@@ -1,0 +1,86 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=glibc
+pkgver=2.31
+pkgrel=1
+arch=(x86_64)
+url="https://www.gnu.org/software/libc"
+depends=(tzdata)
+makedepends=(gcc)
+options=(!strip staticlibs)
+source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
+        locale-gen
+        locale.gen.txt)
+sha256sums=('9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17'
+            'SKIP'
+            '4f7e1dee2d55659362d0cf590b6c4bc47be4fc02e99d287be4edbe4ce56c241e'
+            '0540122fb9340d546702a891bcce344fc3e8f21fe482c2c321b71c2e6b36964e')
+validpgpkeys=('7273542B39962DF7B299931416792B4EA25340F8'
+              'BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+  
+  mkdir build
+}
+
+build() {
+  cd $pkgname-$pkgver/build
+
+  echo "slibdir=/usr/lib" >> configparms
+  echo "rtlddir=/usr/lib" >> configparms
+  echo "sbindir=/usr/bin" >> configparms
+  echo "rootsbindir=/usr/bin" >> configparms
+
+  CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
+
+  CFLAGS=${CFLAGS/-fno-plt/}
+  CXXFLAGS=${CXXFLAGS/-fno-plt/}
+  LDFLAGS=${LDFLAGS/,-z,now/}
+
+  ../configure \
+    --build=$(../scripts/config.guess) \
+    --prefix=/usr \
+    --libdir=/usr/lib \
+    --sbindir=/usr/bin \
+    --libexecdir=/usr/lib \
+    --enable-cet \
+    --enable-static-pie \
+    --enable-stack-protector=strong \
+    --enable-bind-now \
+    --disable-timezone-tools \
+    --disable-profile \
+    --with-headers=/usr/include \
+  
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver/build
+
+  make check || true
+}
+
+package() {
+  cd $pkgname-$pkgver/build
+
+  make DESTDIR="$pkgdir" install
+
+  rm -f "$pkgdir"/etc/ld.so.cache
+  install -Dm644 "$srcdir"/ld.so.conf "$pkgdir"/etc/
+  install -dm644 "$pkgdir"/etc/ld.so.conf.d/
+
+  install -dm755 "$pkgdir"/usr/lib/{locale,systemd/system,tmpfiles.d}/
+  install -dm755 "$pkgdir"/var/db/nscd/
+  install -Dm644 ../nscd/nscd.conf "$pkgdir"/etc/
+  install -Dm644 ../nscd/nscd.service "$pkgdir"/usr/lib/systemd/system/
+  install -Dm644 ../nscd/nscd.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/
+
+  install -Dm644 ../posix/gai.conf "$pkgdir"/etc/gai.conf
+
+  install -Dm755 "$srcdir"/locale-gen "$pkgdir"/usr/bin/
+
+  # Create /etc/locale.gen
+  install -Dm644 "$srcdir"/locale.gen.txt "$pkgdir"/etc/locale.gen/
+  sed -e '1,3d' -e 's|/| |g' -e 's|\\| |g' -e 's|^|#|g' ../localedata/SUPPORTED >> "$pkgdir"/etc/locale.gen
+}
