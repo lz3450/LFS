@@ -1,0 +1,6 @@
+base
+    linux-api-headers
+    glibc (ld.so.conf)
+        tzdata
+    gcc
+    
