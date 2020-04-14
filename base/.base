@@ -3,4 +3,4 @@ base
     glibc (ld.so.conf)
         tzdata
     gcc
-    
+        binutils mpc
