@@ -1,0 +1,16 @@
+**/src
+**/pkg
+*.zip
+*.xz
+*.gz
+*.bz2
+*.lz
+*.tgz
+*.sig
+*.sign
+*.asc
+*.log
+*.sum
+*.xml
+!community/globalprotect/GlobalProtect_tar-5.1.0.0-101.tar.gz
+!community/globalprotect-gui/GlobalProtect_UI_tar-5.1.0.0-101.tar.gz
