@@ -1,0 +1,43 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=tzdata
+pkgver=2019c
+pkgrel=1
+pkgdesc="Sources for time zone and daylight saving time data"
+arch=(x86_64)
+url="https://www.iana.org/time-zones"
+options=(!emptydirs)
+source=(https://www.iana.org/time-zones/repository/releases/tzcode$pkgver.tar.gz{,.asc}
+        https://www.iana.org/time-zones/repository/releases/$pkgname$pkgver.tar.gz{,.asc})
+sha256sums=('f6ebd3668e02d5ed223d3b7b1947561bf2d2da2f4bd1db61efefd9e06c167ed4'
+            'SKIP'
+            '79c7806dab09072308da0e3d22c37d3b245015a591891ea147d3b133b60ffc7c'
+            'SKIP')
+validpgpkeys=('7E3792A9D8ACF7D633BC1588ED97E90E62AA7E34')
+
+timezones=('africa' 'antarctica' 'asia' 'australasia' 'europe' 'northamerica' 'southamerica'
+           'pacificnew' 'etcetera' 'backward' 'systemv' 'factory')
+
+prepare() {
+  sed -i "s:sbin:bin:g" Makefile
+}
+
+build() {
+  make
+}
+
+package() {
+  # install tzcode stuff
+  make DESTDIR="$pkgdir" install
+
+  # install tzdata stuff
+  ./zic -d "$pkgdir"/usr/share/zoneinfo ${timezones[@]}
+  ./zic -d "$pkgdir"/usr/share/zoneinfo/posix ${timezones[@]}
+  ./zic -d "$pkgdir"/usr/share/zoneinfo/right -L leapseconds ${timezones[@]}
+  
+  ./zic -d "$pkgdir"/usr/share/zoneinfo -p America/New_York
+  install -m444 -t "$pkgdir"/usr/share/zoneinfo iso3166.tab zone1970.tab
+  
+  # cleanup
+  rm "$pkgdir"/etc/localtime
+}
