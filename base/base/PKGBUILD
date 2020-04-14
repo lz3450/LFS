@@ -1,0 +1,53 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=base
+pkgver=2020.04
+pkgrel=1
+arch=(any)
+depends=(
+  linux-api-headers
+  glibc
+  gcc
+  bash
+  coreutils
+  util-linux
+  file
+  findutils
+  procps-ng
+  psmisc
+  shadow
+  tar
+  bzip2
+  gzip
+  xz
+  grep
+  sed
+  gawk
+  systemd
+  pciutils
+  iputils
+  iproute2
+  pacman
+)
+optdepends=("linux: bare metal")
+
+package() {
+  cd $pkgdir
+  
+  for d in boot dev etc home mnt usr var opt srv/http run; do
+    install -dm755 $d
+  done
+  install -dm555 proc
+  install -dm555 sys
+  install -dm0750 root
+  install -dm1777 tmp
+
+  ln -s usr/bin bin
+  ln -s usr/bin sbin
+  ln -s bin usr/sbin
+
+  ln -s usr/lib lib64
+  ln -s lib usr/lib64
+
+  ln -s ../proc/self/mounts etc/mtab
+}
