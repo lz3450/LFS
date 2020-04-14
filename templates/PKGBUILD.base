@@ -1,0 +1,37 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=
+pkgver=
+pkgrel=1
+pkgdesc=""
+arch=(x86_64)
+url=""
+groups=(base)
+optdepends=()
+checkdepends=()
+backup=()
+options=()
+install=
+source=($pkgname-$pkgver.tar.gz)
+sha256sums=()
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
