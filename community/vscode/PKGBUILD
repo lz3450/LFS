@@ -1,0 +1,21 @@
+# Maintainer: zelun.kong@outlook.com
+
+pkgname=vscode
+pkgver=1.44.1
+pkgrel=1
+pkgdesc='Visual Studio Code'
+arch=(x86_64)
+url='https://code.visualstudio.com/'
+depends=(glibc)
+source=(https://vscode-update.azurewebsites.net/${pkgver}/linux-x64/stable)
+sha256sums=('0e3498d48674968a85f20d1c23ee33bed8ba4256fe9c9f3fc02c5a5a611a4f96')
+
+package() {
+  _pkg=VSCode-linux-x64
+
+  install -d "$pkgdir"/opt
+  install -d "$pkgdir"/usr/local/bin
+
+  cp -r "$srcdir"/$_pkg "$pkgdir"/opt
+  ln -s /opt/$_pkg/bin/code "$pkgdir"/usr/local/bin/code
+}
