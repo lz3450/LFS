@@ -1,0 +1,75 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gcc
+pkgver=9.3.0
+_islver=0.21
+pkgrel=1
+pkgdesc="The GNU Compiler Collection"
+arch=(x86_64)
+url="https://gcc.gnu.org"
+groups=(base)
+makedepends=(binutils mpc)
+source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
+        http://isl.gforge.inria.fr/isl-${_islver}.tar.xz)
+sha256sums=('71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1'
+            'SKIP'
+            '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960')
+validpgpkeys=('F3691687D867B81B51CE07D9BBE43771487328A9'
+              '86CFFCA918CF3AF47147588051E8B148A9999C34'
+              '13975A70E63C361C73AE69EF6EEB81F8981C74C7'
+              '33C235A34C46AA3FFB293709A328C3A2C3C45C06')
+
+prepare() {
+  cd $pkgname-$pkgver
+  
+  mkdir build
+
+  mv ../isl-$_islver isl
+
+  # Set the default directory name for 64-bit libraries to “lib”
+  sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
+}
+
+build() {
+  cd $pkgname-$pkgver/build
+
+  ../configure \
+    --prefix=/usr \
+    --libdir=/usr/lib \
+    --libexecdir=/usr/lib \
+    --enable-shared \
+    --enable-lto \
+    --enable-threads=posix \
+    --enable-__cxa_atexit \
+    --enable-checking=release \
+    --enable-gnu-unique-object \
+    --enable-linker-build-id \
+    --enable-gnu-indirect-function \
+    --enable-default-pie \
+    --enable-default-ssp \
+    --enable-cet=auto \
+    --enable-languages=c,c++,fortran,lto \
+    --disable-libssp \
+    --disable-multilib \
+    --with-pkgversion="KZL $pkgver-$pkgrel" \
+    --with-isl \
+    --with-system-zlib \
+    --with-linker-hash-style=gnu
+
+  ulimit -s 32768
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver/build
+
+  make -k check || true
+}
+
+package() {
+  cd $pkgname-$pkgver/build
+
+  make DESTDIR="$pkgdir/" install
+
+  ln -s gcc "$pkgdir"/usr/bin/cc
+}
