@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=make
+pkgver=4.3
+pkgrel=1
+pkgdesc="GNU make utility to maintain groups of programs"
+arch=(x86_64)
+url="https://www.gnu.org/software/make"
+depends=(guile)
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.lz{,.sig})
+sha256sums=('de1a441c4edf952521db30bfca80baae86a0ff1acd0a00402999344f04c45e82'
+            'SKIP')
+validpgpkeys=('6D4EEB02AD834703510B117680CB727A20C79BB2')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+	make -k check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
