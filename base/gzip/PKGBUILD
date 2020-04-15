@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gzip
+pkgver=1.10
+pkgrel=1
+pkgdesc="GNU compression utility"
+arch=(x86_64)
+url="https://www.gnu.org/software/gzip/"
+depends=(less)
+source=(https://ftp.gnu.org/pub/gnu/gzip/gzip-$pkgver.tar.xz{,.sig})
+sha256sums=('8425ccac99872d544d4310305f915f5ea81e04d0f437ef1a230dc9d1c819d7c0'
+            'SKIP')
+validpgpkeys=('155D3FC500C834486D1EEA677FD9FCCB000BEEEE')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
