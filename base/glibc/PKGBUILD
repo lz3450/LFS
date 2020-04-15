@@ -9,6 +9,7 @@ depends=(tzdata)
 makedepends=(gcc)
 options=(!strip staticlibs)
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
+        ld.so.conf
         locale-gen
         locale.gen.txt)
 sha256sums=('9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17'
@@ -81,6 +82,6 @@ package() {
   install -Dm755 "$srcdir"/locale-gen "$pkgdir"/usr/bin/
 
   # Create /etc/locale.gen
-  install -Dm644 "$srcdir"/locale.gen.txt "$pkgdir"/etc/locale.gen/
+  install -Dm644 "$srcdir"/locale.gen.txt "$pkgdir"/etc/locale.gen
   sed -e '1,3d' -e 's|/| |g' -e 's|\\| |g' -e 's|^|#|g' ../localedata/SUPPORTED >> "$pkgdir"/etc/locale.gen
 }
