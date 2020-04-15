@@ -1,0 +1,36 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=procps-ng
+pkgver=3.3.16
+pkgrel=1
+pkgdesc="Utilities for monitoring your system and its processes"
+arch=(x86_64)
+url="https://gitlab.com/procps-ng/procps"
+groups=(base)
+depends=(ncurses)
+install=
+source=(https://downloads.sourceforge.net/project/$pkgname/Production/$pkgname-$pkgver.tar.xz)
+sha256sums=('925eacd65dedcf9c98eb94e8978bbfb63f5de37294cc1047d81462ed477a20af')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --exec-prefix=/ \
+    --sysconfdir=/etc \
+    --libdir=/usr/lib \
+    --bindir=/usr/bin \
+    --sbindir=/usr/bin \
+    --enable-watch8bit \
+    --disable-kill
+    --with-systemd \
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
