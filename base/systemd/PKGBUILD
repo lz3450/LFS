@@ -97,7 +97,7 @@ build() {
     -Dsysvrcnd-path= \
     -Dtelinit-path= \
     -Duser-path=/usr/local/bin:/usr/bin \
-    -Dvalgrind=false \
+    -Dvalgrind=true \
     -Dversion-tag="$pkgver-$pkgrel-kzl" \
     -Dxz=true \
     -Dzlib=true \

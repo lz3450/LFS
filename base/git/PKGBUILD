@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=git
+pkgver=2.26.1
+pkgrel=1
+arch=(x86_64)
+url="https://git-scm.com/"
+depends=()
+optdepends=()
+install=
+source=($pkgname-$pkgver.tar.gz)
+sha256sums=()
+validpgpkeys=('96E07AF25771955980DAD10020D04E5A713660A7')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
