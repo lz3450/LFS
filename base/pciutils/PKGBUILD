@@ -1,0 +1,40 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=pciutils
+pkgver=3.6.4
+pkgrel=1
+pkgdesc="PCI bus configuration space access library and tools"
+arch=(x86_64)
+url="https://mj.ucw.cz/sw/pciutils/"
+depends=(curl kmod)
+source=(https://www.kernel.org/pub/software/utils/$pkgname/$pkgname-$pkgver.tar.xz)
+sha256sums=('f67ff732976e2db2a5ccdf3960020796526ba6b05f6b1cdd24b7b206af706055')
+validpgpkeys=('5558F9399CD7836850553C6EC28E7847ED70F82D')
+
+build() {
+  cd $pkgname-$pkgver
+
+  make \
+    PREFIX=/usr \
+    SBINDIR=/usr/bin \
+    SHAREDIR=/usr/share/hwdata \
+    MANDIR=/usr/share/man \
+    OPT="$CFLAGS" \
+    ZLIB=no \
+    SHARED=yes
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make \
+  PREFIX=/usr \
+  SBINDIR=/usr/bin \
+  SHAREDIR=/usr/share/hwdata \
+  MANDIR=/usr/share/man \
+  OPT="$CFLAGS" \
+  SHARED=yes \
+  ZLIB=no \
+  DESTDIR="$pkgdir/" \
+  install install-lib
+}
