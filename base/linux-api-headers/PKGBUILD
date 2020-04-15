@@ -5,21 +5,21 @@ pkgver=5.4.32
 pkgrel=1
 arch=(any)
 makedepends=(rsync)
-source=(https://www.kernel.org/pub/linux/kernel/v${pkgver:0:1}.x/linux-${pkgver}.tar.{xz,sign})
+source=(https://www.kernel.org/pub/linux/kernel/v${pkgver:0:1}.x/linux-$pkgver.tar.{xz,sign})
 sha256sums=('192d99fab7a47a537493b6d7eddb52892b98f8ada655c0bbb419b360a995f2b3'
             'SKIP')
 validpgpkeys=('ABAF11C65A2970B130ABE3C479BE3E4300411886'
               '647F28654894E3BD457199BE38DBBDC86092693E')
 
 build() {
-  cd linux-${pkgver}
+  cd linux-$pkgver
 
   make mrproper
   make headers_check
 }
 
 package() {
-  cd linux-${pkgver}
+  cd linux-$pkgver
 
-  make INSTALL_HDR_PATH="${pkgdir}/usr/" headers_install
+  make INSTALL_HDR_PATH="$pkgdir/usr/" headers_install
 }
