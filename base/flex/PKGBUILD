@@ -1,0 +1,35 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=flex
+pkgver=2.6.4
+pkgrel=1
+pkgdesc="A tool for generating text-scanning programs"
+arch=(x86_64)
+url="https://github.com/westes/flex"
+source=($url/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz{,.sig})
+sha256sums=('e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995'
+            'SKIP')
+validpgpkeys=('56C67868E93390AA1039AD1CE4B29C8D64885307')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make -k check || true
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  ln -sf flex "$pkgdir"/usr/bin/lex
+}
