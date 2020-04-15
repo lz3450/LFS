@@ -6,7 +6,6 @@ pkgrel=1
 pkgdesc="A package contains programs for handling passwords in a secure way"
 arch=(x86_64)
 url="https://github.com/shadow-maint/shadow"
-groups=(base)
 depends=(acl attr audit pam)
 makedepends=(git)
 backup=(etc/default/useradd
