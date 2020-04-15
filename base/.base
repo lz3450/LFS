@@ -40,6 +40,7 @@ base
     iproute2
         iptables elfutils
     autoconf
+        diffutils
     automake
     binutils
     bison
