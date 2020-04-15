@@ -6,7 +6,7 @@ pkgrel=1
 arch=(x86_64)
 url="https://www.github.com/systemd/systemd-stable"
 depends=(acl apparmor audit cryptsetup curl dbus elfutils gnu-efi-libs iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode zlib)
-makedepends=(meson gperf)
+makedepends=(gperf)
 install=systemd.install
 source=(git+https://www.github.com/systemd/systemd-stable#tag=v$pkgver?signed
         0001-Use-Arch-Linux-device-access-groups.patch
@@ -114,7 +114,7 @@ check() {
 }
 
 package() {
-  cd $pkgbase-stable
+  cd $pkgbase-stable/build
 
-  DESTDIR="$pkgdir/" meson install -C build
+  DESTDIR="$pkgdir/" meson install
 }
