@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=iproute2
+pkgver=5.6.0
+pkgrel=1
+pkgdesc="IP Routing Utilities"
+arch=(x86_64)
+url="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git"
+depends=(iptables elfutils)
+backup=(etc/iproute2/ematch_map
+        etc/iproute2/rt_dsfield
+        etc/iproute2/rt_protos
+        etc/iproute2/rt_realms
+        etc/iproute2/rt_scopes
+        etc/iproute2/rt_tables)
+options=(staticlibs)
+source=(https://www.kernel.org/pub/linux/utils/net/$pkgname/$pkgname-$pkgver.tar.{xz,sign})
+sha256sums=('1b5b0e25ce6e23da7526ea1da044e814ad85ba761b10dd29c2b027c056b04692'
+            'SKIP')
+validpgpkeys=('9F6FC345B05BE7E766B83C8F80A77F6095CDE47E')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" SBINDIR="/usr/bin/" install
+}
