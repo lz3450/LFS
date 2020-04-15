@@ -27,6 +27,8 @@ depends=(
   pciutils
   iputils
   iproute2
+  perl
+  python
   pacman
 )
 optdepends=("linux: bare metal")

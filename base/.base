@@ -4,3 +4,7 @@ base
         tzdata
     gcc
         binutils mpc
+    coreutils
+        acl attr gmp libcap openssl
+    util-linux (rfkill, uuidd.socket)
+        libcap-ng pam shadow
