@@ -11,21 +11,12 @@ sha256sums=('c5fefbdf9858f7e4feb86f036e1247a54c79fc2d8e4b7064d5aaa1f47dfa789a'
             'SKIP')
 validpgpkeys=('A5189DB69C1164D33002936646502EF796917195')
 
-prepare() {
-  cd $pkgname-$pkgver
-
-  # Don't build or install locate because we use mlocate, which is a secure version of locate.
-  sed -e '/^SUBDIRS/s/locate//' -e 's/frcode locate updatedb//' -i Makefile.in
-}
-
 build() {
   cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr
 
-  # don't build locate, but the docs want a file in there.
-  make -C locate dblocation.texi
   make
 }
 
