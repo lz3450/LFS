@@ -7,7 +7,6 @@ pkgdesc="Network monitoring tools, including ping"
 arch=(x86_64)
 url="http://www.skbuff.net/iputils/"
 depends=(libcap libidn2 libunistring)
-backup=()
 source=(git+https://github.com/iputils/iputils.git#commit=f406ac9272885016d43214c415b9a9972cd3dc55)
 sha256sums=('SKIP')
 
