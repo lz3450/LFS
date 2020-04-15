@@ -1,0 +1,35 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=tar
+pkgver=1.32
+pkgrel=1
+pkgdesc="Utility used to store, backup, and transport files"
+arch=(x86_64)
+url="https://www.gnu.org/software/tar/"
+depends=(acl attr)
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
+sha256sums=('d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8'
+            'SKIP')
+validpgpkeys=('325F650C4C2B6AD58807327A3602B07F55D0C732')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --libexecdir=/usr/lib/tar
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
