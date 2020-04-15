@@ -1,0 +1,38 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gawk
+pkgver=5.0.1
+pkgrel=1
+pkgdesc="GNU version of awk"
+arch=(x86_64)
+url="https://www.gnu.org/software/gawk/"
+depends=(mpfr)
+provides=(awk)
+source=(https://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz{,.sig})
+sha256sums=('625bf3718e25a84dc4486135d5cb5388174682362c70107fd13f21572f5603bb'
+            'SKIP')
+validpgpkeys=('D1967C63788713177D861ED7DF597815937EC0D2')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --libexecdir=/usr/lib \
+    --sysconfdir=/etc \
+    --without-libsigsegv
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
