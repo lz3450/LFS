@@ -1,10 +1,45 @@
 base
     linux-api-headers
-    glibc (ld.so.conf)
+    glibc {ld.so.conf}
         tzdata
     gcc
         binutils mpc
+    bash
+        ncurses readline
     coreutils
         acl attr gmp libcap openssl
-    util-linux (rfkill, uuidd.socket)
+    util-linux {rfkill, uuidd.socket}
         libcap-ng pam shadow
+    file
+        zlib
+    findutils
+    procps-ng
+        ncurses
+    psmisc
+        ncurses
+    shadow
+        acl attr audit pam
+    tar
+        acl attr
+    bzip2
+    gzip
+        less
+    xz
+    grep
+        pcre [texinfo]
+    sed
+        acl attr [gettext]
+    gawk
+        mpfr
+    systemd {nsswith.conf}
+        acl apparmor audit cryptsetup curl dbus elfutils gnu-efi-libs iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode zlib [gperf]
+    pciutils
+        curl kmod
+    iputils
+        libcap libidn2 libunistring
+    iproute2
+    perl
+    python
+    git
+    meson
+    pacman
