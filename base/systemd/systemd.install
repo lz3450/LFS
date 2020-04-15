@@ -1,0 +1,13 @@
+post_install() {
+  systemd-machine-id-setup
+
+  systemd-sysusers
+  journalctl --update-catalog
+
+  setfacl -Rnm g:wheel:rx,d:g:wheel:rx,g:adm:rx,d:g:adm:rx var/log/journal/ 2>/dev/null
+}
+
+post_upgrade() {
+  systemd-sysusers
+  journalctl --update-catalog
+}

@@ -1,0 +1,120 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=systemd
+pkgver=245.4
+pkgrel=1
+arch=(x86_64)
+url="https://www.github.com/systemd/systemd-stable"
+depends=(acl apparmor audit cryptsetup curl dbus elfutils gnu-efi-libs iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode zlib)
+makedepends=(meson gperf)
+install=systemd.install
+source=(git+https://www.github.com/systemd/systemd-stable#tag=v$pkgver?signed
+        0001-Use-Arch-Linux-device-access-groups.patch
+        systemd.install)
+sha256sums=('SKIP'
+            '1db4255602b94f5c7b55a2a7c592e1874cbb3c118aefb49da42d27fca9e8f4b3'
+            '4c5055f959e4c62028a8991462bb6645e6f984845a2cd8f99df89148aea32ef5')
+validpgpkeys=('63CDA1E5D3FC22B998D20DD6327F26951A015CC4'
+              '5C251B5FC54EB2F80F407AAAC54CA336CFEB557E')
+
+prepare() {
+  cd $pkgbase-stable
+
+  # Replace cdrom/dialout/tape groups with optical/uucp/storage
+  patch -Np1 -i ../0001-Use-Arch-Linux-device-access-groups.patch
+
+  mkdir build
+}
+
+build() {
+  cd $pkgbase-stable/build
+
+  local _timeservers=({0..3}.arch.pool.ntp.org)
+  # We use these public name services, ordered by their privacy policy (hopefully):
+  #  * Cloudflare (https://1.1.1.1/)
+  #  * Quad9 without filtering (https://www.quad9.net/)
+  #  * Google (https://developers.google.com/speed/public-dns/)
+  local _nameservers=(1.1.1.1
+                      9.9.9.10
+                      8.8.8.8
+                      2606:4700:4700::1111
+                      2620:fe::10
+                      2001:4860:4860::8888)
+  meson setup \
+    -Dauto_features=enabled \
+    -Dbuildtype=plain \
+    -Dwrap_mode=nodownload \
+    -Db_lto=true \
+    -Db_pie=true \
+    -Dprefix=/usr \
+    -Dlibexecdir=lib \
+    -Dsbindir=bin \
+    -Dacl=true \
+    -Dapparmor=true \
+    -Daudit=true \
+    -Dbashcompletiondir=no \
+    -Dblkid=true \
+    -Dbzip2=true \
+    -Ddbus=true \
+    -Ddbuspolicydir=/usr/share/dbus-1/system.d \
+    -Ddefault-hierarchy=hybrid \
+    -Ddefault-kill-user-processes=false \
+    -Ddefault-locale=C \
+    -Ddns-over-tls=true \
+    -Ddns-servers="${_nameservers[*]}" \
+    -Defi=true \
+    -Delfutils=true \
+    -Dfallback-hostname='kzl-linux' \
+    -Dfdisk=true \
+    -Dgnu-efi=true \
+    -Dgnutls=true \
+    -Dhomed=true \
+    -Dimportd=true \
+    -Dkmod=true \
+    -Dlibcryptsetup=true \
+    -Dlibcurl=true \
+    -Dlibidn2=true \
+    -Dlibiptc=true \
+    -Dlz4=true \
+    -Dmicrohttpd=true \
+    -Dnologin-path=/usr/bin/nologin \
+    -Dntp-servers="${_timeservers[*]}" \
+    -Dopenssl=true \
+    -Dp11kit=true \
+    -Dpam=true \
+    -Dpcre2=true \
+    -Dpolkit=true \
+    -Dpwquality=true \
+    -Dqrencode=true \
+    -Dremote=true \
+    -Drepart=true \
+    -Drpmmacrosdir=no \
+    -Dseccomp=true \
+    -Dselinux=false \
+    -Dsplit-bin=false \
+    -Dsplit-usr=false \
+    -Dsysvinit-path= \
+    -Dsysvrcnd-path= \
+    -Dtelinit-path= \
+    -Duser-path=/usr/local/bin:/usr/bin \
+    -Dvalgrind=false \
+    -Dversion-tag="$pkgver-$pkgrel-kzl" \
+    -Dxz=true \
+    -Dzlib=true \
+    -Dzshcompletiondir=no \
+    ..
+
+  ninja
+}
+
+check() {
+  cd $pkgbase-stable/build
+
+  meson test
+}
+
+package() {
+  cd $pkgbase-stable
+
+  DESTDIR="$pkgdir/" meson install -C build
+}
