@@ -1,0 +1,25 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=which
+pkgver=2.21
+pkgrel=1
+pkgdesc="A utility to show the full path of commands"
+arch=(x86_64)
+url="https://savannah.gnu.org/projects/which/"
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz)
+sha256sums=()
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
