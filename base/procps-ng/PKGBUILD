@@ -23,7 +23,7 @@ build() {
     --bindir=/usr/bin \
     --sbindir=/usr/bin \
     --enable-watch8bit \
-    --disable-kill
+    --disable-kill \
     --with-systemd \
 
   make
