@@ -68,6 +68,7 @@ base
     git
         curl expat openssl pcre2 perl zlib {libsecret tk}
     pacman
+        curl gpgme libarchive {fakechroot}
     (texinfo)
     (groff)
     (man-db)
