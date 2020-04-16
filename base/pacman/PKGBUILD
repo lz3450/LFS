@@ -6,6 +6,7 @@ pkgrel=1
 arch=(x86_64)
 url="https://www.archlinux.org/pacman/"
 depends=(curl gpgme libarchive)
+checkdepends=(fakechroot)
 backup=(etc/pacman.conf
         etc/makepkg.conf)
 source=(https://sources.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz{,.sig}
