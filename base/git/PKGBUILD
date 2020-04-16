@@ -5,7 +5,7 @@ pkgver=2.26.1
 pkgrel=1
 arch=(x86_64)
 url="https://git-scm.com/"
-depends=(curl expat openssl pcre2 perl zlib)
+depends=(curl expat openssl pcre2 zlib)
 makedepends=()
 optdepends=("libsecret: credential helper"
             "tk: gitk and git gui")

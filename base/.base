@@ -63,9 +63,9 @@ base
     perl
         db gdbm
     python
-        bzip2 expat gdbm libffi libnsl openssl zlib [bluez llvm sqlite tk valgrind] (sqlite mpdecimal tk xz)
+        expat gdbm libffi libnsl openssl zlib [bluez llvm sqlite tk valgrind] (sqlite mpdecimal tk)
     git
-        curl expat openssl pcre2 perl zlib {libsecret tk}
+        curl expat openssl pcre2 zlib {libsecret tk}
     pacman
         curl gpgme libarchive {fakechroot}
     (texinfo)
