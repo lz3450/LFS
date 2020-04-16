@@ -1,0 +1,38 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=pkgconf
+pkgver=1.6.3
+pkgrel=1
+pkgdesc="Package compiler and linker metadata toolkit"
+arch=(x86_64)
+url="https://github.com/pkgconf/pkgconf"
+source=(git+https://git.sr.ht/~kaniini/pkgconf#commit=$_commit)
+sha256sums=()
+
+prepare() {
+  cd $pkgname
+
+  mkdir build
+
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname/build
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --with-pkg-config-dir="/usr/lib/pkgconfig:/usr/share/pkgconfig" \
+    --with-system-libdir="/usr/lib" \
+    --with-system-includedir="/usr/include" \
+    --disable-static
+
+  make
+}
+
+package() {
+  cd $pkgname/build
+
+  make DESTDIR="$pkgdir/" install
+}
