@@ -32,8 +32,8 @@ base
         acl attr
     gawk
         mpfr
-    systemd {nsswith.conf}
-        acl apparmor audit cryptsetup curl dbus elfutils gnu-efi-libs iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode valgrind zlib [gperf]
+    systemd {nsswith.conf} {apparmor}
+        acl audit cryptsetup curl dbus elfutils gnu-efi-libs iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode valgrind zlib [gperf]
     pciutils
         curl kmod
     iputils

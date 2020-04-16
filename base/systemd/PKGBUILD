@@ -5,7 +5,7 @@ pkgver=245.4
 pkgrel=1
 arch=(x86_64)
 url="https://www.github.com/systemd/systemd-stable"
-depends=(acl apparmor audit cryptsetup curl dbus elfutils gnu-efi-libs iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode zlib)
+depends=(acl audit cryptsetup curl dbus elfutils gnu-efi-libs iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode zlib)
 makedepends=(gperf)
 install=systemd.install
 source=(git+https://www.github.com/systemd/systemd-stable#tag=v$pkgver?signed
@@ -50,7 +50,7 @@ build() {
     -Dlibexecdir=lib \
     -Dsbindir=bin \
     -Dacl=true \
-    -Dapparmor=true \
+    -Dapparmor=false \
     -Daudit=true \
     -Dbashcompletiondir=/usr/share/bash-completion/completions/ \
     -Dblkid=true \
