@@ -52,7 +52,7 @@ build() {
     -Dacl=true \
     -Dapparmor=true \
     -Daudit=true \
-    -Dbashcompletiondir=no \
+    -Dbashcompletiondir=/usr/share/bash-completion/completions/ \
     -Dblkid=true \
     -Dbzip2=true \
     -Ddbus=true \
@@ -101,7 +101,7 @@ build() {
     -Dversion-tag="$pkgver-$pkgrel-kzl" \
     -Dxz=true \
     -Dzlib=true \
-    -Dzshcompletiondir=no \
+    -Dzshcompletiondir=/usr/share/zsh/site-functions/ \
     ..
 
   ninja

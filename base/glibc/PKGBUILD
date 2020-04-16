@@ -14,6 +14,7 @@ source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
         locale.gen.txt)
 sha256sums=('9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17'
             'SKIP'
+            '0ddd87dfbd949866a890d7eea3433345928fa086204990bfab968992b2dde503'
             '4f7e1dee2d55659362d0cf590b6c4bc47be4fc02e99d287be4edbe4ce56c241e'
             '0540122fb9340d546702a891bcce344fc3e8f21fe482c2c321b71c2e6b36964e')
 validpgpkeys=('7273542B39962DF7B299931416792B4EA25340F8'

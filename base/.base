@@ -2,9 +2,9 @@ base
     iana-etc
     linux-api-headers
     glibc {ld.so.conf}
-        tzdata
+    tzdata
     gcc
-        binutils mpc
+        mpc
     bash
         ncurses readline
     coreutils
@@ -27,7 +27,7 @@ base
         less
     xz
     grep
-        pcre [texinfo]
+        pcre
     sed
         acl attr
     gawk
@@ -48,7 +48,6 @@ base
     fakeroot
     flex
     gettext
-    gdb
     libtool
     m4
     make
