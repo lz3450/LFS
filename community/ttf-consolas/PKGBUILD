@@ -1,0 +1,19 @@
+# Maintainer: zelun.kong@outlook.com
+
+pkgname=ttf-consolas
+pkgver=10
+pkgrel=1
+pkgdesc="Consola font"
+arch=(any)
+source=(consola.ttf
+        consolab.ttf
+        consolai.ttf
+        consolaz.ttf)
+sha256sums=('c6e6ce8119fdd47ec6a5449a08e2d2ad7f41ea03143aae193068ed9fa58eaebc'
+            '8fa803e5abc7fff0c78c62cd22d07c705f3273c53312380c36ff484246ed3c1b'
+            '81e2a95d3c49468029c07e58f71a5f0ca4cfcb617eaf6bd77576fb03aa430bb2'
+            '1df27cbcc8a9fb7f843bc24e257b78e8ff93de70e8c1ad2caab8379e7d6a1eab')
+
+package() {
+  install -Dm644 consola*.ttf -t "${pkgdir}"/usr/share/fonts/
+}
