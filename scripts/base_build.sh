@@ -57,20 +57,19 @@ pkgs=(
     pacman
 )
 
-if [[ -e $logdir ]]; then
-    rm -rf $logdir
+if [[ ! -d $logdir ]]; then
+    mkdir -p $logdir
 fi
-
-mkdir -p $logdir
 
 for p in ${pkgs[@]}
 do
     echo $p
     log="$logdir"/$p.log
+    if [[ -f $log ]]; then
+        rm $log
+    fi
     cd "$scriptdir"/../base/$p
     # gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
-    makepkg --config "$scriptdir"/../config/makepkg-base.conf -cCf &>> $log
+    makepkg --config "$scriptdir"/../config/makepkg-base.conf -dcCLf &>> $log
     sudo repo-add $LFS/pkgs/base/base.db.tar.gz $LFS/pkgs/base/$p-*.pkg.tar.gz &>> $log
 done
-
-sudo pacstrap -C ../config/pacman-lfs.conf /mnt/lfs base
