@@ -1,0 +1,33 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=diffutils
+pkgver=3.7
+pkgrel=1
+pkgdesc="Utility programs used for creating patch files"
+arch=(x86_64)
+url="https://www.gnu.org/software/diffutils"
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
+sha256sums=('b3a7a6221c3dc916085f0d205abf6b8e1ba443d4dd965118da364a1dc1cb3a26'
+            'SKIP')
+validpgpkeys=('155D3FC500C834486D1EEA677FD9FCCB000BEEEE')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

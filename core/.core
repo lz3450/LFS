@@ -1,0 +1,81 @@
+acl
+    attr
+argon2
+attr
+audit
+    krb5 libcap-ng [krb5 libcap-ng swig linux-headers]
+ca-certificates
+cryptsetup
+    argon2 device-mapper json-c libgcrypt openssl popt
+curl
+    ca-certificates krb5 libidn2 libnghttp2 libpsl libssh2 openssl zlib
+db
+dbus
+    expat (audit)
+device-mapper
+    [thin-provisioning-tools]
+diffutils
+ed
+elfutils
+    curl libarchive libmicrohttpd sqlite zlib
+expat
+gdbm
+gmp
+gnu-efi
+gnupg
+gperf
+gpgme
+    gnupg libgpg-error [swig] (qt5)
+guile
+    gc gmp libffi libunistring ncurses
+iptables
+    libnetfilter_conntrack libnfnetlink libnftnl libpcap
+json-c
+jsoncpp
+kbd
+kmod
+krb5
+less
+libarchive
+libcap
+libcap-ng
+libgcrypt
+libgpg-error
+libffi
+libidn2
+libmicrohttpd
+libmnl
+libnetfilter_conntrack
+libnfnetlink
+libnftnl
+libnghttp2
+libnsl
+libpcap
+libpsl
+libseccomp
+libssh2
+libunistring
+libuv
+linux-headers
+lvm2
+lz4
+mpc
+mpfr
+ncurses
+openldap
+openssl
+p11-kit
+pam
+pcre
+pcre2
+popt
+qrencode
+readline
+rhash
+shadow
+shared-mime-info
+sqlite
+swig
+thin-provisioning-tools
+valgrind
+zlib

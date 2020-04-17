@@ -1,0 +1,46 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=iptables
+pkgver=1.8.4
+pkgrel=1
+pkgdesc="Linux kernel packet control tool"
+arch=(x86_64)
+url="https://www.netfilter.org/projects/iptables/index.html"
+depends=(libnetfilter_conntrack libnfnetlink libnftnl libpcap)
+source=(https://www.netfilter.org/projects/$pkgname/files/$pkgname-$pkgver.tar.bz2{,.sig})
+sha256sums=('993a3a5490a544c2cbf2ef15cf7e7ed21af1845baf228318d5c36ef8827e157c'
+            'SKIP')
+validpgpkeys=('C09DB2063F1D7034BA6152ADAB4655A126D292E4')
+
+prepare() {
+  cd $pkgbase-$pkgver
+
+  mkdir build
+
+  # use system one
+  rm include/linux/types.h
+}
+
+build() {
+  cd $pkgname-$pkgver/build
+
+  ../configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --sbindir=/usr/bin \
+    --libexecdir=/usr/lib \
+    --enable-bpf-compiler \
+    --enable-devel \
+    --enable-libipq \
+    --enable-shared
+
+  sed -e 's/ -shared / -Wl,-O1,--as-needed\0/g' -i libtool
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver/build
+
+  make DESTDIR="$pkgdir/" install
+}

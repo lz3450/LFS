@@ -1,0 +1,27 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gnu-efi
+pkgver=3.0.11
+pkgrel=1
+pkgdesc="Library for building UEFI Applications using GNU toolchain"
+arch=(x86_64)
+url="https://sourceforge.net/projects/gnu-efi/"
+options=(!strip !makeflags !buildflags)
+source=(https://download.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.bz2)
+sha256sums=('f28da792a2532e91e18e0101468811739a22cde9eee5eacfd0efb9bf3a61d6b9')
+
+build() {
+  cd $pkgname-$pkgver
+
+  make lib gnuefi inc apps
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make INSTALLROOT="$pkgdir/" PREFIX="/usr/" LIBDIR="/usr/lib/" install
+
+
+	install -d "$pkgdir"/usr/share/gnu-efi/apps/$arch/
+	install -D -m0644 "$srcdir"/gnu-efi-$pkgver/$arch/apps/*.efi "${pkgdir}"/usr/share/gnu-efi/apps/$arch/
+}

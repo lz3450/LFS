@@ -1,0 +1,40 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=elfutils
+pkgver=0.179
+pkgrel=1
+pkgdesc="Utilities to handle ELF object files and DWARF debugging information"
+arch=(x86_64)
+url="https://sourceware.org/elfutils/"
+depends=(curl libarchive libmicrohttpd sqlite zlib)
+options=(staticlibs)
+source=(https://sourceware.org/$pkgname/ftp/$pkgver/$pkgname-$pkgver.tar.bz2{,.sig})
+sha256sums=('31e7a00e96d4e9c4bda452e1f2cdac4daf8abd24f5e154dee232131899f3a0f2'
+            'SKIP')
+validpgpkeys=('47CC0331081B8BC6D0FD4DA08370665B57816A6A'
+              'EC3CFE88F6CA0788774F5C1D1AA44BE649DE760A')
+
+build() {
+  cd $pkgname-$pkgver
+
+  # required for test-suite success
+  CFLAGS+=" -g"
+
+  ./configure \
+    --prefix=/usr \
+    --enable-deterministic-archives
+
+  make
+}
+
+check() {
+  cd $pkgbase-$pkgver
+
+  make check || true
+}
+
+package() {
+  cd $pkgbase-$pkgver
+
+  make DESTDIR="$pkgdir" install
+}
