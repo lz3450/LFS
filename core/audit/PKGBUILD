@@ -1,0 +1,60 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgbase=audit
+pkgname=(audit python-audit)
+pkgver=2.8.5
+pkgrel=1
+pkgdesc="Userspace components of the audit framework"
+arch=(x86_64)
+url="https://people.redhat.com/sgrubb/audit"
+makedepends=(krb5 libcap-ng swig linux-headers)
+source=($url/$pkgbase-$pkgver.tar.gz)
+sha256sums=('0e5d4103646e00f8d1981e1cd2faea7a2ae28e854c31a803e907a383c5e2ecb7')
+
+prepare() {
+  cd $pkgbase-$pkgver
+
+  sed 's|/var/run/auditd.pid|/run/auditd.pid|' -i init.d/auditd.service
+}
+
+build() {
+  cd $pkgbase-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --libexecdir=/usr/lib/audit \
+    --sysconfdir=/etc \
+    --enable-gssapi-krb5 \
+    --enable-systemd \
+    --with-libcap-ng
+
+  make
+}
+
+package_audit() {
+  depends=(krb5 libcap-ng)
+  backup=(etc/libaudit.conf
+          etc/audit/audit-stop.rules
+          etc/audit/auditd.conf
+          etc/audisp/audispd.conf
+          etc/audisp/audisp-remote.conf
+          etc/audisp/zos-remote.conf
+          etc/audisp/plugins.d/af_unix.conf
+          etc/audisp/plugins.d/audispd-zos-remote.conf
+          etc/audisp/plugins.d/au-remote.conf
+          etc/audisp/plugins.d/syslog.conf)
+
+  cd $pkgbase-$pkgver
+
+  make DESTDIR="$pkgdir/" INSTALL="install -p" install
+}
+
+package_python-audit() {
+  depends=(audit)
+  pkgdesc+=" (python bindings)"
+
+  cd $pkgbase-$pkgver/bindings
+
+  make DESTDIR="$pkgdir/" INSTALL="install -p" install
+}
