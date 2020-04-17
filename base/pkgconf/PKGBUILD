@@ -6,8 +6,8 @@ pkgrel=1
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=(x86_64)
 url="https://github.com/pkgconf/pkgconf"
-source=(git+https://git.sr.ht/~kaniini/pkgconf#commit=$_commit)
-sha256sums=()
+source=(git+https://git.sr.ht/~kaniini/pkgconf#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
   cd $pkgname
@@ -20,7 +20,7 @@ prepare() {
 build() {
   cd $pkgname/build
 
-  ./configure \
+  ../configure \
     --prefix=/usr \
     --sysconfdir=/etc \
     --with-pkg-config-dir="/usr/lib/pkgconfig:/usr/share/pkgconfig" \
