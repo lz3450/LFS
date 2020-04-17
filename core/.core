@@ -33,6 +33,7 @@ iptables
 json-c
 jsoncpp
 kbd
+keyutils
 kmod
 krb5
 less
@@ -51,6 +52,7 @@ libnftnl
 libnghttp2
 libnsl
 libpcap
+libpng
 libpsl
 libseccomp
 libssh2
@@ -64,6 +66,7 @@ mpfr
 ncurses
 openldap
 openssl
+    ca-certificates
 p11-kit
 pam
 pcre
