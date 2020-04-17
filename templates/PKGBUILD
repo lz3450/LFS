@@ -8,6 +8,7 @@ arch=(x86_64)
 url=""
 groups=()
 depends=()
+makedepends=()
 optdepends=()
 checkdepends=()
 backup=()
