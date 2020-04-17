@@ -1,0 +1,44 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=pytorch
+pkgver=1.4.1
+pkgrel=1
+arch=(x86_64)
+url="https://pytorch.org/"
+depends=(google-glog gflags opencv openmp cuda cudnn nccl pybind11 python python-yaml
+         python-numpy protobuf ffmpeg python-future qt5-base intel-dnnl intel-mkl ninja)
+makedepends=(cmake pkgconfig magma)
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=($pkgname-$pkgver::git+https://github.com/pytorch/pytorch.git#tag=v$pkgver)
+noextract=()
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname-$pkgver
+  
+  git submodule sync
+  git submodule update --init --recursive
+
+  export TORCH_CUDA_ARCH_LIST="6.1;6.1+PTX;6.2;6.2+PTX;7.0;7.0+PTX;7.2;7.2+PTX;7.5;7.5+PTX"
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  python setup.py build
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  pytorchpath="usr/lib/python$(python --version)/site-packages/torch"
+
+  python setup.py install --root="${pkgdir}"/ --optimize=1 --skip-build
+}
