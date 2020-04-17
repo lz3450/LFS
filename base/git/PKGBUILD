@@ -72,5 +72,7 @@ package() {
   install -Dm0755 contrib/credential/libsecret/git-credential-libsecret "$pkgdir"/usr/lib/git/
 
   # TODO: git-daemon
-  # TODO: git sysusers
+  
+  # sysusers
+  echo 'u git - "git daemon user" / /usr/bin/git-shell' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/git.conf
 }
