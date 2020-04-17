@@ -33,7 +33,7 @@ base
     gawk
         mpfr
     systemd {nsswith.conf} {apparmor}
-        acl audit cryptsetup curl dbus elfutils gnu-efi-libs iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode valgrind zlib [gperf]
+        acl audit cryptsetup curl dbus elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode valgrind zlib [gperf]
     pciutils
         curl kmod
     iputils
@@ -45,6 +45,8 @@ base
     automake
     binutils
     bison
+    cmake {cmake-gui: qt5}
+        curl jsoncpp libarchive libuv rhash shared-mime-info
     fakeroot
     flex
     gettext
