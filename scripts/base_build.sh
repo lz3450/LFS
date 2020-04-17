@@ -39,6 +39,7 @@ pkgs=(
     automake
     binutils
     bison
+    cmake
     fakeroot
     flex
     gettext
