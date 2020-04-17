@@ -40,6 +40,7 @@ pkgs=(
     binutils
     bison
     cmake
+    e2fsprogs
     fakeroot
     flex
     gettext

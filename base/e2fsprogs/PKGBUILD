@@ -1,0 +1,54 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=e2fsprogs
+pkgver=1.45.6
+pkgrel=1
+pkgdesc="Ext2/3/4 filesystem utilities"
+arch=(x86_64)
+url="http://e2fsprogs.sourceforge.net"
+source=(https://www.kernel.org/pub/linux/kernel/people/tytso/$pkgname/v$pkgver/$pkgname-$pkgver.tar.{xz,sign})
+sha256sums=('ffa7ae6954395abdc50d0f8605d8be84736465afc53b8938ef473fcf7ff44256'
+            'SKIP')
+validpgpkeys=('3AB057B7E78D945C8C5591FBD36F769BC11804F0')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  # Remove unnecessary init.d directory
+  sed -i '/init\.d/s|^|#|' misc/Makefile.in
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --libdir=/usr/lib \
+    --sbindir=/usr/bin \
+    --with-root-prefix="" \
+    --enable-elf-shlibs \
+    --disable-fsck \
+    --disable-uuidd \
+    --disable-libuuid \
+    --disable-libblkid
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install install-libs
+
+  sed -i -e 's/^AWK=.*/AWK=awk/' "$pkgdir"/usr/bin/compile_et
+
+  # remove references to build directory
+  sed -i -e 's#^SS_DIR=.*#SS_DIR="/usr/share/ss"#' "$pkgdir"/usr/bin/mk_cmds
+  sed -i -e 's#^ET_DIR=.*#ET_DIR="/usr/share/et"#' "$pkgdir"/usr/bin/compile_et
+}

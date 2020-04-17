@@ -47,6 +47,7 @@ base
     bison
     cmake {cmake-gui: qt5}
         curl jsoncpp libarchive libuv rhash shared-mime-info
+    e2fsprogs
     fakeroot
     flex
     gettext
