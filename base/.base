@@ -6,7 +6,7 @@ base
     gcc
         mpc
     bash
-        ncurses readline
+        ncurses
     coreutils
         acl attr gmp libcap openssl
     util-linux {rfkill, uuidd.socket}
