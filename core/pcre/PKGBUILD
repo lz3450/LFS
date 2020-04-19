@@ -1,0 +1,40 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=pcre
+pkgver=8.44
+pkgrel=1
+pkgdesc="A library that implements Perl 5-style regular expressions"
+arch=(x86_64)
+url="https://www.pcre.org/"
+source=(https://ftp.pcre.org/pub/pcre/$pkgname-$pkgver.tar.bz2{,.sig})
+sha256sums=('19108658b23b3ec5058edc9f66ac545ea19f9537234be1ec62b714c84399366d'
+            'SKIP')
+validpgpkeys=('45F68D54BBE23FB3039B46E59766E084FB0F43D8')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --enable-unicode-properties \
+    --enable-pcre16 \
+    --enable-pcre32 \
+    --enable-jit \
+    --enable-pcregrep-libz \
+    --enable-pcregrep-libbz2 \
+    --enable-pcretest-libreadline
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
