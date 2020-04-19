@@ -1,0 +1,41 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=kbd
+pkgver=2.2.0+5d2c652
+pkgrel=1
+pkgdesc="Keytable files and keyboard utilities"
+arch=(x86_64)
+url="http://www.kbd-project.org"
+checkdepends=(check)
+source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git#commit=5d2c6527b38361635e8068d6e1bd87918778f2ac?signed)
+sha256sums=('SKIP')
+validpgpkeys=('7F2A3D07298149A0793C9A4EA45ABA544CFFD434')
+
+prepare() {
+  cd $pkgname
+
+  autoreconf -if
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --datadir=/usr/share/kbd \
+    --mandir=/usr/share/man
+
+  make KEYCODES_PROGS=yes RESIZECONS_PROGS=yes
+}
+
+check() {
+  cd ${pkgname}
+
+  make check
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir/" KEYCODES_PROGS=yes RESIZECONS_PROGS=yes install
+}

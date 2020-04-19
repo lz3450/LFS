@@ -1,0 +1,28 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libtirpc
+pkgver=1.2.6
+pkgrel=1
+pkgdesc="Transport Independent RPC library (SunRPC replacement)"
+arch=(x86_64)
+url="http://git.linux-nfs.org/?p=steved/libtirpc.git;a=summary"
+depends=(krb5)
+backup=(etc/netconfig)
+source=(https://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.bz2)
+sha256sums=('4278e9a5181d5af9cd7885322fdecebc444f9a3da87c526e7d47f7a12a37d1cc')
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  ./configure \
+    --prefix=/usr \
+    --sysconf=/etc
+
+  make
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  make DESTDIR="$pkgdir/" install
+}

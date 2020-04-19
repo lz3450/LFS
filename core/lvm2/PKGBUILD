@@ -68,7 +68,7 @@ package_device-mapper() {
 }
 
 package_lvm2() {
-  depends=(device-mapper readline thin-provisioning-tools)
+  depends=(device-mapper thin-provisioning-tools)
   backup=(etc/lvm/lvm.conf
           etc/lvm/lvmlocal.conf)
 

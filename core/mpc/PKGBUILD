@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=mpc
+pkgver=1.1.0
+pkgrel=1
+pkgdesc="Library for the arithmetic of complex numbers with arbitrarily high precision"
+arch=(x86_64)
+url="http://www.multiprecision.org/"
+depends=(mpfr)
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-${pkgver/_/-}.tar.gz{,.sig})
+sha256sums=('6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e'
+            'SKIP')
+validpgpkeys=('AD17A21EF8AED8F1CC02DBD9F7D5C9BF765C61E3')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

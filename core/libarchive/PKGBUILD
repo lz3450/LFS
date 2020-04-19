@@ -1,0 +1,37 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libarchive
+pkgver=3.4.2
+pkgrel=1
+pkgdesc="Multi-format archive and compression library"
+arch=(x86_64)
+url="https://libarchive.org/"
+depends=(acl attr expat lz4 openssl zstd)
+source=(https://github.com/${pkgname}/${pkgname}/releases/download/v${pkgver}/${pkgname}-${pkgver}.tar.xz{,.asc})
+sha256sums=('d8e10494b4d3a15ae9d67a130d3ab869200cfd60b2ab533b391b0a0d5500ada1'
+            'SKIP')
+validpgpkeys=('A5A45B12AD92D964B89EEE2DEC560C81CEC2276E')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --without-xml2 \
+    --without-nettle \
+    --disable-static
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

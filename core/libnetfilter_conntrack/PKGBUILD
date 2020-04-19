@@ -1,0 +1,28 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libnetfilter_conntrack
+pkgver=1.0.8
+pkgrel=1
+pkgdesc="Library providing an API to the in-kernel connection tracking state table"
+arch=(x86_64)
+url="https://www.netfilter.org/projects/libnetfilter_conntrack"
+depends=(libmnl libnfnetlink)
+source=($url/files/$pkgname-$pkgver.tar.bz2{,.sig})
+sha256sums=('0cd13be008923528687af6c6b860f35392d49251c04ee0648282d36b1faec1cf'
+            'SKIP')
+validpgpkeys=('C09DB2063F1D7034BA6152ADAB4655A126D292E4') 
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

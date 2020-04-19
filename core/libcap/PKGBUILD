@@ -1,0 +1,43 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libcap
+pkgver=2.33
+pkgrel=1
+pkgdesc="POSIX 1003.1e capabilities"
+arch=(x86_64)
+url="https://sites.google.com/site/fullycapable/"
+depends=(attr)
+source=(https://kernel.org/pub/linux/libs/security/linux-privs/libcap2/$pkgname-$pkgver.tar.{xz,sign})
+sha256sums=('08edeaba2757021aeec45c4eeec52566675e0e0f5d4f057284d729e04f2643d6'
+            'SKIP')
+validpgpkeys=('38A644698C69787344E954CE29EE848AE2CCF3F4')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  sed -i "s/CFLAGS :=/CFLAGS += \$(CPPFLAGS) /" Make.Rules
+  sed -i "s/LDFLAGS :=/LDFLAGS +=/" Make.Rules
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  make \
+    prefix=/usr \
+    lib=lib
+    SBINDIR=/usr/bin \
+    RAISE_SETFCAP=no
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make \
+    DESTDIR="$pkgdir/" \
+    prefix=/usr \
+    lib=lib
+    SBINDIR=/usr/bin \
+    install
+
+  install -Dm644 pam_cap/capability.conf "$pkgdir"/usr/share/doc/$pkgname/capability.conf.example
+}

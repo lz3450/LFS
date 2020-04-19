@@ -1,0 +1,38 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libnl
+pkgver=3.5.0
+pkgrel=1
+pkgdesc="Library for applications dealing with netlink sockets"
+arch=(x86_64)
+url="https://github.com/thom311/libnl/"
+backup=(etc/libnl/classid
+        etc/libnl/pktloc)
+source=(https://github.com/thom311/libnl/releases/download/libnl${pkgver//./_}/$pkgname-$pkgver.tar.gz{,.sig})
+sha256sums=('352133ec9545da76f77e70ccb48c9d7e5324d67f6474744647a7ed382b5e05fa'
+            'SKIP')
+validpgpkeys=('49EA7C670E0850E7419514F629C2366E4DFC5728')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --sbindir=/usr/bin \
+    --disable-static
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

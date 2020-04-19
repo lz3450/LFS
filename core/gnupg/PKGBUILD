@@ -1,0 +1,66 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gnupg
+pkgver=2.2.20
+pkgrel=1
+pkgdesc="Complete and free implementation of the OpenPGP standard"
+arch=(x86_64)
+url="https://www.gnupg.org/"
+depends=(gnutls libassuan libgcrypt libgpg-error libksba npth pinentry sqlite)
+makedepends=(libusb-compat openldap pcsclite)
+optdepends=("libusb-compat: scdaemon"
+            "openldap: gpg2keys_ldap"
+            "pcsclite: scdaemon")
+checkdepends=(openssh)
+install=gnupg.install
+source=(https://gnupg.org/ftp/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig}
+        23c978640812d123eaffd4108744bdfcf48f7c93.patch)
+sha256sums=('04a7c9d48b74c399168ee8270e548588ddbe52218c337703d7f06373d326ca30'
+            'SKIP'
+            '224551e0b55aa1fc026d202de7d53d98268776d1d803b582c72367943fe74a18')
+validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6'
+              '46CC730865BB5C78EBABADCF04376F3EE0856959'
+              '031EC2536E580D8EA286A9F22071B08A33BD3F06'
+              '5B80C5754298F0CB55D8ED6ABCEF7E294B092E28')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  sed -e '/noinst_SCRIPTS = gpg-zip/c sbin_SCRIPTS += gpg-zip' -i tools/Makefile.in
+
+  patch -R -p1 -i "$srcdir"/23c978640812d123eaffd4108744bdfcf48f7c93.patch
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+		--sysconfdir=/etc \
+		--sbindir=/usr/bin \
+		--libexecdir=/usr/lib/gnupg \
+		--enable-maintainer-mode \
+		--enable-symcryptrun \
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  ln -s gpg "$pkgdir"/usr/bin/gpg2
+	ln -s gpgv "$pkgdir"/usr/bin/gpgv2
+
+  cd doc/examples/systemd-user
+	for i in *.*; do
+		install -Dm644 "$i" "$pkgdir/usr/lib/systemd/user/$i"
+	done
+}

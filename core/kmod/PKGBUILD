@@ -1,0 +1,32 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=kmod
+pkgver=27
+pkgrel=1
+pkgdesc="Linux kernel module management tools and library"
+arch=(x86_64)
+url="https://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary"
+depends=(openssl)
+source=(https://www.kernel.org/pub/linux/utils/kernel/$pkgname/$pkgname-$pkgver.tar.{xz,sign})
+sha256sums=('57bb22c8bb56435991f6b0810a042b0a65e2f1e217551efa58235b7034cdbb9d'
+            'SKIP')
+validpgpkeys=('EAB33C9690013C733916AC839BA2A5A630CBEA53')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --with-xz \
+    --with-zlib \
+    --with-openssl
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

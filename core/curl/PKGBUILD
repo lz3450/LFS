@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="An URL retrieval utility and library"
 arch=(x86_64)
 url="https://curl.haxx.se"
-depends=(ca-certificates krb5 libidn2 libnghttp2 libpsl libssh2 openssl zlib)
+depends=(ca-certificates krb5 libidn2 libnghttp2 libpsl libssh2 openssl)
 source=(https://curl.haxx.se/download/$pkgname-$pkgver.tar.gz{,.asc})
 sha256sums=('01ae0c123dee45b01bbaef94c0bc00ed2aec89cb2ee0fd598e0d302a6b5e0a98'
             'SKIP')

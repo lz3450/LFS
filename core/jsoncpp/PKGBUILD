@@ -1,0 +1,65 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=jsoncpp
+pkgver=1.9.2
+pkgrel=1
+pkgdesc="C++ library for interacting with JSON"
+arch=(x86_64)
+url="https://github.com/open-source-parsers/jsoncpp"
+options=(staticlibs)
+source=($url/archive/$pkgver/$pkgbase-$pkgver.tar.gz)
+sha256sums=('77a402fb577b2e0e5d0bdc1cf9c65278915cdb25171e3452c68b6da8a561f8f0')
+
+build() {
+  cd $pkgname-$pkgver
+
+  msg2 "Building shared library..."
+  meson setup \
+    -Dauto_features=enabled \
+    -Dbuildtype=plain \
+    -Dwrap_mode=nodownload \
+    -Db_lto=true \
+    -Db_pie=true \
+    -Dprefix=/usr \
+    -Dlibexecdir=lib \
+    -Dsbindir=bin \
+    --default-library \
+    shared \
+    build
+
+  ninja -C build
+
+  msg2 "Building static library..."
+  meson setup \
+    -Dauto_features=enabled \
+    -Dbuildtype=plain \
+    -Dwrap_mode=nodownload \
+    -Db_lto=true \
+    -Db_pie=true \
+    -Dprefix=/usr \
+    -Dlibexecdir=lib \
+    -Dsbindir=bin \
+    --default-library \
+    static \
+    build-static
+
+  ninja -C build-static
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  meson test -C build
+
+  cd test
+
+  python runjsontests.py ../build/jsontestrunner
+  python rununittests.py ../build/jsoncpp_test
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  DESTDIR="$pkgdir/" meson install -C build
+  DESTDIR="$pkgdir/" meson install -C build-static
+}

@@ -1,0 +1,31 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=less
+pkgver=551
+pkgrel=1
+pkgdesc="A terminal based program for viewing text files"
+arch=(x86_64)
+url="http://www.greenwoodsoftware.com/less"
+depends=(pcre)
+source=($url/$pkgname-$pkgver.tar.gz
+        $pkgname-$pkgver.tar.gz.sig::$url/$pkgname-$pkgver.sig)
+sha256sums=('ff165275859381a63f19135a8f1f6c5a194d53ec3187f94121ecd8ef0795fe3d'
+            'SKIP')
+validpgpkeys=('AE27252BD6846E7D6EAE1DD6F153A7C833235259')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --with-regex=pcre
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

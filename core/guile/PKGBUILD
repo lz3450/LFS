@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="Portable, embeddable Scheme implementation written in C"
 arch=(x86_64)
 url="https://www.gnu.org/software/guile/"
-depends=(gc gmp libffi libunistring ncurses)
+depends=(gc gmp libffi libunistring)
 source=(https://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
 sha256sums=('08c0e7487777740b61cdd97949b69e8a5e2997d8c2fe6c7e175819eb18444506'
             'SKIP')

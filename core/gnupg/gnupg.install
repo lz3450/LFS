@@ -1,0 +1,15 @@
+_units=(dirmngr.socket gpg-agent.socket gpg-agent-{browser,extra,ssh}.socket)
+
+post_install() {
+	dirmngr </dev/null &>/dev/null
+
+	for _unit in ${_units[@]}; do
+    systemctl enable $_unit
+  done
+}
+
+pre_remove() {
+  for _unit in ${_units[@]}; do
+    systemctl disable $_unit
+  done
+}

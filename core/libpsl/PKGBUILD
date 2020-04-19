@@ -1,0 +1,49 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libpsl
+pkgver=0.21.0
+pkgrel=1
+pkgdesc="Public Suffix List library"
+arch=(x86_64)
+url="https://github.com/rockdaboot/libpsl"
+depends=(libidn2)
+makedepends=(publicsuffix-list)
+source=(https://github.com/rockdaboot/libpsl/releases/download/$pkgname-$pkgver/$pkgname-$pkgver.tar.gz
+        https://github.com/rockdaboot/libpsl/commit/9347024221f4a9d63f9dcafcda13362a7c8d92fe.patch)
+sha256sums=('41bd1c75a375b85c337b59783f5deb93dbb443fb0a52d257f403df7bd653ee12'
+            'a50c2c510a6543e79767af75b909bf7abc15e6b057b0253a036da66b27a590f1')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  patch -Np1 -i "$srcdir"/9347024221f4a9d63f9dcafcda13362a7c8d92fe.patch
+  rm -rf list
+  autoreconf -ifv
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --enable-builtin=libidn2 \
+    --enable-runtime=libidn2 \
+    --disable-static \
+    --disable-dependency-tracking
+    --with-psl-file=/usr/share/publicsuffix/public_suffix_list.dat \
+    --with-psl-testfile=/usr/share/publicsuffix/test_psl.txt
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

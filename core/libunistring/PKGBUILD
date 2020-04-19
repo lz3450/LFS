@@ -1,0 +1,40 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libunistring
+pkgver=0.9.10
+pkgrel=1
+pkgdesc="Library for manipulating Unicode strings and C strings"
+arch=(x86_64)
+url="https://www.gnu.org/software/libunistring"
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
+sha256sums=('eb8fb2c3e4b6e2d336608377050892b54c3c983b646c561836550863003c05d7'
+            'SKIP')
+validpgpkeys=('462225C3B46F34879FC8496CD605848ED7E69871')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  # https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=cca32830b5
+  sed -i '/pragma weak pthread_create/d' tests/glthread/thread.h
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

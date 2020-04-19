@@ -8,72 +8,97 @@ ca-certificates
 cryptsetup
     argon2 device-mapper json-c libgcrypt openssl popt
 curl
-    ca-certificates krb5 libidn2 libnghttp2 libpsl libssh2 openssl zlib
+    ca-certificates krb5 libidn2 libnghttp2 libpsl libssh2 openssl
 db
-dbus
-    expat (audit)
 device-mapper
     [thin-provisioning-tools]
 diffutils
 ed
 elfutils
-    curl libarchive libmicrohttpd sqlite zlib
+    curl libarchive libmicrohttpd sqlite
 expat
 gdbm
 gmp
 gnu-efi
+gnutls
+    libidn2 libtasn1 libunistring nettle p11-kit (guile) {net-tools}
 gnupg
+    gnutls libassuan libgcrypt libgpg-error libksba npth pinentry sqlite [libusb-compat openldap pcsclite] (libusb-compat openldap pcsclite) {openssh}
 gperf
 gpgme
     gnupg libgpg-error [swig] (qt5)
 guile
-    gc gmp libffi libunistring ncurses
+    gc gmp libffi libunistring
 iptables
     libnetfilter_conntrack libnfnetlink libnftnl libpcap
 json-c
 jsoncpp
 kbd
+    {check}
 keyutils
 kmod
+    openssl
 krb5
+    keyutils openldap
 less
+    pcre
 libarchive
+    acl attr expat lz4 openssl zstd
 libcap
+    attr
 libcap-ng
 libgcrypt
+    libgpg-error
 libgpg-error
 libffi
 libidn2
+    libunistring
 libmicrohttpd
+    gnutls {curl}
 libmnl
 libnetfilter_conntrack
+    libmnl libnfnetlink
 libnfnetlink
 libnftnl
+    libmnl
 libnghttp2
+libnl
 libnsl
+    libtirpc
 libpcap
+    bluez libnl libusb
 libpng
 libpsl
+    libidn2 [publicsuffix-list]
 libseccomp
+    {valgrind}
 libssh2
+    openssl
+libtirpc
 libunistring
+libusb
+libusb-compat
+    libusb
 libuv
 linux-headers
 lvm2
 lz4
 mpc
+    mpfr
 mpfr
-ncurses
+    gmp
 openldap
+    cyrus-sasl
 openssl
     ca-certificates
 p11-kit
+    libffi libtasn1
 pam
 pcre
 pcre2
 popt
+publicsuffix-list
 qrencode
-readline
 rhash
 shadow
 shared-mime-info
@@ -81,4 +106,3 @@ sqlite
 swig
 thin-provisioning-tools
 valgrind
-zlib
