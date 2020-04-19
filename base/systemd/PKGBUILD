@@ -5,7 +5,7 @@ pkgver=245.4
 pkgrel=1
 arch=(x86_64)
 url="https://www.github.com/systemd/systemd-stable"
-depends=(acl audit cryptsetup curl dbus elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode zlib)
+depends=(acl audit cryptsetup curl elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode)
 makedepends=(gperf)
 install=systemd.install
 source=(git+https://www.github.com/systemd/systemd-stable#tag=v$pkgver?signed
@@ -22,12 +22,10 @@ prepare() {
 
   # Replace cdrom/dialout/tape groups with optical/uucp/storage
   patch -Np1 -i ../0001-Use-Arch-Linux-device-access-groups.patch
-
-  mkdir build
 }
 
 build() {
-  cd $pkgbase-stable/build
+  cd $pkgbase-stable
 
   local _timeservers=({0..3}.arch.pool.ntp.org)
   # We use these public name services, ordered by their privacy policy (hopefully):
@@ -102,19 +100,19 @@ build() {
     -Dxz=true \
     -Dzlib=true \
     -Dzshcompletiondir=/usr/share/zsh/site-functions/ \
-    ..
+    build
 
-  ninja
+  ninja -C build
 }
 
 check() {
-  cd $pkgbase-stable/build
+  cd $pkgbase-stable
 
-  meson test
+  meson test -C build
 }
 
 package() {
-  cd $pkgbase-stable/build
+  cd $pkgbase-stable
 
-  DESTDIR="$pkgdir/" meson install
+  DESTDIR="$pkgdir/" meson install -C build
 }

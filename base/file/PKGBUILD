@@ -6,7 +6,6 @@ pkgrel=1
 pkgdesc="File type identification utility"
 arch=(x86_64)
 url="https://www.darwinsys.com/file/"
-depends=(zlib)
 source=(ftp://ftp.astron.com/pub/$pkgname/$pkgname-$pkgver.tar.gz{,.asc})
 sha256sums=('593c2ffc2ab349c5aea0f55fedfe4d681737b6b62376a9b3ad1e77b2cc19fa34'
             'SKIP')

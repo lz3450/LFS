@@ -12,7 +12,6 @@ base
     util-linux {rfkill, uuidd.socket}
         libcap-ng pam shadow
     file
-        zlib
     findutils
     procps-ng
         ncurses
@@ -33,7 +32,7 @@ base
     gawk
         mpfr
     systemd {nsswith.conf} {apparmor}
-        acl audit cryptsetup curl dbus elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode valgrind zlib [gperf]
+        acl audit cryptsetup curl elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode valgrind [gperf]
     pciutils
         curl kmod
     iputils
@@ -47,6 +46,8 @@ base
     bison
     cmake {cmake-gui: qt5}
         curl jsoncpp libarchive libuv rhash shared-mime-info
+    dbus
+        expat (audit)
     e2fsprogs
     fakeroot
     flex
@@ -63,12 +64,13 @@ base
     sudo
         libgcrypt openldap pam
     which
+    zlib
     perl
         db gdbm
     python
-        expat gdbm libffi libnsl openssl zlib [bluez llvm sqlite tk valgrind] (sqlite mpdecimal tk)
+        expat gdbm libffi libnsl openssl [bluez llvm sqlite tk valgrind] (sqlite mpdecimal tk)
     git
-        curl expat openssl pcre2 zlib {libsecret tk}
+        curl expat openssl pcre2 {libsecret tk}
     pacman
         curl gpgme libarchive {fakechroot}
     (texinfo)

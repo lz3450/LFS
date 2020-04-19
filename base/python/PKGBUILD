@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="Next generation of the python high-level scripting language"
 arch=(x86_64)
 url="https://www.python.org/"
-depends=(expat gdbm libffi libnsl openssl zlib)
+depends=(expat gdbm libffi libnsl openssl)
 makedepends=(bluez llvm mpdecimal sqlite tk valgrind)
 optdepends=("sqlite"
             "mpdecimal: for decimal"

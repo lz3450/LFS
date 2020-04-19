@@ -10,14 +10,8 @@ depends=(libcap libidn2 libunistring)
 source=(git+https://github.com/iputils/iputils.git#commit=f406ac9272885016d43214c415b9a9972cd3dc55)
 sha256sums=('SKIP')
 
-prepare() {
-  cd $pkgname
-  
-  mkdir build
-}
-
 build() {
-  cd $pkgname/build
+  cd $pkgname
 
   meson setup \
     -Dauto_features=enabled \
@@ -29,13 +23,13 @@ build() {
     -Dlibexecdir=lib \
     -Dsbindir=bin \
     -DBUILD_RARPD=true \
-    ..
+    build
 
-  ninja
+  ninja -C build
 }
 
 package() {
-  cd $pkgname/build
+  cd $pkgname
 
-  DESTDIR="$pkgdir/" meson install
+  DESTDIR="$pkgdir/" meson install -C build
 }
