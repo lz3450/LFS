@@ -6,6 +6,7 @@ pkgrel=1
 pkgdesc=""
 arch=(x86_64)
 url=""
+license=('GPL')
 groups=()
 depends=()
 makedepends=()
@@ -14,7 +15,9 @@ checkdepends=()
 backup=()
 options=()
 install=
+changelog=
 source=($pkgname-$pkgver.tar.gz)
+noextract=()
 sha256sums=()
 
 build() {
