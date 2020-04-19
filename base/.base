@@ -6,7 +6,6 @@ base
     gcc
         mpc
     bash
-        ncurses
     coreutils
         acl attr gmp libcap openssl
     util-linux {rfkill, uuidd.socket}
@@ -14,9 +13,7 @@ base
     file
     findutils
     procps-ng
-        ncurses
     psmisc
-        ncurses
     shadow
         acl attr audit pam
     tar
@@ -57,10 +54,12 @@ base
     make
         guile
     meson
+    ncurses
     ninja
     patch
         attr [ed] {ed}
     pkgconf
+    readline
     sudo
         libgcrypt openldap pam
     which

@@ -7,7 +7,6 @@ pkgrel=1
 pkgdesc="The GNU Bourne Again shell"
 arch=(x86_64)
 url="https://www.gnu.org/software/bash/bash.html"
-depends=(ncurses)
 optdepends=("bash-completion: for tab completion")
 provides=(sh)
 source=(https://ftp.gnu.org/gnu/bash/bash-$_basever.tar.gz{,.sig}
