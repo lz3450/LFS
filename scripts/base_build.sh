@@ -40,6 +40,7 @@ pkgs=(
     binutils
     bison
     cmake
+    dbus
     e2fsprogs
     fakeroot
     flex
@@ -57,6 +58,7 @@ pkgs=(
     python
     git
     pacman
+    zlib
 )
 
 if [[ ! -d $logdir ]]; then
