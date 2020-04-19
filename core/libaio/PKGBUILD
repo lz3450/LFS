@@ -1,0 +1,30 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libaio
+pkgver=0.3.112
+pkgrel=1
+pkgdesc="The Linux-native asynchronous I/O facility (aio) library"
+arch=(x86_64)
+url="http://lse.sourceforge.net/io/aio.html"
+source=(http://ftp.de.debian.org/debian/pool/main/liba/$pkgname/${pkgname}_${pkgver}.orig.tar.xz)
+sha256sums=('f69e5800425f4ea957426693ac09f9896bb993db5490fa021644454adcc72a32')
+
+build() {
+  cd $pkgname-$pkgver
+
+  CFLAGS="-march=native -O2 -pipe"
+
+  make prefix="/usr/"
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make partcheck
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" prefix="/usr/" install
+}
