@@ -6,8 +6,6 @@ pkgrel=1
 pkgdesc="The Open Source toolkit for Secure Sockets Layer and Transport Layer Security"
 arch=(x86_64)
 url="https://www.openssl.org"
-license=('GPL')
-depends=(perl)
 backup=(etc/ssl/openssl.cnf)
 source=(https://www.openssl.org/source/$pkgname-$pkgver.tar.gz{,.asc})
 sha256sums=('186c6bfe6ecfba7a5b48c47f8a1673d0f3b0e5ba2e25602dd23b629975da3f35'
@@ -27,7 +25,7 @@ build() {
     no-ssl3-method \
     enable-ec_nistp_64_gcc_128 \
     linux-x86_64 \
-    "-Wa,--noexecstack ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+    "-Wa,--noexecstack $CPPFLAGS $CFLAGS $LDFLAGS"
 
   make depend
   make
@@ -36,7 +34,11 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make test
+  # The test fails due to missing write permissions in /etc/ssl
+	# Revert this patch for make test
+	patch -p0 -R -i "$srcdir"/ca-dir.patch
+	make test
+	patch -p0 -i "$srcdir"/ca-dir.patch
 }
 
 package() {
