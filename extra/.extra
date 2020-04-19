@@ -1,3 +1,4 @@
+check
 libx11
 python-audit
     audit [krb5 libcap-ng swig linux-headers]
