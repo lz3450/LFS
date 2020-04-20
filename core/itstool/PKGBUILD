@@ -1,0 +1,32 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=itstool
+pkgver=2.0.6
+pkgrel=1
+pkgdesc="XML to PO and back again"
+arch=(x86_64)
+url="http://itstool.org"
+depends=(ibxml2)
+source=(http://files.itstool.org/itstool/$pkgname-$pkgver.tar.bz2)
+sha256sums=('6233cc22726a9a5a83664bf67d1af79549a298c23185d926c3677afa917b92a9')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

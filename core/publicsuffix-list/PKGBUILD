@@ -1,0 +1,17 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=publicsuffix-list
+pkgver=2020.0409
+pkgrel=1
+pkgdesc="Cross-vendor public domain suffix database"
+arch=(any)
+url="https://github.com/publicsuffix/list"
+source=(git+$url#commit=ff6fcea0f91830e909a8ea80c81ac101748d0c0b?signed)
+sha256sums=('SKIP')
+validpgpkeys=('5DE3E0509C47EA3CF04A42D34AEE18F83AFDEB23')
+
+package() {
+  cd list
+
+  install -Dm644 public_suffix_list.dat tests/test_psl.txt -t "$pkgdir"/usr/share/publicsuffix
+}

@@ -1,0 +1,44 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=lapack
+pkgver=3.9.0
+pkgrel=1
+pkgdesc="Linear Algebra PACKage"
+arch=(x86_64)
+url="https://www.netlib.org/lapack"
+source=($pkgname-$pkgver.tar.gz::https://github.com/Reference-LAPACK/lapack/archive/v$pkgver.tar.gz
+        lapacke-missing-symbols.patch::https://github.com/Reference-LAPACK/lapack/commit/87536aa3.patch)
+sha256sums=('106087f1bb5f46afdfba7f569d0cbe23dacb9a07cd24733765a0e89dbe1ad573'
+            '327d62ee39eeb967ce48b4ed0b95e78c6210f688b5c3f944810aafe68d2dadfa')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  # https://github.com/Reference-LAPACK/lapack/issues/365
+  patch -p1 -i "$srcdir"/lapacke-missing-symbols.patch
+
+  mkdir build
+}
+
+build() {
+  cd $pkgname-$pkgver/build
+
+  cmake \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_Fortran_COMPILER=gfortran \
+    -DCMAKE_SKIP_RPATH=ON \
+    -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_TESTING=OFF \
+    -DLAPACKE_WITH_TMG=ON \
+    -DCBLAS=ON \
+    -DBUILD_DEPRECATED=ON \
+    ..
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver/build
+
+  make DESTDIR="$pkgdir/" install
+}

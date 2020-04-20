@@ -1,0 +1,53 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=icu
+pkgver=65.1
+pkgrel=1
+pkgdesc="International Components for Unicode library"
+arch=(x86_64)
+url="http://site.icu-project.org/home"
+source=(https://github.com/unicode-org/icu/releases/download/release-${pkgver//./-}/${pkgname}4c-${pkgver//./_}-src.tgz{,.asc}
+        icu-65.1-initialized-buffer-uloc_getKeywordValue.patch::https://github.com/unicode-org/icu/commit/fab4c3c719.patch
+        icu-65.1-prevent-SEGV_MAPERR-in-append.patch::https://github.com/unicode-org/icu/commit/b7d08bc04a.patch)
+sha256sums=('53e37466b3d6d6d01ead029e3567d873a43a5d1c668ed2278e253b683136d948'
+            'SKIP'
+            '2fafe710a69e0e81f38c8a36fcc17fa494ce27af63ea41d23815b36b1ee319c3'
+            '655c4e207772d4fd0f48028f1c8a2cd679609177c07d8db23e9496980c0fc78a')
+validpgpkeys=('BA90283A60D67BA0DD910A893932080F4FB419E3'
+              '9731166CD8E23A83BEE7C6D3ACA5DBE1FD8FABF1'
+              'FFA9129A180D765B7A5BEA1C9B432B27D1BA20D7'
+              'E4098B78AFC94394F3F49AA903996C7C83F12F11')
+
+prepare() {
+  cd $pkgname
+
+  # https://unicode-org.atlassian.net/browse/ICU-20884
+  patch -Np2 -i ../icu-65.1-initialized-buffer-uloc_getKeywordValue.patch
+
+  # https://github.com/unicode-org/icu/pull/971
+  patch -Np2 -i ../icu-65.1-prevent-SEGV_MAPERR-in-append.patch
+}
+
+build() {
+  cd $pkgname/source
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --mandir=/usr/share/man \
+    --sbindir=/usr/bin
+
+  make
+}
+
+check() {
+  cd $pkgname/source
+
+  make -k check
+}
+
+package() {
+  cd $pkgname/source
+
+  make DESTDIR="$pkgdir/" install
+}

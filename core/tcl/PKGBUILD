@@ -1,0 +1,55 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=tcl
+pkgver=8.6.10
+pkgrel=1
+pkgdesc="The Tcl scripting language"
+arch=(x86_64)
+url="http://tcl.sourceforge.net/"
+source=(https://downloads.sourceforge.net/sourceforge/tcl/$pkgname$pkgver-src.tar.gz)
+sha256sums=('5196dbf6638e3df8d5c87b5815c8c2b758496eb6f0e41446596c9a4e638d87ed')
+
+prepare() {
+  cd $pkgname$pkgver
+
+  # we build the tcl sqlite interface in sqlite-tcl package
+  rm -rf pkgs/sqlite3*
+}
+
+build() {
+  cd $pkgname$pkgver/unix
+
+  ./configure \
+    --prefix=/usr \
+    --enable-threads \
+    --enable-64bit
+
+  make
+}
+
+check() {
+  cd $pkgname$pkgver/unix
+
+  make test
+}
+
+package() {
+  cd $pkgname$pkgver/unix
+
+  make DESTDIR="$pkgdir/" install
+
+  sed -e "s#$srcdir/$pkgname$pkgver/unix#/usr/lib#" \
+      -e "s#$srcdir/$pkgname$pkgver/unix#/usr/include#" \
+      -i tclConfig.sh
+  
+  sed -e "s#$srcdir/$pkgname$pkgver/unix/pkgs/tdbc1.1.1#/usr/lib/tdbc1.1.1#" \
+      -e "s#$srcdir/$pkgname$pkgver/pkgs/tdbc1.1.1/generic#/usr/include#" \
+      -e "s#$srcdir/$pkgname$pkgver/pkgs/tdbc1.1.1/library#/usr/lib/tcl8.6#" \
+      -e "s#$srcdir/$pkgname$pkgver/pkgs/tdbc1.1.1#/usr/include#" \
+      -i pkgs/tdbc1.1.1/tdbcConfig.sh
+
+  sed -e "s#$srcdir/$pkgname$pkgver/unix/pkgs/itcl4.2.0#/usr/lib/itcl4.2.0#" \
+      -e "s#$srcdir/$pkgname$pkgver/pkgs/itcl4.2.0/generic#/usr/include#" \
+      -e "s#$srcdir/$pkgname$pkgver/pkgs/itcl4.2.0#/usr/include#" \
+      -i pkgs/itcl4.2.0/itclConfig.sh
+}

@@ -1,0 +1,66 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=boost
+pkgver=1.72.0
+pkgrel=1
+pkgdesc="Free peer-reviewed portable C++ source libraries"
+arch=(x86_64)
+url="https://www.boost.org/"
+depends=(icu zstd)
+makedepends=(python-numpy)
+# makedepends=(openmpi python-numpy)
+# optdepends=("openmpi: for mpi support")
+source=(https://dl.bintray.com/boostorg/release/$pkgver/source/${pkgname}_${pkgver//./_}.tar.bz2)
+sha256sums=('59c9b274bc451cf91a9ba1dd2c7fdcaf5d60b1b3aa83f2c9fa143417cc660722')
+
+prepare() {
+  cd ${pkgname}_${pkgver//./_}
+
+  mkdir -p "$srcdir"/stagedir
+
+  # TODO: Support for OpenMPI
+}
+
+build() {
+  cd ${pkgname}_${pkgver//./_}
+
+  ./bootstrap.sh \
+    --prefix="/usr" \
+    --with-toolset=gcc \
+    --with-icu \
+    --with-python=/usr/bin/python \
+
+  ./b2 \
+    --stagedir="$srcdir/stagedir" \
+    --build-dir=build \
+    toolset=gcc \
+    variant=release \
+    link=shared,static \
+    threading=multi \
+    runtime-link=shared \
+    cflags="$CPPFLAGS $CFLAGS -fPIC -O3" \
+    cxxflags="$CPPFLAGS $CXXFLAGS -std=c++14 -fPIC -O3" \
+    linkflags="$LDFLAGS" \
+    -d+2 \
+    -j$(nproc) \
+    stage
+}
+
+package() {
+  cd ${pkgname}_${pkgver//./_}
+
+  ./b2 \
+    --prefix="$pkgdir/usr/" \
+    --build-dir=build \
+    toolset=gcc \
+    variant=release \
+    link=shared,static \
+    threading=multi \
+    runtime-link=shared \
+    cflags="$CPPFLAGS $CFLAGS -fPIC -O3" \
+    cxxflags="$CPPFLAGS $CXXFLAGS -std=c++14 -fPIC -O3" \
+    linkflags="$LDFLAGS" \
+    -d+2 \
+    -j$(nproc) \
+    install
+}
