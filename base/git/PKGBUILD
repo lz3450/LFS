@@ -6,9 +6,7 @@ pkgrel=1
 arch=(x86_64)
 url="https://git-scm.com/"
 depends=(curl expat openssl pcre2)
-makedepends=()
-optdepends=("libsecret: credential helper"
-            "tk: gitk and git gui")
+optdepends=("libsecret: credential helper")
 source=(https://www.kernel.org/pub/software/scm/$pkgname/$pkgname-$pkgver.tar.{xz,sign})
 sha256sums=('888228408f254634330234df3cece734d190ef6381063821f31ec020538f0368'
             'SKIP')

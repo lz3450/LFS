@@ -7,10 +7,9 @@ pkgdesc="Next generation of the python high-level scripting language"
 arch=(x86_64)
 url="https://www.python.org/"
 depends=(expat gdbm libffi libnsl openssl)
-makedepends=(bluez llvm mpdecimal sqlite tk valgrind)
+makedepends=(bluez llvm mpdecimal sqlite valgrind)
 optdepends=("sqlite"
-            "mpdecimal: for decimal"
-            "tk: for tkinter")
+            "mpdecimal: for decimal")
 source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc})
 sha256sums=('2646e7dc233362f59714c6193017bb2d6f7b38d6ab4a0cb5fbac5c36c4d845df'
             'SKIP')
