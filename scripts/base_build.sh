@@ -49,16 +49,18 @@ pkgs=(
     m4
     make
     meson
+    ncurses
     ninja
     patch
     pkgconf
+    readline
     sudo
     which
+    zlib
     perl
     python
     git
     pacman
-    zlib
 )
 
 if [[ ! -d $logdir ]]; then
@@ -74,6 +76,7 @@ do
     fi
     cd "$scriptdir"/../base/$p
     # gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
-    makepkg --config "$scriptdir"/../config/makepkg-base.conf -dcCLf &>> $log
-    sudo repo-add $LFS/pkgs/base/base.db.tar.gz $LFS/pkgs/base/$p-*.pkg.tar.gz &>> $log
+    updpkgsums
+    makepkg --config "$scriptdir"/../config/makepkg-lfs.conf -dcCLf &>> $log
+    sudo repo-add $LFS/pkgs/base.db.tar.gz $LFS/pkgs/$p-*.pkg.tar.gz &>> $log
 done
