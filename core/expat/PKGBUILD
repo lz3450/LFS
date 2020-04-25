@@ -15,10 +15,13 @@ build() {
   cd $pkgname-$pkgver
 
   cmake \
-    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -S . \
     -B build
+
+  cmake --build build
 }
 
 check() {

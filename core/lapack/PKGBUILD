@@ -16,12 +16,10 @@ prepare() {
 
   # https://github.com/Reference-LAPACK/lapack/issues/365
   patch -p1 -i "$srcdir"/lapacke-missing-symbols.patch
-
-  mkdir build
 }
 
 build() {
-  cd $pkgname-$pkgver/build
+  cd $pkgname-$pkgver
 
   cmake \
     -DCMAKE_INSTALL_PREFIX=/usr \
@@ -32,13 +30,15 @@ build() {
     -DLAPACKE_WITH_TMG=ON \
     -DCBLAS=ON \
     -DBUILD_DEPRECATED=ON \
-    ..
+    -DCMAKE_BUILD_TYPE=Release \
+    -S . \
+    -B build
 
-  make
+  cmake --build build
 }
 
 package() {
-  cd $pkgname-$pkgver/build
+  cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  cmake --build build --target install -- DESTDIR="$pkgdir/"
 }

@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=guile
-pkgver=2.2.6
+pkgver=3.0.2
 pkgrel=1
 pkgdesc="Portable, embeddable Scheme implementation written in C"
 arch=(x86_64)
