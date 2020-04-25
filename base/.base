@@ -3,75 +3,53 @@ base
     linux-api-headers
     glibc {ld.so.conf}
     tzdata
-    gcc
-        mpc
+    gcc: mpc
     bash
-    coreutils
-        acl attr gmp libcap openssl
-    util-linux {rfkill, uuidd.socket}
-        libcap-ng pam shadow
+    coreutils: acl attr gmp libcap openssl
+    util-linux {rfkill, uuidd.socket}: libcap-ng pam shadow
     file
     findutils
     procps-ng
     psmisc
-    shadow
-        acl attr audit pam
-    tar
-        acl attr
+    shadow: acl attr audit pam
+    tar: acl attr
     bzip2
-    gzip
-        less
+    gzip: less
     xz
-    grep
-        pcre
-    sed
-        acl attr
-    gawk
-        mpfr
-    systemd {nsswith.conf} {apparmor}
-        acl audit cryptsetup curl elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode valgrind [gperf]
-    pciutils
-        curl kmod
-    iputils
-        libcap libidn2 libunistring
-    iproute2
-        iptables elfutils
-    autoconf
-        diffutils
+    grep: pcre
+    sed: acl attr
+    gawk: mpfr
+    systemd {nsswith.conf} {apparmor}: acl audit cryptsetup curl elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 qrencode valgrind [gperf]
+    pciutils: curl kmod
+    iputils: libcap libidn2 libunistring
+    iproute2: iptables elfutils
+    autoconf: diffutils
     automake
     binutils
     bison
-    cmake {cmake-gui: qt5}
-        curl jsoncpp libarchive libuv rhash shared-mime-info
-    dbus
-        expat (audit)
+    cmake {cmake-gui: qt5}: curl jsoncpp libarchive libuv rhash shared-mime-info
+    dbus: expat (audit)
     e2fsprogs
     fakeroot
     flex
     gettext
     libtool
     m4
-    make
-        guile
+    make: guile
     meson
     ncurses
     ninja
-    patch
-        attr [ed] {ed}
+    patch: attr [ed] {ed}
     pkgconf
     readline
-    sudo
-        libgcrypt openldap pam
+    sudo: libgcrypt libldap pam
     which
     zlib
-    perl
-        db gdbm
-    python
-        expat gdbm libffi libnsl openssl [bluez llvm sqlite valgrind] (sqlite mpdecimal)
-    git
-        curl expat openssl pcre2 {libsecret}
-    pacman
-        curl gpgme libarchive {fakechroot}
+    perl: db gdbm
+    python: expat gdbm libffi libnsl openssl [bluez llvm sqlite valgrind] (sqlite mpdecimal)
+    git: curl expat openssl pcre2 {libsecret}
+    pacman: curl gpgme libarchive {fakechroot}
     (texinfo)
     (groff)
     (man-db)
+linux

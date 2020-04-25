@@ -11,7 +11,7 @@ backup=(etc/{protocols,services})
 source=(https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml
         https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml)
 sha256sums=('39b49c33e73959d3651d7b4a2b4f3772f4e3aa6fe6162c641bb69de36fcf943b'
-            '4703c1157774e7b2673bfbf0a7c0ba8bb409df92c92ac906ac66a54cad51497f')
+            '7de8f70197974b5238edd5a5a318392d7c262147c7495b7fb64f66b9966d4ec8')
 
 package() {
   install -dm755 "$pkgdir"/etc

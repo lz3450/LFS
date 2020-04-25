@@ -8,11 +8,9 @@ arch=(x86_64)
 url="https://wiki.freedesktop.org/www/Software/dbus/"
 depends=(expat)
 optdepends=(audit)
-source=(https://dbus.freedesktop.org/releases/$pkgname/$pkgname-$pkgver.tar.gz{,.asc}
-        dbus-reload.hook)
+source=(https://dbus.freedesktop.org/releases/$pkgname/$pkgname-$pkgver.tar.gz{,.asc})
 sha256sums=('54a22d2fa42f2eb2a871f32811c6005b531b9613b1b93a0d269b05e7549fec80'
-            'SKIP'
-            'd636205622d0ee3b0734360225739ef0c7ad2468a09489e6ef773d88252960f3')
+            'SKIP')
 validpgpkeys=('DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90'
               '3C8672A0F49637FE064AC30F52A43A1E4B77B059')
 

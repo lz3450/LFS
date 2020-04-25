@@ -76,3 +76,4 @@ package() {
 
   ln -s ../proc/self/mounts etc/mtab
 }
+
