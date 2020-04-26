@@ -34,6 +34,7 @@ base_pkgs=(
     iproute2
     iputils
     libtool
+    linux
     linux-api-headers
     m4
     make
@@ -128,6 +129,7 @@ core_pkgs=(
     libsasl
     libseccomp
     libssh2
+    libtasn1
     libtirpc
     libunistring
     libusb
@@ -138,6 +140,7 @@ core_pkgs=(
     lz4
     mpc
     mpfr
+    nettle
     npth
     nss
     libldap #openldap
@@ -163,7 +166,7 @@ core_pkgs=(
 )
 
 update() {
-    sudo repo-add -R $LFS/pkgs/$repo.db.tar.gz $LFS/pkgs/$p-*.pkg.tar.gz &>> $log
+    sudo repo-add -R $LFS/pkgs/$1.db.tar.gz $LFS/pkgs/$2-*.pkg.tar.gz
 }
 
 case $1 in
@@ -181,7 +184,10 @@ case $1 in
         ;;
 esac
 
-for p in ${pkgs[@]}
-do
+for r in $(find $LFS/pkgs -name "$repo.db*"); do
+    rm -f $r
+done
+
+for p in ${pkgs[@]}; do
     update $repo $p
 done

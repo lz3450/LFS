@@ -131,6 +131,7 @@ core_pkgs=(
     libsasl
     libseccomp
     libssh2
+    libtasn1
     libtirpc
     libunistring
     libusb
@@ -141,6 +142,7 @@ core_pkgs=(
     lz4
     mpc
     mpfr
+    nettle
     npth
     nss
     openldap
