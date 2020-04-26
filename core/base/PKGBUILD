@@ -2,7 +2,7 @@
 
 pkgname=base
 pkgver=2020.04
-pkgrel=1
+pkgrel=2
 arch=(any)
 depends=(
   autoconf
@@ -30,6 +30,7 @@ depends=(
   iproute2
   iputils
   libtool
+  linux
   linux-api-headers
   m4
   make
@@ -56,7 +57,8 @@ depends=(
   xz
   zlib
 )
-optdepends=("linux: bare metal")
+source=(fstab)
+sha256sums=('cd119c6c215476f0efe91ae7d10558586ea584532bbe1f84df33200d7529b40c')
 
 package() {
   cd $pkgdir
@@ -69,14 +71,20 @@ package() {
   install -dm0750 root
   install -dm1777 tmp
 
+  install -dm755 etc/profile.d
+
   ln -s usr/bin bin
   ln -s usr/bin sbin
   ln -s bin usr/sbin
 
+  ln -s usr/lib lib
   ln -s usr/lib lib64
   ln -s lib usr/lib64
 
   ln -s ../proc/self/mounts etc/mtab
+
+  # /etc
+  for f in fstab; do
+    install -m644 "$srcdir"/$f etc/
+  done
 }
-
-

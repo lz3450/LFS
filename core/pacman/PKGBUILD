@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=5.2.1
-pkgrel=1
+pkgrel=3
 arch=(x86_64)
 url="https://www.archlinux.org/pacman/"
 depends=(curl gpgme libarchive)

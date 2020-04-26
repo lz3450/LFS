@@ -7,7 +7,6 @@ pkgdesc="A library which provides a secure layer over a reliable transport layer
 arch=(x86_64)
 url="https://www.gnutls.org/"
 depends=(libidn2 libtasn1 libunistring nettle p11-kit)
-optdepends=("guile: for use with Guile bindings")
 source=(https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/$pkgname-$pkgver.tar.xz{,.sig})
 sha256sums=('32041df447d9f4644570cf573c9f60358e865637d69b7e59d1159b7240b52f38'
             'SKIP')
@@ -19,12 +18,11 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --enable-guile \
+    --disable-guile \
     --disable-static \
     --with-idn \
     --with-zlib \
-    --with-default-trust-store-pkcs11="pkcs11:model=p11-kit-trust;manufacturer=PKCS%2311%20Kit" \
-    --without-guile-site-dir
+    --with-default-trust-store-pkcs11="pkcs11:model=p11-kit-trust;manufacturer=PKCS%2311%20Kit"
 
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 

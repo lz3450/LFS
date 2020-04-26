@@ -33,4 +33,6 @@ package() {
   cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir/" install
+
+  rm "$pkgdir"/usr/lib/libguile-3.?.so.*-gdb.scm
 }

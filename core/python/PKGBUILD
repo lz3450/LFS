@@ -48,4 +48,6 @@ package() {
   CFLAGS="${CFLAGS/-O2/-O3}"
 
   make DESTDIR="$pkgdir/" EXTRA_CFLAGS="$CFLAGS" install
+
+  ln -s python3 "$pkgdir"/usr/bin/python
 }
