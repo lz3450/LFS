@@ -1,14 +1,11 @@
 #!/bin/bash
 # 
-# build_all.sh
+# update_repo.sh
 #
 
 set -exu -o pipefail
 
 LFS=/mnt/lfs
-
-scriptdir=$(pwd)
-logdir="$scriptdir"/../log
 
 base_pkgs=(
     autoconf
@@ -61,7 +58,7 @@ base_pkgs=(
     util-linux
     which
     xz
-    zlib minizip
+    zlib
 )
 
 core_pkgs=(
@@ -137,13 +134,13 @@ core_pkgs=(
     libusb-compat
     libuv
     libxml2
-    lvm2
+    lvm2 device-mapper
     lz4
     mpc
     mpfr
     npth
     nss
-    openldap
+    libldap #openldap
     openssh
     openssl
     p11-kit
@@ -165,15 +162,8 @@ core_pkgs=(
     zstd
 )
 
-build() {
-    log="$logdir"/$2.log
-    if [[ -f $log ]]; then
-        rm $log
-    fi
-    cd "$scriptdir"/../$1/$2
-    # gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
-    updpkgsums
-    makepkg --config "$scriptdir"/../config/makepkg-lfs.conf -scCLf &>> $log
+update() {
+    sudo repo-add -R $LFS/pkgs/$repo.db.tar.gz $LFS/pkgs/$p-*.pkg.tar.gz &>> $log
 }
 
 case $1 in
@@ -191,12 +181,7 @@ case $1 in
         ;;
 esac
 
-if [[ ! -d $logdir ]]; then
-    mkdir -p $logdir
-fi
-
 for p in ${pkgs[@]}
 do
-    build $repo $p
-    # sudo repo-add $LFS/pkgs/$repo.db.tar.gz $LFS/pkgs/$p-*.pkg.tar.gz &>> $log
+    update $repo $p
 done
