@@ -1,0 +1,33 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libtasn1
+pkgver=4.16.0
+pkgrel=1
+pkgdesc="The ASN.1 library used in GNUTLS"
+arch=(x86_64)
+url="https://www.gnu.org/software/libtasn1/"
+source=(https://ftp.gnu.org/gnu/libtasn1/${pkgname}-${pkgver}.tar.gz{,.sig})
+sha256sums=('0e0fb0903839117cb6e3b56e68222771bebf22ad7fc2295a0ed7d576e8d4329d'
+            'SKIP')
+validpgpkeys=('1F42418905D8206AA754CCDC29EE58B996865171')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make CODE_COVERAGE_LDFLAGS="$LDFLAGS"
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
