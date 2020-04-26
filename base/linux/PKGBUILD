@@ -1,0 +1,47 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=linux
+pkgver=5.4.32
+pkgrel=1
+pkgdesc="LTS Linux Kernel"
+arch=(x86_64)
+url="https://www.kernel.org"
+options=(!strip)
+source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.{xz,sign}
+        config)
+sha256sums=('192d99fab7a47a537493b6d7eddb52892b98f8ada655c0bbb419b360a995f2b3'
+            'SKIP'
+            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
+validpgpkeys=('ABAF11C65A2970B130ABE3C479BE3E4300411886'
+              '647F28654894E3BD457199BE38DBBDC86092693E')
+
+prepare() {
+  export KBUILD_BUILD_HOST=kzl-linux
+  export KBUILD_BUILD_USER=kzl
+  export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
+
+  cd $pkgname-$pkgver
+
+  cp "$srcdir"/config .config
+
+  make localmodconfig
+  make nconfig
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  make all
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" modules_install
+}

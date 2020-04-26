@@ -5,53 +5,55 @@ pkgver=2020.04
 pkgrel=1
 arch=(any)
 depends=(
-  iana-etc
-  linux-api-headers
-  glibc
-  tzdata
-  gcc
-  bash
-  coreutils
-  util-linux
-  file
-  findutils
-  procps-ng
-  psmisc
-  shadow
-  tar
-  bzip2
-  gzip
-  xz
-  grep
-  sed
-  gawk
-  systemd
-  pciutils
-  iputils
-  iproute2
   autoconf
   automake
+  bash
   binutils
   bison
+  bzip2
   cmake
+  coreutils
   dbus
   e2fsprogs
   fakeroot
+  file
+  findutils
   flex
+  gawk
+  gcc
   gettext
+  git
+  glibc
+  grep
+  gzip
+  iana-etc
+  iproute2
+  iputils
   libtool
+  linux-api-headers
   m4
   make
   meson
+  ncurses
   ninja
-  patch
-  pkgconf
-  sudo
-  which
-  perl
-  python
-  git
   pacman
+  patch
+  pciutils
+  perl
+  pkgconf
+  procps-ng
+  psmisc
+  python
+  readline
+  sed
+  shadow
+  sudo
+  systemd
+  tar
+  tzdata
+  util-linux
+  which
+  xz
   zlib
 )
 optdepends=("linux: bare metal")
@@ -76,4 +78,5 @@ package() {
 
   ln -s ../proc/self/mounts etc/mtab
 }
+
 
