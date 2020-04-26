@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=bluez
+pkgver=5.54
+pkgrel=1
+arch=(x86_64)
+url="http://www.bluez.org/"
+depends=(glib2 libical)
+makedepends=()
+source=(https://www.kernel.org/pub/linux/bluetooth/$pkgname-$pkgver.tar.{xz,sign})
+sha256sums=('68cdab9e63e8832b130d5979dc8c96fdb087b31278f342874d992af3e56656dc'
+            'SKIP')
+validpgpkeys=('E932D120BC2AEC444E558F0106CA9F5D1DCF2659')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --mandir=/usr/share/man \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --libexecdir=/usr/lib \
+    --with-dbusconfdir=/usr/share \
+    --enable-btpclient \
+    --enable-midi \
+    --enable-sixaxis \
+    --enable-mesh \
+    --enable-experimental \
+    --enable-library
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

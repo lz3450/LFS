@@ -1,0 +1,35 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libical
+pkgver=3.0.8
+pkgrel=1
+pkgdesc="An open source reference implementation of the icalendar data type and serialization format"
+arch=(x86_64)
+url="https://github.com/libical/libical"
+depends=(db glib2 icu)
+makedepends=(gobject-introspection vala)
+source=($url/archive/v$pkgver.tar.gz)
+sha256sums=('09fecacaf75ba5a242159e3a9758a5446b5ce4d0ab684f98a7040864e1d1286f')
+
+build() {
+  cd $pkgname-$pkgver
+  
+  cmake \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DSHARED_ONLY=yes \
+    -DICAL_BUILD_DOCS=false \
+    -DGOBJECT_INTROSPECTION=true \
+    -DICAL_GLIB_VAPI=true \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  cmake --build build --target install -- DESTDIR="$pkgdir/"
+}
