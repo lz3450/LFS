@@ -7,7 +7,7 @@ pkgdesc="A commandline option parser"
 arch=(x86_64)
 url="http://rpm5.org"
 options=(staticlibs)
-source=(https://deb.debian.org/debian/pool/main/p/$pkgname/$pkgname_$pkgver.orig.tar.gz)
+source=(https://deb.debian.org/debian/pool/main/p/$pkgname/${pkgname}_${pkgver}.orig.tar.gz)
 sha256sums=('e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8')
 
 build() {

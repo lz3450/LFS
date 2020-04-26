@@ -18,7 +18,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" SBINDIR="/usr/bin" BINDIR="/usr/bin" LIBDIR="/usr/lib" USRLIBDIR="/usr/lib" install
 }

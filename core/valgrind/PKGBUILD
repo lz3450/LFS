@@ -32,12 +32,6 @@ build() {
   make
 }
 
-check() {
-  cd $pkgname
-
-  make regtest 
-}
-
 package() {
   cd $pkgname
 

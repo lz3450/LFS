@@ -11,7 +11,7 @@ source=(git+https://github.com/libusb/hidapi.git#commit=ca1a2d6efae8d372587f4c13
 sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./bootstrap
 
@@ -22,7 +22,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

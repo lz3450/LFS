@@ -1,0 +1,55 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgbase=openldap
+pkgname=(libldap)
+pkgver=2.4.49
+pkgrel=1
+arch=(x86_64)
+url="https://www.openldap.org"
+makedepends=(libsasl)
+# makedepends=(libsasl unixodbc)
+source=($url/software/download/OpenLDAP/openldap-release/openldap-$pkgver.tgz)
+sha256sums=('e3b117944b4180f23befe87d0dcf47f29de775befbc469dcf4ac3dab3311e56e')
+
+# TODO: ldap client ldap server
+
+build() {
+  cd $pkgbase-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --libexecdir=/usr/lib \
+    --sysconfdir=/etc \
+    --localstatedir=/var/lib/openldap \
+    --disable-debug \
+    --enable-dynamic \
+    --enable-syslog \
+    --enable-ipv6 \
+    --enable-local \
+    --disable-slapd \
+    --enable-crypt \
+    --enable-spasswd \
+    --enable-modules \
+    --enable-backends=mod \
+    --enable-overlays=mod \
+    --with-cyrus-sasl \
+    --with-threads
+
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  make depend
+  make
+}
+
+package_libldap() {
+  pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries"
+  depends=(libsasl)
+  backup=(etc/openldap/ldap.conf)
+
+  cd $pkgbase-$pkgver
+
+  for dir in include libraries doc/man/man3 ; do
+    make -C $dir DESTDIR="$pkgdir/" install
+  done
+}

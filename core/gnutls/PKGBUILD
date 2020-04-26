@@ -8,7 +8,6 @@ arch=(x86_64)
 url="https://www.gnutls.org/"
 depends=(libidn2 libtasn1 libunistring nettle p11-kit)
 optdepends=("guile: for use with Guile bindings")
-checkdepends=(net-tools)
 source=(https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/$pkgname-$pkgver.tar.xz{,.sig})
 sha256sums=('32041df447d9f4644570cf573c9f60358e865637d69b7e59d1159b7240b52f38'
             'SKIP')
@@ -24,8 +23,8 @@ build() {
     --disable-static \
     --with-idn \
     --with-zlib \
-    --with-default-trust-store-pkcs11="pkcs11:model=p11-kit-trust;manufacturer=PKCS%2311%20Kit"
-    --without-guile-site-dir \
+    --with-default-trust-store-pkcs11="pkcs11:model=p11-kit-trust;manufacturer=PKCS%2311%20Kit" \
+    --without-guile-site-dir
 
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 

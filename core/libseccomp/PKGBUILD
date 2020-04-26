@@ -14,6 +14,8 @@ validpgpkeys=('47A68FCE37C7D7024FD65E11356CE62C2B524099')
 build() {
   cd $pkgname
 
+  ./autogen.sh
+
   ./configure \
     --prefix=/usr
 
@@ -21,13 +23,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

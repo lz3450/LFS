@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="The Kerberos network authentication system"
 arch=(x86_64)
 url="https://web.mit.edu/kerberos/"
-depends=(keyutils openldap)
+depends=(keyutils libldap)
 backup=(etc/krb5.conf
         var/lib/krb5kdc/kdc.conf)
 source=(https://web.mit.edu/kerberos/dist/krb5/$pkgver/$pkgname-$pkgver.tar.gz{,.asc})

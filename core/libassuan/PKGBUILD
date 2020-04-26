@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libassuan
+pkgver=2.5.3
+pkgrel=1
+pkgdesc="IPC library used by some GnuPG related software"
+arch=(x86_64)
+url="https://www.gnupg.org/related_software/libassuan/"
+depends=(libgpg-error)
+source=(https://gnupg.org/ftp/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig})
+sha256sums=('91bcb0403866b4e7c4bc1cc52ed4c364a9b5414b3994f718c70303f7f765e702'
+            'SKIP')
+validpgpkeys=('031EC2536E580D8EA286A9F22071B08A33BD3F06')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

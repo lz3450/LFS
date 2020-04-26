@@ -34,11 +34,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  # The test fails due to missing write permissions in /etc/ssl
-	# Revert this patch for make test
-	patch -p0 -R -i "$srcdir"/ca-dir.patch
 	make test
-	patch -p0 -i "$srcdir"/ca-dir.patch
 }
 
 package() {

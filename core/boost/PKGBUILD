@@ -13,12 +13,12 @@ makedepends=(python-numpy)
 source=(https://dl.bintray.com/boostorg/release/$pkgver/source/${pkgname}_${pkgver//./_}.tar.bz2)
 sha256sums=('59c9b274bc451cf91a9ba1dd2c7fdcaf5d60b1b3aa83f2c9fa143417cc660722')
 
+# TODO: Support for OpenMPI
+
 prepare() {
   cd ${pkgname}_${pkgver//./_}
 
   mkdir -p "$srcdir"/stagedir
-
-  # TODO: Support for OpenMPI
 }
 
 build() {

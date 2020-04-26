@@ -1,0 +1,43 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gc
+pkgver=8.0.4
+pkgrel=1
+pkgdesc="A garbage collector for C and C++"
+arch=(x86_64)
+url="https://www.hboehm.info/gc/"
+source=(https://github.com/ivmai/bdwgc/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz
+        add_stack_bottom_feature.patch::https://github.com/ivmai/bdwgc/commit/5668de71107022a316ee967162bc16c10754b9ce.patch)
+sha256sums=('436a0ddc67b1ac0b0405b61a9675bca9e075c8156f4debd1d06f3a56c7cd289d'
+            '784ade9fe1c2668db77a3c08cd195cd7701331bdf8c9d160038cfce099b77e37')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  patch -p1 -i "$srcdir"/add_stack_bottom_feature.patch
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --enable-cplusplus \
+    --disable-static
+
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

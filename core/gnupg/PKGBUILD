@@ -6,10 +6,10 @@ pkgrel=1
 pkgdesc="Complete and free implementation of the OpenPGP standard"
 arch=(x86_64)
 url="https://www.gnupg.org/"
-depends=(gnutls libassuan libgcrypt libgpg-error libksba npth pinentry sqlite)
-makedepends=(libusb-compat openldap pcsclite)
+depends=(gnutls libassuan libgcrypt libgpg-error libksba npth sqlite)
+makedepends=(libusb-compat libldap pcsclite)
 optdepends=("libusb-compat: scdaemon"
-            "openldap: gpg2keys_ldap"
+            "libldap: gpg2keys_ldap"
             "pcsclite: scdaemon")
 checkdepends=(openssh)
 install=gnupg.install

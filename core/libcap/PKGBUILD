@@ -35,7 +35,7 @@ package() {
   make \
     DESTDIR="$pkgdir/" \
     prefix=/usr \
-    lib=lib
+    lib=lib \
     SBINDIR=/usr/bin \
     install
 

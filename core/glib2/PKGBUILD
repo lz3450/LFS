@@ -7,8 +7,12 @@ pkgdesc="Low level core library"
 arch=(x86_64)
 url="https://wiki.gnome.org/Projects/GLib"
 depends=(libffi pcre)
-source=(git+https://gitlab.gnome.org/GNOME/glib.git#commit=e264e6fcf7f5199e137314b0d1ebca7648613148)
-sha256sums=('SKIP')
+source=(git+https://gitlab.gnome.org/GNOME/glib.git#commit=e264e6fcf7f5199e137314b0d1ebca7648613148
+        gio-querymodules.hook
+        glib-compile-schemas.hook)
+sha256sums=('SKIP'
+            '557c88177f011ced17bdeac1af3f882b2ca33b386a866fdf900b35f927a2bbe8'
+            '64ae5597dda3cc160fc74be038dbe6267d41b525c0c35da9125fbf0de27f9b25')
 
 build() {
   cd glib
@@ -43,5 +47,5 @@ package() {
 
   DESTDIR="$pkgdir" meson install -C build
 
-  install -Dm644 *.hook -t "$pkgdir"/usr/share/libalpm/hooks
+  install -Dm644 "$srcdir"/*.hook -t "$pkgdir"/usr/share/libalpm/hooks
 }
