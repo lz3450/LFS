@@ -57,6 +57,9 @@ depends=(
   xz
   zlib
 )
+backup=(etc/fstab
+        etc/passwd
+        etc/group)
 source=(fstab)
 sha256sums=('cd119c6c215476f0efe91ae7d10558586ea584532bbe1f84df33200d7529b40c')
 

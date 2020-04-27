@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="The GNU Debugger"
 arch=(x86_64)
 url="https://www.gnu.org/software/gdb"
-makedepends=(guile)
+makedepends=(expat guile mpfr)
 source=(https://ftp.gnu.org/gnu/gdb/$pkgname-$pkgver.tar.xz{,.sig})
 sha256sums=('699e0ec832fdd2f21c8266171ea5bf44024bd05164fdf064e4d10cc4cf0d1737'
             'SKIP')
@@ -25,12 +25,13 @@ build() {
 
   ../configure \
     --prefix=/usr \
-    --disable-nls \
     --enable-tui \
     --with-system-readline \
-    --with-python \
-    --with-guile \
-    --with-system-gdbinit
+    --with-system-zlib \
+    --with-expat \
+    --with-mpfr \
+    --with-python=/usr/bin/python3 \
+    --with-guile=guile-3.0
 
   make
 }

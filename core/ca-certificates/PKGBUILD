@@ -32,6 +32,6 @@ package() {
   install -Dm755 update-ca-trust "$pkgdir"/usr/bin/update-ca-trust
   install -Dm644 update-ca-trust.hook "$pkgdir"/usr/share/libalpm/hooks/update-ca-trust.hook
 
-  ln -s "$pkgdir"/etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/cert.pem
-  ln -s "$pkgdir"/etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/certs/ca-certificates.crt
+  ln -s /etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/cert.pem
+  ln -s /etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/certs/ca-certificates.crt
 }

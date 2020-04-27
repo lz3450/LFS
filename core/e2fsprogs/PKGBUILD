@@ -44,7 +44,7 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install install-libs
+  make DESTDIR="$pkgdir/" install
 
   sed -i -e 's/^AWK=.*/AWK=awk/' "$pkgdir"/usr/bin/compile_et
 
