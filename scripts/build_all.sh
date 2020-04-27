@@ -8,17 +8,171 @@ set -exu -o pipefail
 LFS=/mnt/lfs
 
 scriptdir=$(pwd)
-logdir="$scriptdir"/../log
+
+core_pkgs=(
+    # acl
+    # argon2
+    # attr
+    # audit
+    # autoconf
+    # automake
+    # base
+    # bash
+    # bc
+    # binutils
+    # bison
+    # boost
+    # bzip2
+    # ca-certificates
+    # cmake
+    # coreutils
+    # cracklib
+    # cryptsetup
+    # curl
+    # cython
+    # db
+    # dbus
+    # diffutils
+    # e2fsprogs
+    # ed
+    # elfutils
+    # expat
+    # fakeroot
+    # file
+    # findutils
+    # flex
+    # gawk
+    # gc
+    # gcc
+    # gdb
+    # gdbm
+    # gettext
+    # git
+    # glib2
+    # glibc
+    # gmp
+    # gnupg
+    # gnutls
+    # gnu-efi
+    # gperf
+    # gpgme
+    # grep
+    # guile
+    # gzip
+    # hidapi
+    # iana-etc
+    # icu
+    # iproute2
+    # iptables
+    # iputils
+    # itstool
+    # jsoncpp
+    # json-c
+    # kbd
+    # keyutils
+    # kmod
+    # krb5
+    # lapack
+    # less
+    # libaio
+    # libarchive
+    # libassuan
+    # libcap
+    # libcap-ng
+    # libcbor
+    # libedit
+    # libffi
+    # libfido2
+    # libgcrypt
+    # libgpg-error
+    # libidn2
+    # libksba
+    # libmicrohttpd
+    # libmnl
+    # libnetfilter_conntrack
+    # libnfnetlink
+    # libnftnl
+    # libnghttp2
+    # libnl
+    # libnsl
+    # libpcap
+    # libpng
+    # libpsl
+    # libsasl
+    # libseccomp
+    # libssh2
+    # libtasn1
+    # libtirpc
+    # libtool
+    # libunistring
+    # libusb
+    # libusb-compat
+    # libuv
+    # libxml2
+    # linux-api-headers
+    # lvm2
+    # lz4
+    # m4
+    # make
+    # meson
+    # mpc
+    # mpfr
+    # nano
+    # ncurses
+    # nettle
+    # ninja
+    # npth
+    # nss
+    # openldap
+    # openssh
+    # openssl
+    # p11-kit
+    # pacman
+    # pam
+    # patch
+    pciutils
+    pcre
+    pcre2
+    pcsclite
+    perl
+    pkgconf
+    popt
+    procps-ng
+    psmisc
+    publicsuffix-list
+    python
+    python-numpy
+    qrencode
+    readline
+    rhash
+    sed
+    shadow
+    shared-mime-info
+    sqlite
+    sudo
+    swig
+    systemd
+    tar
+    tcl
+    thin-provisioning-tools
+    tzdata
+    util-linux
+    valgrind
+    which
+    xz
+    zlib
+    zstd
+)
 
 build() {
-    log="$logdir"/$2.log
+    cd "$scriptdir"/../$1/$2
+    log=$2.log
     if [[ -f $log ]]; then
         rm $log
     fi
-    cd "$scriptdir"/../$1/$2
     # gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
-    updpkgsums
-    makepkg --config "$scriptdir"/../config/makepkg-lfs.conf -scCLf &>> $log
+    # updpkgsums
+    makepkg --config "$scriptdir"/../config/makepkg-lfs.conf -scCLf --nocheck &>> $log
 }
 
 case $1 in
@@ -32,10 +186,6 @@ case $1 in
         ;;
 esac
 
-if [[ ! -d $logdir ]]; then
-    mkdir -p $logdir
-fi
-
-for p in $(ls --format=single-column ../$repo); do
+for p in ${pkgs[@]}; do
     build $repo $p
 done
