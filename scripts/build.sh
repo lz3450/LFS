@@ -1,11 +1,17 @@
 #!/bin/bash
 # 
-# update_repo.sh
+# build_all.sh
 #
 
 set -exu -o pipefail
 
-pkgs=(
+scriptdir=$(pwd)
+
+tools_stage1_pkgs=(
+    linux-api-headers
+)
+
+core_pkgs=(
     acl
     argon2
     attr
@@ -105,9 +111,7 @@ pkgs=(
     libusb-compat
     libuv
     libxml2
-    linux
-    linux-api-headers
-    lvm2 device-mapper
+    lvm2
     lz4
     m4
     make
@@ -120,7 +124,7 @@ pkgs=(
     ninja
     npth
     nss
-    libldap # openldap
+    openldap
     openssh
     openssl
     p11-kit
@@ -157,18 +161,32 @@ pkgs=(
     valgrind
     which
     xz
-    zlib minizip
+    zlib
     zstd
 )
 
-update() {
-    sudo repo-add -R /home/kzl/makepkg/packages/core.db.tar.gz /home/kzl/makepkg/packages/$1-*.pkg.tar.gz
+build() {
+    cd "$scriptdir"/../$1/$2
+    log=$2.log
+    if [[ -f $log ]]; then
+        rm $log
+    fi
+    gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
+    # updpkgsums
+    makepkg --config "$scriptdir"/../config/makepkg-lfs.conf -scCLf --nocheck --noconfirm &>> $log
 }
 
-for r in $(find $LFS/pkgs -name "core.*"); do
-    rm -f $r
-done
+case $1 in
+    core)
+        pkgs=${core_pkgs[@]}
+        repo='core'
+        ;;
+    *)
+        # unknow repo
+        exit 1
+        ;;
+esac
 
 for p in ${pkgs[@]}; do
-    update $p
+    build $repo $p
 done
