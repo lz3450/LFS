@@ -57,10 +57,20 @@ depends=(
   xz
   zlib
 )
-backup=(etc/fstab
+backup=(etc/crypttab
+        etc/fstab
+        etc/group
+        etc/gshadow
+        etc/host.conf
+        etc/hosts
+        etc/os-release
         etc/passwd
-        etc/group)
-source=(fstab
+        etc/profile
+        etc/resolv.conf
+        etc/securetty
+        etc/shells)
+source=(crypttab
+        fstab
         group
         gshadow
         host.conf
@@ -76,7 +86,8 @@ sha256sums=('cd119c6c215476f0efe91ae7d10558586ea584532bbe1f84df33200d7529b40c')
 package() {
   cd $pkgdir
   
-  for d in boot dev etc home mnt usr var opt srv/http run; do
+  # root filesystem
+  for d in boot dev etc home mnt usr var opt srv run; do
     install -dm755 $d
   done
   install -dm555 proc
@@ -84,20 +95,40 @@ package() {
   install -dm0750 root
   install -dm1777 tmp
 
-  install -dm755 etc/profile.d
+  # /etc
+  install -d etc/{skel,profile.d} usr/share/factory/etc
+  for f in fstab group host.conf hosts os-release passwd profile resolv.conf securetty shells; do
+    install -m644 "$srcdir"/$f etc/
+    install -m644 "$srcdir"/$f usr/share/factory/etc/
+  done
+  ln -s ../proc/self/mounts etc/mtab
+  for f in crypttab gshadow shadow; do
+    install -m600 "$srcdir"/$f etc/
+    install -m600 "$srcdir"/$f usr/share/factory/etc/
+  done
 
+  # /usr
+  for d in bin include lib share src; do
+    install -d -m755 usr/$d
+  done
+  for d in {1..8}; do
+    install -d -m755 usr/share/man/man$d
+  done
+
+  # /usr/local
+  for d in bin etc games include lib man sbin share src; do
+    install -d -m755 usr/local/$d
+  done
+  ln -s ../man usr/local/share/man
+
+
+  # bin symlinks
   ln -s usr/bin bin
   ln -s usr/bin sbin
   ln -s bin usr/sbin
 
+  # lib symlinks
   ln -s usr/lib lib
   ln -s usr/lib lib64
   ln -s lib usr/lib64
-
-  ln -s ../proc/self/mounts etc/mtab
-
-  # /etc
-  for f in fstab group host.conf hosts os-release passwd profile resolv.conf securetty shells; do
-    install -m644 "$srcdir"/$f etc/
-  done
 }
