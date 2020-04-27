@@ -2,7 +2,7 @@
 
 pkgname=globalprotect-gui
 pkgver=5.1.0
-pkgrel=4
+pkgrel=1
 pkgdesc='Global Protect UI'
 arch=(x86_64)
 url='https://utdallas.box.com/s/sn3ardilya3oue3jn2esu9r3yjtsdn5d'

@@ -2,7 +2,7 @@
 
 pkgname=intel-mkl
 pkgver=2020.1.217
-pkgrel=2
+pkgrel=1
 pkgdesc="Intel Math Kernel Library"
 arch=(x86_64)
 url="https://software.intel.com/en-us/mkl"
