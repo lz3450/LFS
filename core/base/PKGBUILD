@@ -60,7 +60,17 @@ depends=(
 backup=(etc/fstab
         etc/passwd
         etc/group)
-source=(fstab)
+source=(fstab
+        group
+        gshadow
+        host.conf
+        hosts
+        os-release
+        passwd
+        profile
+        resolv.conf
+        securetty
+        shells)
 sha256sums=('cd119c6c215476f0efe91ae7d10558586ea584532bbe1f84df33200d7529b40c')
 
 package() {
@@ -87,7 +97,7 @@ package() {
   ln -s ../proc/self/mounts etc/mtab
 
   # /etc
-  for f in fstab; do
+  for f in fstab group host.conf hosts os-release passwd profile resolv.conf securetty shells; do
     install -m644 "$srcdir"/$f etc/
   done
 }
