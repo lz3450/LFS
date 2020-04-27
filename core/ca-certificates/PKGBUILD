@@ -13,8 +13,8 @@ source=(https://hg.mozilla.org/mozilla-central/raw-file/tip/security/nss/lib/ckf
         update-ca-trust.hook)
 sha256sums=('f3bdcd74612952da8476a9d4147f50b29ad0710b7dd95b4c8690500209986d70'
             'd2a1579dae05fd16175fac27ef08b54731ecefdf414085c610179afcf62b096c'
-            'c9f166ab8df93c2bba1fe86a62570860bf94c2ea75f307557f2cfe45ca64429e'
-            '1f1ced9714802713f0576b9de07037ac9131751e655c897ecf33899013bfdd0a')
+            'a6f534bed509e2996ff00a1b6a82fbad070d4a8762c66c55e39aacf932ebcd51'
+            '55b230878d71847c629494d3b1d0b43482568027c3272ffa477c1d77e4594bf6')
 
 build() {
   ./certdata2pem.py
@@ -25,13 +25,13 @@ build() {
 }
 
 package() {
-  install -dm644 "$pkgdir"/etc/{ssl/certs/{edk2,java},$pkgname/extracted}
-  install -dm644 "$pkgdir"/{etc,usr/share}/$pkgname/trust-source/{anchors,blacklist}
-
   install -Dm644 ca-bundle.trust.p11-kit "$pkgdir"/usr/share/ca-certificates/trust-source/mozilla.trust.p11-kit
   install -Dm755 update-ca-trust "$pkgdir"/usr/bin/update-ca-trust
   install -Dm644 update-ca-trust.hook "$pkgdir"/usr/share/libalpm/hooks/update-ca-trust.hook
 
-  ln -s /etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/cert.pem
-  ln -s /etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/certs/ca-certificates.crt
+  install -d "$pkgdir"/{etc,usr/share}/$pkgname/trust-source/{anchors,blacklist}
+  install -d "$pkgdir"/etc/{ssl/certs/{edk2,java},$pkgname/extracted}
+
+  ln -sr "$pkgdir"/etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/cert.pem
+  ln -sr "$pkgdir"/etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/certs/ca-certificates.crt
 }

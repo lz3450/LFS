@@ -27,3 +27,6 @@ extract --format=java-cacerts --filter=ca-anchors --purpose=server-auth /etc/ssl
 ## OpenSSL-style directory with individual PEM files and hash links
 # The directory-format extractors remove all files in the target directory, but not directories or files therein
 extract --format=pem-directory-hash --filter=ca-anchors --purpose=server-auth /etc/ssl/certs
+
+ln -srf /etc/ca-certificates/extracted/tls-ca-bundle.pem /etc/ssl/cert.pem
+ln -srf /etc/ca-certificates/extracted/tls-ca-bundle.pem /etc/ssl/certs/ca-certificates.crt
