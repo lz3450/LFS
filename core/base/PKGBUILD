@@ -2,7 +2,7 @@
 
 pkgname=base
 pkgver=2020.04
-pkgrel=2
+pkgrel=1
 arch=(any)
 depends=(
   autoconf

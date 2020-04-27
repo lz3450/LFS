@@ -16,6 +16,8 @@ prepare() {
   cd $pkgname-$pkgver
 
   mkdir build
+
+  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
 }
 
 build() {
@@ -30,7 +32,6 @@ build() {
     --enable-threads \
     --with-system-zlib
 
-  make configure-host
   make tooldir=/usr
 }
 
