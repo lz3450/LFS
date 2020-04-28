@@ -48,6 +48,21 @@ package_audit() {
   cd $pkgbase-$pkgver
 
   make DESTDIR="$pkgdir/" INSTALL="install -p" install
+
+  install -dm0700 "$pkgdir"/var/log/audit
+
+  rm -rf \
+    "$pkgdir"/etc/rc.d \
+    "$pkgdir"/etc/sysconfig \
+    "$pkgdir"/usr/lib/audit \
+    "$pkgdir"/usr/lib/python*
+
+  sed -ri 's|/sbin|/usr/bin|' \
+    "$pkgdir"/etc/audit/*.conf \
+    "$pkgdir"/etc/audisp/plugins.d/*.conf \
+    "$pkgdir"/usr/lib/systemd/system/auditd.service
+
+  chmod 644 "$pkgdir"/usr/lib/systemd/system/auditd.service
 }
 
 package_python-audit() {
