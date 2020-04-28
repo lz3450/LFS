@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="C library for parsing and generating CBOR, the general-purpose schema-less binary data format"
 arch=(x86_64)
 url="https://github.com/PJK/libcbor"
-source=(https://github.com/PJK/$pkgname/archive/v$pkgver/$pkgname-$pkgver.tar.gz)
+source=($url/archive/v$pkgver/$pkgname-$pkgver.tar.gz)
 sha256sums=('2f805f5fa2790c4fdd16046287f5814703229547da2b83009dd32357623aa182')
 
 build() {

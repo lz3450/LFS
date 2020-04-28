@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=check
+pkgver=0.14.0
+pkgrel=1
+pkgdesc="A unit testing framework for C"
+arch=(x86_64)
+url="https://libcheck.github.io/check/"
+source=(git+https://github.com/libcheck/check#tag=$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  autoreconf -fvi
+
+  ./configure \
+    --prefix=/usr \
+    --disable-static
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make -k check
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir/" install
+}

@@ -1,0 +1,41 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libxslt
+pkgver=1.1.34
+pkgrel=1
+pkgdesc="XML stylesheet transformation library"
+arch=(x86_64)
+url="http://xmlsoft.org/XSLT/"
+depends=(libgcrypt libxml2)
+source=(git+https://gitlab.gnome.org/GNOME/libxslt.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  NOCONFIGURE=1 ./autogen.sh
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --with-python=/usr/bin/python3
+
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make check
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir/" install
+}

@@ -7,26 +7,32 @@ pkgdesc="XML parsing library, version 2"
 arch=(x86_64)
 url="http://xmlsoft.org"
 depends=(icu)
-source=($url/sources/$pkgname-$pkgver.tar.gz)
-sha256sums=('aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f')
+source=(git+https://gitlab.gnome.org/GNOME/libxml2.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  NOCONFIGURE=1 ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
     --with-threads \
     --with-history \
-    --with-python=/usr/bin/python$1 \
+    --with-python=/usr/bin/python3 \
     --with-icu
 
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' libtool
 
-  make
+  PYTHONHASHSEED=0 make
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

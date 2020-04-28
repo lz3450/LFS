@@ -6,8 +6,10 @@ pkgrel=1
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=(x86_64)
 url="https://github.com/pkgconf/pkgconf"
-source=(git+https://git.sr.ht/~kaniini/pkgconf#tag=$pkgname-$pkgver)
-sha256sums=('SKIP')
+source=(git+https://git.sr.ht/~kaniini/pkgconf#tag=$pkgname-$pkgver
+        x86_64-linux-gnu.personality)
+sha256sums=('SKIP'
+            'c8297817ba0b57d003878db247ff34b4c47a7594c9f67dcfe8ff8d6567956cd5')
 
 prepare() {
   cd $pkgname
@@ -23,10 +25,10 @@ build() {
   ../configure \
     --prefix=/usr \
     --sysconfdir=/etc \
+    --disable-static \
     --with-pkg-config-dir="/usr/lib/pkgconfig:/usr/share/pkgconfig" \
     --with-system-libdir="/usr/lib" \
-    --with-system-includedir="/usr/include" \
-    --disable-static
+    --with-system-includedir="/usr/include"
 
   make
 }
@@ -35,4 +37,8 @@ package() {
   cd $pkgname/build
 
   make DESTDIR="$pkgdir/" install
+
+  ln -s pkgconf "$pkgdir"/usr/bin/pkg-config
+  
+  install -Dm644 "$srcdir"/x86_64-linux-gnu.personality -t "$pkgdir"/usr/share/pkgconfig/personality.d
 }

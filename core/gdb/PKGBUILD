@@ -6,11 +6,14 @@ pkgrel=1
 pkgdesc="The GNU Debugger"
 arch=(x86_64)
 url="https://www.gnu.org/software/gdb"
-makedepends=(expat guile mpfr)
+makedepends=(expat)
+# makedepends=(expat guile)
 source=(https://ftp.gnu.org/gnu/gdb/$pkgname-$pkgver.tar.xz{,.sig})
 sha256sums=('699e0ec832fdd2f21c8266171ea5bf44024bd05164fdf064e4d10cc4cf0d1737'
             'SKIP')
 validpgpkeys=('F40ADB902B24264AA42E50BF92EDB04BFF325CF3')
+
+# TODO guile (3.0 does not work)
 
 prepare() {
   cd $pkgname-$pkgver
@@ -29,9 +32,8 @@ build() {
     --with-system-readline \
     --with-system-zlib \
     --with-expat \
-    --with-mpfr \
-    --with-python=/usr/bin/python3 \
-    --with-guile=guile-3.0
+    --with-python=/usr/bin/python3
+    # --with-guile=guile-3.0
 
   make
 }

@@ -28,10 +28,6 @@ build() {
     --disable-static
 
   make
-
-  cd contrib/pngminus
-
-  make PNGLIB_SHARED="-L$pkgdir/usr/lib -lpng" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" png2pnm pnm2png
 }
 
 check() {
@@ -45,5 +41,8 @@ package() {
 
   make DESTDIR="${pkgdir}/" install
 
-  install -Dm0755 contrib/pngminus/{png2pnm,pnm2png} "$pkgdir"/usr/bin/
+  cd contrib/pngminus
+
+  make PNGLIB_SHARED="-L$pkgdir/usr/lib -lpng" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" png2pnm pnm2png
+  install -Dm0755 png2pnm pnm2png "$pkgdir"/usr/bin/
 }

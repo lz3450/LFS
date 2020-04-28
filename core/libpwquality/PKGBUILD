@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libpwquality
+pkgver=1.4.2
+pkgrel=1
+pkgdesc="Library for password quality checking and generating random passwords"
+arch=(x86_64)
+url="https://github.com/libpwquality/libpwquality"
+depends=(cracklib pam)
+source=(git+https://github.com/libpwquality/libpwquality.git#tag=libpwquality-1.4.2)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  NOCONFIGURE=1 ./autogen.sh
+  sed '/mr_IN/d' -i po/LINGUAS
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --with-python-binary=python3
+
+    sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir/" install
+  install -dm755 "$pkgdir"/etc/security/pwquality.conf.d
+}

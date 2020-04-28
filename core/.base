@@ -45,6 +45,7 @@ base
     sudo: libgcrypt libldap pam
     which
     zlib
+    zstd
     perl: db gdbm
     python: expat gdbm libffi libnsl openssl [bluez llvm sqlite valgrind] (sqlite mpdecimal)
     git: curl expat openssl pcre2 {libsecret}

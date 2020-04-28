@@ -6,7 +6,6 @@ pkgrel=1
 pkgdesc="Utilities to handle ELF object files and DWARF debugging information"
 arch=(x86_64)
 url="https://sourceware.org/elfutils/"
-depends=(curl libarchive libmicrohttpd sqlite)
 options=(staticlibs)
 source=(https://sourceware.org/$pkgname/ftp/$pkgver/$pkgname-$pkgver.tar.bz2{,.sig})
 sha256sums=('25a545566cbacaa37ae6222e58f1c48ea4570f53ba991886e2f5ce96e22a23a2'

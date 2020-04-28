@@ -56,6 +56,7 @@ depends=(
   which
   xz
   zlib
+  zstd
 )
 backup=(etc/crypttab
         etc/fstab
@@ -116,9 +117,10 @@ package() {
   done
 
   # /usr/local
-  for d in bin etc games include lib man sbin share src; do
+  for d in bin etc include lib man share src; do
     install -d -m755 usr/local/$d
   done
+  ln -s bin usr/local/sbin
   ln -s ../man usr/local/share/man
 
 
