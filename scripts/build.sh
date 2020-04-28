@@ -174,6 +174,7 @@ core_pkgs=(
     libcbor
     libfido2
     openssh
+    rsync
 )
 
 build() {
