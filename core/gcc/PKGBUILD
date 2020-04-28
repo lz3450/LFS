@@ -8,6 +8,7 @@ pkgdesc="The GNU Compiler Collection"
 arch=(x86_64)
 url="https://gcc.gnu.org"
 makedepends=(binutils mpc)
+options+=(staticlibs !strip)
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         http://isl.gforge.inria.fr/isl-${_islver}.tar.xz)
 sha256sums=('71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1'
@@ -36,26 +37,29 @@ build() {
 
   ../configure \
     --prefix=/usr \
-    --libdir=/usr/lib \
+    --sbindir=/usr/bin \
     --libexecdir=/usr/lib \
+    --libdir=/usr/lib \
+    --infodir=/usr/share/info \
+    --mandir=/usr/share/man \
+    --with-pkgversion="KZL $pkgver-$pkgrel" \
     --enable-shared \
-    --enable-lto \
+    --disable-multilib \
     --enable-threads=posix \
     --enable-__cxa_atexit \
-    --enable-checking=release \
-    --enable-gnu-unique-object \
-    --enable-linker-build-id \
     --enable-gnu-indirect-function \
-    --enable-default-pie \
-    --enable-default-ssp \
-    --enable-cet=auto \
     --enable-languages=c,c++,fortran,lto \
     --disable-libssp \
-    --disable-multilib \
-    --with-pkgversion="KZL $pkgver-$pkgrel" \
-    --with-isl \
+    --enable-default-pie \
+    --enable-default-ssp \
+    --enable-checking=release \
     --with-system-zlib \
-    --with-linker-hash-style=gnu
+    --with-isl \
+    --enable-linker-build-id \
+    --with-linker-hash-style=gnu \
+    --enable-gnu-unique-object \
+    --enable-lto \
+    --enable-cet=auto
 
   ulimit -s 32768
   make
