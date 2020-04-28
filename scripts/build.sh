@@ -1,183 +1,223 @@
 #!/bin/bash
 # 
-# build_all.sh
+# build.sh
 #
 
 set -exu -o pipefail
 
+PKGDEST=/var/makepkg
 scriptdir=$(pwd)
 
-tools_stage1_pkgs=(
+stage1_pkgs=(
     linux-api-headers
+    glibc
+    binutils
+    gcc
+    libtool
+)
+
+stage2_pkgs=(
+    binutils
+    glibc
 )
 
 core_pkgs=(
-    acl
-    argon2
-    attr
-    audit
-    autoconf
-    automake
-    base
-    bash
-    bc
-    binutils
-    bison
-    boost
-    bzip2
-    ca-certificates
-    cmake
-    coreutils
-    cracklib
-    cryptsetup
-    curl
-    cython
-    db
-    dbus
-    diffutils
-    e2fsprogs
-    ed
-    elfutils
-    expat
-    fakeroot
-    file
-    findutils
-    flex
-    gawk
-    gc
-    gcc
-    gdb
-    gdbm
-    gettext
-    git
-    glib2
-    glibc
-    gmp
-    gnupg
-    gnutls
-    gnu-efi
-    gperf
-    gpgme
-    grep
-    guile
-    gzip
-    hidapi
-    iana-etc
-    icu
-    iproute2
-    iptables
-    iputils
-    itstool
-    jsoncpp
-    json-c
-    kbd
-    keyutils
-    kmod
-    krb5
-    lapack
-    less
-    libaio
-    libarchive
-    libassuan
-    libcap
-    libcap-ng
+    # gcc
+    # libtool
+    # iana-etc
+    # tzdata
+    # zlib
+    # bzip2
+    # xz
+    # file
+    # readline
+    # m4
+    # ed
+    # bc
+    # binutils
+    # gmp
+    # mpfr
+    # mpc
+    # attr
+    # acl
+    # cracklib
+    # keyutils
+    # openssl
+    # libsasl
+    # openldap # libldap
+    # krb5
+    # libtirpc
+    # pam
+    # libcap-ng
+    # pcre
+    # swig
+    # audit
+    # shadow
+    # pkgconf
+    # ncurses
+    # libcap
+    # sed
+    # psmisc
+    # bison
+    # flex
+    # grep
+    # bash
+    # db
+    # gdbm
+    # expat
+    # perl
+    # diffutils
+    # autoconf
+    # automake
+    # kmod
+    # gettext
+    # elfutils
+    # libffi
+    # make
+    # libnsl
+    # mpdecimal
+    # tcl
+    # sqlite
+    # gc
+    # libunistring
+    # guile
+    # gdb
+    # valgrind
+    # python
+    # ninja
+    # meson
+    # coreutils
+    # gawk
+    # findutils
+    # less
+    # gzip
+    # zstd
+    # libmnl
+    # libnfnetlink
+    # libnetfilter_conntrack
+    # libnftnl
+    # libnl
+    # libusb
+    # libpcap
+    # iptables
+    # iproute2
+    # patch
+    # tar
+    # argon2
+    # libaio
+    # icu
+    # lapack
+    # cython
+    # python-numpy
+    # boost
+    # thin-provisioning-tools
+    # lvm2 #device-mapper
+    # json-c
+    # libgpg-error
+    # libgcrypt
+    # popt
+    # cryptsetup
+    # ca-certificates
+    # libidn2
+    # libnghttp2
+    # publicsuffix-list
+    # libpsl
+    # libssh2
+    # curl
+    # gnu-efi
+    # iptables
+    # check
+    # kbd
+    # libseccomp
+    # lz4
+    # libtasn1
+    # p11-kit
+    # pcre2
+    # libpng
+    # libpwquality
+    # qrencode
+    # gperf
+    # dbus
+    # systemd
+    # procps-ng
+    # util-linux
+    # e2fsprogs
+    # nettle
+    # gnutls
+    # libassuan
+    # libksba
+    # npth
+    # libusb-compat
+    # pcsclite
+    # gnupg
+    # swig
+    # gpgme
+    # zstd
+    # libarchive
+    # pacman
+    # git
+    # which
+    # sudo
+    # jsoncpp
+    # libuv
+    # rhash
+    # glib2
+    # libxml2
+    # itstool
+    # shared-mime-info
+    # cmake
+    # libedit
+    # libxslt
+    # iputils
+    # pciutils
+    # hidapi
     libcbor
-    libedit
-    libffi
     libfido2
-    libgcrypt
-    libgpg-error
-    libidn2
-    libksba
-    libmicrohttpd
-    libmnl
-    libnetfilter_conntrack
-    libnfnetlink
-    libnftnl
-    libnghttp2
-    libnl
-    libnsl
-    libpcap
-    libpng
-    libpsl
-    libsasl
-    libseccomp
-    libssh2
-    libtasn1
-    libtirpc
-    libtool
-    libunistring
-    libusb
-    libusb-compat
-    libuv
-    libxml2
-    lvm2
-    lz4
-    m4
-    make
-    meson
-    mpc
-    mpfr
-    nano
-    ncurses
-    nettle
-    ninja
-    npth
-    nss
-    openldap
     openssh
-    openssl
-    p11-kit
-    pacman
-    pam
-    patch
-    pciutils
-    pcre
-    pcre2
-    pcsclite
-    perl
-    pkgconf
-    popt
-    procps-ng
-    psmisc
-    publicsuffix-list
-    python
-    python-numpy
-    qrencode
-    readline
-    rhash
-    sed
-    shadow
-    shared-mime-info
-    sqlite
-    sudo
-    swig
-    systemd
-    tar
-    tcl
-    thin-provisioning-tools
-    tzdata
-    util-linux
-    valgrind
-    which
-    xz
-    zlib
-    zstd
 )
 
 build() {
-    cd "$scriptdir"/../$1/$2
-    log=$2.log
+    local pkg
+    pkg=$1
+
+    cd "$scriptdir"/../$repo/$pkg
+
+    local log
+    log=$pkg.$target.log
     if [[ -f $log ]]; then
         rm $log
     fi
-    gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
+
+    # gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
     # updpkgsums
-    makepkg --config "$scriptdir"/../config/makepkg-lfs.conf -scCLf --nocheck --noconfirm &>> $log
+    makepkg --config "$scriptdir"/../config/makepkg-$target.conf -scCLf --skippgpcheck --nocheck --noconfirm &>> $log
+
+    case $pkg in
+        openldap)
+            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/libldap-*.pkg.tar.gz --noconfirm
+            ;;
+        lvm2)
+            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/device-mapper-*.pkg.tar.gz --noconfirm
+            ;;
+        *)
+            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/$pkg-*.pkg.tar.gz --noconfirm
+            ;;
+    esac
 }
 
 case $1 in
+    stage1)
+        target='stage1'
+        pkgs=${stage1_pkgs[@]}
+        repo='core'
+        ;;
+    stage2)
+        target='stage2'
+        pkgs=${stage2_pkgs[@]}
+        repo='core'
+        ;;
     core)
+        target='lfs'
         pkgs=${core_pkgs[@]}
         repo='core'
         ;;
@@ -188,5 +228,5 @@ case $1 in
 esac
 
 for p in ${pkgs[@]}; do
-    build $repo $p
+    build $p
 done
