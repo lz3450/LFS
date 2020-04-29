@@ -1,13 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libcbor
-pkgver=0.6.1
+pkgver=0.7.0
 pkgrel=1
 pkgdesc="C library for parsing and generating CBOR, the general-purpose schema-less binary data format"
 arch=(x86_64)
 url="https://github.com/PJK/libcbor"
 source=($url/archive/v$pkgver/$pkgname-$pkgver.tar.gz)
-sha256sums=('2f805f5fa2790c4fdd16046287f5814703229547da2b83009dd32357623aa182')
+sha256sums=('fb731afe0a9980581d85e4b8d4ef128b175f782d92e0cd898935f3d26dd3dde7')
 
 build() {
   cd $pkgname-$pkgver
