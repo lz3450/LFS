@@ -1,0 +1,36 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=arch-install-scripts
+pkgver=23
+pkgrel=1
+pkgdesc="Scripts to aid in installing Arch Linux"
+arch=(x86_64)
+url="https://projects.archlinux.org/arch-install-scripts.git"
+source=(git+https://projects.archlinux.org/arch-install-scripts.git?signed#tag=v$pkgver)
+sha256sums=('SKIP')
+validpgpkeys=('487EACC08557AD082088DABA1EB2638FF56C0C53'
+              'BD27B07A5EF45C2ADAF70E0484818A6819AF4A9B')
+
+prepare() {
+  cd $pkgname
+
+  sed -e "/^MAN/{n;N;N;d}" -i Makefile
+}
+
+build() {
+  cd $pkgname
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make check
+}
+
+package() {
+  cd $pkgname
+
+  make PREFIX="/usr/" DESTDIR="$pkgdir/" install
+}

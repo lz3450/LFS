@@ -30,7 +30,6 @@ depends=(
   iproute2
   iputils
   libtool
-  linux
   linux-api-headers
   m4
   make

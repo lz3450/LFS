@@ -9,6 +9,12 @@ url="https://packages.debian.org/fakeroot"
 source=(http://ftp.debian.org/debian/pool/main/f/$pkgname/${pkgname}_${pkgver}.orig.tar.gz)
 sha256sums=('2e045b3160370b8ab4d44d1f8d267e5d1d555f1bb522d650e7167b09477266ed')
 
+prepare() {
+  cd $pkgname-$pkgver
+
+  ./bootstrap
+}
+
 build() {
   cd $pkgname-$pkgver
 
@@ -24,7 +30,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || true
+  make check
 }
 
 package() {
