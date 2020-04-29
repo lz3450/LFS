@@ -81,8 +81,23 @@ source=(crypttab
         profile
         resolv.conf
         securetty
-        shells)
-sha256sums=('cd119c6c215476f0efe91ae7d10558586ea584532bbe1f84df33200d7529b40c')
+        shadow
+        shells
+        systemd.environment-generator)
+sha256sums=('e03bede3d258d680548696623d5979c6edf03272e801a813c81ba5a5c64f4f82'
+            'e54626e74ed8fee4173b62a545ab1c3a3a069e4217a0ee8fc398d9933e9c1696'
+            '244f0718ee2a9d6862ae59d6c18c1dd1568651eada91a704574fa527fbac2b3a'
+            '90d879374f77bac47f132164c1e7fc4892e994ff1d1ac376efa0c1c26ea37273'
+            '4d7b647169063dfedbff5e1e22cee77bd1a4183dbcfd5e802e68939da4bbf733'
+            'd9cd8a77d9e0aa5e90d7f4ed74c8745c17b525e720e28e4c44364150003c35f9'
+            '9178f1df5caa9f18ba20844c3fa5582d61994ae411751ca918505a1bfc5a198b'
+            '5e06477834f51abf42ea4e8dc199632afc6afbfd8c44354685a271e9a48d2c0a'
+            '5da078777cda24e4df697e2928451723f2303bfdbb2ce9551c822188c7945d25'
+            '5557d8e601b17a80d1ea7de78a9869be69637cb6a02fbfe334e22fdf64e61d4c'
+            'd88be2b45b43605ff31dd83d6a138069b6c2e92bc8989b7b9ab9eba8da5f8c7b'
+            '8ce994663d7588143ad7ed4441b07f468f4f7d3590164dd73ddfa3ea307ece8e'
+            'c390b31fffc4a2b5d78ae8c89f5317aadef1f71baac09cfb467b675db1406d61'
+            'cb54cecc63f47bfaa5b27fa2409c07c35531342c82b9bb1f2956334b33792853')
 
 package() {
   cd $pkgdir
@@ -133,4 +148,8 @@ package() {
   ln -s usr/lib lib
   ln -s usr/lib lib64
   ln -s lib usr/lib64
+
+  # systemd
+  # systemd.environment-generator
+  install -Dm755 "$srcdir"/systemd.environment-generator usr/lib/systemd/system-environment-generators/path
 }
