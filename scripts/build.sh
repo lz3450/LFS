@@ -152,7 +152,6 @@ core_pkgs=(
     gnupg
     swig
     gpgme
-    zstd
     libarchive
     pacman
     git
@@ -195,13 +194,13 @@ build() {
 
     case $pkg in
         openldap)
-            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/libldap-*.pkg.tar.gz --noconfirm
+            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/libldap-*.pkg.tar.zst --noconfirm
             ;;
         lvm2)
-            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/device-mapper-*.pkg.tar.gz --noconfirm
+            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/device-mapper-*.pkg.tar.zst --noconfirm
             ;;
         *)
-            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/$pkg-*.pkg.tar.gz --noconfirm
+            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/$pkg-*.pkg.tar.zst --noconfirm
             ;;
     esac
 }
