@@ -17,7 +17,7 @@ validpgpkeys=('0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D'
               'E3FF2839C048B25C084DEBE9B26995E310250568')
 
 build() {
-  cd Python-${pkgver}
+  cd Python-$pkgver
 
   CFLAGS="${CFLAGS/-O2/-O3} -fno-semantic-interposition"
   LDFLAGS="$LDFLAGS -fno-semantic-interposition"
