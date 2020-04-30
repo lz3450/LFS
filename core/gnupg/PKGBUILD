@@ -58,9 +58,4 @@ package() {
 
   ln -s gpg "$pkgdir"/usr/bin/gpg2
 	ln -s gpgv "$pkgdir"/usr/bin/gpgv2
-
-  cd doc/examples/systemd-user
-	for i in *.*; do
-		install -Dm644 "$i" "$pkgdir/usr/lib/systemd/user/$i"
-	done
 }
