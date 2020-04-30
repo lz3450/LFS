@@ -51,11 +51,11 @@ package() {
   make DESTDIR="$pkgdir/" install
 
   # remove sudoers.dist; not needed since pacman manages updates to sudoers
-  rm "$pkgdir/etc/sudoers.dist"
+  rm "$pkgdir"/etc/sudoers.dist
 
   # remove /run/sudo directory; create it using systemd-tmpfiles
   rmdir "$pkgdir"/run/sudo
   rmdir "$pkgdir"/run
 
-  install -Dm644 "$srcdir"/sudo.pam "$pkgdir"/etc/pam.d/sudo/
+  install -Dm644 "$srcdir"/sudo.pam "$pkgdir"/etc/pam.d/sudo/sudo.pam
 }
