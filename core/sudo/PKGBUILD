@@ -13,7 +13,7 @@ source=($url/dist/$pkgname-$pkgver.tar.gz{,.sig}
         sudo.pam)
 sha256sums=('7ea8d97a3cee4c844e0887ea7a1bd80eb54cc98fd77966776cb1a80653ad454f'
             'SKIP'
-            'ad3dbd687bb3ec0849ff91cd774fbeec21f9c4e6d1334de34d0f84a8519966e5')
+            'd1738818070684a5d2c9b26224906aad69a4fea77aabd960fc2675aee2df1fa2')
 validpgpkeys=('59D1E9CCBA2B376704FDD35BA9F4C021CEA470FB')
 
 build() {

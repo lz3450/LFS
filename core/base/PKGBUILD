@@ -148,7 +148,18 @@ package() {
   ln -s usr/lib lib64
   ln -s lib usr/lib64
 
-  # systemd
   # systemd.environment-generator
   install -Dm755 "$srcdir"/systemd.environment-generator usr/lib/systemd/system-environment-generators/path
+
+  # systemd-sysctl
+  # install -Dm644 "$srcdir"/sysctl usr/lib/sysctl.d/10-arch.conf
+
+  # systemd-sysusers
+  # install -Dm644 "$srcdir"/sysusers usr/lib/sysusers.d/arch.conf
+
+  # systemd-tmpfiles
+  # install -Dm644 "$srcdir"/tmpfiles usr/lib/tmpfiles.d/arch.conf
+
+  # add logo
+  # install -D -m644 "$srcdir"/archlinux.{svg,png} usr/share/pixmaps
 }

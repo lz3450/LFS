@@ -10,26 +10,26 @@ makedepends=(gperf)
 install=systemd.install
 source=(git+https://www.github.com/systemd/systemd-stable#tag=v$pkgver?signed
         0001-Use-Arch-Linux-device-access-groups.patch
-        systemd.install
-        systemd-binfmt.hook
-        systemd-catalog.hook
-        systemd-daemon-reload.hook
-        systemd-hwdb.hook
-        systemd-sysctl.hook
-        systemd-sysusers.hook
-        systemd-tmpfiles.hook
-        systemd-udev-reload.hook)
+        20-systemd-sysusers.hook
+        30-systemd-binfmt.hook
+        30-systemd-catalog.hook
+        30-systemd-daemon-reload.hook
+        30-systemd-hwdb.hook
+        30-systemd-sysctl.hook
+        30-systemd-tmpfiles.hook
+        30-systemd-udev-reload.hook
+        systemd.install)
 sha256sums=('SKIP'
             '1db4255602b94f5c7b55a2a7c592e1874cbb3c118aefb49da42d27fca9e8f4b3'
-            '4c5055f959e4c62028a8991462bb6645e6f984845a2cd8f99df89148aea32ef5'
+            '5eae106bbd9ec207bf200d9b94f58bf8f704b9f3bfe5bb42a7704468e5c26e8d'
             'e7a7c4dedd8f164b8018ddf199298ca68d553e6f88577dc29a092a5b0418f268'
             '22e919a30076ee4fc4bfc2e0649d88af064827173da18a3e2e83445160bb02f0'
             'bc8d59d1a8a4f432bf66d45c522fd99bee493dda0f28f7172a172467357de640'
             'b02736427b682b93fedeafadf567ecd04bb1007cc70c73f8a911689df541dedf'
             '8121c15a61e26c3f51af595d44c601c5660d605e2df34e6ba52b894dd408b306'
-            '5eae106bbd9ec207bf200d9b94f58bf8f704b9f3bfe5bb42a7704468e5c26e8d'
             'b741f9acbeaff3f3d399acb767428c8637a49e8e415d7a9549cd7ac3131d81e3'
-            '6bad6854f5b50bbae50d66f267f4e385b6862fdf538e2f1bd85dbdcad549416f')
+            '6bad6854f5b50bbae50d66f267f4e385b6862fdf538e2f1bd85dbdcad549416f'
+            '4c5055f959e4c62028a8991462bb6645e6f984845a2cd8f99df89148aea32ef5')
 validpgpkeys=('63CDA1E5D3FC22B998D20DD6327F26951A015CC4'
               '5C251B5FC54EB2F80F407AAAC54CA336CFEB557E')
 
@@ -132,5 +132,5 @@ package() {
 
   DESTDIR="$pkgdir/" meson install -C build
 
-  install -Dm0644 *.hook -t "$pkgdir"/usr/share/libalpm/hooks/
+  install -Dm0644 "$srcdir"/*.hook -t "$pkgdir"/usr/share/libalpm/hooks/
 }

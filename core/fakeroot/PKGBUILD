@@ -6,11 +6,15 @@ pkgrel=1
 pkgdesc="Tool for simulating superuser privileges"
 arch=(x86_64)
 url="https://packages.debian.org/fakeroot"
-source=(http://ftp.debian.org/debian/pool/main/f/$pkgname/${pkgname}_${pkgver}.orig.tar.gz)
-sha256sums=('2e045b3160370b8ab4d44d1f8d267e5d1d555f1bb522d650e7167b09477266ed')
+source=(http://ftp.debian.org/debian/pool/main/f/$pkgname/${pkgname}_${pkgver}.orig.tar.gz
+        silence-dlerror.patch)
+sha256sums=('2e045b3160370b8ab4d44d1f8d267e5d1d555f1bb522d650e7167b09477266ed'
+            '347f6496c93ed0d91dcb554db92602b50520a16308e3b8bc33822bd69966267b')
 
 prepare() {
   cd $pkgname-$pkgver
+
+  patch -p1 -i "$srcdir"/silence-dlerror.patch
 
   ./bootstrap
 }
