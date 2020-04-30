@@ -176,6 +176,7 @@ core_pkgs=(
     # rsync
     # fakeroot
     # arch-install-scripts
+    # dosfstools
     # base
 )
 
