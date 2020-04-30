@@ -20,7 +20,7 @@ build() {
     fi
 
     gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
-    # updpkgsums
+    updpkgsums
     makepkg -scCf --nocheck --noconfirm &>> $log
 }
 
@@ -29,7 +29,7 @@ case $1 in
         pkgs="$scriptdir"/../linux
         ;;
     core)
-        pkgs=$(find $scriptdir/../core/* -type d)
+        pkgs=$(find $scriptdir/../core/* -type d -name "[s-z]*")
         ;;
     *)
         # unknow repo

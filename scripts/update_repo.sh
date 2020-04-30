@@ -5,170 +5,214 @@
 
 set -exu -o pipefail
 
-pkgs=(
-    acl
-    argon2
-    attr
-    audit
-    autoconf
-    automake
-    base
-    bash
+REPODIR=/var/repository
+
+core_pkgs=(
+    linux-api-headers
+    glibc
+    gcc
+    libtool
+    iana-etc
+    tzdata
+    zlib minizip
+    bzip2
+    xz
+    file
+    readline
+    m4
+    ed
     bc
     binutils
-    bison
-    boost
-    bzip2
-    ca-certificates
-    cmake
-    coreutils
-    cracklib
-    cryptsetup
-    curl
-    cython
-    db
-    dbus
-    diffutils
-    e2fsprogs
-    ed
-    elfutils
-    expat
-    fakeroot
-    file
-    findutils
-    flex
-    gawk
-    gc
-    gcc
-    gdb
-    gdbm
-    gettext
-    git
-    glib2
-    glibc
     gmp
-    gnupg
-    gnutls
-    gnu-efi
-    gperf
-    gpgme
-    grep
-    guile
-    gzip
-    hidapi
-    iana-etc
-    icu
-    iproute2
-    iptables
-    iputils
-    itstool
-    jsoncpp
-    json-c
-    kbd
-    keyutils
-    kmod
-    krb5
-    lapack
-    less
-    libaio
-    libarchive
-    libassuan
-    libcap
-    libcap-ng
-    libcbor
-    libedit
-    libffi
-    libfido2
-    libgcrypt
-    libgpg-error
-    libidn2
-    libksba
-    libmicrohttpd
-    libmnl
-    libnetfilter_conntrack
-    libnfnetlink
-    libnftnl
-    libnghttp2
-    libnl
-    libnsl
-    libpcap
-    libpng
-    libpsl
-    libsasl
-    libseccomp
-    libssh2
-    libtasn1
-    libtirpc
-    libtool
-    libunistring
-    libusb
-    libusb-compat
-    libuv
-    libxml2
-    linux
-    linux-api-headers
-    lvm2 device-mapper
-    lz4
-    m4
-    make
-    meson
-    mpc
     mpfr
-    nano
-    ncurses
-    nettle
-    ninja
-    npth
-    nss
-    libldap # openldap
-    openssh
+    mpc
+    attr
+    acl
+    cracklib
+    keyutils
     openssl
-    p11-kit
-    pacman
+    libsasl
+    libldap # openldap
+    krb5
+    libtirpc
     pam
-    patch
-    pciutils
+    libcap-ng
     pcre
-    pcre2
-    pcsclite
-    perl
-    pkgconf
-    popt
-    procps-ng
-    psmisc
-    publicsuffix-list
-    python
-    python-numpy
-    qrencode
-    readline
-    rhash
-    sed
-    shadow
-    shared-mime-info
-    sqlite
-    sudo
     swig
-    systemd
-    tar
+    audit
+    shadow
+    pkgconf
+    ncurses
+    libcap
+    sed
+    psmisc
+    bison
+    flex
+    grep
+    bash
+    db
+    gdbm
+    expat
+    perl
+    diffutils
+    autoconf
+    automake
+    kmod
+    gettext
+    elfutils
+    libffi
+    make
+    libnsl
+    mpdecimal
     tcl
-    thin-provisioning-tools
-    tzdata
-    util-linux
+    sqlite
+    gc
+    libunistring
+    guile
+    gdb
     valgrind
-    which
-    xz
-    zlib minizip
+    python
+    ninja
+    meson
+    coreutils
+    gawk
+    findutils
+    less
+    gzip
     zstd
+    libmnl
+    libnfnetlink
+    libnetfilter_conntrack
+    libnftnl
+    libnl
+    libusb
+    libpcap
+    iptables
+    iproute2
+    patch
+    tar
+    argon2
+    libaio
+    icu
+    lapack
+    cython
+    python-numpy
+    boost
+    thin-provisioning-tools
+    lvm2 device-mapper
+    json-c
+    libgpg-error
+    libgcrypt
+    popt
+    cryptsetup
+    ca-certificates
+    libidn2
+    libnghttp2
+    publicsuffix-list
+    libpsl
+    libssh2
+    curl
+    gnu-efi
+    iptables
+    check
+    kbd
+    libseccomp
+    lz4
+    libtasn1
+    p11-kit
+    pcre2
+    libpng
+    libpwquality
+    qrencode
+    gperf
+    dbus
+    systemd
+    procps-ng
+    util-linux
+    e2fsprogs
+    nettle
+    gnutls
+    libassuan
+    libksba
+    npth
+    libusb-compat
+    pcsclite
+    gnupg
+    swig
+    gpgme
+    libarchive
+    pacman
+    git
+    which
+    sudo
+    jsoncpp
+    libuv
+    rhash
+    glib2
+    libxml2
+    itstool
+    shared-mime-info
+    cmake
+    libedit
+    libxslt
+    iputils
+    pciutils
+    hidapi
+    libcbor
+    libfido2
+    openssh
+    rsync
+    fakeroot
+    arch-install-scripts
+    dosfstools
+    base
+    linux
+    nano
 )
 
+extra_pkgs=()
+
+community_pkgs=()
+
 update() {
-    sudo repo-add -R /home/kzl/makepkg/packages/core.db.tar.gz /home/kzl/makepkg/packages/$1-*.pkg.tar.gz
+    local repo
+    repo=$1
+    local pkg
+    pkg=$2
+
+    pkgname=$pkg-[0-9]*.pkg.tar.zst
+
+    if [ -f ~/makepkg/packages/$pkgname ]; then
+        sudo mv ~/makepkg/packages/$pkgname $REPODIR/$repo
+    fi
+    sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
 }
 
-for r in $(find $LFS/pkgs -name "core.*"); do
-    rm -f $r
-done
+repo=$1
+
+if [ ! -d $REPODIR/$repo ]; then
+    sudo mkdir -p $REPODIR/$repo
+fi
+
+case $repo in
+    core)
+        pkgs=${core_pkgs[@]}
+        ;;
+    extra)
+        pkgs=${extra_pkgs[@]}
+        ;;
+    community)
+        pkgs=${community_pkgs[@]}
+        ;;
+    *)
+        # unknow repo
+        exit 1
+        ;;
+esac
+
+sudo find $REPODIR/$repo -name "$repo.*" -delete
+sudo repo-add $REPODIR/$repo/$repo.db.tar.zst
 
 for p in ${pkgs[@]}; do
-    update $p
+    update $repo $p
 done
