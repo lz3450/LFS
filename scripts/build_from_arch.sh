@@ -174,8 +174,9 @@ core_pkgs=(
     # libfido2
     # openssh
     # rsync
-    fakeroot
-    arch-install-scripts
+    # fakeroot
+    # arch-install-scripts
+    # base
 )
 
 build() {
