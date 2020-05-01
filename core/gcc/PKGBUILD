@@ -7,7 +7,7 @@ pkgrel=1
 pkgdesc="The GNU Compiler Collection"
 arch=(x86_64)
 url="https://gcc.gnu.org"
-makedepends=(binutils mpc)
+depends=(mpc)
 options+=(staticlibs !strip)
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         http://isl.gforge.inria.fr/isl-${_islver}.tar.xz)
