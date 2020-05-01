@@ -31,6 +31,7 @@ depends=(
   iputils
   libtool
   linux-api-headers
+  bc
   m4
   make
   meson
