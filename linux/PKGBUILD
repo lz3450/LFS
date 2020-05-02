@@ -1,18 +1,19 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=linux
-pkgver=5.4.32
+pkgver=5.4.36
 pkgrel=1
 pkgdesc="LTS Linux Kernel"
 arch=(x86_64)
 url="https://www.kernel.org"
+makedepends=(bc)
 options=(!strip)
 source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.{xz,sign}
         config
         https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/archive/microcode-20191115.tar.gz)
-sha256sums=('192d99fab7a47a537493b6d7eddb52892b98f8ada655c0bbb419b360a995f2b3'
+sha256sums=('b9faea98122e8316af8fb428c942e81797b5d28a8fc59a24a4e47959e3765b8d'
             'SKIP'
-            'd0fb28f4997a0c35939845d388bbb5059a7d9456eaf3e4b4b6128f9368e4f5ed'
+            'f3f583c9de01d21a027e3526cbf5afae152879466378fd55ac0634bba4b9507c'
             '14b26d27be70774948b8cb582e298f5317263b8b8bb1fe8e41260eae54f531dc')
 validpgpkeys=('ABAF11C65A2970B130ABE3C479BE3E4300411886'
               '647F28654894E3BD457199BE38DBBDC86092693E')
@@ -26,6 +27,7 @@ prepare() {
 
   cp "$srcdir"/config .config
 
+  # make defconfig
   make nconfig
 }
 
@@ -42,8 +44,8 @@ package() {
 
   install -Dm755 arch/x86_64/boot/bzImage "$pkgdir"/boot/vmlinuz-linux
 
-  rm "$pkgdir"/usr/lib/modules/$pkgver-kzl/{build,source}
-  cp -a . "$pkgdir"/usr/lib/modules/$pkgver-kzl/build
-  ln -s build "$pkgdir"/usr/lib/modules/$pkgver-kzl/source
+  rm "$pkgdir"/usr/lib/modules/$pkgver/{build,source}
+  cp -a . "$pkgdir"/usr/lib/modules/$pkgver/build
+  ln -s build "$pkgdir"/usr/lib/modules/$pkgver/source
   cp -a System.map "$pkgdir"/boot/System.map
 }
