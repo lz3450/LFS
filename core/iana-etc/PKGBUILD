@@ -10,7 +10,7 @@ groups=(base)
 backup=(etc/{protocols,services})
 source=(https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml
         https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml)
-sha256sums=('fdaef5df3a1932bb98d84e1e5c896aea3fc3ce14a99d5ffc6df5ac110f34c11b'
+sha256sums=('8db1bc893c8611a27c381cc0fc26b3db0a03f0e5b7e50fa93be87ff9ebfc1fc5'
             '7de8f70197974b5238edd5a5a318392d7c262147c7495b7fb64f66b9966d4ec8')
 
 package() {

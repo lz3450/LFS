@@ -177,7 +177,9 @@ core_pkgs=(
     fakeroot
     arch-install-scripts
     dosfstools
+    nano
     base
+    linux
 )
 
 build() {
@@ -191,20 +193,18 @@ build() {
     if [[ -f $log ]]; then
         rm $log
     fi
-
-    gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
-    updpkgsums
+    
     makepkg --config "$scriptdir"/../config/makepkg-$target.conf -scCLf --skippgpcheck --nocheck --noconfirm &>> $log
 
     case $pkg in
         openldap)
-            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/libldap-*.pkg.tar.zst --noconfirm
+            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/libldap-[0-9]*.pkg.tar.zst --noconfirm
             ;;
         lvm2)
-            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/device-mapper-*.pkg.tar.zst --noconfirm
+            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/device-mapper-[0-9]*.pkg.tar.zst --noconfirm
             ;;
         *)
-            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/$pkg-*.pkg.tar.zst --noconfirm
+            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/$pkg-[0-9]*.pkg.tar.zst --noconfirm
             ;;
     esac
 }
