@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=linux-api-headers
-pkgver=5.4.32
+pkgver=5.4.36
 pkgrel=1
 arch=(any)
 makedepends=(rsync)
