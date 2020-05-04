@@ -194,7 +194,7 @@ build() {
         rm $log
     fi
     
-    makepkg --config "$scriptdir"/../config/makepkg-$target.conf -scCLf --skippgpcheck --nocheck --noconfirm &>> $log
+    makepkg --config "$scriptdir"/../config/makepkg-$target.conf -scCLf --nocheck --noconfirm &>> $log
 
     case $pkg in
         openldap)
