@@ -72,15 +72,15 @@ core_pkgs=(
     kmod
     gettext
     elfutils
+    gc
     libffi
+    libunistring
+    guile
     make
     libnsl
     mpdecimal
     tcl
     sqlite
-    gc
-    libunistring
-    guile
     gdb
     valgrind
     python
