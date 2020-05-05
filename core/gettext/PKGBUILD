@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="GNU internationalization library"
 arch=(x86_64)
 url="https://www.gnu.org/software/gettext/"
-depends=(acl)
+depends=(acl libunistring libxml2)
 options=(!docs)
 source=(https://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
 sha256sums=('ecb9d0908ca41d5ca5fef974323b3bba6bec19eebba0b44f396de98cfcc089f1'
@@ -18,10 +18,10 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --enable-csharp \
-    --enable-nls \
-    --with-xz \
-    --without-included-gettext
+    --without-included-gettext \
+    --without-included-libunistring \
+    --without-included-libxm \
+    --without-emacs
 
   sed -e 's/ -shared / -Wl,-O1,--as-needed\0/g' -i gettext-{tools,runtime,runtime/libasprintf}/libtool
 
