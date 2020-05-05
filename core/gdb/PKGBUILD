@@ -31,7 +31,7 @@ build() {
     --with-system-zlib \
     --with-expat \
     --with-python=/usr/bin/python3 \
-    --with-guile=guile-2.2
+    --with-guile=guile-3.0
 
   make
 }
