@@ -11,6 +11,11 @@ source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
         ld.so.conf
         locale-gen
         locale.gen.txt)
+backup=(etc/gai.conf
+        etc/ld.so.conf
+        etc/locale.gen
+        etc/nscd.conf)
+install=glibc.install
 sha256sums=('9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17'
             'SKIP'
             'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
@@ -40,18 +45,18 @@ build() {
   LDFLAGS=${LDFLAGS/,-z,now/}
 
   ../configure \
-    --build=$(../scripts/config.guess) \
     --prefix=/usr \
     --libdir=/usr/lib \
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib \
-    --enable-cet \
-    --enable-static-pie \
-    --enable-stack-protector=strong \
-    --enable-bind-now \
-    --disable-timezone-tools \
-    --disable-profile \
     --with-headers=/usr/include \
+    --enable-kernel=5.4.36 \
+    --enable-static-pie \
+    --enable-cet \
+    --disable-profile \
+    --disable-timezone-tools \
+    --enable-stack-protector=strong \
+    --enable-bind-now
   
   make
 }
@@ -65,9 +70,9 @@ check() {
 package() {
   cd $pkgname-$pkgver/build
 
-  make DESTDIR="$pkgdir" install
+  make install_root="$pkgdir/" install
 
-  rm -f "$pkgdir"/etc/ld.so.cache
+  rm -f "$pkgdir"/etc/ld.so.{cache,conf}
   install -Dm644 "$srcdir"/ld.so.conf "$pkgdir"/etc/
   install -dm755 "$pkgdir"/etc/ld.so.conf.d/
 
