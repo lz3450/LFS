@@ -26,8 +26,8 @@ validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD'
 prepare() {
   cd $pkgname-$pkgver
 
-  patch -Np1 < "$srcdir"/pacman-5.2.1-fix-pactest-package-tar-format.patch
-  patch -Np1 < "$srcdir"/makepkg-fix-one-more-file-seccomp-issue.patch
+  patch -Np1 -i "$srcdir"/pacman-5.2.1-fix-pactest-package-tar-format.patch
+  patch -Np1 -i "$srcdir"/makepkg-fix-one-more-file-seccomp-issue.patch
 }
 
 build() {
