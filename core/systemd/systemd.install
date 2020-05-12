@@ -7,12 +7,14 @@ post_install() {
   setfacl -Rnm g:wheel:rx,d:g:wheel:rx,g:adm:rx,d:g:adm:rx var/log/journal/ 2>/dev/null
 
   systemctl enable getty@tty1.service
-  
+
   mkdir -m2755 var/log/journal/remote
   chgrp systemd-journal-remote var/log/journal/remote
 }
 
 post_upgrade() {
+  systemctl --system daemon-reexec
+  
   systemd-sysusers
   journalctl --update-catalog
 }
