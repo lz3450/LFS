@@ -70,11 +70,13 @@ core_pkgs=(
     autoconf
     automake
     kmod
+    libunistring
+    icu
+    libxml2
     gettext
     elfutils
     gc
     libffi
-    libunistring
     guile
     make
     libnsl
@@ -105,7 +107,6 @@ core_pkgs=(
     tar
     argon2
     libaio
-    icu
     lapack
     cython
     python-numpy
@@ -154,6 +155,7 @@ core_pkgs=(
     gpgme
     libarchive
     pacman
+    pacman-contrib
     git
     which
     sudo
@@ -161,7 +163,6 @@ core_pkgs=(
     libuv
     rhash
     glib2
-    libxml2
     itstool
     shared-mime-info
     cmake
@@ -178,8 +179,8 @@ core_pkgs=(
     arch-install-scripts
     dosfstools
     nano
+    wpa_supplicant
     base
-    linux
 )
 
 build() {

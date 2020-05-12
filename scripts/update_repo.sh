@@ -58,17 +58,19 @@ core_pkgs=(
     autoconf
     automake
     kmod
+    libunistring
+    icu
+    libxml2
     gettext
     elfutils
+    gc
     libffi
+    guile
     make
     libnsl
     mpdecimal
     tcl
     sqlite
-    gc
-    libunistring
-    guile
     gdb
     valgrind
     python
@@ -93,7 +95,6 @@ core_pkgs=(
     tar
     argon2
     libaio
-    icu
     lapack
     cython
     python-numpy
@@ -142,6 +143,7 @@ core_pkgs=(
     gpgme
     libarchive
     pacman
+    pacman-contrib
     git
     which
     sudo
@@ -149,7 +151,6 @@ core_pkgs=(
     libuv
     rhash
     glib2
-    libxml2
     itstool
     shared-mime-info
     cmake
@@ -165,9 +166,12 @@ core_pkgs=(
     fakeroot
     arch-install-scripts
     dosfstools
+    nano
+    wpa_supplicant
+    parted
     base
     linux
-    nano
+    linux-firmware
 )
 
 extra_pkgs=()
