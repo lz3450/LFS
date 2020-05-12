@@ -34,6 +34,6 @@ package() {
 
   make DESTDIR="$pkgdir/" install
 
-  install -dm644 "$pkgdir"/usr/share/bash-completion/completions/
+  install -dm755 "$pkgdir"/usr/share/bash-completion/completions/
   ln -s /usr/share/$pkgname-${pkgver%.*}/completions/{cmake,cpack,ctest} "$pkgdir"/usr/share/bash-completion/completions/
 }
