@@ -42,5 +42,5 @@ check() {
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir" meson install -C build
+  DESTDIR="$pkgdir/" meson install -C build
 }

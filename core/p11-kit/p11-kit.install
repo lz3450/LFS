@@ -1,11 +1,8 @@
 post_install() {
-  systemctl --global enable p11-kit-server.socket
-}
-
-post_upgrade() {
-  post_install
+  local socket=p11-kit-server.socket
+  ln -sf /usr/lib/systemd/user/$socket /etc/systemd/user/sockets.target.wants/$socket
 }
 
 pre_remove() {
-  systemctl --global disable p11-kit-server.socket
+  rm -f /etc/systemd/user/sockets.target.wants/$socket
 }
