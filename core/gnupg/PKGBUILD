@@ -40,7 +40,7 @@ build() {
 		--sbindir=/usr/bin \
 		--libexecdir=/usr/lib/gnupg \
 		--enable-maintainer-mode \
-		--enable-symcryptrun \
+		--enable-symcryptrun
 
   make
 }
@@ -58,4 +58,6 @@ package() {
 
   ln -s gpg "$pkgdir"/usr/bin/gpg2
 	ln -s gpgv "$pkgdir"/usr/bin/gpgv2
+
+  install -Dm644 doc/examples/systemd-user/*.{service,socket} -t "$pkgdir"/usr/lib/systemd/user/
 }
