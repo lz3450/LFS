@@ -8,7 +8,7 @@ post_install() {
 
   systemctl enable getty@tty1.service
 
-  mkdir -m2755 var/log/journal/remote
+  chmod 2755 var/log/journal/remote
   chgrp systemd-journal-remote var/log/journal/remote
 }
 
