@@ -8,6 +8,7 @@ set -exu -o pipefail
 REPODIR=/var/repository
 
 core_pkgs=(
+    filesystem
     linux-api-headers
     glibc
     gcc
