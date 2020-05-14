@@ -7,11 +7,8 @@ pkgdesc="Loads and enumerates PKCS#11 modules"
 arch=(x86_64)
 url="https://p11-glue.freedesktop.org"
 depends=(libffi libtasn1)
-install=p11-kit.install
-source=(git+https://github.com/p11-glue/p11-kit?signed#tag=$pkgver
-        p11-kit.install)
-sha256sums=('SKIP'
-            '04407e2c7a2696460f41a3cdaff08df94ced2e6170c38aa23b864660f1649a19')
+source=(git+https://github.com/p11-glue/p11-kit?signed#tag=$pkgver)
+sha256sums=('SKIP')
 validpgpkeys=('C0F67099B808FB063E2C81117BFB1108D92765AF'
               '462225C3B46F34879FC8496CD605848ED7E69871')
 
