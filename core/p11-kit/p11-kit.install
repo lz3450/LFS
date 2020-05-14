@@ -1,8 +1,0 @@
-post_install() {
-  local socket=p11-kit-server.socket
-  ln -sf /usr/lib/systemd/user/$socket /etc/systemd/user/sockets.target.wants/$socket
-}
-
-pre_remove() {
-  rm -f /etc/systemd/user/sockets.target.wants/$socket
-}
