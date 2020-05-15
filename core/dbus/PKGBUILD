@@ -2,15 +2,17 @@
 
 pkgname=dbus
 pkgver=1.12.16
-pkgrel=1
+pkgrel=2
 pkgdesc="Freedesktop.org message bus system"
 arch=(x86_64)
 url="https://wiki.freedesktop.org/www/Software/dbus/"
 depends=(expat)
 optdepends=(audit)
-source=(https://dbus.freedesktop.org/releases/$pkgname/$pkgname-$pkgver.tar.gz{,.asc})
+source=(https://dbus.freedesktop.org/releases/$pkgname/$pkgname-$pkgver.tar.gz{,.asc}
+        dbus-reload.hook)
 sha256sums=('54a22d2fa42f2eb2a871f32811c6005b531b9613b1b93a0d269b05e7549fec80'
-            'SKIP')
+            'SKIP'
+            '40a68351784cff90591656db57e77c9a97840ebf9e7a63eb1ccd6538e9c090f7')
 validpgpkeys=('DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90'
               '3C8672A0F49637FE064AC30F52A43A1E4B77B059')
 
@@ -53,4 +55,6 @@ package() {
 
   # pre-assigned uid (81)
   echo 'u dbus 81 "System Message Bus"' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/dbus.conf
+
+  install -Dm644 "$srcdir"/dbus-reload.hook -t "$pkgdir"/usr/share/libalpm/hooks
 }
