@@ -4,12 +4,12 @@ post_install() {
 	dirmngr </dev/null &>/dev/null
 
 	for _unit in ${_units[@]}; do
-    systemctl --user enable $_unit
+    systemctl --global enable $_unit
   done
 }
 
 pre_remove() {
   for _unit in ${_units[@]}; do
-    systemctl --user disable $_unit
+    systemctl --global disable $_unit
   done
 }
