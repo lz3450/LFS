@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=cairo
+pkgver=1.17.2+d0dccb9
+pkgrel=1
+pkgdesc="2D graphics library with support for multiple output devices"
+arch=(x86_64)
+url="https://cairographics.org/"
+depends=(libpng)
+makedepends=()
+optdepends=()
+checkdepends=()
+backup=()
+options=()
+install=
+changelog=
+source=(git+https://gitlab.freedesktop.org/cairo/cairo.git#commit=d0dccb92c520556aaa02bd1fdf8f2922cef00292)
+sha256sums=()
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
