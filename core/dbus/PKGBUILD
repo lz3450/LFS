@@ -7,49 +7,58 @@ pkgdesc="Freedesktop.org message bus system"
 arch=(x86_64)
 url="https://wiki.freedesktop.org/www/Software/dbus/"
 depends=(expat)
+makedepends=(autoconf-archive)
 optdepends=(audit)
-source=(https://dbus.freedesktop.org/releases/$pkgname/$pkgname-$pkgver.tar.gz{,.asc}
+source=(git+https://gitlab.freedesktop.org/dbus/dbus.git#tag=$pkgname-$pkgver?signed
         dbus-reload.hook)
-sha256sums=('54a22d2fa42f2eb2a871f32811c6005b531b9613b1b93a0d269b05e7549fec80'
-            'SKIP'
+sha256sums=('SKIP'
             '40a68351784cff90591656db57e77c9a97840ebf9e7a63eb1ccd6538e9c090f7')
 validpgpkeys=('DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90'
               '3C8672A0F49637FE064AC30F52A43A1E4B77B059')
 
+prepare() {
+  cd $pkgname
+
+  NOCONFIGURE=1 ./autogen.sh
+}
+
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
+    --libexecdir=/usr/lib/dbus-$pkgver \
     --sysconfdir=/etc \
     --localstatedir=/var \
-    --libexecdir=/usr/lib/dbus-$pkgver \
     --docdir=/usr/share/doc/dbus-$pkgver \
-    --runstatedir=/run \
+    runstatedir=/run \
+    --disable-static \
+    --disable-verbose-mode \
+    --disable-checks \
+    --disable-asserts \
+    --disable-xml-docs \
+    --disable-doxygen-docs \
     --enable-inotify \
     --enable-systemd \
     --enable-user-session \
-    --disable-static \
-    --disable-doxygen-docs \
-    --disable-xml-docs \
-    --with-console-auth-dir=/run/console/ \
-    --with-dbus-user=dbus \
     --with-system-pid-file=/run/dbus/pid \
     --with-system-socket=/run/dbus/system_bus_socket \
-    --with-systemdsystemunitdir=/usr/lib/systemd/system \
-    --without-x
+    --with-console-auth-dir=/run/console/ \
+    --with-dbus-user=dbus \
+    --without-x \
+    --with-systemdsystemunitdir=/usr/lib/systemd/system
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 
