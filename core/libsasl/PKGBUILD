@@ -52,7 +52,7 @@ build() {
 package() {
   cd cyrus-sasl
 
-  make DESTDIR="$pkgdir" install-pkgconfigDATA
+  make DESTDIR="$pkgdir/" install-pkgconfigDATA
 
   for dir in include lib; do
     pushd ${dir}

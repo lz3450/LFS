@@ -42,5 +42,5 @@ package() {
   cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir/" install
-  make -C scripts DESTDIR="$pkgdir" install
+  make -C scripts DESTDIR="$pkgdir/" install
 }

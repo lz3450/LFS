@@ -28,7 +28,7 @@ build() {
 
 package() {
   # install tzcode stuff
-  make DESTDIR="$pkgdir" install
+  make DESTDIR="$pkgdir/" install
 
   # install tzdata stuff
   ./zic -d "$pkgdir"/usr/share/zoneinfo ${timezones[@]}
