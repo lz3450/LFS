@@ -7,7 +7,7 @@ pkgdesc="File type identification utility"
 arch=(x86_64)
 url="https://www.darwinsys.com/file/"
 source=(ftp://ftp.astron.com/pub/$pkgname/$pkgname-$pkgver.tar.gz{,.asc})
-sha256sums=('593c2ffc2ab349c5aea0f55fedfe4d681737b6b62376a9b3ad1e77b2cc19fa34'
+sha256sums=('5f48d9e0710d4132793cf040ea33bbae94e15ac1fe885414e79f2fbd62c1b904'
             'SKIP')
 validpgpkeys=('BE04995BA8F90ED0C0C176C471112AB16CB33B3A')
 
