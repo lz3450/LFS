@@ -19,8 +19,6 @@ build() {
         rm $log
     fi
 
-    gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
-    updpkgsums
     makepkg -scCf --nocheck --noconfirm &>> $log
 }
 
