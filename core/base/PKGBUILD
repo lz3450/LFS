@@ -34,8 +34,17 @@ depends=(
   sudo
   which
   zstd
+  texinfo
+  groff
 )
 optdepends=("linux: bare metal support")
+backup=(etc/os-release)
+source=(os-release)
+sha256sums=('9178f1df5caa9f18ba20844c3fa5582d61994ae411751ca918505a1bfc5a198b')
 
-
-
+package() {
+  cd $pkgdir
+  
+  install -Dm644 "$srcdir"/os-release etc/os-release
+  install -Dm644 "$srcdir"/os-release usr/share/factory/etc/os-release
+}

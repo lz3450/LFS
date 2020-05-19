@@ -11,7 +11,6 @@ backup=(etc/crypttab
         etc/gshadow
         etc/host.conf
         etc/hosts
-        etc/os-release
         etc/passwd
         etc/profile
         etc/resolv.conf
@@ -23,7 +22,6 @@ source=(crypttab
         gshadow
         host.conf
         hosts
-        os-release
         passwd
         profile
         resolv.conf
@@ -37,7 +35,6 @@ sha256sums=('e03bede3d258d680548696623d5979c6edf03272e801a813c81ba5a5c64f4f82'
             '90d879374f77bac47f132164c1e7fc4892e994ff1d1ac376efa0c1c26ea37273'
             '4d7b647169063dfedbff5e1e22cee77bd1a4183dbcfd5e802e68939da4bbf733'
             'd9cd8a77d9e0aa5e90d7f4ed74c8745c17b525e720e28e4c44364150003c35f9'
-            '9178f1df5caa9f18ba20844c3fa5582d61994ae411751ca918505a1bfc5a198b'
             '5e06477834f51abf42ea4e8dc199632afc6afbfd8c44354685a271e9a48d2c0a'
             '5da078777cda24e4df697e2928451723f2303bfdbb2ce9551c822188c7945d25'
             '5557d8e601b17a80d1ea7de78a9869be69637cb6a02fbfe334e22fdf64e61d4c'
@@ -60,7 +57,7 @@ package() {
 
   # /etc
   install -d etc/{skel,profile.d} usr/share/factory/etc
-  for f in fstab group host.conf hosts os-release passwd profile resolv.conf securetty shells; do
+  for f in fstab group host.conf hosts passwd profile resolv.conf securetty shells; do
     install -m644 "$srcdir"/$f etc/
     install -m644 "$srcdir"/$f usr/share/factory/etc/
   done
