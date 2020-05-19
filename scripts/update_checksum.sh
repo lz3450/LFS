@@ -20,5 +20,7 @@ update() {
 repo=$1
 
 for p in $(ls "$scriptdir"/../$repo/); do
-    update $p
+    update $p &
 done
+
+wait
