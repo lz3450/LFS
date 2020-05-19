@@ -177,6 +177,7 @@ core_pkgs=(
     base
     linux
     linux-firmware
+    iw
 )
 
 extra_pkgs=()
