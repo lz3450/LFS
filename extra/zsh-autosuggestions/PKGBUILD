@@ -1,0 +1,24 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=zsh-autosuggestions
+pkgver=0.6.4
+pkgrel=1
+pkgdesc="Fish-like autosuggestions for zsh"
+arch=(x86_64)
+url="https://github.com/zsh-users/zsh-autosuggestions"
+depends=(zsh)
+source=(git+https://github.com/zsh-users/zsh-autosuggestions.git#commit=ae315ded4dba10685dbbafbfa2ff3c1aefeb490d?signed)
+sha256sums=('SKIP')
+validpgpkeys=('5DE3E0509C47EA3CF04A42D34AEE18F83AFDEB23')
+
+build() {
+  cd $pkgname
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  install -Dm644 $pkgname{,.plugin}.zsh -t "$pkgdir"/usr/share/zsh/plugins/$pkgname/
+}
