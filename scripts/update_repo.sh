@@ -193,8 +193,8 @@ update() {
 
     if [ -f ~/makepkg/packages/$pkgname ]; then
         sudo mv ~/makepkg/packages/$pkgname $REPODIR/$repo
+        sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
     fi
-    sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
 }
 
 repo=$1
