@@ -1,0 +1,43 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=inetutils
+pkgver=1.9.4
+pkgrel=1
+pkgdesc="A collection of common network programs"
+arch=(x86_64)
+url="https://www.gnu.org/software/inetutils/"
+depends=(libcap pam)
+backup=()
+options=(!emptydirs)
+install=
+source=(https://ftp.gnu.org/gnu/inetutils/$pkgname-$pkgver.tar.xz{,.sig})
+sha256sums=('849d96f136effdef69548a940e3e0ec0624fc0c81265296987986a0dd36ded37'
+            'SKIP')
+validpgpkeys=('4FBD67621082C4C502448E3B180551BAD95A3C35')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --libexec=/usr/bin \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --disable-servers \
+    --disable-clients \
+    --enable-hostname
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
