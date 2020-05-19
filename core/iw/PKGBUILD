@@ -1,0 +1,31 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=iw
+pkgver=5.4
+pkgrel=1
+pkgdesc="nl80211 based CLI configuration utility for wireless devices"
+arch=(x86_64)
+url="https://wireless.kernel.org/en/users/Documentation/iw"
+depends=(libnl)
+source=(https://www.kernel.org/pub/software/network/$pkgname/$pkgname-$pkgver.tar.{xz,sign})
+sha256sums=('a2469f677088d7b1070a7fbb28f3c747041697e8f6ec70783339cb1bc27a395f'
+            'SKIP')
+validpgpkeys=('C0EBC440F6DA091C884D8532E0F373F37BF9099A')
+
+build() {
+  cd $pkgname-$pkgver
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" SBINDIR="/usr/bin" install
+}
