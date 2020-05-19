@@ -6,8 +6,8 @@ pkgver=2.4.49
 pkgrel=1
 arch=(x86_64)
 url="https://www.openldap.org"
-makedepends=(libsasl)
-# makedepends=(libsasl unixodbc)
+makedepends=(groff libsasl)
+# makedepends=(groff libsasl unixodbc)
 source=($url/software/download/OpenLDAP/openldap-release/openldap-$pkgver.tgz)
 sha256sums=('e3b117944b4180f23befe87d0dcf47f29de775befbc469dcf4ac3dab3311e56e')
 

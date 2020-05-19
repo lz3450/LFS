@@ -6,13 +6,14 @@ pkgrel=1
 arch=(x86_64)
 url="https://git-scm.com/"
 depends=(curl expat openssl pcre2)
-optdepends=("libsecret: credential helper")
+# makedepends=(libsecret)
+# optdepends=("libsecret: credential helper")
 source=(https://www.kernel.org/pub/software/scm/$pkgname/$pkgname-$pkgver.tar.{xz,sign})
 sha256sums=('6d65132471df9e531807cb2746f8be317e22a343b9385bbe11c9ce7f0d2fc848'
             'SKIP')
 validpgpkeys=('96E07AF25771955980DAD10020D04E5A713660A7')
 
-# TODO: git-daemon
+# TODO: git-daemon libsecret
 
 _make_paths=(
   prefix="/usr"
@@ -37,8 +38,8 @@ build() {
     "${_make_options[@]}" \
     all
 
-  make -C contrib/credential/libsecret \
-    "${_make_paths[@]}"
+  # make -C contrib/credential/libsecret \
+  #   "${_make_paths[@]}"
 }
 
 check() {
@@ -69,7 +70,7 @@ package() {
     install
 
   # libsecret credentials helper
-  install -Dm0755 contrib/credential/libsecret/git-credential-libsecret "$pkgdir"/usr/lib/git/
+  # install -Dm0755 contrib/credential/libsecret/git-credential-libsecret "$pkgdir"/usr/lib/git/
   
   # sysusers
   echo 'u git - "git daemon user" / /usr/bin/git-shell' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/git.conf

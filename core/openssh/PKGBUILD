@@ -30,9 +30,7 @@ sha256sums=('SKIP'
 build() {
   cd $pkgname
 
-  aclocal
-  autoheader
-  autoconf
+  autoreconf
 
   ./configure \
     --prefix=/usr \

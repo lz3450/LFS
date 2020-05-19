@@ -6,7 +6,7 @@ pkgrel=1
 arch=(any)
 makedepends=(rsync)
 source=(https://www.kernel.org/pub/linux/kernel/v${pkgver:0:1}.x/linux-$pkgver.tar.{xz,sign})
-sha256sums=('b9faea98122e8316af8fb428c942e81797b5d28a8fc59a24a4e47959e3765b8d'
+sha256sums=('1e64e7c247d7440b0dd9fa63135cf7078c3e09b933ae66dfb3e07b05dcf8b057'
             'SKIP')
 validpgpkeys=('ABAF11C65A2970B130ABE3C479BE3E4300411886'
               '647F28654894E3BD457199BE38DBBDC86092693E')

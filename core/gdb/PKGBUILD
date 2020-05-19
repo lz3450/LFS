@@ -39,4 +39,10 @@ package() {
   cd $pkgname-$pkgver/build
 
   make DESTDIR="$pkgdir/" install
+
+  # conflicts with binutils
+  rm "$pkgdir"/usr/include/{ansidecl,bfd,bfd_stdint,bfdlink,ctf-api,ctf,diagnostics,dis-asm,plugin-api,symcat}.h
+  rm "$pkgdir"/usr/lib/{libbfd,libctf-nobfd,libctf,libopcodes}.a
+  rm -rf "$pkgdir"/usr/share/locale/
+  rm -rf "$pkgdir"/usr/share/info/
 }

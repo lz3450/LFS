@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=groff
+pkgver=1.22.4
+pkgrel=1
+pkgdesc="GNU troff text-formatting system"
+arch=(x86_64)
+url="https://www.gnu.org/software/groff/groff.html"
+options=(!docs !emptydirs !makeflags)
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
+sha256sums=('e78e7b4cb7dec310849004fa88847c44701e8d133b5d4c13057d876c1bad0293'
+            'SKIP')
+validpgpkeys=('2D0C08D2B0AD0D3D8626670272D23FBAC99D4E75')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
