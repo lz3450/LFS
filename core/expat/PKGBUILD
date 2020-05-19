@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="An XML parser library"
 arch=(x86_64)
 url="https://libexpat.github.io/"
-source=(https://github.com/libexpat/libexpat/releases/download/R_${pkgver//./_}/expat-${pkgver}.tar.bz2{,.asc})
+source=(https://github.com/libexpat/libexpat/releases/download/R_${pkgver//./_}/expat-$pkgver.tar.bz2{,.asc})
 sha256sums=('f1063084dc4302a427dabcca499c8312b3a32a29b7d2506653ecc8f950a9a237'
             'SKIP')
 validpgpkeys=('3176EF7DB2367F1FCA4F306B1F9B0E909AF37285')
@@ -16,6 +16,7 @@ build() {
 
   cmake \
     -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -S . \
