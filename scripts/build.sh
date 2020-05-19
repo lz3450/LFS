@@ -27,7 +27,7 @@ case $1 in
         pkgs="$scriptdir"/../linux
         ;;
     core)
-        pkgs=$(find $scriptdir/../core/* -type d)
+        pkgs=$(ls -d $scriptdir/../core/[a-z]*)
         ;;
     *)
         # unknow repo
