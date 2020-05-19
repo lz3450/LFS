@@ -18,7 +18,7 @@ update() {
 
     pkgname=$pkg-[0-9]*.pkg.tar.zst
 
-    if [[ -f ~/makepkg/packages/$pkgname ]]; then
+    if [ -f ~/makepkg/packages/$pkgname ]; then
         sudo mv ~/makepkg/packages/$pkgname $REPODIR/$repo
         sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
     fi
@@ -75,7 +75,7 @@ if (( REPLACE )); then
     sudo find $REPODIR/$repo -name "$repo.*" -delete
 fi
 
-if [[ ! -f $REPODIR/$repo/$repo.db.tar.zst ]]; then
+if [ ! -f $REPODIR/$repo/$repo.db.tar.zst ]; then
     sudo repo-add $REPODIR/$repo/$repo.db.tar.zst
 fi
 
