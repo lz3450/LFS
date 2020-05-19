@@ -11,16 +11,18 @@ update() {
     local pkg
     pkg=$1
 
-    cd "$scriptdir"/../$repo/$pkg
+    cd "$pkg"
 
     gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
     updpkgsums
 }
 
-repo=$1
-
-for p in $(ls "$scriptdir"/../$repo/); do
-    update $p &
-done
+if [ $1 == linux ]; then
+    update "$scriptdir"/../linux
+else
+    for p in $(ls -d "$scriptdir"/../$1/*); do
+        update $p &
+    done
+fi
 
 wait
