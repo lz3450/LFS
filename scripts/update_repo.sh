@@ -219,9 +219,14 @@ case $repo in
         ;;
 esac
 
-sudo find $REPODIR/$repo -name "$repo.*" -delete
-sudo repo-add $REPODIR/$repo/$repo.db.tar.zst
+# sudo find $REPODIR/$repo -name "$repo.*" -delete
+
+if [ ! -f $REPODIR/$repo/$repo.db.tar.zst ]; then
+    sudo repo-add $REPODIR/$repo/$repo.db.tar.zst
+fi
 
 for p in ${pkgs[@]}; do
     update $repo $p
 done
+
+wait
