@@ -123,10 +123,12 @@ core_pkgs=(
     libtasn1
     p11-kit
     pcre2
+    libmicrohttpd
     libpng
     libpwquality
     qrencode
     gperf
+    autoconf-archive
     dbus
     systemd
     procps-ng
@@ -170,6 +172,8 @@ core_pkgs=(
     nano
     wpa_supplicant
     parted
+    texinfo
+    groff
     base
     linux
     linux-firmware
