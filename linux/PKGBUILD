@@ -11,9 +11,9 @@ options=(!strip)
 source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.{xz,sign}
         config
         https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/archive/microcode-20191115.tar.gz)
-sha256sums=('b9faea98122e8316af8fb428c942e81797b5d28a8fc59a24a4e47959e3765b8d'
+sha256sums=('1e64e7c247d7440b0dd9fa63135cf7078c3e09b933ae66dfb3e07b05dcf8b057'
             'SKIP'
-            'f3f583c9de01d21a027e3526cbf5afae152879466378fd55ac0634bba4b9507c'
+            '35e3211cdcde6f62cd76b442638dd4e8c4dbb5a739b4c4fdf2e53654cc842933'
             '14b26d27be70774948b8cb582e298f5317263b8b8bb1fe8e41260eae54f531dc')
 validpgpkeys=('ABAF11C65A2970B130ABE3C479BE3E4300411886'
               '647F28654894E3BD457199BE38DBBDC86092693E')
