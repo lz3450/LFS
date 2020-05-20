@@ -1,0 +1,48 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=wget
+pkgver=1.20.3
+pkgrel=1
+pkgdesc="Network utility to retrieve files from the Web"
+arch=(x86_64)
+url="https://www.gnu.org/software/wget/wget.html"
+depends=(gnutls libidn2 libpsl pcre2)
+optdepends=("ca-certificates: HTTPS downloads")
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.lz{,.sig})
+sha256sums=('69607ce8216c2d1126b7a872db594b3f21e511e660e07ca1f81be96650932abb'
+            'SKIP')
+validpgpkeys=('AC404C1C0BF735C63FF4D562263D6DF2E163E1EA'
+              '7845120B07CBD8D6ECE5FF2B2A1743EDA91A35B6'
+              '1CB27DBC98614B2D5841646D08302DB6A2670428')
+prepare() {
+  cd $pkgname-$pkgver
+
+  cat >> doc/sample.wgetrc <<EOF
+
+# default root certs location
+ca_certificate=/etc/ssl/certs/ca-certificates.crt
+EOF
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --with-ssl=gnutls
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check || :
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
