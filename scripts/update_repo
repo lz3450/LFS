@@ -62,9 +62,10 @@ while (( "$#" )); do
 done
 
 case $repo in
-    core|extra|community)   pkgs=$(ls $scriptdir/../$repo/) ;;
+    core)               pkgs=$(ls $scriptdir/../$repo/); pkgs+=" linux" ;;
+    extra|community)    pkgs=$(ls $scriptdir/../$repo/) ;;
     # unknown repo
-    *)                      printf "unknown repo \"%s\".\n" "$repo"; exit 1 ;;
+    *)                  printf "unknown repo \"%s\".\n" "$repo"; exit 1 ;;
 esac
 
 if [ ! -d $REPODIR/$repo ]; then
