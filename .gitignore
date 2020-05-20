@@ -22,3 +22,5 @@
 **/libpsl/9347024221f4a9d63f9dcafcda13362a7c8d92fe.patch
 !community/globalprotect/GlobalProtect_tar-5.1.0.0-101.tar.gz
 !community/globalprotect-gui/GlobalProtect_UI_tar-5.1.0.0-101.tar.gz
+core/wpa_supplicant/CVE-2019-16275.patch
+core/wpa_supplicant/roam-properties.patch
