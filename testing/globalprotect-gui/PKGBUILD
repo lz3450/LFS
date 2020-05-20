@@ -1,0 +1,43 @@
+# Maintainer: zelun.kong@outlook.com
+
+pkgname=globalprotect-gui
+pkgver=5.1.0
+pkgrel=1
+pkgdesc='Global Protect UI'
+arch=(x86_64)
+url='https://utdallas.box.com/s/sn3ardilya3oue3jn2esu9r3yjtsdn5d'
+depends=(qt5-webkit)
+provides=(globalprotect)
+conflicts=(globalprotect)
+options=(!strip !docs !libtool staticlibs emptydirs zipman purge !debug)
+install=globalprotect.install
+source=(GlobalProtect_UI_tar-5.1.0.0-101.tar.gz)
+sha256sums=('fdad01ea220454e620decfeac9b616b2f97895bf137cd00313ca5e199be2b233')
+
+package() {
+  install -dm755 "$pkgdir"/opt/paloaltonetworks/globalprotect/
+  install -Dm755 globalprotect PanGPA PanGPS PanGpHip PanGpHipMp "$pkgdir"/opt/paloaltonetworks/globalprotect/
+  install -Dm644 *.so* "$pkgdir"/opt/paloaltonetworks/globalprotect/
+  install -Dm644 license.cfg "$pkgdir"/opt/paloaltonetworks/globalprotect/
+  install -Dm644 gpd gpd.service pangps.xml "$pkgdir"/opt/paloaltonetworks/globalprotect/
+  install -Dm755 PanMSInit.sh pre_exec_gps.sh gpshow.sh gp_support.sh "$pkgdir"/opt/paloaltonetworks/globalprotect/
+
+  # GUI
+  install -Dm644 PanGPUI.desktop "$pkgdir"/opt/paloaltonetworks/globalprotect/
+  install -Dm755 PanGPUI "$pkgdir"/opt/paloaltonetworks/globalprotect/
+
+  install -dm755 "$pkgdir"/usr/share/man/man1/
+  install -Dm644 globalprotect.1.gz "$pkgdir"/usr/share/man/man1/
+
+  # Enable gp service
+  install -Dm644 gpd.service "$pkgdir"/usr/lib/systemd/system/gpd.service
+
+  # Ensure symbol link for GPI and GPUI
+  install -dm755 "$pkgdir"/usr/bin/
+  ln -s /opt/paloaltonetworks/globalprotect/globalprotect "$pkgdir"/usr/bin/globalprotect
+  ln -s /opt/paloaltonetworks/globalprotect/PanGPUI "$pkgdir"/usr/bin/PanGPUI
+
+  # Enable autostart
+  install -dm755 "$pkgdir"/etc/profile.d/
+  install -Dm755 PanMSInit.sh "$pkgdir"/etc/profile.d/
+}

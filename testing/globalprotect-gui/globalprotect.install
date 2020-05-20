@@ -1,0 +1,75 @@
+pre_install() {
+  # Stop gp service when i's running
+  if [ "$(pidof PanGPS)" ]; then
+    echo "gp service is running and we need to stop it..."
+    if [ "$USE_SYSTEMD" ]; then
+      systemctl stop gpd
+    fi
+    sleep 5
+  fi
+  
+  if [ "$(pidof PanGPA)" ]; then
+    echo "Stopping gpa..."
+    kill -9 `pidof PanGPA`
+  fi
+
+  if [ "$(pidof globalprotect)" ]; then
+    echo "Stopping globalprotect..."
+    kill -9 `pidof globalprotect`
+  fi
+
+  if [ "$(pidof PanGPUI)" ]; then
+    echo "Stopping gpui..."
+    kill `pidof PanGPUI`
+  fi
+}
+
+post_install() {
+  /opt/paloaltonetworks/globalprotect/PanGPA start &
+}
+
+pre_upgrade() {
+  pre_install
+}
+
+post_upgrade() {
+  post_install
+}
+
+pre_remove() {
+  # Stop GPS
+  if [ "$(pidof PanGPS)" ]; then
+    echo "gp service is running and we need to stop it..."
+    if [ "$USE_SYSTEMD" ]; then
+      systemctl stop gpd
+      sleep 5
+      echo "Disable service..."
+      systemctl disable gpd
+      rm /lib/systemd/system/gpd.service
+    fi
+  fi
+
+  # Stop GPA
+  echo "Stopping gpa..."
+  if [ "$(pidof PanGPA)" ]; then
+    kill -9 `pidof PanGPA`
+  fi
+
+  # Stop globalprotect
+  echo "Stopping globalprotect..."
+  if [ "$(pidof globalprotect)" ]; then
+    kill -9 `pidof globalprotect`
+  fi
+
+  # Stop GPUI
+  echo "Stopping gpui..."
+  if [ "$(pidof PanGPUI)" ]; then
+    kill `pidof PanGPUI`
+  fi
+
+  # Clean GP environment
+  echo "clear message queue"
+  if [ -f $GPDIR/PanGPA ]; then
+    $GPDIR/PanGPA dqueue
+  fi
+}
