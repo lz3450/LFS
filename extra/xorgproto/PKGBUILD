@@ -1,0 +1,53 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+# When releasing a xorgproto version with updated keysyms, rebuild libx11
+
+pkgname=xorgproto
+pkgver=2020.1
+pkgrel=1
+pkgdesc="combined X.Org X11 Protocol headers"
+arch=(any)
+url="https://xorg.freedesktop.org/"
+makedepends=(xorg-util-macros)
+source=(https://xorg.freedesktop.org/archive/individual/proto/$pkgname-$pkgver.tar.bz2{,.sig})
+sha256sums=('54a153f139035a376c075845dd058049177212da94d7a9707cf9468367b699d2'
+            'SKIP')
+validpgpkeys=('995ED5C8A6138EB0961F18474C09DD83CAAA50B2'
+              'DD38563A8A8224537D1F90E45B8A2D50A0ECD0D3'
+              'C383B778255613DFDB409D91DB221A6900000011'
+              '3C2C43D9447D5938EF4551EBE23B7E70B467F0BF'
+              '995ED5C8A6138EB0961F18474C09DD83CAAA50B2')
+
+build() {
+  cd $pkgname-$pkgver
+
+  meson setup \
+    -Dauto_features=enabled \
+    -Dbuildtype=plain \
+    -Dwrap_mode=nodownload \
+    -Db_lto=true \
+    -Db_pie=true \
+    -Dprefix=/usr \
+    -Dlibexecdir=lib \
+    -Dsbindir=bin \
+    build
+
+  ninja -C build
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  meson test -C build
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  DESTDIR="$pkgdir/" meson install -C build
+
+  # cleanup
+  rm -f "$pkgdir"/usr/include/X11/extensions/apple*
+  rm -f "$pkgdir"/usr/share/licenses/$pkgname/COPYING-{apple,windows}wmproto
+  rm -f "$pkgdir"/usr/share/pkgconfig/applewmproto.pc
+}

@@ -1,0 +1,31 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=xorg-util-macros
+pkgver=1.19.2
+pkgrel=1
+pkgdesc="X.Org Autotools macros"
+arch=(any)
+url="https://xorg.freedesktop.org/"
+source=($url/releases/individual/util/util-macros-$pkgver.tar.bz2{,.sig})
+sha256sums=('d7e43376ad220411499a79735020f9d145fdc159284867e99467e0d771f3e712'
+            'SKIP')
+validpgpkeys=('3BB639E56F861FA2E86505690FDD682D974CA72A'
+              '4A193C06D35E7C670FA4EF0BA2FB9E081F2D130E')
+
+build() {
+  cd util-macros-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+package() {
+  cd util-macros-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  install -dm755 "$pkgdir"/usr/lib/
+  mv "$pkgdir"/usr/share/pkgconfig "$pkgdir"/usr/lib/
+}
