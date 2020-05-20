@@ -1,12 +1,17 @@
-#!/bin/bash
+#!/usr/bin/bash
 # 
-# build.sh
+# build_from_arch
 #
 
-set -exu -o pipefail
+VERSION=1.0
+PKGDEST=~/makepkg/packages
 
-PKGDEST=/var/makepkg
-scriptdir=$(pwd)
+# arguments
+
+TARGET='x86_64'
+STAGE='stage1'
+
+# packages
 
 stage1_pkgs=(
     linux-api-headers
@@ -21,9 +26,11 @@ stage2_pkgs=(
     glibc
 )
 
-core_pkgs=(
+stage3_pkgs=(
     gcc
     libtool
+    linux-api-headers
+    glibc
     iana-etc
     tzdata
     zlib
@@ -180,58 +187,81 @@ core_pkgs=(
     dosfstools
     nano
     wpa_supplicant
+    filesystem
     base
 )
+
+# functions
 
 build() {
     local pkg
     pkg=$1
 
-    cd "$scriptdir"/../$repo/$pkg
+    cd "$scriptdir"/../core/$pkg
 
     local log
-    log=$pkg.$target.log
+    log=$pkg.$STAGE.log
     if [[ -f $log ]]; then
         rm $log
     fi
     
-    makepkg --config "$scriptdir"/../config/makepkg-$target.conf -scCLf --nocheck --noconfirm &>> $log
+    makepkg --config "$scriptdir"/../config/makepkg-$TARGET.conf -scCf --nocheck --noconfirm &>> $log
 
     case $pkg in
         openldap)
-            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/libldap-[0-9]*.pkg.tar.zst --noconfirm
+            sudo pacman -Udd --overwrite "*" $PKGDEST/libldap-[0-9]*.pkg.tar.zst --noconfirm
             ;;
         lvm2)
-            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/device-mapper-[0-9]*.pkg.tar.zst --noconfirm
+            sudo pacman -Udd --overwrite "*" $PKGDEST/device-mapper-[0-9]*.pkg.tar.zst --noconfirm
             ;;
         *)
-            sudo pacman -Udd --overwrite "*" $PKGDEST/$target/packages/$pkg-[0-9]*.pkg.tar.zst --noconfirm
+            sudo pacman -Udd --overwrite "*" $PKGDEST/$pkg-[0-9]*.pkg.tar.zst --noconfirm
             ;;
     esac
 }
 
-case $1 in
-    stage1)
-        target='stage1'
-        pkgs=${stage1_pkgs[@]}
-        repo='core'
-        ;;
-    stage2)
-        target='stage2'
-        pkgs=${stage2_pkgs[@]}
-        repo='core'
-        ;;
-    core)
-        target='lfs'
-        pkgs=${core_pkgs[@]}
-        repo='core'
-        ;;
-    *)
-        # unknow repo
-        exit 1
-        ;;
+usage() {
+	printf "build_from_arch (kzl-linux) %s\n" "$VERSION"
+	echo
+	printf "build_from_arch will build from scratch.\n"
+	echo
+	printf "Usage: build_from_arch [options]\n"
+	echo
+	echo "    -h, --help        display this help message and exit"
+	echo "    -v, --version     display version information and exit"
+	echo "    -s, --stage       build stage (stage1, stage2, stage3)"
+	echo "    -t, --target      target archtecture (x86_64, raspberrypi(armv7l))"
+    echo
+}
+
+# program start
+
+set -e -u -o pipefail
+# set -x
+
+# ensure we have a sane umask set
+umask 0022
+
+scriptdir=$(pwd)
+
+while (( "$#" )); do
+	case "$1" in
+        -h|--help)      usage; exit 0 ;;
+        -v|--version)   printf "$VERSION"; exit 0 ;;
+        -s|--stage)     shift; STAGE="$1" ;;
+        -t|--target)    shift; TARGET="$1" ;;
+	esac
+    shift
+done
+
+case $STAGE in
+    stage1) pkgs=${stage1_pkgs[@]} ;;
+    stage2) pkgs=${stage2_pkgs[@]} ;;
+    stage3) pkgs=${stage3_pkgs[@]} ;;
+    *)      printf "unknown stage \"$STAGE\""; exit 1 ;;
 esac
 
 for p in ${pkgs[@]}; do
+    echo "building $p ..."
     build $p
 done
