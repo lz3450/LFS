@@ -8,14 +8,14 @@ depends=(libsigsegv ffcall cairo pixman graphite gd poppler libpng libjpeg
          freetype2 icu harfbuzz harfbuzz-icu gmp mpfr libpaper zziplib)
 install=texlive.install
 source=(git+https://github.com/Tex-Live/texlive-source.git#tag=svn$pkgver
-        ftp://tug.org/$pkgname/historic/2019/$pkgname-20190410-texmf.tar.xz
+        ftp://tug.org/$pkgname/historic/2020/$pkgname-20200406-texmf.tar.xz
         09-texlive-fonts.conf
         texlive.install
         texmf.cnf
         texmfcnf.lua)
 noextract=($pkgname-20190410-texmf.tar.xz)
 sha256sums=('SKIP'
-            'c2ec974abc98b91995969e7871a0b56dbc80dd8508113ffcff6923e912c4c402'
+            '0aa97e583ecfd488e1dc60ff049fec073c1e22dfe7de30a3e4e8c851bb875a95'
             '5e79c40cf3ab93348fc89e97890198601767ea2c8fea89ea76088c17a2b35962'
             '27fba25012f840a11f3021c4c71c2ccc80f45e4d16d46dd26fc570c80f3c5db4'
             '585678708ae9f1e883668fe2d1686e11d35aea9854fae60eb20bb6f02f0490ef'
