@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=5.2.1
-pkgrel=1
+pkgrel=2
 arch=(x86_64)
 url="https://www.archlinux.org/pacman/"
 depends=(curl gpgme libarchive)
@@ -19,7 +19,7 @@ sha256sums=('1930c407265fd039cb3a8e6edc82f69e122aa9239d216d9d57b9d1b9315af312'
             '824a5c9dd458fb27b05a9a0b4b5d75b7a392de0dae79a18f5cfe8beaf4d82f0c'
             'e481a161bba76729cd434c97e0b319ddfcb1d93b2e4890d72b4e8a32982531d9'
             '0e084cac91121c37cd3dc019693e6fadfcb68060af45d77a81dc2a03687f998d'
-            '09be030709a6f8817c388ba4377db94147b5175a188369374a3d9f5d2c250128')
+            'fad62c240fb1cc6551788199b75c23a9aedc3c529f9608e2df15e2c1922ea1e2')
 validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD'
               'B8151B117037781095514CA7BBDFFC92306B1121')
               
