@@ -32,6 +32,7 @@ build() {
     --enable-ld=default \
     --enable-lto \
     --enable-host-shared \
+    --disable-nls \
     --with-system-zlib \
     --with-build-sysroot=/usr/$_target
 
