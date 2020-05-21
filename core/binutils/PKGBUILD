@@ -2,7 +2,7 @@
 
 pkgname=binutils
 pkgver=2.34
-pkgrel=1
+pkgrel=2
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=(x86_64)
 url="https://www.gnu.org/software/binutils/"
@@ -28,11 +28,10 @@ build() {
     --enable-gold \
     --enable-ld=default \
     --enable-lto \
-    --enable-shared \
-    --enable-threads \
+    --enable-host-shared \
     --with-system-zlib
 
-  make tooldir=/usr
+  make tooldir="/usr/"
 }
 
 check() {
@@ -44,7 +43,7 @@ check() {
 package() {
   cd $pkgname-$pkgver/build
 
-  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr/"  install
+  make prefix="$pkgdir/usr/" tooldir="$pkgdir/usr/"  install
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*

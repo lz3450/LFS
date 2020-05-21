@@ -2,7 +2,7 @@
 
 pkgname=valgrind
 pkgver=3.15.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Tool to help find memory-management problems in programs"
 arch=(x86_64)
 url="http://valgrind.org/"
@@ -24,9 +24,13 @@ build() {
 
   ./configure \
     --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --libexecdir=/usr/lib \
+    --mandir=/usr/share/man \
     --enable-lto \
-    --enable-only64bit \
-    --without-mpicc
+    --enable-only64bit
+    # --without-mpicc
 
 
   make
