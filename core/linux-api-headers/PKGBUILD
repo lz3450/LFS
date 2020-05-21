@@ -3,7 +3,9 @@
 pkgname=linux-api-headers
 pkgver=5.4.41
 pkgrel=1
+pkgdesc="Kernel headers sanitized for use in userspace"
 arch=(any)
+url='https://www.kernel.org'
 makedepends=(rsync)
 source=(https://www.kernel.org/pub/linux/kernel/v${pkgver:0:1}.x/linux-$pkgver.tar.{xz,sign})
 sha256sums=('1e64e7c247d7440b0dd9fa63135cf7078c3e09b933ae66dfb3e07b05dcf8b057'
