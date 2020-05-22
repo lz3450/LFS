@@ -2,7 +2,7 @@
 
 pkgname=binutils
 pkgver=2.34
-pkgrel=3
+pkgrel=4
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=(x86_64)
 url="https://www.gnu.org/software/binutils/"
@@ -28,7 +28,17 @@ build() {
     --enable-gold \
     --enable-ld=default \
     --enable-lto \
-    --with-system-zlib
+    --with-system-zlib \
+    --enable-shared \
+    --enable-plugins \
+    --enable-64-bit-bfd \
+    --enable-targets=x86_64-pep \
+    --with-debuginfod \
+    --with-pic \
+    --enable-deterministic-archives \
+    --enable-relro \
+    --with-lib-path=/usr/lib:/usr/local/lib \
+    --enable-threads
 
   make tooldir="/usr/"
 }
