@@ -4,7 +4,7 @@ _target_arch=arm64
 _target=aarch64-linux-gnu
 pkgname=$_target-binutils
 pkgver=2.34
-pkgrel=1
+pkgrel=2
 pkgdesc="A set of programs to assemble and manipulate binary and object files ($_target)"
 arch=(x86_64)
 url="https://www.gnu.org/software/binutils/"
@@ -31,9 +31,7 @@ build() {
     --enable-gold \
     --enable-ld=default \
     --enable-lto \
-    --enable-host-shared \
     --disable-nls \
-    --with-system-zlib \
     --with-build-sysroot=/usr/$_target
 
   make
