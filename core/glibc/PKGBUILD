@@ -25,7 +25,7 @@ validpgpkeys=('7273542B39962DF7B299931416792B4EA25340F8'
               'BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
 
 prepare() {
-  cd "$pkgname-$pkgver"
+  cd $pkgname-$pkgver
   
   mkdir build
 }
