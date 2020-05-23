@@ -31,13 +31,13 @@ build() {
     --enable-gold \
     --enable-ld=default \
     --enable-lto \
+    --with-system-zlib \
     --disable-shared \
     --enable-plugins \
     --with-debuginfod \
     --with-pic \
     --enable-deterministic-archives \
     --enable-relro \
-    --with-lib-path=/usr/lib:/usr/local/lib \
     --enable-threads \
     --disable-nls \
     --with-sysroot=/usr/$_target \
@@ -57,7 +57,5 @@ package() {
 
   make DESTDIR="$pkgdir/" install
 
-  # Remove unwanted files
-  rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
-  rm -rf "$pkgdir"/usr/share/info/
+  rm -rf "$pkgdir"/usr/share/
 }
