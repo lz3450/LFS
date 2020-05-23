@@ -1,0 +1,163 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+_target_arch=arm64
+_target=aarch64-linux-gnu
+pkgname=$_target-gcc
+pkgver=9.3.0
+_mpcver=1.1.0
+_mpfrver=4.0.2
+_gmpver=6.2.0
+_islver=0.21
+pkgrel=4
+pkgdesc="The GNU Compiler Collection ($_target)"
+arch=(x86_64)
+url="https://gcc.gnu.org"
+options+=(staticlibs !strip)
+source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
+        https://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz{,.sig}
+        https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfrver.tar.xz{,.sig}
+        https://gmplib.org/download/gmp/gmp-$_gmpver.tar.lz{,.sig}
+        http://isl.gforge.inria.fr/isl-$_islver.tar.xz)
+sha256sums=('71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1'
+            'SKIP'
+            '6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e'
+            'SKIP'
+            '1d3be708604eae0e42d578ba93b390c2a145f17743a744d8f3f8c2ad5855a38a'
+            'SKIP'
+            '3f33f127bcb6b2c3601676cd3281df45824b148cbf688b73c0fc8248793667d9'
+            'SKIP'
+            '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960')
+validpgpkeys=('33C235A34C46AA3FFB293709A328C3A2C3C45C06'
+              'AD17A21EF8AED8F1CC02DBD9F7D5C9BF765C61E3'
+              '07F3DBBECC1A39605078094D980C197698C3739D'
+              '343C2FF0FBEE5EC2EDBEF399F3599FF828C67298')
+
+prepare() {
+  cd gcc-$pkgver
+  
+  mkdir build
+
+  mv ../mpc-$_mpcver mpc
+  mv ../mpfr-$_mpfrver mpfr
+  mv ../gmp-$_gmpver gmp
+  mv ../isl-$_islver isl
+  
+  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
+}
+
+build() {
+  cd gcc-$pkgver/build
+
+  # stage 1
+  ../configure \
+    --with-pkgversion="KZL $pkgver-$pkgrel ($_target stage1)" \
+    --target=$_target \
+    --host=$CHOST \
+    --build=$CHOST \
+    --prefix=/usr \
+    --libexecdir=/usr/lib \
+    --libdir=/usr/lib \
+    --disable-shared \
+    --disable-multilib \
+    --disable-threads \
+    --with-arch=armv8-a \
+    --enable-__cxa_atexit \
+    --enable-gnu-indirect-function \
+    --enable-languages=c,c++ \
+    --disable-libssp \
+    --enable-default-pie \
+    --enable-default-ssp \
+    --disable-checking \
+    --with-system-zlib \
+    --without-isl \
+    --enable-linker-build-id \
+    --with-linker-hash-style=gnu \
+    --enable-gnu-unique-object \
+    --enable-lto \
+    --with-glibc-version=2.31 \
+    --with-sysroot=/usr/$_target \
+    --with-build-sysroot=/usr/$_target
+    --enable-install-libiberty \
+    --enable-fix-cortex-a53-835769 \
+    --enable-fix-cortex-a53-843419 \
+    --disable-plugin \
+    --disable-libstdcxx-pch \
+    --enable-clocale=gnu \
+    --without-headers \
+    --with-newlib \
+    --disable-nls \
+    --disable-libstdcxx \
+    --disable-libquadmath \
+    --disable-libatomic \
+    --disable-libgomp \
+    --disable-libvtv
+
+  # stage 2
+  # ../configure \
+  #   --with-pkgversion="KZL $pkgver-$pkgrel ($_target)" \
+  #   --target=$_target \
+  #   --host=$CHOST \
+  #   --build=$CHOST \
+  #   --prefix=/usr \
+  #   --libexecdir=/usr/lib \
+  #   --libdir=/usr/lib \
+  #   --enable-shared \
+  #   --disable-multilib \
+  #   --enable-threads=posix \
+  #   --with-arch=armv8-a \
+  #   --enable-__cxa_atexit \
+  #   --enable-gnu-indirect-function \
+  #   --enable-languages=c,c++,fortran,lto \
+  #   --disable-libssp \
+  #   --enable-default-pie \
+  #   --enable-default-ssp \
+  #   --enable-checking=release \
+  #   --with-system-zlib \
+  #   --with-isl \
+  #   --enable-linker-build-id \
+  #   --with-linker-hash-style=gnu \
+  #   --enable-gnu-unique-object \
+  #   --enable-lto \
+  #   --with-glibc-version=2.31 \
+  #   --with-sysroot=/usr/$_target \
+  #   --with-build-sysroot=/usr/$_target
+  #   --enable-install-libiberty \
+  #   --enable-fix-cortex-a53-835769 \
+  #   --enable-fix-cortex-a53-843419 \
+  #   --disable-plugin \
+  #   --disable-libstdcxx-pch \
+  #   --enable-clocale=gnu
+
+  make
+}
+
+check() {
+  cd gcc-$pkgver/build
+
+  make -k check || :
+}
+
+package() {
+  cd gcc-$pkgver/build
+
+  # stage 1 & 2
+  make DESTDIR="$pkgdir/" install-gcc install-target-libgcc
+  
+  # stage 2
+  # make DESTDIR="$pkgdir/" install-target-{libstdc++-v3,libgomp,libgfortran,libquadmath}
+
+  # # strip target binaries
+  # find "$pkgdir"/usr/lib/gcc/$_target/ "$pkgdir"/usr/$_target/lib \
+  #      -type f -and \( -name \*.a -or -name \*.o \) \
+  #      -exec $_target-objcopy -R .comment -R .note -R .debug_info -R .debug_aranges \
+  #         -R .debug_pubnames -R .debug_pubtypes -R .debug_abbrev -R .debug_line \
+  #         -R .debug_str -R .debug_ranges -R .debug_loc '{}' \;
+
+  # # strip host binaries
+  # find "$pkgdir"/usr/bin/ "$pkgdir"/usr/lib/gcc/$_target/ -type f -and \( -executable \) -exec strip '{}' \;
+
+  # Remove files that conflict with host gcc package
+  rm -rf "$pkgdir"/usr/share/man/man7
+  rm -rf "$pkgdir"/usr/share/info
+  rm -rf "$pkgdir"/usr/share/gcc-$pkgver
+}
