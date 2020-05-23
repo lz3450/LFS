@@ -65,7 +65,7 @@ build() {
 check() {
   cd $pkgname-$pkgver/build
 
-  make check || true
+  make check || :
 }
 
 package() {
