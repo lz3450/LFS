@@ -1,0 +1,77 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+_target=aarch64-linux-gnu
+pkgname=$_target-glibc
+pkgver=2.31
+pkgrel=1
+_commit=be176490b818b65b5162c332eb6b581690b16e5c
+pkgdesc="GNU C Library ARM64 target"
+arch=(x86_64 aarch64)
+url='https://www.gnu.org/software/libc/'
+depends=($_target-gcc $_target-linux-api-headers)
+makedepends=(python)
+options=(!buildflags !strip staticlibs)
+source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig})
+sha256sums=('9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17'
+            'SKIP')
+validpgpkeys=('7273542B39962DF7B299931416792B4EA25340F8'
+              'BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
+
+prepare() {
+  cd glibc-$pkgver
+  
+  mkdir build
+}
+
+build() {
+  cd glibc-$pkgver/build
+
+  BUILD_CC=gcc
+  CC=${_target}-gcc
+  CXX=${_target}-g++
+  AR=${_target}-ar
+  RANLIB=${_target}-ranlib
+  CFLAGS="-U_FORTIFY_SOURCE -mlittle-endian -O2"
+  CPPFLAGS="-U_FORTIFY_SOURCE -O2"
+
+  echo "slibdir=/usr/lib" >> configparms
+  echo "rtlddir=/usr/lib" >> configparms
+  echo "sbindir=/usr/bin" >> configparms
+  echo "rootsbindir=/usr/bin" >> configparms
+  echo "build-programs=no" >> configparms
+
+  ../configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --libexecdir=/usr/lib \
+    --libdir=/usr/lib \
+    --with-headers=/usr/$_target/include \
+    --enable-kernel=5.4.41 \
+    --enable-shared \
+    --enable-static-pie \
+    --enable-cet \
+    --disable-profile \
+    --disable-timezone-tools \
+    --enable-stack-protector=strong \
+    --enable-bind-now \
+    --host=$_target \
+    --build=$CHOST \
+    --with-pkgversion="KZL GNU/Linux $pkgver-$pkgrel" \
+    --enable-multi-arch
+  
+  make
+}
+
+check() {
+  cd glibc-$pkgver/build
+
+  make check || :
+}
+
+package() {
+  cd glibc-$pkgver/build
+
+  make install_root="$pkgdir"/usr/$_target install
+
+  rm -rf "$pkgdir"/usr/$_target/{etc,usr/share,var}
+}
