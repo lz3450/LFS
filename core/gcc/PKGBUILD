@@ -3,7 +3,7 @@
 pkgname=gcc
 pkgver=9.3.0
 _islver=0.21
-pkgrel=1
+pkgrel=2
 pkgdesc="The GNU Compiler Collection"
 arch=(x86_64)
 url="https://gcc.gnu.org"
@@ -14,10 +14,7 @@ source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
 sha256sums=('71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1'
             'SKIP'
             '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960')
-validpgpkeys=('F3691687D867B81B51CE07D9BBE43771487328A9'
-              '86CFFCA918CF3AF47147588051E8B148A9999C34'
-              '13975A70E63C361C73AE69EF6EEB81F8981C74C7'
-              '33C235A34C46AA3FFB293709A328C3A2C3C45C06')
+validpgpkeys=('33C235A34C46AA3FFB293709A328C3A2C3C45C06')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -36,13 +33,11 @@ build() {
   cd $pkgname-$pkgver/build
 
   ../configure \
+    --with-pkgversion="KZL $pkgver-$pkgrel" \
     --prefix=/usr \
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib \
     --libdir=/usr/lib \
-    --infodir=/usr/share/info \
-    --mandir=/usr/share/man \
-    --with-pkgversion="KZL $pkgver-$pkgrel" \
     --enable-shared \
     --disable-multilib \
     --enable-threads=posix \
@@ -59,7 +54,12 @@ build() {
     --with-linker-hash-style=gnu \
     --enable-gnu-unique-object \
     --enable-lto \
-    --enable-cet=auto
+    --with-glibc-version=2.31 \
+    --enable-cet=auto\
+    --enable-install-libiberty \
+    --enable-plugin \
+    --disable-libstdcxx-pch \
+    --enable-clocale=gnu
 
   ulimit -s 32768
   make
@@ -68,7 +68,7 @@ build() {
 check() {
   cd $pkgname-$pkgver/build
 
-  make -k check || true
+  make -k check || :
 }
 
 package() {
