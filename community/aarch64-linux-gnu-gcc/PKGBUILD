@@ -41,6 +41,8 @@ prepare() {
   mv ../mpfr-$_mpfrver mpfr
   mv ../gmp-$_gmpver gmp
   mv ../isl-$_islver isl
+
+  sed -i '/mabi.lp64=/s/lib64/lib/' gcc/config/aarch64/t-aarch64-linux
   
   sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
 }
@@ -49,84 +51,87 @@ build() {
   cd gcc-$pkgver/build
 
   # stage 1
-  ../configure \
-    --with-pkgversion="KZL $pkgver-$pkgrel ($_target stage1)" \
-    --target=$_target \
-    --host=$CHOST \
-    --build=$CHOST \
-    --prefix=/usr \
-    --libexecdir=/usr/lib \
-    --libdir=/usr/lib \
-    --disable-shared \
-    --disable-multilib \
-    --disable-threads \
-    --with-arch=armv8-a \
-    --enable-__cxa_atexit \
-    --enable-gnu-indirect-function \
-    --enable-languages=c,c++ \
-    --disable-libssp \
-    --enable-default-pie \
-    --enable-default-ssp \
-    --disable-checking \
-    --with-system-zlib \
-    --without-isl \
-    --enable-linker-build-id \
-    --with-linker-hash-style=gnu \
-    --enable-gnu-unique-object \
-    --enable-lto \
-    --with-glibc-version=2.31 \
-    --with-sysroot=/usr/$_target \
-    --with-build-sysroot=/usr/$_target
-    --enable-install-libiberty \
-    --enable-fix-cortex-a53-835769 \
-    --enable-fix-cortex-a53-843419 \
-    --disable-plugin \
-    --disable-libstdcxx-pch \
-    --enable-clocale=gnu \
-    --without-headers \
-    --with-newlib \
-    --disable-nls \
-    --disable-libstdcxx \
-    --disable-libquadmath \
-    --disable-libatomic \
-    --disable-libgomp \
-    --disable-libvtv
-
-  # stage 2
   # ../configure \
-  #   --with-pkgversion="KZL $pkgver-$pkgrel ($_target)" \
+  #   --with-pkgversion="KZL $pkgver-$pkgrel ($_target stage1)" \
   #   --target=$_target \
   #   --host=$CHOST \
   #   --build=$CHOST \
   #   --prefix=/usr \
   #   --libexecdir=/usr/lib \
   #   --libdir=/usr/lib \
-  #   --enable-shared \
+  #   --disable-shared \
   #   --disable-multilib \
-  #   --enable-threads=posix \
+  #   --disable-threads \
   #   --with-arch=armv8-a \
   #   --enable-__cxa_atexit \
   #   --enable-gnu-indirect-function \
-  #   --enable-languages=c,c++,fortran,lto \
+  #   --enable-languages=c,c++ \
   #   --disable-libssp \
   #   --enable-default-pie \
   #   --enable-default-ssp \
-  #   --enable-checking=release \
+  #   --disable-checking \
+  #   --disable-nls \
   #   --with-system-zlib \
-  #   --with-isl \
+  #   --without-isl \
   #   --enable-linker-build-id \
   #   --with-linker-hash-style=gnu \
   #   --enable-gnu-unique-object \
   #   --enable-lto \
   #   --with-glibc-version=2.31 \
   #   --with-sysroot=/usr/$_target \
-  #   --with-build-sysroot=/usr/$_target
-  #   --enable-install-libiberty \
+  #   --with-build-sysroot=/usr/$_target \
+  #   --disable-install-libiberty \
   #   --enable-fix-cortex-a53-835769 \
   #   --enable-fix-cortex-a53-843419 \
   #   --disable-plugin \
   #   --disable-libstdcxx-pch \
-  #   --enable-clocale=gnu
+  #   --enable-clocale=gnu \
+  #   --without-headers \
+  #   --with-newlib \
+  #   --disable-libstdcxx \
+  #   --disable-libquadmath \
+  #   --disable-libatomic \
+  #   --disable-libgomp \
+  #   --disable-libvtv
+
+  # make install-gcc install-target-libgcc
+
+  # stage 2
+  ../configure \
+    --with-pkgversion="KZL $pkgver-$pkgrel ($_target)" \
+    --target=$_target \
+    --host=$CHOST \
+    --build=$CHOST \
+    --prefix=/usr \
+    --libexecdir=/usr/lib \
+    --libdir=/usr/lib \
+    --enable-shared \
+    --disable-multilib \
+    --enable-threads=posix \
+    --with-arch=armv8-a \
+    --enable-__cxa_atexit \
+    --enable-gnu-indirect-function \
+    --enable-languages=c,c++,fortran,lto \
+    --disable-libssp \
+    --enable-default-pie \
+    --enable-default-ssp \
+    --enable-checking=release \
+    --disable-nls \
+    --with-system-zlib \
+    --with-isl \
+    --enable-linker-build-id \
+    --with-linker-hash-style=gnu \
+    --enable-gnu-unique-object \
+    --enable-lto \
+    --with-glibc-version=2.31 \
+    --with-sysroot=/usr/$_target \
+    --with-build-sysroot=/usr/$_target \
+    --disable-install-libiberty \
+    --enable-fix-cortex-a53-835769 \
+    --enable-fix-cortex-a53-843419 \
+    --disable-plugin \
+    --disable-libstdcxx-pch \
+    --enable-clocale=gnu
 
   make
 }
@@ -140,24 +145,22 @@ check() {
 package() {
   cd gcc-$pkgver/build
 
-  # stage 1 & 2
-  make DESTDIR="$pkgdir/" install-gcc install-target-libgcc
+  # stage 1
+  # make DESTDIR="$pkgdir/" install-gcc install-target-libgcc
   
   # stage 2
-  # make DESTDIR="$pkgdir/" install-target-{libstdc++-v3,libgomp,libgfortran,libquadmath}
+  make DESTDIR="$pkgdir/" install
 
-  # # strip target binaries
-  # find "$pkgdir"/usr/lib/gcc/$_target/ "$pkgdir"/usr/$_target/lib \
-  #      -type f -and \( -name \*.a -or -name \*.o \) \
-  #      -exec $_target-objcopy -R .comment -R .note -R .debug_info -R .debug_aranges \
-  #         -R .debug_pubnames -R .debug_pubtypes -R .debug_abbrev -R .debug_line \
-  #         -R .debug_str -R .debug_ranges -R .debug_loc '{}' \;
+  # strip target binaries
+  find "$pkgdir"/usr/lib/gcc/$_target/ "$pkgdir"/usr/$_target/lib \
+       -type f -and \( -name \*.a -or -name \*.o \) \
+       -exec $_target-objcopy -R .comment -R .note -R .debug_info -R .debug_aranges \
+          -R .debug_pubnames -R .debug_pubtypes -R .debug_abbrev -R .debug_line \
+          -R .debug_str -R .debug_ranges -R .debug_loc '{}' \;
 
-  # # strip host binaries
-  # find "$pkgdir"/usr/bin/ "$pkgdir"/usr/lib/gcc/$_target/ -type f -and \( -executable \) -exec strip '{}' \;
+  # strip host binaries
+  find "$pkgdir"/usr/bin/ "$pkgdir"/usr/lib/gcc/$_target/ -type f -and \( -executable \) -exec strip '{}' \;
 
   # Remove files that conflict with host gcc package
-  rm -rf "$pkgdir"/usr/share/man/man7
-  rm -rf "$pkgdir"/usr/share/info
-  rm -rf "$pkgdir"/usr/share/gcc-$pkgver
+  rm -rf "$pkgdir"/usr/share/
 }
