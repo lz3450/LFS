@@ -1,20 +1,22 @@
 pkgname=texlive
 pkgver=54456
+_texmfver=20200406
 pkgrel=1
 pkgdesc="TeX Live"
 arch=(x86_64)
 url='http://tug.org/texlive/'
-depends=(cairo libsigsegv pixman graphite gd poppler libpng libjpeg
-         freetype2 icu harfbuzz harfbuzz-icu gmp mpfr libpaper zziplib)
+depends=(libpng gmp mpfr)
+# depends=(cairo libsigsegv pixman graphite gd poppler libpng libjpeg
+#          freetype2 icu harfbuzz harfbuzz-icu gmp mpfr libpaper zziplib)
 # makedepends=(ffcall)
 install=texlive.install
 source=(git+https://github.com/Tex-Live/texlive-source.git#tag=svn$pkgver
-        ftp://tug.org/$pkgname/historic/2020/$pkgname-20200406-texmf.tar.xz
+        ftp://tug.org/$pkgname/historic/2020/$pkgname-$_texmfver-texmf.tar.xz
         09-texlive-fonts.conf
         texlive.install
         texmf.cnf
         texmfcnf.lua)
-noextract=($pkgname-20190410-texmf.tar.xz)
+noextract=($pkgname-$_texmfver-texmf.tar.xz)
 sha256sums=('SKIP'
             '0aa97e583ecfd488e1dc60ff049fec073c1e22dfe7de30a3e4e8c851bb875a95'
             '5e79c40cf3ab93348fc89e97890198601767ea2c8fea89ea76088c17a2b35962'
