@@ -31,7 +31,6 @@ build() {
     --with-system-zlib \
     --enable-shared \
     --enable-plugins \
-    --enable-64-bit-bfd \
     --enable-targets=x86_64-pep \
     --with-debuginfod \
     --with-pic \
@@ -52,7 +51,7 @@ check() {
 package() {
   cd $pkgname-$pkgver/build
 
-  make prefix="$pkgdir/usr/" tooldir="$pkgdir/usr/"  install
+  make DESTDIR="$pkgdir/" tooldir="/usr/" install
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
