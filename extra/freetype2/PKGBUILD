@@ -1,0 +1,40 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=freetype2
+pkgver=2.10.2
+pkgrel=1
+pkgdesc="Font rasterization library"
+arch=(x86_64)
+url="https://www.freetype.org/"
+depends=(harfbuzz libpng)
+backup=(etc/profile.d/freetype2.sh)
+source=(https://download-mirror.savannah.gnu.org/releases/freetype/freetype-$pkgver.tar.xz{,.sig}
+        freetype2.sh)
+sha256sums=('1543d61025d2e6312e0a1c563652555f17378a204a61e99928c9fcef030a2d8b'
+            'SKIP'
+            'f7f8e09c44f7552c883846e9a6a1efc50377c4932234e74adc4a8ff750606467')
+validpgpkeys=('58E0C111E39F5408C5D3EC76C1A60EACE707FDA5')
+
+build() {
+  cd freetype-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --disable-static
+
+  make
+}
+
+check() {
+  cd freetype-$pkgver
+
+  make -k check
+}
+
+package() {
+  cd freetype-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  install -Dm644 "$srcdir"/freetype2.sh -t "$pkgdir"/etc/profile.d
+}
