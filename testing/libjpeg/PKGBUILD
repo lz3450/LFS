@@ -1,0 +1,115 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libjpeg-turbo
+pkgver=2.0.4
+pkgrel=1
+pkgdesc=''
+url='https://libjpeg-turbo.org/'
+arch=('x86_64')
+license=('custom')
+makedepends=('cmake' 'nasm' 'jdk8-openjdk')
+validpgpkeys=('7D6293CC6378786E1B5C496885C7044E033FDE16')
+source=("https://downloads.sourceforge.net/project/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.gz"{,.sig})
+sha256sums=('33dd8547efd5543639e890efbf2ef52d5a21df81faf41bb940657af916a23406'
+            'SKIP')
+
+
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	sed 's/Szathmáry/Szathmary/g' -i java/org/libjpegturbo/turbojpeg/*.java
+}
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	cmake \
+		-DWITH_JAVA=1 \
+		-DWITH_JPEG8=1 \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=/usr/lib \
+		.
+
+	make
+}
+
+check() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	make test
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	make \
+		DESTDIR="${pkgdir}" \
+		docdir="/usr/share/doc/${pkgname}" \
+		exampledir="/usr/share/doc/${pkgname}" \
+		install
+
+	install -d "${pkgdir}/usr/share/licenses/${pkgname}"
+	ln -s ../../doc/libjpeg-turbo/LICENSE.md "${pkgdir}/usr/share/licenses/${pkgname}"
+	install -m 644 jpegint.h "${pkgdir}/usr/include" # required by other software
+}
+
+pkgname=libjpeg-turbo
+pkgver=2.0.4
+pkgrel=1
+pkgdesc="JPEG image codec with accelerated baseline compression and decompression"
+arch=(x86_64)
+url="https://libjpeg-turbo.org/"
+depends=()
+makedepends=()
+optdepends=()
+checkdepends=()
+backup=()
+options=()
+install=
+changelog=
+source=($pkgname-$pkgver.tar.gz)
+noextract=()
+sha256sums=()
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
+
+###########################################################
+
+build() {
+  cd $pkgname-$pkgver
+
+  meson setup \
+    -Dauto_features=enabled \
+    -Dbuildtype=plain \
+    -Dwrap_mode=nodownload \
+    -Db_lto=true \
+    -Db_pie=true \
+    -Dprefix=/usr \
+    -Dlibexecdir=lib \
+    -Dsbindir=bin \
+    build
+
+  ninja -C build
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  DESTDIR="$pkgdir/" meson install -C build
+}
