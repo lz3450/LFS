@@ -1,0 +1,42 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=linux-rpi
+pkgver=5.4
+pkgrel=1
+pkgdesc="LTS Linux Kernel (Raspberry Pi)"
+arch=('aarch64')
+url="https://www.raspberrypi.org/documentation/linux/kernel/building.md"
+makedepends=(bc)
+options=(!strip)
+source=(git+https://github.com/raspberrypi/linux#branch=rpi-5.4.y
+        config)
+sha256sums=('SKIP'
+            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
+
+export KBUILD_BUILD_HOST=kzl-linux
+export KBUILD_BUILD_USER=kzl
+export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
+export KERNEL=kernel8
+
+prepare() {
+  cd linux
+
+  make bcm2711_defconfig
+  make nconfig
+}
+
+build() {
+  cd linux
+
+  make all
+}
+
+package() {
+  cd linux
+
+  make INSTALL_MOD_PATH="$pkgdir/usr" modules_install
+
+  install -Dm755 arch/arm/boot/zImage "$pkgdir"/boot/$KERNEL.img
+  cp -a arch/arm/boot/dts/overlays/*.dtb* "$pkgdir"/boot/overlay/
+  cp -a arch/arm/boot/dts/overlays/README "$pkgdir"/boot/overlay/
+}
