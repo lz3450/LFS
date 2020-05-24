@@ -4,7 +4,7 @@ pkgname=lapack
 pkgver=3.9.0
 pkgrel=1
 pkgdesc="Linear Algebra PACKage"
-arch=(x86_64)
+arch=('x86_64')
 url="https://www.netlib.org/lapack"
 source=($pkgname-$pkgver.tar.gz::https://github.com/Reference-LAPACK/lapack/archive/v$pkgver.tar.gz
         lapacke-missing-symbols.patch::https://github.com/Reference-LAPACK/lapack/commit/87536aa3.patch)

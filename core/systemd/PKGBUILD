@@ -3,7 +3,7 @@
 pkgname=systemd
 pkgver=245.4
 pkgrel=1
-arch=(x86_64)
+arch=('x86_64')
 url="https://www.github.com/systemd/systemd-stable"
 depends=(acl audit cryptsetup curl elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libmicrohttpd libpwquality libseccomp lz4 openssl p11-kit pam pcre2 qrencode)
 makedepends=(gperf)

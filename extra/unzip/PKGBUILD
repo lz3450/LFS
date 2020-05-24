@@ -4,7 +4,7 @@ pkgname=unzip
 pkgver=6.0
 pkgrel=1
 pkgdesc="For extracting and viewing files in .zip archives"
-arch=(x86_64)
+arch=('x86_64')
 url="https://www.info-zip.org/UnZip.html"
 source=(https://downloads.sourceforge.net/infozip/$pkgname${pkgver/./}.tar.gz
         overflow-fsize.patch

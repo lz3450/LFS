@@ -4,7 +4,7 @@ pkgname=db
 pkgver=5.3.28
 pkgrel=1
 pkgdesc="The Berkeley DB embedded database system"
-arch=(x86_64)
+arch=('x86_64')
 url="https://www.oracle.com/technology/software/products/berkeley-db/index.html"
 source=(https://download.oracle.com/berkeley-db/db-$pkgver.tar.gz
         atomic.patch)

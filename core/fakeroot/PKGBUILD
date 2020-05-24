@@ -4,7 +4,7 @@ pkgname=fakeroot
 pkgver=1.24
 pkgrel=1
 pkgdesc="Tool for simulating superuser privileges"
-arch=(x86_64)
+arch=('x86_64')
 url="https://packages.debian.org/fakeroot"
 source=(http://ftp.debian.org/debian/pool/main/f/$pkgname/${pkgname}_${pkgver}.orig.tar.gz
         silence-dlerror.patch)

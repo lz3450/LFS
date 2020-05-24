@@ -4,7 +4,7 @@ pkgname=libseccomp
 pkgver=2.4.3
 pkgrel=1
 pkgdesc="Enhanced seccomp library"
-arch=(x86_64)
+arch=('x86_64')
 url="https://github.com/seccomp/libseccomp"
 checkdepends=(valgrind)
 source=(git+https://github.com/seccomp/$pkgname?signed#tag=v$pkgver)

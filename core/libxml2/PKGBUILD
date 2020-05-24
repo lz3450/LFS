@@ -4,7 +4,7 @@ pkgname=libxml2
 pkgver=2.9.10
 pkgrel=1
 pkgdesc="XML parsing library, version 2"
-arch=(x86_64)
+arch=('x86_64')
 url="http://xmlsoft.org"
 depends=(icu)
 source=(git+https://gitlab.gnome.org/GNOME/libxml2.git#tag=v$pkgver)

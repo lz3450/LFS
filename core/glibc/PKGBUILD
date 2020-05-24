@@ -3,7 +3,7 @@
 pkgname=glibc
 pkgver=2.31
 pkgrel=6
-arch=(x86_64)
+arch=('x86_64')
 url="https://www.gnu.org/software/libc"
 depends=(tzdata)
 options=(!strip staticlibs)

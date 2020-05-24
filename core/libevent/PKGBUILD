@@ -4,7 +4,7 @@ pkgname=libevent
 pkgver=2.1.11
 pkgrel=5
 pkgdesc="An event notification library"
-arch=(x86_64)
+arch=('x86_64')
 url="https://libevent.org/"
 depends=(openssl)
 source=(git+https://github.com/libevent/libevent.git#commit=61fc2bf2e9719eb7ca9c56b6e186df2f79f05de7?signed)

@@ -4,7 +4,7 @@ pkgname=libnl
 pkgver=3.5.0
 pkgrel=1
 pkgdesc="Library for applications dealing with netlink sockets"
-arch=(x86_64)
+arch=('x86_64')
 url="https://github.com/thom311/libnl/"
 backup=(etc/libnl/classid
         etc/libnl/pktloc)

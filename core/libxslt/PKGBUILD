@@ -4,7 +4,7 @@ pkgname=libxslt
 pkgver=1.1.34
 pkgrel=1
 pkgdesc="XML stylesheet transformation library"
-arch=(x86_64)
+arch=('x86_64')
 url="http://xmlsoft.org/XSLT/"
 depends=(libgcrypt libxml2)
 source=(git+https://gitlab.gnome.org/GNOME/libxslt.git#tag=v$pkgver)

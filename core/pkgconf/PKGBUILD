@@ -4,7 +4,7 @@ pkgname=pkgconf
 pkgver=1.6.3
 pkgrel=1
 pkgdesc="Package compiler and linker metadata toolkit"
-arch=(x86_64)
+arch=('x86_64')
 url="https://github.com/pkgconf/pkgconf"
 source=(git+https://git.sr.ht/~kaniini/pkgconf#tag=$pkgname-$pkgver
         x86_64-linux-gnu.personality)

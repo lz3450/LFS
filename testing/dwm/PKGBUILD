@@ -3,7 +3,7 @@
 pkgname=dwm
 pkgver=6.2
 pkgrel=1
-arch=(x86_64)
+arch=('x86_64')
 url="http://dwm.suckless.org"
 depends=(libx11 freetype2 dmenu)
 source=(http://dl.suckless.org/$pkgname/$pkgname-$pkgver.tar.gz

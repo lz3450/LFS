@@ -3,7 +3,7 @@
 pkgname=python-numpy
 pkgver=1.18.2
 pkgrel=1
-arch=(x86_64)
+arch=('x86_64')
 url="https://www.numpy.org/"
 depends=(lapack)
 makedepends=(cython)

@@ -3,7 +3,7 @@
 pkgname=zsh
 pkgver=5.8
 pkgrel=1
-arch=(x86_64)
+arch=('x86_64')
 url="https://www.zsh.org/"
 depends=(gdbm libcap pcre)
 install=zsh.install

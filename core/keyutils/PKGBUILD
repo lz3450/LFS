@@ -4,7 +4,7 @@ pkgname=keyutils
 pkgver=1.6.1
 pkgrel=1
 pkgdesc="Linux Key Management Utilities"
-arch=(x86_64)
+arch=('x86_64')
 url="https://www.kernel.org/"
 backup=(etc/request-key.conf)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/$pkgname.git#tag=v$pkgver?signed)

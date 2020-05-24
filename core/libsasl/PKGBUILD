@@ -4,7 +4,7 @@ pkgname=libsasl
 pkgver=2.1.27
 pkgrel=1
 pkgdesc="Cyrus Simple Authentication Service Layer (SASL) library"
-arch=(x86_64)
+arch=('x86_64')
 url="https://www.cyrusimap.org/"
 depends=(openssl)
 source=(git+https://github.com/cyrusimap/cyrus-sasl.git#commit=f769dde423e1b3ae8bfb35b826fca3d5f1e1f6fe?signed)

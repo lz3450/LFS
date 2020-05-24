@@ -4,7 +4,7 @@ pkgname=json-c
 pkgver=0.13.1
 pkgrel=1
 pkgdesc="A JSON implementation in C"
-arch=(x86_64)
+arch=('x86_64')
 url="https://github.com/json-c/json-c/wiki"
 source=(git+https://github.com/$pkgname/$pkgname#tag=$pkgname-$pkgver-20180305)
 sha256sums=('SKIP')

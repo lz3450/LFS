@@ -4,7 +4,7 @@ pkgname=cython
 pkgver=0.29.16
 pkgrel=1
 pkgdesc="C-Extensions for Python"
-arch=(x86_64)
+arch=('x86_64')
 url="https://cython.org"
 source=($pkgname-$pkgver.tar.gz::https://github.com/cython/cython/archive/$pkgver.tar.gz
         cython-hash-int-conversion.patch::https://github.com/cython/cython/commit/28251032.patch)

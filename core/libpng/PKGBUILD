@@ -4,7 +4,7 @@ pkgname=libpng
 pkgver=1.6.37
 pkgrel=1
 pkgdesc="A collection of routines used to create PNG format graphics files"
-arch=(x86_64)
+arch=('x86_64')
 url="http://www.libpng.org/pub/png/libpng.html"
 source=(https://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.xz
         https://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-$pkgver-apng.patch.gz)

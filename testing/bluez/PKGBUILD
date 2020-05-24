@@ -3,7 +3,7 @@
 pkgname=bluez
 pkgver=5.54
 pkgrel=1
-arch=(x86_64)
+arch=('x86_64')
 url="http://www.bluez.org/"
 depends=(glib2 libical)
 makedepends=()

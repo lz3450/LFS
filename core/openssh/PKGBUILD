@@ -3,7 +3,7 @@
 pkgname=openssh
 pkgver=8.2.P1
 pkgrel=1
-arch=(x86_64)
+arch=('x86_64')
 url="https://www.openssh.com/portable.html"
 depends=(krb5 libedit openssl)
 # depends=(krb5 ldns libedit openssl)

@@ -4,7 +4,7 @@ pkgname=p11-kit
 pkgver=0.23.20
 pkgrel=1
 pkgdesc="Loads and enumerates PKCS#11 modules"
-arch=(x86_64)
+arch=('x86_64')
 url="https://p11-glue.freedesktop.org"
 depends=(libffi libtasn1)
 source=(git+https://github.com/p11-glue/p11-kit?signed#tag=$pkgver)

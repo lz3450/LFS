@@ -4,7 +4,7 @@ pkgname=libtirpc
 pkgver=1.2.6
 pkgrel=1
 pkgdesc="Transport Independent RPC library (SunRPC replacement)"
-arch=(x86_64)
+arch=('x86_64')
 url="http://git.linux-nfs.org/?p=steved/libtirpc.git;a=summary"
 depends=(krb5)
 backup=(etc/netconfig)

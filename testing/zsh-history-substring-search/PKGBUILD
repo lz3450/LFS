@@ -4,7 +4,7 @@ pkgname=zsh-history-substring-search
 pkgver=1.0.2
 pkgrel=1
 pkgdesc="ZSH port of Fish history search (up arrow)"
-arch=(x86_64)
+arch=('x86_64')
 url="https://github.com/zsh-users/zsh-history-substring-search"
 depends=(zsh)
 source=(git+https://github.com/zsh-users/zsh-history-substring-search.git#commit=2c36e4dd3aad8ca538df917094713d177815388b?signed)

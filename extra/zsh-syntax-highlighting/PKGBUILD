@@ -4,7 +4,7 @@ pkgname=zsh-syntax-highlighting
 pkgver=0.7.1
 pkgrel=1
 pkgdesc="Fish shell like syntax highlighting for Zsh"
-arch=(x86_64)
+arch=('x86_64')
 url="https://github.com/zsh-users/zsh-syntax-highlighting"
 depends=(zsh)
 source=(git+https://github.com/zsh-users/zsh-syntax-highlighting.git#commit=415e762ab21da7e0ebfe6dab09b8cc62df99bfcc?signed)

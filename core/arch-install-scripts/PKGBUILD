@@ -4,7 +4,7 @@ pkgname=arch-install-scripts
 pkgver=23
 pkgrel=1
 pkgdesc="Scripts to aid in installing Arch Linux"
-arch=(x86_64)
+arch=('x86_64')
 url="https://projects.archlinux.org/arch-install-scripts.git"
 source=(git+https://projects.archlinux.org/arch-install-scripts.git?signed#tag=v$pkgver)
 sha256sums=('SKIP')
