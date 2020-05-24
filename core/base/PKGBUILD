@@ -4,7 +4,7 @@ pkgname=base
 pkgver=2020.0514
 pkgrel=1
 pkgdesc="Minimal package set to define a basic KZL Linux installation"
-arch=(any)
+arch=('any')
 depends=(
   filesystem linux-api-headers tzdata glibc
   zlib binutils gcc

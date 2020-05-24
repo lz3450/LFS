@@ -4,7 +4,7 @@ pkgname=ttf-consolas
 pkgver=10
 pkgrel=1
 pkgdesc="Consola font"
-arch=(any)
+arch=('any')
 source=(consola.ttf
         consolab.ttf
         consolai.ttf

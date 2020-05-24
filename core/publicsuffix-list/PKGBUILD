@@ -4,7 +4,7 @@ pkgname=publicsuffix-list
 pkgver=2020.0409
 pkgrel=1
 pkgdesc="Cross-vendor public domain suffix database"
-arch=(any)
+arch=('any')
 url="https://github.com/publicsuffix/list"
 source=(git+$url#commit=ff6fcea0f91830e909a8ea80c81ac101748d0c0b?signed)
 sha256sums=('SKIP')

@@ -3,7 +3,7 @@
 pkgname=filesystem
 pkgver=2020.05
 pkgrel=1
-arch=(any)
+arch=('any')
 depends=(iana-etc)
 backup=(etc/crypttab
         etc/fstab
