@@ -2,7 +2,7 @@
 
 pkgname=libcbor
 pkgver=0.7.0
-pkgrel=1
+pkgrel=2
 pkgdesc="C library for parsing and generating CBOR, the general-purpose schema-less binary data format"
 arch=('x86_64')
 url="https://github.com/PJK/libcbor"
@@ -16,7 +16,6 @@ build() {
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -S . \
     -B build
   
