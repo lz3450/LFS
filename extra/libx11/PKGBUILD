@@ -1,0 +1,37 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libx11
+pkgver=1.6.9
+pkgrel=1
+pkgdesc="X11 client-side library"
+arch=('x86_64')
+url="https://xorg.freedesktop.org/"
+depends=(libxcb xorgproto)
+makedepends=(xorg-util-macros xtrans)
+source=($url/releases/individual/lib/libX11-$pkgver.tar.bz2{,.sig})
+sha256sums=('9cc7e8d000d6193fa5af580d50d689380b8287052270f5bb26a5fb6b58b2bed1'
+            'SKIP')
+validpgpkeys=('995ED5C8A6138EB0961F18474C09DD83CAAA50B2')
+
+build() {
+  cd libX11-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --disable-static \
+    --disable-xf86bigfont
+
+  make
+}
+
+check() {
+  cd libX11-$pkgver
+
+  make check
+}
+
+package() {
+  cd libX11-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
