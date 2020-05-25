@@ -1,0 +1,31 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=xtrans
+pkgver=1.4.0
+pkgrel=1
+pkgdesc="X transport library"
+arch=('any')
+url="https://xorg.freedesktop.org/"
+options=(!emptydirs)
+source=($url/releases/individual/lib/$pkgname-$pkgver.tar.bz2{,.sig})
+sha256sums=('377c4491593c417946efcd2c7600d1e62639f7a8bbca391887e2c4679807d773'
+            'SKIP')
+validpgpkeys=('4A193C06D35E7C670FA4EF0BA2FB9E081F2D130E')    
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  install -dm755 "$pkgdir"/usr/lib
+  mv "$pkgdir"/usr/share/pkgconfig "$pkgdir"/usr/lib/pkgconfig
+}
