@@ -16,8 +16,8 @@ build() {
   
   cmake \
     -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -DSHARED_ONLY=yes \
     -DICAL_BUILD_DOCS=false \
     -DGOBJECT_INTROSPECTION=true \
