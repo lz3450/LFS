@@ -9,34 +9,63 @@ url="https://www.raspberrypi.org/documentation/linux/kernel/building.md"
 makedepends=(bc)
 options=(!strip)
 source=(git+https://github.com/raspberrypi/linux#branch=rpi-5.4.y
-        git+https://github.com/raspberrypi/firmware.git)
+        git+https://github.com/raspberrypi/firmware.git
+        cmdline.txt
+        config.txt)
 sha256sums=('SKIP'
-            'SKIP')
+            'SKIP'
+            'd1e42fab21572b3e79671e30a87e6a68c0b49ecfdd09da160a885760d0415240'
+            'd65aa55d48805cf83e4ff99d133a3d1e2dddb755364defa440943f9179489f8f')
 
 export KBUILD_BUILD_HOST=kzl-linux
 export KBUILD_BUILD_USER=kzl
 export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
+export KBUILD_OUTPUT="$srcdir"/$pkgname-$pkgver/build
 export KERNEL=kernel8
 
 prepare() {
   cd linux
 
-  make bcm2711_defconfig
-  make nconfig
+  rm -rf .git
+
+  make O=build bcm2711_defconfig
+  make O=build nconfig
+  
+  make O=build -s kernelrelease > version
 }
 
 build() {
   cd linux
 
-  make Image modules dtbs
+  make O=build Image modules dtbs
 }
 
 package() {
   cd linux
 
-  make INSTALL_MOD_PATH="$pkgdir/usr" modules_install
+  local kernelver=$(<version)
+  local modulesdir="/usr/lib/modules/$kernelver"
 
-  install -Dm755 arch/arm64/boot/Image "$pkgdir"/boot/$KERNEL.img
-  install -Dm755 arch/arm64/boot/dts/overlays/*.dtb* -t "$pkgdir"/boot/overlays/
-  install -Dm755 arch/arm64/boot/dts/overlays/README -t "$pkgdir"/boot/overlays/
+  make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
+
+  # make INSTALL_PATH="$pkgdir/boot" O=build install
+
+  install -Dm755 build/arch/arm64/boot/Image -t "$pkgdir/$modulesdir/"
+  install -Dm755 build/arch/arm64/boot/Image "$pkgdir"/boot/$KERNEL.img
+  install -Dm644 arch/arm64/boot/dts/overlays/*.dtb* -t "$pkgdir/$modulesdir"/overlays/
+  install -Dm644 arch/arm64/boot/dts/overlays/*.dtb* -t "$pkgdir"/boot/overlays/
+
+  install -Dm644 build/System.map -t "$pkgdir/$modulesdir/"
+  install -Dm644 build/System.map -t "$pkgdir"/boot/
+
+  install -Dm644 "$srcdir"/{cmdline,config}.txt "$pkgdir"/boot/
+
+  # raspberry pi firmware
+  install -Dm644 "$srcdir"/firmware/boot/bcm2711-rpi-4-b.dtb "$pkgdir"/boot/
+  install -Dm644 "$srcdir"/firmware/boot/fixup*.dat "$pkgdir"/boot/
+  install -Dm644 "$srcdir"/firmware/boot/start*.elf "$pkgdir"/boot/
+
+  rm "$pkgdir"/usr/lib/modules/$kernelver/{build,source}
+  cp -a build "$pkgdir"/usr/lib/modules/$kernelver/build
+  cp -a . "$pkgdir"/usr/lib/modules/$kernelver/source
 }
