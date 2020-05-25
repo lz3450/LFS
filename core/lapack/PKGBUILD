@@ -2,7 +2,7 @@
 
 pkgname=lapack
 pkgver=3.9.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Linear Algebra PACKage"
 arch=('x86_64')
 url="https://www.netlib.org/lapack"
@@ -23,6 +23,8 @@ build() {
 
   cmake \
     -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_Fortran_COMPILER=gfortran \
     -DCMAKE_SKIP_RPATH=ON \
     -DBUILD_SHARED_LIBS=ON \
@@ -30,7 +32,6 @@ build() {
     -DLAPACKE_WITH_TMG=ON \
     -DCBLAS=ON \
     -DBUILD_DEPRECATED=ON \
-    -DCMAKE_BUILD_TYPE=Release \
     -S . \
     -B build
 
