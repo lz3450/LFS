@@ -1,0 +1,29 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libxau
+pkgver=1.0.9
+pkgrel=1
+pkgdesc="X11 authorisation library"
+arch=('x86_64')
+url="https://xorg.freedesktop.org/"
+depends=(xorgproto)
+source=($url/releases/individual/lib/libXau-$pkgver.tar.bz2{,.sig})
+sha256sums=('ccf8cbf0dbf676faa2ea0a6d64bcc3b6746064722b606c8c52917ed00dcb73ec'
+            'SKIP')
+validpgpkeys=('4A193C06D35E7C670FA4EF0BA2FB9E081F2D130E')
+
+build() {
+  cd libXau-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc
+
+  make
+}
+
+package() {
+  cd libXau-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
