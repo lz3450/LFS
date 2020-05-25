@@ -28,15 +28,15 @@ prepare() {
 build() {
   cd linux
 
-  make O=build Image modules dtbs
+  make Image modules dtbs
 }
 
 package() {
   cd linux
 
-  make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
+  make INSTALL_MOD_PATH="$pkgdir/usr" modules_install
 
-  install -Dm755 build/arch/arm64/boot/Image "$pkgdir"/boot/$KERNEL.img
-  install -Dm755 build/arch/arm64/boot/dts/overlays/*.dtb* -t "$pkgdir"/boot/overlays/
+  install -Dm755 arch/arm64/boot/Image "$pkgdir"/boot/$KERNEL.img
+  install -Dm755 arch/arm64/boot/dts/overlays/*.dtb* -t "$pkgdir"/boot/overlays/
   install -Dm755 arch/arm64/boot/dts/overlays/README -t "$pkgdir"/boot/overlays/
 }
