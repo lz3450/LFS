@@ -19,6 +19,7 @@ changelog=
 source=($pkgname-$pkgver.tar.gz)
 noextract=()
 sha256sums=()
+validpgpkeys=()
 
 build() {
   cd $pkgname-$pkgver
