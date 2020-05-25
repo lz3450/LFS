@@ -9,9 +9,9 @@ url="https://www.raspberrypi.org/documentation/linux/kernel/building.md"
 makedepends=(bc)
 options=(!strip)
 source=(git+https://github.com/raspberrypi/linux#branch=rpi-5.4.y
-        config)
+        git+https://github.com/raspberrypi/firmware.git)
 sha256sums=('SKIP'
-            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
+            'SKIP')
 
 export KBUILD_BUILD_HOST=kzl-linux
 export KBUILD_BUILD_USER=kzl
@@ -28,15 +28,15 @@ prepare() {
 build() {
   cd linux
 
-  make all
+  make O=build Image modules dtbs
 }
 
 package() {
   cd linux
 
-  make INSTALL_MOD_PATH="$pkgdir/usr" modules_install
+  make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
 
-  install -Dm755 arch/arm/boot/zImage "$pkgdir"/boot/$KERNEL.img
-  cp -a arch/arm/boot/dts/overlays/*.dtb* "$pkgdir"/boot/overlay/
-  cp -a arch/arm/boot/dts/overlays/README "$pkgdir"/boot/overlay/
+  install -Dm755 build/arch/arm64/boot/Image "$pkgdir"/boot/$KERNEL.img
+  install -Dm755 build/arch/arm64/boot/dts/overlays/*.dtb* -t "$pkgdir"/boot/overlays/
+  install -Dm755 arch/arm64/boot/dts/overlays/README -t "$pkgdir"/boot/overlays/
 }
