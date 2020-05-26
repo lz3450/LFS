@@ -1,8 +1,11 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
+# order
+# linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
+
 pkgname=glibc
 pkgver=2.31
-pkgrel=6
+pkgrel=7
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
 depends=(tzdata)
@@ -21,8 +24,7 @@ sha256sums=('9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17'
             'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
             '4f7e1dee2d55659362d0cf590b6c4bc47be4fc02e99d287be4edbe4ce56c241e'
             '0540122fb9340d546702a891bcce344fc3e8f21fe482c2c321b71c2e6b36964e')
-validpgpkeys=('7273542B39962DF7B299931416792B4EA25340F8'
-              'BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
+validpgpkeys=('BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -50,7 +52,7 @@ build() {
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib \
     --with-headers=/usr/include \
-    --enable-kernel=5.4.41 \
+    --enable-kernel=5.4.42 \
     --enable-static-pie \
     --enable-cet \
     --disable-profile \

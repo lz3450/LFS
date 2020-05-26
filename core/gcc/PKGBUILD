@@ -1,9 +1,12 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
+# order
+# linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
+
 pkgname=gcc
 pkgver=9.3.0
 _islver=0.21
-pkgrel=2
+pkgrel=3
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
 url="https://gcc.gnu.org"
