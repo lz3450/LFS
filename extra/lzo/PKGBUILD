@@ -1,0 +1,32 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=lzo
+pkgver=2.10
+pkgrel=1
+pkgdesc="Portable lossless data compression library"
+arch=('x86_64')
+url="https://www.oberhumer.com/opensource/lzo"
+source=(https://www.oberhumer.com/opensource/lzo/download/lzo-$pkgver.tar.gz)
+sha256sums=('c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --enable-shared
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

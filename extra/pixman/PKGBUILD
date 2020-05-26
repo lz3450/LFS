@@ -1,0 +1,48 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=pixman
+pkgver=0.40.0
+pkgrel=1
+pkgdesc="The pixel-manipulation library for X and cairo"
+arch=('x86_64')
+url="https://cgit.freedesktop.org/pixman/"
+makedepends=(libpng)
+source=(https://xorg.freedesktop.org/releases/individual/lib/$pkgname-$pkgver.tar.xz)
+sha256sums=('da8ed9fe2d1c5ef8ce5d1207992db959226bd4e37e3f88acf908fd9a71e2704e')
+
+build() {
+  cd $pkgname-$pkgver
+
+  meson setup \
+    -Dauto_features=enabled \
+    -Dbuildtype=plain \
+    -Dwrap_mode=nodownload \
+    -Db_lto=true \
+    -Db_pie=true \
+    -Dprefix=/usr \
+    -Dlibexecdir=lib \
+    -Dsbindir=bin \
+    -Dloongson-mmi=disabled \
+    -Dloongson-mmi=disabled \
+    -Dvmx=disabled \
+    -Darm-simd=disabled \
+    -Dneon=disabled \
+    -Diwmmxt=disabled \
+    -Dmips-dspr2=disabled \
+    -Dgtk=disabled \
+    build
+
+  ninja -C build
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  meson test -C build
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  DESTDIR="$pkgdir/" meson install -C build
+}
