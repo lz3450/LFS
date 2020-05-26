@@ -1,10 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
+# from scratch
+# linux-api-header -> binutils -> gcc (stage 1) -> glibc -> gcc (stage2)
+
+# update
+# linux-api-header -> binutils -> glibc -> gcc (stage2)
+
 _target=aarch64-linux-gnu
 pkgname=$_target-glibc
 pkgver=2.31
 pkgrel=3
-_commit=be176490b818b65b5162c332eb6b581690b16e5c
 pkgdesc="GNU C Library ARM64 target"
 arch=(x86_64)
 url='https://www.gnu.org/software/libc/'
@@ -33,19 +38,20 @@ build() {
   CFLAGS="-U_FORTIFY_SOURCE -mlittle-endian -O2"
   CPPFLAGS="-U_FORTIFY_SOURCE -O2"
 
-  echo "slibdir=/usr/lib" >> configparms
-  echo "rtlddir=/usr/lib" >> configparms
-  echo "sbindir=/usr/bin" >> configparms
-  echo "rootsbindir=/usr/bin" >> configparms
+  echo "slibdir=/lib" >> configparms
+  echo "rtlddir=/lib" >> configparms
+  echo "sbindir=/bin" >> configparms
+  echo "rootsbindir=/bin" >> configparms
   echo "build-programs=no" >> configparms
 
   ../configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
-    --libexecdir=/usr/lib \
-    --libdir=/usr/lib \
+    --sbindir=/bin \
+    --libexecdir=/lib \
+    --libdir=/lib \
+    --includedir=/include \
     --with-headers=/usr/$_target/include \
-    --enable-kernel=5.4.41 \
+    --enable-kernel=5.4.42 \
     --enable-shared \
     --enable-static-pie \
     --enable-cet \
@@ -72,5 +78,5 @@ package() {
 
   make install_root="$pkgdir"/usr/$_target install
 
-  rm -rf "$pkgdir"/usr/$_target/{etc,usr/share,var}
+  rmdir "$pkgdir"/usr/$_target/{etc,usr,var}
 }

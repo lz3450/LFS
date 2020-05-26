@@ -1,6 +1,11 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-_target_arch=arm64
+# from scratch
+# linux-api-header -> binutils -> gcc (stage 1) -> glibc -> gcc (stage2)
+
+# update
+# linux-api-header -> binutils -> glibc -> gcc (stage2)
+
 _target=aarch64-linux-gnu
 pkgname=$_target-binutils
 pkgver=2.34
