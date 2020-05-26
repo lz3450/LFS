@@ -1,27 +1,37 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cairo
-pkgver=1.17.2+d0dccb9
+pkgver=1.17.2
 pkgrel=1
 pkgdesc="2D graphics library with support for multiple output devices"
 arch=('x86_64')
 url="https://cairographics.org/"
-depends=(libpng)
+depends=(fontconfig glib2 libpng libxext libxrender lzo pixman)
 makedepends=()
 optdepends=()
 checkdepends=()
-backup=()
-options=()
-install=
-changelog=
-source=(git+https://gitlab.freedesktop.org/cairo/cairo.git#commit=d0dccb92c520556aaa02bd1fdf8f2922cef00292)
-sha256sums=()
+source=(git+https://gitlab.freedesktop.org/cairo/cairo.git#commit=aee96d175d8349945a6d1948a56abd4b4ec6ad84)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  # fix typo
+  sed -i 's/have_png/use_png/g' configure.ac
+
+  NOCONFIGURE=1 ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --disable-static
+
+  sed -i 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
   make
 }
@@ -29,7 +39,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check
+  make -k check || :
 }
 
 package() {
