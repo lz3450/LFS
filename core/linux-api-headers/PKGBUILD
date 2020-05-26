@@ -1,17 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=linux-api-headers
-pkgver=5.4.41
+pkgver=5.4.42
 pkgrel=1
 pkgdesc="Kernel headers sanitized for use in userspace"
 arch=('any')
 url='https://www.kernel.org'
 makedepends=(rsync)
 source=(https://www.kernel.org/pub/linux/kernel/v${pkgver:0:1}.x/linux-$pkgver.tar.{xz,sign})
-sha256sums=('1e64e7c247d7440b0dd9fa63135cf7078c3e09b933ae66dfb3e07b05dcf8b057'
+sha256sums=('4e431b7c0266a07b76fdb77f8917ad681f0fa34ffba0eb8a172b67f7ef57bc31'
             'SKIP')
-validpgpkeys=('ABAF11C65A2970B130ABE3C479BE3E4300411886'
-              '647F28654894E3BD457199BE38DBBDC86092693E')
+validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
 
 build() {
   cd linux-$pkgver
