@@ -78,5 +78,5 @@ package() {
 
   make install_root="$pkgdir"/usr/$_target install
 
-  rmdir "$pkgdir"/usr/$_target/{etc,usr,var}
+  rm -rf "$pkgdir"/usr/$_target/{etc,usr,var}
 }
