@@ -29,10 +29,6 @@ prepare() {
   make O=build olddefconfig
 
   make O=build nconfig
-
-  make O=build -s kernelrelease > version
-
-  msg2 $(<version)
 }
 
 build() {
@@ -44,8 +40,8 @@ build() {
 package() {
   cd $pkgname-$pkgver
 
-  local kernelver=$(<version)
-  local modulesdir="/usr/lib/modules/$kernelver"
+  local kernelrelease=$(make O=build -s kernelrelease)
+  local modulesdir="/usr/lib/modules/$kernelrelease"
 
   make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
 
