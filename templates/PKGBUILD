@@ -61,6 +61,12 @@ build() {
   ninja -C build
 }
 
+check() {
+  cd $pkgname-$pkgver
+
+  meson test -C build
+}
+
 package() {
   cd $pkgname-$pkgver
 
