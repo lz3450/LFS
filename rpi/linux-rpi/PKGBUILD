@@ -8,7 +8,7 @@ arch=('aarch64')
 url="https://www.raspberrypi.org/documentation/linux/kernel/building.md"
 makedepends=(bc)
 options=(!strip)
-source=(git+https://github.com/raspberrypi/linux#branch=rpi-5.4.y
+source=(git+https://github.com/raspberrypi/linux.git#branch=rpi-5.4.y
         git+https://github.com/raspberrypi/firmware.git
         cmdline.txt
         config.txt)
@@ -29,9 +29,8 @@ prepare() {
   rm -rf .git
 
   make O=build bcm2711_defconfig
+  make O=build olddefconfig
   make O=build nconfig
-  
-  make O=build -s kernelrelease > version
 }
 
 build() {
@@ -43,8 +42,8 @@ build() {
 package() {
   cd linux
 
-  local kernelver=$(<version)
-  local modulesdir="/usr/lib/modules/$kernelver"
+  local kernelrelease=$(make O=build -s kernelrelease)
+  local modulesdir="/usr/lib/modules/$kernelrelease"
 
   make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
 
@@ -52,20 +51,19 @@ package() {
 
   install -Dm755 build/arch/arm64/boot/Image -t "$pkgdir/$modulesdir/"
   install -Dm755 build/arch/arm64/boot/Image "$pkgdir"/boot/$KERNEL.img
-  install -Dm644 arch/arm64/boot/dts/overlays/*.dtb* -t "$pkgdir/$modulesdir"/overlays/
-  install -Dm644 arch/arm64/boot/dts/overlays/*.dtb* -t "$pkgdir"/boot/overlays/
+  install -Dm644 build/arch/arm64/boot/dts/overlays/*.dtb* -t "$pkgdir/$modulesdir"/overlays/
+  install -Dm644 build/arch/arm64/boot/dts/overlays/*.dtb* -t "$pkgdir"/boot/overlays/
+  install -Dm644 arch/arm64/boot/dts/overlays/README -t "$pkgdir/$modulesdir"/overlays/
+  install -Dm644 arch/arm64/boot/dts/overlays/README -t "$pkgdir"/boot/overlays/
 
   install -Dm644 build/System.map -t "$pkgdir/$modulesdir/"
   install -Dm644 build/System.map -t "$pkgdir"/boot/
 
-  install -Dm644 "$srcdir"/{cmdline,config}.txt "$pkgdir"/boot/
+  install -Dm644 "$srcdir"/{cmdline,config}.txt -t "$pkgdir/$modulesdir/"
+  install -Dm644 "$srcdir"/{cmdline,config}.txt -t "$pkgdir"/boot/
 
   # raspberry pi firmware
   install -Dm644 "$srcdir"/firmware/boot/bcm2711-rpi-4-b.dtb "$pkgdir"/boot/
   install -Dm644 "$srcdir"/firmware/boot/fixup*.dat "$pkgdir"/boot/
   install -Dm644 "$srcdir"/firmware/boot/start*.elf "$pkgdir"/boot/
-
-  rm "$pkgdir"/usr/lib/modules/$kernelver/{build,source}
-  cp -a build "$pkgdir"/usr/lib/modules/$kernelver/build
-  cp -a . "$pkgdir"/usr/lib/modules/$kernelver/source
 }
