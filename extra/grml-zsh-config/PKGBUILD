@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=grml-zsh-config
-pkgver=0.16.2
+pkgver=0.17.2
 pkgrel=1
 pkgdesc="grml's zsh configration"
 arch=('x86_64')
 url="https://grml.org/zsh/"
 depends=(zsh inetutils)
 source=(https://deb.grml.org/pool/main/g/grml-etc-core/grml-etc-core_$pkgver.tar.gz)
-sha256sums=('97d137ca102779d05d63da3a691f02c8b0b46e36d6a1ff2ea6d8aa290b8869fe')
+sha256sums=('3b717be2979dddfa896968ee948592e20b82d6d56aa1156c1c9ee05ed06d88ec')
 
 package() {
   cd grml-etc-core-$pkgver
