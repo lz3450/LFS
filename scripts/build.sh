@@ -26,8 +26,8 @@ case $1 in
     linux)
         pkgs="$scriptdir"/../linux
         ;;
-    core)
-        pkgs=$(ls -d $scriptdir/../core/[a-z]*)
+    core|extra)
+        pkgs=$(ls -d $scriptdir/../$1/[d-z]*)
         ;;
     *)
         # unknow repo
