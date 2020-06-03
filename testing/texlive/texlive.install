@@ -1,0 +1,11 @@
+post_install() {
+  mktexlsr
+  fmtutil-sys --all
+  mtxrun --generate
+}
+
+post_upgrade() {
+  mktexlsr
+  fmtutil-sys --all
+  mtxrun --generate
+}
