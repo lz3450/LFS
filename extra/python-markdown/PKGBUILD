@@ -1,0 +1,31 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=python-markdown
+pkgver=3.1.1
+pkgrel=1
+pkgdesc="Python implementation of John Gruber's Markdown"
+arch=('any')
+url="https://python-markdown.github.io/"
+# checkdepends=(python-yaml)
+source=(https://files.pythonhosted.org/packages/source/M/Markdown/Markdown-$pkgver.tar.gz)
+sha256sums=('2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a')
+
+# TODO: check
+
+build() {
+  cd Markdown-$pkgver
+
+  python setup.py build
+}
+
+# check() {
+#   cd Markdown-$pkgver
+
+#   python -m unittest discover tests
+# }
+
+package() {
+  cd Markdown-$pkgver
+
+  python setup.py install --root="$pkgdir/" --optimize=1
+}
