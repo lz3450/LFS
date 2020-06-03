@@ -1,14 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cairo
-pkgver=1.17.2
+pkgver=1.17.3
 pkgrel=1
 pkgdesc="2D graphics library with support for multiple output devices"
 arch=('x86_64')
 url="https://cairographics.org/"
 depends=(fontconfig glib2 libpng libxext libxrender lzo pixman)
-makedepends=()
-optdepends=()
+# makedepends=(librsvg)
 checkdepends=()
 source=(git+https://gitlab.freedesktop.org/cairo/cairo.git#commit=aee96d175d8349945a6d1948a56abd4b4ec6ad84)
 sha256sums=('SKIP')
@@ -18,18 +17,18 @@ prepare() {
 
   # fix typo
   sed -i 's/have_png/use_png/g' configure.ac
-
-  NOCONFIGURE=1 ./autogen.sh
 }
 
 build() {
   cd $pkgname
 
-  ./configure \
+  ./autogen.sh \
     --prefix=/usr \
     --sysconfdir=/etc \
     --localstatedir=/var \
-    --disable-static
+    --disable-static \
+    --disable-gtk-doc \
+    --enable-full-testing
 
   sed -i 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
@@ -37,13 +36,15 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make -k check || :
+  env CAIRO_TEST_TARGET=image \
+      CAIRO_TEST_TARGET_FORMAT=rgba \
+      CAIRO_TESTS='!pthread-show-text' \make -k check || :
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }
