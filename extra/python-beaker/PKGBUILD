@@ -1,0 +1,28 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=python-beaker
+pkgver=1.11.0
+pkgrel=1
+pkgdesc="Caching and sessions WSGI middleware for use with web applications and stand-alone Python scripts and applications"
+arch=('any')
+url="http://beaker.groovie.org/"
+# checkdepends=()
+source=(https://github.com/bbangert/beaker/archive/$pkgver.tar.gz)
+sha256sums=('5298f2d3be7b3ad8f299c9cc69b57907613412f397feb8c322896dbc857f5218')
+
+# TODO: check
+
+build() {
+  cd beaker-$pkgver
+
+  python setup.py build
+}
+
+# check() {
+# }
+
+package() {
+  cd beaker-$pkgver
+
+  python setup.py install --root="$pkgdir" --optimize=1
+}
