@@ -1,6 +1,6 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-# freetype2 (without harfbuzz) -> harfbuzz (without cairo) -> cairo
+# freetype2 (without harfbuzz) -> harfbuzz (without cairo) -> cairo -> harfbuzz (with cairo) -> freetype2 (with harfbuzz)
 
 pkgname=freetype2
 pkgver=2.10.2
