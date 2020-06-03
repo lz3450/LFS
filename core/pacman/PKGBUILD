@@ -41,8 +41,8 @@ build() {
     --sysconfdir=/etc \
     --localstatedir=/var \
     --disable-doc \
-    --with-scriptlet-shell=/usr/bin/bash \
-    --with-ldconfig=/usr/bin/ldconfig
+    --with-scriptlet-shell=/bin/bash \
+    --with-ldconfig=/sbin/ldconfig
 
   make V=1
 }
