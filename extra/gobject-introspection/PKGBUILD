@@ -1,0 +1,48 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gobject-introspection
+pkgver=1.64.1
+_glibver=2.64.1
+pkgrel=1
+pkgdesc="Introspection system for GObject-based libraries"
+arch=('x86_64')
+url="https://wiki.gnome.org/Projects/GObjectIntrospection"
+depends=(glib2 python-mako python-markdown)
+makedepends=(cairo libffi)
+options=(!emptydirs)
+source=(git+https://gitlab.gnome.org/GNOME/gobject-introspection.git#tag=1.64.1
+        git+https://gitlab.gnome.org/GNOME/glib.git?signed#tag=$_glibver)
+sha256sums=('SKIP'
+            'SKIP')
+validpgpkeys=('923B7025EE03C1C59F42684CF0942E894B2EAFA0')
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    -Dauto_features=enabled \
+    -Dbuildtype=plain \
+    -Dwrap_mode=nodownload \
+    -Db_lto=true \
+    -Db_pie=true \
+    -Dprefix=/usr \
+    -Dlibexecdir=lib \
+    -Dsbindir=bin \
+    -Dgtk_doc=false \
+    -Dglib_src_dir="$srcdir/glib" \
+    build
+
+  ninja -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build
+}
+
+package() {
+  cd $pkgname
+
+  DESTDIR="$pkgdir/" meson install -C build
+}
