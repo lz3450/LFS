@@ -3,9 +3,11 @@
 # build.sh
 #
 
-set -exu -o pipefail
+set -xu -o pipefail
 
 scriptdir=$(pwd)
+
+failed_pkgs=()
 
 build() {
     local pkg
@@ -20,6 +22,10 @@ build() {
     fi
 
     makepkg -scCf --nocheck --noconfirm &>> $log
+
+    if [ $? -ne 0 ]; then
+        failed_pkgs+=($pkg)
+    fi
 }
 
 case $1 in
@@ -27,7 +33,7 @@ case $1 in
         pkgs="$scriptdir"/../linux
         ;;
     core|extra)
-        pkgs=$(ls -d $scriptdir/../$1/[d-z]*)
+        pkgs=$(ls -d $scriptdir/../$1/[a-z]*)
         ;;
     *)
         # unknow repo
@@ -38,3 +44,10 @@ esac
 for p in ${pkgs[@]}; do
     build $p
 done
+
+if [ ${#failed_pkgs[@]} -eq 0 ]; then
+    echo "Build all packages successfully. "
+else
+    echo ${failed_pkgs[@]}
+    exit -1
+fi
