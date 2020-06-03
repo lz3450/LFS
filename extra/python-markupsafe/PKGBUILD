@@ -1,0 +1,31 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=python-markupsafe
+pkgver=1.1.1
+pkgrel=1
+pkgdesc="Implementation of XML/HTML/XHTML Markup safe string for Python"
+arch=('x86_64')
+url="https://pypi.python.org/pypi/MarkupSafe"
+# checkdepends=(python-pytest-runner)
+source=(https://github.com/pallets/markupsafe/archive/$pkgver.tar.gz)
+sha256sums=('222a10e3237d92a9cd45ed5ea882626bc72bc5e0264d3ed0f2c9129fa69fc167')
+
+# TODO: check
+
+build() {
+  cd markupsafe-$pkgver
+
+  python setup.py build
+}
+
+# check() {
+#   cd markupsafe-$pkgver
+
+#   python setup.py pytest
+# }
+
+package() {
+  cd markupsafe-$pkgver
+
+  python setup.py install --root="$pkgdir/" --optimize=1
+}
