@@ -1,0 +1,31 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libxt
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="X11 toolkit intrinsics library"
+arch=('x86_64')
+url="https://xorg.freedesktop.org/"
+depends=(libsm libx11)
+makedepends=(xorg-util-macros)
+source=($url/releases/individual/lib/libXt-$pkgver.tar.bz2{,.sig})
+sha256sums=('b31df531dabed9f4611fc8980bc51d7782967e2aff44c4105251a1acb5a77831'
+            'SKIP')
+validpgpkeys=('C52048C0C0748FEE227D47A2702353E0F7E48EDB')
+
+build() {
+  cd libXt-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --disable-static
+
+  make
+}
+
+package() {
+  cd libXt-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

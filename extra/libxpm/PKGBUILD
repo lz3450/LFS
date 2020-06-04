@@ -1,0 +1,35 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libxpm
+pkgver=3.5.13
+pkgrel=1
+pkgdesc="X11 pixmap library"
+arch=('x86_64')
+url="https://xorg.freedesktop.org"
+depends=(libxext libxt)
+makedepends=(xorg-util-macros)
+source=($url/releases/individual/lib/libXpm-$pkgver.tar.bz2{,.sig})
+sha256sums=('9cd1da57588b6cb71450eff2273ef6b657537a9ac4d02d0014228845b935ac25'
+            'SKIP')
+validpgpkeys=('3C2C43D9447D5938EF4551EBE23B7E70B467F0BF')
+
+build() {
+  cd libXpm-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd libXpm-$pkgver
+
+  make check
+}
+
+package() {
+  cd libXpm-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
