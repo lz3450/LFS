@@ -1,0 +1,29 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=giflib
+pkgver=5.2.1
+pkgrel=1
+pkgdesc="Library for reading and writing gif images"
+arch=('x86_64')
+url="http://giflib.sourceforge.net/"
+makedepends=()
+source=(https://downloads.sourceforge.net/project/giflib/$pkgname-$pkgver.tar.gz)
+sha256sums=('31da5562f44c5f15d63340a09a4fd62b48c45620cd302f77a6d9acf0077879bd')
+
+build() {
+  cd $pkgname-$pkgver
+
+  make PREFIX="/usr"
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make PREFIX="/usr" DESTDIR="$pkgdir/" install
+}
