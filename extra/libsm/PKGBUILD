@@ -1,0 +1,28 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libsm
+pkgver=1.2.3
+pkgrel=1
+pkgdesc="X11 Session Management library"
+arch=('x86_64')
+url="https://xorg.freedesktop.org"
+depends=(libice)
+makedepends=(xorg-util-macros xorgproto xtrans)
+source=($url/releases/individual/lib/libSM-$pkgver.tar.bz2)
+sha256sums=('2d264499dcb05f56438dee12a1b4b71d76736ce7ba7aa6efbf15ebb113769cbb')
+
+build() {
+  cd libSM-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc
+
+  make
+}
+
+package() {
+  cd libSM-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
