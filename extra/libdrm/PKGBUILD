@@ -1,0 +1,45 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libdrm
+pkgver=2.4.102
+pkgrel=1
+pkgdesc="Userspace interface to kernel DRM services"
+arch=('x86_64')
+url="https://dri.freedesktop.org/"
+depends=(libpciaccess)
+makedepends=(libxslt)
+checkdepends=(cairo)
+source=($url/$pkgname/$pkgname-$pkgver.tar.xz)
+sha256sums=('8bcbf9336c28e393d76c1f16d7e79e394a7fce8a2e929d52d3ad7ad8525ba05b')
+validpgpkeys=()
+
+build() {
+  cd $pkgname-$pkgver
+
+  meson setup \
+    -Dauto_features=enabled \
+    -Dbuildtype=plain \
+    -Dwrap_mode=nodownload \
+    -Db_lto=true \
+    -Db_pie=true \
+    -Dprefix=/usr \
+    -Dlibexecdir=lib \
+    -Dsbindir=bin \
+    -Dudev=false \
+    -Dvalgrind=false \
+    build
+
+  ninja -C build
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  meson test -C build
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  DESTDIR="$pkgdir/" meson install -C build
+}
