@@ -5,9 +5,9 @@ pkgrel=1
 pkgdesc="TeX Live"
 arch=('x86_64')
 url='http://tug.org/texlive/'
-depends=(libpng gmp mpfr)
-# depends=(cairo libsigsegv pixman graphite gd poppler libpng libjpeg
-#          freetype2 icu harfbuzz harfbuzz-icu gmp mpfr libpaper zziplib)
+depends=(cairo gmp harfbuzz libpng mpfr)
+# depends=(libsigsegv pixman graphite gd poppler libjpeg
+#          freetype2 icu libpaper zziplib)
 # makedepends=(ffcall)
 install=texlive.install
 source=(git+https://github.com/Tex-Live/texlive-source.git#tag=svn$pkgver
