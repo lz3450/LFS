@@ -1,0 +1,40 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=fribidi
+pkgver=1.0.9
+pkgrel=1
+pkgdesc="A Free Implementation of the Unicode Bidirectional Algorithm"
+arch=('x86_64')
+url="https://github.com/fribidi/fribidi/"
+source=(git+https://github.com/fribidi/fribidi#tag=v1.0.9)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D docs=false \
+    build
+
+  ninja -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build --print-errorlogs
+}
+
+package() {
+  cd $pkgname
+
+  DESTDIR="$pkgdir/" meson install -C build
+}
