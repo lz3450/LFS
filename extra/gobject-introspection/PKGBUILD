@@ -20,16 +20,16 @@ build() {
   cd $pkgname
 
   meson setup \
-    -Dauto_features=enabled \
-    -Dbuildtype=plain \
-    -Dwrap_mode=nodownload \
-    -Db_lto=true \
-    -Db_pie=true \
-    -Dprefix=/usr \
-    -Dlibexecdir=lib \
-    -Dsbindir=bin \
-    -Dgtk_doc=false \
-    -Dglib_src_dir="$srcdir/glib" \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D gtk_doc=false \
+    -D glib_src_dir="$srcdir/glib" \
     build
 
   ninja -C build

@@ -20,17 +20,17 @@ build() {
   CFLAGS+=" -DG_DISABLE_CAST_CHECKS"
 
   meson setup \
-    -Dauto_features=enabled \
-    -Dbuildtype=plain \
-    -Dwrap_mode=nodownload \
-    -Db_lto=true \
-    -Db_pie=true \
-    -Dprefix=/usr \
-    -Dlibexecdir=lib \
-    -Dsbindir=bin \
-    -Dselinux=disabled \
-    -Dman=false \
-    -Dgtk_doc=false \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D selinux=disabled \
+    -D man=false \
+    -D gtk_doc=false \
     build
 
   ninja -C build

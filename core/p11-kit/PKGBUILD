@@ -16,18 +16,18 @@ build() {
   cd $pkgname
 
   meson setup \
-    -Dauto_features=enabled \
-    -Dbuildtype=plain \
-    -Dwrap_mode=nodownload \
-    -Db_lto=true \
-    -Db_pie=true \
-    -Dprefix=/usr \
-    -Dlibexecdir=lib \
-    -Dsbindir=bin \
-    -Dtrust_paths=/etc/ca-certificates/trust-source:/usr/share/ca-certificates/trust-source \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D trust_paths=/etc/ca-certificates/trust-source:/usr/share/ca-certificates/trust-source \
     build
 
-    ninja -C build
+  ninja -C build
 }
 
 check() {

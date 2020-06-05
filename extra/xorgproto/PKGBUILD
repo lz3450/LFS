@@ -22,14 +22,14 @@ build() {
   cd $pkgname-$pkgver
 
   meson setup \
-    -Dauto_features=enabled \
-    -Dbuildtype=plain \
-    -Dwrap_mode=nodownload \
-    -Db_lto=true \
-    -Db_pie=true \
-    -Dprefix=/usr \
-    -Dlibexecdir=lib \
-    -Dsbindir=bin \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
     build
 
   ninja -C build

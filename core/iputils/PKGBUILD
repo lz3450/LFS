@@ -14,15 +14,15 @@ build() {
   cd $pkgname
 
   meson setup \
-    -Dauto_features=enabled \
-    -Dbuildtype=plain \
-    -Dwrap_mode=nodownload \
-    -Db_lto=true \
-    -Db_pie=true \
-    -Dprefix=/usr \
-    -Dlibexecdir=lib \
-    -Dsbindir=bin \
-    -DBUILD_RARPD=true \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D BUILD_RARPD=true \
     build
 
   ninja -C build

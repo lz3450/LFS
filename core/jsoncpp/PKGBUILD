@@ -15,16 +15,15 @@ build() {
 
   msg2 "Building shared library..."
   meson setup \
-    -Dauto_features=enabled \
-    -Dbuildtype=plain \
-    -Dwrap_mode=nodownload \
-    -Db_lto=true \
-    -Db_pie=true \
-    -Dprefix=/usr \
-    -Dlibexecdir=lib \
-    -Dsbindir=bin \
-    --default-library \
-    shared \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    --default-library shared \
     build
 
   ninja -C build
@@ -39,8 +38,7 @@ build() {
     -Dprefix=/usr \
     -Dlibexecdir=lib \
     -Dsbindir=bin \
-    --default-library \
-    static \
+    --default-library static \
     build-static
 
   ninja -C build-static

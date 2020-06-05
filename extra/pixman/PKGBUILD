@@ -14,22 +14,22 @@ build() {
   cd $pkgname-$pkgver
 
   meson setup \
-    -Dauto_features=enabled \
-    -Dbuildtype=plain \
-    -Dwrap_mode=nodownload \
-    -Db_lto=true \
-    -Db_pie=true \
-    -Dprefix=/usr \
-    -Dlibexecdir=lib \
-    -Dsbindir=bin \
-    -Dloongson-mmi=disabled \
-    -Dloongson-mmi=disabled \
-    -Dvmx=disabled \
-    -Darm-simd=disabled \
-    -Dneon=disabled \
-    -Diwmmxt=disabled \
-    -Dmips-dspr2=disabled \
-    -Dgtk=disabled \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D loongson-mmi=disabled \
+    -D loongson-mmi=disabled \
+    -D vmx=disabled \
+    -D arm-simd=disabled \
+    -D neon=disabled \
+    -D iwmmxt=disabled \
+    -D mips-dspr2=disabled \
+    -D gtk=disabled \
     build
 
   ninja -C build

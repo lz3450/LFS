@@ -55,67 +55,67 @@ build() {
                       2620:fe::10
                       2001:4860:4860::8888)
   meson setup \
-    -Dauto_features=enabled \
-    -Dbuildtype=plain \
-    -Dwrap_mode=nodownload \
-    -Db_lto=true \
-    -Db_pie=true \
-    -Dprefix=/usr \
-    -Dlibexecdir=lib \
-    -Dsbindir=bin \
-    -Dacl=true \
-    -Dapparmor=false \
-    -Daudit=true \
-    -Dbashcompletiondir=/usr/share/bash-completion/completions/ \
-    -Dblkid=true \
-    -Dbzip2=true \
-    -Ddbus=true \
-    -Ddbuspolicydir=/usr/share/dbus-1/system.d \
-    -Ddefault-hierarchy=hybrid \
-    -Ddefault-kill-user-processes=false \
-    -Ddefault-locale=C \
-    -Ddns-over-tls=true \
-    -Ddns-servers="${_nameservers[*]}" \
-    -Defi=true \
-    -Delfutils=true \
-    -Dfallback-hostname='kzl-linux' \
-    -Dfdisk=true \
-    -Dgnu-efi=true \
-    -Dgnutls=true \
-    -Dhomed=true \
-    -Dimportd=true \
-    -Dkmod=true \
-    -Dlibcryptsetup=true \
-    -Dlibcurl=true \
-    -Dlibidn2=true \
-    -Dlibiptc=true \
-    -Dlz4=true \
-    -Dmicrohttpd=true \
-    -Dnologin-path=/usr/bin/nologin \
-    -Dntp-servers="${_timeservers[*]}" \
-    -Dopenssl=true \
-    -Dp11kit=true \
-    -Dpam=true \
-    -Dpcre2=true \
-    -Dpolkit=true \
-    -Dpwquality=true \
-    -Dqrencode=true \
-    -Dremote=true \
-    -Drepart=true \
-    -Drpmmacrosdir=no \
-    -Dseccomp=true \
-    -Dselinux=false \
-    -Dsplit-bin=false \
-    -Dsplit-usr=false \
-    -Dsysvinit-path= \
-    -Dsysvrcnd-path= \
-    -Dtelinit-path= \
-    -Duser-path=/usr/local/bin:/usr/bin \
-    -Dvalgrind=true \
-    -Dversion-tag="$pkgver-$pkgrel-kzl" \
-    -Dxz=true \
-    -Dzlib=true \
-    -Dzshcompletiondir=/usr/share/zsh/site-functions/ \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D acl=true \
+    -D apparmor=false \
+    -D audit=true \
+    -D bashcompletiondir=/usr/share/bash-completion/completions/ \
+    -D blkid=true \
+    -D bzip2=true \
+    -D dbus=true \
+    -D dbuspolicydir=/usr/share/dbus-1/system.d \
+    -D default-hierarchy=hybrid \
+    -D default-kill-user-processes=false \
+    -D default-locale=C \
+    -D dns-over-tls=true \
+    -D dns-servers="${_nameservers[*]}" \
+    -D efi=true \
+    -D elfutils=true \
+    -D fallback-hostname='kzl-linux' \
+    -D fdisk=true \
+    -D gnu-efi=true \
+    -D gnutls=true \
+    -D homed=true \
+    -D importd=true \
+    -D kmod=true \
+    -D libcryptsetup=true \
+    -D libcurl=true \
+    -D libidn2=true \
+    -D libiptc=true \
+    -D lz4=true \
+    -D microhttpd=true \
+    -D nologin-path=/usr/bin/nologin \
+    -D ntp-servers="${_timeservers[*]}" \
+    -D openssl=true \
+    -D p11kit=true \
+    -D pam=true \
+    -D pcre2=true \
+    -D polkit=true \
+    -D pwquality=true \
+    -D qrencode=true \
+    -D remote=true \
+    -D repart=true \
+    -D rpmmacrosdir=no \
+    -D seccomp=true \
+    -D selinux=false \
+    -D split-bin=false \
+    -D split-usr=false \
+    -D sysvinit-path= \
+    -D sysvrcnd-path= \
+    -D telinit-path= \
+    -D user-path=/usr/local/bin:/usr/bin \
+    -D valgrind=true \
+    -D version-tag="$pkgver-$pkgrel-kzl" \
+    -D xz=true \
+    -D zlib=true \
+    -D zshcompletiondir=/usr/share/zsh/site-functions/ \
     build
 
   ninja -C build
