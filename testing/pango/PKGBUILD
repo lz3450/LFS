@@ -1,15 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgname=libsecret
-pkgver=0.20.3
+pkgname=pango
+pkgver=1.44.7
 pkgrel=1
-pkgdesc="Library for storing and retrieving passwords and other secrets"
+pkgdesc="A library for layout and rendering of text"
 arch=('x86_64')
-url="https://wiki.gnome.org/Projects/Libsecret"
-depends=(glib2 libgcrypt)
-makedepends=()
+url="https://www.pango.org/"
+depends=()
+makedepends=(cairo freetype2 fribidi glib2 gobject-introspection harfbuzz libthai libxft libxrender)
 checkdepends=()
-source=(git+https://gitlab.gnome.org/GNOME/libsecret.git#tag=$pkgver)
+source=(git+https://gitlab.gnome.org/GNOME/pango.git#tag=$pkgver)
 sha256sums=('SKIP')
 
 build() {
@@ -28,6 +28,12 @@ build() {
     build
 
   ninja -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build --print-errorlogs
 }
 
 package() {

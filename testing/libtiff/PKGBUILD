@@ -1,0 +1,41 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libtiff
+pkgver=4.1.0
+pkgrel=1
+pkgdesc="Library for manipulation of TIFF images"
+arch=('x86_64')
+url="http://www.simplesystems.org/libtiff/"
+depends=(libjpeg libwebp)
+makedepends=(freeglut libwebp)
+optdepends=('freeglut: for using tiffgt')
+source=(https://download.osgeo.org/libtiff/tiff-$pkgver.tar.gz{,.sig})
+sha256sums=('5d29f32517dadb6dbcd1255ea5bbc93a2b54b94fbf83653b4d65c7d6775b8634'
+            'SKIP')
+validpgpkeys=('EBDFDB21B020EE8FD151A88DE301047DE1198975')
+
+build() {
+  cd tiff-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+	  --sysconfdir=/etc \
+	  --mandir=/usr/share/man \
+    --with-docdir=/usr/share/doc/$pkgname
+
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  make
+}
+
+check() {
+  cd tiff-$pkgver
+
+  make check
+}
+
+package() {
+  cd tiff-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
