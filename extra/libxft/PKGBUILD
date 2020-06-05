@@ -1,0 +1,30 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libxft
+pkgver=2.3.3
+pkgrel=1
+pkgdesc="FreeType-based font drawing library for X"
+arch=('x86_64')
+url="https://xorg.freedesktop.org"
+makedepends=(fontconfig freetype2 libxrender)
+source=($url/releases/individual/lib/libXft-$pkgver.tar.bz2{,.sig})
+sha256sums=('225c68e616dd29dbb27809e45e9eadf18e4d74c50be43020ef20015274529216'
+            'SKIP')
+validpgpkeys=('4A193C06D35E7C670FA4EF0BA2FB9E081F2D130E')
+
+build() {
+  cd libXft-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --disable-static
+
+  make
+}
+
+package() {
+  cd libXft-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
