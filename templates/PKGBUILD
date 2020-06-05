@@ -51,9 +51,9 @@ build() {
     --prefix /usr \
     --libexecdir lib \
     --sbindir bin \
-    --auto_features enabled \
+    --auto-features enabled \
     --buildtype plain \
-    --wrap_mode nodownload \
+    --wrap-mode nodownload \
     -D b_lto=true \
     -D b_pie=true \
     build
