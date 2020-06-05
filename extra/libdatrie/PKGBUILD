@@ -1,0 +1,26 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libdatrie
+pkgver=0.2.12
+pkgrel=1
+pkgdesc="Implementation of double-array structure for representing trie, as proposed by Junichi Aoe"
+arch=('x86_64')
+url="https://linux.thai.net/projects/datrie"
+source=(https://linux.thai.net/pub/thailinux/software/libthai/$pkgname-$pkgver.tar.xz)
+sha256sums=('452dcc4d3a96c01f80f7c291b42be11863cd1554ff78b93e110becce6e00b149')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --disable-static
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
