@@ -1,0 +1,38 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=xorg-mkfontscale
+pkgver=1.2.1
+pkgrel=1
+pkgdesc="Create an index of scalable font files for X"
+arch=('x86_64')
+url="https://xorg.freedesktop.org/"
+groups=(xorg)
+depends=(freetype2 libfontenc)
+makedepends=(xorg-util-macros xorgproto)
+install=xorg-mkfontscale.install
+source=(https://xorg.freedesktop.org/archive/individual/app/mkfontscale-$pkgver.tar.bz2{,.sig}
+        xorg-mkfontscale.hook
+        xorg-mkfontscale.script)
+sha256sums=('ca0495eb974a179dd742bfa6199d561bda1c8da4a0c5a667f21fd82aaab6bac7'
+            'SKIP'
+            'bce03fee6597504bae05a9812bbd105c0bb7e99f90a115a1ff03aa2dc86ee1d1'
+            '06c60e3e46a76b5300c3224cea6b5094556ea712a08ff9a0103be2eb58d222b5')
+validpgpkeys=('4A193C06D35E7C670FA4EF0BA2FB9E081F2D130E')
+
+build() {
+  cd mkfontscale-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+package() {
+  cd mkfontscale-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  install -Dm644 "$srcdir"/xorg-mkfontscale.hook "$pkgdir"/usr/share/libalpm/hooks/xorg-mkfontscale.hook
+  install -Dm755 "$srcdir"/xorg-mkfontscale.script "$pkgdir"/usr/share/libalpm/scripts/xorg-mkfontscale
+}
