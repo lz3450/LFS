@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=5.2.1
-pkgrel=4
+pkgrel=5
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
 depends=(curl gpgme libarchive)
@@ -12,16 +12,12 @@ backup=(etc/pacman.conf
 source=(https://sources.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz{,.sig}
         pacman-5.2.1-fix-pactest-package-tar-format.patch
         makepkg-fix-one-more-file-seccomp-issue.patch
-        pacman-5.2.1-reproducible-libprovides.patch
-        pacman.conf
-        makepkg.conf)
+        pacman-5.2.1-reproducible-libprovides.patch)
 sha256sums=('1930c407265fd039cb3a8e6edc82f69e122aa9239d216d9d57b9d1b9315af312'
             'SKIP'
             '824a5c9dd458fb27b05a9a0b4b5d75b7a392de0dae79a18f5cfe8beaf4d82f0c'
             'e481a161bba76729cd434c97e0b319ddfcb1d93b2e4890d72b4e8a32982531d9'
-            '667ba659f85e3740fda9808e4751a44a63e0484072594d961b87e474c607b79c'
-            '0e084cac91121c37cd3dc019693e6fadfcb68060af45d77a81dc2a03687f998d'
-            '09be030709a6f8817c388ba4377db94147b5175a188369374a3d9f5d2c250128')
+            '667ba659f85e3740fda9808e4751a44a63e0484072594d961b87e474c607b79c')
 validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD'
               'B8151B117037781095514CA7BBDFFC92306B1121')
               
@@ -41,6 +37,8 @@ build() {
     --sysconfdir=/etc \
     --localstatedir=/var \
     --disable-doc \
+    --with-pkg-ext='.pkg.tar.zst' \
+    --with-src-ext='.src.tar.zst' \
     --with-scriptlet-shell=/bin/bash \
     --with-ldconfig=/sbin/ldconfig
 
@@ -58,8 +56,61 @@ package() {
 
   make DESTDIR="$pkgdir/" install
 
-  install -dm755 "$pkgdir"/etc/
-  install -dm755 "$pkgdir"/var/
-  install -Dm644 "$srcdir"/pacman.conf "$pkgdir"/etc/
-  install -Dm644 "$srcdir"/makepkg.conf "$pkgdir"/etc/
+  #-- Compiler and Linker Flags
+  CPPFLAGS="-D_FORTIFY_SOURCE=2"
+  CFLAGS="-march=native -O2 -pipe -fno-plt"
+  CXXFLAGS="-march=native -O2 -pipe -fno-plt"
+  LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
+  RUSTFLAGS="-C opt-level=2"
+  #-- Make Flags: change this for DistCC/SMP systems
+  MAKEFLAGS="-j$(nproc)"
+  #-- Debugging flags
+  DEBUG_CFLAGS="-g -fvar-tracking-assignments"
+  DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"
+  DEBUG_RUSTFLAGS="-C debuginfo=2"
+
+  sed -e '/CPPFLAGS=/s/^#//' \
+      -e "/CPPFLAGS=/s/\"\(.*\)\"/\"$CPPFLAGS\"/" \
+      -e '/CFLAGS=/s/^#//' \
+      -e "/CFLAGS=/s/\"\(.*\)\"/\"$CFLAGS\"/" \
+      -e '/CXXFLAGS=/s/^#//' \
+      -e "/CXXFLAGS=/s/\"\(.*\)\"/\"$CXXFLAGS\"/" \
+      -e '/LDFLAGS=/s/^#//' \
+      -e "/LDFLAGS=/s/\"\(.*\)\"/\"$LDFLAGS\"/" \
+      -e '/RUSTFLAGS=/s/^#//' \
+      -e "/RUSTFLAGS=/s/\"\(.*\)\"/\"$RUSTFLAGS\"/" \
+      -e '/MAKEFLAGS=/s/^#//' \
+      -e "/MAKEFLAGS=/s/\"\(.*\)\"/\"$MAKEFLAGS\"/" \
+      -e '/DEBUG_CFLAGS=/s/^#//' \
+      -e "/DEBUG_CFLAGS=/s/\"\(.*\)\"/\"$DEBUG_CFLAGS\"/" \
+      -e '/DEBUG_CXXFLAGS=/s/^#//' \
+      -e "/DEBUG_CXXFLAGS=/s/\"\(.*\)\"/\"$DEBUG_CXXFLAGS\"/" \
+      -e '/BUILDDIR=\/tmp\/makepkg/s/^#//' \
+      -e '/PKGDEST=/s/^#//' \
+      -e '/SRCDEST=/s/^#//' \
+      -e '/SRCPKGDEST=/s/^#//' \
+      -e '/LOGDEST=/s/^#//' \
+      -e '/PACKAGER=/s/^#//' \
+      -e '/INTEGRITY_CHECK=/s/md5/sha256/' \
+      -e '/PKGDEST=/s/\/home/~\/makepkg/' \
+      -e '/SRCDEST=/s/\/home/~\/makepkg/' \
+      -e '/SRCPKGDEST=/s/\/home/~\/makepkg/' \
+      -e '/LOGDEST=/s/\/home/~\/makepkg/' \
+      -e '/PACKAGER=/s/John Doe <john@doe.com>/Zelun Kong <zelun.kong@outlook.com>/' \
+      -i "$pkgdir"/etc/makepkg.conf
+
+  cat >> "$pkgdir"/etc/pacman.conf << EOF
+
+[core]
+SigLevel = Optional TrustAll
+Server = file:///var/repository/$repo
+
+[extra]
+SigLevel = Optional TrustAll
+Server = file:///var/repository/$repo
+
+[community]
+SigLevel = Optional TrustAll
+Server = file:///var/repository/$repo
+EOF
 }
