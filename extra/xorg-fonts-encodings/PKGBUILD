@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=xorg-fonts-encodings
+pkgver=1.0.5
+pkgrel=1
+pkgdesc="X.org font encoding files"
+arch=('x86_64')
+url="https://xorg.freedesktop.org/"
+makedepends=(xorg-font-util xorg-mkfontscale xorg-util-macros)
+source=($url/releases/individual/font/encodings-$pkgver.tar.bz2{,.sig})
+sha256sums=('bd96e16143a044b19e87f217cf6a3763a70c561d1076aad6f6d862ec41774a31'
+            'SKIP')
+validpgpkeys=('3BB639E56F861FA2E86505690FDD682D974CA72A')
+
+build() {
+  cd encodings-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+package() {
+  cd encodings-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  # regenerate encodngs file not to include non-compressed versions
+  cd "$pkgdir"/usr/share/fonts/encodings/large
+  mkfontscale -b -s -l -n -r -p /usr/share/fonts/encodings/large -e . .
+  cd "$pkgdir"/usr/share/fonts/encodings/
+  mkfontscale -b -s -l -n -r -p /usr/share/fonts/encodings -e . -e large .
+}
