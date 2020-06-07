@@ -24,7 +24,7 @@ url="https://gcc.gnu.org"
 # depends=($_target-binutils mpc)
 # stage 2
 depends=($_target-binutils $_target-glibc mpc)
-options+=(staticlibs !strip)
+options=(!strip)
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         http://isl.gforge.inria.fr/isl-$_islver.tar.xz)
 sha256sums=('71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1'

@@ -18,7 +18,7 @@ pkgdesc="The GNU Compiler Collection ($_target)"
 arch=('x86_64')
 url="https://gcc.gnu.org"
 depends=($_target-binutils $_target-glibc mpc)
-options+=(staticlibs !strip)
+options=(!strip)
 # https://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz{,.sig}
 # https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfrver.tar.xz{,.sig}
 # https://gmplib.org/download/gmp/gmp-$_gmpver.tar.lz{,.sig}
