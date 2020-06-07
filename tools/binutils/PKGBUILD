@@ -1,0 +1,60 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+# order
+# binutils (pass 1) -> 
+
+pkgname=binutils
+pkgver=2.34
+pkgrel=6
+pkgdesc="A set of programs to assemble and manipulate binary and object files"
+arch=('x86_64' 'aarch64')
+url="https://www.gnu.org/software/binutils/"
+options=(staticlibs)
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
+sha256sums=('f00b0e8803dc9bab1e2165bd568528135be734df3fabf8d0161828cd56028952'
+            'SKIP')
+validpgpkeys=('3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  mkdir build
+
+  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
+}
+
+build() {
+  cd $pkgname-$pkgver/build
+
+  ../configure \
+    --prefix=/tools \
+    --enable-gold \
+    --enable-ld=default \
+    --enable-lto \
+    --with-system-zlib \
+    --enable-shared \
+    --enable-plugins \
+    --enable-targets=x86_64-pep \
+    --with-pic \
+    --enable-deterministic-archives \
+    --enable-relro \
+    --with-lib-path=/usr/lib:/usr/local/lib \
+    --enable-threads
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver/build
+
+  make -k LDFLAGS="" check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver/build
+
+  make DESTDIR="$pkgdir/" install
+
+  # Remove unwanted files
+  rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
+}
