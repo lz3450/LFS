@@ -21,7 +21,7 @@ check() (
   cd $pkgname-$pkgver
 
   export LC_CTYPE=en_US.UTF-8 CPPFLAGS= CFLAGS= CXXFLAGS= LDFLAGS=
-  python run_tests.py || true
+  python run_tests.py || warning "Check failed."
 )
 
 package() {

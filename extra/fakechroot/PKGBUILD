@@ -25,7 +25,7 @@ check() {
   cd $pkgname-$pkgver
 
   # t/fts.t fails when building on BTRFS
-  make -k check || :
+  make -k check || warning "Check failed."
 }
 
 package() {

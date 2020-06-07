@@ -23,7 +23,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make -k check || true
+  make -k check || warning "Check failed."
 }
 
 package() {

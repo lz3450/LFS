@@ -54,7 +54,7 @@ build() {
 check() {
   cd binutils-$pkgver/build
 
-  make -k LDFLAGS="" check || :
+  make -k LDFLAGS="" check || warning "Check failed."
 }
 
 package() {

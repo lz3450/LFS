@@ -70,7 +70,7 @@ build() {
 check() {
   cd glibc-$pkgver/build
 
-  make check || :
+  make check || warning "Check failed."
 }
 
 package() {

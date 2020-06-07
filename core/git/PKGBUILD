@@ -46,7 +46,7 @@ check() {
   cd $pkgname-$pkgver
 
   local jobs
-  jobs=$(expr "$MAKEFLAGS" : '.*\(-j[0-9]*\).*') || true
+  jobs=$(expr "$MAKEFLAGS" : '.*\(-j[0-9]*\).*') || warning "Check failed."
 
   mkdir -p /dev/shm/git-test
 
