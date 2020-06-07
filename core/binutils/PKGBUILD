@@ -42,19 +42,19 @@ build() {
     --with-lib-path=/usr/lib:/usr/local/lib \
     --enable-threads
 
-  make tooldir="/usr/"
+  make tooldir="/usr"
 }
 
 check() {
   cd $pkgname-$pkgver/build
 
-  make -k LDFLAGS="" check || true
+  make -k LDFLAGS="" check || warning "Check failed."
 }
 
 package() {
   cd $pkgname-$pkgver/build
 
-  make DESTDIR="$pkgdir/" tooldir="/usr/" install
+  make DESTDIR="$pkgdir/" tooldir="/usr" install
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*

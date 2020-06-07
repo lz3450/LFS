@@ -142,7 +142,7 @@ build() {
 check() {
   cd gcc-$pkgver/build
 
-  make -k check || :
+  make -k check || warning "Check failed."
 }
 
 package() {
