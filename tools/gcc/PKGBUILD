@@ -1,0 +1,108 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+# order
+# binutils (pass 1) -> gcc (pass 1) -> 
+
+pkgname=gcc
+pkgver=9.3.0
+_mpcver=1.1.0
+_mpfrver=4.0.2
+_gmpver=6.2.0
+_islver=0.21
+pkgrel=1
+pkgdesc="The GNU Compiler Collection"
+arch=('x86_64' 'aarch64')
+url="https://gcc.gnu.org"
+source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
+        https://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz{,.sig}
+        https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfrver.tar.xz{,.sig}
+        https://gmplib.org/download/gmp/gmp-$_gmpver.tar.lz{,.sig}
+        http://isl.gforge.inria.fr/isl-$_islver.tar.xz)
+sha256sums=('71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1'
+            'SKIP'
+            '6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e'
+            'SKIP'
+            '1d3be708604eae0e42d578ba93b390c2a145f17743a744d8f3f8c2ad5855a38a'
+            'SKIP'
+            '3f33f127bcb6b2c3601676cd3281df45824b148cbf688b73c0fc8248793667d9'
+            'SKIP'
+            '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960')
+validpgpkeys=('33C235A34C46AA3FFB293709A328C3A2C3C45C06')
+
+prepare() {
+  cd $pkgname-$pkgver
+  
+  mkdir build
+
+  mv ../mpc-$_mpcver mpc
+  mv ../mpfr-$_mpfrver mpfr
+  mv ../gmp-$_gmpver gmp
+  mv ../isl-$_islver isl
+  
+  sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i {libiberty,gcc}/configure
+
+  # Set the default directory name for 64-bit libraries to “lib”
+  sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
+  sed -e '/mabi.lp64=/s/lib64/lib/' -i.orig gcc/config/aarch64/t-aarch64-linux
+}
+
+build() {
+  cd $pkgname-$pkgver/build
+
+  # stage 1
+  ../configure \
+    --with-pkgversion="KZL $pkgver-$pkgrel (tools stage1)" \
+    --prefix=/tools \
+    --libexecdir=/tools/lib \
+    --libdir=/tools/lib \
+    --disable-shared \
+    --disable-multilib \
+    --disable-threads \
+    --with-arch=armv8-a \
+    --enable-__cxa_atexit \
+    --enable-gnu-indirect-function \
+    --enable-languages=c,c++ \
+    --disable-libssp \
+    --enable-default-pie \
+    --enable-default-ssp \
+    --disable-checking \
+    --disable-nls \
+    --with-system-zlib \
+    --without-isl \
+    --enable-linker-build-id \
+    --with-linker-hash-style=gnu \
+    --enable-gnu-unique-object \
+    --enable-lto \
+    --with-glibc-version=2.31 \
+    --with-sysroot=/tools \
+    --with-build-sysroot=/tools \
+    --with-native-system-header-dir=/include \
+    --enable-install-libiberty \
+    --enable-fix-cortex-a53-835769 \
+    --enable-fix-cortex-a53-843419 \
+    --disable-plugin \
+    --disable-libstdcxx-pch \
+    --enable-clocale=gnu \
+    --without-headers \
+    --with-newlib \
+    --disable-libstdcxx \
+    --disable-libquadmath \
+    --disable-libatomic \
+    --disable-libgomp \
+    --disable-libvtv
+
+  ulimit -s 32768
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver/build
+
+  make -k check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver/build
+
+  make DESTDIR="$pkgdir/" install
+}
