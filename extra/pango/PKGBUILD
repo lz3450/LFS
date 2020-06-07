@@ -8,7 +8,7 @@ arch=('x86_64')
 url="https://www.pango.org/"
 depends=()
 makedepends=(cairo freetype2 fribidi glib2 gobject-introspection harfbuzz libthai libxft libxrender)
-checkdepends=()
+checkdepends=(cantarell-fonts ttf-dejavu)
 source=(git+https://gitlab.gnome.org/GNOME/pango.git#tag=$pkgver)
 sha256sums=('SKIP')
 
@@ -33,7 +33,7 @@ build() {
 check() {
   cd $pkgname
 
-  meson test -C build --print-errorlogs
+  meson test -C build --print-errorlogs || warning "Test failed."
 }
 
 package() {
