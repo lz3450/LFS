@@ -26,10 +26,11 @@ prepare() {
 
   mv ../isl-$_islver isl
   
-  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
+  sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i {libiberty,gcc}/configure
 
   # Set the default directory name for 64-bit libraries to “lib”
   sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
+  sed -e '/mabi.lp64=/s/lib64/lib/' -i.orig gcc/config/aarch64/t-aarch64-linux
 }
 
 build() {
