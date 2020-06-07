@@ -18,7 +18,7 @@ prepare() {
 
   mkdir build
 
-  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
+  sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i libiberty/configure
 }
 
 build() {
