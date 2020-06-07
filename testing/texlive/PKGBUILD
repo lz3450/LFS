@@ -69,7 +69,7 @@ build() {
 check() {
   cd $pkgname-source/build
 
-  make check || true
+  make check || warning "Check failed."
 }
 
 package() {

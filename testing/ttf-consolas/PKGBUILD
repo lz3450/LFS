@@ -5,6 +5,7 @@ pkgver=10
 pkgrel=1
 pkgdesc="Consola font"
 arch=('any')
+groups=(ttf-font)
 source=(consola.ttf
         consolab.ttf
         consolai.ttf
@@ -15,5 +16,5 @@ sha256sums=('c6e6ce8119fdd47ec6a5449a08e2d2ad7f41ea03143aae193068ed9fa58eaebc'
             '1df27cbcc8a9fb7f843bc24e257b78e8ff93de70e8c1ad2caab8379e7d6a1eab')
 
 package() {
-  install -Dm644 consola*.ttf -t "${pkgdir}"/usr/share/fonts/
+  install -Dm644 consola*.ttf -t "$pkgdir"/usr/share/fonts/
 }
