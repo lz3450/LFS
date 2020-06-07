@@ -56,35 +56,23 @@ package() {
 
   make DESTDIR="$pkgdir/" install
 
-  #-- Compiler and Linker Flags
-  CPPFLAGS="-D_FORTIFY_SOURCE=2"
-  CFLAGS="-march=native -O2 -pipe -fno-plt"
-  CXXFLAGS="-march=native -O2 -pipe -fno-plt"
-  LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
-  RUSTFLAGS="-C opt-level=2"
-  #-- Make Flags: change this for DistCC/SMP systems
-  MAKEFLAGS="-j$(nproc)"
-  #-- Debugging flags
-  DEBUG_CFLAGS="-g -fvar-tracking-assignments"
-  DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"
-  DEBUG_RUSTFLAGS="-C debuginfo=2"
-
   sed -e '/CPPFLAGS=/s/^#//' \
-      -e "/CPPFLAGS=/s/\"\(.*\)\"/\"$CPPFLAGS\"/" \
+      -e '/CPPFLAGS=/s/"\(.*\)"/"-D_FORTIFY_SOURCE=2"/' \
       -e '/CFLAGS=/s/^#//' \
-      -e "/CFLAGS=/s/\"\(.*\)\"/\"$CFLAGS\"/" \
+      -e '/CFLAGS=/s/"\(.*\)"/"-march=native -O2 -pipe -fno-plt"/' \
       -e '/CXXFLAGS=/s/^#//' \
-      -e "/CXXFLAGS=/s/\"\(.*\)\"/\"$CXXFLAGS\"/" \
+      -e '/CXXFLAGS=/s/"\(.*\)"/"-march=native -O2 -pipe -fno-plt"/' \
       -e '/LDFLAGS=/s/^#//' \
-      -e "/LDFLAGS=/s/\"\(.*\)\"/\"$LDFLAGS\"/" \
+      -e '/LDFLAGS=/s/"\(.*\)"/"-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"/' \
       -e '/RUSTFLAGS=/s/^#//' \
-      -e "/RUSTFLAGS=/s/\"\(.*\)\"/\"$RUSTFLAGS\"/" \
+      -e '/RUSTFLAGS=/s/"\(.*\)"/"-C opt-level=2"/' \
       -e '/MAKEFLAGS=/s/^#//' \
-      -e "/MAKEFLAGS=/s/\"\(.*\)\"/\"$MAKEFLAGS\"/" \
+      -e '/MAKEFLAGS=/s/"\(.*\)"/"-j$(nproc)"/' \
       -e '/DEBUG_CFLAGS=/s/^#//' \
-      -e "/DEBUG_CFLAGS=/s/\"\(.*\)\"/\"$DEBUG_CFLAGS\"/" \
+      -e '/DEBUG_CFLAGS=/s/"\(.*\)"/"-g -fvar-tracking-assignments"/' \
       -e '/DEBUG_CXXFLAGS=/s/^#//' \
-      -e "/DEBUG_CXXFLAGS=/s/\"\(.*\)\"/\"$DEBUG_CXXFLAGS\"/" \
+      -e '/DEBUG_CXXFLAGS=/s/"\(.*\)"/"-g -fvar-tracking-assignments"/' \
+      -e '/DEBUG_RUSTFLAGS=/s/"\(.*\)"/"-C debuginfo=2"/' \
       -e '/BUILDDIR=\/tmp\/makepkg/s/^#//' \
       -e '/PKGDEST=/s/^#//' \
       -e '/SRCDEST=/s/^#//' \
