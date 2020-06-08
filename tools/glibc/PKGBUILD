@@ -51,7 +51,7 @@ build() {
     --disable-timezone-tools \
     --enable-stack-protector=strong \
     --enable-bind-now \
-    --with-pkgversion="KZL $pkgver-$pkgrel"
+    --with-pkgversion="KZL $pkgver-$pkgrel" \
     --host=$CHOST \
     --enable-multi-arch
   
