@@ -34,7 +34,7 @@ validpgpkeys=('33C235A34C46AA3FFB293709A328C3A2C3C45C06'
               '343C2FF0FBEE5EC2EDBEF399F3599FF828C67298')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd gcc-$pkgver
   
   mkdir build
 
@@ -51,7 +51,7 @@ prepare() {
 }
 
 build() {
-  cd $pkgname-$pkgver/build
+  cd gcc-$pkgver/build
 
   # stage 1
   ../configure \
@@ -103,13 +103,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver/build
+  cd gcc-$pkgver/build
 
   make -k check || warning "Check failed."
 }
 
 package() {
-  cd $pkgname-$pkgver/build
+  cd gcc-$pkgver/build
 
   make DESTDIR="$pkgdir/" install
 }

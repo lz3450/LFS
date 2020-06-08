@@ -18,7 +18,7 @@ validpgpkeys=('3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F')
 CC="$CHOST-gcc"
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd binutils-$pkgver
 
   mkdir build
 
@@ -28,7 +28,7 @@ prepare() {
 }
 
 build() {
-  cd $pkgname-$pkgver/build
+  cd binutils-$pkgver/build
 
   ../configure \
     --target=$CHOST \
@@ -52,13 +52,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver/build
+  cd binutils-$pkgver/build
 
   make -k LDFLAGS="" check || warning "Check failed."
 }
 
 package() {
-  cd $pkgname-$pkgver/build
+  cd binutils-$pkgver/build
 
   make DESTDIR="$pkgdir/" install
 
