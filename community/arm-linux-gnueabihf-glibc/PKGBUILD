@@ -31,10 +31,10 @@ build() {
   cd glibc-$pkgver/build
 
   BUILD_CC=gcc
-  CC=${_target}-gcc
-  CXX=${_target}-g++
-  AR=${_target}-ar
-  RANLIB=${_target}-ranlib
+  CC=$_target-gcc
+  CXX=$_target-g++
+  AR=$_target-ar
+  RANLIB=$_target-ranlib
   CFLAGS="-U_FORTIFY_SOURCE -mlittle-endian -O2"
   CPPFLAGS="-U_FORTIFY_SOURCE -O2"
 

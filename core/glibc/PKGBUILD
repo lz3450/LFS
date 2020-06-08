@@ -48,9 +48,9 @@ build() {
 
   ../configure \
     --prefix=/usr \
-    --libdir=/usr/lib \
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib \
+    --libdir=/usr/lib \
     --with-headers=/usr/include \
     --enable-kernel=5.4.42 \
     --enable-static-pie \
