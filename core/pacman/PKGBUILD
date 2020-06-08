@@ -55,13 +55,13 @@ package() {
   cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir/" install
-
+  
   sed -e '/CPPFLAGS=/s/^#//' \
       -e '/CPPFLAGS=/s/"\(.*\)"/"-D_FORTIFY_SOURCE=2"/' \
       -e '/CFLAGS=/s/^#//' \
-      -e '/CFLAGS=/s/"\(.*\)"/"-march=native -O2 -pipe -fno-plt"/' \
+      -e '/CFLAGS=/s/"\(.*\)"/"-march= -O2 -pipe -fno-plt"/' \
       -e '/CXXFLAGS=/s/^#//' \
-      -e '/CXXFLAGS=/s/"\(.*\)"/"-march=native -O2 -pipe -fno-plt"/' \
+      -e '/CXXFLAGS=/s/"\(.*\)"/"-march= -O2 -pipe -fno-plt"/' \
       -e '/LDFLAGS=/s/^#//' \
       -e '/LDFLAGS=/s/"\(.*\)"/"-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"/' \
       -e '/RUSTFLAGS=/s/^#//' \
