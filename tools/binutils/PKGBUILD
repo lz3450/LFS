@@ -5,17 +5,14 @@
 
 pkgname=lfs-tools-binutils
 pkgver=2.34
-pkgrel=6
+pkgrel=1
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64' 'aarch64')
 url="https://www.gnu.org/software/binutils/"
-options=(!strip)
 source=(https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz{,.sig})
 sha256sums=('f00b0e8803dc9bab1e2165bd568528135be734df3fabf8d0161828cd56028952'
             'SKIP')
 validpgpkeys=('3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F')
-
-CC="$CHOST-gcc"
 
 prepare() {
   cd binutils-$pkgver
@@ -23,30 +20,28 @@ prepare() {
   mkdir build
 
   sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i libiberty/configure
-
-  echo $(which strip)
 }
 
 build() {
   cd binutils-$pkgver/build
 
   ../configure \
-    --target=$CHOST \
-    --host=$CHOST \
     --prefix=/tools \
     --enable-gold \
     --enable-ld=default \
     --enable-lto \
+    --without-system-zlib \
     --enable-shared \
     --enable-plugins \
+    --without-debuginfod \
     --with-pic \
     --enable-deterministic-archives \
     --enable-relro \
     --with-lib-path=/tools/lib \
     --enable-threads \
-    --disable-nls \
-    --with-sysroot=/tools \
-    --with-build-sysroot=/tools
+    # --disable-nls \
+    # --with-sysroot=/tools \
+    # --with-build-sysroot=/tools
 
   make
 }
