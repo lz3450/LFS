@@ -76,7 +76,7 @@ check() {
 package() {
   cd glibc-$pkgver/build
 
-  make install_root="$pkgdir"/usr/$_target install
+  make install_root="$pkgdir/usr/$_target" install
 
   rm -rf "$pkgdir"/usr/$_target/{etc,usr,var}
 }
