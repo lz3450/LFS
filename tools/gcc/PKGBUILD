@@ -64,7 +64,6 @@ build() {
     --disable-shared \
     --disable-multilib \
     --disable-threads \
-    --with-arch=armv8-a \
     --enable-__cxa_atexit \
     --enable-gnu-indirect-function \
     --enable-languages=c,c++ \
@@ -73,7 +72,7 @@ build() {
     --enable-default-ssp \
     --disable-checking \
     --disable-nls \
-    --with-system-zlib \
+    --without-system-zlib \
     --without-isl \
     --enable-linker-build-id \
     --with-linker-hash-style=gnu \
