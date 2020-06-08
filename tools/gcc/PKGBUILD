@@ -3,7 +3,7 @@
 # order
 # binutils (pass 1) -> gcc (pass 1) -> 
 
-pkgname=gcc
+pkgname=lfs-tools-gcc
 pkgver=9.3.0
 _mpcver=1.1.0
 _mpfrver=4.0.2
@@ -13,6 +13,7 @@ pkgrel=1
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64' 'aarch64')
 url="https://gcc.gnu.org"
+options=(!strip)
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         https://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz{,.sig}
         https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfrver.tar.xz{,.sig}
@@ -27,7 +28,10 @@ sha256sums=('71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1'
             '3f33f127bcb6b2c3601676cd3281df45824b148cbf688b73c0fc8248793667d9'
             'SKIP'
             '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960')
-validpgpkeys=('33C235A34C46AA3FFB293709A328C3A2C3C45C06')
+validpgpkeys=('33C235A34C46AA3FFB293709A328C3A2C3C45C06'
+              'AD17A21EF8AED8F1CC02DBD9F7D5C9BF765C61E3'
+              '07F3DBBECC1A39605078094D980C197698C3739D'
+              '343C2FF0FBEE5EC2EDBEF399F3599FF828C67298')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -52,6 +56,8 @@ build() {
   # stage 1
   ../configure \
     --with-pkgversion="KZL $pkgver-$pkgrel (tools stage1)" \
+    --target=$CHOST \
+    --host=$CHOST \
     --prefix=/tools \
     --libexecdir=/tools/lib \
     --libdir=/tools/lib \
@@ -89,7 +95,8 @@ build() {
     --disable-libquadmath \
     --disable-libatomic \
     --disable-libgomp \
-    --disable-libvtv
+    --disable-libvtv \
+    --disable-bootstrap
 
   ulimit -s 32768
   make
