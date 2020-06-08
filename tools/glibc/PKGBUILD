@@ -10,19 +10,11 @@ arch=('x86_64' 'aarch64')
 url="https://www.gnu.org/software/libc"
 options=(!strip)
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-        ld.so.conf
-        locale-gen::https://git.archlinux.org/svntogit/packages.git/plain/trunk/locale-gen?h=packages/glibc
-        locale.gen.txt)
-backup=(etc/gai.conf
-        etc/ld.so.conf
-        etc/locale.gen
-        etc/nscd.conf)
+        ld.so.conf)
 install=glibc.install
 sha256sums=('9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17'
             'SKIP'
-            'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
-            '83f108f915863c7ed0338e2d3e8f2e071a531a090ef8f8b2eb3a956a3c4f04d7'
-            '0540122fb9340d546702a891bcce344fc3e8f21fe482c2c321b71c2e6b36964e')
+            'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5')
 validpgpkeys=('BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
 
 prepare() {
