@@ -26,6 +26,7 @@ build() {
   cd binutils-$pkgver/build
 
   ../configure \
+    --target=$CHOST \
     --prefix=/tools \
     --enable-gold \
     --enable-ld=default \
@@ -39,9 +40,9 @@ build() {
     --enable-relro \
     --with-lib-path=/tools/lib \
     --enable-threads \
-    # --disable-nls \
-    # --with-sysroot=/tools \
-    # --with-build-sysroot=/tools
+    --disable-nls \
+    --with-sysroot=/tools \
+    --with-build-sysroot=/tools
 
   make
 }
