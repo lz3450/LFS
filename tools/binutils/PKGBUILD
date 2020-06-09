@@ -26,6 +26,7 @@ build() {
   cd binutils-$pkgver/build
 
   ../configure \
+    --target=$CHOST \
     --prefix=/tools \
     --enable-gold \
     --enable-ld=default \

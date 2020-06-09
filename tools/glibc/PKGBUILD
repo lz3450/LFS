@@ -9,12 +9,10 @@ pkgrel=7
 arch=('x86_64' 'aarch64')
 url="https://www.gnu.org/software/libc"
 options=(!strip)
-source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-        ld.so.conf)
+source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig})
 install=glibc.install
 sha256sums=('9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17'
-            'SKIP'
-            'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5')
+            'SKIP')
 validpgpkeys=('BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
 
 prepare() {
@@ -26,16 +24,18 @@ prepare() {
 build() {
   cd glibc-$pkgver/build
 
+  BUILD_CC=gcc
+  CC=$_target-gcc
+  CXX=$_target-g++
+  AR=$_target-ar
+  RANLIB=$_target-ranlib
+  CFLAGS="-U_FORTIFY_SOURCE -mlittle-endian -O2"
+  CPPFLAGS="-U_FORTIFY_SOURCE -O2"
+
   echo "slibdir=/tools/lib" >> configparms
   echo "rtlddir=/tools/lib" >> configparms
   echo "sbindir=/tools/bin" >> configparms
   echo "rootsbindir=/tools/bin" >> configparms
-
-  CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
-
-  CFLAGS=${CFLAGS/-fno-plt/}
-  CXXFLAGS=${CXXFLAGS/-fno-plt/}
-  LDFLAGS=${LDFLAGS/,-z,now/}
 
   ../configure \
     --prefix=/tools \
@@ -53,6 +53,7 @@ build() {
     --enable-bind-now \
     --with-pkgversion="KZL $pkgver-$pkgrel" \
     --host=$CHOST \
+    --build=$CHOST \
     --enable-multi-arch
   
   make
@@ -68,8 +69,4 @@ package() {
   cd glibc-$pkgver/build
 
   make install_root="$pkgdir/" install
-
-  rm -f "$pkgdir"/etc/ld.so.{cache,conf}
-  install -Dm644 "$srcdir"/ld.so.conf "$pkgdir"/etc/
-  install -dm755 "$pkgdir"/etc/ld.so.conf.d/
 }
