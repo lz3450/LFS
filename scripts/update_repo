@@ -23,7 +23,7 @@ update() {
         sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
     fi
 
-    if (( REPLACE )); then
+    if (( REPLACE )) && [ -f $REPODIR/$repo/$pkgname ] ; then
         sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
     fi
 }
