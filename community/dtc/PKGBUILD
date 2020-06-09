@@ -1,0 +1,36 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=dtc
+pkgver=1.6.0
+pkgrel=1
+pkgdesc="Device Tree Compiler"
+arch=('x86_64')
+url="https://www.devicetree.org/"
+makedepends=(swig)
+checkdepends=(valgrind)
+source=(https://www.kernel.org/pub/software/utils/dtc/dtc-$pkgver.tar.xz)
+sha256sums=('10503b0217e1b07933e29e8d347a00015b2431bea5f59afe0bed3af30340c82d')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  sed -e 's/-Werror//' -i Makefile
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make PREFIX="$pkgdir/usr" install
+}
