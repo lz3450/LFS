@@ -38,18 +38,18 @@ build() {
   CFLAGS="-U_FORTIFY_SOURCE -mlittle-endian -O2"
   CPPFLAGS="-U_FORTIFY_SOURCE -O2"
 
-  echo "slibdir=/usr/$_target/lib" >> configparms
-  echo "rtlddir=/usr/$_target/lib" >> configparms
-  echo "sbindir=/usr/$_target/bin" >> configparms
-  echo "rootsbindir=/usr/$_target/bin" >> configparms
+  echo "slibdir=/lib" >> configparms
+  echo "rtlddir=/lib" >> configparms
+  echo "sbindir=/bin" >> configparms
+  echo "rootsbindir=/bin" >> configparms
   echo "build-programs=no" >> configparms
 
   ../configure \
     --prefix=/usr \
-    --sbindir=/usr/$_target/bin \
-    --libexecdir=/usr/$_target/lib \
-    --libdir=/usr/$_target/lib \
-    --includedir=/usr/$_target/include \
+    --sbindir=/bin \
+    --libexecdir=/lib \
+    --libdir=/lib \
+    --includedir=/include \
     --with-headers=/usr/$_target/include \
     --enable-kernel=5.4.42 \
     --enable-shared \
@@ -76,7 +76,7 @@ check() {
 package() {
   cd glibc-$pkgver/build
 
-  make install_root="$pkgdir/" install
+  make install_root="$pkgdir/usr/$_target" install
 
-  rm -rf "$pkgdir"/{etc,usr/share,var}
+  rm -rf "$pkgdir"/usr/$_target/{etc,usr,var}
 }
