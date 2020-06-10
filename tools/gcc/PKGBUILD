@@ -13,7 +13,7 @@ pkgrel=1
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64' 'aarch64')
 url="https://gcc.gnu.org"
-options=(!strip)
+options=(!strip !emptydirs)
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         https://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz{,.sig}
         https://ftp.gnu.org/gnu/mpfr/mpfr-$_mpfrver.tar.xz{,.sig}
@@ -58,8 +58,8 @@ build() {
     --with-pkgversion="KZL $pkgver-$pkgrel (tools stage1)" \
     --target=$CHOST \
     --prefix=/tools \
-    --libexecdir=/tools/lib \
-    --libdir=/tools/lib \
+    --libexecdir=/tools/$CHOST/lib \
+    --libdir=/tools/$CHOST/lib \
     --disable-shared \
     --disable-multilib \
     --disable-threads \
@@ -78,10 +78,7 @@ build() {
     --enable-gnu-unique-object \
     --enable-lto \
     --with-glibc-version=2.31 \
-    --with-sysroot=/tools \
-    --with-build-sysroot=/tools \
-    --with-native-system-header-dir=/include \
-    --enable-install-libiberty \
+    --disable-install-libiberty \
     --enable-fix-cortex-a53-835769 \
     --enable-fix-cortex-a53-843419 \
     --disable-plugin \
