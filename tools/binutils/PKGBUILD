@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 # order
-# linux-api-headers -> binutils (pass 1) -> gcc (pass 1) -> glibc
+# linux-api-headers -> binutils (pass 1) -> gcc (pass 1) -> glibc -> binutils (pass 2)
 
 pkgname=lfs-tools-binutils
 pkgver=2.34
@@ -25,8 +25,30 @@ prepare() {
 build() {
   cd binutils-$pkgver/build
 
+  # pass 1
+  # ../configure \
+  #   --target=$CHOST \
+  #   --prefix=/usr \
+  #   --enable-gold \
+  #   --enable-ld=default \
+  #   --enable-lto \
+  #   --without-system-zlib \
+  #   --disable-shared \
+  #   --enable-plugins \
+  #   --without-debuginfod \
+  #   --with-pic \
+  #   --enable-deterministic-archives \
+  #   --enable-relro \
+  #   --enable-threads \
+  #   --disable-nls \
+  #   --with-sysroot=/usr/$CHOST \
+  #   --with-build-sysroot=/usr/$CHOST
+
+  # pass 2
   ../configure \
     --target=$CHOST \
+    --host=$CHOST \
+    --build=$CHOST \
     --prefix=/usr \
     --enable-gold \
     --enable-ld=default \
