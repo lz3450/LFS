@@ -23,7 +23,6 @@ prepare() {
 build() {
   cd glibc-$pkgver/build
 
-  PATH=/tools/bin:$PATH
   BUILD_CC=gcc
   CC=$CHOST-gcc
   CXX=$CHOST-g++
@@ -34,19 +33,19 @@ build() {
   CXXFLAGS=${CXXFLAGS/-fno-plt/}
   LDFLAGS=${LDFLAGS/,-z,now/}
 
-  echo "slibdir=/tools/$CHOST/lib" >> configparms
-  echo "rtlddir=/tools/$CHOST/lib" >> configparms
-  echo "sbindir=/tools/$CHOST/bin" >> configparms
-  echo "rootsbindir=/tools/$CHOST/bin" >> configparms
+  echo "slibdir=/lib" >> configparms
+  echo "rtlddir=/lib" >> configparms
+  echo "sbindir=/bin" >> configparms
+  echo "rootsbindir=/bin" >> configparms
   echo "build-programs=no" >> configparms
 
   ../configure \
-    --prefix=/tools \
-    --sbindir=/tools/$CHOST/bin \
-    --libexecdir=/tools/$CHOST/lib \
-    --libdir=/tools/$CHOST/lib \
-    --includedir=/tools/$CHOST/include \
-    --with-headers=/tools/$CHOST/include \
+    --prefix=/usr \
+    --sbindir=/bin \
+    --libexecdir=/lib \
+    --libdir=/lib \
+    --includedir=/include \
+    --with-headers=/usr/$CHOST/include \
     --enable-kernel=5.4.42 \
     --enable-shared \
     --enable-static-pie \
@@ -56,7 +55,7 @@ build() {
     --enable-stack-protector=strong \
     --enable-bind-now \
     --host=$CHOST \
-    --with-pkgversion="LFS Tools $pkgver-$pkgrel" \
+    --with-pkgversion="KZL $pkgver-$pkgrel ($CHOST)" \
     --enable-multi-arch
   
   make
@@ -71,7 +70,7 @@ check() {
 package() {
   cd glibc-$pkgver/build
 
-  make install_root="$pkgdir/" install
+  make install_root="$pkgdir/usr/$CHOST" install
 
-  rm -rf "$pkgdir"/tools/{etc,var,share/info}
+  rm -rf "$pkgdir"/usr/$CHOST/{etc,usr,var}
 }

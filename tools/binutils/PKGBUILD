@@ -27,7 +27,7 @@ build() {
 
   ../configure \
     --target=$CHOST \
-    --prefix=/tools \
+    --prefix=/usr \
     --enable-gold \
     --enable-ld=default \
     --enable-lto \
@@ -40,7 +40,8 @@ build() {
     --enable-relro \
     --enable-threads \
     --disable-nls \
-    --with-lib-path=/tools/lib
+    --with-sysroot=/usr/$CHOST \
+    --with-build-sysroot=/usr/$CHOST
 
   make
 }
@@ -56,7 +57,5 @@ package() {
 
   make DESTDIR="$pkgdir/" install
 
-  # Remove unwanted files
-  rm -f "$pkgdir"/tools/share/man/man1/{dlltool,nlmconv,windres,windmc}*
-  rm -rf "$pkgdir"/tools/share/info
+  rm -rf "$pkgdir"/usr/share/
 }

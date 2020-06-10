@@ -57,9 +57,9 @@ build() {
   ../configure \
     --with-pkgversion="KZL $pkgver-$pkgrel (tools stage1)" \
     --target=$CHOST \
-    --prefix=/tools \
-    --libexecdir=/tools/$CHOST/lib \
-    --libdir=/tools/$CHOST/lib \
+    --prefix=/usr \
+    --libexecdir=/usr/$CHOST/lib \
+    --libdir=/usr/$CHOST/lib \
     --disable-shared \
     --disable-multilib \
     --disable-threads \
@@ -78,6 +78,9 @@ build() {
     --enable-gnu-unique-object \
     --enable-lto \
     --with-glibc-version=2.31 \
+    --with-sysroot=/usr/$CHOST \
+    --with-build-sysroot=/usr/$CHOST \
+    --with-native-system-header-dir=/include \
     --disable-install-libiberty \
     --enable-fix-cortex-a53-835769 \
     --enable-fix-cortex-a53-843419 \
@@ -107,4 +110,6 @@ package() {
   cd gcc-$pkgver/build
 
   make DESTDIR="$pkgdir/" install
+
+  rm -rf "$pkgdir"/usr/share/
 }
