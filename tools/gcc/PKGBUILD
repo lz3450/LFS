@@ -57,8 +57,6 @@ build() {
   ../configure \
     --with-pkgversion="KZL $pkgver-$pkgrel (tools stage1)" \
     --target=$CHOST \
-    --host=$CHOST \
-    --build=$CHOST \
     --prefix=/tools \
     --libexecdir=/tools/lib \
     --libdir=/tools/lib \
