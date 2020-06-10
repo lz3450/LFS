@@ -45,7 +45,7 @@ build() {
   echo "build-programs=no" >> configparms
 
   ../configure \
-    --prefix=/usr/$_target/usr \
+    --prefix=/usr \
     --sbindir=/usr/$_target/bin \
     --libexecdir=/usr/$_target/lib \
     --libdir=/usr/$_target/lib \
@@ -78,5 +78,5 @@ package() {
 
   make install_root="$pkgdir/" install
 
-  rm -rf "$pkgdir"/usr/$_target/{etc,usr,var}
+  rm -rf "$pkgdir"/{etc,usr/share,var}
 }
