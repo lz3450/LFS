@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 # order
-# linux-api-headers -> binutils (pass 1) -> gcc (pass 1) -> glibc
+# linux-api-headers -> binutils (pass 1) -> gcc (pass 1) -> glibc -> gcc (pass 2)
 
 pkgname=lfs-tools-gcc
 pkgver=9.3.0
@@ -53,26 +53,71 @@ prepare() {
 build() {
   cd gcc-$pkgver/build
 
-  # stage 1
+  # pass 1
+  # ../configure \
+  #   --with-pkgversion="KZL $pkgver-$pkgrel (tools pass 1)" \
+  #   --target=$CHOST \
+  #   --prefix=/usr \
+  #   --libexecdir=/usr/$CHOST/lib \
+  #   --libdir=/usr/$CHOST/lib \
+  #   --disable-shared \
+  #   --disable-multilib \
+  #   --disable-threads \
+  #   --enable-__cxa_atexit \
+  #   --enable-gnu-indirect-function \
+  #   --enable-languages=c,c++ \
+  #   --disable-libssp \
+  #   --enable-default-pie \
+  #   --enable-default-ssp \
+  #   --disable-checking \
+  #   --disable-nls \
+  #   --without-system-zlib \
+  #   --without-isl \
+  #   --enable-linker-build-id \
+  #   --with-linker-hash-style=gnu \
+  #   --enable-gnu-unique-object \
+  #   --enable-lto \
+  #   --with-glibc-version=2.31 \
+  #   --with-sysroot=/usr/$CHOST \
+  #   --with-build-sysroot=/usr/$CHOST \
+  #   --with-native-system-header-dir=/include \
+  #   --disable-install-libiberty \
+  #   --enable-fix-cortex-a53-835769 \
+  #   --enable-fix-cortex-a53-843419 \
+  #   --disable-plugin \
+  #   --disable-libstdcxx-pch \
+  #   --enable-clocale=gnu \
+  #   --without-headers \
+  #   --with-newlib \
+  #   --disable-libstdcxx \
+  #   --disable-libquadmath \
+  #   --disable-libatomic \
+  #   --disable-libgomp \
+  #   --disable-libvtv \
+  #   --disable-bootstrap
+
+  # pass 2
   ../configure \
-    --with-pkgversion="KZL $pkgver-$pkgrel (tools stage1)" \
+    --with-pkgversion="KZL $pkgver-$pkgrel (tools pass 1)" \
     --target=$CHOST \
+    --host=$CHOST \
+    --build=$CHOST \
     --prefix=/usr \
     --libexecdir=/usr/$CHOST/lib \
     --libdir=/usr/$CHOST/lib \
-    --disable-shared \
+    --enable-shared \
     --disable-multilib \
-    --disable-threads \
+    --enable-threads=posix \
     --enable-__cxa_atexit \
     --enable-gnu-indirect-function \
-    --enable-languages=c,c++ \
+    --enable-languages=c,c++,fortran,lto \
     --disable-libssp \
     --enable-default-pie \
     --enable-default-ssp \
-    --disable-checking \
+    --enable-checking=release \
     --disable-nls \
     --without-system-zlib \
-    --without-isl \
+    --with-isl \
     --enable-linker-build-id \
     --with-linker-hash-style=gnu \
     --enable-gnu-unique-object \
@@ -81,20 +126,12 @@ build() {
     --with-sysroot=/usr/$CHOST \
     --with-build-sysroot=/usr/$CHOST \
     --with-native-system-header-dir=/include \
-    --disable-install-libiberty \
+    --enable-install-libiberty \
     --enable-fix-cortex-a53-835769 \
     --enable-fix-cortex-a53-843419 \
-    --disable-plugin \
+    --enable-plugin \
     --disable-libstdcxx-pch \
-    --enable-clocale=gnu \
-    --without-headers \
-    --with-newlib \
-    --disable-libstdcxx \
-    --disable-libquadmath \
-    --disable-libatomic \
-    --disable-libgomp \
-    --disable-libvtv \
-    --disable-bootstrap
+    --enable-clocale=gnu
 
   ulimit -s 32768
   make
