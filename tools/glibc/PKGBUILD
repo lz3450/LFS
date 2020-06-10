@@ -10,7 +10,6 @@ arch=('x86_64' 'aarch64')
 url="https://www.gnu.org/software/libc"
 options=(!strip)
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig})
-install=glibc.install
 sha256sums=('9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17'
             'SKIP')
 validpgpkeys=('BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
@@ -25,10 +24,10 @@ build() {
   cd glibc-$pkgver/build
 
   BUILD_CC=gcc
-  CC=$_target-gcc
-  CXX=$_target-g++
-  AR=$_target-ar
-  RANLIB=$_target-ranlib
+  CC=$CHOST-gcc
+  CXX=$CHOST-g++
+  AR=$CHOST-ar
+  RANLIB=$CHOST-ranlib
   CFLAGS="-U_FORTIFY_SOURCE -mlittle-endian -O2"
   CPPFLAGS="-U_FORTIFY_SOURCE -O2"
 
@@ -36,6 +35,7 @@ build() {
   echo "rtlddir=/tools/lib" >> configparms
   echo "sbindir=/tools/bin" >> configparms
   echo "rootsbindir=/tools/bin" >> configparms
+  echo "build-programs=no" >> configparms
 
   ../configure \
     --prefix=/tools \
@@ -51,9 +51,8 @@ build() {
     --disable-timezone-tools \
     --enable-stack-protector=strong \
     --enable-bind-now \
-    --with-pkgversion="KZL $pkgver-$pkgrel" \
     --host=$CHOST \
-    --build=$CHOST \
+    --with-pkgversion="KZL $pkgver-$pkgrel" \
     --enable-multi-arch
   
   make
@@ -69,4 +68,6 @@ package() {
   cd glibc-$pkgver/build
 
   make install_root="$pkgdir/" install
+
+  rm -rf "$pkgdir"/tools/{etc,var}
 }
