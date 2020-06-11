@@ -37,7 +37,6 @@ build() {
   echo "rtlddir=/lib" >> configparms
   echo "sbindir=/bin" >> configparms
   echo "rootsbindir=/bin" >> configparms
-  echo "build-programs=no" >> configparms
 
   ../configure \
     --prefix=/usr \
@@ -71,6 +70,4 @@ package() {
   cd glibc-$pkgver/build
 
   make install_root="$pkgdir/usr/$CHOST" install
-
-  rm -rf "$pkgdir"/usr/$CHOST/{etc,usr,var}
 }

@@ -53,7 +53,7 @@ prepare() {
 build() {
   cd gcc-$pkgver/build
 
-  # pass 1
+  # pass 1 (build basic gcc)
   # ../configure \
   #   --with-pkgversion="KZL $pkgver-$pkgrel (tools pass 1)" \
   #   --target=$CHOST \
@@ -96,7 +96,46 @@ build() {
   #   --disable-libvtv \
   #   --disable-bootstrap
 
-  # pass 2
+  # make all-gcc all-target-libgcc
+
+  # pass 2 (build whole gcc using old compiler)
+  # ../configure \
+  #   --with-pkgversion="KZL $pkgver-$pkgrel (tools pass 2)" \
+  #   --target=$CHOST \
+  #   --prefix=/usr \
+  #   --libexecdir=/usr/$CHOST/lib \
+  #   --libdir=/usr/$CHOST/lib \
+  #   --enable-shared \
+  #   --disable-multilib \
+  #   --enable-threads=posix \
+  #   --enable-__cxa_atexit \
+  #   --enable-gnu-indirect-function \
+  #   --enable-languages=c,c++,fortran,lto \
+  #   --disable-libssp \
+  #   --enable-default-pie \
+  #   --enable-default-ssp \
+  #   --enable-checking=release \
+  #   --disable-nls \
+  #   --with-system-zlib \
+  #   --with-isl \
+  #   --enable-linker-build-id \
+  #   --with-linker-hash-style=gnu \
+  #   --enable-gnu-unique-object \
+  #   --enable-lto \
+  #   --with-glibc-version=2.31 \
+  #   --with-sysroot=/usr/$CHOST \
+  #   --with-build-sysroot=/usr/$CHOST \
+  #   --with-native-system-header-dir=/include \
+  #   --enable-install-libiberty \
+  #   --enable-fix-cortex-a53-835769 \
+  #   --enable-fix-cortex-a53-843419 \
+  #   --enable-plugin \
+  #   --disable-libstdcxx-pch \
+  #   --enable-clocale=gnu
+
+  # make
+
+  # pass 3 (build whole gcc using new compiler from pass 2)
   ../configure \
     --with-pkgversion="KZL $pkgver-$pkgrel (tools pass 1)" \
     --target=$CHOST \
@@ -116,7 +155,7 @@ build() {
     --enable-default-ssp \
     --enable-checking=release \
     --disable-nls \
-    --without-system-zlib \
+    --with-system-zlib \
     --with-isl \
     --enable-linker-build-id \
     --with-linker-hash-style=gnu \
@@ -133,7 +172,6 @@ build() {
     --disable-libstdcxx-pch \
     --enable-clocale=gnu
 
-  ulimit -s 32768
   make
 }
 
