@@ -36,7 +36,7 @@ validpgpkeys=('33C235A34C46AA3FFB293709A328C3A2C3C45C06'
 prepare() {
   cd gcc-$pkgver
   
-  mkdir build
+  mkdir -p build
 
   mv ../mpc-$_mpcver mpc
   mv ../mpfr-$_mpfrver mpfr
@@ -57,9 +57,9 @@ build() {
   # ../configure \
   #   --with-pkgversion="KZL $pkgver-$pkgrel (tools pass 1)" \
   #   --target=$CHOST \
-  #   --prefix=/usr \
-  #   --libexecdir=/usr/$CHOST/lib \
-  #   --libdir=/usr/$CHOST/lib \
+  #   --prefix=/tools \
+  #   --libexecdir=/tools/$CHOST/lib \
+  #   --libdir=/tools/$CHOST/lib \
   #   --disable-shared \
   #   --disable-multilib \
   #   --disable-threads \
@@ -78,8 +78,8 @@ build() {
   #   --enable-gnu-unique-object \
   #   --enable-lto \
   #   --with-glibc-version=2.31 \
-  #   --with-sysroot=/usr/$CHOST \
-  #   --with-build-sysroot=/usr/$CHOST \
+  #   --with-sysroot=/tools/$CHOST \
+  #   --with-build-sysroot=/tools/$CHOST \
   #   --with-native-system-header-dir=/include \
   #   --disable-install-libiberty \
   #   --enable-fix-cortex-a53-835769 \
@@ -96,15 +96,13 @@ build() {
   #   --disable-libvtv \
   #   --disable-bootstrap
 
-  # make all-gcc all-target-libgcc
-
   # pass 2 (build whole gcc using old compiler)
   # ../configure \
   #   --with-pkgversion="KZL $pkgver-$pkgrel (tools pass 2)" \
   #   --target=$CHOST \
-  #   --prefix=/usr \
-  #   --libexecdir=/usr/$CHOST/lib \
-  #   --libdir=/usr/$CHOST/lib \
+  #   --prefix=/tools \
+  #   --libexecdir=/tools/$CHOST/lib \
+  #   --libdir=/tools/$CHOST/lib \
   #   --enable-shared \
   #   --disable-multilib \
   #   --enable-threads=posix \
@@ -123,27 +121,28 @@ build() {
   #   --enable-gnu-unique-object \
   #   --enable-lto \
   #   --with-glibc-version=2.31 \
-  #   --with-sysroot=/usr/$CHOST \
-  #   --with-build-sysroot=/usr/$CHOST \
+  #   --with-sysroot=/tools/$CHOST \
+  #   --with-build-sysroot=/tools/$CHOST \
   #   --with-native-system-header-dir=/include \
-  #   --enable-install-libiberty \
+  #   --disable-install-libiberty \
   #   --enable-fix-cortex-a53-835769 \
   #   --enable-fix-cortex-a53-843419 \
   #   --enable-plugin \
   #   --disable-libstdcxx-pch \
   #   --enable-clocale=gnu
 
-  # make
-
   # pass 3 (build whole gcc using new compiler from pass 2)
+  PATH="/tools/bin:$PATH"
+  CC=$CHOST-gcc
+  CXX=$CHOST-g++
+  AR=$CHOST-ar
+  RANLIB=$CHOST-ranlib
+
   ../configure \
     --with-pkgversion="KZL $pkgver-$pkgrel (tools pass 1)" \
-    --target=$CHOST \
-    --host=$CHOST \
-    --build=$CHOST \
-    --prefix=/usr \
-    --libexecdir=/usr/$CHOST/lib \
-    --libdir=/usr/$CHOST/lib \
+    --prefix=/tools \
+    --libexecdir=/tools/$CHOST/lib \
+    --libdir=/tools/$CHOST/lib \
     --enable-shared \
     --disable-multilib \
     --enable-threads=posix \
@@ -155,16 +154,14 @@ build() {
     --enable-default-ssp \
     --enable-checking=release \
     --disable-nls \
-    --with-system-zlib \
+    --without-system-zlib \
     --with-isl \
     --enable-linker-build-id \
     --with-linker-hash-style=gnu \
     --enable-gnu-unique-object \
     --enable-lto \
     --with-glibc-version=2.31 \
-    --with-sysroot=/usr/$CHOST \
-    --with-build-sysroot=/usr/$CHOST \
-    --with-native-system-header-dir=/include \
+    --with-native-system-header-dir=/tools/$CHOST/include \
     --enable-install-libiberty \
     --enable-fix-cortex-a53-835769 \
     --enable-fix-cortex-a53-843419 \
@@ -186,5 +183,5 @@ package() {
 
   make DESTDIR="$pkgdir/" install
 
-  rm -rf "$pkgdir"/usr/share/
+  rm -rf "$pkgdir"/tools/share/
 }

@@ -17,7 +17,7 @@ validpgpkeys=('BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
 prepare() {
   cd glibc-$pkgver
   
-  mkdir build
+  mkdir -p build
 }
 
 build() {
@@ -39,12 +39,12 @@ build() {
   echo "rootsbindir=/bin" >> configparms
 
   ../configure \
-    --prefix=/usr \
+    --prefix=/ \
     --sbindir=/bin \
     --libexecdir=/lib \
     --libdir=/lib \
     --includedir=/include \
-    --with-headers=/usr/$CHOST/include \
+    --with-headers=/tools/$CHOST/include \
     --enable-kernel=5.4.42 \
     --enable-shared \
     --enable-static-pie \
@@ -69,5 +69,5 @@ check() {
 package() {
   cd glibc-$pkgver/build
 
-  make install_root="$pkgdir/usr/$CHOST" install
+  make install_root="$pkgdir/tools/$CHOST" install
 }

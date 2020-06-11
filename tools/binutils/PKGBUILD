@@ -26,30 +26,9 @@ build() {
   cd binutils-$pkgver/build
 
   # pass 1
-  # ../configure \
-  #   --target=$CHOST \
-  #   --prefix=/usr \
-  #   --enable-gold \
-  #   --enable-ld=default \
-  #   --enable-lto \
-  #   --without-system-zlib \
-  #   --disable-shared \
-  #   --enable-plugins \
-  #   --without-debuginfod \
-  #   --with-pic \
-  #   --enable-deterministic-archives \
-  #   --enable-relro \
-  #   --enable-threads \
-  #   --disable-nls \
-  #   --with-sysroot=/usr/$CHOST \
-  #   --with-build-sysroot=/usr/$CHOST
-
-  # pass 2
   ../configure \
     --target=$CHOST \
-    --host=$CHOST \
-    --build=$CHOST \
-    --prefix=/usr \
+    --prefix=/tools \
     --enable-gold \
     --enable-ld=default \
     --enable-lto \
@@ -62,8 +41,34 @@ build() {
     --enable-relro \
     --enable-threads \
     --disable-nls \
-    --with-sysroot=/usr/$CHOST \
-    --with-build-sysroot=/usr/$CHOST
+    --with-sysroot=/tools/$CHOST \
+    --with-build-sysroot=/tools/$CHOST \
+    --with-lib-path=/lib
+
+  # pass 2
+  PATH="/tools/bin:$PATH"
+  CC=$CHOST-gcc
+  CXX=$CHOST-g++
+  AR=$CHOST-ar
+  RANLIB=$CHOST-ranlib
+
+  ../configure \
+    --prefix=/tools \
+    --enable-gold \
+    --enable-ld=default \
+    --enable-lto \
+    --without-system-zlib \
+    --disable-shared \
+    --enable-plugins \
+    --without-debuginfod \
+    --with-pic \
+    --enable-deterministic-archives \
+    --enable-relro \
+    --enable-threads \
+    --disable-nls \
+    --with-sysroot=/tools/$CHOST \
+    --with-build-sysroot=/tools/$CHOST \
+    --with-lib-path=/lib
 
   make
 }
@@ -79,5 +84,5 @@ package() {
 
   make DESTDIR="$pkgdir/" install
 
-  rm -rf "$pkgdir"/usr/share/
+  rm -rf "$pkgdir"/tools/share/
 }
