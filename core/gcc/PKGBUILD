@@ -58,7 +58,6 @@ build() {
     --with-linker-hash-style=gnu \
     --enable-gnu-unique-object \
     --enable-lto \
-    --with-glibc-version=2.31 \
     --enable-cet=auto\
     --enable-install-libiberty \
     --enable-plugin \
