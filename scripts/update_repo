@@ -19,6 +19,7 @@ update() {
     pkgname=$pkg-[0-9]*.pkg.tar.zst
 
     if [ -f ~/makepkg/packages/$pkgname ]; then
+        sudo rm -f /var/repository/$repo/$pkgname
         sudo mv ~/makepkg/packages/$pkgname $REPODIR/$repo
         sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
     fi
@@ -31,7 +32,7 @@ update() {
 usage() {
 	printf "update_repo (kzl-linux) %s\n" "$VERSION"
 	echo
-	printf "update_repo will update the pacman repository.\n"
+	printf "\"update_repo\" will update the pacman repository.\n"
 	echo
 	printf "Usage: update_repo [options] [repo]\n"
 	echo
@@ -62,8 +63,11 @@ while (( "$#" )); do
 done
 
 case $repo in
-    core)               pkgs=$(ls $scriptdir/../$repo/); pkgs+=" linux" ;;
-    extra|community)    pkgs=$(ls $scriptdir/../$repo/) ;;
+    core)               pkgs=$(ls $scriptdir/../$repo/)
+                        pkgs+=" linux" ;;
+    extra|community)    pkgs=$(ls $scriptdir/../$repo/)
+                        pkgs+=" minizip"
+                        pkgs+=" python-audit";;
     # unknown repo
     *)                  printf "unknown repo \"%s\".\n" "$repo"; exit 1 ;;
 esac
