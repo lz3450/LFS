@@ -61,7 +61,7 @@ build() {
   #   --build=$CHOST \
   #   --prefix=/usr \
   #   --libexecdir=/usr/lib \
-  #   --libdir==/usr/lib \
+  #   --libdir=/usr/lib \
   #   --disable-shared \
   #   --disable-multilib \
   #   --disable-threads \
@@ -82,7 +82,7 @@ build() {
   #   --with-glibc-version=2.31 \
   #   --with-sysroot=$_sysroot \
   #   --with-build-sysroot=$_sysroot \
-  #   --with-native-system-header-dir=/usr/include \
+  #   --with-native-system-header-dir=/include \
   #   --disable-install-libiberty \
   #   --enable-fix-cortex-a53-835769 \
   #   --enable-fix-cortex-a53-843419 \
@@ -128,7 +128,7 @@ build() {
     --with-glibc-version=2.31 \
     --with-sysroot=$_sysroot \
     --with-build-sysroot=$_sysroot \
-    --with-native-system-header-dir=/usr/include \
+    --with-native-system-header-dir=/include \
     --disable-install-libiberty \
     --enable-fix-cortex-a53-835769 \
     --enable-fix-cortex-a53-843419 \
@@ -155,7 +155,7 @@ package() {
   make DESTDIR="$pkgdir/" install
 
   # strip target binaries
-  find "$pkgdir"/usr/lib/gcc/$_target/ "$pkgdir"/usr/$_target/lib/ \
+  find "$pkgdir"/usr/lib/gcc/$_target/ "$pkgdir"/$_sysroot/lib/ \
        -type f -and \( -name \*.a -or -name \*.o \) \
        -exec $_target-objcopy -R .comment -R .note -R .debug_info -R .debug_aranges \
           -R .debug_pubnames -R .debug_pubtypes -R .debug_abbrev -R .debug_line \
@@ -164,6 +164,7 @@ package() {
   # strip host binaries
   find "$pkgdir"/usr/bin/ "$pkgdir"/usr/lib/gcc/$_target/ -type f -and \( -executable \) -exec strip '{}' \;
 
+  # stage 1 & 2
   # remove files that conflict with host gcc package
   rmdir "$pkgdir"/usr/include/
   rm -rf "$pkgdir"/usr/share/
