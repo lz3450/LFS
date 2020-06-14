@@ -7,11 +7,12 @@
 # linux-api-header -> binutils -> glibc -> gcc (stage2)
 
 _target=aarch64-linux-gnu
+_sysroot=/usr/$_target
 pkgname=$_target-glibc
 pkgver=2.31
-pkgrel=3
+pkgrel=1
 pkgdesc="GNU C Library ARM64 target"
-arch=(x86_64)
+arch=('x86_64')
 url='https://www.gnu.org/software/libc/'
 depends=($_target-gcc $_target-linux-api-headers)
 options=(!strip)
@@ -45,12 +46,12 @@ build() {
   echo "build-programs=no" >> configparms
 
   ../configure \
-    --prefix=/usr \
+    --prefix=/ \
     --sbindir=/bin \
     --libexecdir=/lib \
     --libdir=/lib \
     --includedir=/include \
-    --with-headers=/usr/$_target/include \
+    --with-headers=$_sysroot/include \
     --enable-kernel=5.4.42 \
     --enable-shared \
     --enable-static-pie \
@@ -78,5 +79,5 @@ package() {
 
   make install_root="$pkgdir/usr/$_target" install
 
-  rm -rf "$pkgdir"/usr/$_target/{etc,usr,var}
+  rm -rf "$pkgdir/$_sysroot"/{etc,share,var}
 }

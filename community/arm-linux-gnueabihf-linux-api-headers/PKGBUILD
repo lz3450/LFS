@@ -8,6 +8,7 @@
 
 _target_arch=arm
 _target=arm-linux-gnueabihf
+_sysroot=/usr/$_target
 pkgname=$_target-linux-api-headers
 pkgver=5.4.42
 pkgrel=1
@@ -31,7 +32,7 @@ build() {
 package() {
   cd linux-$pkgver
 
-  make INSTALL_HDR_PATH="$pkgdir/usr/$_target/" ARCH=$_target_arch headers_install
+  make INSTALL_HDR_PATH="$pkgdir/$_sysroot/" ARCH=$_target_arch headers_install
 
   # clean-up unnecessary files generated during install
   find "$pkgdir" \( -name .install -or -name ..install.cmd \) -delete
