@@ -32,7 +32,7 @@ build() {
     -D glib_src_dir="$srcdir/glib" \
     build
 
-  ninja -C build
+  meson compile -C build
 }
 
 check() {

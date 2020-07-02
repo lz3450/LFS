@@ -27,7 +27,7 @@ build() {
     -D trust_paths=/etc/ca-certificates/trust-source:/usr/share/ca-certificates/trust-source \
     build
 
-  ninja -C build
+  meson compile -C build
 }
 
 check() {

@@ -1,19 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgname=libsecret
-pkgver=0.20.3
+pkgname=vdpau
+pkgver=1.4
 pkgrel=1
-pkgdesc="Library for storing and retrieving passwords and other secrets"
+pkgdesc="Nvidia VDPAU library"
 arch=('x86_64')
-url="https://wiki.gnome.org/Projects/Libsecret"
-depends=(glib2 libgcrypt)
-makedepends=()
-checkdepends=()
-source=(git+https://gitlab.gnome.org/GNOME/libsecret.git#tag=$pkgver)
-sha256sums=('SKIP')
+url="https://www.freedesktop.org/wiki/Software/VDPAU/"
+depends=()
+source=(git+https://gitlab.freedesktop.org/vdpau/libvdpau.git#tag=$pkgver)
+sha256sums=()
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   meson setup \
     --prefix /usr \
@@ -24,14 +22,19 @@ build() {
     --wrap-mode nodownload \
     -D b_lto=true \
     -D b_pie=true \
-    -D gtk_doc=false \
     build
 
   meson compile -C build
 }
 
+check() {
+  cd $pkgname-$pkgver
+
+  meson test -C build
+}
+
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   DESTDIR="$pkgdir/" meson install -C build
 }

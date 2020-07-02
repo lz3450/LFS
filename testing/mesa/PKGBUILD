@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=mesa
-pkgver=20.1.0
+pkgver=20.1.2
 pkgrel=1
 pkgdesc="An open-source implementation of the OpenGL specification"
 arch=('x86_64')
@@ -14,10 +14,10 @@ backup=()
 options=()
 install=
 changelog=
-source=($pkgname-$pkgver.tar.gz)
-noextract=()
-sha256sums=()
-validpgpkeys=()
+source=(https://mesa.freedesktop.org/archive/mesa-$pkgver.tar.xz{,.sig})
+sha256sums=('283dff72814c8a80ce1ff8271e3f055895d26f4da3f4362acc49193e635780cb'
+            'SKIP')
+validpgpkeys=('57551DE15B968F6341C248F68D8E31AFC32428A6')
 
 build() {
   cd $pkgname-$pkgver
@@ -62,7 +62,7 @@ build() {
     -D valgrind=true \
     build
 
-  ninja -C build
+  meson compile -C build
 }
 
 package() {

@@ -24,7 +24,7 @@ build() {
     -D useprebuilt=true \
     build
 
-  ninja -C build
+  meson compile -C build
 }
 
 package() {

@@ -29,7 +29,7 @@ build() {
     -D valgrind=false \
     build
 
-  ninja -C build
+  meson compile -C build
 }
 
 check() {

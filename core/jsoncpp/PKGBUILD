@@ -26,7 +26,7 @@ build() {
     --default-library shared \
     build
 
-  ninja -C build
+  meson compile -C build
 
   msg2 "Building static library..."
   meson setup \
@@ -41,7 +41,7 @@ build() {
     --default-library static \
     build-static
 
-  ninja -C build-static
+  meson compile -C build-static
 }
 
 check() {

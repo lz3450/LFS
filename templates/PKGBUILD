@@ -61,7 +61,7 @@ build() {
     -D b_pie=true \
     build
 
-  ninja -C build
+  meson compile -C build
 }
 
 check() {

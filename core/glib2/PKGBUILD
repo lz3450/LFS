@@ -33,7 +33,7 @@ build() {
     -D gtk_doc=false \
     build
 
-  ninja -C build
+  meson compile -C build
 }
 
 check() {

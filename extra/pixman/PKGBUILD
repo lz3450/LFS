@@ -32,7 +32,7 @@ build() {
     -D gtk=disabled \
     build
 
-  ninja -C build
+  meson compile -C build
 }
 
 check() {

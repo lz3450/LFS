@@ -118,7 +118,7 @@ build() {
     -D zshcompletiondir=/usr/share/zsh/site-functions/ \
     build
 
-  ninja -C build
+  meson compile -C build
 }
 
 check() {
