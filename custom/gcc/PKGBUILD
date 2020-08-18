@@ -1,0 +1,87 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+# order
+# linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
+
+pkgname=gcc
+pkgver=10.2.0
+_islver=0.21
+pkgrel=1
+epoch=1
+pkgdesc="The GNU Compiler Collection"
+arch=('x86_64')
+url="https://gcc.gnu.org"
+depends=(libmpc)
+provides=(gcc-libs gcc-fortran)
+conflicts=(gcc-libs gcc-fortran)
+replaces=(gcc-libs gcc-fortran)
+options=(!emptydirs)
+source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
+        http://isl.gforge.inria.fr/isl-$_islver.tar.xz)
+sha256sums=('b8dd4368bb9c7f0b98188317ee0254dd8cc99d1e3a18d0ff146c855fe16c1d8c'
+            'SKIP'
+            '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960')
+validpgpkeys=('33C235A34C46AA3FFB293709A328C3A2C3C45C06')
+
+prepare() {
+  cd $pkgname-$pkgver
+  
+  mkdir build
+
+  mv ../isl-$_islver isl
+  
+  sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i {libiberty,gcc}/configure
+
+  # Set the default directory name for 64-bit libraries to “lib”
+  sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
+  sed -e '/mabi.lp64=/s/lib64/lib/' -i.orig gcc/config/aarch64/t-aarch64-linux
+}
+
+build() {
+  cd $pkgname-$pkgver/build
+
+  ../configure \
+    --with-pkgversion="KZL $pkgver-$pkgrel" \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --libexecdir=/usr/lib \
+    --libdir=/usr/lib \
+    --enable-shared \
+    --disable-multilib \
+    --enable-threads=posix \
+    --enable-__cxa_atexit \
+    --enable-gnu-indirect-function \
+    --enable-languages=c,c++,fortran,lto \
+    --disable-libssp \
+    --enable-default-pie \
+    --enable-default-ssp \
+    --enable-checking=release \
+    --with-system-zlib \
+    --with-isl \
+    --enable-linker-build-id \
+    --with-linker-hash-style=gnu \
+    --enable-gnu-unique-object \
+    --enable-lto \
+    --enable-cet=auto\
+    --enable-install-libiberty \
+    --enable-plugin \
+    --disable-libstdcxx-pch \
+    --enable-clocale=gnu
+
+  ulimit -s 32768
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver/build
+
+  make -k check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver/build
+
+  make DESTDIR="$pkgdir/" install
+
+  ln -s gcc "$pkgdir"/usr/bin/cc
+}
