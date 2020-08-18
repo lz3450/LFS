@@ -1,0 +1,30 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+# order
+# linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
+
+pkgname=linux-api-headers
+pkgver=5.4.58
+pkgrel=1
+epoch=1
+pkgdesc="Kernel headers sanitized for use in userspace"
+arch=('any')
+url='https://www.kernel.org'
+makedepends=(rsync)
+source=(https://www.kernel.org/pub/linux/kernel/v${pkgver:0:1}.x/linux-$pkgver.tar.{xz,sign})
+sha256sums=('702fe2af119375387b314481b603d8ce71e71b4e5bae4cb70a980e0951b21647'
+            'SKIP')
+validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
+
+build() {
+  cd linux-$pkgver
+
+  make mrproper
+  make headers_check
+}
+
+package() {
+  cd linux-$pkgver
+
+  make INSTALL_HDR_PATH="$pkgdir/usr/" headers_install
+}
