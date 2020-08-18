@@ -1,0 +1,54 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=python
+pkgver=3.8.5
+pkgrel=1
+epoch=1
+pkgdesc="Next generation of the python high-level scripting language"
+arch=('x86_64')
+url="https://www.python.org/"
+depends=(expat gdbm libffi libnsl openssl)
+makedepends=(mpdecimal sqlite valgrind)
+provides=(python-pip python-setuptools)
+conflicts=(python-pip python-setuptools)
+replaces=(python-pip python-setuptools)
+source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc})
+sha256sums=('e3003ed57db17e617acb382b0cade29a248c6026b1bd8aad1f976e9af66a83b0'
+            'SKIP')
+validpgpkeys=('E3FF2839C048B25C084DEBE9B26995E310250568')
+
+build() {
+  cd Python-$pkgver
+
+  CFLAGS="${CFLAGS/-O2/-O3} -fno-semantic-interposition"
+  LDFLAGS="$LDFLAGS -fno-semantic-interposition"
+
+  ./configure \
+    --prefix=/usr \
+    --enable-shared \
+    --enable-optimizations \
+    --enable-loadable-sqlite-extensions \
+    --enable-ipv6 \
+    --enable-big-digits \
+    --with-universal-archs="intel-64" \
+    --with-lto \
+    --with-system-expat \
+    --with-system-ffi \
+    --with-system-libmpdec \
+    --with-dbmliborder=gdbm:ndbm \
+    --with-valgrind \
+    --with-computed-gotos \
+    --with-ensurepip
+
+  make
+}
+
+package() {
+  cd Python-$pkgver
+
+  CFLAGS="${CFLAGS/-O2/-O3}"
+
+  make DESTDIR="$pkgdir/" EXTRA_CFLAGS="$CFLAGS" install
+
+  ln -s python3 "$pkgdir"/usr/bin/python
+}
