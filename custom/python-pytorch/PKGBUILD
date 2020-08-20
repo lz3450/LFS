@@ -1,0 +1,61 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=python-pytorch
+pkgver=1.6.0
+pkgrel=1
+epoch=1
+pkgdesc="Tensors and Dynamic neural networks in Python with strong GPU acceleration"
+arch=('x86_64')
+url="https://pytorch.org"
+depends=(ffmpeg gflags google-glog intel-mkl opencv pybind11 python-future python-numpy python-requests python-yaml)
+source=(git+https://github.com/pytorch/pytorch.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd pytorch
+
+  git submodule sync
+  git submodule update --init --recursive
+
+  # setup.py, CMakeLists.txt, tools/setup_helpers/cmake.py
+  export BUILD_BINARY=ON
+  export BUILD_CUSTOM_PROTOBUF=ON
+  export BUILD_DOCS=OFF
+  export BUILD_PYTHON=True
+  export BUILD_CAFFE2_OPS=ON
+  export BUILD_SHARED_LIBS=ON
+  export BUILD_TEST=False
+  export BUILD_JNI=OFF
+  export USE_CUDA=ON
+  export USE_CUDNN=ON
+  export CUDA_HOME=/opt/cuda
+  export CUDNN_LIB_DIR=/usr/lib
+  export CUDNN_INCLUDE_DIR=/usr/include
+  export TORCH_NVCC_FLAGS="-Xfatbin -compress-all"
+  export CUDAHOSTCXX=g++-9
+  export USE_FFMPEG=ON
+  export USE_GFLAGS=ON
+  export USE_GLOG=ON
+  export USE_MKL=ON
+  export USE_MKLDNN=ON
+  export USE_SYSTEM_NCCL=ON
+  export USE_NUMPY=ON
+  export USE_OPENCL=OFF
+  export USE_OPENCV=ON
+
+  export PYTORCH_BUILD_VERSION="$pkgver"
+  export PYTORCH_BUILD_NUMBER=1
+  export TORCH_CUDA_ARCH_LIST="6.1"
+}
+
+build() {
+  cd pytorch
+
+  python setup.py build
+}
+
+package() {
+  cd pytorch
+
+  python setup.py install --root="$pkgdir/" --optimize=1 --skip-build
+}
