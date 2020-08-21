@@ -67,7 +67,8 @@ case $repo in
                         pkgs+=" linux" ;;
     extra|community)    pkgs=$(ls $scriptdir/../$repo/)
                         pkgs+=" minizip"
-                        pkgs+=" python-audit";;
+                        pkgs+=" python-audit" ;;
+    custom)             pkgs=$(ls $scriptdir/../$repo/) ;;
     # unknown repo
     *)                  printf "unknown repo \"%s\".\n" "$repo"; exit 1 ;;
 esac
