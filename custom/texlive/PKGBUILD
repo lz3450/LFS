@@ -1,7 +1,7 @@
 pkgname=texlive
 pkgver=54456
 _texmfver=20200406
-pkgrel=1
+pkgrel=2
 pkgdesc="TeX Live"
 arch=('x86_64')
 url='http://tug.org/texlive/'
@@ -80,6 +80,7 @@ package() {
   cd $pkgname-source/build
 
   make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir/" texlinks
 
   tar -xvf "$srcdir"/$pkgname-$_texmfver-texmf.tar.xz -C "$pkgdir"/usr/share/ --skip-old-files --strip-components=1
 
