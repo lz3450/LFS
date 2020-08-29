@@ -3,6 +3,7 @@
 pkgname=python-numpy
 pkgver=1.19.1
 pkgrel=1
+epoch=1
 arch=('x86_64')
 url="https://www.numpy.org/"
 depends=(lapack)
