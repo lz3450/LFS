@@ -5,7 +5,7 @@
 
 pkgname=glibc
 pkgver=2.32
-pkgrel=1
+pkgrel=2
 epoch=1
 arch=('x86_64' 'aarch64')
 url="https://www.gnu.org/software/libc"
@@ -90,4 +90,7 @@ package() {
   # Create /etc/locale.gen
   install -Dm644 "$srcdir"/locale.gen.txt "$pkgdir"/etc/locale.gen
   sed -e '1,3d' -e 's|/| |g' -e 's|\\| |g' -e 's|^|#|g' ../localedata/SUPPORTED >> "$pkgdir"/etc/locale.gen
+  
+  # Provided by libxcrypt
+  rm -f "$pkgdir"/usr/include/crypt.h "$pkgdir"/usr/lib/libcrypt.{a,so}
 }
