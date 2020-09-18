@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=grml-zsh-config
-pkgver=0.17.2
+pkgver=0.17.4
 pkgrel=1
 pkgdesc="grml's zsh configration"
 arch=('x86_64')
@@ -13,7 +13,7 @@ sha256sums=('3b717be2979dddfa896968ee948592e20b82d6d56aa1156c1c9ee05ed06d88ec')
 package() {
   cd grml-etc-core-$pkgver
 
-	install -D -m644 etc/skel/.zshrc $pkgdir/etc/skel/.zshrc
-	install -D -m644 etc/zsh/keephack $pkgdir/etc/zsh/keephack
-	install -D -m644 etc/zsh/zshrc $pkgdir/etc/zsh/zshrc
+  install -D -m644 etc/skel/.zshrc $pkgdir/etc/skel/.zshrc
+  install -D -m644 etc/zsh/keephack $pkgdir/etc/zsh/keephack
+  install -D -m644 etc/zsh/zshrc $pkgdir/etc/zsh/zshrc
 }

@@ -1,0 +1,17 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=zsh-history-substring-search
+pkgver=1.0.2
+pkgrel=1
+pkgdesc="ZSH port of Fish history search (up arrow)"
+arch=('any')
+url="https://github.com/zsh-users/zsh-history-substring-search"
+depends=(zsh)
+source=(https://github.com/zsh-users/$pkgname/archive/v$pkgver.tar.gz)
+sha256sums=()
+
+package() {
+  cd $pkgname-$pkgver
+
+  install -Dm644 $pkgname.zsh -t "$pkgdir"/usr/share/zsh/plugins/$pkgname/
+}
