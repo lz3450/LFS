@@ -1,0 +1,110 @@
+#!/bin/bash
+# 
+# build_custom
+#
+
+VERSION=1.0
+PKGDEST=~/makepkg/packages
+
+# arguments
+
+TARGET='x86_64'
+STAGE='stage1'
+
+# packages
+
+stage1_pkgs=(
+    linux-api-headers
+    glibc
+    binutils
+    gcc
+    libtool
+)
+
+stage2_pkgs=(
+    binutils
+    glibc
+    gcc
+)
+
+stage3_pkgs=(
+    # python
+    # ruby
+    # perl
+    git
+)
+
+# functions
+
+build() {
+    local pkg
+    pkg=$1
+
+    cd "$scriptdir"/../custom/$pkg
+
+    local log
+    log=$pkg.stage$STAGE.log
+    if [[ -f $log ]]; then
+        rm $log
+    fi
+    
+    makepkg --config "$scriptdir"/../config/makepkg-$TARGET.conf -scCf --skippgpcheck --nocheck --noconfirm &>> $log
+
+    case $pkg in
+        openldap)
+            sudo pacman -Udd --overwrite "*" $PKGDEST/libldap-[0-9]*.pkg.tar.zst
+            ;;
+        lvm2)
+            sudo pacman -Udd --overwrite "*" $PKGDEST/device-mapper-[0-9]*.pkg.tar.zst
+            ;;
+        *)
+            sudo pacman -Udd --overwrite "*" $PKGDEST/$pkg-[0-9]*.pkg.tar.zst
+            ;;
+    esac
+}
+
+usage() {
+	printf "build_custom (kzl-linux) %s\n" "$VERSION"
+	echo
+	printf "build_custom will build custom packages from scratch.\n"
+	echo
+	printf "Usage: build_custom [options]\n"
+	echo
+	echo "    -h, --help        display this help message and exit"
+	echo "    -v, --version     display version information and exit"
+	echo "    -s, --stage       build stage (stage1, stage2, stage3)"
+	echo "    -t, --target      target archtecture (x86_64)"
+    echo
+}
+
+# program start
+
+set -e -u -o pipefail
+# set -x
+
+# ensure we have a sane umask set
+umask 0022
+
+scriptdir=$(pwd)
+
+while (( "$#" )); do
+	case "$1" in
+        -h|--help)      usage; exit 0 ;;
+        -v|--version)   printf "$VERSION"; exit 0 ;;
+        -s|--stage)     shift; STAGE="$1" ;;
+        -t|--target)    shift; TARGET="$1" ;;
+	esac
+    shift
+done
+
+case $STAGE in
+    1) pkgs=${stage1_pkgs[@]} ;;
+    2) pkgs=${stage2_pkgs[@]} ;;
+    3) pkgs=${stage3_pkgs[@]} ;;
+    *) printf "unknown stage \"$STAGE\""; exit 1 ;;
+esac
+
+for p in ${pkgs[@]}; do
+    echo "building $p ..."
+    build $p
+done
