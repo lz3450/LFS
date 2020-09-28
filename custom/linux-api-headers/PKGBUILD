@@ -4,7 +4,7 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
 pkgname=linux-api-headers
-pkgver=5.4.62
+pkgver=5.4.67
 pkgrel=1
 epoch=1
 pkgdesc="Kernel headers sanitized for use in userspace"
@@ -12,7 +12,7 @@ arch=('any')
 url='https://www.kernel.org'
 makedepends=(rsync)
 source=(https://www.kernel.org/pub/linux/kernel/v${pkgver:0:1}.x/linux-$pkgver.tar.{xz,sign})
-sha256sums=('26883d8c2fd9790c0f5079620b1da7a65438b3edcaaf922be943fcea29f28970'
+sha256sums=('c175bd9c5d54c7120365d51cf235102e14d5a9a1baddd6296819839240dccaa4'
             'SKIP')
 validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
 

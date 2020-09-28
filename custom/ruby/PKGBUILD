@@ -1,0 +1,43 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=ruby
+pkgver=2.7.1
+pkgrel=3
+epoch=1
+pkgdesc="An object-oriented language for quick and easy programming"
+arch=('x86_64')
+url="https://www.ruby-lang.org"
+depends=(gmp libffi libxcrypt openssl)
+provides=(irb rubygems ruby-bundler)
+conflicts=(irb rubygems ruby-bundler)
+replaces=(irb rubygems ruby-bundler)
+source=(https://cache.ruby-lang.org/pub/ruby/${pkgver:0:3}/$pkgname-$pkgver.tar.xz)
+sha256sums=('b224f9844646cc92765df8288a46838511c1cec5b550d8874bd4686a904fcee7')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --libexecdir=/usr/lib/ruby \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --sharedstatedir=/var/lib \
+    --disable-rpath \
+    --enable-shared \
+    --disable-install-doc \
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make test
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
