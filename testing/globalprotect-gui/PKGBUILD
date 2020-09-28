@@ -7,7 +7,6 @@ pkgdesc='Global Protect UI'
 arch=('x86_64')
 url='https://utdallas.box.com/s/sn3ardilya3oue3jn2esu9r3yjtsdn5d'
 depends=(qt5-webkit)
-provides=(globalprotect)
 conflicts=(globalprotect)
 options=(!strip !docs !libtool staticlibs emptydirs zipman purge !debug)
 install=globalprotect.install
