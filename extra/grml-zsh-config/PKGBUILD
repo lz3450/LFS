@@ -13,7 +13,7 @@ sha256sums=('3b717be2979dddfa896968ee948592e20b82d6d56aa1156c1c9ee05ed06d88ec')
 package() {
   cd grml-etc-core-$pkgver
 
-  install -Dm644 etc/skel/.zshrc $pkgdir/etc/skel/.zshrc
-  install -Dm644 etc/zsh/keephack $pkgdir/etc/zsh/keephack
-  install -Dm644 etc/zsh/zshrc $pkgdir/etc/zsh/zshrc
+  install -Dm644 etc/skel/.zshrc "$pkgdir"/etc/skel/.zshrc
+  install -Dm644 etc/zsh/keephack "$pkgdir"/etc/zsh/keephack
+  install -Dm644 etc/zsh/zshrc "$pkgdir"/etc/zsh/zshrc
 }
