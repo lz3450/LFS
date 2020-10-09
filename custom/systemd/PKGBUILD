@@ -1,0 +1,136 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=systemd
+pkgver=245.4
+pkgrel=1
+arch=('x86_64')
+url="https://www.github.com/systemd/systemd-stable"
+depends=(acl audit cryptsetup curl elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libmicrohttpd libpwquality libseccomp lz4 openssl p11-kit pam pcre2 qrencode)
+makedepends=(gperf)
+install=systemd.install
+source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
+        0001-Use-Arch-Linux-device-access-groups.patch
+        20-systemd-sysusers.hook
+        30-systemd-binfmt.hook
+        30-systemd-catalog.hook
+        30-systemd-daemon-reload.hook
+        30-systemd-hwdb.hook
+        30-systemd-sysctl.hook
+        30-systemd-tmpfiles.hook
+        30-systemd-udev-reload.hook
+        systemd.install)
+sha256sums=('SKIP'
+            '1db4255602b94f5c7b55a2a7c592e1874cbb3c118aefb49da42d27fca9e8f4b3'
+            '5eae106bbd9ec207bf200d9b94f58bf8f704b9f3bfe5bb42a7704468e5c26e8d'
+            'e7a7c4dedd8f164b8018ddf199298ca68d553e6f88577dc29a092a5b0418f268'
+            '22e919a30076ee4fc4bfc2e0649d88af064827173da18a3e2e83445160bb02f0'
+            'bc8d59d1a8a4f432bf66d45c522fd99bee493dda0f28f7172a172467357de640'
+            'b02736427b682b93fedeafadf567ecd04bb1007cc70c73f8a911689df541dedf'
+            '8121c15a61e26c3f51af595d44c601c5660d605e2df34e6ba52b894dd408b306'
+            'b741f9acbeaff3f3d399acb767428c8637a49e8e415d7a9549cd7ac3131d81e3'
+            '6bad6854f5b50bbae50d66f267f4e385b6862fdf538e2f1bd85dbdcad549416f'
+            '547976dad8b10bd3ccf1e8b16c208b7b3e3454220261b47c7ee3f07f128d5f3a')
+validpgpkeys=('63CDA1E5D3FC22B998D20DD6327F26951A015CC4'
+              '5C251B5FC54EB2F80F407AAAC54CA336CFEB557E')
+
+prepare() {
+  cd $pkgname-stable
+
+  # Replace cdrom/dialout/tape groups with optical/uucp/storage
+  patch -Np1 -i ../0001-Use-Arch-Linux-device-access-groups.patch
+}
+
+build() {
+  cd $pkgname-stable
+
+  local _timeservers=({0..3}.arch.pool.ntp.org)
+  # We use these public name services, ordered by their privacy policy (hopefully):
+  #  * Cloudflare (https://1.1.1.1/)
+  #  * Quad9 without filtering (https://www.quad9.net/)
+  #  * Google (https://developers.google.com/speed/public-dns/)
+  local _nameservers=(1.1.1.1
+                      9.9.9.10
+                      8.8.8.8
+                      2606:4700:4700::1111
+                      2620:fe::10
+                      2001:4860:4860::8888)
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D acl=true \
+    -D apparmor=false \
+    -D audit=true \
+    -D bashcompletiondir=/usr/share/bash-completion/completions/ \
+    -D blkid=true \
+    -D bzip2=true \
+    -D dbus=true \
+    -D dbuspolicydir=/usr/share/dbus-1/system.d \
+    -D default-hierarchy=hybrid \
+    -D default-kill-user-processes=false \
+    -D default-locale=C \
+    -D dns-over-tls=true \
+    -D dns-servers="${_nameservers[*]}" \
+    -D efi=true \
+    -D elfutils=true \
+    -D fallback-hostname='kzl-linux' \
+    -D fdisk=true \
+    -D gnu-efi=true \
+    -D gnutls=true \
+    -D homed=true \
+    -D importd=true \
+    -D kmod=true \
+    -D libcryptsetup=true \
+    -D libcurl=true \
+    -D libidn2=true \
+    -D libiptc=true \
+    -D lz4=true \
+    -D microhttpd=true \
+    -D nologin-path=/usr/bin/nologin \
+    -D ntp-servers="${_timeservers[*]}" \
+    -D openssl=true \
+    -D p11kit=true \
+    -D pam=true \
+    -D pcre2=true \
+    -D polkit=true \
+    -D pwquality=true \
+    -D qrencode=true \
+    -D remote=true \
+    -D repart=true \
+    -D rpmmacrosdir=no \
+    -D seccomp=true \
+    -D selinux=false \
+    -D split-bin=false \
+    -D split-usr=false \
+    -D sysvinit-path= \
+    -D sysvrcnd-path= \
+    -D telinit-path= \
+    -D user-path=/usr/local/bin:/usr/bin \
+    -D valgrind=true \
+    -D version-tag="$pkgver-$pkgrel-kzl" \
+    -D xz=true \
+    -D zlib=true \
+    -D zshcompletiondir=/usr/share/zsh/site-functions/ \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname-stable
+
+  meson test -C build
+}
+
+package() {
+  cd $pkgname-stable
+
+  DESTDIR="$pkgdir/" meson install -C build
+
+  install -Dm0644 "$srcdir"/*.hook -t "$pkgdir"/usr/share/libalpm/hooks/
+}

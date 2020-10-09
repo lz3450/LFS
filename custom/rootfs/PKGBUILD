@@ -1,10 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=filesystem
-pkgver=2020.05
+pkgver=2020.10
 pkgrel=1
 arch=('any')
 depends=(iana-etc)
+provides=(filesystem)
+conflicts=(filesystem)
+replaces=(filesystem)
 backup=(etc/crypttab
         etc/fstab
         etc/group

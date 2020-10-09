@@ -27,6 +27,10 @@ package() {
     sed -i "s|/usr/local/cuda|/opt/cuda|g" "$f"
   done
 
+  # Define compilers for CUDA to use.
+  ln -s /usr/bin/gcc "$pkgdir"/opt/cuda/bin/gcc
+  ln -s /usr/bin/g++ "$pkgdir"/opt/cuda/bin/g++
+
   rm "$pkgdir"/opt/cuda/{include,lib64}
   mv "$pkgdir"/opt/cuda/targets/x86_64-linux/include "$pkgdir"/opt/cuda/
   mv "$pkgdir"/opt/cuda/targets/x86_64-linux/lib "$pkgdir"/opt/cuda/lib64
