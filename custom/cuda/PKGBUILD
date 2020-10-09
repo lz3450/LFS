@@ -27,6 +27,11 @@ package() {
     sed -i "s|/usr/local/cuda|/opt/cuda|g" "$f"
   done
 
+  rm "$pkgdir"/opt/cuda/{include,lib64}
+  mv "$pkgdir"/opt/cuda/targets/x86_64-linux/include "$pkgdir"/opt/cuda/
+  mv "$pkgdir"/opt/cuda/targets/x86_64-linux/lib "$pkgdir"/opt/cuda/lib64
+  rmdir "$pkgdir"/opt/cuda/targets/{x86_64-linux,}
+
   install -Dm755 "$srcdir"/cuda.sh "$pkgdir"/etc/profile.d/cuda.sh
   install -Dm644 "$srcdir"/cuda.conf "$pkgdir"/etc/ld.so.conf.d/cuda.conf
 }
