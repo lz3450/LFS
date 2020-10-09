@@ -21,6 +21,6 @@ prepare() {
 }
 
 package() {
-  install -dm755 "$pkgdir"/opt
-  mv cuda "$pkgdir"/opt
+  install -dm755 "$pkgdir"/opt/
+  mv cuda "$pkgdir"/opt/
 }
