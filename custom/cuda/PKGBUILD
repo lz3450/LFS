@@ -18,7 +18,7 @@ sha256sums=('a65f7d96e2447eb40b1be9586b90eb0bd776a8938c93d21f9606d2880b548b28'
             '858cbab091fde94556a249b9580fadff55a46eafbcb4d4a741d2dcd358ab94a5')
 
 package() {
-  install -dm755 "$pkgdir"/opt
+  install -dm755 "$pkgdir"/opt/
   sh cuda_${pkgver}_455.23.05_linux.run --silent --toolkit --samples --installpath="$pkgdir/opt/cuda"
 
   rm -rf "$pkgdir"/opt/cuda/cuda-uninstaller
