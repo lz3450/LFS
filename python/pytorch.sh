@@ -2,7 +2,7 @@
 
 set -e
 
-ROOTDIR=/dev/shm
+ROOTDIR=/tmp
 
 export BUILD_BINARY=ON
 export BUILD_CUSTOM_PROTOBUF=ON
@@ -18,27 +18,32 @@ export CUDA_HOME=/opt/cuda
 export CUDNN_LIB_DIR=/usr/lib
 export CUDNN_INCLUDE_DIR=/usr/include
 export TORCH_NVCC_FLAGS="-Xfatbin -compress-all"
-export CUDAHOSTCXX=g++-9
+export CUDAHOSTCXX=g++
+export USE_SYSTEM_NCCL=ON
 export USE_FFMPEG=ON
 export USE_GFLAGS=ON
 export USE_GLOG=ON
-export USE_MKL=ON
 export USE_MKLDNN=ON
+export USE_MKLDNN_CBLAS=ON
 export USE_SYSTEM_NCCL=ON
 export USE_NUMPY=ON
 export USE_OPENCL=OFF
-export USE_OPENCV=ON
+export USE_OPENCV=OFF
 
 export PYTORCH_BUILD_VERSION="1.6.0"
 export PYTORCH_BUILD_NUMBER=1
 
-sudo pacman -Sy ffmpeg gflags google-glog intel-mkl opencv 
+sudo pacman -Sy --needed --noconfirm ffmpeg gflags google-glog intel-mkl nccl lapack
 
 cd $ROOTDIR
-git clone https://github.com/pytorch/pytorch.git -b v$PYTORCH_BUILD_VERSION
+if [ -d pytorch ]; then
+    rm -rf pytorch
+fi
+
+git clone https://github.com/pytorch/pytorch.git -b v$PYTORCH_BUILD_VERSION --recursive
 cd pytorch
 git submodule update --init --recursive
 
-sudo pip install --force-reinstall --ignore-installed --no-binary :all: -r requirements.txt
+sudo pip install --no-binary :all: -r requirements.txt
 TORCH_CUDA_ARCH_LIST="6.1" python setup.py build
-python setup.py install --user
+sudo python setup.py install
