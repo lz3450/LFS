@@ -1,6 +1,6 @@
 #!/bin/bash
 # 
-# update_repo
+# update-repo
 #
 
 VERSION=1.0
@@ -32,7 +32,7 @@ update() {
 usage() {
 	printf "update_repo (kzl-linux) %s\n" "$VERSION"
 	echo
-	printf "\"update_repo\" will update the pacman repository.\n"
+	printf "\"update-repo\" will update the pacman repository.\n"
 	echo
 	printf "Usage: update_repo [options] [repo]\n"
 	echo
@@ -50,7 +50,6 @@ set -e -u -o pipefail
 # ensure we have a sane umask set
 umask 0022
 
-scriptdir=$(pwd)
 repo=
 
 while (( "$#" )); do
@@ -63,12 +62,12 @@ while (( "$#" )); do
 done
 
 case $repo in
-    core)               pkgs=$(ls $scriptdir/../$repo/)
+    core)               pkgs=$(ls $ROOTDIR/$repo/)
                         pkgs+=" linux" ;;
-    extra|community)    pkgs=$(ls $scriptdir/../$repo/)
+    extra|community)    pkgs=$(ls $ROOTDIR/$repo/)
                         pkgs+=" minizip"
                         pkgs+=" python-audit" ;;
-    custom)             pkgs=$(ls $scriptdir/../$repo/) ;;
+    custom)             pkgs=$(ls $ROOTDIR/$repo/) ;;
     # unknown repo
     *)                  printf "unknown repo \"%s\".\n" "$repo"; exit 1 ;;
 esac
