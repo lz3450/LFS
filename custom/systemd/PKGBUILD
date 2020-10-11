@@ -1,12 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=systemd
-pkgver=245.4
+pkgver=246.6
 pkgrel=1
+epoch=1
 arch=('x86_64')
 url="https://www.github.com/systemd/systemd-stable"
 depends=(acl audit cryptsetup curl elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libmicrohttpd libpwquality libseccomp lz4 openssl p11-kit pam pcre2 qrencode)
 makedepends=(gperf)
+provides=(systemd-libs systemd-resolvconf systemd-sysvcompat libsystemd.so libudev.so libudev.so)
+conflicts=(systemd-libs systemd-resolvconf systemd-sysvcompat)
+replaces=(systemd-libs systemd-resolvconf systemd-sysvcompat)
 install=systemd.install
 source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
         0001-Use-Arch-Linux-device-access-groups.patch
@@ -30,8 +34,7 @@ sha256sums=('SKIP'
             'b741f9acbeaff3f3d399acb767428c8637a49e8e415d7a9549cd7ac3131d81e3'
             '6bad6854f5b50bbae50d66f267f4e385b6862fdf538e2f1bd85dbdcad549416f'
             '547976dad8b10bd3ccf1e8b16c208b7b3e3454220261b47c7ee3f07f128d5f3a')
-validpgpkeys=('63CDA1E5D3FC22B998D20DD6327F26951A015CC4'
-              '5C251B5FC54EB2F80F407AAAC54CA336CFEB557E')
+validpgpkeys=('5C251B5FC54EB2F80F407AAAC54CA336CFEB557E')
 
 prepare() {
   cd $pkgname-stable
@@ -131,6 +134,9 @@ package() {
   cd $pkgname-stable
 
   DESTDIR="$pkgdir/" meson install -C build
+  
+  chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
+  chmod -R 2755 "$pkgdir"/var/log/journal/
 
   install -Dm0644 "$srcdir"/*.hook -t "$pkgdir"/usr/share/libalpm/hooks/
 }
