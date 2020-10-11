@@ -14,6 +14,7 @@ replaces=(systemd-libs systemd-resolvconf systemd-sysvcompat)
 install=systemd.install
 source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
         0001-Use-Arch-Linux-device-access-groups.patch
+        environment-generator.conf
         20-systemd-sysusers.hook
         30-systemd-binfmt.hook
         30-systemd-catalog.hook
@@ -25,6 +26,7 @@ source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
         systemd.install)
 sha256sums=('SKIP'
             '1db4255602b94f5c7b55a2a7c592e1874cbb3c118aefb49da42d27fca9e8f4b3'
+            '9c6254a8b8cbc48eca494491d26a1d0d58e6677615c4ea26557f98cc3d2aeffb'
             '5eae106bbd9ec207bf200d9b94f58bf8f704b9f3bfe5bb42a7704468e5c26e8d'
             'e7a7c4dedd8f164b8018ddf199298ca68d553e6f88577dc29a092a5b0418f268'
             '22e919a30076ee4fc4bfc2e0649d88af064827173da18a3e2e83445160bb02f0'
@@ -134,6 +136,8 @@ package() {
   cd $pkgname-stable
 
   DESTDIR="$pkgdir/" meson install -C build
+
+  install -Dm755 "$srcdir"/environment-generator.conf usr/lib/systemd/system-environment-generators/10-kzl
   
   chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
   chmod -R 2755 "$pkgdir"/var/log/journal/
