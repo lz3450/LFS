@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=dosfstools
+pkgver=4.1
+pkgrel=1
+epoch=1
+pkgdesc="DOS filesystem utilities"
+arch=('x86_64')
+url="https://github.com/dosfstools/dosfstools"
+source=($url/releases/download/v$pkgver/$pkgname-$pkgver.tar.xz{,.sig})
+sha256sums=('e6b2aca70ccc3fe3687365009dd94a2e18e82b688ed4e260e04b7412471cc173'
+            'SKIP')
+validpgpkeys=('25714AECDBFDACEE1CE95FE77F6022516E869F64')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --libexecdir=/usr/lib \
+    --sbindir=/usr/bin \
+    --mandir=/usr/share/man \
+    --docdir=/usr/share/doc/dosfstools \
+    --enable-compat-symlinks
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
