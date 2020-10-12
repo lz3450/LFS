@@ -14,6 +14,10 @@ replaces=(systemd-libs systemd-resolvconf systemd-sysvcompat)
 install=systemd.install
 source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
         0001-Use-Arch-Linux-device-access-groups.patch
+        nsswitch.conf
+        sysctl
+        sysusers
+        tmpfiles
         environment-generator.conf
         20-systemd-sysusers.hook
         30-systemd-binfmt.hook
@@ -26,6 +30,10 @@ source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
         systemd.install)
 sha256sums=('SKIP'
             '1db4255602b94f5c7b55a2a7c592e1874cbb3c118aefb49da42d27fca9e8f4b3'
+            '98f8b57182abf05a79535c790b04b75d5d5c2f3ba6ba6048694fda0581551fbc'
+            'f6a2444dc3d6f86d80591e255af2a555d5a90acfe92c1b69e8ba75e85ffeafdd'
+            'a11eb9cc07f8bb697804fe499a281a20bae7a8885c3b4b3713fa928280f3fc70'
+            'c8f01b8c7e5388e3c9f7cb03239450bcd7a86caf12b94d2c8ce226b1841d985c'
             '9c6254a8b8cbc48eca494491d26a1d0d58e6677615c4ea26557f98cc3d2aeffb'
             '5eae106bbd9ec207bf200d9b94f58bf8f704b9f3bfe5bb42a7704468e5c26e8d'
             'e7a7c4dedd8f164b8018ddf199298ca68d553e6f88577dc29a092a5b0418f268'
@@ -137,6 +145,19 @@ package() {
 
   DESTDIR="$pkgdir/" meson install -C build
 
+  install -Dm644 "$srcdir"/nsswitch.conf "$pkgdir"/etc/
+  install -Dm644 "$srcdir"/nsswitch.conf "$pkgdir"/usr/share/factory/etc/
+
+  # sysctl
+  install -Dm644 "$srcdir"/sysctl usr/lib/sysctl.d/10-kzl.conf
+
+  # sysusers
+  install -Dm644 "$srcdir"/sysusers usr/lib/sysusers.d/kzl.conf
+
+  # tmpfiles
+  install -Dm644 "$srcdir"/tmpfiles usr/lib/tmpfiles.d/kzl.conf
+
+  # environment generator
   install -Dm755 "$srcdir"/environment-generator.conf usr/lib/systemd/system-environment-generators/10-kzl
   
   chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
