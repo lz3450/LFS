@@ -12,20 +12,14 @@ url="https://www.gnu.org/software/libc"
 depends=(tzdata)
 options=(!strip)
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
-        ld.so.conf
-        resolv.conf
         locale-gen::https://git.archlinux.org/svntogit/packages.git/plain/trunk/locale-gen?h=packages/glibc
         locale.gen.txt)
 backup=(etc/gai.conf
-        etc/ld.so.conf
         etc/locale.gen
-        etc/nscd.conf
-        etc/resolv.conf)
+        etc/nscd.conf)
 install=glibc.install
 sha256sums=('1627ea54f5a1a8467032563393e0901077626dc66f37f10ee6363bb722222836'
             'SKIP'
-            'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
-            '5557d8e601b17a80d1ea7de78a9869be69637cb6a02fbfe334e22fdf64e61d4c'
             '83f108f915863c7ed0338e2d3e8f2e071a531a090ef8f8b2eb3a956a3c4f04d7'
             '0540122fb9340d546702a891bcce344fc3e8f21fe482c2c321b71c2e6b36964e')
 validpgpkeys=('BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
@@ -80,12 +74,6 @@ package() {
   make install_root="$pkgdir/" install
 
   rm -f "$pkgdir"/etc/ld.so.{cache,conf}
-  install -dm755 "$pkgdir"/etc/ld.so.conf.d/
-  install -dm755 "$pkgdir"/usr/share/factory/etc/
-  install -Dm644 "$srcdir"/ld.so.conf "$pkgdir"/etc/
-  install -Dm644 "$srcdir"/ld.so.conf "$pkgdir"/usr/share/factory/etc/
-  install -Dm644 "$srcdir"/resolv.conf "$pkgdir"/etc/
-  install -Dm644 "$srcdir"/resolv.conf "$pkgdir"/usr/share/factory/etc/
 
   install -dm755 "$pkgdir"/usr/lib/{locale,systemd/system,tmpfiles.d}/
   install -dm755 "$pkgdir"/var/db/nscd/
