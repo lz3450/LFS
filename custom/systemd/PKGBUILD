@@ -11,6 +11,19 @@ makedepends=(gperf)
 provides=(systemd-libs systemd-resolvconf systemd-sysvcompat libsystemd.so libudev.so libudev.so)
 conflicts=(systemd-libs systemd-resolvconf systemd-sysvcompat)
 replaces=(systemd-libs systemd-resolvconf systemd-sysvcompat)
+backup=(etc/pam.d/systemd-user
+        etc/systemd/coredump.conf
+        etc/systemd/journald.conf
+        etc/systemd/journal-remote.conf
+        etc/systemd/journal-upload.conf
+        etc/systemd/logind.conf
+        etc/systemd/networkd.conf
+        etc/systemd/resolved.conf
+        etc/systemd/sleep.conf
+        etc/systemd/system.conf
+        etc/systemd/timesyncd.conf
+        etc/systemd/user.conf
+        etc/udev/udev.conf)
 install=systemd.install
 source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
         0001-Use-Arch-Linux-device-access-groups.patch
@@ -137,6 +150,8 @@ package() {
   
   chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
   chmod -R 2755 "$pkgdir"/var/log/journal/
+
+  rm -f "$pkgdir"/usr/share/factory/etc/{issue,nsswitch.conf}
 
   install -Dm0644 "$srcdir"/*.hook -t "$pkgdir"/usr/share/libalpm/hooks/
 }
