@@ -39,7 +39,6 @@ build() {
   echo "rootsbindir=/usr/bin" >> configparms
 
   CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
-
   CFLAGS=${CFLAGS/-fno-plt/}
   CXXFLAGS=${CXXFLAGS/-fno-plt/}
   LDFLAGS=${LDFLAGS/,-z,now/}
@@ -49,16 +48,19 @@ build() {
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib \
     --libdir=/usr/lib \
-    --with-headers=/usr/include \
-    --enable-kernel=5.4.42 \
-    --enable-static-pie \
-    --enable-cet \
     --disable-profile \
+    --enable-static-pie \
     --disable-timezone-tools \
-    --enable-stack-protector=strong \
+    --enable-stackguard-randomization \
     --enable-bind-now \
-    --with-pkgversion="KZL $pkgver-$pkgrel"
-  
+    --enable-stack-protector=strong \
+    --enable-kernel=5.4.70 \
+    --enable-multi-arch \
+    --enable-cet \
+    --with-pkgversion="KZL $pkgver-$pkgrel" \
+    --with-headers=/usr/include
+    # --enable-systemtap
+
   make
 }
 
