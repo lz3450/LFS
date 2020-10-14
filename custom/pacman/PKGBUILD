@@ -43,7 +43,8 @@ package() {
 
   make DESTDIR="$pkgdir/" install
   
-  sed -e '/CPPFLAGS=/s/^#//' \
+  sed -e '/CHOST=/s/x86_64-pc-linux-gnu/x86_64-kzl-linux-gnu/' \
+      -e '/CPPFLAGS=/s/^#//' \
       -e '/CPPFLAGS=/s/"\(.*\)"/"-D_FORTIFY_SOURCE=2"/' \
       -e '/CFLAGS=/s/^#//' \
       -e '/CFLAGS=/s/"\(.*\)"/"-march=native -O2 -pipe -fno-plt"/' \
@@ -78,7 +79,7 @@ package() {
 
 [custom]
 SigLevel = Optional TrustAll
-Server = file:///var/repository/$repo
+Server = file:///var/repository/\$repo
 
 # The testing repositories are disabled by default. To enable, uncomment the
 # repo name header and Include lines. You can add preferred servers immediately
