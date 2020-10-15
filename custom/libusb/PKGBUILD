@@ -7,6 +7,7 @@ epoch=1
 pkgdesc="Library that provides generic access to USB devices"
 arch=('x86_64')
 url="https://libusb.info/"
+provides=(libusbx)
 source=(https://github.com/libusb/libusb/releases/download/v$pkgver/$pkgname-$pkgver.tar.bz2)
 sha256sums=('db11c06e958a82dac52cf3c65cb4dd2c3f339c8a988665110e0d24d19312ad8d')
 
