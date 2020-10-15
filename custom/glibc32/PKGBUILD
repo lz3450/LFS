@@ -3,34 +3,34 @@
 # order
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
-pkgname=glibc
+pkgname=glibc32
 pkgver=2.32
 pkgrel=1
 epoch=1
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
-options=(!strip)
+provides=(lib32-glibc)
+conflicts=(lib32-glibc)
+replaces=(lib32-glibc)
+options=(!strip !emptydirs)
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
         glibc32.conf)
-backup=(etc/gai.conf
-        etc/locale.gen
-        etc/nscd.conf)
 sha256sums=('1627ea54f5a1a8467032563393e0901077626dc66f37f10ee6363bb722222836'
             'SKIP'
             'c27424154a6096ae32c0824b785e05de6acef33d9224fd6147d1936be9b4962b')
 validpgpkeys=('BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd glibc-$pkgver
   
   mkdir build
 }
 
 build() {
-  cd $pkgname-$pkgver/build
-
-  CC="gcc -m32 -mstackrealign"
-  CXX="g++ -m32 -mstackrealign"
+  cd glibc-$pkgver/build
+  
+  export CC="gcc -m32 -mstackrealign"
+  export CXX="g++ -m32 -mstackrealign"
 
   echo "slibdir=/usr/lib32" >> configparms
   echo "rtlddir=/usr/lib32" >> configparms
@@ -64,13 +64,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver/build
+  cd glibc-$pkgver/build
 
   make check || warning "Check failed."
 }
 
 package() {
-  cd $pkgname-$pkgver/build
+  cd glibc-$pkgver/build
 
   make install_root="$pkgdir/" install
 
