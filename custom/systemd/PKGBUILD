@@ -83,6 +83,7 @@ build() {
     -D apparmor=false \
     -D audit=true \
     -D bashcompletiondir=/usr/share/bash-completion/completions/ \
+    -D binfmt=true \
     -D blkid=true \
     -D bzip2=true \
     -D dbus=true \
