@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=cmake
+pkgver=3.18.4
+pkgrel=1
+pkgdesc="A cross-platform open-source make system"
+arch=('x86_64')
+url="https://www.cmake.org/"
+depends=(curl jsoncpp libarchive libuv rhash shared-mime-info)
+# makedepends=(qt5)
+# optdepends=("qt5: cmake-gui")
+source=(https://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz)
+sha256sums=('597c61358e6a92ecbfad42a9b5321ddd801fc7e7eca08441307c9138382d4f77')
+
+# TODO: --qt-gui
+
+build() {
+  cd $pkgname-$pkgver
+
+  export CXXFLAGS+=" $CPPFLAGS"
+
+  ./bootstrap \
+    --prefix=/usr \
+    --mandir=/share/man \
+    --docdir=/share/doc/cmake \
+    --system-libs \
+    --parallel=$(/usr/bin/getconf _NPROCESSORS_ONLN)
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  install -dm755 "$pkgdir"/usr/share/bash-completion/completions/
+  ln -s /usr/share/$pkgname-${pkgver%.*}/completions/{cmake,cpack,ctest} "$pkgdir"/usr/share/bash-completion/completions/
+}
