@@ -8,7 +8,7 @@ arch=('x86_64')
 url="https://www.github.com/systemd/systemd-stable"
 depends=(acl audit cryptsetup curl elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libmicrohttpd libpwquality libseccomp lz4 openssl p11-kit pam pcre2 qrencode)
 makedepends=(gperf)
-provides=(systemd-libs systemd-resolvconf systemd-sysvcompat libsystemd.so libudev.so libudev.so)
+provides=(systemd-libs systemd-resolvconf systemd-sysvcompat udev systemd-tools nss-myhostname libsystemd.so libudev.so libudev.so)
 conflicts=(systemd-libs systemd-resolvconf systemd-sysvcompat)
 replaces=(systemd-libs systemd-resolvconf systemd-sysvcompat)
 backup=(etc/pam.d/systemd-user
@@ -140,7 +140,7 @@ build() {
 check() {
   cd $pkgname-stable
 
-  meson test -C build
+  meson test -C build || warning "Check failed."
 }
 
 package() {
