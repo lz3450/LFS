@@ -1,0 +1,51 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=fakeroot
+pkgver=1.24
+pkgrel=1
+epoch=1
+pkgdesc="Tool for simulating superuser privileges"
+arch=('x86_64')
+url="https://packages.debian.org/fakeroot"
+install=fakeroot.install
+source=(https://deb.debian.org/debian/pool/main/f/$pkgname/${pkgname}_${pkgver}.orig.tar.gz
+        fakeroot.install
+        silence-dlerror.patch)
+sha256sums=('2e045b3160370b8ab4d44d1f8d267e5d1d555f1bb522d650e7167b09477266ed'
+            '711d023c713fa45e115de91f82ef0bf6f454e35cd9e5e4cd1768e68ebc2659d0'
+            '347f6496c93ed0d91dcb554db92602b50520a16308e3b8bc33822bd69966267b')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  patch -p1 -i "$srcdir"/silence-dlerror.patch
+
+  ./bootstrap
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --libdir=/usr/lib/libfakeroot \
+    --disable-static \
+    --with-ipc=sysv
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+  
+  install -dm755 "$pkgdir"/etc/ld.so.conf.d/
+  echo "/usr/lib/libfakeroot" > "$pkgdir"/etc/ld.so.conf.d/fakeroot.conf
+}
