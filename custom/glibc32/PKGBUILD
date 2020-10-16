@@ -1,0 +1,91 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+# order
+# linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
+
+pkgname=glibc32
+pkgver=2.32
+pkgrel=1
+epoch=1
+arch=('x86_64')
+url="https://www.gnu.org/software/libc"
+provides=(lib32-glibc)
+conflicts=(lib32-glibc)
+replaces=(lib32-glibc)
+options=(!strip !emptydirs)
+source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
+        glibc32.conf)
+sha256sums=('1627ea54f5a1a8467032563393e0901077626dc66f37f10ee6363bb722222836'
+            'SKIP'
+            'c27424154a6096ae32c0824b785e05de6acef33d9224fd6147d1936be9b4962b')
+validpgpkeys=('BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
+
+prepare() {
+  cd glibc-$pkgver
+  
+  mkdir build
+}
+
+build() {
+  cd glibc-$pkgver/build
+  
+  export CC="gcc -m32 -mstackrealign"
+  export CXX="g++ -m32 -mstackrealign"
+
+  echo "slibdir=/usr/lib32" >> configparms
+  echo "rtlddir=/usr/lib32" >> configparms
+  echo "sbindir=/usr/bin" >> configparms
+  echo "rootsbindir=/usr/bin" >> configparms
+
+  CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
+  CFLAGS=${CFLAGS/-fno-plt/}
+  CXXFLAGS=${CXXFLAGS/-fno-plt/}
+  LDFLAGS=${LDFLAGS/,-z,now/}
+
+  ../configure \
+    --host=i686-pc-linux-gnu \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --libexecdir=/usr/lib32 \
+    --libdir=/usr/lib32 \
+    --disable-profile \
+    --enable-static-pie \
+    --disable-timezone-tools \
+    --enable-stackguard-randomization \
+    --enable-bind-now \
+    --enable-stack-protector=strong \
+    --enable-kernel=5.4.70 \
+    --enable-multi-arch \
+    --enable-cet \
+    --with-pkgversion="KZL $pkgver-$pkgrel" \
+    --with-headers=/usr/include
+
+  make
+}
+
+check() {
+  cd glibc-$pkgver/build
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd glibc-$pkgver/build
+
+  make install_root="$pkgdir/" install
+
+  rm -rf "$pkgdir"/{etc,sbin,usr/{bin,sbin,share},var}
+
+  # Keep 32 bit specific header files
+  find "$pkgdir/usr/include" -type f -not -name '*-32.h' -delete
+
+  install -dm755 "$pkgdir"/usr/lib/
+  ln -s ../lib32/ld-linux.so.2 "$pkgdir"/usr/lib/
+
+  ln -s ../lib/locale "$pkgdir/usr/lib32/locale"
+
+  install -Dm644 "$srcdir"/glibc32.conf "$pkgdir"/etc/ld.so.conf.d/glibc32.conf
+
+  # Provided by lib32-libxcrypt
+  rm -f "$pkgdir"/usr/lib32/libcrypt.{a,so}
+}

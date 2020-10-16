@@ -1,12 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=base
-pkgver=2020.09.04
+pkgver=2020.10.12
 pkgrel=1
+epoch=1
 pkgdesc="Minimal package set to define a basic KZL Linux installation"
 arch=('any')
 depends=(
-  filesystem linux-api-headers tzdata glibc
+  filesystem
+  linux-api-headers tzdata glibc
   zlib binutils gcc
   ncurses readline bash
   coreutils file findutils gawk grep procps-ng sed tar
@@ -36,13 +38,4 @@ depends=(
   texinfo groff man-db
 )
 optdepends=("linux: bare metal support")
-backup=(etc/os-release)
-source=(os-release)
-sha256sums=('9178f1df5caa9f18ba20844c3fa5582d61994ae411751ca918505a1bfc5a198b')
 
-package() {
-  cd $pkgdir
-  
-  install -Dm644 "$srcdir"/os-release etc/os-release
-  install -Dm644 "$srcdir"/os-release usr/share/factory/etc/os-release
-}

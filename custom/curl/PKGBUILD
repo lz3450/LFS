@@ -1,0 +1,47 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=curl
+pkgver=7.73.0
+pkgrel=1
+epoch=1
+pkgdesc="An URL retrieval utility and library"
+arch=('x86_64')
+url="https://curl.haxx.se"
+depends=(ca-certificates krb5 libidn2 libnghttp2 libpsl libssh2 openssl)
+source=(https://curl.haxx.se/download/$pkgname-$pkgver.tar.gz{,.asc})
+sha256sums=('ba98332752257b47b9dea6d8c0ad25ec1745c20424f1dd3ff2c99ab59e97cf91'
+            'SKIP')
+validpgpkeys=('27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --mandir=/usr/share/man \
+    --enable-ipv6 \
+    --enable-versioned-symbols \
+    --enable-threaded-resolver \
+    --disable-ldap \
+    --disable-ldaps \
+    --disable-manual \
+    --with-gssapi \
+    --with-libssh2 \
+    --with-random=/dev/urandom \
+    --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt
+
+  make
+}
+
+# check() {
+#   cd $pkgname-$pkgver
+
+#   make check || warning "Check failed."
+# }
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+  make -C scripts DESTDIR="$pkgdir/" install
+}

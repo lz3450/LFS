@@ -1,0 +1,137 @@
+#!/bin/bash
+# 
+# lfs-build
+#
+
+VERSION=1.0
+LOGDIR=/tmp
+
+# arguments/options
+
+TARGET=''
+STAGE=0
+
+# packages
+
+stage0_pkgs=(
+    base
+    pacman
+)
+
+stage1_pkgs=(
+    linux-api-headers
+    glibc
+    glibc32
+    binutils
+    gcc
+    libtool
+)
+
+stage2_pkgs=(
+    binutils
+    glibc
+    glibc32
+    gcc
+    pacman
+    filesystem
+)
+
+stage3_pkgs=(
+    # python
+    # perl
+    # ruby
+    # git
+    linux-firmware
+    cmake meson ninja
+    systemd
+    nvidia cuda cudnn nccl intel-mkl
+    lapack
+    zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
+
+)
+
+# functions
+
+stage0_init() {
+    update-repo --clear
+    update-repo $TARGET
+    sudo pacman -Scc --config $PACMAN_CONF
+    sudo pacman -Syy --config $PACMAN_CONF
+}
+
+build() {
+    local pkg
+    pkg=$1
+
+    cd $ROOTDIR/custom/$pkg
+
+    local log
+    log="$LOGDIR"/$pkg.stage$STAGE.log
+    if [ -f $log ]; then
+        rm $log
+    fi
+    
+    makepkg --config $MAKEPKG_CONF -sCf --skippgpcheck --noconfirm &>> $log
+
+    case $pkg in
+        *)
+            update-repo $TARGET
+            (yes yes || :) | sudo pacman -Sy --config $PACMAN_CONF --overwrite "*" $pkg
+            ;;
+    esac
+}
+
+usage() {
+	printf "lfs-build (kzl-linux) %s\n" "$VERSION"
+	echo
+	printf "lfs-build will build custom packages from scratch.\n"
+	echo
+	printf "Usage: lfs-build [options]\n"
+	echo
+	echo "    -h, --help        display this help message and exit"
+	echo "    -v, --version     display version information and exit"
+	echo "    -t, --target      target archtecture (custom, x86_64, ...)"
+	echo "    -s, --stage       stage (stage0 (default), stage1, stage2, stage3)"
+    echo
+}
+
+# program start
+
+set -e -u -o pipefail
+# set -x
+
+# ensure we have a sane umask set
+umask 0022
+
+scriptdir=$(pwd)
+
+while (( "$#" )); do
+	case "$1" in
+        -h|--help)      usage; exit 0 ;;
+        -v|--version)   printf "$VERSION"; exit 0 ;;
+        -t|--target)    shift; TARGET="$1" ;;
+        -s|--stage)     shift; STAGE="$1" ;;
+	esac
+    shift
+done
+
+PACMAN_CONF=$ROOTDIR/config/pacman.conf
+MAKEPKG_CONF=$ROOTDIR/config/makepkg-$TARGET.conf
+REPODIR=/var/repository/$TARGET
+
+if [ -d /tmp/makepkg ]; then
+    rm -rf /tmp/makepkg
+fi
+
+case $STAGE in
+    0) stage0_init; pkgs=${stage0_pkgs[@]} ;;
+    1) pkgs=${stage1_pkgs[@]} ;;
+    2) pkgs=${stage2_pkgs[@]} ;;
+    3) pkgs=${stage3_pkgs[@]} ;;
+    *) printf "unknown stage \"$STAGE\""; exit 1 ;;
+esac
+
+for p in ${pkgs[@]}; do
+    echo "building $p ..."
+    build $p
+done

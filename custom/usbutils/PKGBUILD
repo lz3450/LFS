@@ -1,0 +1,41 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=usbutils
+pkgver=012
+pkgrel=1
+epoch=1
+pkgdesc="USB Device Utilities"
+arch=('x86_64')
+depends=(libusb)
+source=(https://www.kernel.org/pub/linux/utils/usb/usbutils/$pkgname-$pkgver.tar{.xz,.sign})
+sha256sums=('88634625f91840bc1993d2731cc081ee8d3b13d56069a95bdd6ac6ef0e063e46'
+            'SKIP')
+validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
+
+prepare() {
+  cd $pkgname-$pkgver
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --datadir=/usr/share/hwdata \
+    --disable-zlib
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

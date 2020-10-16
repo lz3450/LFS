@@ -1,0 +1,41 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=ca-certificates
+pkgver=2020.10.15
+pkgrel=1
+epoch=1
+pkgdesc="Common CA certificates form Mozilla CA Certificate Store"
+arch=('any')
+url="https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/"
+depends=(p11-kit)
+provides=(ca-certificates-utils ca-certificates-mozilla)
+conflicts=(ca-certificates-utils ca-certificates-mozilla)
+replaces=(ca-certificates-utils ca-certificates-mozilla)
+source=(https://hg.mozilla.org/mozilla-central/raw-file/tip/security/nss/lib/ckfw/builtins/certdata.txt
+        certdata2pem.py
+        update-ca-trust
+        update-ca-trust.hook)
+sha256sums=('f3bdcd74612952da8476a9d4147f50b29ad0710b7dd95b4c8690500209986d70'
+            'd2a1579dae05fd16175fac27ef08b54731ecefdf414085c610179afcf62b096c'
+            'a6f534bed509e2996ff00a1b6a82fbad070d4a8762c66c55e39aacf932ebcd51'
+            '55b230878d71847c629494d3b1d0b43482568027c3272ffa477c1d77e4594bf6')
+
+build() {
+  ./certdata2pem.py
+
+  for p in *.tmp-p11-kit; do
+    cat "$p" >> ca-bundle.trust.p11-kit
+  done
+}
+
+package() {
+  install -Dm644 ca-bundle.trust.p11-kit "$pkgdir"/usr/share/ca-certificates/trust-source/mozilla.trust.p11-kit
+  install -Dm755 update-ca-trust "$pkgdir"/usr/bin/update-ca-trust
+  install -Dm644 update-ca-trust.hook "$pkgdir"/usr/share/libalpm/hooks/update-ca-trust.hook
+
+  install -d "$pkgdir"/{etc,usr/share}/$pkgname/trust-source/{anchors,blacklist}
+  install -d "$pkgdir"/etc/{ssl/certs/{edk2,java},$pkgname/extracted}
+
+  ln -sr "$pkgdir"/etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/cert.pem
+  ln -sr "$pkgdir"/etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/certs/ca-certificates.crt
+}

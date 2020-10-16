@@ -30,21 +30,22 @@ build() {
   ../configure \
     --prefix=/usr \
     --enable-gold \
-    --enable-ld=default \
     --enable-lto \
-    --with-system-zlib \
-    --enable-shared \
     --enable-plugins \
-    --enable-targets=x86_64-pep \
-    --with-debuginfod \
-    --with-pic \
-    --enable-deterministic-archives \
     --enable-relro \
+    --enable-shared \
+    --enable-targets=x86_64-pep \
+    --enable-threads \
+    --enable-deterministic-archives \
+    --enable-cet \
+    --enable-ld=default \
     --with-lib-path=/usr/lib:/usr/local/lib \
-    --enable-threads
+    --with-system-zlib \
+    --with-pic \
+    --with-debuginfod \
 
   make configure-host
-  make tooldir="/usr"
+  make tooldir="/usr/"
 }
 
 check() {
@@ -56,7 +57,7 @@ check() {
 package() {
   cd $pkgname-$pkgver/build
 
-  make DESTDIR="$pkgdir/" tooldir="/usr" install
+  make DESTDIR="$pkgdir/" tooldir="/usr/" install
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*

@@ -1,0 +1,50 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=intel-mkl
+pkgver=2020.3.279
+pkgrel=1
+epoch=1
+pkgdesc="Intel Math Kernel Library"
+arch=('x86_64')
+url="https://software.intel.com/en-us/mkl"
+options=(!strip)
+source=(http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16903/l_mkl_$pkgver.tgz
+        intel-mkl.sh
+        intel-mkl.conf)
+sha256sums=('2b8e434ecc9462491130ba25a053927fd1a2eca05e12acb5936b08c486857a04'
+            'c4b14fe26ee7da95e404bd86cc8a1897aa4ab2f9701a9e758a68c4a31a3da37e'
+            'd679e0e5ff2551fd5028bc1fd0d1c202e8434e8bb29e72a9a647cbb10316668e')
+
+prepare() {
+  cd l_mkl_$pkgver/rpm
+
+  for rpm in *.rpm; do
+    bsdtar -xf $rpm
+  done
+
+  sed -i \
+  -e 's|^prefix=.*|prefix=/opt/intel/mkl|g' \
+  -e 's|${MKLROOT}|/opt/intel/mkl|g' \
+  -e 's|^omplibdir=.*|omplibdir=/opt/intel/mkl/lib/intel64|g' \
+  opt/intel/compilers_and_libraries_$pkgver/linux/mkl/bin/pkgconfig/*.pc
+}
+
+package() {
+  cd l_mkl_$pkgver/rpm
+
+  install -dm755 "$pkgdir"/usr/bin/
+  install -Dm755 opt/intel/compilers_and_libraries_$pkgver/linux/mkl/bin/mkl_link_tool "$pkgdir"/opt/intel/mkl/bin/mkl_link_tool
+  ln -s /opt/intel/mkl/tools/mkl_link_tool "$pkgdir"/usr/bin/mkl_link_tool
+
+  install -dm755 "$pkgdir"/usr/lib/pkgconfig/
+  mv opt/intel/compilers_and_libraries_${pkgver}/linux/mkl/bin/pkgconfig/*.pc "${pkgdir}"/usr/lib/pkgconfig/
+
+  install -dm755 "$pkgdir"/opt/intel/mkl/{include,lib/intel64_lin}/
+  mv opt/intel/compilers_and_libraries_$pkgver/linux/mkl/include/* "${pkgdir}"/opt/intel/mkl/include/
+  mv opt/intel/compilers_and_libraries_$pkgver/linux/mkl/lib/intel64_lin/*.{so,a} "$pkgdir"/opt/intel/mkl/lib/intel64_lin/
+  mv opt/intel/compilers_and_libraries_$pkgver/linux/compiler/lib/intel64_lin/*.{so,a} "$pkgdir"/opt/intel/mkl/lib/intel64_lin/
+  ln -s intel64_lin "${pkgdir}"/opt/intel/mkl/lib/intel64
+
+  install -Dm755 "$srcdir"/intel-mkl.sh "$pkgdir"/etc/profile.d/intel-mkl.sh
+  install -Dm644 "$srcdir"/intel-mkl.conf "$pkgdir"/etc/ld.so.conf.d/intel-mkl.conf
+}

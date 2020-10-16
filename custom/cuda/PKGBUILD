@@ -1,0 +1,41 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=cuda
+pkgver=11.1.0
+pkgrel=1
+epoch=1
+pkgdesc="NVIDIA's GPU programming toolkit"
+arch=('x86_64')
+url="https://developer.nvidia.com/cuda-zone"
+depends=(nvidia)
+options=(!strip staticlibs)
+install=cuda.install
+source=(cuda.conf
+        cuda.sh
+        https://developer.download.nvidia.com/compute/cuda/$pkgver/local_installers/cuda_${pkgver}_455.23.05_linux.run)
+sha256sums=('a65f7d96e2447eb40b1be9586b90eb0bd776a8938c93d21f9606d2880b548b28'
+            '07933525d0affb2bc98aae9d133f0aaef27aefb883ce0e8cdcaa1cf332ad240d'
+            '858cbab091fde94556a249b9580fadff55a46eafbcb4d4a741d2dcd358ab94a5')
+
+package() {
+  install -dm755 "$pkgdir"/opt/
+  sh cuda_${pkgver}_455.23.05_linux.run --silent --toolkit --samples --installpath="$pkgdir/opt/cuda"
+
+  rm -rf "$pkgdir"/opt/cuda/cuda-uninstaller
+
+  for f in $(find "$pkgdir"/opt/cuda -name Makefile); do
+    sed -i "s|/usr/local/cuda|/opt/cuda|g" "$f"
+  done
+
+  # Define compilers for CUDA to use.
+  ln -s /usr/bin/gcc "$pkgdir"/opt/cuda/bin/gcc
+  ln -s /usr/bin/g++ "$pkgdir"/opt/cuda/bin/g++
+
+  rm "$pkgdir"/opt/cuda/{include,lib64}
+  mv "$pkgdir"/opt/cuda/targets/x86_64-linux/include "$pkgdir"/opt/cuda/
+  mv "$pkgdir"/opt/cuda/targets/x86_64-linux/lib "$pkgdir"/opt/cuda/lib64
+  rmdir "$pkgdir"/opt/cuda/targets/{x86_64-linux,}
+
+  install -Dm755 "$srcdir"/cuda.sh "$pkgdir"/etc/profile.d/cuda.sh
+  install -Dm644 "$srcdir"/cuda.conf "$pkgdir"/etc/ld.so.conf.d/cuda.conf
+}

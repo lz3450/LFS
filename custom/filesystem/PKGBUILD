@@ -1,8 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=filesystem
-pkgver=2020.05
+pkgver=2020.10
 pkgrel=1
+epoch=1
 arch=('any')
 depends=(iana-etc)
 backup=(etc/crypttab
@@ -11,37 +12,59 @@ backup=(etc/crypttab
         etc/gshadow
         etc/host.conf
         etc/hosts
+        etc/issue
+        etc/ld.so.conf
+        etc/motd
+        etc/nsswitch.conf
+        etc/os-release
         etc/passwd
         etc/profile
         etc/resolv.conf
         etc/securetty
+        etc/shadow
         etc/shells)
 source=(crypttab
+        environment-generator
         fstab
         group
         gshadow
         host.conf
         hosts
+        issue
+        ld.so.conf
+        motd
+        nsswitch.conf
+        os-release
         passwd
         profile
         resolv.conf
         securetty
         shadow
         shells
-        systemd.environment-generator)
+        sysctl
+        sysusers
+        tmpfiles)
 sha256sums=('e03bede3d258d680548696623d5979c6edf03272e801a813c81ba5a5c64f4f82'
+            '9c6254a8b8cbc48eca494491d26a1d0d58e6677615c4ea26557f98cc3d2aeffb'
             'e54626e74ed8fee4173b62a545ab1c3a3a069e4217a0ee8fc398d9933e9c1696'
             '244f0718ee2a9d6862ae59d6c18c1dd1568651eada91a704574fa527fbac2b3a'
             '90d879374f77bac47f132164c1e7fc4892e994ff1d1ac376efa0c1c26ea37273'
             '4d7b647169063dfedbff5e1e22cee77bd1a4183dbcfd5e802e68939da4bbf733'
             'd9cd8a77d9e0aa5e90d7f4ed74c8745c17b525e720e28e4c44364150003c35f9'
+            'd9c7dc6be96564223d7720103136e4ddc13ad7ad5f9cd95dc2718fee0216342f'
+            'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
+            '404c3f2e1d3d4097cedd08a4484119cb37d9adfc0ead49bdf5960e227e9159de'
+            '98f8b57182abf05a79535c790b04b75d5d5c2f3ba6ba6048694fda0581551fbc'
+            '9178f1df5caa9f18ba20844c3fa5582d61994ae411751ca918505a1bfc5a198b'
             '5e06477834f51abf42ea4e8dc199632afc6afbfd8c44354685a271e9a48d2c0a'
             '5da078777cda24e4df697e2928451723f2303bfdbb2ce9551c822188c7945d25'
             '5557d8e601b17a80d1ea7de78a9869be69637cb6a02fbfe334e22fdf64e61d4c'
             'd88be2b45b43605ff31dd83d6a138069b6c2e92bc8989b7b9ab9eba8da5f8c7b'
             '8ce994663d7588143ad7ed4441b07f468f4f7d3590164dd73ddfa3ea307ece8e'
             'c390b31fffc4a2b5d78ae8c89f5317aadef1f71baac09cfb467b675db1406d61'
-            'cb54cecc63f47bfaa5b27fa2409c07c35531342c82b9bb1f2956334b33792853')
+            'f6a2444dc3d6f86d80591e255af2a555d5a90acfe92c1b69e8ba75e85ffeafdd'
+            'a11eb9cc07f8bb697804fe499a281a20bae7a8885c3b4b3713fa928280f3fc70'
+            'c8f01b8c7e5388e3c9f7cb03239450bcd7a86caf12b94d2c8ce226b1841d985c')
 
 package() {
   cd $pkgdir
@@ -56,32 +79,31 @@ package() {
   install -dm1777 tmp
 
   # /etc
-  install -d etc/{skel,profile.d} usr/share/factory/etc
-  for f in fstab group host.conf hosts passwd profile resolv.conf securetty shells; do
-    install -m644 "$srcdir"/$f etc/
-    install -m644 "$srcdir"/$f usr/share/factory/etc/
+  install -dm755 etc/{skel,profile.d} usr/share/factory/etc
+  for f in fstab group host.conf hosts issue ld.so.conf motd nsswitch.conf passwd profile resolv.conf securetty shells; do
+    install -Dm644 "$srcdir"/$f etc/
+    install -Dm644 "$srcdir"/$f usr/share/factory/etc/
   done
   ln -s ../proc/self/mounts etc/mtab
   for f in crypttab gshadow shadow; do
-    install -m600 "$srcdir"/$f etc/
-    install -m600 "$srcdir"/$f usr/share/factory/etc/
+    install -Dm600 "$srcdir"/$f etc/
+    install -Dm600 "$srcdir"/$f usr/share/factory/etc/
   done
 
   # /usr
   for d in bin include lib share src; do
-    install -d -m755 usr/$d
+    install -dm755 usr/$d
   done
   for d in {1..8}; do
-    install -d -m755 usr/share/man/man$d
+    install -dm755 usr/share/man/man$d
   done
 
   # /usr/local
   for d in bin etc include lib man share src; do
-    install -d -m755 usr/local/$d
+    install -dm755 usr/local/$d
   done
   ln -s bin usr/local/sbin
   ln -s ../man usr/local/share/man
-
 
   # bin symlinks
   ln -s usr/bin bin
@@ -93,18 +115,24 @@ package() {
   ln -s usr/lib lib64
   ln -s lib usr/lib64
 
-  # systemd.environment-generator
-  install -Dm755 "$srcdir"/systemd.environment-generator usr/lib/systemd/system-environment-generators/path
+  # var
+  ln -s spool/mail var/mail
+  ln -s ../run var/run
+  ln -s ../run/lock var/lock
 
-  # systemd-sysctl
-  # install -Dm644 "$srcdir"/sysctl usr/lib/sysctl.d/10-arch.conf
+  # sysctl
+  install -Dm644 "$srcdir"/sysctl usr/lib/sysctl.d/10-kzl.conf
 
-  # systemd-sysusers
-  # install -Dm644 "$srcdir"/sysusers usr/lib/sysusers.d/arch.conf
+  # sysusers
+  install -Dm644 "$srcdir"/sysusers usr/lib/sysusers.d/kzl.conf
 
-  # systemd-tmpfiles
-  # install -Dm644 "$srcdir"/tmpfiles usr/lib/tmpfiles.d/arch.conf
+  # tmpfiles
+  install -Dm644 "$srcdir"/tmpfiles usr/lib/tmpfiles.d/kzl.conf
 
-  # add logo
-  # install -D -m644 "$srcdir"/archlinux.{svg,png} usr/share/pixmaps
+  # environment generator
+  install -Dm755 "$srcdir"/environment-generator usr/lib/systemd/system-environment-generators/10-kzl
+
+  # os-release
+  install -Dm644 "$srcdir"/os-release etc/os-release
+  install -Dm644 "$srcdir"/os-release usr/share/factory/etc/os-release
 }

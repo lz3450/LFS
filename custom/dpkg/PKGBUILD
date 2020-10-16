@@ -1,0 +1,51 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=dpkg
+pkgver=1.20.5
+pkgrel=1
+epoch=1
+pkgdesc="The Debian Package Manager tools"
+arch=('x86_64')
+url="https://tracker.debian.org/pkg/dpkg"
+source=(git+https://salsa.debian.org/dpkg-team/$pkgname.git#tag=$pkgver
+        origin.kzl-linux)
+sha256sums=('SKIP'
+            '8bb0ff1f18716db0bda20553e50b3049f0a9a3656868f347da342e68027d21a6')
+
+prepare(){
+  cd $pkgname
+
+  ./autogen
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --sbindir=/usr/bin \
+    --libexecdir=/usr/lib \
+    --disable-start-stop-daemon
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir/" install
+  
+  install -Dm644 "$srcdir"/origin.kzl-linux "$pkgdir"/etc/dpkg/origins/kzl-linux
+  ln -s kzl-linux "$pkgdir"/etc/dpkg/origins/default
+
+  install -dm644 "$pkgdir"/var/dpkg/updates/
+  touch "$pkgdir"/var/lib/dpkg/{status,available}
+}
