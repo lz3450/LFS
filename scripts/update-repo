@@ -2,12 +2,15 @@
 # 
 # update-repo
 #
+# 1.1: Add '--clear'.
+#
 
-VERSION=1.0
+VERSION=1.1
 REPODIR=/var/repository
 
 # options
 REPLACE=0
+CLEAR=0
 
 # functions
 update() {
@@ -39,6 +42,7 @@ usage() {
 	echo "    -h, --help        display this help message and exit"
 	echo "    -v, --version     display version information and exit"
     echo "    -R, --replace     replace old repo"
+    echo "    --clear           clear the specified repository"
     echo
 }
 
@@ -57,6 +61,7 @@ while (( "$#" )); do
         -h|--help)      usage; exit 0 ;;
         -v|--version)   printf "$VERSION"; exit 0 ;;
 		-R|--replace)   REPLACE=1; shift ;;
+        --clear)        CLEAR=1; shift ;; 
         *)              repo="$1"; break 2 ;;
 	esac
 done
@@ -71,6 +76,11 @@ case $repo in
     # unknown repo
     *)                  printf "unknown repo \"%s\".\n" "$repo"; exit 1 ;;
 esac
+
+if (( CLEAR )); then
+    sudo rm -rf $REPODIR/$repo
+    exit 0
+fi
 
 if [ ! -d $REPODIR/$repo ]; then
     sudo mkdir -p $REPODIR/$repo
