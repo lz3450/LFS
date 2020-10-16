@@ -6,8 +6,6 @@ pkgdesc="TeX Live"
 arch=('x86_64')
 url='http://tug.org/texlive/'
 depends=(cairo freetype2 gmp graphite harfbuzz icu gd libjpeg libpaper libpng mpfr pixman poppler zziplib)
-# depends=(cairo freetype2 gmp graphite2 harfbuzz icu gd libjpeg libpaper libpng mpfr pixman poppler zziplib)
-# depends=(libsigsegv)
 # makedepends=(ffcall)
 provides=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 conflicts=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
@@ -35,37 +33,59 @@ prepare() {
 
 build() {
   cd $pkgname-source/build
-
+  
   ../configure \
-    --prefix=/usr \
-    --sysconfdir=/etc \
-    --datarootdir=/usr/share \
-    --datadir=/usr/share \
-    --mandir=/usr/share/man \
-    --enable-shared \
-    --enable-luatex \
-    --disable-static \
-    --disable-multiplatform \
+    --prefix=/opt/TeXLive \
     --disable-native-texlive-build \
-    --disable-dump-share \
-    --disable-psutils \
+    --disable-xindy \
+    --enable-shared \
+    --disable-static \
     --with-banner-add="/KZL" \
-    --with-system-cairo \
-    --with-system-freetype2 \
-    --with-freetype2-libdir=/usr/lib \
-    --with-freetype2-include=/usr/include/freetype2 \
-    --with-system-gd \
-    --with-system-gmp \
-    --with-system-graphite2 \
     --with-system-harfbuzz \
     --with-system-icu \
-    --with-system-libpaper \
-    --with-system-libpng \
-    --with-system-mpfr \
-    --with-system-pixman \
+    --with-system-graphite2 \
+    --with-system-zziplib \
     --with-system-poppler \
+    --with-system-mpfr \
+    --with-system-gmp \
+    --with-system-cairo \
+    --with-system-pixman \
+    --with-system-gd \
+    --with-system-libpng \
+    --with-system-libpaper \
     --with-system-zlib \
-    --with-system-zziplib
+    --without-x
+
+  # ../configure \
+  #   --prefix=/usr \
+  #   --sysconfdir=/etc \
+  #   --datarootdir=/usr/share \
+  #   --datadir=/usr/share \
+  #   --mandir=/usr/share/man \
+  #   --enable-shared \
+  #   --enable-luatex \
+  #   --disable-static \
+  #   --disable-multiplatform \
+  #   --disable-native-texlive-build \
+  #   --disable-dump-share \
+  #   --disable-psutils \
+  #   --with-banner-add="/KZL" \
+  #   --with-system-cairo \
+  #   --with-system-freetype2 \
+  #   --with-freetype2-libdir=/usr/lib \
+  #   --with-freetype2-include=/usr/include/freetype2 \
+  #   --with-system-gd \
+  #   --with-system-gmp \
+  #   --with-system-graphite2 \
+  #   --with-system-harfbuzz \
+  #   --with-system-icu \
+  #   --with-system-libpaper \
+  #   --with-system-libpng \
+  #   --with-system-mpfr \
+  #   --with-system-pixman \
+  #   --with-system-poppler \
+  #   --with-system-zlib \
+  #   --with-system-zziplib
 
   make
 }
@@ -82,38 +102,38 @@ package() {
   make DESTDIR="$pkgdir/" install
   make DESTDIR="$pkgdir/" texlinks
 
-  tar -xvf "$srcdir"/$pkgname-$_texmfver-texmf.tar.xz -C "$pkgdir"/usr/share/ --skip-old-files --strip-components=1
+  # tar -xvf "$srcdir"/$pkgname-$_texmfver-texmf.tar.xz -C "$pkgdir"/usr/share/ --skip-old-files --strip-components=1
 
-  # install config files to $TEXMFSYSCONFIG tree
-  msg2 "Installing the /etc/texmf tree"
-  install -Dm755 "$pkgdir"/usr/share/texmf-dist/chktex/chktexrc \
-    -t "$pkgdir"/etc/texmf/chktex/
-  install -Dm755 "$pkgdir"/usr/share/texmf-dist/dvipdfmx/dvipdfmx.cfg \
-    -t "$pkgdir"/etc/texmf/dvipdfmx/
-  install -Dm755 "$pkgdir"/usr/share/texmf-dist/dvips/config/config.ps \
-    -t "$pkgdir"/etc/texmf/dvips/config/
-  install -Dm755 "$pkgdir"/usr/share/texmf-dist/tex/generic/config/language.{dat,def} \
-    -t "$pkgdir"/etc/texmf/tex/generic/config/                       
-  install -Dm755 "$pkgdir"/usr/share/texmf-dist/tex/generic/tex-ini-files/pdftexconfig.tex \
-    -t "$pkgdir"/etc/texmf/tex/generic/tex-ini-files/
-  install -Dm755 "$pkgdir"/usr/share/texmf-dist/ttf2pk/ttf2pk.cfg \
-    -t "$pkgdir"/etc/texmf/ttf2pk/
-  install -Dm755 "$pkgdir"/usr/share/texmf-dist/web2c/{fmtutil-hdr.cnf,mktex.cnf,updmap-hdr.cfg} \
-    -t "$pkgdir"/etc/texmf/web2c/
-  install -Dm755 "$pkgdir"/usr/share/texmf-dist/xdvi/XDvi \
-    -t "$pkgdir"/etc/texmf/xdvi/
+  # # install config files to $TEXMFSYSCONFIG tree
+  # msg2 "Installing the /etc/texmf tree"
+  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/chktex/chktexrc \
+  #   -t "$pkgdir"/etc/texmf/chktex/
+  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/dvipdfmx/dvipdfmx.cfg \
+  #   -t "$pkgdir"/etc/texmf/dvipdfmx/
+  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/dvips/config/config.ps \
+  #   -t "$pkgdir"/etc/texmf/dvips/config/
+  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/tex/generic/config/language.{dat,def} \
+  #   -t "$pkgdir"/etc/texmf/tex/generic/config/                       
+  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/tex/generic/tex-ini-files/pdftexconfig.tex \
+  #   -t "$pkgdir"/etc/texmf/tex/generic/tex-ini-files/
+  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/ttf2pk/ttf2pk.cfg \
+  #   -t "$pkgdir"/etc/texmf/ttf2pk/
+  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/web2c/{fmtutil-hdr.cnf,mktex.cnf,updmap-hdr.cfg} \
+  #   -t "$pkgdir"/etc/texmf/web2c/
+  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/xdvi/XDvi \
+  #   -t "$pkgdir"/etc/texmf/xdvi/
 
-  # replace upstream texmf.cnf
-  install -Dm644 "$srcdir"/texmf.cnf -t "$pkgdir"/usr/share/texmf-dist/web2c/
-  install -Dm644 "$srcdir"/texmf.cnf -t "$pkgdir"/etc/texmf/web2c/
-  # replace upstream texmfcnf.lua
-  install -Dm644 "$srcdir"/texmfcnf.lua -t "$pkgdir"/usr/share/texmf-dist/web2c/
+  # # replace upstream texmf.cnf
+  # install -Dm644 "$srcdir"/texmf.cnf -t "$pkgdir"/usr/share/texmf-dist/web2c/
+  # install -Dm644 "$srcdir"/texmf.cnf -t "$pkgdir"/etc/texmf/web2c/
+  # # replace upstream texmfcnf.lua
+  # install -Dm644 "$srcdir"/texmfcnf.lua -t "$pkgdir"/usr/share/texmf-dist/web2c/
 
-  # texlive fonts
-  install -dm755 "$pkgdir"/etc/fonts/conf.avail/
-  install -Dm644 "$srcdir"/09-texlive-fonts.conf "$pkgdir"/etc/fonts/conf.avail/
+  # # texlive fonts
+  # install -dm755 "$pkgdir"/etc/fonts/conf.avail/
+  # install -Dm644 "$srcdir"/09-texlive-fonts.conf "$pkgdir"/etc/fonts/conf.avail/
 
-  # cleanup
-  rm -rf "$pkgdir"/usr/share/texmf-dist/scripts/context/stubs/mswin/
-  rm -rf "$pkgdir"/usr/bin/tlmgr
+  # # cleanup
+  # rm -rf "$pkgdir"/usr/share/texmf-dist/scripts/context/stubs/mswin/
+  # rm -rf "$pkgdir"/usr/bin/tlmgr
 }
