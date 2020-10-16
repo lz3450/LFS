@@ -47,7 +47,7 @@ build() {
     --libexecdir=/usr/lib \
     --libdir=/usr/lib \
     --enable-shared \
-    --enable-multilib \
+    --disable-multilib \
     --enable-threads=posix \
     --enable-__cxa_atexit \
     --enable-gnu-indirect-function \
