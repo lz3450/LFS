@@ -1,0 +1,14 @@
+post_install() {
+  pkgver=$1
+  python -m ensurepip
+  ln -sf pip${pkgver:0:3} usr/bin/pip
+}
+
+post_upgrade() {
+  python -m ensurepip --upgrade
+}
+
+post_remove() {
+  pkgver=$1
+  rm -rf usr/lib/python${pkgver:0:3}
+}
