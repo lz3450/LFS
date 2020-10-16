@@ -48,10 +48,10 @@ stage3_pkgs=(
 # functions
 
 stage0_init() {
-    update-repo --clear
+    update-repo --clear $TARGET
     update-repo $TARGET
-    sudo pacman -Scc --config $PACMAN_CONF
-    sudo pacman -Syy --config $PACMAN_CONF
+    (yes yes || :) | sudo pacman -Scc --config $PACMAN_CONF
+    (yes yes || :) | sudo pacman -Syy --config $PACMAN_CONF
 }
 
 build() {
