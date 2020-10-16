@@ -19,35 +19,30 @@ stage0_pkgs=(
 )
 
 stage1_pkgs=(
-    linux-api-headers
-    glibc
-    glibc32
-    binutils
-    gcc
-    libtool
+    linux-api-headers glibc glibc32 binutils gcc libtool
 )
 
 stage2_pkgs=(
-    binutils
-    glibc
-    glibc32
-    gcc
-    pacman
+    binutils glibc glibc32 gcc libtool
     filesystem
+    bash
+    pacman
+    linux linux-firmware
 )
 
 stage3_pkgs=(
-    # python
-    # perl
-    # ruby
-    # git
-    linux-firmware
-    cmake meson ninja
-    systemd
-    nvidia cuda cudnn nccl intel-mkl
-    lapack
-    zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
-
+    # python perl ruby git
+    # cmake meson ninja
+    # systemd dbus
+    # nvidia cuda cudnn nccl intel-mkl lapack
+    # zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
+    # arch-install-scripts pacman-contrib
+    # wpa_supplicant
+    # libusb usbutils
+    # dosfstools nano parted tmux 
+    # ca-certificates curl wget
+    texlive
+    acl attr
 )
 
 # functions
@@ -71,7 +66,7 @@ build() {
         rm $log
     fi
     
-    makepkg --config $MAKEPKG_CONF -sCf --skippgpcheck --noconfirm &>> $log
+    makepkg --config $MAKEPKG_CONF -scCf --skippgpcheck --noconfirm &>> $log
 
     case $pkg in
         *)
