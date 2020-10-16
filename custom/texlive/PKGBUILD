@@ -1,7 +1,8 @@
 pkgname=texlive
 pkgver=54456
 _texmfver=20200406
-pkgrel=2
+pkgrel=1
+epoch=1
 pkgdesc="TeX Live"
 arch=('x86_64')
 url='http://tug.org/texlive/'
