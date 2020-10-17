@@ -29,7 +29,7 @@ build() {
     -Duseshrplib \
     -Dusethreads \
     -Dmyuname="kzl" \
-    -Dmyhostname="kzl" \
+    -Dmyhostname="kzl-linux" \
     -Dcf_time="`date -u --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}"`"
 
   make
