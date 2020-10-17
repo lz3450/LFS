@@ -12,9 +12,9 @@ pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
 url="https://gcc.gnu.org"
 depends=(libmpc)
-provides=(gcc-libs lib32-gcc-libs gcc-fortran)
-conflicts=(gcc-libs lib32-gcc-libs gcc-fortran)
-replaces=(gcc-libs lib32-gcc-libs gcc-fortran)
+provides=(gcc-libs gcc-fortran)
+conflicts=(gcc-libs gcc-fortran)
+replaces=(gcc-libs gcc-fortran)
 options=(!emptydirs)
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         http://isl.gforge.inria.fr/isl-$_islver.tar.xz)
@@ -31,6 +31,9 @@ prepare() {
   mv ../isl-$_islver isl
   
   sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i {libiberty,gcc}/configure
+
+  # Do not run fixincludes
+  sed -e 's@\./fixinc\.sh@-c true@' -i gcc/Makefile.in
 
   # Set the default directory name for 64-bit libraries to “lib”
   sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
@@ -68,7 +71,6 @@ build() {
     --disable-libstdcxx-pch \
     --enable-clocale=gnu
 
-  ulimit -s 32768
   make
 }
 
