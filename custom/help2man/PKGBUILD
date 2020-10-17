@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=help2man
+pkgver=1.47.16
+pkgrel=1
+epoch=1
+pkgdesc="Conversion tool to create man files"
+arch=('x86_64')
+url="https://www.gnu.org/software/help2man/"
+install=$pkgname.install
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
+        $pkgname.install)
+sha256sums=('3ef8580c5b86e32ca092ce8de43df204f5e6f714b0cd32bc6237e6cd0f34a8f4'
+            'SKIP'
+            '78732c7a3ecc820e6c697bbea5230e6021ecc362384c840f88165ae292db07db')
+validpgpkeys=('87EA44D150D89615E39A3FEEF0DC8E00B28C5995')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --libdir=/usr/lib \
+    --infodir=/usr/share/info \
+    --mandir=/usr/share/man
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
