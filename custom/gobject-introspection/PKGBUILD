@@ -21,7 +21,7 @@ sha256sums=('SKIP'
 validpgpkeys=('923B7025EE03C1C59F42684CF0942E894B2EAFA0')
 
 prepare() {
-  pip install -U --no-binary :all: mako markdown sphinx
+  sudo pip install -U --no-binary :all: mako markdown sphinx
 }
 
 build() {
