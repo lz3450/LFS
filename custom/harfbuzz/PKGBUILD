@@ -1,0 +1,81 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=harfbuzz
+pkgver=2.7.2
+pkgrel=1
+epoch=1
+pkgdesc="OpenType text shaping engine"
+arch=('x86_64')
+url="https://www.freedesktop.org/wiki/Software/HarfBuzz"
+depends=(freetype2 glib2 graphite icu)
+makedepends=(cairo gobject-introspection)
+optdepents=("cairo: hb-view program")
+checkdepends=(python-fonttools)
+provides=(harfbuzz-icu)
+conflicts=(harfbuzz-icu)
+replaces=(harfbuzz-icu)
+source=(git+https://github.com/harfbuzz/harfbuzz#tag=$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D docs=disabled \
+    -D graphite=enabled \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  mkdir -p ="$srcdir"/tmp
+  TMPDIR="$srcdir/tmp" meson test -C build || warning "Check failed."
+}
+
+package() {
+  cd $pkgname
+
+  DESTDIR="$pkgdir/" meson install -C build
+}
+
+# build() {
+#   cd $pkgname
+
+#   ./autogen.sh \
+#     --prefix=/usr \
+#     --with-freetype \
+#     --with-glib \
+#     --with-gobject \
+#     --with-graphite2 \
+#     --with-icu \
+#     --with-cairo \
+#     --disable-gtk-doc
+
+#   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+#   make
+# }
+
+# check() {
+#   cd $pkgname
+
+#   make TMPDIR="$srcdir/" check
+#   rm -rf "$srcdir"/tmp*
+# }
+
+# package() {
+#   cd $pkgname
+
+#   make DESTDIR="$pkgdir/" install
+# }
