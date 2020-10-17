@@ -24,6 +24,8 @@ sha256sums=('1627ea54f5a1a8467032563393e0901077626dc66f37f10ee6363bb722222836'
             '0540122fb9340d546702a891bcce344fc3e8f21fe482c2c321b71c2e6b36964e')
 validpgpkeys=('BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
 
+# TODO: '--enable-systemtap'
+
 prepare() {
   cd $pkgname-$pkgver
   
@@ -48,6 +50,7 @@ build() {
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib \
     --libdir=/usr/lib \
+    --enable-shared \
     --disable-profile \
     --enable-static-pie \
     --disable-timezone-tools \
@@ -55,11 +58,9 @@ build() {
     --enable-bind-now \
     --enable-stack-protector=strong \
     --enable-kernel=5.4.70 \
-    --enable-multi-arch \
     --enable-cet \
     --with-pkgversion="KZL $pkgver-$pkgrel" \
     --with-headers=/usr/include
-    # --enable-systemtap
 
   make
 }
