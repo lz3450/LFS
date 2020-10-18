@@ -1,46 +1,49 @@
 pkgname=texlive
-pkgver=54456
-_texmfver=20200406
+pkgver=20200406
 pkgrel=1
 epoch=1
 pkgdesc="TeX Live"
 arch=('x86_64')
 url='http://tug.org/texlive/'
-depends=(cairo freetype2 gmp graphite harfbuzz icu gd libjpeg libpaper libpng mpfr pixman poppler zziplib)
-# makedepends=(ffcall)
+depends=(cairo ghostscript freetype2 gmp graphite harfbuzz icu gd libjpeg libpaper libpng libsigsegv mpfr pixman poppler zziplib)
 provides=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 conflicts=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 replaces=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
+options=(!strip)
 install=texlive.install
-source=(git+https://github.com/Tex-Live/texlive-source.git#tag=svn$pkgver
-        ftp://tug.org/$pkgname/historic/2020/$pkgname-$_texmfver-texmf.tar.xz
-        texmf.cnf
-        texmfcnf.lua
+source=(ftp://tug.org/historic/systems/$pkgname/${pkgver:0:4}/$pkgname-$pkgver-source.tar.xz
+        ftp://tug.org/historic/systems/$pkgname/${pkgver:0:4}/$pkgname-$pkgver-texmf.tar.xz
         09-texlive-fonts.conf
         texlive.install)
-noextract=($pkgname-$_texmfver-texmf.tar.xz)
-sha256sums=('SKIP'
+noextract=($pkgname-$pkgver-texmf.tar.xz)
+sha256sums=('e32f3d08cbbbcf21d8d3f96f2143b64a1f5e4cb01b06b761d6249c8785249078'
             '0aa97e583ecfd488e1dc60ff049fec073c1e22dfe7de30a3e4e8c851bb875a95'
-            '585678708ae9f1e883668fe2d1686e11d35aea9854fae60eb20bb6f02f0490ef'
-            '0b6c3ee516608ce04d7133db52cadfa1be5d885b3f82bb39dc5897b213847e0d'
-            '5e79c40cf3ab93348fc89e97890198601767ea2c8fea89ea76088c17a2b35962'
-            'b747f7a95e5533cdf22cd538d88fe1ac0a1aa86d349ffa24e3419848f69a2d79')
+            'dd4bd23f57bfcf60abb2e0c4902840df3fed6eed82674bbe5d98ff0f9d7b4ee5'
+            '4b1cbc2a653e327d0cd293f61a66b86575709a1b58c6b36fe25a18411692fd27')
 
 prepare() {
-  cd $pkgname-source
+  cd $pkgname-$pkgver-source
 
-  mkdir build
+  test -d build || mkdir build
 }
 
 build() {
-  cd $pkgname-source/build
-  
+  cd $pkgname-$pkgver-source/build
+
   ../configure \
     --prefix=/opt/TeXLive \
+    --datarootdir=/opt/TeXLive \
     --disable-native-texlive-build \
-    --disable-xindy \
+    --disable-multiplatform \
+    --disable-t1utils \
+    --disable-dump-share \
+    --disable-aleph \
+    --enable-luatex \
+    --disable-bibtexu \
+    --disable-psutils \
     --enable-shared \
     --disable-static \
+    --with-clisp-runtime=default \
     --with-banner-add="/KZL" \
     --with-system-harfbuzz \
     --with-system-icu \
@@ -52,58 +55,42 @@ build() {
     --with-system-cairo \
     --with-system-pixman \
     --with-system-gd \
+    --with-system-freetype2 \
+    --with-freetype2-libdir=/usr/lib \
+    --with-freetype2-include=/usr/include/freetype2 \
     --with-system-libpng \
     --with-system-libpaper \
     --with-system-zlib \
     --without-x
-
-  # ../configure \
-  #   --prefix=/usr \
-  #   --sysconfdir=/etc \
-  #   --datarootdir=/usr/share \
-  #   --datadir=/usr/share \
-  #   --mandir=/usr/share/man \
-  #   --enable-shared \
-  #   --enable-luatex \
-  #   --disable-static \
-  #   --disable-multiplatform \
-  #   --disable-native-texlive-build \
-  #   --disable-dump-share \
-  #   --disable-psutils \
-  #   --with-banner-add="/KZL" \
-  #   --with-system-cairo \
-  #   --with-system-freetype2 \
-  #   --with-freetype2-libdir=/usr/lib \
-  #   --with-freetype2-include=/usr/include/freetype2 \
-  #   --with-system-gd \
-  #   --with-system-gmp \
-  #   --with-system-graphite2 \
-  #   --with-system-harfbuzz \
-  #   --with-system-icu \
-  #   --with-system-libpaper \
-  #   --with-system-libpng \
-  #   --with-system-mpfr \
-  #   --with-system-pixman \
-  #   --with-system-poppler \
-  #   --with-system-zlib \
-  #   --with-system-zziplib
+    
+    # --prefix=/opt/TeXLive/${pkgver:0:4} \
+    # --bindir=/opt/TeXLive/${pkgver:0:4}/bin/$(uname -m | sed -e 's/$/-linux/') \
+    # --libdir=/opt/TeXLive/${pkgver:0:4}/lib \
+    # --includedir=/opt/TeXLive/${pkgver:0:4}/include \
+    # --datarootdir=/opt/TeXLive/${pkgver:0:4}/ \
+    # --infodir=/opt/TeXLive/${pkgver:0:4}/texmf-dist/doc/info \
+    # --mandir=/opt/TeXLive/${pkgver:0:4}/texmf-dist/doc/man \
 
   make
 }
 
 check() {
-  cd $pkgname-source/build
+  cd $pkgname-$pkgver-source/build
 
-  make check || warning "Check failed."
+  make -k check || warning "Check failed."
 }
 
 package() {
-  cd $pkgname-source/build
+  cd $pkgname-$pkgver-source/build
 
-  make DESTDIR="$pkgdir/" install
-  make DESTDIR="$pkgdir/" texlinks
+  make DESTDIR="$pkgdir/" install-strip
+  # make DESTDIR="$pkgdir/" texlinks
 
-  # tar -xvf "$srcdir"/$pkgname-$_texmfver-texmf.tar.xz -C "$pkgdir"/usr/share/ --skip-old-files --strip-components=1
+  # install -dm755 "$pkgdir"/opt/TeXLive/${pkgver:0:4}/tlpkg/
+  # tar -xf "$srcdir"/$pkgname-$pkgver-tlpdb-full.tar.gz -C "$pkgdir"/opt/TeXLive/${pkgver:0:4}/tlpkg/
+  # install -Dm644 "$srcdir"/$pkgname-$pkgver-extra/tlpkg/TeXLive/* -t "$pkgdir"/opt/TeXLive/${pkgver:0:4}/tlpkg/TeXLive/
+
+  tar -xf "$srcdir"/$pkgname-$pkgver-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
 
   # # install config files to $TEXMFSYSCONFIG tree
   # msg2 "Installing the /etc/texmf tree"
@@ -130,11 +117,13 @@ package() {
   # # replace upstream texmfcnf.lua
   # install -Dm644 "$srcdir"/texmfcnf.lua -t "$pkgdir"/usr/share/texmf-dist/web2c/
 
-  # # texlive fonts
-  # install -dm755 "$pkgdir"/etc/fonts/conf.avail/
-  # install -Dm644 "$srcdir"/09-texlive-fonts.conf "$pkgdir"/etc/fonts/conf.avail/
+  echo "export PATH=\$PATH:/opt/TeXLive/bin" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/texlive.sh
 
-  # # cleanup
-  # rm -rf "$pkgdir"/usr/share/texmf-dist/scripts/context/stubs/mswin/
-  # rm -rf "$pkgdir"/usr/bin/tlmgr
+  # texlive fonts
+  install -dm755 "$pkgdir"/etc/fonts/conf.avail/
+  install -Dm644 "$srcdir"/09-texlive-fonts.conf "$pkgdir"/etc/fonts/conf.avail/
+
+  # cleanup
+  rm -rf "$pkgdir"/usr/share/texmf-dist/scripts/context/stubs/mswin/
+  rm -rf "$pkgdir"/usr/bin/tlmgr
 }
