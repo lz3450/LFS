@@ -91,8 +91,6 @@ package() {
   make DESTDIR="$pkgdir/" texlinks
 
   install -Dm644 "$srcdir"/$pkgname-$pkgver-source/texk/tests/TeXLive/* -t "$pkgdir"/opt/TeXLive/texmf-dist/scripts/texlive/TeXLive/
-  # tar -xf "$srcdir"/$pkgname-$pkgver-tlpdb-full.tar.gz -C "$pkgdir"/opt/TeXLive/${pkgver:0:4}/tlpkg/
-  # install -Dm644 "$srcdir"/$pkgname-$pkgver-extra/tlpkg/TeXLive/* -t "$pkgdir"/opt/TeXLive/${pkgver:0:4}/tlpkg/TeXLive/
 
   tar -xf "$srcdir"/$pkgname-$pkgver-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
 
@@ -106,6 +104,6 @@ package() {
   install -Dm644 "$srcdir"/09-texlive-fonts.conf "$pkgdir"/etc/fonts/conf.avail/
 
   # cleanup
-  rm -rf "$pkgdir"/usr/share/texmf-dist/scripts/context/stubs/mswin/
-  rm -rf "$pkgdir"/usr/bin/tlmgr
+  rm -rf "$pkgdir"/opt/TeXLive/texmf-dist/scripts/context/stubs/mswin/
+  rm -rf "$pkgdir"/opt/TeXLive/bin/tlmgr
 }
