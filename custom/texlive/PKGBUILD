@@ -90,30 +90,11 @@ package() {
   make DESTDIR="$pkgdir/" install-strip
   make DESTDIR="$pkgdir/" texlinks
 
-  # install -dm755 "$pkgdir"/opt/TeXLive/${pkgver:0:4}/tlpkg/
+  install -Dm644 "$srcdir"/$pkgname-$pkgver-source/texk/tests/TeXLive/* -t "$pkgdir"/opt/TeXLive/texmf-dist/scripts/texlive/TeXLive/
   # tar -xf "$srcdir"/$pkgname-$pkgver-tlpdb-full.tar.gz -C "$pkgdir"/opt/TeXLive/${pkgver:0:4}/tlpkg/
   # install -Dm644 "$srcdir"/$pkgname-$pkgver-extra/tlpkg/TeXLive/* -t "$pkgdir"/opt/TeXLive/${pkgver:0:4}/tlpkg/TeXLive/
 
   tar -xf "$srcdir"/$pkgname-$pkgver-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
-
-  # # install config files to $TEXMFSYSCONFIG tree
-  # msg2 "Installing the /etc/texmf tree"
-  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/chktex/chktexrc \
-  #   -t "$pkgdir"/etc/texmf/chktex/
-  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/dvipdfmx/dvipdfmx.cfg \
-  #   -t "$pkgdir"/etc/texmf/dvipdfmx/
-  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/dvips/config/config.ps \
-  #   -t "$pkgdir"/etc/texmf/dvips/config/
-  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/tex/generic/config/language.{dat,def} \
-  #   -t "$pkgdir"/etc/texmf/tex/generic/config/                       
-  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/tex/generic/tex-ini-files/pdftexconfig.tex \
-  #   -t "$pkgdir"/etc/texmf/tex/generic/tex-ini-files/
-  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/ttf2pk/ttf2pk.cfg \
-  #   -t "$pkgdir"/etc/texmf/ttf2pk/
-  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/web2c/{fmtutil-hdr.cnf,mktex.cnf,updmap-hdr.cfg} \
-  #   -t "$pkgdir"/etc/texmf/web2c/
-  # install -Dm755 "$pkgdir"/usr/share/texmf-dist/xdvi/XDvi \
-  #   -t "$pkgdir"/etc/texmf/xdvi/
 
   # replace upstream texmf.cnf and texmfcnf.lua
   install -Dm644 "$srcdir"/texmf{.cnf,cnf.lua} -t "$pkgdir"/opt/TeXLive/texmf-dist/web2c/
