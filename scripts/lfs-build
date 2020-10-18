@@ -3,7 +3,7 @@
 # lfs-build
 #
 
-VERSION=1.0
+VERSION=1.1
 LOGDIR=/tmp
 
 # arguments/options
@@ -19,39 +19,42 @@ stage0_pkgs=(
 )
 
 stage1_pkgs=(
-    linux-api-headers glibc glibc32 binutils gcc libtool
+    linux-api-headers glibc binutils gcc libtool
 )
 
 stage2_pkgs=(
-    binutils glibc glibc32 gcc libtool
+    binutils glibc gcc libtool
     filesystem
     bash
-    pacman
+    fakeroot pacman
     linux linux-firmware
 )
 
 stage3_pkgs=(
-    # python perl ruby git
-    # cmake meson ninja
-    # systemd dbus
-    # nvidia cuda cudnn nccl intel-mkl lapack
-    # zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
-    # arch-install-scripts pacman-contrib
-    # wpa_supplicant
-    # libusb usbutils
-    # dosfstools nano parted tmux 
-    # ca-certificates curl wget
-    texlive
+    python perl ruby git
+    cmake meson ninja
+    systemd dbus
+    nvidia cuda cudnn nccl intel-mkl lapack
+    zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
+    arch-install-scripts pacman-contrib
+    wpa_supplicant
+    libusb usbutils
+    dosfstools nano parted tmux 
+    ca-certificates curl wget
+    gobject-introspection graphite harfbuzz ghostscript texlive
     acl attr
 )
 
 # functions
 
-stage0_init() {
-    update-repo --clear $TARGET
-    update-repo $TARGET
+prepare() {
     (yes yes || :) | sudo pacman -Scc --config $PACMAN_CONF
     (yes yes || :) | sudo pacman -Syy --config $PACMAN_CONF
+}
+
+stage0_prepare() {
+    update-repo --clear $TARGET
+    update-repo $TARGET
 }
 
 build() {
@@ -71,7 +74,7 @@ build() {
     case $pkg in
         *)
             update-repo $TARGET
-            (yes yes || :) | sudo pacman -Sy --config $PACMAN_CONF --overwrite "*" $pkg
+            (yes yes || :) | sudo pacman -Sddy --config $PACMAN_CONF --overwrite "*" $pkg
             ;;
     esac
 }
@@ -119,12 +122,14 @@ if [ -d /tmp/makepkg ]; then
 fi
 
 case $STAGE in
-    0) stage0_init; pkgs=${stage0_pkgs[@]} ;;
+    0) stage0_prepare; pkgs=${stage0_pkgs[@]} ;;
     1) pkgs=${stage1_pkgs[@]} ;;
     2) pkgs=${stage2_pkgs[@]} ;;
     3) pkgs=${stage3_pkgs[@]} ;;
     *) printf "unknown stage \"$STAGE\""; exit 1 ;;
 esac
+
+prepare
 
 for p in ${pkgs[@]}; do
     echo "building $p ..."
