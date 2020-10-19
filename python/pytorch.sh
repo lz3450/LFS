@@ -33,6 +33,11 @@ export USE_OPENCV=OFF
 export PYTORCH_BUILD_VERSION="1.6.0"
 export PYTORCH_BUILD_NUMBER=1
 
+export CPPFLAGS="-D_FORTIFY_SOURCE=2"
+export CFLAGS="-march=native -O2 -pipe -fno-plt"
+export CXXFLAGS="-march=native -O2 -pipe -fno-plt"
+export LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
+
 sudo pacman -Sy --needed --noconfirm ffmpeg gflags google-glog intel-mkl nccl lapack
 
 cd $ROOTDIR
