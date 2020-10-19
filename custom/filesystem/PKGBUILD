@@ -118,8 +118,6 @@ package() {
   # var
   install -dm1777 var/{tmp,spool/mail}
   ln -s spool/mail var/mail
-  ln -s ../run var/run
-  ln -s ../run/lock var/lock
 
   # sysctl
   install -Dm644 "$srcdir"/sysctl usr/lib/sysctl.d/10-kzl.conf
