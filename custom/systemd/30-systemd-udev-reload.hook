@@ -8,4 +8,4 @@ Target = usr/lib/udev/rules.d/*
 [Action]
 Description = Reloading device manager configuration...
 When = PostTransaction
-Exec = /usr/bin/udevadm control --reload
+Exec = usr/bin/udevadm control --reload

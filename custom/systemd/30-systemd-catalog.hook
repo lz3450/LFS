@@ -8,4 +8,4 @@ Target = usr/lib/systemd/catalog/*
 [Action]
 Description = Updating journal message catalog...
 When = PostTransaction
-Exec = /usr/bin/journalctl --update-catalog
+Exec = usr/bin/journalctl --update-catalog

@@ -7,4 +7,4 @@ Target = usr/lib/sysusers.d/*.conf
 [Action]
 Description = Creating system user accounts...
 When = PostTransaction
-Exec = /usr/bin/systemd-sysusers
+Exec = usr/bin/systemd-sysusers

@@ -7,4 +7,4 @@ Target = usr/lib/binfmt.d/*.conf
 [Action]
 Description = Registering binary formats...
 When = PostTransaction
-Exec = /usr/lib/systemd/systemd-binfmt
+Exec = usr/lib/systemd/systemd-binfmt
