@@ -43,7 +43,10 @@ stage3_pkgs=(
     ca-certificates curl wget
     gobject-introspection graphite harfbuzz ghostscript texlive
     acl attr
+    rsync
 )
+
+# TODO: xxhash lz4 openssl popt
 
 # functions
 
