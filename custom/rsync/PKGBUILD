@@ -1,0 +1,41 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=rsync
+pkgver=3.2.3
+pkgrel=1
+epoch=1
+pkgdesc="'A fast and versatile file copying tool for remote and local files"
+arch=('x86_64')
+url="https://rsync.samba.org/"
+depends=(acl lz4 openssl popt xxhash)
+# backup=(etc/rsyncd.conf)
+source=(git+https://github.com/WayneD/rsync#tag=v$pkgver?signed)
+sha256sums=('SKIP')
+validpgpkeys=('0048C8B026D4C96F0E589C2F6C859FB14B96A8C5')
+
+# TODO: rsyncd
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+		--disable-debug \
+    --disable-md2man \
+		--with-included-popt=no \
+		--with-included-zlib=no
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make test
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir/" install
+}
