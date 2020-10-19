@@ -3,6 +3,7 @@
 pkgname=linux
 pkgver=5.4.70
 pkgrel=1
+epoch=1
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
 url="https://www.kernel.org"
@@ -52,6 +53,5 @@ package() {
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
   cp -a build "$pkgdir"/usr/lib/modules/$kernelrelease/build
-  rm -rf build
   cp -a . "$pkgdir"/usr/lib/modules/$kernelrelease/source
 }
