@@ -7,10 +7,9 @@ epoch=1
 pkgdesc="Freedesktop.org message bus system"
 arch=('x86_64')
 url="https://wiki.freedesktop.org/www/Software/dbus/"
-depends=(expat)
+depends=(audit expat)
 makedepends=(autoconf-archive)
-optdepends=(audit)
-provides=(libdbus)
+provides=(libdbus libdbus-1.so)
 source=(git+https://gitlab.freedesktop.org/dbus/dbus.git#tag=$pkgname-$pkgver?signed
         dbus-reload.hook)
 sha256sums=('SKIP'
@@ -31,14 +30,9 @@ build() {
     --libexecdir=/usr/lib/dbus-$pkgver \
     --sysconfdir=/etc \
     --localstatedir=/var \
-    --docdir=/usr/share/doc/dbus-$pkgver \
     runstatedir=/run \
     --disable-static \
-    --disable-verbose-mode \
-    --disable-checks \
-    --disable-asserts \
-    --disable-xml-docs \
-    --disable-doxygen-docs \
+    --enable-libaudit \
     --enable-inotify \
     --enable-systemd \
     --enable-user-session \
