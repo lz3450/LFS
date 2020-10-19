@@ -43,6 +43,7 @@ stage3_pkgs=(
     ca-certificates curl wget
     gobject-introspection graphite harfbuzz ghostscript texlive
     acl attr
+    openssh
     rsync
 )
 
