@@ -38,6 +38,8 @@ export CFLAGS="-march=native -O2 -pipe -fno-plt"
 export CXXFLAGS="-march=native -O2 -pipe -fno-plt"
 export LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
 
+TORCHVISION_VERSION=0.7.0
+
 sudo pacman -Sy --needed --noconfirm ffmpeg gflags google-glog intel-mkl nccl lapack
 
 cd $ROOTDIR
@@ -49,6 +51,15 @@ git clone https://github.com/pytorch/pytorch.git -b v$PYTORCH_BUILD_VERSION --re
 cd pytorch
 git submodule update --init --recursive
 
+# pytorch
 sudo pip install --no-binary :all: -r requirements.txt
 TORCH_CUDA_ARCH_LIST="6.1" python setup.py build
+sudo python setup.py install
+
+# torchvision
+cd $ROOTDIR
+git clone https://github.com/pytorch/vision.git -b v$TORCHVISION_VERSION
+cd vision
+
+python setup.py build
 sudo python setup.py install
