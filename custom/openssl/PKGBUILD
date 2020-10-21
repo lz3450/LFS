@@ -1,0 +1,47 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=openssl
+pkgver=1.1.1h
+pkgrel=1
+pkgdesc="The Open Source toolkit for Secure Sockets Layer and Transport Layer Security"
+arch=('x86_64')
+url="https://www.openssl.org"
+backup=(etc/ssl/openssl.cnf)
+source=(https://www.openssl.org/source/$pkgname-$pkgver.tar.gz{,.asc})
+sha256sums=('5c9ca8774bd7b03e5784f26ae9e9e6d749c9da2438545077e6b3d755a06595d9'
+            'SKIP')
+validpgpkeys=('7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./Configure \
+    --prefix=/usr \
+    --libdir=lib \
+    --openssldir=/etc/ssl \
+    shared \
+    zlib-dynamic \
+    no-ssl3-method \
+    enable-ec_nistp_64_gcc_128 \
+    linux-x86_64 \
+    "-Wa,--noexecstack $CPPFLAGS $CFLAGS $LDFLAGS"
+
+  make depend
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+	make test
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" MANSUFFIX=ssl install_sw install_ssldirs install_man_docs
+
+  sed -e "s|./demoCA|/etc/ssl|" \
+      -i "$pkgdir"/etc/ssl/openssl.cnf \
+      -i "$pkgdir"/etc/ssl/misc/CA.pl
+}

@@ -1,0 +1,25 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=xxhash
+pkgver=0.8.0
+pkgrel=1
+epoch=1
+pkgdesc="Extremely fast non-cryptographic hash algorithm"
+arch=('x86_64')
+url="https://cyan4973.github.io/xxHash/"
+source=(git+https://github.com/Cyan4973/xxHash.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd xxHash
+
+  make PREFIX="/usr/"
+}
+
+package() {
+  cd xxHash
+
+  make DESTDIR="$pkgdir/" PREFIX="/usr/" install
+
+  chmod 555 "$pkgdir"/etc/ssl/certs/
+}

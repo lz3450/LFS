@@ -1,0 +1,27 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=popt
+pkgver=1.18
+pkgrel=1
+epoch=1
+pkgdesc="A commandline option parser"
+arch=('x86_64')
+url="http://rpm5.org"
+options=(staticlibs)
+source=(https://deb.debian.org/debian/pool/main/p/$pkgname/${pkgname}_${pkgver}.orig.tar.gz)
+sha256sums=('5159bc03a20b28ce363aa96765f37df99ea4d8850b1ece17d1e6ad5c24fdc5d1')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
