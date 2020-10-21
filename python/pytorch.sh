@@ -30,21 +30,19 @@ export USE_NUMPY=ON
 export USE_OPENCL=OFF
 export USE_OPENCV=OFF
 
-export PYTORCH_BUILD_VERSION="1.6.0"
+export PYTORCH_BUILD_VERSION="1.7.0-rc2"
 export PYTORCH_BUILD_NUMBER=1
 
 export CPPFLAGS="-D_FORTIFY_SOURCE=2"
-export CFLAGS="-march=native -O2 -pipe -fno-plt"
-export CXXFLAGS="-march=native -O2 -pipe -fno-plt"
+export CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt"
+export CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt"
 export LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
-
-TORCHVISION_VERSION=0.7.0
 
 sudo pacman -Sy --needed --noconfirm ffmpeg gflags google-glog intel-mkl nccl lapack
 
 cd $ROOTDIR
 if [ -d pytorch ]; then
-    rm -rf pytorch
+    sudo rm -rf pytorch
 fi
 
 git clone https://github.com/pytorch/pytorch.git -b v$PYTORCH_BUILD_VERSION --recursive
@@ -56,10 +54,6 @@ sudo pip install --no-binary :all: -r requirements.txt
 TORCH_CUDA_ARCH_LIST="6.1" python setup.py build
 sudo python setup.py install
 
-# torchvision
-cd $ROOTDIR
-git clone https://github.com/pytorch/vision.git -b v$TORCHVISION_VERSION
-cd vision
-
-python setup.py build
-sudo python setup.py install
+echo "#################################"
+echo " PyTorch installed successfully. "
+echo "#################################"
