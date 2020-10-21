@@ -13,8 +13,7 @@ backup=(etc/pacman.conf
 source=(https://sources.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz{,.sig})
 sha256sums=('bb201a9f2fb53c28d011f661d50028efce6eef2c1d2a36728bdd0130189349a0'
             'SKIP')
-validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD'
-              'B8151B117037781095514CA7BBDFFC92306B1121')
+validpgpkeys=('B8151B117037781095514CA7BBDFFC92306B1121')
               
 build() {
   cd $pkgname-$pkgver
