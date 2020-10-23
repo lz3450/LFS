@@ -118,7 +118,7 @@ done
 
 PACMAN_CONF=$ROOTDIR/config/pacman.conf
 MAKEPKG_CONF=$ROOTDIR/config/makepkg-$TARGET.conf
-REPODIR=/var/repository/$TARGET
+REPODIR=/home/.repository/$TARGET
 
 if [ -d /tmp/makepkg ]; then
     rm -rf /tmp/makepkg

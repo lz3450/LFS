@@ -78,7 +78,7 @@ package() {
 
 [custom]
 SigLevel = Optional TrustAll
-Server = file:///var/repository/\$repo
+Server = file:///home/.repository/\$repo
 
 # The testing repositories are disabled by default. To enable, uncomment the
 # repo name header and Include lines. You can add preferred servers immediately

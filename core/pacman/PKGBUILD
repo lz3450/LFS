@@ -91,14 +91,14 @@ package() {
 
 [core]
 SigLevel = Optional TrustAll
-Server = file:///var/repository/\$repo
+Server = file:///home/.repository/\$repo
 
 [extra]
 SigLevel = Optional TrustAll
-Server = file:///var/repository/\$repo
+Server = file:///home/.repository/\$repo
 
 [community]
 SigLevel = Optional TrustAll
-Server = file:///var/repository/\$repo
+Server = file:///home/.repository/\$repo
 EOF
 }
