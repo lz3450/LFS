@@ -1,0 +1,63 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=pam
+pkgver=1.4.0
+pkgrel=1
+epoch=1
+pkgdesc="PAM (Pluggable Authentication Modules) library"
+arch=('x86_64')
+url="http://linux-pam.org"
+depends=(libtirpc)
+provides=(pambase)
+conflicts=(pambase)
+replaces=(pambase)
+source=(https://github.com/linux-pam/linux-pam/releases/download/v$pkgver/Linux-PAM-$pkgver.tar.xz{,.asc}
+        other
+        system-auth
+        system-local-login
+        system-login
+        system-remote-login
+        system-services)
+sha256sums=('cd6d928c51e64139be3bdb38692c68183a509b83d4f2c221024ccd4bcddfd034'
+            'SKIP'
+            '39f8e23c458d50a5d3ed09e921303e5af4f15dbed9dfadc127dd2ebe311a6ed5'
+            '60ca06d24fa5887ddf83fc6df76e70e82de3a2bc18249317eb917728cf8e282e'
+            '1832a52bcd761fbe9007d5adbd08e44b6a34b1d7b1ce689bfbe73dbcab7ff838'
+            '68da3b853873306abd586600e6c193d624b4898c40189f45ecfd823a453f6d73'
+            '1832a52bcd761fbe9007d5adbd08e44b6a34b1d7b1ce689bfbe73dbcab7ff838'
+            '985bba1357fc2e128234ff4f9503f47d0b6ad403dc433c34cfd1ef3e438487f2')
+validpgpkeys=('8C6BFD92EE0F42EDF91A6A736D1A7F052E5924BB')
+
+build() {
+  cd Linux-PAM-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --libdir=/usr/lib \
+    --disable-db
+
+  make
+}
+
+check() {
+  cd Linux-PAM-$pkgver
+
+  make check
+}
+
+package() {
+  cd Linux-PAM-$pkgver
+
+  make DESTDIR="$pkgdir/" SCONFIGDIR="/etc/security/" install
+
+  rm -rf "$pkgdir"/usr/share/doc/Linux-PAM/index.html
+
+  install -dm755 "$pkgdir"/etc/pam.d/
+  install -Dm644 "$srcdir"/other "$pkgdir"/etc/pam.d/
+  install -Dm644 "$srcdir"/system-auth "$pkgdir"/etc/pam.d/
+  install -Dm644 "$srcdir"/system-local-login "$pkgdir"/etc/pam.d/
+  install -Dm644 "$srcdir"/system-login "$pkgdir"/etc/pam.d/
+  install -Dm644 "$srcdir"/system-remote-login "$pkgdir"/etc/pam.d/
+  install -Dm644 "$srcdir"/system-services "$pkgdir"/etc/pam.d/
+}
