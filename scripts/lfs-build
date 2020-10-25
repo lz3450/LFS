@@ -13,39 +13,43 @@ STAGE=0
 
 # packages
 
+# preparation
 stage0_pkgs=(
     base
     pacman
 )
 
+# toolchain
 stage1_pkgs=(
     linux-api-headers glibc binutils gcc libtool
+    binutils glibc gcc libtool
 )
 
+# base
 stage2_pkgs=(
-    binutils glibc gcc libtool
     filesystem
     bash
-    fakeroot pacman
+    dbus systemd
+    acl attr libxcrypt openssl libcap libcap-ng coreutils pam shadow util-linux
+    perl python
+    ca-certificates curl wget
+    git
+    fakeroot pacman arch-install-scripts pacman-contrib
+    dosfstools nano parted
+    openssh rsync
+    cmake meson ninja
     linux linux-firmware
 )
 
 stage3_pkgs=(
-    python perl ruby git
-    cmake meson ninja
-    systemd dbus
-    nvidia cuda cudnn nccl intel-mkl lapack
     zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
-    arch-install-scripts pacman-contrib
+    ruby 
+    nvidia cuda cudnn nccl intel-mkl lapack
     wpa_supplicant
     libusb usbutils
-    dosfstools nano parted tmux 
-    ca-certificates curl wget
+    tmux
     gobject-introspection graphite harfbuzz ghostscript texlive
-    acl attr
-    xxhash lz4 popt openssl
-    openssh
-    rsync
+    xxhash lz4 popt
 )
 
 # functions
