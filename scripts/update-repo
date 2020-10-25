@@ -19,7 +19,7 @@ update() {
     local pkg
     pkg=$2
 
-    pkgname=$pkg-[0-9]*.pkg.tar.zst
+    pkgname=$(find ~/makepkg/packages -type f -regex "$HOME/makepkg/packages/$pkg-[0-9]+:\([0-9]+\.?\)+-[0-9]+-\(x86_64\).pkg.tar.zst" -printf "%f\n")
 
     if [ -f ~/makepkg/packages/$pkgname ]; then
         sudo rm -f $REPODIR/$repo/$pkgname
@@ -27,7 +27,7 @@ update() {
         sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
     fi
 
-    if (( REPLACE )) && [ -f $REPODIR/$repo/$pkgname ] ; then
+    if (( REPLACE )) && [ -f $REPODIR/$repo/$pkgname ];then
         sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
     fi
 }
