@@ -1,0 +1,111 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=shadow
+pkgver=4.8.1
+pkgrel=1
+epoch=1
+pkgdesc="A package contains programs for handling passwords in a secure way"
+arch=('x86_64')
+url="https://github.com/shadow-maint/shadow"
+depends=(acl attr audit libxcrypt pam)
+backup=(etc/default/useradd
+        etc/login.defs
+        etc/pam.d/{chage,chgpasswd,chpasswd,groupadd,groupdel,groupmems,groupmod,newusers,shadow,passwd,useradd,userdel,usermod})
+source=(https://github.com/shadow-maint/shadow/releases/download/$pkgver/$pkgname-$pkgver.tar.xz{,.asc}
+        chgpasswd
+        chpasswd
+        defaults.pam
+        login.defs
+        newusers
+        passwd
+        shadow.service
+        shadow.timer
+        useradd.defaults)
+sha256sums=('a3ad4630bdc41372f02a647278a8c3514844295d36eefe68ece6c3a641c1ae62'
+            'SKIP'
+            '2e1c63f7293f465412a2743e023bd3127ea4120418f578ccd22e4e253c21739b'
+            '401b66d85ddbaad83a926dc538a868cb0fe10a36d080ff1a2a5f8279531df7e6'
+            '4902920671abb084ab6301302c62718fe22cdb38563f5f95771d54ac7aa70385'
+            '28840649091b80a8c0f28a5f17f65c860cabc5868ce52a9a3906843923e876e3'
+            '401b66d85ddbaad83a926dc538a868cb0fe10a36d080ff1a2a5f8279531df7e6'
+            '94f41220a4c7ecf5e93e1ae3a35ec5f1442e768fa19b353d2f16d1a3b54dfedf'
+            'c391494a31f3260a49887bd4109f87a3a8fc368b3ec89d9d15be7466bd8975cb'
+            '736eb7b16fc2fff9c902d4823641114338f290a6825e66831f41c5474e994207'
+            'bc9fef974321e399fb47c229a82e37d81a8f39424082ef8e4915d0dbee9ff7c2')
+validpgpkeys=('D5C2F9BFCA128BBA22A77218872F702C4D6E25A8')
+
+build() {
+  cd $pkgname-$pkgver
+  
+  ./configure \
+    --prefix=/usr \
+    --bindir=/usr/bin \
+    --sbindir=/usr/bin \
+    --sysconfdir=/etc \
+    --libdir=/usr/lib \
+    --disable-account-tools-setuid \
+    --with-audit \
+    --with-libpam \
+    --without-selinux \
+    --with-acl \
+    --with-attr \
+    --with-group-name-max-length=32
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  # login.defs
+  install -Dm644 "$srcdir"/login.defs "$pkgdir"/etc/
+
+  # useradd defaults
+  install -Dm600 "$srcdir"/useradd.defaults "$pkgdir"/etc/default/useradd
+
+  # PAM config - custom
+  rm "$pkgdir"/etc/pam.d/*
+  install -t "$pkgdir"/etc/pam.d -m644 "$srcdir"/{chgpasswd,chpasswd,newusers,passwd}
+  
+  # PAM config - from source
+  install -Dm644 etc/pam.d/groupmems "$pkgdir"/etc/pam.d/groupmems
+
+  # Use the 'defaults.pam' PAM file for other similar utilities
+  for file in chage groupadd groupdel groupmod shadow useradd usermod userdel; do
+    install -Dm644 "$srcdir"/defaults.pam "$pkgdir"/etc/pam.d/$file
+  done
+
+  # Remove broken tools
+  rm "$pkgdir"/usr/sbin/logoutd
+
+  # Remove utilities provided by util-linux
+  rm "$pkgdir"/usr/bin/{chfn,chsh,login,nologin,su,sg}
+  rm "$pkgdir"/usr/sbin/{vipw,vigr}
+  find "$pkgdir"/usr/share/man \
+    '(' -name 'chsh.1'    -o \
+        -name 'chfn.1'    -o \
+        -name 'su.1'      -o \
+        -name 'logoutd.8' -o \
+        -name 'login.1'   -o \
+        -name 'nologin.8' -o \
+        -name 'vipw.8'    -o \
+        -name 'vigr.8'    -o \
+        -name 'newgrp.1' ')' \
+    -delete
+  rmdir "$pkgdir"/usr/share/man/{fi,id,zh_TW}/man1
+  rmdir "$pkgdir"/usr/share/man/{fi,ko/man8}
+
+  # Keep newgrp, as sg is really an alias to it
+  mv "$pkgdir"/usr/bin/{newgrp,sg}
+
+  mv "$pkgdir"/usr/sbin/* "$pkgdir"/usr/bin
+  rmdir "$pkgdir"/usr/sbin
+
+  # systemd units
+  install -Dm644 "$srcdir"/shadow.timer "$pkgdir"/usr/lib/systemd/system/shadow.timer
+  install -Dm644 "$srcdir"/shadow.service "$pkgdir"/usr/lib/systemd/system/shadow.service
+  install -dm755 "$pkgdir"/usr/lib/systemd/system/timers.target.wants
+  ln -s ../shadow.timer "$pkgdir"/usr/lib/systemd/system/timers.target.wants/shadow.timer
+}
