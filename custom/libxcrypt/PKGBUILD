@@ -1,0 +1,44 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libxcrypt
+pkgver=4.4.17
+pkgrel=1
+epoch=1
+pkgdesc="Modern library for one-way hashing of passwords"
+arch=('x86_64')
+url="https://github.com/besser82/libxcrypt/"
+provides=(libcrypt.so)
+source=(git+https://github.com/besser82/libxcrypt.git#tag=v$pkgver?signed)
+sha256sums=('SKIP')
+validpgpkeys=('678CE3FEE430311596DB8C16F52E98007594C21D')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --disable-static \
+    --disable-failure-tokens \
+    --disable-obsolete-api \
+    --enable-hashes=strong,glibc
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir/" install
+}
