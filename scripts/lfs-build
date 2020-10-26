@@ -108,8 +108,6 @@ set -e -u -o pipefail
 # ensure we have a sane umask set
 umask 0022
 
-scriptdir=$(pwd)
-
 while (( "$#" )); do
 	case "$1" in
         -h|--help)      usage; exit 0 ;;
