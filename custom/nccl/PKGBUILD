@@ -11,16 +11,17 @@ makedepends=(cuda)
 source=(git+https://github.com/NVIDIA/nccl.git#tag=v$pkgver-$pkgrel)
 sha256sums=('SKIP')
 
+prepare() {
+  for f in $(find . -type f -exec grep 'BUILDDIR' {} + | awk -F':' '{ print $1 }' | uniq)
+  do
+    sed -i 's/BUILDDIR/_BUILDPATH/g' "$f"
+  done
+}
+
 build() {
   cd $pkgname
   
-  export NVCC_GENCODE="-gencode=arch=compute_52,code=sm_52 \
-                       -gencode=arch=compute_52,code=compute_52 \
-                       -gencode=arch=compute_53,code=sm_53 \
-                       -gencode=arch=compute_53,code=compute_53 \
-                       -gencode=arch=compute_60,code=sm_60 \
-                       -gencode=arch=compute_60,code=compute_60 \
-                       -gencode=arch=compute_61,code=sm_61 \
+  export NVCC_GENCODE="-gencode=arch=compute_61,code=sm_61 \
                        -gencode=arch=compute_61,code=compute_61 \
                        -gencode=arch=compute_62,code=sm_62 \
                        -gencode=arch=compute_62,code=compute_62 \
