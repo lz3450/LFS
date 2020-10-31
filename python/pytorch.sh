@@ -30,7 +30,7 @@ export USE_NUMPY=ON
 export USE_OPENCL=OFF
 export USE_OPENCV=OFF
 
-export PYTORCH_BUILD_VERSION="1.7.0-rc2"
+export PYTORCH_BUILD_VERSION="1.7.0"
 export PYTORCH_BUILD_NUMBER=1
 
 export CPPFLAGS="-D_FORTIFY_SOURCE=2"
@@ -51,9 +51,11 @@ git submodule update --init --recursive
 
 # pytorch
 sudo pip install --no-binary :all: -r requirements.txt
-TORCH_CUDA_ARCH_LIST="6.1" python setup.py build
-sudo python setup.py install
+TORCH_CUDA_ARCH_LIST="6.1;6.2;7.0;7.0+PTX;7.2;7.2+PTX;7.5;7.5+PTX;8.6;8.6+PTX" python setup.py bdist_wheel
+sudo mkdir -p /home/.repository/pip
+sudo cp dist/*.whl /home/.repository/pip
+pip install -U --user /home/.repository/pip/torch-$PYTORCH_BUILD_VERSION*-*-linux_aarch64.whl
 
 echo "#################################"
-echo " PyTorch installed successfully. "
+echo " PyTorch built successfully. "
 echo "#################################"
