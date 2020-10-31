@@ -54,7 +54,7 @@ sudo pip install --no-binary :all: -r requirements.txt
 TORCH_CUDA_ARCH_LIST="6.1;6.2;7.0;7.0+PTX;7.2;7.2+PTX;7.5;7.5+PTX;8.6;8.6+PTX" python setup.py bdist_wheel
 sudo mkdir -p /home/.repository/pip
 sudo cp dist/*.whl /home/.repository/pip
-pip install -U --user /home/.repository/pip/torch-$PYTORCH_BUILD_VERSION*-*-linux_aarch64.whl
+pip install -U --user /home/.repository/pip/torch-$PYTORCH_BUILD_VERSION-*-linux_aarch64.whl
 
 echo "#################################"
 echo " PyTorch built successfully. "
