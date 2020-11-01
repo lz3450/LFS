@@ -1,0 +1,32 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libtool
+pkgver=2.4.6
+pkgrel=1
+epoch=1
+pkgdesc="A generic library support script"
+arch=('aarch64')
+url="https://www.gnu.org/software/libtool"
+source=(https://ftpmirror.gnu.org/$pkgname/$pkgname-$pkgver.tar.gz)
+sha256sums=('e3bd4d5d3d025a36c21dd6af7ea818a2afcd4dfc1ea5a17b39d7854bcd0c06e3')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

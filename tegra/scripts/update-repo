@@ -1,0 +1,98 @@
+#!/bin/bash
+# 
+# update-repo
+#
+# 1.1: Add '--clear'.
+#
+
+VERSION=1.1
+REPODIR=/home/.repository
+
+# options
+REPLACE=0
+CLEAR=0
+
+# functions
+update() {
+    local repo
+    repo=$1
+    local pkg
+    pkg=$2
+
+    pkgname=$(find ~/makepkg/packages -type f -regex "$HOME/makepkg/packages/$pkg-[0-9]+:\([0-9]+\.?\)+-[0-9]+-aarch64.pkg.tar.*" -printf "%f\n")
+
+    if [ -f ~/makepkg/packages/$pkgname ]; then
+        sudo rm -f /var/repository/$repo/$pkgname
+        sudo mv ~/makepkg/packages/$pkgname $REPODIR/$repo
+        sudo repo-add -R $REPODIR/$repo/$repo.db.tar.xz $REPODIR/$repo/$pkgname
+    fi
+
+    if (( REPLACE )) && [ -f $REPODIR/$repo/$pkgname ] ; then
+        sudo repo-add -R $REPODIR/$repo/$repo.db.tar.xz $REPODIR/$repo/$pkgname
+    fi
+}
+
+usage() {
+	printf "update_repo (kzl-linux) %s\n" "$VERSION"
+	echo
+	printf "\"update-repo\" will update the pacman repository.\n"
+	echo
+	printf "Usage: update_repo [options] [repo]\n"
+	echo
+	echo "    -h, --help        display this help message and exit"
+	echo "    -v, --version     display version information and exit"
+    echo "    -R, --replace     replace old repo"
+    echo "    --clear           clear the specified repository"
+    echo
+}
+
+# program start
+
+# set -exu -o pipefail
+set -e -u -o pipefail
+
+# ensure we have a sane umask set
+umask 0022
+
+repo=
+
+while (( "$#" )); do
+	case "$1" in
+        -h|--help)      usage; exit 0 ;;
+        -v|--version)   printf "$VERSION"; exit 0 ;;
+		-R|--replace)   REPLACE=1; shift ;;
+        --clear)        CLEAR=1; shift ;; 
+        *)              repo="$1"; break 2 ;;
+	esac
+done
+
+case $repo in
+    tx2)                pkgs=$(ls $ROOTDIR/$repo/) ;;
+    # unknown repo
+    *)                  printf "unknown repo \"%s\".\n" "$repo"; exit 1 ;;
+esac
+
+if (( CLEAR )); then
+    sudo rm -rf $REPODIR/$repo
+    exit 0
+fi
+
+if [ ! -d $REPODIR/$repo ]; then
+    sudo mkdir -p $REPODIR/$repo
+fi
+
+if (( REPLACE )); then
+    sudo find $REPODIR/$repo -name "$repo.*" -delete
+fi
+
+if [ ! -f $REPODIR/$repo/$repo.db.tar.xz ]; then
+    sudo repo-add $REPODIR/$repo/$repo.db.tar.xz
+fi
+
+for p in ${pkgs[@]}; do
+    case $p in
+        openldap)   update $repo libldap ;;
+        lvm2)       update $repo lvm2; update $repo device-mapper ;;
+        *)          update $repo $p;;
+    esac
+done

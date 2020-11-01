@@ -1,0 +1,26 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=mpdecimal
+pkgver=2.5.0
+pkgrel=1
+epoch=1
+pkgdesc="Package for correctly-rounded arbitrary precision decimal floating point arithmetic"
+arch=('aarch64')
+url="https://www.bytereef.org/mpdecimal/index.html"
+source=(https://www.bytereef.org/software/$pkgname/releases/$pkgname-$pkgver.tar.gz)
+sha256sums=('15417edc8e12a57d1d9d75fa7e3f22b158a3b98f44db9d694cfd2acde8dfa0ca')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr/local
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

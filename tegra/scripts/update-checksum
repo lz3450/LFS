@@ -1,0 +1,23 @@
+#!/bin/bash
+# 
+# update_checksum
+#
+
+set -e -u -o pipefail
+
+update() {
+    local pkg
+    pkg=$1
+
+    cd "$pkg"
+
+    updpkgsums
+    # gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
+}
+
+
+for p in $(ls -d $ROOTDIR/tx2/*); do
+    update $p &
+done
+
+wait
