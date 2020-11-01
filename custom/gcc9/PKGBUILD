@@ -3,8 +3,8 @@
 # order
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
-pkgname=gcc8
-pkgver=8.4.0
+pkgname=gcc9
+pkgver=9.3.0
 _islver=0.21
 pkgrel=1
 epoch=1
@@ -12,13 +12,13 @@ pkgdesc="The GNU Compiler Collection ($pkgver)"
 arch=('x86_64')
 url="https://gcc.gnu.org"
 depends=(libmpc)
-provides=(gcc8-libs gcc8-fortran)
-conflicts=(gcc8-libs gcc8-fortran)
-replaces=(gcc8-libs gcc8-fortran)
+provides=(gcc9-libs gcc9-fortran)
+conflicts=(gcc9-libs gcc9-fortran)
+replaces=(gcc9-libs gcc9-fortran)
 options=(!emptydirs)
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         http://isl.gforge.inria.fr/isl-$_islver.tar.xz)
-sha256sums=('e30a6e52d10e1f27ed55104ad233c30bd1e99cfb5ff98ab022dc941edd1b2dd4'
+sha256sums=('71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1'
             'SKIP'
             '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960')
 validpgpkeys=('33C235A34C46AA3FFB293709A328C3A2C3C45C06')
@@ -86,7 +86,7 @@ package() {
 
   make DESTDIR="$pkgdir/" install
 
-  ln -s gcc-8 "$pkgdir"/usr/bin/cc-8
+  ln -s gcc-9 "$pkgdir"/usr/bin/cc-9
 
   rm -rf "$pkgdir"/usr/lib/{libcc1.la,libcc1.so,libcc1.so.0,libcc1.so.0.0.0}
   rm -rf "$pkgdir"/usr/lib/gcc/x86_64-pc-linux-gnu/lib/
