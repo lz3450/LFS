@@ -1,32 +1,31 @@
 #!/bin/bash
 # 
-# lfs-build
+# build
 #
 
 VERSION=1.1
-LOGDIR=/tmp
 
 # arguments/options
 
-TARGET=''
+TARGET=
 STAGE=0
 
-# packages
+# kzl packages
 
 # preparation
-stage0_pkgs=(
+kzl_stage0_pkgs=(
     base
     pacman
 )
 
 # toolchain
-stage1_pkgs=(
+kzl_stage1_pkgs=(
     linux-api-headers glibc binutils gcc libtool
     binutils glibc gcc libtool
 )
 
 # base
-stage2_pkgs=(
+kzl_stage2_pkgs=(
     filesystem
     bash
     dbus systemd
@@ -41,7 +40,7 @@ stage2_pkgs=(
     linux linux-firmware
 )
 
-stage3_pkgs=(
+kzl_stage3_pkgs=(
     zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
     ruby 
     nvidia cuda cudnn nccl intel-mkl lapack
@@ -51,6 +50,13 @@ stage3_pkgs=(
     gobject-introspection graphite harfbuzz ghostscript texlive
     xxhash lz4 popt
 )
+
+# ubuntu packages
+
+ubuntu_pkgs=(
+
+)
+
 
 # functions
 
@@ -68,7 +74,7 @@ build() {
     local pkg
     pkg=$1
 
-    cd $ROOTDIR/custom/$pkg
+    cd $ROOTDIR/$TARGET/pkgbuilds/$pkg
 
     local log
     log="$LOGDIR"/$pkg.stage$STAGE.log
@@ -89,13 +95,13 @@ build() {
 usage() {
 	printf "lfs-build (kzl-linux) %s\n" "$VERSION"
 	echo
-	printf "lfs-build will build custom packages from scratch.\n"
+	printf "lfs-build will build packages from scratch.\n"
 	echo
 	printf "Usage: lfs-build [options]\n"
 	echo
 	echo "    -h, --help        display this help message and exit"
 	echo "    -v, --version     display version information and exit"
-	echo "    -t, --target      target archtecture (custom, x86_64, ...)"
+	echo "    -t, --target      build target (kzl, rpi tegra, ubuntu)"
 	echo "    -s, --stage       stage (stage0 (default), stage1, stage2, stage3)"
     echo
 }
@@ -114,25 +120,38 @@ while (( "$#" )); do
         -v|--version)   printf "$VERSION"; exit 0 ;;
         -t|--target)    shift; TARGET="$1" ;;
         -s|--stage)     shift; STAGE="$1" ;;
+        *)              printf "unknown option \"$1\""; exit 1 ;;
 	esac
     shift
 done
 
-PACMAN_CONF=$ROOTDIR/config/pacman.conf
-MAKEPKG_CONF=$ROOTDIR/config/makepkg-$TARGET.conf
+BUILDDIR=
+LOGDIR=
 REPODIR=/home/.repository/$TARGET
 
-if [ -d /tmp/makepkg ]; then
-    rm -rf /tmp/makepkg
+case $TARGET in
+    kzl)            BUILDDIR=/tmp ;;
+    ubuntu|tegra)   BUILDDIR=/dev/shm ;;
+    *)              printf "unknown target \"$STAGE\""; exit 1 ;;
+esac
+
+LOGDIR=$BUILDDIR
+
+if [ -d $BUILDDIR/makepkg ]; then
+    rm -rf $BUILDDIR/makepkg
 fi
 
-case $STAGE in
-    0) stage0_prepare; pkgs=${stage0_pkgs[@]} ;;
-    1) pkgs=${stage1_pkgs[@]} ;;
-    2) pkgs=${stage2_pkgs[@]} ;;
-    3) pkgs=${stage3_pkgs[@]} ;;
-    *) printf "unknown stage \"$STAGE\""; exit 1 ;;
-esac
+if [ "$TARGET" = "kzl" ]; then
+    case $STAGE in
+        0) stage0_prepare; pkgs=${stage0_pkgs[@]} ;;
+        1) pkgs=${stage1_pkgs[@]} ;;
+        2) pkgs=${stage2_pkgs[@]} ;;
+        3) pkgs=${stage3_pkgs[@]} ;;
+        *) printf "unknown stage \"$STAGE\""; exit 1 ;;
+    esac
+elif [ "$TARGET" = "ubuntu" ]; then
+    pkgs=${ubuntu_pkgs[@]}
+fi
 
 prepare
 

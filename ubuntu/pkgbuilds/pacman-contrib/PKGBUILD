@@ -1,0 +1,46 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=pacman-contrib
+pkgver=1.2.0
+pkgrel=1
+epoch=1
+pkgdesc="Contributed scripts and tools for pacman systems"
+arch=('aarch64')
+url="https://git.archlinux.org/pacman-contrib.git/about/"
+depends=(pacman)
+optdepends=("mlocate: pacdiff"
+            "vim: default merge program for pacdiff")
+source=(https://git.archlinux.org/$pkgname.git/snapshot/$pkgname-$pkgver.tar.{gz,asc})
+sha256sums=('317f53819e35647a19138cb0d68e16206af4a80f52115a7cd622c4a367f914b7'
+            'SKIP')
+validpgpkeys=('5134EF9EAF65F95B6BB1608E50FB9B273A9D0BB5')
+
+prepare() {
+  cd pacman-contrib-$pkgver
+
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr/local \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --disable-doc
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

@@ -1,0 +1,70 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=python
+pkgver=3.9.0
+pkgrel=1
+epoch=1
+pkgdesc="Next generation of the python high-level scripting language"
+arch=('x86_64')
+url="https://www.python.org/"
+install=python.install
+source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc}
+        python.install)
+sha256sums=('9c73e63c99855709b9be0b3cc9e5b072cb60f37311e8c4e50f15576a0bf82854'
+            'SKIP'
+            'd190bd3596ed9ef2b424e9096e2e70906914ba36ab5de6600b2d35d0a013ebcf')
+validpgpkeys=('E3FF2839C048B25C084DEBE9B26995E310250568')
+
+prepare() {
+  sudo apt install -y \
+    libreadline-gplv2-dev \
+    libncursesw5-dev \
+    libssl-dev \
+    libsqlite3-dev \
+    tk-dev \
+    libgdbm-dev \
+    libc6-dev \
+    libbz2-dev \
+    valgrind \
+    liblzma-dev \
+    libgdbm-compat-dev \
+    libjpeg-dev \
+    libffi-dev \
+    libmpdec-dev \
+    g++
+}
+
+build() {
+  cd Python-$pkgver
+
+  CFLAGS="${CFLAGS/-O2/-O3} -fno-semantic-interposition"
+  LDFLAGS+=" -fno-semantic-interposition"
+
+  ./configure \
+    --prefix=/usr/local \
+    --enable-shared \
+    --enable-optimizations \
+    --enable-loadable-sqlite-extensions \
+    --enable-ipv6 \
+    --enable-big-digits \
+    --with-lto \
+    --with-system-expat \
+    --with-system-ffi \
+    --with-system-libmpdec \
+    --with-dbmliborder=gdbm:ndbm \
+    --with-valgrind \
+    --with-computed-gotos \
+    --with-ensurepip=no
+
+  make EXTRA_CFLAGS="$CFLAGS"
+}
+
+package() {
+  cd Python-$pkgver
+
+  CFLAGS="${CFLAGS/-O2/-O3}"
+
+  make DESTDIR="$pkgdir/" EXTRA_CFLAGS="$CFLAGS" install
+
+  chmod 775 "$pkgdir"/usr/local/bin
+}

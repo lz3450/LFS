@@ -6,10 +6,8 @@ pkgrel=1
 epoch=1
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
-depends=(curl gpgme libarchive pacman-mirrorlist archlinux-keyring)
-checkdepends=(fakechroot)
-backup=(etc/pacman.conf
-        etc/makepkg.conf)
+backup=(usr/local/etc/pacman.conf
+        usr/local/etc/makepkg.conf)
 source=(https://sources.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz{,.sig})
 sha256sums=('bb201a9f2fb53c28d011f661d50028efce6eef2c1d2a36728bdd0130189349a0'
             'SKIP')
@@ -19,9 +17,9 @@ build() {
   cd $pkgname-$pkgver
 
   ./configure \
-    --prefix=/usr \
-    --sysconfdir=/etc \
+    --prefix=/usr/local \
     --localstatedir=/var \
+    --datarootdir=/usr/share \
     --disable-doc \
     --with-pkg-ext='.pkg.tar.zst' \
     --with-src-ext='.src.tar.zst' \
@@ -34,7 +32,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check
+  make check || warning "Checking failed."
 }
 
 package() {
@@ -42,13 +40,13 @@ package() {
 
   make DESTDIR="$pkgdir/" install
   
-  sed -e '/CHOST=/s/x86_64-pc-linux-gnu/x86_64-kzl-linux-gnu/' \
+  sed -e '/CHOST=/s/aarch64-unknown-linux-gnu/aarch64-linux-gnu/' \
       -e '/CPPFLAGS=/s/^#//' \
       -e '/CPPFLAGS=/s/"\(.*\)"/"-D_FORTIFY_SOURCE=2"/' \
       -e '/CFLAGS=/s/^#//' \
-      -e '/CFLAGS=/s/"\(.*\)"/"-march=native -O2 -pipe -fno-plt"/' \
+      -e '/CFLAGS=/s/"\(.*\)"/"-O2 -pipe -fno-plt"/' \
       -e '/CXXFLAGS=/s/^#//' \
-      -e '/CXXFLAGS=/s/"\(.*\)"/"-march=native -O2 -pipe -fno-plt"/' \
+      -e '/CXXFLAGS=/s/"\(.*\)"/"-O2 -pipe -fno-plt"/' \
       -e '/LDFLAGS=/s/^#//' \
       -e '/LDFLAGS=/s/"\(.*\)"/"-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"/' \
       -e '/RUSTFLAGS=/s/^#//' \
@@ -61,6 +59,7 @@ package() {
       -e '/DEBUG_CXXFLAGS=/s/"\(.*\)"/"-g -fvar-tracking-assignments"/' \
       -e '/DEBUG_RUSTFLAGS=/s/"\(.*\)"/"-C debuginfo=2"/' \
       -e '/BUILDDIR=\/tmp\/makepkg/s/^#//' \
+      -e '/BUILDDIR=\/tmp\/makepkg/s/tmp/dev\/shm/' \
       -e '/PKGDEST=/s/^#//' \
       -e '/SRCDEST=/s/^#//' \
       -e '/SRCPKGDEST=/s/^#//' \
@@ -72,40 +71,14 @@ package() {
       -e '/SRCPKGDEST=/s/\/home/~\/makepkg/' \
       -e '/LOGDEST=/s/\/home/~\/makepkg/' \
       -e '/PACKAGER=/s/John Doe <john@doe.com>/Zelun Kong <zelun.kong@outlook.com>/' \
-      -i "$pkgdir"/etc/makepkg.conf
+      -i "$pkgdir"/usr/local/etc/makepkg.conf
 
-  cat >> "$pkgdir"/etc/pacman.conf << EOF
+  cat >> "$pkgdir"/usr/local/etc/pacman.conf << EOF
 
-[custom]
+[ubuntu]
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
-
-# The testing repositories are disabled by default. To enable, uncomment the
-# repo name header and Include lines. You can add preferred servers immediately
-# after the header, and they will be used before the default mirrors.
-
-#[testing]
-#Include = /etc/pacman.d/mirrorlist
-
-[core]
-Include = /etc/pacman.d/mirrorlist
-
-[extra]
-Include = /etc/pacman.d/mirrorlist
-
-#[community-testing]
-#Include = /etc/pacman.d/mirrorlist
-
-[community]
-Include = /etc/pacman.d/mirrorlist
-
-# If you want to run 32 bit applications on your x86_64 system,
-# enable the multilib repositories as required here.
-
-#[multilib-testing]
-#Include = /etc/pacman.d/mirrorlist
-
-#[multilib]
-#Include = /etc/pacman.d/mirrorlist
 EOF
+
+  chmod 775 "$pkgdir"/usr/local/bin/
 }

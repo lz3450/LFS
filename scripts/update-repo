@@ -11,6 +11,7 @@ REPODIR=/home/.repository
 # options
 REPLACE=0
 CLEAR=0
+TARGET=
 
 # functions
 update() {
@@ -27,7 +28,7 @@ update() {
         sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
     fi
 
-    if (( REPLACE )) && [ -f $REPODIR/$repo/$pkgname ];then
+    if (( REPLACE )) && [ -f $REPODIR/$repo/$pkgname ]; then
         sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
     fi
 }
@@ -41,6 +42,7 @@ usage() {
 	echo
 	echo "    -h, --help        display this help message and exit"
 	echo "    -v, --version     display version information and exit"
+	echo "    -t, --target      build target (kzl, rpi tegra, ubuntu)"
     echo "    -R, --replace     replace old repo"
     echo "    --clear           clear the specified repository"
     echo
@@ -54,50 +56,43 @@ set -e -u -o pipefail
 # ensure we have a sane umask set
 umask 0022
 
-repo=
-
 while (( "$#" )); do
 	case "$1" in
         -h|--help)      usage; exit 0 ;;
         -v|--version)   printf "$VERSION"; exit 0 ;;
+        -t|--target)    shift; TARGET="$1" ;;
 		-R|--replace)   REPLACE=1; shift ;;
         --clear)        CLEAR=1; shift ;; 
-        *)              repo="$1"; break 2 ;;
+        *)              printf "unknown option \"$1\"\n"; exit 1 ;;
 	esac
+    shift
 done
 
-case $repo in
-    core)               pkgs=$(ls $ROOTDIR/$repo/)
-                        pkgs+=" linux" ;;
-    extra|community)    pkgs=$(ls $ROOTDIR/$repo/)
-                        pkgs+=" minizip"
-                        pkgs+=" python-audit" ;;
-    custom)             pkgs=$(ls $ROOTDIR/$repo/) ;;
+case $TARGET in
+    kzl|ubuntu)     pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds) ;;
     # unknown repo
-    *)                  printf "unknown repo \"%s\".\n" "$repo"; exit 1 ;;
+    *)              printf "unknown target \"%s\".\n" "$TARGET"; exit 1 ;;
 esac
 
 if (( CLEAR )); then
-    sudo rm -rf $REPODIR/$repo
+    sudo rm -rf $REPODIR/$TARGET
     exit 0
 fi
 
-if [ ! -d $REPODIR/$repo ]; then
-    sudo mkdir -p $REPODIR/$repo
+if [ ! -d $REPODIR/$TARGET ]; then
+    sudo mkdir -p $REPODIR/$TARGET
 fi
 
 if (( REPLACE )); then
-    sudo find $REPODIR/$repo -name "$repo.*" -delete
+    sudo find $REPODIR/$TARGET -name "$TARGET.*" -delete
 fi
 
-if [ ! -f $REPODIR/$repo/$repo.db.tar.zst ]; then
-    sudo repo-add $REPODIR/$repo/$repo.db.tar.zst
+if [ ! -f $REPODIR/$TARGET/$TARGET.db.tar.zst ]; then
+    sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.zst
 fi
 
 for p in ${pkgs[@]}; do
     case $p in
-        openldap)   update $repo libldap ;;
-        lvm2)       update $repo lvm2; update $repo device-mapper ;;
-        *)          update $repo $p;;
+        *)          update $TARGET $p;;
     esac
 done
