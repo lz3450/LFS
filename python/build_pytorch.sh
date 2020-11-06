@@ -51,7 +51,7 @@ export LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
 #     libavcodec-dev libavformat-dev libavdevice-dev libavfilter-dev libavresample-dev libavutil-dev libpostproc-dev libswresample-dev libswscale-dev
 
 # sudo apt update
-# sudo apt install -y libassuan-dev intel-mkl-full\
+# sudo apt install -y libassuan-dev intel-mkl-full ffmpeg \
 #     libgflags-dev libgoogle-glog-dev libnuma-dev libopenblas-dev libatlas-base-dev liblapack-dev libopenmpi-dev \
 #     libavcodec-dev libavformat-dev libavdevice-dev libavfilter-dev libavresample-dev libavutil-dev libpostproc-dev libswresample-dev libswscale-dev
 
