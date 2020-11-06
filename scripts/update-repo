@@ -7,6 +7,7 @@
 
 VERSION=1.1
 REPODIR=/home/.repository
+PACKAGEDIR=~/makepkg/packages
 
 # options
 REPLACE=0
@@ -21,15 +22,17 @@ update() {
     pkg=$2
 
     pkgname=$(find ~/makepkg/packages -type f -regex "$HOME/makepkg/packages/$pkg-[0-9]+:\([0-9]+\.?\)+-[0-9]+-\(x86_64\).pkg.tar.zst" -printf "%f\n")
-
-    if [ -f ~/makepkg/packages/$pkgname ]; then
+    if [ -f $PACKAGEDIR/$pkgname ]; then
         sudo rm -f $REPODIR/$repo/$pkgname
-        sudo mv ~/makepkg/packages/$pkgname $REPODIR/$repo
+        sudo mv $PACKAGEDIR/$pkgname $REPODIR/$repo
         sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
     fi
 
-    if (( REPLACE )) && [ -f $REPODIR/$repo/$pkgname ]; then
-        sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
+    if (( REPLACE )) ; then
+        pkgname=$(find $REPODIR/$repo -type f -regex "$REPODIR/$repo/$pkg-[0-9]+:\([0-9]+\.?\)+-[0-9]+-\(x86_64\).pkg.tar.zst" -printf "%f\n")
+        if [ -f $REPODIR/$repo/$pkgname ]; then
+            sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
+        fi
     fi
 }
 
@@ -61,8 +64,8 @@ while (( "$#" )); do
         -h|--help)      usage; exit 0 ;;
         -v|--version)   printf "$VERSION"; exit 0 ;;
         -t|--target)    shift; TARGET="$1" ;;
-		-R|--replace)   REPLACE=1; shift ;;
-        --clear)        CLEAR=1; shift ;; 
+		-R|--replace)   REPLACE=1 ;;
+        --clear)        CLEAR=1 ;; 
         *)              printf "unknown option \"$1\"\n"; exit 1 ;;
 	esac
     shift
@@ -91,8 +94,8 @@ if [ ! -f $REPODIR/$TARGET/$TARGET.db.tar.zst ]; then
     sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.zst
 fi
 
-for p in ${pkgs[@]}; do
-    case $p in
-        *)          update $TARGET $p;;
+for pkg in ${pkgs[@]}; do
+    case $pkg in
+        *)          update $TARGET $pkg ;;
     esac
 done
