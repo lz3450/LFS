@@ -1,0 +1,46 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=node
+pkgver=15.1.0
+pkgrel=1
+epoch=1
+pkgdesc="javascript"
+arch=('x86_64')
+url="https://nodejs.org/"
+depends=(icu libnghttp2 libuv openssl)
+makedepends=(procps-ng)
+provides=(nodejs npm)
+conflicts=(nodejs npm)
+replaces=(nodejs npm)
+source=($pkgname-$pkgver.tar.gz::https://github.com/nodejs/node/archive/v$pkgver.tar.gz)
+sha256sums=('0ea4f9e1aae21aac619c86374a27376e4afa2c6e830d5f4ed8cb67dcdd9a4851')
+
+build() {
+  cd $pkgname-$pkgver
+
+  CFLAGS="${CFLAGS/-O2/-O3}"
+  CXXFLAGS="${CXXFLAGS/-O2/-O3}"
+
+  ./configure \
+    --prefix=/usr \
+    --experimental-http-parser \
+    --shared-libuv \
+    --shared-nghttp2 \
+    --shared-openssl \
+    --shared-zlib \
+    --with-intl=system-icu
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make test || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
