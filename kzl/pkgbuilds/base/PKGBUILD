@@ -26,8 +26,6 @@ depends=(
   libtool
   m4
   make
-  meson
-  ninja
   patch
   perl
   pkgconf
