@@ -1,0 +1,27 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=debootstrap
+pkgver=1.0.123
+pkgrel=1
+epoch=1
+pkgdesc="Bootstrap a basic Debian system"
+arch=('any')
+url="https://tracker.debian.org/pkg/debootstrap"
+license=('GPL')
+depends=(wget)
+optdepends=("gnupg: check release signatures")
+source=(https://salsa.debian.org/installer-team/debootstrap/-/archive/$pkgver/debootstrap-$pkgver.tar.bz2)
+sha256sums=('ede3cc581720852010372ded8d51c93b9d9df970036be56394a9564033800b87')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  sed -e 's/sbin/bin/g' -i Makefile
+  sed -e 's|export PATH|export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"|' -i debootstrap
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
