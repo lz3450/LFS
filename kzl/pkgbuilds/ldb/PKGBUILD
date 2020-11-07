@@ -1,0 +1,35 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=ldb
+pkgver=2.2.0
+pkgrel=1
+epoch=2
+pkgdesc="Schema-less, ldap like, API and database"
+arch=('x86_64')
+url="https://ldb.samba.org/"
+depends=(lmdb popt talloc tdb tevent)
+makedepends=(cmocka)
+source=(https://samba.org/ftp/$pkgname/$pkgname-$pkgver.tar.{gz,asc})
+sha256sums=('134bb51769709af59f30bf468e454d1377a8096acd4e80dcb42fd264f558bd5f'
+            'SKIP')
+validpgpkeys=('9147A339719518EE9011BCB54793916113084025')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --with-modulesdir=/usr/lib/ldb/modules \
+    --with-privatelibdir=/usr/lib/ldb \
+    --prefix=/usr \
+    --bundled-libraries=NONE \
+    --disable-rpath \
+    --disable-rpath-install
+    
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

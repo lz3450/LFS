@@ -1,0 +1,32 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=tevent
+pkgver=0.10.2
+pkgrel=1
+epoch=1
+pkgdesc="Event system based on the talloc memory management library"
+arch=('x86_64')
+url="https://tevent.samba.org/"
+depends=(talloc)
+source=(https://samba.org/ftp/$pkgname/$pkgname-${pkgver}.tar.{gz,asc})
+sha256sums=('f8427822e5b2878fb8b28d6f50d96848734f3f3130612fb574fdd2d2148a6696'
+            'SKIP')
+validpgpkeys=('9147A339719518EE9011BCB54793916113084025')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --bundled-libraries=NONE \
+    --disable-rpath \
+    --disable-rpath-install
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

@@ -1,0 +1,30 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=tdb
+pkgver=1.4.3
+pkgrel=1
+epoch=1
+pkgdesc="Trivial Database similar to GDBM but allows simultaneous commits"
+arch=('x86_64')
+url="https://tdb.samba.org/"
+source=(https://samba.org/ftp/$pkgname/$pkgname-$pkgver.tar{.gz,.asc})
+sha256sums=('c8058393dfa15f47e11ebd2f1d132693f0b3b3b8bf22d0201bfb305026f88a1b'
+            'SKIP')
+validpgpkeys=('9147A339719518EE9011BCB54793916113084025')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc/tdb \
+    --localstatedir=/var
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
