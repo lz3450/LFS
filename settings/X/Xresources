@@ -1,0 +1,6 @@
+!! Urxvt
+URxvt.font: -*-terminus-medium-*-*-*-18-*-*-*-*-*-*-*
+urxvt.background: black
+urxvt.foreground: white
+urxvt.scrollBar: false
+urxvt.saveLines: 1000000

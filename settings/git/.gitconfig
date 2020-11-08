@@ -1,0 +1,5 @@
+[user]
+	email = zelun.kong@outlook.com
+	name = Kong, Zelun
+[credential]
+	helper = cache --timeout=86400

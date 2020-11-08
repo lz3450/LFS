@@ -1,0 +1,2 @@
+efibootmgr --disk /dev/nvme0n1 --part 1 --create --label "Arch Linux"  --loader /vmlinuz-linux --unicode "root=UUID=3382177c-c6e8-419a-8d85-2ccd6b886f93 rw initrd=/intel-ucode.img initrd=/initramfs-linux.img  drm.edid_firmware=edid/edid_new.bin"
+#efibootmgr --disk /dev/nvme0n1 --part 1 --create --label "Arch Linux i915_debug"  --loader /vmlinuz-linux --unicode "root=UUID=2f17144f-5d89-407b-bbbf-6fdc3db4c933 rw initrd=/intel-ucode.img initrd=/initramfs-linux.img drm.debug=0xe drm_kms_helper.edid_firmware=edid/edid_new.bin"
