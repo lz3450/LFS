@@ -6,7 +6,7 @@ set -e
 apt update || :
 apt install -y \
     gnupg \
-    wget \
+    wget curl \
     dialog \
     wpasupplicant \
     git \
