@@ -24,3 +24,4 @@
 !**/GlobalProtect_UI_tar-5.1.0.0-101.tgz
 core/wpa_supplicant/CVE-2019-16275.patch
 core/wpa_supplicant/roam-properties.patch
+*.img
