@@ -1,0 +1,13 @@
+[Unit]
+Description=Aria2 WebUI
+After=aria2cd.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/kzl/aria2/webui-aria2
+ExecStart=/usr/bin/node node-server.js 3001
+RestartSec=60
+Restart=always
+
+[Install]
+WantedBy=default.target
