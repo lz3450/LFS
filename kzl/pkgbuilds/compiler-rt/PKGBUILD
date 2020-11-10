@@ -1,0 +1,40 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=compiler-rt
+pkgver=11.0.0
+pkgrel=1
+epoch=1
+pkgdesc="Compiler runtime libraries for clang"
+arch=('x86_64')
+url="https://compiler-rt.llvm.org/"
+makedepends=(llvm)
+options=(staticlibs)
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/$pkgname-$pkgver.src.tar.xz{,.sig})
+sha256sums=('374aff82ff573a449f9aabbd330a5d0a441181c535a3599996127378112db234'
+            'SKIP')
+validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
+
+build() {
+  cd $pkgname-$pkgver.src
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS" \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+package() {
+  cd $pkgname-$pkgver.src
+
+  cmake --build build --target install -- DESTDIR="$pkgdir/"
+
+  install -dm755 "$pkgdir"/usr/lib/clang/$pkgver/
+  install -dm755 "$pkgdir"/usr/share/clang/$pkgver/
+  mv "$pkgdir"/usr/lib/{linux,clang/$pkgver/}
+  mv "$pkgdir"/usr/share/{*.txt,clang/$pkgver/}
+}
