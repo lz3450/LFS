@@ -38,7 +38,7 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --sysconfdir=/etc/postgresql \
+    --sysconfdir=/etc \
     --datadir=/usr/share/postgresql \
     --enable-nls \
     --disable-rpath \
@@ -58,7 +58,6 @@ build() {
     --with-system-tzdata=/usr/share/zoneinfo
 
   make world
-
   make -C src/pl/plpython all
   make -C contrib/hstore_plpython all
   make -C contrib/ltree_plpython all
@@ -87,9 +86,4 @@ package() {
   install -Dm644 "$srcdir"/$pkgname.service  "$pkgdir"/usr/lib/systemd/system/$pkgname.service
   install -Dm644 "$srcdir"/$pkgname.sysusers "$pkgdir"/usr/lib/sysusers.d/$pkgname.conf
   install -Dm644 "$srcdir"/$pkgname.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/$pkgname.conf
-
-  # clean up
-  rm -rf "$pkgdir"/usr/include/postgresql/internal
-  rm -rf "$pkgdir"/usr/include/libpq
-  find "$pkgdir"/usr/include -maxdepth 1 -type f -execdir rm {} +
 }
