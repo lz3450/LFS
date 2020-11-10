@@ -1,0 +1,42 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=redmine
+pkgver=4.1.1
+pkgrel=1
+epoch=1
+pkgdesc="A flexible project management web application written using Ruby on Rails framework"
+arch=('any')
+url="https://www.redmine.org"
+depends=(ruby libmagick libxml2 libxslt)
+makedepends=(postgresql)
+optdepends=("nginx: A supported application server"
+            "postgresql: PostgreSQL database support")
+source=($url/releases/$pkgname-$pkgver.tar.gz
+        redmine.service)
+sha256sums=('05faafe764330f2d77b0aacddf9d8ddce579c3d26bb8e03a7d6e7ff461f1cdda'
+            '8525b5914297613643716bf3e4d56b2abcae6b598c6bfd0649f83dc090eaa42e')
+
+build() {
+  cd $pkgname-$pkgver
+
+  bundle lock
+  BUNDLER_WITHOUT="development test" bundle install
+}
+
+package() {
+  install -dm755 "$pkgdir"/usr/share/webapps/
+  cp -a --no-preserve=ownership "$srcdir"/$pkgname-$pkgver "$pkgdir"/usr/share/webapps/redmine
+
+  install -Dm0644 "$srcdir"/redmine.service "$pkgdir"/usr/lib/systemd/system/redmine.service
+  
+  cd "$pkgdir"/usr/share/webapps/redmine
+  rm -rf files
+  install -dm0755 -o http -g http "$pkgdir"/var/lib/redmine/files
+  rm -rf log
+  install -dm0755 -o http -g http "$pkgdir"/var/log/redmine
+  mv tmp "$pkgdir"/var/lib/redmine/tmp
+  chown -R http:http "$pkgdir"/var/lib/redmine/tmp
+  ln -s /var/lib/redmine/files files
+  ln -s /var/log/redmine log
+  ln -s /var/lib/redmine/tmp tmp
+}
