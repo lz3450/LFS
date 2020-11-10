@@ -3,11 +3,13 @@
 pkgname=libxml2
 pkgver=2.9.10
 pkgrel=1
+epoch=1
 pkgdesc="XML parsing library, version 2"
 arch=('x86_64')
 url="http://xmlsoft.org"
 depends=(icu)
-source=(git+https://gitlab.gnome.org/GNOME/libxml2.git#tag=v$pkgver)
+# source=(git+https://gitlab.gnome.org/GNOME/libxml2.git#tag=v$pkgver)
+source=(git+https://gitlab.gnome.org/GNOME/libxml2.git#commit=7c06d99e1f4f853e3c5b307c0dc79c8a32a09855)
 sha256sums=('SKIP')
 
 prepare() {
@@ -21,14 +23,13 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --with-threads \
     --with-history \
+    --with-icu \
     --with-python=/usr/bin/python3 \
-    --with-icu
-
-  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' libtool
+    --with-threads
 
   PYTHONHASHSEED=0 make
+  find doc -type f -exec chmod 0644 {} +
 }
 
 package() {
