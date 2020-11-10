@@ -1,0 +1,88 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=postgresql
+pkgver=12.4
+pkgrel=1
+epoch=1
+pkgdesc="Sophisticated object-relational DBMS"
+arch=('x86_64')
+url="https://www.postgresql.org/"
+depends=(clang icu libldap libxml2 llvm openssl tcl)
+provides=(postgresql-libs)
+conflicts=(postgresql-libs)
+replaces=(postgresql-libs)
+backup=(etc/logrotate.d/postgresql
+        etc/pam.d/postgresql)
+source=(https://ftp.postgresql.org/pub/source/v$pkgver/postgresql-$pkgver.tar.bz2
+        postgresql.logrotate
+        postgresql.pam
+        postgresql.service
+        postgresql.sysusers
+        postgresql.tmpfiles)
+sha256sums=('bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc'
+            'a32d8907fe4c1dd5643cffa46c7ae045c02dc6c3ee4d35bd6f91a8c9ae9dc4f0'
+            'a3e28676e9f11136690f6d46ca15b1d548cec2e29db043206ab09582671dc2d5'
+            '25f51732c48d1eb166d5e2b31c9be85c235ee22e979dc8c1b79085e57e0b453c'
+            'a9f80b218555af3e9db14a8e1bb927ed2c83937fa2008b433b83497f9c13f111'
+            'e088406e7fa1e74d62acf701e9216d34ec07a943628c70bc930446075a133551')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc/postgresql \
+    --datadir=/usr/share/postgresql \
+    --enable-nls \
+    --disable-rpath \
+    --enable-thread-safety \
+    --with-llvm \
+    --with-icu \
+    --with-tcl \
+    --with-perl \
+    --with-python \
+    --with-gssapi \
+    --with-pam \
+    --with-ldap \
+    --with-openssl \
+    --with-systemd \
+    --with-uuid=e2fs \
+    --with-libxml \
+    --with-system-tzdata=/usr/share/zoneinfo
+
+  make world
+
+  make -C src/pl/plpython all
+  make -C contrib/hstore_plpython all
+  make -C contrib/ltree_plpython all
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+  make -C contrib DESTDIR="$pkgdir/" install
+
+  # install plpython3
+  make -C src/pl/plpython DESTDIR="$pkgdir/" install
+  make -C contrib/hstore_plpython DESTDIR="$pkgdir/" install
+  make -C contrib/ltree_plpython DESTDIR="$pkgdir/" install
+
+  # configuration files
+  install -Dm644 "$srcdir"/$pkgname.pam "$pkgdir"/etc/pam.d/$pkgname
+  install -Dm644 "$srcdir"/$pkgname.logrotate "$pkgdir"/etc/logrotate.d/$pkgname
+  install -Dm644 "$srcdir"/$pkgname.service  "$pkgdir"/usr/lib/systemd/system/$pkgname.service
+  install -Dm644 "$srcdir"/$pkgname.sysusers "$pkgdir"/usr/lib/sysusers.d/$pkgname.conf
+  install -Dm644 "$srcdir"/$pkgname.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/$pkgname.conf
+
+  # clean up
+  rm -rf "$pkgdir"/usr/include/postgresql/internal
+  rm -rf "$pkgdir"/usr/include/libpq
+  find "$pkgdir"/usr/include -maxdepth 1 -type f -execdir rm {} +
+}
