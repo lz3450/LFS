@@ -8,6 +8,9 @@ pkgdesc="An interpreter for the PostScript language"
 arch=('x86_64')
 url="https://www.ghostscript.com/"
 depends=(fontconfig ijs jbig2dec lcms2 libcups libidn libjpeg libpaper libpng libtiff libxt openjpeg2)
+makedepends=(freeglut glu gtk3)
+optdepends=("texlive: dvipdf"
+            "gtk3: gsx")
 provides=(ghostxps ghostpcl)
 conflicts=(ghostxps ghostpcl)
 replaces=(ghostxps ghostpcl)
@@ -38,26 +41,32 @@ build() {
     --with-jbig2dec \
     --with-x \
     --with-drivers=ALL \
-    --with-fontpath="/usr/share/fonts/gsfonts/"
+    --with-fontpath=/usr/share/fonts/gsfonts
 
   make so-only
-}
-
-check() {
-  cd ghostpdl-$pkgver
-
-  make check || warning "Check failed."
 }
 
 package() {
   cd ghostpdl-$pkgver
 
   make DESTDIR="$pkgdir/" \
-    CUPSSERVERROOT="${pkgdir}$(cups-config --serverroot)" \
-    CUPSSERVERBIN="${pkgdir}$(cups-config --serverbin)" \
+    CUPSSERVERROOT="$pkgdir$(cups-config --serverroot)" \
+    CUPSSERVERBIN="$pkgdir$(cups-config --serverbin)" \
     soinstall
 
-  ln -s gsc "${pkgdir}"/usr/bin/gs
+  ln -s gsc "$pkgdir"/usr/bin/gs
 
-  rm -r "${pkgdir}"/usr/share/man/de
+  install -D sobin/gxpsc -t "$pkgdir"/usr/bin
+  ln -s gxpsc "$pkgdir"/usr/bin/gxps
+
+  install -D sobin/libgxps.so.${pkgver%.*} -t "$pkgdir"/usr/lib
+  ln -s libgxps.so.${pkgver%.*} "$pkgdir"/usr/lib/libgxps.so.${pkgver%%.*}
+
+  install -D sobin/gpcl6c -t "$pkgdir"/usr/bin
+  ln -sf gpcl6c "$pkgdir"/usr/bin/gpcl6
+
+  install -D sobin/libgpcl6.so.${pkgver%.*} -t "$pkgdir"/usr/lib 
+  ln -s libgpcl6.so.${pkgver%.*} "$pkgdir"/usr/lib/libgpcl6.so.${pkgver%%.*}
+
+  rm -r "$pkgdir"/usr/share/man/de
 }
