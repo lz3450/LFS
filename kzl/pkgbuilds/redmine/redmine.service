@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=http
-Group=http
+User=redmine
+Group=redmine
 WorkingDirectory=/usr/share/webapps/redmine
 ExecStart=/usr/bin/ruby ./bin/rails server webrick -p 3000 -b 0.0.0.0 -e production
 RestartSec=60

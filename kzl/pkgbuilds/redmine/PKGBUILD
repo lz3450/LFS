@@ -12,12 +12,18 @@ makedepends=(postgresql)
 optdepends=("nginx: A supported application server"
             "postgresql: PostgreSQL database support")
 source=($url/releases/$pkgname-$pkgver.tar.gz
-        redmine.service)
+        Gemfile.local
+        redmine.service
+        redmine.sysusers)
 sha256sums=('05faafe764330f2d77b0aacddf9d8ddce579c3d26bb8e03a7d6e7ff461f1cdda'
-            '8525b5914297613643716bf3e4d56b2abcae6b598c6bfd0649f83dc090eaa42e')
+            '28a291fc28d6e90e273e3259160eedd81ec4981ffaa02a21da2968f71bb7f309'
+            '32d84968d3dd73f4d311ba362301e210a924ccf57ea808f586d8436608d7cad8'
+            'aee03a345f4bf9b01ebfc24884790560942fea9e99bee9c41544f70c5d0015b5')
 
 build() {
   cd $pkgname-$pkgver
+  
+  cp "$srcdir"/Gemfile.local Gemfile.local
 
   bundle lock
   BUNDLER_WITHOUT="development test" bundle install
@@ -27,15 +33,15 @@ package() {
   install -dm755 "$pkgdir"/usr/share/webapps/
   cp -a --no-preserve=ownership "$srcdir"/$pkgname-$pkgver "$pkgdir"/usr/share/webapps/redmine
 
-  install -Dm0644 "$srcdir"/redmine.service "$pkgdir"/usr/lib/systemd/system/redmine.service
+  install -Dm644 "$srcdir"/redmine.service "$pkgdir"/usr/lib/systemd/system/redmine.service
+  install -Dm644 "$srcdir"/$pkgname.sysusers "$pkgdir"/usr/lib/sysusers.d/$pkgname.conf
   
   cd "$pkgdir"/usr/share/webapps/redmine
   rm -rf files
-  install -dm0755 -o http -g http "$pkgdir"/var/lib/redmine/files
+  install -dm755 "$pkgdir"/var/lib/redmine/files
   rm -rf log
-  install -dm0755 -o http -g http "$pkgdir"/var/log/redmine
+  install -dm755 "$pkgdir"/var/log/redmine
   mv tmp "$pkgdir"/var/lib/redmine/tmp
-  chown -R http:http "$pkgdir"/var/lib/redmine/tmp
   ln -s /var/lib/redmine/files files
   ln -s /var/log/redmine log
   ln -s /var/lib/redmine/tmp tmp
