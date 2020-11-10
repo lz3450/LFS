@@ -7,7 +7,8 @@ epoch=1
 pkgdesc="Sophisticated object-relational DBMS"
 arch=('x86_64')
 url="https://www.postgresql.org/"
-depends=(clang icu libldap libxml2 llvm openssl tcl)
+depends=(clang icu krb5 libldap libxml2 llvm openssl tcl)
+optdepends=('tcl: PL/Tcl support')
 provides=(postgresql-libs)
 conflicts=(postgresql-libs)
 replaces=(postgresql-libs)
@@ -25,6 +26,12 @@ sha256sums=('bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc'
             '25f51732c48d1eb166d5e2b31c9be85c235ee22e979dc8c1b79085e57e0b453c'
             'a9f80b218555af3e9db14a8e1bb927ed2c83937fa2008b433b83497f9c13f111'
             'e088406e7fa1e74d62acf701e9216d34ec07a943628c70bc930446075a133551')
+
+prepare () {
+  cd $pkgname-$pkgver
+
+  sed -e '/\#define DEFAULT_PGSOCKET_DIR/s/\/tmp/\/run\/postgresql/' -i src/include/pg_config_manual.h
+}
 
 build() {
   cd $pkgname-$pkgver
