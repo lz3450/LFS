@@ -1,25 +1,25 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=krb5
-pkgver=1.18
+pkgver=1.18.2
 pkgrel=1
+epoch=1
 pkgdesc="The Kerberos network authentication system"
 arch=('x86_64')
 url="https://web.mit.edu/kerberos/"
 depends=(keyutils libldap)
 backup=(etc/krb5.conf
         var/lib/krb5kdc/kdc.conf)
-source=(https://web.mit.edu/kerberos/dist/krb5/$pkgver/$pkgname-$pkgver.tar.gz{,.asc})
-sha256sums=('73913934d711dcf9d5f5605803578edb44b9a11786df3c1b2711f4e1752f2c88'
+source=(https://web.mit.edu/kerberos/dist/krb5/${pkgver:0:4}/$pkgname-$pkgver.tar.gz{,.asc})
+sha256sums=('c6e4c9ec1a98141c3f5d66ddf1a135549050c9fab4e9a4620ee9b22085873ae0'
             'SKIP')
-validpgpkeys=('2C732B1C0DBEF678AB3AF606A32F17FD0055C305'
-              'C4493CB739F4A89F9852CBC20CBA08575F8372DF')
+validpgpkeys=('C4493CB739F4A89F9852CBC20CBA08575F8372DF')
 
 build() {
   cd $pkgname-$pkgver/src
 
-  export CFLAGS+=" -fPIC -fno-strict-aliasing -fstack-protector-all"
-  export CPPFLAGS+=" -I/usr/include/et"
+  CFLAGS+=" -fPIC -fno-strict-aliasing -fstack-protector-all"
+  CPPFLAGS+=" -I/usr/include/et"
 
   ./configure \
     --prefix=/usr \
