@@ -1,0 +1,75 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=imagemagick
+pkgver=7.0.10
+pkgrel=37
+epoch=1
+pkgdesc="An image viewing/manipulation program"
+arch=('x86_64')
+url="https://www.imagemagick.org/"
+depends=(fontconfig freetype2 lcms2 liblqr libltdl libpng libraqm libzip)
+makedepends=(chrpath djvulibre ghostscript jbigkit libheif libraw librsvg libtiff libwebp libwmf libxext libxml2 ocl-icd opencl-headers openexr openjpeg2)
+optdepends=("djvulibre: DJVU support"
+            "ghostscript: PS/PDF support"
+            "libheif: HEIF support"
+            "libraw: DNG support"
+            "librsvg: SVG support"
+            "libtiff: TIFF support"
+            "libwebp: WEBP support"
+            "libwmf: WMF support"
+            "libxml2: Magick Scripting Language"
+            "ocl-icd: OpenCL support"
+            "openexr: OpenEXR support"
+            "openjpeg2: JPEG2000 support"
+            "pango: text rendering")
+provides=(libmagick)
+backup=(etc/ImageMagick-${pkgver%%.*}/{colors,delegates,log,mime,policy,quantization-table,thresholds,type,type-{dejavu,ghostscript}}.xml)
+source=(https://imagemagick.org/download/ImageMagick-$pkgver-$pkgrel.tar.xz{,.asc})
+sha256sums=('9c2d5fd11fc4752986f70996a0975c3c39124500ab53330b09f5921441286d2b'
+            'SKIP')
+validpgpkeys=('D8272EF51DA223E4D05B466989AB63D48277377A')
+
+build() {
+  cd ImageMagick-$pkgver-$pkgrel
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --enable-opencl \
+    --with-modules \
+    --enable-hdri \
+    --disable-docs \
+    --without-dps \
+    --without-fftw \
+    --without-flif \
+    --without-fpx \
+    --without-gvc \
+    --without-jxl \
+    --with-perl \
+    --with-perl-options="INSTALLDIRS=vendor" \
+    --with-rsvg \
+    --with-wmf \
+    --with-dejavu-font-dir=/usr/share/fonts/TTF \
+    --with-gs-font-dir=/usr/share/fonts/gsfonts
+
+  make
+}
+
+check() {
+  cd ImageMagick-$pkgver-$pkgrel
+
+  ulimit -n 4096
+  make check || warning "Check failed."
+}
+
+package() {
+  cd ImageMagick-$pkgver-$pkgrel
+
+  make DESTDIR="$pkgdir/" install
+
+  find "$pkgdir"/usr/lib/perl5 -name "*.so" -exec chrpath -d {} +
+  rm "$pkgdir"/etc/ImageMagick-${pkgver%%.*}/type-{apple,urw-base35,windows}.xml
+  rm "$pkgdir"/usr/lib/*.la
+
+  sed -e '/<\/policymap>/i \ \ <policy domain="delegate" rights="none" pattern="gs" \/>' -i "$pkgdir"/etc/ImageMagick-7/policy.xml
+}
