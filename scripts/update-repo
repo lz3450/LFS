@@ -21,7 +21,7 @@ update() {
     local pkg
     pkg=$2
 
-    pkgname_regex="$pkg-[0-9]+:\([0-9]+\.?\)+\(\+[0-9]+\+g.+\)-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.zst"
+    pkgname_regex="$pkg-[0-9]+:\([0-9]+\.?\)+\(\+[0-9]+\+g.+\)?-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.zst"
 
     pkgname=$(find ~/makepkg/packages -type f -regex "$HOME/makepkg/packages/$pkgname_regex" -printf "%f\n")
     if [ -f $PACKAGEDIR/$pkgname ]; then

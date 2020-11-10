@@ -41,14 +41,16 @@ kzl_stage2_pkgs=(
 )
 
 kzl_stage3_pkgs=(
+    icu libldap krb5 libxcrypt 
+    llvm clang
     zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
-    ruby 
-    nvidia cuda cudnn nccl intel-mkl lapack
-    wpa_supplicant
+    ruby
     libusb usbutils
+    wpa_supplicant
+    nvidia cuda cudnn nccl intel-mkl lapack
     tmux
-    gobject-introspection graphite harfbuzz ghostscript texlive
-    xxhash lz4 popt
+    gobject-introspection graphite harfbuzz ghostscript xxhash lz4 popt texlive
+    
 )
 
 # ubuntu packages
