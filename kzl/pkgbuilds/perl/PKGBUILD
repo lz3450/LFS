@@ -23,7 +23,7 @@ build() {
     -Dman1ext=1perl \
     -Dman3ext=3perl \
     -Doptimize="$CFLAGS" \
-    -Dcccdlflags='-fPIC' \
+    -Dcccdlflags="-fPIC" \
     -Dldflags="$LDFLAGS" \
     -Dlddlflags="-shared $LDFLAGS" \
     -Duseshrplib \
