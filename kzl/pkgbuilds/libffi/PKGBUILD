@@ -3,11 +3,18 @@
 pkgname=libffi
 pkgver=3.3
 pkgrel=1
+epoch=1
 pkgdesc="Portable foreign function interface library"
 arch=('x86_64')
 url="https://sourceware.org/libffi/"
 source=(ftp://sourceware.org/pub/$pkgname/$pkgname-$pkgver.tar.gz)
 sha256sums=('72fba7922703ddfa7a028d513ac15a85c8d54c8d67f55fa5a4802885dc652056')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  autoreconf -fiv
+}
 
 build() {
   cd $pkgname-$pkgver
