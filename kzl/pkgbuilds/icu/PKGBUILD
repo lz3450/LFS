@@ -1,0 +1,37 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=icu
+pkgver=68.1
+pkgrel=1
+epoch=1
+pkgdesc="International Components for Unicode library"
+arch=('x86_64')
+url="http://site.icu-project.org/home"
+source=(https://github.com/unicode-org/icu/releases/download/release-${pkgver//./-}/${pkgname}4c-${pkgver//./_}-src.tgz{,.asc})
+sha256sums=('a9f2e3d8b4434b8e53878b4308bd1e6ee51c9c7042e2b1a376abefb6fbb29f2d'
+            'SKIP')
+validpgpkeys=('0E51E7F06EF719FBD072782A5F56E5AFA63CCD33')
+
+build() {
+  cd $pkgname/source
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --sysconfdir=/etc \
+    --mandir=/usr/share/man
+
+  make
+}
+
+check() {
+  cd $pkgname/source
+
+  make -k check
+}
+
+package() {
+  cd $pkgname/source
+
+  make DESTDIR="$pkgdir/" install
+}
