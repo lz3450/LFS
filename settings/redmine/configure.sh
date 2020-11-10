@@ -35,7 +35,7 @@ default:
 
   scm_subversion_command:
   scm_mercurial_command:
-  scm_git_command:
+  scm_git_command: /usr/bin/git
   scm_cvs_command:
   scm_bazaar_command:
 
@@ -63,3 +63,5 @@ cd /usr/share/webapps/redmine
 sudo -u redmine -g redmine bundle exec rake generate_secret_token
 sudo -u redmine -g redmine RAILS_ENV=production bundle exec rake db:migrate
 sudo -u redmine -g redmine RAILS_ENV=production bundle exec rake redmine:load_default_data
+
+sudo -u redmine -g redmine mkdir ~/repository
