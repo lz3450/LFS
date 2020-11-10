@@ -9,15 +9,9 @@ arch=('x86_64')
 url="https://www.python.org/"
 depends=(expat gdbm libffi libnsl openssl)
 makedepends=(mpdecimal sqlite valgrind)
-provides=(python-pip python-setuptools)
-conflicts=(python-pip python-setuptools)
-replaces=(python-pip python-setuptools)
-install=python.install
-source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc}
-        python.install)
+source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc})
 sha256sums=('9c73e63c99855709b9be0b3cc9e5b072cb60f37311e8c4e50f15576a0bf82854'
-            'SKIP'
-            '22b548343d32471d9fae6ec57fae832b569f29f9d9ec0763f84ac24b9a12bcce')
+            'SKIP')
 validpgpkeys=('E3FF2839C048B25C084DEBE9B26995E310250568')
 
 build() {
@@ -48,8 +42,6 @@ build() {
 
 package() {
   cd Python-$pkgver
-
-  CFLAGS="${CFLAGS/-O2/-O3}"
 
   make DESTDIR="$pkgdir/" EXTRA_CFLAGS="$CFLAGS" install
 
