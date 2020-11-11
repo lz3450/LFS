@@ -64,4 +64,7 @@ sudo -u redmine -g redmine bundle exec rake generate_secret_token
 sudo -u redmine -g redmine RAILS_ENV=production bundle exec rake db:migrate
 sudo -u redmine -g redmine RAILS_ENV=production bundle exec rake redmine:load_default_data
 
+# repository
 sudo -u redmine -g redmine mkdir ~/repository
+sudo -u redmine -g redmine chmod g+w ~/repository
+sudo -u redmine -g redmine setfacl -d -m g::rwx ~/repository
