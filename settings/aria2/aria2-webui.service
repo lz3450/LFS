@@ -4,7 +4,7 @@ After=aria2cd.service
 
 [Service]
 Type=simple
-WorkingDirectory=/home/kzl/aria2/webui-aria2
+WorkingDirectory=/home/kzl/.aria2/webui-aria2
 ExecStart=/usr/bin/node node-server.js 3001
 RestartSec=60
 Restart=always
