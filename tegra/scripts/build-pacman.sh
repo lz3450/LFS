@@ -6,20 +6,22 @@ BUILDDIR=/dev/shm
 PACMANVER=5.1.3
 
 sudo apt update
-sudo apt install -y curl libssl-dev libcurl4-openssl-dev libarchive-dev bsdtar libgpgme-dev fakeroot fakechroot
+sudo apt install -y curl libssl-dev libcurl4-openssl-dev libarchive-dev bsdtar libgpgme-dev fakeroot fakechroot m4 autoconf
 
 cd $BUILDDIR
-wget https://sources.archlinux.org/other/pacman/pacman-$PACMANVER.tar.gz
+if [ ! -f pacman-$PACMANVER.tar.gz ]; then
+    wget https://sources.archlinux.org/other/pacman/pacman-$PACMANVER.tar.gz
+fi
 tar -xf pacman-$PACMANVER.tar.gz
 cd pacman-$PACMANVER
 
 ./configure \
-    --prefix=/usr/local \
+    --prefix=/usr \
     --sysconfdir=/etc \
     --localstatedir=/var \
     --disable-doc \
-    --with-pkg-ext='.pkg.tar.xz' \
-    --with-src-ext='.src.tar.xz' \
+    --with-pkg-ext='.pkg.tar.gz' \
+    --with-src-ext='.src.tar.gz' \
     --with-scriptlet-shell=/bin/bash \
     --with-ldconfig=/sbin/ldconfig
 
@@ -63,7 +65,7 @@ sudo sed \
 
 sudo tee -a /etc/pacman.conf << EOF
 
-[tx2]
+[tegra]
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
 EOF

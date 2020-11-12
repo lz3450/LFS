@@ -17,12 +17,12 @@ build() {
   cd $pkgname-$pkgver
 
   ./configure \
-    --prefix=/usr/local \
+    --prefix=/usr \
     --sysconfdir=/etc \
     --localstatedir=/var \
     --disable-doc \
-    --with-pkg-ext='.pkg.tar.xz' \
-    --with-src-ext='.src.tar.xz' \
+    --with-pkg-ext='.pkg.tar.gz' \
+    --with-src-ext='.src.tar.gz' \
     --with-scriptlet-shell=/bin/bash \
     --with-ldconfig=/sbin/ldconfig
 
@@ -75,10 +75,8 @@ package() {
 
   cat >> "$pkgdir"/etc/pacman.conf << EOF
 
-[tx2]
+[tegra]
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
 EOF
-
-  chmod 2775 "$pkgdir"/usr/local/share/zsh/site-functions/
 }
