@@ -8,6 +8,7 @@
 VERSION=1.1
 REPODIR=/home/.repository
 PACKAGEDIR=~/makepkg/packages
+EXTENSION="zst"
 
 # options
 REPLACE=0
@@ -21,19 +22,19 @@ update() {
     local pkg
     pkg=$2
 
-    pkgname_regex="$pkg-[0-9]+:\([0-9]+\.?\)+\(\+[0-9]+\+g.+\)?-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.zst"
+    pkgname_regex="$pkg-[0-9]+:\([0-9]+\.?\)+\(\+[0-9]+\+g.+\)?-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.$EXTENSION"
 
     pkgname=$(find ~/makepkg/packages -type f -regex "$HOME/makepkg/packages/$pkgname_regex" -printf "%f\n")
     if [ -f $PACKAGEDIR/$pkgname ]; then
         sudo rm -f $REPODIR/$repo/$pkgname
         sudo mv $PACKAGEDIR/$pkgname $REPODIR/$repo
-        sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
+        sudo repo-add -R $REPODIR/$repo/$repo.db.tar.$EXTENSION $REPODIR/$repo/$pkgname
     fi
 
     if (( REPLACE )) ; then
         pkgname=$(find $REPODIR/$repo -type f -regex "$REPODIR/$repo/$pkgname_regex" -printf "%f\n")
         if [ -f $REPODIR/$repo/$pkgname ]; then
-            sudo repo-add -R $REPODIR/$repo/$repo.db.tar.zst $REPODIR/$repo/$pkgname
+            sudo repo-add -R $REPODIR/$repo/$repo.db.tar.$EXTENSION $REPODIR/$repo/$pkgname
         fi
     fi
 }
@@ -43,11 +44,11 @@ usage() {
 	echo
 	printf "\"update-repo\" will update the pacman repository.\n"
 	echo
-	printf "Usage: update_repo [options] [repo]\n"
+	printf "Usage: update_repo [ -R | --clear ] [ -t repo ]\n"
 	echo
 	echo "    -h, --help        display this help message and exit"
 	echo "    -v, --version     display version information and exit"
-	echo "    -t, --target      build target (kzl, rpi tegra, ubuntu)"
+	echo "    -t, --target      build target (kzl, rpi, tegra, ubuntu)"
     echo "    -R, --replace     replace old repo"
     echo "    --clear           clear the specified repository"
     echo
@@ -65,7 +66,7 @@ while (( "$#" )); do
 	case "$1" in
         -h|--help)      usage; exit 0 ;;
         -v|--version)   printf "$VERSION"; exit 0 ;;
-        -t|--target)    shift; TARGET="$1" ;;
+        -t|--target)    shift; TARGET="$1" EXTENSION="gz" ;;
 		-R|--replace)   REPLACE=1 ;;
         --clear)        CLEAR=1 ;; 
         *)              printf "unknown option \"$1\"\n"; exit 1 ;;
@@ -74,13 +75,14 @@ while (( "$#" )); do
 done
 
 case $TARGET in
-    kzl|ubuntu)     pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds) ;;
+    kzl|ubuntu|tegra)   pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds) ;;
     # unknown repo
-    *)              printf "unknown target \"%s\".\n" "$TARGET"; exit 1 ;;
+    *)                  printf "unknown target \"%s\".\n" "$TARGET"; exit 1 ;;
 esac
 
 if (( CLEAR )); then
     sudo rm -rf $REPODIR/$TARGET
+    echo "Repository \"$TARGET\" has been removed."
     exit 0
 fi
 
@@ -88,12 +90,16 @@ if [ ! -d $REPODIR/$TARGET ]; then
     sudo mkdir -p $REPODIR/$TARGET
 fi
 
+if [ ! -f $REPODIR/$TARGET ]; then
+    sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION
+fi
+
 if (( REPLACE )); then
     sudo find $REPODIR/$TARGET -name "$TARGET.*" -delete
 fi
 
-if [ ! -f $REPODIR/$TARGET/$TARGET.db.tar.zst ]; then
-    sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.zst
+if [ ! -f $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION ]; then
+    sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION
 fi
 
 for pkg in ${pkgs[@]}; do

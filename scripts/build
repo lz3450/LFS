@@ -8,7 +8,7 @@ VERSION=1.1
 # arguments/options
 
 TARGET=
-STAGE=0
+STAGE=
 
 # kzl packages
 
@@ -59,17 +59,22 @@ ubuntu_pkgs=(
 
 )
 
+# tegra packages
+
+tegra_pkgs=(
+    pacman pacman-contrib
+)
 
 # functions
 
 prepare() {
-    (yes yes || :) | sudo pacman -Scc --config $PACMAN_CONF
-    (yes yes || :) | sudo pacman -Syy --config $PACMAN_CONF
-}
+    (yes yes || :) | sudo pacman -Scc
 
-stage0_prepare() {
-    update-repo --clear $TARGET
-    update-repo $TARGET
+    if [ ! -f /home/.repository/$TARGET/$TARGET.db ]; then
+        update-repo -t $TARGET
+    fi
+
+    (yes yes || :) | sudo pacman -Syy
 }
 
 build() {
@@ -79,17 +84,23 @@ build() {
     cd $ROOTDIR/$TARGET/pkgbuilds/$pkg
 
     local log
-    log="$LOGDIR"/$pkg.stage$STAGE.log
+
+    if [ -z $STAGE ]; then
+        log="$LOGDIR"/$pkg.log
+    else
+        log="$LOGDIR"/$pkg.stage$STAGE.log
+    fi
+
     if [ -f $log ]; then
         rm $log
     fi
     
-    makepkg --config $MAKEPKG_CONF -scCf --skippgpcheck --nocheck --noconfirm &>> $log
+    makepkg -scCf --skippgpcheck --nocheck --noconfirm &>> $log
 
     case $pkg in
         *)
-            update-repo $TARGET
-            (yes yes || :) | sudo pacman -Sddy --config $PACMAN_CONF --overwrite "*" $pkg
+            update-repo -t $TARGET
+            (yes yes || :) | sudo pacman -Sddy --overwrite "*" $pkg # --config $PACMAN_CONF
             ;;
     esac
 }
@@ -113,7 +124,6 @@ usage() {
 set -e -u -o pipefail
 # set -x
 
-# ensure we have a sane umask set
 umask 0022
 
 while (( "$#" )); do
@@ -143,9 +153,10 @@ if [ -d $BUILDDIR/makepkg ]; then
     rm -rf $BUILDDIR/makepkg
 fi
 
+# 
 if [ "$TARGET" = "kzl" ]; then
     case $STAGE in
-        0) stage0_prepare; pkgs=${stage0_pkgs[@]} ;;
+        0) update-repo --clear -t $TARGET; pkgs=${stage0_pkgs[@]} ;;
         1) pkgs=${stage1_pkgs[@]} ;;
         2) pkgs=${stage2_pkgs[@]} ;;
         3) pkgs=${stage3_pkgs[@]} ;;
@@ -153,6 +164,9 @@ if [ "$TARGET" = "kzl" ]; then
     esac
 elif [ "$TARGET" = "ubuntu" ]; then
     pkgs=${ubuntu_pkgs[@]}
+elif [ "$TARGET" = "tegra" ]; then
+    update-repo --clear -t $TARGET
+    pkgs=${tegra_pkgs[@]}
 fi
 
 prepare
