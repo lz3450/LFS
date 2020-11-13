@@ -56,8 +56,8 @@ usage() {
 
 # program start
 
-# set -exu -o pipefail
 set -e -u -o pipefail
+# set -x
 
 # ensure we have a sane umask set
 umask 0022
@@ -66,7 +66,7 @@ while (( "$#" )); do
 	case "$1" in
         -h|--help)      usage; exit 0 ;;
         -v|--version)   printf "$VERSION"; exit 0 ;;
-        -t|--target)    shift; TARGET="$1" EXTENSION="gz" ;;
+        -t|--target)    shift; TARGET="$1"  ;;
 		-R|--replace)   REPLACE=1 ;;
         --clear)        CLEAR=1 ;; 
         *)              printf "unknown option \"$1\"\n"; exit 1 ;;
@@ -75,9 +75,10 @@ while (( "$#" )); do
 done
 
 case $TARGET in
-    kzl|ubuntu|tegra)   pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds) ;;
+    kzl|ubuntu)     pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds) EXTENSION="zst" ;;
+    tegra)          pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds) EXTENSION="gz" ;;
     # unknown repo
-    *)                  printf "unknown target \"%s\".\n" "$TARGET"; exit 1 ;;
+    *)              printf "unknown target \"%s\".\n" "$TARGET"; exit 1 ;;
 esac
 
 if (( CLEAR )); then
