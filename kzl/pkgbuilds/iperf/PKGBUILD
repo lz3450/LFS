@@ -1,0 +1,33 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=iperf
+pkgver=3.9
+pkgrel=1
+epoch=1
+pkgdesc="TCP, UDP, and SCTP network bandwidth measurement tool"
+arch=('x86_64')
+url="https://github.com/esnet/iperf"
+depends=(openssl)
+source=(https://github.com/esnet/iperf/archive/$pkgver.tar.gz)
+sha256sums=('c6d8076b800f2b51f92dc941b0a9b77fbf2a867f623b5cb3cbf4754dabc40899')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
