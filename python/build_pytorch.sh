@@ -7,8 +7,10 @@ ROOTDIR=/dev/shm
 
 # PYTHONBIN=/usr/bin/python
 # PIPBIN=/usr/bin/pip
-PYTHONBIN=/usr/local/bin/python3.9
-PIPBIN=/usr/local/bin/pip3.9
+PYTHONBIN=/usr/bin/python3
+PIPBIN=/usr/bin/pip3
+# PYTHONBIN=/usr/local/bin/python3.9
+# PIPBIN=/usr/local/bin/pip3.9
 
 export TORCH_BUILD_VERSION=1.7.0
 
@@ -45,10 +47,20 @@ export LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
 
 # sudo pacman -Sy --needed --noconfirm ffmpeg gflags google-glog intel-mkl nccl lapack
 
-# sudo apt update
-# sudo apt install -y \
-#     nvidia-jetpack libgflags-dev libgoogle-glog-dev libnuma-dev libopenblas-dev libatlas-base-dev liblapack-dev libopenmpi-dev \
-#     libavcodec-dev libavformat-dev libavdevice-dev libavfilter-dev libavresample-dev libavutil-dev libpostproc-dev libswresample-dev libswscale-dev
+# tegra
+BUILD_BINARY=ON
+USE_FFMPEG=ON
+USE_GLOG=ON
+USE_NCCL=OFF
+USE_PYTORCH_QNNPACK=OFF
+USE_QNNPACK=OFF
+USE_ZSTD=ON
+
+sudo apt update
+sudo apt install -y \
+    nvidia-jetpack libgflags-dev libgoogle-glog-dev libnuma-dev libopenblas-dev libatlas-base-dev liblapack-dev libopenmpi-dev \
+    libavcodec-dev libavformat-dev libavdevice-dev libavfilter-dev libavresample-dev libavutil-dev libpostproc-dev libswresample-dev libswscale-dev \
+    zstd libzstd-dev
 
 # sudo apt update
 # sudo apt install -y libassuan-dev intel-mkl-full ffmpeg \
