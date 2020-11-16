@@ -40,15 +40,15 @@ update() {
 }
 
 usage() {
-	printf "update_repo (kzl-linux) %s\n" "$VERSION"
-	echo
-	printf "\"update-repo\" will update the pacman repository.\n"
-	echo
-	printf "Usage: update_repo [ -R | --clear ] [ -t repo ]\n"
-	echo
-	echo "    -h, --help        display this help message and exit"
-	echo "    -v, --version     display version information and exit"
-	echo "    -t, --target      build target (kzl, rpi, tegra, ubuntu)"
+    printf "update_repo (kzl-linux) %s\n" "$VERSION"
+    echo
+    printf "\"update-repo\" will update the pacman repository.\n"
+    echo
+    printf "Usage: update_repo [ -R | --clear ] [ -t repo ]\n"
+    echo
+    echo "    -h, --help        display this help message and exit"
+    echo "    -v, --version     display version information and exit"
+    echo "    -t, --target      build target (kzl, rpi, tegra, ubuntu)"
     echo "    -R, --replace     replace old repo"
     echo "    --clear           clear the specified repository"
     echo
@@ -63,14 +63,14 @@ set -e -u -o pipefail
 umask 0022
 
 while (( "$#" )); do
-	case "$1" in
+    case "$1" in
         -h|--help)      usage; exit 0 ;;
         -v|--version)   printf "$VERSION"; exit 0 ;;
         -t|--target)    shift; TARGET="$1"  ;;
-		-R|--replace)   REPLACE=1 ;;
+        -R|--replace)   REPLACE=1 ;;
         --clear)        CLEAR=1 ;; 
         *)              printf "unknown option \"$1\"\n"; exit 1 ;;
-	esac
+    esac
     shift
 done
 
