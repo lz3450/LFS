@@ -27,7 +27,7 @@ default:
       user_name: zelun.kong@outlook.com
       password: K31405302zl
 
-  attachments_storage_path: /home/kzl/redmine/attachments
+  attachments_storage_path:
 
   autologin_cookie_name:
   autologin_cookie_path:
@@ -65,6 +65,6 @@ sudo -u redmine -g redmine RAILS_ENV=production bundle exec rake db:migrate
 sudo -u redmine -g redmine RAILS_ENV=production bundle exec rake redmine:load_default_data
 
 # repository
-sudo -u redmine -g redmine mkdir ~/repository
-sudo -u redmine -g redmine chmod g+w ~/repository
-sudo -u redmine -g redmine setfacl -d -m g::rwx ~/repository
+sudo -u redmine -g redmine mkdir ~redmine/repository
+sudo -u redmine -g redmine chmod g+w ~redmine/repository
+sudo -u redmine -g redmine setfacl -d -m g::rwx ~redmine/repository
