@@ -1,0 +1,49 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gnupg
+pkgver=2.2.23
+pkgrel=1
+epoch=1
+pkgdesc="Complete and free implementation of the OpenPGP standard"
+arch=('x86_64')
+url="https://www.gnupg.org/"
+depends=(gnutls libassuan libgcrypt libgpg-error libksba npth sqlite)
+makedepends=(libusb-compat libldap pcsclite)
+optdepends=("libusb-compat: scdaemon"
+            "libldap: gpg2keys_ldap"
+            "pcsclite: scdaemon")
+checkdepends=(openssh)
+install=gnupg.install
+source=(https://gnupg.org/ftp/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig})
+sha256sums=('10b55e49d78b3e49f1edb58d7541ecbdad92ddaeeb885b6f486ed23d1cd1da5c'
+            'SKIP')
+validpgpkeys=('5B80C5754298F0CB55D8ED6ABCEF7E294B092E28')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --libexecdir=/usr/lib/gnupg \
+    --sysconfdir=/etc \
+    --disable-doc \
+    --enable-symcryptrun \
+    --enable-maintainer-mode
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  install -Dm644 doc/examples/systemd-user/*.{service,socket} -t "$pkgdir"/usr/lib/systemd/user/
+}
