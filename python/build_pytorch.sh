@@ -18,10 +18,12 @@ export LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
 export BUILD_BINARY=ON
 export BUILD_TEST=OFF
 export USE_FFMPEG=ON
+export USE_GFLAGS=ON
 export USE_GLOG=ON
 export USE_NCCL=OFF
 export USE_PYTORCH_QNNPACK=OFF
 export USE_QNNPACK=OFF
+export USE_TENSORRT=ON
 export USE_XNNPACK=OFF
 export USE_ZSTD=ON
 
@@ -50,6 +52,8 @@ git clone --recursive https://github.com/pytorch/pytorch.git
 cd pytorch
 git checkout v$TORCH_BUILD_VERSION
 git submodule update --init --recursive
+
+rm -rf .git
 
 $PYTHONBIN -m pip install --user -U --no-binary :all: ninja
 $PYTHONBIN -m pip install --user -U --no-binary :all: -r requirements.txt
