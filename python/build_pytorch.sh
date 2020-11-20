@@ -35,7 +35,7 @@ usage() {
 # program start
 
 set -e -u -o pipefail
-set -x
+# set -x
 
 umask 0022
 
@@ -67,22 +67,28 @@ export USE_GLOG=ON
 export TORCH_BUILD_VERSION=$TORCH_VERSION
 
 if [ $PLATFORM = "kzl-linux" ]; then
+
+export USE_SYSTEM_NCCL=ON
+export USE_MKLDNN_CBLAS=ON
+
     sudo pacman -Sy --needed --noconfirm \
         ffmpeg \
         gflags \
         google-glog \
         intel-mkl \
         nccl \
-        lapack
+        lapack \
+        openmpi
 elif [ $PLATFORM = "tegra" ]; then
-    BUILDDIR=/dev/shm
-    CUDA_ARCH_LIST="6.2"
-    export USE_NCCL=OFF
-    export USE_PYTORCH_QNNPACK=OFF
-    export USE_QNNPACK=OFF
-    export USE_TENSORRT=ON
-    export USE_XNNPACK=OFF
-    export USE_ZSTD=ON
+
+BUILDDIR=/dev/shm
+CUDA_ARCH_LIST="6.2"
+export USE_NCCL=OFF
+export USE_PYTORCH_QNNPACK=OFF
+export USE_QNNPACK=OFF
+export USE_TENSORRT=ON
+export USE_XNNPACK=OFF
+export USE_ZSTD=ON
 
     sudo apt update
     sudo apt install -y \
