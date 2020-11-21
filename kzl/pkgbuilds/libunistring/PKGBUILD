@@ -3,6 +3,7 @@
 pkgname=libunistring
 pkgver=0.9.10
 pkgrel=1
+epoch=1
 pkgdesc="Library for manipulating Unicode strings and C strings"
 arch=('x86_64')
 url="https://www.gnu.org/software/libunistring"
@@ -15,7 +16,7 @@ prepare() {
   cd $pkgname-$pkgver
 
   # https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=cca32830b5
-  sed -i '/pragma weak pthread_create/d' tests/glthread/thread.h
+  sed -e '/pragma weak pthread_create/d' -i tests/glthread/thread.h
 }
 
 build() {
