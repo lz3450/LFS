@@ -1,0 +1,56 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=valgrind
+pkgver=3.16.1
+pkgrel=1
+epoch=1
+pkgdesc="Tool to help find memory-management problems in programs"
+arch=('x86_64')
+url="http://valgrind.org/"
+makedepends=(gdb)
+checkdepends=(procps-ng)
+source=(https://sourceware.org/pub/$pkgname/$pkgname-$pkgver.tar.bz2{,.asc})
+sha256sums=('c91f3a2f7b02db0f3bc99479861656154d241d2fdb265614ba918cc6720a33ca'
+            'SKIP')
+validpgpkeys=('0E9FFD0C16A1856CF9C7C690BA0166E698FA6035')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
+  CFLAGS=${CFLAGS/-fno-plt/}
+  CXXFLAGS=${CXXFLAGS/-fno-plt/}
+
+  ./configure \
+    --prefix=/usr \
+    --libexecdir=/usr/lib \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --mandir=/usr/share/man \
+    --enable-only64bit \
+    --enable-lto \
+    --without-mpicc
+
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  ./vg-in-place --error-exitcode=1 /bin/true
+
+  make check CPPFLAGS= CFLAGS= CXXFLAGS= LDFLAGS=
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
