@@ -35,7 +35,7 @@ usage() {
 # program start
 
 set -e -u -o pipefail
-# set -x
+set -x
 
 umask 0022
 
@@ -136,7 +136,7 @@ if (( CLEAN )); then
     $PYTHONBIN setup.py clean
 fi
 
-TORCH_CUDA_ARCH_LIST=$CUDA_ARCH_LIST $PYTHONBIN setup.py bdist_wheel
+TORCH_CUDA_ARCH_LIST="$CUDA_ARCH_LIST" $PYTHONBIN setup.py bdist_wheel
 sudo mkdir -p /home/.repository/pip
 sudo cp dist/*.whl /home/.repository/pip
 
