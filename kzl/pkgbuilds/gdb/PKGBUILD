@@ -1,14 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gdb
-pkgver=9.1
+pkgver=10.1
 pkgrel=1
+epoch=1
 pkgdesc="The GNU Debugger"
 arch=('x86_64')
 url="https://www.gnu.org/software/gdb"
-makedepends=(expat)
+depends=(expat guile libelf mpfr source-highlight)
+backup=(etc/gdb/gdbinit)
 source=(https://ftp.gnu.org/gnu/gdb/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('699e0ec832fdd2f21c8266171ea5bf44024bd05164fdf064e4d10cc4cf0d1737'
+sha256sums=('f82f1eceeec14a3afa2de8d9b0d3c91d5a3820e23e0a01bbb70ef9f0276b62c0'
             'SKIP')
 validpgpkeys=('F40ADB902B24264AA42E50BF92EDB04BFF325CF3')
 
@@ -26,11 +28,15 @@ build() {
 
   ../configure \
     --prefix=/usr \
+    --enable-lto \
     --enable-tui \
-    --with-system-readline \
+    --enable-source-highlight \
     --with-system-zlib \
+    --with-system-readline \
     --with-expat \
-    --with-python=/usr/bin/python3
+    --with-python=/usr/bin/python3 \
+    --with-guile=guile-2.2 \
+    --with-system-gdbinit=/etc/gdb/gdbinit
 
   make
 }
@@ -40,9 +46,11 @@ package() {
 
   make DESTDIR="$pkgdir/" install
 
+  install -dm755 "$pkgdir"/etc/gdb
+  touch "$pkgdir"/etc/gdb/gdbinit
+
   # conflicts with binutils
   rm "$pkgdir"/usr/include/{ansidecl,bfd,bfd_stdint,bfdlink,ctf-api,ctf,diagnostics,dis-asm,plugin-api,symcat}.h
-  rm "$pkgdir"/usr/lib/{libbfd,libctf-nobfd,libctf,libopcodes}.a
-  rm -rf "$pkgdir"/usr/share/locale/
-  rm -rf "$pkgdir"/usr/share/info/
+  rm "$pkgdir"/usr/lib/{libbfd,libctf-nobfd,libctf,libopcodes}.{a,la}
+  rm -rf "$pkgdir"/usr/share/{locale,info,gdb}
 }
