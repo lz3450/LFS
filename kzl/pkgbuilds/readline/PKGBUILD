@@ -4,12 +4,16 @@ pkgname=readline
 _basever=8.0
 pkgver=$_basever.004
 pkgrel=1
+epoch=1
 pkgdesc="GNU readline library"
 arch=('x86_64')
 url="https://tiswww.case.edu/php/chet/readline/rltop.html"
+provides=(libreadline.so)
+backup=(etc/inputrc)
 options=(!emptydirs)
 source=(https://ftp.gnu.org/gnu/readline/readline-$_basever.tar.gz{,.sig}
-        https://ftp.gnu.org/gnu/readline/readline-$_basever-patches/readline${_basever//.}-{001..004}{,.sig})
+        https://ftp.gnu.org/gnu/readline/readline-$_basever-patches/readline${_basever//.}-{001..004}{,.sig}
+        inputrc)
 sha256sums=('e339f51971478d369f8a053a330a190781acb9864cf4c541060f12078948e461'
             'SKIP'
             'd8e5e98933cf5756f862243c0601cb69d3667bb33f2c7b751fe4e40b2c3fd069'
@@ -19,7 +23,8 @@ sha256sums=('e339f51971478d369f8a053a330a190781acb9864cf4c541060f12078948e461'
             '94ddb2210b71eb5389c7756865d60e343666dfb722c85892f8226b26bb3eeaef'
             'SKIP'
             'b1aa3d2a40eee2dea9708229740742e649c32bb8db13535ea78f8ac15377394c'
-            'SKIP')
+            'SKIP'
+            'bfbb40e8ffd893c37da0f8aaa757936548a91cca0bc899a56e90338990e85e2a')
 validpgpkeys=('7C0135FB088AAF6C66C650B9BB5869F064EA74AB')
 
 prepare() {
@@ -49,4 +54,5 @@ package() {
   cd $pkgname-$_basever
 
   make DESTDIR="$pkgdir/" install
+  install -Dm644 "$srcdir"/inputrc "$pkgdir"/etc/inputrc
 }
