@@ -2,5 +2,7 @@
 
 for c in $(find $1 -name 'configure'); do
     echo $c
-    cat $c | sed -n -e '/Optional Features:/,$p' | sed -e '/Some influential environment variables:/Q'
+    # cat $c | sed -n -e '/Optional Features:/,$p' | sed -e '/Some influential environment variables:/Q'
+    $c --help
+    echo
 done
