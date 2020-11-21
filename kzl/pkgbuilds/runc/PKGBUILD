@@ -1,0 +1,36 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=runc
+pkgver=1.0.0
+pkgrel=92
+epoch=1
+pkgdesc="CLI tool for spawning and running containers according to the OCI specification"
+arch=('x86_64')
+url="https://github.com/opencontainers/runc"
+depends=(libseccomp)
+makedepends=(go)
+source=(git+https://github.com/opencontainers/runc.git#tag=v$pkgver-rc$pkgrel?signed)
+sha256sums=('SKIP')
+validpgpkeys=('C9C370B246B09F6DBCFC744C34401015D1D2D386')
+
+build() {
+  cd $pkgname
+
+  LDFLAGS=${LDFLAGS/-Wl,/}
+
+  export GOPATH="$srcdir"
+  export CGO_CPPFLAGS="$CPPFLAGS"
+  export CGO_CFLAGS="$CFLAGS"
+  export CGO_CXXFLAGS="$CXXFLAGS"
+  export CGO_LDFLAGS="$LDFLAGS"
+  export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
+
+  make BUILDTAGS='seccomp apparmor'
+}
+
+package() {
+  cd $pkgname
+
+  install -Dm755 runc "$pkgdir"/usr/bin/runc
+  install -Dm644 contrib/completions/bash/runc "$pkgdir"/usr/share/bash-completion/completions/runc
+}
