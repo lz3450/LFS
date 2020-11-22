@@ -1,13 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=expat
-pkgver=2.2.9
+pkgver=2.2.10
 pkgrel=1
+epoch=1
 pkgdesc="An XML parser library"
 arch=('x86_64')
 url="https://libexpat.github.io/"
 source=(https://github.com/libexpat/libexpat/releases/download/R_${pkgver//./_}/expat-$pkgver.tar.bz2{,.asc})
-sha256sums=('f1063084dc4302a427dabcca499c8312b3a32a29b7d2506653ecc8f950a9a237'
+sha256sums=('b2c160f1b60e92da69de8e12333096aeb0c3bf692d41c60794de278af72135a5'
             'SKIP')
 validpgpkeys=('3176EF7DB2367F1FCA4F306B1F9B0E909AF37285')
 
@@ -15,10 +16,11 @@ build() {
   cd $pkgname-$pkgver
 
   cmake \
+    -DCMAKE_BUILD_TYPE=None \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
-    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_LIBDIR:PATH=lib \
     -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
     -S . \
     -B build
 
