@@ -1,0 +1,54 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=vim
+pkgver=8.2.1989
+pkgrel=1
+epoch=1
+pkgdesc="Vi Improved, a highly configurable, improved version of the vi text editor"
+arch=('x86_64')
+url="https://www.vim.org"
+depends=(acl gpm libffi libgcrypt pcre)
+makedepends=(lua ruby tcl)
+source=(https://github.com/vim/vim/archive/v$pkgver/$pkgname-$pkgver.tar.gz)
+sha256sums=('81d5d6a48cd421c7a8056f9436436de1ed37598341cbec3b1db7ff99c3889276')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var/lib/vim \
+    --enable-luainterp=dynamic \
+    --enable-perlinterp=dynamic \
+    --enable-python3interp=dynamic \
+    --enable-tclinterp=dynamic \
+    --enable-rubyinterp=dynamic \
+    --enable-cscope \
+    --disable-netbeans \
+    --enable-multibyte \
+    --disable-gui \
+    --disable-canberra \
+    --enable-acl \
+    --enable-gpm \
+    --with-features=huge \
+    --with-compiledby="KZL" \
+    --without-x
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make test || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make VIMRCLOC="/etc" DESTDIR="$pkgdir/" install
+  
+  install -dm755 "$pkgdir"/etc
+  touch "$pkgdir"/etc/vimrc
+}
