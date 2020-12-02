@@ -1,0 +1,53 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=openmpi
+pkgver=4.0.5
+pkgrel=1
+epoch=1
+pkgdesc="High performance message passing library (MPI)"
+arch=('x86_64')
+url="https://www.open-mpi.org"
+depends=(hwloc libnl)
+makedepends=(valgrind)
+options=(staticlibs)
+source=(https://www.open-mpi.org/software/ompi/v${pkgver%.*}/downloads/$pkgname-$pkgver.tar.bz2)
+sha256sums=('c58f3863b61d944231077f344fe6b4b8fbb83f3d1bc93ab74640bf3e5acac009')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc/$pkgname \
+    --libdir=/usr/lib/$pkgname \
+    --enable-mpi-fortran \
+    --enable-mpi-cxx \
+    --enable-memchecker \
+    --with-libltdl \
+    --with-hwloc \
+    --with-valgrind \
+    --without-slurm \
+    LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  install -dm755 "$pkgdir"/usr/lib/pkgconfig
+  for pc in ompi-c.pc ompi-cxx.pc ompi-f77.pc ompi-f90.pc ompi.pc; do
+    ln -sf /usr/lib/openmpi/pkgconfig/$pc "$pkgdir"/usr/lib/pkgconfig/
+  done
+
+  install -dm755 "$pkgdir"/etc/ld.so.conf.d
+  echo /usr/lib/$pkgname > "$pkgdir"/etc/ld.so.conf.d/$pkgname.conf
+}
