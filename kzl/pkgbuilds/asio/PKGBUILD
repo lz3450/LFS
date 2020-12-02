@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=asio
+pkgver=1.18.0
+pkgrel=1
+epoch=1
+pkgdesc="Cross-platform C++ library for ASynchronous network I/O"
+arch=('any')
+url="https://think-async.com/Asio/"
+makedepends=(boost)
+source=(https://sourceforge.net/projects/asio/files/asio/${pkgver}%20%28Stable%29/$pkgname-$pkgver.tar.bz2)
+sha256sums=('9d539e7c09aa6394d512c433c5601c1f26dc4975f022ad7d5e8e57c3b635b370')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  autoreconf -fiv
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
