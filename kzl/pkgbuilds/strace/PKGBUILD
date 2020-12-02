@@ -1,0 +1,30 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=strace
+pkgver=5.9
+pkgrel=1
+epoch=1
+pkgdesc="A diagnostic, debugging and instructional userspace tracer"
+arch=('x86_64')
+url="https://strace.io"
+depends=(libunwind)
+source=(https://github.com/strace/strace/releases/download/v$pkgver/strace-$pkgver.tar.xz{,.asc})
+sha256sums=('39473eb8465546c3e940fb663cb381eba5613160c7302794699d194a4d5d66d9'
+            'SKIP')
+validpgpkeys=('296D6F29A020808E8717A8842DB5BD89A340AEB7')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --with-libunwind
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
