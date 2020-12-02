@@ -3,35 +3,33 @@
 pkgname=boost
 pkgver=1.72.0
 pkgrel=1
+epoch=1
 pkgdesc="Free peer-reviewed portable C++ source libraries"
 arch=('x86_64')
 url="https://www.boost.org/"
 depends=(icu)
-makedepends=(python-numpy)
-# makedepends=(openmpi python-numpy)
-# optdepends=("openmpi: for mpi support")
+makedepends=(openmpi)
+optdepends=("openmpi: for mpi support")
+provides=(boost-libs)
+conflicts=(boost-libs)
+replaces=(boost-libs)
 source=(https://dl.bintray.com/boostorg/release/$pkgver/source/${pkgname}_${pkgver//./_}.tar.bz2)
 sha256sums=('59c9b274bc451cf91a9ba1dd2c7fdcaf5d60b1b3aa83f2c9fa143417cc660722')
 
 # TODO: Support for OpenMPI
 
-prepare() {
-  cd ${pkgname}_${pkgver//./_}
-
-  mkdir -p "$srcdir"/stagedir
-}
-
 build() {
   cd ${pkgname}_${pkgver//./_}
 
   ./bootstrap.sh \
-    --prefix="/usr" \
     --with-toolset=gcc \
     --with-icu \
     --with-python=/usr/bin/python \
+    --prefix=/usr
+
+  echo "using mpi ;" >> project-config.jam
 
   ./b2 \
-    --stagedir="$srcdir/stagedir" \
     --build-dir=build \
     toolset=gcc \
     variant=release \
