@@ -1,6 +1,6 @@
 NAME="KZL Linux"
 PRETTY_NAME="KZL Linux"
-ID=kzl
+ID=arch
 BUILD_ID=rolling
 ANSI_COLOR="0;36"
 HOME_URL="https://www.archlinux.org/"

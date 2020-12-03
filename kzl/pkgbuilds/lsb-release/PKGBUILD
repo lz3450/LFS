@@ -1,0 +1,30 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=lsb-release
+pkgver=1.4
+pkgrel=1
+epoch=1
+pkgdesc="LSB version query program"
+arch=('any')
+url="http://www.linuxbase.org/"
+source=(https://downloads.sourceforge.net/lsb/$pkgname-$pkgver.tar.gz)
+sha256sums=('99321288f8d62e7a1d485b7c6bdccf06766fb8ca603c6195806e4457fdf17172')
+
+build() {
+  cd $pkgname-$pkgver
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  install -dm755 "$pkgdir"/etc/
+  echo "LSB_VERSION=$pkgver" >> "$pkgdir"/etc/lsb-release
+  echo "DISTRIB_ID=Arch" >> "$pkgdir"/etc/lsb-release
+  echo "DISTRIB_RELEASE=rolling" >> "$pkgdir"/etc/lsb-release
+  echo "DISTRIB_DESCRIPTION=\"KZL Linux\"" >> "$pkgdir"/etc/lsb-release
+
+  install -Dm755 lsb_release "$pkgdir"/usr/bin/lsb_release
+  install -Dm644 lsb_release.1.gz "$pkgdir/usr/share/man/man1/lsb_release.1.gz"
+}

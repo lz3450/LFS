@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=filesystem
-pkgver=20201018
+pkgver=20201202
 pkgrel=1
 epoch=1
 arch=('any')
@@ -55,7 +55,7 @@ sha256sums=('e03bede3d258d680548696623d5979c6edf03272e801a813c81ba5a5c64f4f82'
             'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
             '404c3f2e1d3d4097cedd08a4484119cb37d9adfc0ead49bdf5960e227e9159de'
             '98f8b57182abf05a79535c790b04b75d5d5c2f3ba6ba6048694fda0581551fbc'
-            '9178f1df5caa9f18ba20844c3fa5582d61994ae411751ca918505a1bfc5a198b'
+            'ac0289c7be9aa973d9c484b89cfe9da11a4c4fde1ed60579ff96269b46967011'
             '5e06477834f51abf42ea4e8dc199632afc6afbfd8c44354685a271e9a48d2c0a'
             '5da078777cda24e4df697e2928451723f2303bfdbb2ce9551c822188c7945d25'
             '5557d8e601b17a80d1ea7de78a9869be69637cb6a02fbfe334e22fdf64e61d4c'
