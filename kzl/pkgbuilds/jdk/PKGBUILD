@@ -1,0 +1,24 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=jdk
+pkgver=15.0.1
+pkgrel=9
+epoch=1
+pkgdesc="Java Development Kit"
+arch=('x86_64')
+url="https://www.oracle.com/java/"
+options=(!strip)
+source=(jdk-15.0.1_linux-x64_bin.tar.gz)
+sha256sums=('445a1c5c335b53b030f68aca58493ddedd49f4b53085618bc1ae7aba68156606')
+
+package() {
+  cd $pkgname-$pkgver
+
+  install -dm755 "$pkgdir"/usr/lib/java
+  cp -a "$srcdir"/$pkgname-$pkgver "$pkgdir"/usr/lib/java/
+  ln -s $pkgname-$pkgver "$pkgdir"/usr/lib/java/default
+
+  echo | install -Dm755 /dev/stdin "$pkgdir"/etc/profile.d/java.sh << EOF
+export PATH=\${PATH}:/usr/lib/java/default/bin
+EOF
+}
