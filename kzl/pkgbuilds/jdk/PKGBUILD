@@ -8,8 +8,12 @@ pkgdesc="Java Development Kit"
 arch=('x86_64')
 url="https://www.oracle.com/java/"
 options=(!strip)
-source=(jdk-15.0.1_linux-x64_bin.tar.gz)
-sha256sums=('445a1c5c335b53b030f68aca58493ddedd49f4b53085618bc1ae7aba68156606')
+
+prepare() {
+  wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+    https://download.oracle.com/otn-pub/java/jdk/15.0.1+9/51f4f36ad4ef43e39d0dfdbaf6549e32/${pkgname}-${pkgver}_linux-x64_bin.tar.gz
+  tar -xf ${pkgname}-${pkgver}_linux-x64_bin.tar.gz
+}
 
 package() {
   cd $pkgname-$pkgver
