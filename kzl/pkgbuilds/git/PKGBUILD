@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=git
-pkgver=2.28.0
+pkgver=2.29.2
 pkgrel=1
 epoch=1
 arch=('x86_64')
@@ -11,7 +11,7 @@ makedepends=(asciidoc xmlto)
 source=(https://www.kernel.org/pub/software/scm/$pkgname/$pkgname-$pkgver.tar.{xz,sign}
         git-daemon.socket
         git-daemon@.service)
-sha256sums=('dfa5d1a253aa451465478fe45c6a40ab8605b340fdb4c4e80b16d7f87708439d'
+sha256sums=('f2fc436ebe657821a1360bcd1e5f4896049610082419143d60f6fa13c2f607c1'
             'SKIP'
             'ac4c90d62c44926e6d30d18d97767efc901076d4e0283ed812a349aece72f203'
             '14c0b67cfe116b430645c19d8c4759419657e6809dfa28f438c33a005245ad91')
