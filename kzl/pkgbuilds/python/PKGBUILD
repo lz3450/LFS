@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.9.0
+pkgver=3.9.1
 pkgrel=1
 epoch=1
 pkgdesc="Next generation of the python high-level scripting language"
@@ -10,7 +10,7 @@ url="https://www.python.org/"
 depends=(expat gdbm libffi libnsl openssl)
 makedepends=(mpdecimal sqlite valgrind)
 source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc})
-sha256sums=('9c73e63c99855709b9be0b3cc9e5b072cb60f37311e8c4e50f15576a0bf82854'
+sha256sums=('991c3f8ac97992f3d308fefeb03a64db462574eadbff34ce8bc5bb583d9903ff'
             'SKIP')
 validpgpkeys=('E3FF2839C048B25C084DEBE9B26995E310250568')
 
