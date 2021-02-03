@@ -2,14 +2,15 @@
 
 pkgbase=audit
 pkgname=(audit python-audit)
-pkgver=2.8.5
+pkgver=3.0
 pkgrel=1
+epoch=1
 pkgdesc="Userspace components of the audit framework"
 arch=('x86_64')
 url="https://people.redhat.com/sgrubb/audit"
 makedepends=(krb5 libcap-ng swig)
 source=($url/$pkgbase-$pkgver.tar.gz)
-sha256sums=('0e5d4103646e00f8d1981e1cd2faea7a2ae28e854c31a803e907a383c5e2ecb7')
+sha256sums=('bd31826823b912b6fe271d2d979ed879e9fc393cab1e2f7c4e1af258231765b8')
 
 prepare() {
   cd $pkgbase-$pkgver
@@ -59,7 +60,7 @@ package_audit() {
 
   sed -ri 's|/sbin|/usr/bin|' \
     "$pkgdir"/etc/audit/*.conf \
-    "$pkgdir"/etc/audisp/plugins.d/*.conf \
+    "$pkgdir"/etc/audit/plugins.d/*.conf \
     "$pkgdir"/usr/lib/systemd/system/auditd.service
 
   chmod 644 "$pkgdir"/usr/lib/systemd/system/auditd.service

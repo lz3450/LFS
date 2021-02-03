@@ -1,8 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=sudo
-pkgver=1.8.31p1
+pkgver=1.9.5p2
 pkgrel=1
+epoch=1
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('x86_64')
 url="https://www.sudo.ws/sudo"
@@ -11,7 +12,7 @@ backup=(etc/sudoers
         etc/pam.d/sudo)
 source=($url/dist/$pkgname-$pkgver.tar.gz{,.sig}
         sudo.pam)
-sha256sums=('c73cfdfbc1c5cc259fcc3a355e1bacfed99c5580daeadec9704a24cd5e6d15d8'
+sha256sums=('539e2ef43c8a55026697fb0474ab6a925a11206b5aa58710cb42a0e1c81f0978'
             'SKIP'
             'd1738818070684a5d2c9b26224906aad69a4fea77aabd960fc2675aee2df1fa2')
 validpgpkeys=('59D1E9CCBA2B376704FDD35BA9F4C021CEA470FB')

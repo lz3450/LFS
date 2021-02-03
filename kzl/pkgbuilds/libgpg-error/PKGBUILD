@@ -1,16 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libgpg-error
-pkgver=1.37
+pkgver=1.41
 pkgrel=1
+epoch=1
 pkgdesc="Support library for libgcrypt"
 arch=('x86_64')
 url="https://www.gnupg.org"
 source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('b32d6ff72a73cf79797f7f2d039e95e9c6f92f0c1450215410840ab62aea9763'
+sha256sums=('64b078b45ac3c3003d7e352a5e05318880a5778c42331ce1ef33d1a0d9922742'
             'SKIP')
-validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6'
-              '031EC2536E580D8EA286A9F22071B08A33BD3F06') 
+validpgpkeys=('6DAA6E64A76D2840571B4902528897B826403ADA') 
 
 prepare() {
   cd $pkgname-$pkgver

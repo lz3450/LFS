@@ -25,3 +25,4 @@
 core/wpa_supplicant/CVE-2019-16275.patch
 core/wpa_supplicant/roam-properties.patch
 *.img
+!kzl/pkgbuilds/jdk8/jdk-8u271-linux-x64.tar.gz

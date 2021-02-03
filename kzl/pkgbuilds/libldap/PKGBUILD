@@ -1,16 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libldap
-pkgver=2.4.55
+pkgver=2.4.56
 pkgrel=1
 epoch=1
 pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries"
 arch=('x86_64')
 url="https://www.openldap.org"
 depends=(libsasl)
-backup=(etc/openldap/slapd.conf)
 source=($url/software/download/OpenLDAP/openldap-release/openldap-$pkgver.tgz)
-sha256sums=('97357bd6ba8ff73d204c1f8208c5e6ab97d60c9e779f989057aa1229bbe98434')
+sha256sums=('25520e0363c93f3bcb89802a4aa3db33046206039436e0c7c9262db5a61115e0')
 
 prepare() {
   cd openldap-$pkgver

@@ -50,7 +50,7 @@ base
     python: expat gdbm libffi libnsl openssl [bluez llvm sqlite valgrind] (sqlite mpdecimal)
     git: curl expat openssl pcre2 {libsecret}
     pacman: curl gpgme libarchive {fakechroot}
-    (texinfo)
-    (groff)
-    (man-db)
+    texinfo
+    groff
+    man-db
 linux
