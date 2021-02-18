@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=linux
-pkgver=5.4.70
+pkgver=5.10.17
 pkgrel=1
 epoch=1
 pkgdesc="LTS Linux Kernel"
@@ -11,9 +11,9 @@ makedepends=(bc)
 options=(!strip)
 source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.{xz,sign}
         config)
-sha256sums=('c0b3d8085c5ba235df38b00b740e053659709e8a5ca21957a239f6bc22c45007'
+sha256sums=('e84e623ce8bb2446ec026b62eafa3b18480aa6fb6ae9c86cd8f18651324d4814'
             'SKIP'
-            '41c67554d449dcafbb3d2f0468cdc97f69fb62c7e4f9e66c72c9a7b2f951c1a2')
+            '27da6d6c6c1179f6ac524d11208892fdb6670e01d699916404f0b56af531620d')
 validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
 
 export KBUILD_BUILD_HOST=kzl-linux
@@ -27,7 +27,7 @@ prepare() {
 
   cp "$srcdir"/config build/.config
 
-  # make O=build nconfig
+  make O=build nconfig
 }
 
 build() {
@@ -52,6 +52,6 @@ package() {
   install -Dm644 build/System.map -t "$pkgdir"/boot/
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
-  cp -a build "$pkgdir"/usr/lib/modules/$kernelrelease/build
-  cp -a . "$pkgdir"/usr/lib/modules/$kernelrelease/source
+  # cp -a build "$pkgdir"/usr/lib/modules/$kernelrelease/build
+  # cp -a . "$pkgdir"/usr/lib/modules/$kernelrelease/source
 }
