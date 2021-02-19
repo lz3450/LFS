@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openssh
-pkgver=8.4p1
+pkgver=8.4
 pkgrel=1
 epoch=1
 arch=('x86_64')
@@ -14,23 +14,32 @@ optdepends=("libfido2: FIDO/U2F support"
 backup=(etc/ssh/ssh_config
         etc/ssh/sshd_config
         etc/pam.d/sshd)
-source=(https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-$pkgver.tar.gz{,.asc}
+source=(https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/${pkgname}-${pkgver}p${pkgrel}.tar.gz{,.asc}
+        ssh-copy-id.patch::https://github.com/openssh/openssh-portable/commit/d9e727dcc04a52caaac87543ea1d230e9e6b5604.patch
         sshd.conf
         sshd.pam
         sshd.service
         sshdgenkeys.service)
 sha256sums=('5a01d22e407eb1c05ba8a8f7c654d388a13e9f226e4ed33bd38748dafa1d2b24'
             'SKIP'
+            '8b844b6ed29b270aed508cfe158bed668d09f554780d85c0c486a2607b00bb5e'
             '4effac1186cc62617f44385415103021f72f674f8b8e26447fc1139c670090f6'
             'd447e0d52f12b8b186e6864749d594746966ac997767e8af300190d1fbb74eaf'
             'e40f8b7c8e5e2ecf3084b3511a6c36d5b5c9f9e61f2bb13e3726c71dc7d4fbc7'
             '4031577db6416fcbaacf8a26a024ecd3939e5c10fe6a86ee3f0eea5093d533b7')
 validpgpkeys=('59C2118ED206D927E667EBE3D3E5F56B6D920D30')
 
-build() {
-  cd $pkgname-$pkgver
+prepare() {
+	cd ${pkgname}-${pkgver}p${pkgrel}
 
-  autoreconf
+  # Fix `EOF: command not found` error in ssh-copy-id
+  patch -p1 -i "$srcdir"/ssh-copy-id.patch
+        
+	autoreconf
+}
+
+build() {
+  cd ${pkgname}-${pkgver}p${pkgrel}
 
   ./configure \
     --prefix=/usr \
@@ -53,7 +62,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd ${pkgname}-${pkgver}p${pkgrel}
 
   make DESTDIR="$pkgdir/" install
 
