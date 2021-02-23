@@ -8,7 +8,7 @@ set -e
 
 # # source
 if [ ! -d linux ]; then
-    git clone --depth 1 -b rpi-5.4.y https://github.com/raspberrypi/linux.git
+    git clone --depth 1 -b rpi-5.10.y https://github.com/raspberrypi/linux.git
 fi
 source_dir="linux"
 
@@ -52,7 +52,16 @@ cp "${KERNEL_OUT_DIR}/${image_name}" "${KERNEL_INSTALL_DIR}"/boot/$KERNEL.img
 cp "${KERNEL_OUT_DIR}"/arch/arm64/boot/dts/broadcom/*.dtb "${KERNEL_INSTALL_DIR}"/boot/
 cp "${KERNEL_OUT_DIR}"/arch/arm64/boot/dts/overlays/*.dtb* "${KERNEL_INSTALL_DIR}"/boot/overlays/
 
-# rm "$tegra_kernel_install"/lib/modules/4.9.140-KZL/build
+rm "$KERNEL_INSTALL_DIR"/usr/lib/modules/${kernelrelease}/build
 # cp -a "$KERNEL_OUT_DIR" "$tegra_kernel_install"/lib/modules/4.9.140-KZL/build
-# rm "$tegra_kernel_install"/lib/modules/4.9.140-KZL/source
+rm "$KERNEL_INSTALL_DIR"/usr/lib/modules/${kernelrelease}/source
 # cp -a "$source_dir" "$tegra_kernel_install"/lib/modules/4.9.140-KZL/source
+
+while true; do
+    read -p "Do you wish to install this program?" yn
+    case $yn in
+        [Yy]* ) sudo cp -rf kernel_install/* / ; break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
