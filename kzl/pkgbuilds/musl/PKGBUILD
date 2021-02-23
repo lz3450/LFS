@@ -1,0 +1,32 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=musl
+pkgver=1.2.2
+pkgrel=1
+epoch=1
+pkgdesc="Lightweight implementation of C standard library"
+arch=('x86_64')
+url="https://musl.libc.org/"
+options=(staticlibs !buildflags)
+source=(https://musl.libc.org/releases/$pkgname-$pkgver.tar.gz{,.asc})
+sha256sums=('9b969322012d796dc23dda27a35866034fa67d8fb67e0e2c45c913c3d43219dd'
+            'SKIP')
+validpgpkeys=('836489290BB6B70F99FFDA0556BCDB593020450F')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr/lib/musl \
+    --exec-prefix=/usr \
+    --syslibdir=/usr/lib \
+    --enable-wrapper=all
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
