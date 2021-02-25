@@ -3,6 +3,7 @@
 pkgname=db
 pkgver=5.3.28
 pkgrel=1
+epoch=1
 pkgdesc="The Berkeley DB embedded database system"
 arch=('x86_64')
 url="https://www.oracle.com/technology/software/products/berkeley-db/index.html"
@@ -23,12 +24,12 @@ build() {
 
   ../dist/configure \
     --prefix=/usr \
-    --enable-compat185 \
-    --enable-shared \
-    --enable-static \
     --enable-cxx \
+    --enable-compat185 \
+    --enable-stl \
     --enable-dbm \
-    --enable-stl
+    --enable-shared \
+    --enable-static
 
   make
 }
@@ -38,5 +39,5 @@ package() {
 
   make DESTDIR="$pkgdir/" install
 
-  rm -r "${pkgdir}"/usr/docs
+  rm -r "$pkgdir"/usr/docs
 }
