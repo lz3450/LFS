@@ -8,6 +8,7 @@ pkgdesc="A generic library support script"
 arch=('x86_64')
 url="https://www.gnu.org/software/libtool"
 provides=(libltdl libtool-multilib)
+makedepends=(help2man)
 source=(git+https://git.savannah.gnu.org/git/libtool.git#commit=b88cebd510add4420dd8f5367e3cc6e6e1f267cd
         git+https://git.savannah.gnu.org/git/gnulib.git
         gnulib-bootstrap::git+https://github.com/gnulib-modules/bootstrap.git)
