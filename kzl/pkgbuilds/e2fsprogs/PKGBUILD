@@ -1,19 +1,21 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=e2fsprogs
-pkgver=1.46.0
+pkgver=1.46.1
 pkgrel=1
 epoch=1
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('x86_64')
 url="http://e2fsprogs.sourceforge.net"
+backup=(etc/mke2fs.conf)
+options=(staticlibs)
 source=(https://www.kernel.org/pub/linux/kernel/people/tytso/$pkgname/v$pkgver/$pkgname-$pkgver.tar.{xz,sign})
-sha256sums=('91d61cef9a251a18e49a700be0028a8d35b0549a25d2bc263af6fa5d9f7c7d13'
+sha256sums=('bbe6af3b7bb7119556b6f57a78d41b330007738bca8530b2ba95d2ba35430151'
             'SKIP')
 validpgpkeys=('3AB057B7E78D945C8C5591FBD36F769BC11804F0')
 
 prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd $pkgname-$pkgver
 
   # Remove unnecessary init.d directory
   sed -i '/init\.d/s|^|#|' misc/Makefile.in
@@ -51,7 +53,7 @@ package() {
 
   make DESTDIR="$pkgdir/" install install-libs
 
-  sed -i -e 's/^AWK=.*/AWK=awk/' "$pkgdir"/usr/bin/compile_et
+  sed -e 's/^AWK=.*/AWK=awk/' -i "$pkgdir"/usr/bin/compile_et
 
   # remove references to build directory
   sed -i -e 's#^SS_DIR=.*#SS_DIR="/usr/share/ss"#' "$pkgdir"/usr/bin/mk_cmds
