@@ -1,14 +1,18 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pciutils
-pkgver=3.6.4
+pkgver=3.7.0
 pkgrel=1
+epoch=1
 pkgdesc="PCI bus configuration space access library and tools"
 arch=('x86_64')
 url="https://mj.ucw.cz/sw/pciutils/"
-depends=(curl kmod)
+depends=(kmod)
+provides=(hwids)
+conflicts=(hwids)
+replaces=(hwids)
 source=(https://www.kernel.org/pub/software/utils/$pkgname/$pkgname-$pkgver.tar.xz)
-sha256sums=('f67ff732976e2db2a5ccdf3960020796526ba6b05f6b1cdd24b7b206af706055')
+sha256sums=('9d40b97be8b6a2cdf96aead5a61881d1f7e4e0da9544a9bac4fba1ae9dcd40eb')
 validpgpkeys=('5558F9399CD7836850553C6EC28E7847ED70F82D')
 
 build() {
