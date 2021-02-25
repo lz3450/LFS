@@ -8,7 +8,8 @@ epoch=1
 pkgdesc="Userspace components of the audit framework"
 arch=('x86_64')
 url="https://people.redhat.com/sgrubb/audit"
-makedepends=(krb5 libcap-ng swig)
+depends=(krb5 libcap-ng)
+makedepends=(swig)
 source=($url/$pkgbase-$pkgver.tar.gz)
 sha256sums=('bd31826823b912b6fe271d2d979ed879e9fc393cab1e2f7c4e1af258231765b8')
 
