@@ -12,7 +12,7 @@ provides=(ca-certificates-utils ca-certificates-mozilla)
 conflicts=(ca-certificates-utils ca-certificates-mozilla)
 replaces=(ca-certificates-utils ca-certificates-mozilla)
 source=(https://hg.mozilla.org/mozilla-central/raw-file/tip/security/nss/lib/ckfw/builtins/certdata.txt
-        certdata2pem.py
+        https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/nss/trunk/certdata2pem.py
         update-ca-trust
         update-ca-trust.hook)
 sha256sums=('f3bdcd74612952da8476a9d4147f50b29ad0710b7dd95b4c8690500209986d70'
@@ -21,7 +21,7 @@ sha256sums=('f3bdcd74612952da8476a9d4147f50b29ad0710b7dd95b4c8690500209986d70'
             '55b230878d71847c629494d3b1d0b43482568027c3272ffa477c1d77e4594bf6')
 
 build() {
-  ./certdata2pem.py
+  python certdata2pem.py
 
   for p in *.tmp-p11-kit; do
     cat "$p" >> ca-bundle.trust.p11-kit

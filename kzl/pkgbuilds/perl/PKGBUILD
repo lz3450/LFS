@@ -1,16 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=perl
-pkgver=5.32.0
+pkgver=5.32.1
 pkgrel=1
 epoch=1
 pkgdesc="A highly capable, feature-rich programming language"
 arch=('x86_64')
 url="https://www.perl.org"
-depends=(db gdbm)
+depends=(db gdbm libxcrypt)
 options=(!purge)
 source=(https://www.cpan.org/src/5.0/$pkgname-$pkgver.tar.xz)
-sha256sums=('6f436b447cf56d22464f980fac1916e707a040e96d52172984c5d184c09b859b')
+sha256sums=('57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309')
 
 build() {
   cd $pkgname-$pkgver

@@ -1,24 +1,31 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=fakeroot
-pkgver=1.24
+pkgver=1.25.3
 pkgrel=1
 epoch=1
 pkgdesc="Tool for simulating superuser privileges"
 arch=('x86_64')
 url="https://packages.debian.org/fakeroot"
-install=fakeroot.install
-source=(https://deb.debian.org/debian/pool/main/f/$pkgname/${pkgname}_${pkgver}.orig.tar.gz
-        fakeroot.install
-        silence-dlerror.patch)
-sha256sums=('2e045b3160370b8ab4d44d1f8d267e5d1d555f1bb522d650e7167b09477266ed'
-            '711d023c713fa45e115de91f82ef0bf6f454e35cd9e5e4cd1768e68ebc2659d0'
-            '347f6496c93ed0d91dcb554db92602b50520a16308e3b8bc33822bd69966267b')
+install=$pkgname.install
+source=(#git+https://salsa.debian.org/clint/fakeroot.git#commit=8090dffdad8fda86dccd47ce7a7db8840bdf7d7b
+        https://deb.debian.org/debian/pool/main/f/$pkgname/${pkgname}_${pkgver}.orig.tar.gz
+        https://salsa.debian.org/clint/fakeroot/-/commit/03bc0ee07fb6e293d081ffd8af1654788b434f6a.patch
+        https://salsa.debian.org/clint/fakeroot/-/commit/feda578ca3608b7fc9a28a3a91293611c0ef47b7.patch
+        https://salsa.debian.org/clint/fakeroot/-/commit/c3eebec293e35b997bb46c22fb5a4e114afb5e7f.patch
+        $pkgname.install)
+sha256sums=('8e903683357f7f5bcc31b879fd743391ad47691d4be33d24a76be3b6c21e956c'
+            '7b1ea49a4123a6d95329b370cc9edb51dc0c292ee3eeaa034757b555607026ea'
+            '1d2b3c9de24a4249f71e4ed1465ccac462c4ae36bd0a72c796cbfc51fb88a5e6'
+            '669dc27fc4a63d265adffbd7fe04521d9e91f46fdba5465c55c6b2d281aae0dc'
+            '711d023c713fa45e115de91f82ef0bf6f454e35cd9e5e4cd1768e68ebc2659d0')
 
 prepare() {
   cd $pkgname-$pkgver
 
-  patch -p1 -i "$srcdir"/silence-dlerror.patch
+  patch -p1 -i "$srcdir"/03bc0ee07fb6e293d081ffd8af1654788b434f6a.patch
+  patch -p1 -i "$srcdir"/feda578ca3608b7fc9a28a3a91293611c0ef47b7.patch
+  patch -p1 -i "$srcdir"/c3eebec293e35b997bb46c22fb5a4e114afb5e7f.patch
 
   ./bootstrap
 }
@@ -28,11 +35,14 @@ build() {
 
   ./configure \
     --prefix=/usr \
+    --libdir=/usr/lib/libfakeroot \
     --disable-static \
     --with-ipc=sysv
-    # --libdir=/usr/lib/libfakeroot \
 
   make
+  
+  cd doc
+  po4a -k 0 --rm-backups --variable 'srcdir=../doc/' po4a/po4a.cfg
 }
 
 check() {
@@ -46,6 +56,5 @@ package() {
 
   make DESTDIR="$pkgdir/" install
   
-  # install -dm755 "$pkgdir"/etc/ld.so.conf.d/
-  # echo "/usr/lib/libfakeroot" > "$pkgdir"/etc/ld.so.conf.d/fakeroot.conf
+  echo "/usr/lib/libfakeroot" | install -Dm644 /dev/stdin "$pkgdir"/etc/ld.so.conf.d/fakeroot.conf
 }

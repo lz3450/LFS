@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=dosfstools
-pkgver=4.1
+pkgver=4.2
 pkgrel=1
 epoch=1
 pkgdesc="DOS filesystem utilities"
 arch=('x86_64')
 url="https://github.com/dosfstools/dosfstools"
-source=($url/releases/download/v$pkgver/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('e6b2aca70ccc3fe3687365009dd94a2e18e82b688ed4e260e04b7412471cc173'
+source=($url/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz{,.sig})
+sha256sums=('64926eebf90092dca21b14259a5301b7b98e7b1943e8a201c7d726084809b527'
             'SKIP')
 validpgpkeys=('25714AECDBFDACEE1CE95FE77F6022516E869F64')
 

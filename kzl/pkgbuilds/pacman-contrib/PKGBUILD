@@ -13,7 +13,7 @@ optdepends=("mlocate: pacdiff"
 source=(https://git.archlinux.org/$pkgname.git/snapshot/$pkgname-$pkgver.tar.{gz,asc})
 sha256sums=('8746f1352aaad990fe633be34f925d5ab8bd8a19a5f1274e72dbde426deb86bd'
             'SKIP')
-validpgpkeys=('5134EF9EAF65F95B6BB1608E50FB9B273A9D0BB5')
+validpgpkeys=('04DC3FB1445FECA813C27EFAEA4F7B321A906AD9')
 
 prepare() {
   cd pacman-contrib-$pkgver

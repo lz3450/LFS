@@ -4,21 +4,22 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
 pkgname=binutils
-pkgver=2.35
+pkgver=2.36.1
 pkgrel=1
 epoch=1
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64')
 url="https://www.gnu.org/software/binutils/"
+options=(staticlibs)
 source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('1b11659fb49e20e18db460d44485f09442c8c56d5df165de9461eb09c8302f85'
+sha256sums=('e81d9edf373f193af428a0f256674aea62a9d74dfe93f65192d4eae030b0f3b0'
             'SKIP')
 validpgpkeys=('3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F')
 
 prepare() {
   cd $pkgname-$pkgver
 
-  mkdir build
+  mkdir -p build
 
   sed -e '/^development=/s/true/false/' -i bfd/development.sh
   sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i libiberty/configure
@@ -33,7 +34,6 @@ build() {
     --enable-lto \
     --enable-plugins \
     --enable-relro \
-    --enable-shared \
     --enable-targets=x86_64-pep \
     --enable-threads \
     --enable-deterministic-archives \
@@ -57,7 +57,7 @@ check() {
 package() {
   cd $pkgname-$pkgver/build
 
-  make DESTDIR="$pkgdir/" tooldir="/usr/" install
+  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*

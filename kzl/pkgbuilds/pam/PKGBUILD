@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pam
-pkgver=1.4.0
+pkgver=1.5.1
 pkgrel=1
 epoch=1
 pkgdesc="PAM (Pluggable Authentication Modules) library"
@@ -18,7 +18,7 @@ source=(https://github.com/linux-pam/linux-pam/releases/download/v$pkgver/Linux-
         system-login
         system-remote-login
         system-services)
-sha256sums=('cd6d928c51e64139be3bdb38692c68183a509b83d4f2c221024ccd4bcddfd034'
+sha256sums=('201d40730b1135b1b3cdea09f2c28ac634d73181ccd0172ceddee3649c5792fc'
             'SKIP'
             '39f8e23c458d50a5d3ed09e921303e5af4f15dbed9dfadc127dd2ebe311a6ed5'
             '60ca06d24fa5887ddf83fc6df76e70e82de3a2bc18249317eb917728cf8e282e'
@@ -26,7 +26,7 @@ sha256sums=('cd6d928c51e64139be3bdb38692c68183a509b83d4f2c221024ccd4bcddfd034'
             '68da3b853873306abd586600e6c193d624b4898c40189f45ecfd823a453f6d73'
             '1832a52bcd761fbe9007d5adbd08e44b6a34b1d7b1ce689bfbe73dbcab7ff838'
             '985bba1357fc2e128234ff4f9503f47d0b6ad403dc433c34cfd1ef3e438487f2')
-validpgpkeys=('8C6BFD92EE0F42EDF91A6A736D1A7F052E5924BB')
+validpgpkeys=('296D6F29A020808E8717A8842DB5BD89A340AEB7')
 
 build() {
   cd Linux-PAM-$pkgver

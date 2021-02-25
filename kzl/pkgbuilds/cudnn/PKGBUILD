@@ -1,9 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cudnn
-pkgver=8.0.4.30
-_pkgver=8.0.4
-_cudaver=11.1
+pkgver=8.1.0.77
+_pkgver=8.1.0
+_cudaver=11.2
 _majorver=8
 pkgrel=1
 epoch=1
@@ -11,7 +11,7 @@ pkgdesc="NVIDIA CUDA Deep Neural Network library"
 arch=('x86_64')
 url="https://developer.nvidia.com/cuDNN"
 depends=(cuda)
-options=(!strip)
+options=(!strip staticlibs)
 source=(https://developer.download.nvidia.com/compute/redist/cudnn/v$_pkgver/cudnn-$_cudaver-linux-x64-v$pkgver.tgz)
 noextract=(cudnn-$_cudaver-linux-x64-v$pkgver.tgz)
 sha256sums=('8f4c662343afce5998ce963500fe3bb167e9a508c1a1a949d821a4b80fa9beab')

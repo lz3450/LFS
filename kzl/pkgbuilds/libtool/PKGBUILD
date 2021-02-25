@@ -1,18 +1,40 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libtool
-pkgver=2.4.6
+pkgver=2.4.6+42+gb88cebd5
 pkgrel=1
 epoch=1
 pkgdesc="A generic library support script"
 arch=('x86_64')
 url="https://www.gnu.org/software/libtool"
 provides=(libltdl libtool-multilib)
-source=(https://ftpmirror.gnu.org/$pkgname/$pkgname-$pkgver.tar.gz)
-sha256sums=('e3bd4d5d3d025a36c21dd6af7ea818a2afcd4dfc1ea5a17b39d7854bcd0c06e3')
+source=(git+https://git.savannah.gnu.org/git/libtool.git#commit=b88cebd510add4420dd8f5367e3cc6e6e1f267cd
+        git+https://git.savannah.gnu.org/git/gnulib.git
+        gnulib-bootstrap::git+https://github.com/gnulib-modules/bootstrap.git)
+sha256sums=('SKIP'
+            'SKIP'
+            'SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g;s/^v//'
+  # git describe --tags | sed 's/-/+/g'
+}
+
+prepare() {
+  cd $pkgname
+
+  git submodule init
+  git config --local submodule.gnulib.url "$srcdir/gnulib"
+  git config --local submodule.gl-mod/bootstrap.url "$srcdir/gnulib-bootstrap"
+  git submodule update
+
+  ./bootstrap
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -21,13 +43,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

@@ -6,7 +6,7 @@
 pkgname=gcc
 pkgver=10.2.0
 _islver=0.21
-pkgrel=1
+pkgrel=2
 epoch=1
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')

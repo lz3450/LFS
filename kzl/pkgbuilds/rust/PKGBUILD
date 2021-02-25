@@ -21,7 +21,9 @@ prepare() {
 
   cp config.toml.example config.toml
 
-  sed -e '/vendor = /s/^#//' \
+  sed -e '/link-shared = /s/^#//' \
+      -e '/link-shared = /s/false/true/' \
+      -e '/vendor = /s/^#//' \
       -e '/vendor = /s/false/true/' \
       -e '/extended = false$/s/^#//' \
       -e '/extended = /s/false/true/' \
@@ -66,9 +68,9 @@ package() {
   # overwrite them with symlinks to the per-architecture versions
   ln -srft "$pkgdir"/usr/lib "$pkgdir"/usr/lib/rustlib/x86_64-unknown-linux-gnu/lib/*.so
 
-  install -dm755 "$pkgdir"/usr/share/bash-completion/
-  mv "$pkgdir"/etc/bash_completion.d/* "$pkgdir"/usr/share/bash-completion/completions
-  rm -rf "$pkgdir"/etc
+  install -dm755 "$pkgdir"/usr/share/bash-completion/completions/
+  mv "$pkgdir"/etc/bash_completion.d/* "$pkgdir"/usr/share/bash-completion/completions/
+  rmdir "$pkgdir"/etc/{bash_completion.d,}
 
   rm "$pkgdir"/usr/lib/rustlib/{components,install.log,manifest-*,rust-installer-version,uninstall.sh}
 }

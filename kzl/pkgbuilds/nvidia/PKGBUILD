@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=nvidia
-pkgver=455.28
+pkgver=460.39
 pkgrel=1
 epoch=1
 arch=('x86_64')
@@ -10,8 +10,7 @@ depends=(linux)
 optdepends=("opencl-headers: headers necessary for OpenCL development")
 provides=(opencl-driver)
 options=(!strip)
-source=(nvidia.sysusers
-        https://us.download.nvidia.com/XFree86/Linux-x86_64/$pkgver/NVIDIA-Linux-x86_64-$pkgver.run)
+source=(https://us.download.nvidia.com/XFree86/Linux-x86_64/$pkgver/NVIDIA-Linux-x86_64-$pkgver.run)
 sha256sums=('b9c775b87829698cee92cd8b0004bd3d34b8b5cb36cef4d96199539fa72f8d15'
             'e4e1499b15aedc7c0b5c0d30c170858ed1625ab2701d3bb11747ac8c8371da0f')
 
@@ -122,7 +121,7 @@ package() {
   install -Dm644 nvidia-persistenced.1.gz "$pkgdir"/usr/share/man/man1/nvidia-persistenced.1.gz
   install -Dm644 nvidia-persistenced-init/systemd/nvidia-persistenced.service.template "$pkgdir"/usr/lib/systemd/system/nvidia-persistenced.service
   sed -i 's/__USER__/nvidia-persistenced/' "$pkgdir"/usr/lib/systemd/system/nvidia-persistenced.service
-  install -Dm644 "$srcdir"/nvidia.sysusers "$pkgdir"/usr/lib/sysusers.d/$pkgname.conf
+  echo "u nvidia-persistenced 143 'NVIDIA Persistence Daemon'" | | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/$pkgname.conf
 
   # application profiles
   install -Dm644 nvidia-application-profiles-$pkgver-rc "$pkgdir"/usr/share/nvidia/nvidia-application-profiles-$pkgver-rc
