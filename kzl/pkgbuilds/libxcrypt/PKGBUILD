@@ -8,9 +8,8 @@ pkgdesc="Modern library for one-way hashing of passwords"
 arch=('x86_64')
 url="https://github.com/besser82/libxcrypt/"
 provides=(libcrypt.so)
-source=(git+https://github.com/besser82/libxcrypt.git#tag=v$pkgver?signed)
+source=(git+https://github.com/besser82/libxcrypt.git#tag=v$pkgver)
 sha256sums=('SKIP')
-validpgpkeys=('678CE3FEE430311596DB8C16F52E98007594C21D')
 
 prepare() {
   cd $pkgname
