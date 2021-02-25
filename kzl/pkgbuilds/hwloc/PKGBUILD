@@ -7,7 +7,6 @@ epoch=1
 pkgdesc="(Portable Hardware Locality) a portable abstraction of hierarchical architectures"
 arch=('x86_64')
 url="https://www.open-mpi.org/projects/hwloc/"
-depends=(libpciaccess)
 makedepends=(cairo libxml2 pciutils)
 optdepends=(cairo libxml2 pciutils)
 source=(https://www.open-mpi.org/software/hwloc/v${pkgver%.*}/downloads/$pkgname-$pkgver.tar.bz2)
