@@ -22,7 +22,7 @@ sha256sums=('2e2556000e105dbd57f0b6b2a32ff2cf173bde4f0d85dffccfd8b7e51a0677ff'
             'SKIP'
             '83f108f915863c7ed0338e2d3e8f2e071a531a090ef8f8b2eb3a956a3c4f04d7'
             '0540122fb9340d546702a891bcce344fc3e8f21fe482c2c321b71c2e6b36964e')
-validpgpkeys=('BC7C7372637EC10C57D7AA6579C43DFBF1CF2187')
+validpgpkeys=('7273542B39962DF7B299931416792B4EA25340F8')
 
 # TODO: '--enable-systemtap'
 
