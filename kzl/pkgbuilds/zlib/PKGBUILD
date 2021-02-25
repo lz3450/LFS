@@ -16,6 +16,8 @@ validpgpkeys=('5ED46A6721D365587791E2AA783FCD8E58BCAFBA')
 build() {
   cd zlib-$pkgver
 
+  CFLAGS+=" -fPIC"
+
   ./configure \
     --prefix=/usr
 
@@ -34,7 +36,7 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd zlib-$pkgver
 
 	make test
 
@@ -47,7 +49,7 @@ check() {
 package_zlib() {
   pkgdesc="Compression library implementing the deflate compression method found in gzip and PKZIP"
 
-  cd $pkgname-$pkgver
+  cd zlib-$pkgver
 
   make DESTDIR="$pkgdir/" install
 }
