@@ -4,6 +4,7 @@ pkgbase=zlib
 pkgname=(zlib minizip)
 pkgver=1.2.11
 pkgrel=1
+epoch=2
 arch=('x86_64')
 url="https://zlib.net"
 options=(staticlibs)
