@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://www.openldap.org"
 depends=(libsasl)
 source=($url/software/download/OpenLDAP/openldap-release/openldap-$pkgver.tgz)
-sha256sums=('25520e0363c93f3bcb89802a4aa3db33046206039436e0c7c9262db5a61115e0')
+sha256sums=('c7ba47e1e6ecb5b436f3d43281df57abeffa99262141aec822628bc220f6b45a')
 
 prepare() {
   cd openldap-$pkgver
