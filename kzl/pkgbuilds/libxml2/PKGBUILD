@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libxml2
-pkgver=2.9.10+155+g7c06d99e
+pkgver=2.9.10+190+gf93ca3e1
 pkgrel=1
 epoch=1
 pkgdesc="XML parsing library, version 2"
 arch=('x86_64')
 url="http://xmlsoft.org"
 depends=(icu)
-source=(git+https://gitlab.gnome.org/GNOME/libxml2.git#commit=7c06d99e1f4f853e3c5b307c0dc79c8a32a09855)
+source=(git+https://gitlab.gnome.org/GNOME/libxml2.git#commit=f93ca3e140a371b26366f747a408588c631e0fd1)
 sha256sums=('SKIP')
 
 pkgver() {
