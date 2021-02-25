@@ -1,8 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=keyutils
-pkgver=1.6.1
+pkgver=1.6.3
 pkgrel=1
+epoch=1
 pkgdesc="Linux Key Management Utilities"
 arch=('x86_64')
 url="https://www.kernel.org/"
