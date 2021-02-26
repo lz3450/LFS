@@ -1,13 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=kbd
-pkgver=2.2.0+bc60377
+pkgver=2.4.0
 pkgrel=1
+epoch=1
 pkgdesc="Keytable files and keyboard utilities"
 arch=('x86_64')
 url="http://www.kbd-project.org"
 checkdepends=(check)
-source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git#commit=bc603778b15c6703c9e432843d4d5c5f991373ca?signed)
+source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git#tag=v$pkgver?signed)
 sha256sums=('SKIP')
 validpgpkeys=('7F2A3D07298149A0793C9A4EA45ABA544CFFD434')
 
