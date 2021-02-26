@@ -1,0 +1,32 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=quota
+pkgver=4.06
+pkgrel=1
+epoch=1
+pkgdesc="Tools to manage kernel-level quotas in Linux"
+arch=('x86_64')
+url="https://sourceforge.net/projects/linuxquota/"
+depends=(libnl dbus libtirpc)
+makedepends=(rpcsvc-proto)
+backup=(etc/warnquota.conf
+        etc/quotatab
+        etc/quotagrpadmins)
+source=(https://downloads.sourceforge.net/sourceforge/linuxquota/quota-$pkgver.tar.gz)
+sha256sums=('2f3e03039f378d4f0d97acdb49daf581dcaad64d2e1ddf129495fd579fbd268d')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" sbindir=/usr/bin root_sbindir=/usr/bin STRIP="" install
+}
