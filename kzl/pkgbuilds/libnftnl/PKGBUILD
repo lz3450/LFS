@@ -1,16 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libnftnl
-pkgver=1.1.6
+pkgver=1.1.9
 pkgrel=1
 pkgdesc="Netfilter library providing interface to the nf_tables subsystem"
 arch=('x86_64')
 url="https://netfilter.org/projects/libnftnl"
 depends=(libmnl)
 source=($url/files/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('c1eb5a696fc1d4b3b412770586017bc01af93da3ddd25233d34a62979dee1eca'
+sha256sums=('e9b21a6f9a41f9e72aff696cc842e4a9a78ec8d281aec188f3e2b7a21db94b9a'
             'SKIP')
-validpgpkeys=('C09DB2063F1D7034BA6152ADAB4655A126D292E4')
+validpgpkeys=('37D964ACC04981C75500FB9BD55D978A8A1420E4')
 
 build() {
   cd $pkgname-$pkgver
