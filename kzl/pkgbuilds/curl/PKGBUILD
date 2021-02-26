@@ -19,16 +19,16 @@ build() {
   ./configure \
     --prefix=/usr \
     --mandir=/usr/share/man \
-    --enable-ipv6 \
-    --enable-versioned-symbols \
-    --enable-threaded-resolver \
     --disable-ldap \
     --disable-ldaps \
     --disable-manual \
+    --enable-ipv6 \
+    --enable-versioned-symbols \
+    --enable-threaded-resolver \
     --with-gssapi \
-    --with-libssh2 \
     --with-random=/dev/urandom \
-    --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt
+    --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt \
+    --with-libssh2
 
   make
 }
