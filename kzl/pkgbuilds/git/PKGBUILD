@@ -7,7 +7,8 @@ epoch=1
 arch=('x86_64')
 url="https://git-scm.com/"
 depends=(curl expat openssl pcre2)
-makedepends=(asciidoc xmlto)
+makedepends=(xmlto)
+# makedepends=(asciidoc xmlto)
 # optdepends=("tk: gitk and git gui"
 #             "libsecret: libsecret credential helper")
 install=$pkgname.install
@@ -41,7 +42,7 @@ build() {
   make \
     "${_make_paths[@]}" \
     "${_make_options[@]}" \
-    all man
+    all
 
   # make -C contrib/credential/libsecret
   make -C contrib/diff-highlight "${_make_paths[@]}"
@@ -72,7 +73,7 @@ package() {
     "${_make_paths[@]}" \
     "${_make_options[@]}" \
     DESTDIR="$pkgdir/" \
-    install install-man
+    install
   
   # sysusers
   echo 'u git - "git daemon user" / /usr/bin/git-shell' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/git.conf
