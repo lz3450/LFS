@@ -20,15 +20,14 @@ pkgver() {
   cd $pkgname
 
   git describe --tags | sed 's/-/+/g;s/^v//'
-  # git describe --tags | sed 's/-/+/g'
 }
 
 prepare() {
   cd $pkgname
 
   git submodule init
-  git config --local submodule.gnulib.url "$srcdir/gnulib"
-  git config --local submodule.gl-mod/bootstrap.url "$srcdir/gnulib-bootstrap"
+  git config --local submodule.gnulib.url "$srcdir"/gnulib
+  git config --local submodule.gl-mod/bootstrap.url "$srcdir"/gnulib-bootstrap
   git submodule update
 
   ./bootstrap
@@ -38,7 +37,8 @@ build() {
   cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    lt_cv_sys_lib_dlsearch_path_spec="/usr/lib"
 
   make
 }
@@ -46,7 +46,7 @@ build() {
 check() {
   cd $pkgname
 
-  make check || warning "Check failed."
+  make gl_public_submodule_commit= check || warning "Check failed."
 }
 
 package() {
