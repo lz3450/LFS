@@ -14,7 +14,7 @@ source=(git+https://gitlab.freedesktop.org/dbus/dbus.git#tag=$pkgname-$pkgver?si
         dbus-reload.hook)
 sha256sums=('SKIP'
             '40a68351784cff90591656db57e77c9a97840ebf9e7a63eb1ccd6538e9c090f7')
-validpgpkeys=('3C8672A0F49637FE064AC30F52A43A1E4B77B059')
+validpgpkeys=('DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90')
 
 prepare() {
   cd $pkgname
@@ -49,7 +49,7 @@ build() {
 check() {
   cd $pkgname
 
-  make check
+  make check || warning "Check failed."
 }
 
 package() {
