@@ -10,7 +10,7 @@ url="https://www.lysator.liu.se/~nisse/nettle"
 depends=(gmp)
 checkdepends=(valgrind)
 source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('75cca1998761b02e16f2db56da52992aef622bf55a3b45ec538bc2eedadc9419'
+sha256sums=('156621427c7b00a75ff9b34b770b95d34f80ef7a55c3407de94b16cbf436c42e'
             'SKIP')
 validpgpkeys=('343C2FF0FBEE5EC2EDBEF399F3599FF828C67298')
 
