@@ -61,4 +61,9 @@ package() {
 
   # Remove unwanted files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
+
+  # No shared linking to these files outside binutils
+  rm -f "$pkgdir"/usr/lib/lib{bfd,opcodes}.so
+  echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "$pkgdir"/usr/lib/libbfd.so
+  echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "$pkgdir"/usr/lib/libopcodes.so
 }
