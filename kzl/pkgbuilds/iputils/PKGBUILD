@@ -1,13 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=iputils
-pkgver=20200309
+pkgver=20200821
 pkgrel=1
+epoch=1
 pkgdesc="Network monitoring tools, including ping"
 arch=('x86_64')
 url="http://www.skbuff.net/iputils/"
-depends=(libcap libidn2 libunistring libxslt)
-source=(git+https://github.com/iputils/iputils.git#commit=f406ac9272885016d43214c415b9a9972cd3dc55)
+depends=(libcap libidn2)
+source=(git+https://github.com/iputils/iputils.git#commit=s$pkgver)
 sha256sums=('SKIP')
 
 build() {
@@ -23,6 +24,7 @@ build() {
     -D b_lto=true \
     -D b_pie=true \
     -D BUILD_RARPD=true \
+    -D BUILD_TFTPD=true \
     build
 
   meson compile -C build
