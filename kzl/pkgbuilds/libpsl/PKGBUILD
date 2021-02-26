@@ -1,24 +1,21 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libpsl
-pkgver=0.21.0
+pkgver=0.21.1
 pkgrel=1
+epoch=1
 pkgdesc="Public Suffix List library"
 arch=('x86_64')
 url="https://github.com/rockdaboot/libpsl"
 depends=(libidn2)
-makedepends=(publicsuffix-list)
-source=(https://github.com/rockdaboot/libpsl/releases/download/$pkgname-$pkgver/$pkgname-$pkgver.tar.gz
-        https://github.com/rockdaboot/libpsl/commit/9347024221f4a9d63f9dcafcda13362a7c8d92fe.patch)
-sha256sums=('41bd1c75a375b85c337b59783f5deb93dbb443fb0a52d257f403df7bd653ee12'
-            'a50c2c510a6543e79767af75b909bf7abc15e6b057b0253a036da66b27a590f1')
+makedepends=(libxslt publicsuffix-list)
+source=($url/releases/download/$pkgver/$pkgname-$pkgver.tar.gz)
+sha256sums=('ac6ce1e1fbd4d0254c4ddb9d37f1fa99dec83619c1253328155206b896210d4c')
 
 prepare() {
   cd $pkgname-$pkgver
 
-  patch -Np1 -i "$srcdir"/9347024221f4a9d63f9dcafcda13362a7c8d92fe.patch
   rm -rf list
-  autoreconf -ifv
 }
 
 build() {
@@ -26,9 +23,11 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --enable-builtin=libidn2 \
-    --enable-runtime=libidn2 \
     --disable-static \
+    --disable-gtk-doc \
+    --disable-man \
+    --enable-runtime=libidn2 \
+    --enable-builtin=libidn2 \
     --disable-dependency-tracking \
     --with-psl-file=/usr/share/publicsuffix/public_suffix_list.dat \
     --with-psl-testfile=/usr/share/publicsuffix/test_psl.txt
@@ -39,7 +38,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check
+  make check || warning "Check failed."
 }
 
 package() {
