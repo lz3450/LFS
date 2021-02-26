@@ -9,7 +9,6 @@ arch=('x86_64')
 url="https://wiki.freedesktop.org/www/Software/dbus/"
 depends=(audit expat)
 makedepends=(autoconf-archive)
-provides=(libdbus libdbus-1.so)
 source=(git+https://gitlab.freedesktop.org/dbus/dbus.git#tag=$pkgname-$pkgver?signed
         dbus-reload.hook)
 sha256sums=('SKIP'
@@ -27,18 +26,21 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --libexecdir=/usr/lib/dbus-$pkgver \
+    --libexecdir=/usr/lib/dbus-1.0 \
     --sysconfdir=/etc \
     --localstatedir=/var \
     runstatedir=/run \
     --disable-static \
+    --disable-xml-docs \
+    --disable-doxygen-docs \
+    --disable-ducktype-docs \
     --enable-libaudit \
     --enable-inotify \
     --enable-systemd \
     --enable-user-session \
     --with-system-pid-file=/run/dbus/pid \
     --with-system-socket=/run/dbus/system_bus_socket \
-    --with-console-auth-dir=/run/console/ \
+    --with-console-auth-dir=/run/console \
     --with-dbus-user=dbus \
     --without-x \
     --with-systemdsystemunitdir=/usr/lib/systemd/system
