@@ -36,4 +36,3 @@ depends=(
   texinfo groff man-db
 )
 optdepends=("linux: bare metal support")
-
