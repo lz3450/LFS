@@ -1,20 +1,20 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libnsl
-pkgver=1.2.0
+pkgver=1.3.0
 pkgrel=1
+epoch=1
 pkgdesc="Public client interface library for NIS(YP) and NIS+"
 arch=('x86_64')
 url="https://github.com/thkukuk/libnsl"
 depends=(libtirpc)
 source=($pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz)
-sha256sums=('a5a28ef17c4ca23a005a729257c959620b09f8c7f99d0edbfe2eb6b06bafd3f8')
+sha256sums=('8e88017f01dd428f50386186b0cd82ad06c9b2a47f9c5ea6b3023fc6e08a6b0f')
 
 prepare() {
   cd $pkgname-$pkgver
 
   autoreconf -ifv
-  ./autogen.sh
 }
 
 build() {
