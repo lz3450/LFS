@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libgcrypt
-pkgver=1.9.1
+pkgver=1.9.2
 pkgrel=1
 epoch=1
 pkgdesc="General purpose cryptographic library based on the code from GnuPG"
@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://www.gnupg.org"
 depends=(libgpg-error)
 source=(https://gnupg.org/ftp/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('c5a67a8b9b2bd370fb415ed1ee31c7172e5683076493cf4a3678a0fbdf0265d9'
+sha256sums=('b2c10d091513b271e47177274607b1ffba3d95b188bbfa8797f948aec9053c5a'
             'SKIP')
 validpgpkeys=('6DAA6E64A76D2840571B4902528897B826403ADA')
 
@@ -19,7 +19,7 @@ prepare() {
   sed -e "s:t-secmem::" -i tests/Makefile.am
   sed -e "s:t-sexp::" -i tests/Makefile.am
 
-  autoreconf -vfi
+  autoreconf -ifv
 }
 
 build() {
