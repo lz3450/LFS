@@ -1,0 +1,40 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=json-c
+pkgver=0.15
+pkgrel=1
+epoch=1
+pkgdesc="A JSON implementation in C"
+arch=('x86_64')
+url="https://github.com/json-c/json-c/wiki"
+source=(git+https://github.com/$pkgname/$pkgname#tag=$pkgname-$pkgver-20200726)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=None \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DENABLE_THREADING=ON \
+    -DENABLE_RDRAND=OFF \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+check() {
+  cd $pkgname
+
+  cmake --build build --target tests || warning "Check failed."
+}
+
+package() {
+  cd $pkgname
+
+  cmake --build build --target install -- DESTDIR="$pkgdir/"
+}
