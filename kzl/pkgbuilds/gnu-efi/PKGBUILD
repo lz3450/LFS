@@ -3,6 +3,7 @@
 pkgname=gnu-efi
 pkgver=3.0.12
 pkgrel=1
+epoch=1
 pkgdesc="Library for building UEFI Applications using GNU toolchain"
 arch=('x86_64')
 url="https://sourceforge.net/projects/gnu-efi/"
