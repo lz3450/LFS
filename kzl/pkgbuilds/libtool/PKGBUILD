@@ -46,7 +46,7 @@ build() {
 check() {
   cd $pkgname
 
-  make check
+  make check || warning "Check failed."
 }
 
 package() {
