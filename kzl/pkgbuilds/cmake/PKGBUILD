@@ -3,6 +3,7 @@
 pkgname=cmake
 pkgver=3.19.6
 pkgrel=1
+epoch=1
 pkgdesc="A cross-platform open-source make system"
 arch=('x86_64')
 url="https://www.cmake.org/"
@@ -10,7 +11,7 @@ depends=(curl jsoncpp libarchive libuv rhash shared-mime-info)
 # makedepends=(qt5)
 # optdepends=("qt5: cmake-gui")
 source=(https://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz)
-sha256sums=('597c61358e6a92ecbfad42a9b5321ddd801fc7e7eca08441307c9138382d4f77')
+sha256sums=('ec87ab67c45f47c4285f204280c5cde48e1c920cfcfed1555b27fb3b1a1d20ba')
 
 # TODO: --qt-gui
 
