@@ -22,7 +22,10 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --with-python=/usr/bin/python3
+    --disable-static \
+    --without-python
+  
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
   make
 }
@@ -30,7 +33,7 @@ build() {
 check() {
   cd $pkgname
 
-  make check
+  make check || warning "Check failed."
 }
 
 package() {
