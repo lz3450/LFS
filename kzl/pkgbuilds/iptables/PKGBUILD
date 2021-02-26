@@ -1,16 +1,20 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=iptables
-pkgver=1.8.4
+pkgver=1.8.7
 pkgrel=1
+epoch=1
 pkgdesc="Linux kernel packet control tool"
 arch=('x86_64')
 url="https://www.netfilter.org/projects/iptables/index.html"
 depends=(libnetfilter_conntrack libnfnetlink libnftnl libpcap)
+provides=(iptables-nft)
+conflicts=(iptables-nft)
+replaces=(iptables-nft)
 source=(https://www.netfilter.org/projects/$pkgname/files/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('993a3a5490a544c2cbf2ef15cf7e7ed21af1845baf228318d5c36ef8827e157c'
+sha256sums=('c109c96bb04998cd44156622d36f8e04b140701ec60531a10668cfdff5e8d8f0'
             'SKIP')
-validpgpkeys=('C09DB2063F1D7034BA6152ADAB4655A126D292E4')
+validpgpkeys=('37D964ACC04981C75500FB9BD55D978A8A1420E4')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -26,13 +30,13 @@ build() {
 
   ../configure \
     --prefix=/usr \
-    --sysconfdir=/etc \
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib \
-    --enable-bpf-compiler \
+    --sysconfdir=/etc \
+    --enable-shared \
     --enable-devel \
     --enable-libipq \
-    --enable-shared
+    --enable-bpf-compiler
 
   sed -e 's/ -shared / -Wl,-O1,--as-needed\0/g' -i libtool
 
