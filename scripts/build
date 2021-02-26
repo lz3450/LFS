@@ -7,8 +7,8 @@ VERSION=1.1
 
 # arguments/options
 
-TARGET=
-STAGE=
+TARGET=kzl
+STAGE=1
 
 # kzl packages
 
@@ -26,31 +26,39 @@ kzl_stage1_pkgs=(
 
 # base
 kzl_stage2_pkgs=(
-    filesystem
-    bash
-    dbus systemd
-    acl attr libxcrypt openssl libcap libcap-ng coreutils pam shadow util-linux
-    perl python
-    ca-certificates curl wget
-    git
-    fakeroot pacman arch-install-scripts pacman-contrib
-    dosfstools nano parted
-    openssh rsync
-    cmake meson ninja
-    linux linux-firmware
-)
+    ### base
+    # iana-etc tzdata filesystem
+    # ncurses readline bash bash-completion
+    # bzip2 xz zlib lz4 zstd
+    # acl attr gmp keyutils libldap krb5 libcap-ng swig audit libtirpc libxcrypt pam libcap openssl libseccomp file shadow
+    # coreutils util-linux e2fsprogs
+    # db gdbm perl
+    # cmake
+    # expat elfutils gc libffi libunistring guile mpfr gdb
+    # libnsl mpdecimal tcl sqlite valgrind python
+    # findutils icu libxml2 kmod pciutils hwloc libnl openssh openmpi boost
+    # argon2 libaio thin-provisioning-tools device-mapper json-c popt cryptsetup
+    # diffutils gawk m4 autoconf automake autoconf-archive dbus
+    # libmnl libnfnetlink libnetfilter_conntrack libnftnl libpcap iptables
+    libidn2 libtasn1 p11-kit nettle gnutls
+    ca-certificates curl wget git
+    kbd libgcrypt libgpg-error pcre2 gnu-efi libmicrohttpd
+    # systemd
+    # procps-ng
 
-kzl_stage3_pkgs=(
-    icu libldap krb5 libxcrypt 
-    llvm clang
-    zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
-    ruby
-    libusb usbutils
-    wpa_supplicant
-    nvidia cuda cudnn nccl intel-mkl lapack
-    tmux
-    gobject-introspection graphite harfbuzz ghostscript xxhash lz4 popt texlive
-    
+    #  ruby
+    #  glib2 gettext po4a fakeroot
+    # llvm clang rust ruby
+    # pacman arch-install-scripts pacman-contrib
+    # dosfstools nano parted rsync
+    # zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
+    # linux-firmware
+    # libusb usbutils
+    # wpa_supplicant
+    # nvidia cuda cudnn nccl intel-mkl lapack
+    # tmux
+    # gobject-introspection graphite harfbuzz ghostscript xxhash lz4 popt texlive
+    # xmlto help2man po4a
 )
 
 # ubuntu packages
@@ -77,32 +85,50 @@ prepare() {
     (yes yes || :) | sudo pacman -Syy
 }
 
-build() {
-    local pkg
-    pkg=$1
+get_pkgbase() {
+    local pkgbase
+    case $1 in
+        device-mapper)  pkgbase=lvm2;;
+        *)              pkgbase=$1;;
+    esac
+    echo "$pkgbase"
+}
 
-    cd $ROOTDIR/$TARGET/pkgbuilds/$pkg
+update_key() {
+    local pkgbase
+    local pkgname
+    pkgname=$1
+    pkgbase=$(get_pkgbase $pkgname)
+
+    cd $ROOTDIR/$TARGET/pkgbuilds/$pkgbase
+
+    updpkgsums
+    gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
+}
+
+build() {
+    local pkgbase
+    local pkgname
+    pkgname=$1
+    pkgbase=$(get_pkgbase $pkgname)
+
+    cd $ROOTDIR/$TARGET/pkgbuilds/$pkgbase
 
     local log
-
     if [ -z $STAGE ]; then
-        log="$LOGDIR"/$pkg.log
+        log="$LOGDIR"/$pkgbase.log
     else
-        log="$LOGDIR"/$pkg.stage$STAGE.log
+        log="$LOGDIR"/$pkgbase.stage$STAGE.log
     fi
-
     if [ -f $log ]; then
         rm $log
     fi
     
-    makepkg -scCf --skippgpcheck --nocheck --noconfirm &>> $log
+    makepkg -scCf --noconfirm &>> $log
 
-    case $pkg in
-        *)
-            update-repo -t $TARGET
-            (yes yes || :) | sudo pacman -Sddy --overwrite "*" $pkg # --config $PACMAN_CONF
-            ;;
-    esac
+    update-repo -t $TARGET
+    (yes yes || :) | sudo pacman -Scc
+    (yes yes || :) | sudo pacman -Sddy --overwrite "*" $pkgname # --config $PACMAN_CONF
 }
 
 usage() {
@@ -114,8 +140,8 @@ usage() {
     echo
     echo "    -h, --help        display this help message and exit"
     echo "    -v, --version     display version information and exit"
-    echo "    -t, --target      build target (kzl, rpi tegra, ubuntu)"
-    echo "    -s, --stage       stage (stage0 (default), stage1, stage2, stage3)"
+    echo "    -t, --target      build target (kzl(default), rpi, tegra, ubuntu)"
+    echo "    -s, --stage       stage (stage0, stage1(default), stage2, stage3)"
     echo
 }
 
@@ -156,10 +182,9 @@ fi
 # 
 if [ "$TARGET" = "kzl" ]; then
     case $STAGE in
-        0) update-repo --clear -t $TARGET; pkgs=${stage0_pkgs[@]} ;;
-        1) pkgs=${stage1_pkgs[@]} ;;
-        2) pkgs=${stage2_pkgs[@]} ;;
-        3) pkgs=${stage3_pkgs[@]} ;;
+        0) update-repo --clear -t $TARGET; pkgs=${kzl_stage0_pkgs[@]} ;;
+        1) pkgs=${kzl_stage1_pkgs[@]} ;;
+        2) pkgs=${kzl_stage2_pkgs[@]} ;;
         *) printf "unknown stage \"$STAGE\""; exit 1 ;;
     esac
 elif [ "$TARGET" = "ubuntu" ]; then
@@ -172,6 +197,15 @@ fi
 prepare
 
 for p in ${pkgs[@]}; do
-    echo "building $p ..."
+    echo "update keys for $p ..."
+    update_key $p &
+done
+
+wait
+
+for p in ${pkgs[@]}; do
+    echo "################################################################################"
+    echo "   building $p ..."
+    echo "################################################################################"
     build $p
 done
