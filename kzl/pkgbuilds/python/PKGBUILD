@@ -10,9 +10,12 @@ url="https://www.python.org/"
 depends=(expat gdbm libffi libnsl openssl)
 makedepends=(mpdecimal sqlite valgrind)
 # makedepends=(mpdecimal sqlite tk valgrind)
-source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc})
+install=$pkgname.install
+source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc}
+        $pkgname.install)
 sha256sums=('3c2034c54f811448f516668dce09d24008a0716c3a794dd8639b5388cbde247d'
-            'SKIP')
+            'SKIP'
+            '97b9da46cb77d4a4e9c86a84de1f0e1ca130cbc4b3fef51fcee6bc0a50d90e04')
 validpgpkeys=('E3FF2839C048B25C084DEBE9B26995E310250568')
 
 build() {

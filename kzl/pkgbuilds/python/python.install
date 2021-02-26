@@ -1,0 +1,8 @@
+post_install() {
+  sudo python -m ensurepip
+  pip install -U --no-binary :all: pip meson ninja
+}
+
+post_upgrade() {
+  post_install
+}
