@@ -16,7 +16,7 @@ prepare() {
   cd $pkgbase
 
   # remove install section from systemd units that are enabled by default
-  sed -i -e '/^\[Install\]$/,$d' \
+  sed -e '/^\[Install\]$/,$d' -i \
     scripts/dm_event_systemd_red_hat.socket.in \
     scripts/lvm2_lvmpolld_systemd_red_hat.socket.in \
     scripts/lvm2_monitoring_systemd_red_hat.service.in
@@ -26,29 +26,27 @@ build() {
   cd $pkgbase
 
   ./configure \
+    CONFIG_SHELL=/bin/bash \
     --prefix=/usr \
     --sbindir=/usr/bin \
     --sysconfdir=/etc \
     --localstatedir=/var \
-    --enable-applib \
-    --enable-cmdlib \
-    --enable-dmeventd \
-    --enable-lvmetad \
-    --enable-lvmpolld \
-    --enable-pkgconfig \
     --enable-readline \
-    --enable-udev_rules \
-    --enable-udev_sync \
-    --enable-use-lvmetad \
+    --enable-lvmpolld \
     --enable-udev-systemd-background-jobs \
-    --with-cache=internal \
-    --with-default-dm-run-dir=/run \
-    --with-default-locking-dir=/run/lock/lvm \
-    --with-default-pid-dir=/run \
-    --with-default-run-dir=/run/lvm \
-    --with-systemdsystemunitdir=/usr/lib/systemd/system \
+    --enable-udev_sync \
+    --enable-udev_rules \
+    --enable-cmdlib \
+    --enable-pkgconfig \
+    --enable-dmeventd \
     --with-thin=internal \
-    --with-udev-prefix=/usr
+    --with-cache=internal \
+    --with-default-pid-dir=/run \
+    --with-default-dm-run-dir=/run \
+    --with-default-run-dir=/run/lvm \
+    --with-udev-prefix=/usr \
+    --with-systemdsystemunitdir=/usr/lib/systemd/system \
+    --with-default-locking-dir=/run/lock/lvm
 
   make
 }
@@ -62,7 +60,7 @@ package_device-mapper() {
   make DESTDIR="$pkgdir/" install_device-mapper
   make DESTDIR="$pkgdir/" install_systemd_units
   rm -f "$pkgdir"/usr/lib/systemd/system/{blk-availability.service,lvm2-*}
-  install -d -m0755 "$pkgdir"/usr/lib/systemd/system/sockets.target.wants
+  install -dm0755 "$pkgdir"/usr/lib/systemd/system/sockets.target.wants
   ln -sf ../dm-event.socket "$pkgdir"/usr/lib/systemd/system/sockets.target.wants/dm-event.socket
 }
 
@@ -74,7 +72,7 @@ package_lvm2() {
   cd $pkgbase
 
   make DESTDIR="$pkgdir/" install_lvm2
-  make -C liblvm DESTDIR="$pkgdir/" install
+  install -dm755 "${pkgdir}"/etc/lvm/{archive,backup}
   make DESTDIR="$pkgdir/" install_systemd_units
   rm -f "$pkgdir"/usr/lib/systemd/system/dm-*
   make DESTDIR="$pkgdir/" install_systemd_generators
