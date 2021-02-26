@@ -7,10 +7,17 @@ pkgdesc="A collection of common network programs"
 arch=('x86_64')
 url="https://www.gnu.org/software/inetutils/"
 depends=(libcap pam)
-backup=()
+makedepends=(help2man)
+backup=(etc/xinetd.d/telnet
+        etc/xinetd.d/talk
+        etc/xinetd.d/rlogin
+        etc/xinetd.d/rsh
+        etc/pam.d/rlogin
+        etc/pam.d/rsh)
 options=(!emptydirs)
-install=
-source=(https://ftp.gnu.org/gnu/inetutils/$pkgname-$pkgver.tar.xz{,.sig})
+install=$pkgname.inetutils
+source=(https://ftp.gnu.org/gnu/inetutils/$pkgname-$pkgver.tar.xz{,.sig}
+        $pkgname.inetutils)
 sha256sums=('849d96f136effdef69548a940e3e0ec0624fc0c81265296987986a0dd36ded37'
             'SKIP')
 validpgpkeys=('4FBD67621082C4C502448E3B180551BAD95A3C35')
@@ -40,4 +47,6 @@ package() {
   cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir/" install
+
+  chmod -s "$pkgdir"/usr/bin/{rcp,rlogin,rsh}
 }
