@@ -7,7 +7,7 @@ epoch=1
 pkgdesc="'A fast and versatile file copying tool for remote and local files"
 arch=('x86_64')
 url="https://rsync.samba.org/"
-depends=(acl lz4 openssl popt xxhash)
+depends=(acl openssl popt xxhash)
 # backup=(etc/rsyncd.conf)
 source=(git+https://github.com/WayneD/rsync#tag=v$pkgver?signed)
 sha256sums=('SKIP')
