@@ -1,0 +1,40 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gd
+pkgver=2.3.1
+pkgrel=1
+epoch=1
+pkgdesc="Library for the dynamic creation of images by programmer"
+arch=('x86_64')
+url="https://libgd.github.io/"
+depends=(fontconfig libxpm)
+source=(https://github.com/libgd/libgd/archive/$pkgname-$pkgver.tar.gz)
+sha256sums=('795978dcec1bf931148ebcdca9ed1e9cdfa9e71acff8bf035a8867dd1f7af6cd')
+
+prepare() {
+  cd libgd-$pkgname-$pkgver
+
+  ./bootstrap.sh
+}
+
+build() {
+  cd libgd-$pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --disable-rpath
+
+  make
+}
+
+check() {
+  cd libgd-$pkgname-$pkgver
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd libgd-$pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
