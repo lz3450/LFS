@@ -1,0 +1,61 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=shared-mime-info
+pkgver=2.0+57+gc1d1c70
+pkgrel=1
+epoch=1
+pkgdesc="Freedesktop.org Shared MIME Info"
+arch=('x86_64')
+url="https://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec/"
+depends=(glib2 libxml2)
+makedepends=(docbook-xsl itstool xmlto)
+source=(git+https://gitlab.freedesktop.org/xdg/shared-mime-info.git#commit=c1d1c70684dac11ce6c14a5089b5cb0b64a7dc27
+        git+https://gitlab.freedesktop.org/xdg/xdgmime.git#commit=de283fc430460b9b3a7e61432a6d273cd64cb10
+        update-mime-database.hook)
+sha256sums=('SKIP'
+            'SKIP'
+            '95cd0b97a5ec35ee97c459669e8c0f9c16b0cf43a9a801ff11da2cabf5424df5')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --long | sed 's/^Release.//;s/\([^-]*-g\)/\1/;s/-/+/g;'
+}
+
+prepare() {
+  cd xdgmime
+
+  CFLAGS= make 
+}
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D update-mimedb=false \
+    -D xdgmime-path="$srcdir"/xdgmime \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build --print-errorlogs || warning "Check failed."
+}
+
+package() {
+  cd $pkgname
+
+  DESTDIR="$pkgdir/" meson install -C build
+  install -Dm644 "$srcdir"/update-mime-database.hook "$pkgdir"/usr/share/libalpm/hooks/update-mime-database.hook
+}
