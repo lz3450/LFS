@@ -1,13 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libutempter
-pkgver=1.2.0
+pkgver=1.2.1
 pkgrel=1
+epoch=1
 pkgdesc="Interface for terminal emulators such as screen and xterm to record user sessions to utmp and wtmp files"
 arch=('x86_64')
 url="ftp://ftp.altlinux.org/pub/people/ldv/utempter"
 source=(ftp://ftp.altlinux.org/pub/people/ldv/utempter/$pkgname-$pkgver.tar.gz{,.asc})
-sha256sums=('27a99e351ca28ed868f0a6a5b155d0e09c8fc20674a210668a3da17ef79b7213'
+sha256sums=('967fef372f391de501843ad87570c6cf5dabd9651f00f1783090fbc12b2a34cb'
             'SKIP')
 validpgpkeys=('296D6F29A020808E8717A8842DB5BD89A340AEB7')
 
