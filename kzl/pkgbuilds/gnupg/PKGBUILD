@@ -24,6 +24,12 @@ prepare() {
 
 	rm doc/gnupg.info*
 
+  rm -rf .git
+
+  sed -e '/^\s*beta=yes/s/yes/no/' \
+      -e '/^\s*tmp=\"-unknown\"/s/-unknown//' \
+      -i autogen.sh
+
 	./autogen.sh
 }
 
