@@ -1,0 +1,40 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=ldns
+pkgver=1.7.1
+pkgrel=1
+epoch=1
+pkgdesc="Fast DNS library supporting recent RFCs"
+arch=('x86_64')
+url="https://www.nlnetlabs.nl/projects/ldns/"
+depends=(openssl)
+makedepends=(libpcap)
+optdepends=("libpcap: ldns-dpa tool")
+source=(https://www.nlnetlabs.nl/downloads/$pkgname/$pkgname-$pkgver.tar.gz)
+sha256sums=('8ac84c16bdca60e710eea75782356f3ac3b55680d40e1530d7cea474ac208229')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+    --disable-rpath \
+    --with-drill \
+    --with-trust-anchor=/etc/trusted-key.key \
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
