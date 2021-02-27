@@ -10,14 +10,16 @@ url="https://po4a.org/"
 source=(https://github.com/mquinson/$pkgname/archive/v$pkgver.tar.gz)
 sha256sums=('ef8ea68ceafd810a70c6d2aead57268375542a61d9b7c36ddd2550c9b8708430')
 
-build() {
-  cd $pkgname-$pkgver
-
+prepare() {
   cpan Module::Build
   cpan Unicode::LineBreak 
   cpan YAML::Tiny
   cpan Locale::gettext
   cpan Pod::Parser
+}
+
+build() {
+  cd $pkgname-$pkgver
 
   perl Build.PL installdirs=vendor create_packlist=0
   LC_ALL=en_US.UTF-8 perl Build
