@@ -10,7 +10,7 @@ url="https://www.freedesktop.org/wiki/Software/HarfBuzz"
 depends=(freetype2 glib2 graphite icu)
 makedepends=(cairo gobject-introspection)
 optdepents=("cairo: hb-view program")
-checkdepends=(python-fonttools)
+# checkdepends=(python-fonttools)
 provides=(harfbuzz-icu)
 conflicts=(harfbuzz-icu)
 replaces=(harfbuzz-icu)
@@ -48,34 +48,3 @@ package() {
 
   DESTDIR="$pkgdir/" meson install -C build
 }
-
-# build() {
-#   cd $pkgname
-
-#   ./autogen.sh \
-#     --prefix=/usr \
-#     --with-freetype \
-#     --with-glib \
-#     --with-gobject \
-#     --with-graphite2 \
-#     --with-icu \
-#     --with-cairo \
-#     --disable-gtk-doc
-
-#   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
-
-#   make
-# }
-
-# check() {
-#   cd $pkgname
-
-#   make TMPDIR="$srcdir/" check
-#   rm -rf "$srcdir"/tmp*
-# }
-
-# package() {
-#   cd $pkgname
-
-#   make DESTDIR="$pkgdir/" install
-# }
