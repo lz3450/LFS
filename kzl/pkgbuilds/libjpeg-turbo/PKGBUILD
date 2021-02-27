@@ -1,19 +1,21 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgname=libjpeg
-pkgver=2.0.4
+pkgname=libjpeg-turbo
+pkgver=2.0.6
 pkgrel=1
+epoch=1
 pkgdesc="JPEG image codec with accelerated baseline compression and decompression"
 arch=('x86_64')
 url="https://libjpeg-turbo.org/"
 makedepends=(nasm)
+provides=(libjpeg)
 source=(https://downloads.sourceforge.net/project/libjpeg-turbo/$pkgver/libjpeg-turbo-$pkgver.tar.gz{,.sig})
-sha256sums=('33dd8547efd5543639e890efbf2ef52d5a21df81faf41bb940657af916a23406'
+sha256sums=('d74b92ac33b0e3657123ddcf6728788c90dc84dcb6a52013d758af3c4af481bb'
             'SKIP')
-validpgpkeys=('7D6293CC6378786E1B5C496885C7044E033FDE16')
+validpgpkeys=('0338C8D8D9FDA62CF9C421BD7EC2DBB6F4DBF434')
 
 build() {
-  cd libjpeg-turbo-$pkgver
+  cd $pkgname-$pkgver
 
   cmake \
     -DCMAKE_INSTALL_PREFIX=/usr \
@@ -22,6 +24,7 @@ build() {
     -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -DWITH_JAVA=0 \
     -DWITH_JPEG8=1 \
+    -W no-dev \
     -S . \
     -B build
 
@@ -29,13 +32,13 @@ build() {
 }
 
 check() {
-  cd libjpeg-turbo-$pkgver
+  cd $pkgname-$pkgver
 
   cmake --build build --target test
 }
 
 package() {
-  cd libjpeg-turbo-$pkgver
+  cd $pkgname-$pkgver
 
   cmake --build build --target install -- \
     DESTDIR="$pkgdir/" \
