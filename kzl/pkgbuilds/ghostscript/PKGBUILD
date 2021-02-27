@@ -7,10 +7,10 @@ epoch=1
 pkgdesc="An interpreter for the PostScript language"
 arch=('x86_64')
 url="https://www.ghostscript.com/"
-depends=(fontconfig ijs jbig2dec lcms2 libcups libidn libjpeg libpaper libpng libtiff libxt openjpeg2)
-makedepends=(freeglut glu gtk3)
-optdepends=("texlive: dvipdf"
-            "gtk3: gsx")
+depends=(fontconfig lcms2 libidn libjpeg-turbo libpaper libpng libtiff libxt openjpeg)
+# makedepends=(freeglut glu gtk3)
+# optdepends=("texlive: dvipdf"
+#             "gtk3: gsx")
 provides=(ghostxps ghostpcl)
 conflicts=(ghostxps ghostpcl)
 replaces=(ghostxps ghostpcl)
@@ -20,7 +20,8 @@ sha256sums=('96d04e4e464bddb062c1774ea895c4f1c1c94e6c4b62f5d32218ebd44dd65ba1')
 prepare() {
   cd ghostpdl-$pkgver
 
-  rm -rf cups/libs expat ijs jpeg lcms2mt libpng openjpeg tiff zlib
+  # rm -rf cups/libs expat ijs jpeg lcms2mt libpng openjpeg tiff zlib
+  rm -rf expat jpeg lcms2mt libpng openjpeg tiff zlib
 }
 
 build() {
@@ -29,8 +30,9 @@ build() {
   ./configure \
     --prefix=/usr \
     --enable-fontconfig \
+    --disable-cups \
     --enable-openjpeg \
-    --enable-gtk \
+    --disable-gtk \
     --disable-compile-inits \
     --enable-dynamic \
     --with-libidn \
