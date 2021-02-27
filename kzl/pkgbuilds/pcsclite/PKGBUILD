@@ -1,0 +1,36 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=pcsclite
+pkgver=1.9.0
+pkgrel=1
+epoch=1
+pkgdesc="PC/SC Architecture smartcard middleware library"
+arch=('x86_64')
+url="https://pcsclite.apdu.fr/"
+options=(!docs)
+source=(https://pcsclite.apdu.fr/files/pcsc-lite-$pkgver.tar.bz2{,.asc})
+sha256sums=('0148d403137124552c5d0f10f8cdab2cbb8dfc7c6ce75e018faf667be34f2ef9'
+            'SKIP')
+validpgpkeys=('F5E11B9FFE911146F41D953D78A1B4DFE8F9C57E')
+
+build() {
+  cd pcsc-lite-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --sysconfdir=/etc \
+    --enable-libudev \
+    --enable-usbdropdir=/usr/lib/pcsc/drivers \
+    --enable-ipcdir=/run/pcscd \
+    --enable-filter \
+    --with-systemdsystemunitdir=/usr/lib/systemd/system
+
+  make
+}
+
+package() {
+  cd pcsc-lite-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
