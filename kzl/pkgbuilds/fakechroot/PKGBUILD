@@ -8,15 +8,15 @@ arch=('x86_64')
 url="https://github.com/dex4er/fakechroot/wiki"
 source=($pkgname-$pkgver.tar.gz::https://github.com/dex4er/fakechroot/archive/$pkgver.tar.gz)
 sha256sums=('7f9d60d0d48611969e195fadf84d05f6c74f71bbf8f41950ad8f5bf061773e18')
-  
+
 build() {
   cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr \
     --sbindir=/usr/bin \
-    --libdir=/usr/lib/libfakeroot \
-    --sysconfdir=/etc
+    --sysconfdir=/etc \
+    --libdir=/usr/lib/libfakeroot
 
   make
 }
@@ -24,7 +24,6 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  # t/fts.t fails when building on BTRFS
   make -k check || warning "Check failed."
 }
 
