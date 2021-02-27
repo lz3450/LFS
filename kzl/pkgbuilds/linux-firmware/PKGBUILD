@@ -15,5 +15,5 @@ validpgpkeys=('4CDE8575E547BF835FE15807A31B6BD72486CFD6')
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" FIRMWAREDIR=/usr/lib/firmware install
+  make DESTDIR="$pkgdir/" FIRMWAREDIR="/usr/lib/firmware" install
 }
