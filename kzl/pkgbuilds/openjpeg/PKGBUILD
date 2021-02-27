@@ -1,0 +1,35 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=openjpeg
+pkgver=2.4.0
+pkgrel=1
+epoch=1
+pkgdesc="An open source JPEG 2000 codec"
+arch=('x86_64')
+url="https://github.com/uclouvain/openjpeg"
+depends=(lcms2 libpng libtiff)
+source=(https://github.com/uclouvain/openjpeg/archive/v$pkgver.tar.gz)
+sha256sums=('8702ba68b442657f11aaeb2b338443ca8d5fb95b0d845757968a7be31ef7f16d')
+
+build() {
+  cd $pkgname-$pkgver
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_STATIC_LIBS=OFF \
+    -DBUILD_DOC=OFF \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  cmake --build build --target install -- DESTDIR="$pkgdir/"
+}
