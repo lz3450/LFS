@@ -27,7 +27,7 @@ build() {
     --sharedstatedir=/var/lib \
     --disable-rpath \
     --enable-shared \
-    --disable-install-doc \
+    --disable-install-doc
 
   make
 }
@@ -35,7 +35,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make test
+  make test || warning "Check failed."
 }
 
 package() {
