@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libevent
+pkgver=2.1.12
+pkgrel=1
+epoch=1
+pkgdesc="An event notification library"
+arch=('x86_64')
+url="https://libevent.org/"
+depends=(openssl)
+source=(git+https://github.com/libevent/libevent.git#commit=61fc2bf2e9719eb7ca9c56b6e186df2f79f05de7?signed)
+sha256sums=('SKIP')
+validpgpkeys=('5DE3E0509C47EA3CF04A42D34AEE18F83AFDEB23')
+
+build() {
+  cd $pkgname
+
+  cmake \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
+    -DCMAKE_BUILD_TYPE=Release  \
+    -DEVENT__LIBRARY_TYPE=SHARED \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+check() {
+  cd $pkgname
+
+  cmake --build build --target test || warning "Check failed."
+}
+
+package() {
+  cd $pkgname
+
+  cmake --build build --target install -- DESTDIR="$pkgdir/"
+}
