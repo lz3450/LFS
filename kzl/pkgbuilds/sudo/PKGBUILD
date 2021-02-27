@@ -24,18 +24,17 @@ build() {
     --prefix=/usr \
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib \
-    --with-rundir=/run/sudo \
-    --with-vardir=/var/db/sudo \
-    --with-logfac=auth \
     --enable-gcrypt \
     --enable-tmpfiles.d \
-    --with-pam \
     --with-sssd \
-    --with-ldap \
-    --with-ldap-conf-file=/etc/openldap/ldap.conf \
-    --with-env-editor \
+    --with-pam \
     --with-passprompt="[sudo] password for %p: " \
-    --with-all-insults
+    --with-rundir=/run/sudo \
+    --with-vardir=/var/db/sudo \
+    --with-env-editor \
+    --with-all-insults \
+    --with-ldap \
+    --with-ldap-conf-file=/etc/openldap/ldap.conf
 
   make
 }
@@ -43,7 +42,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check
+  make check || warning "Check failed."
 }
 
 package() {
@@ -55,8 +54,7 @@ package() {
   rm "$pkgdir"/etc/sudoers.dist
 
   # remove /run/sudo directory; create it using systemd-tmpfiles
-  rmdir "$pkgdir"/run/sudo
-  rmdir "$pkgdir"/run
+  rmdir "$pkgdir"/run/{sudo,}
 
   install -Dm644 "$srcdir"/sudo.pam "$pkgdir"/etc/pam.d/sudo
 }
