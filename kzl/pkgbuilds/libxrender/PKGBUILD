@@ -3,6 +3,7 @@
 pkgname=libxrender
 pkgver=0.9.10
 pkgrel=1
+epoch=1
 pkgdesc="X Rendering Extension client library"
 arch=('x86_64')
 url="https://xorg.freedesktop.org/"
