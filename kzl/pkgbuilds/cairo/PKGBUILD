@@ -1,0 +1,44 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=cairo
+pkgver=1.17.4
+pkgrel=1
+epoch=1
+pkgdesc="2D graphics library with support for multiple output devices"
+arch=('x86_64')
+url="https://cairographics.org/"
+depends=(fontconfig glib2 libpng libx11 libxext libxrender lzo pixman)
+makedepends=(ghostscript valgrind)
+source=(git+https://gitlab.freedesktop.org/cairo/cairo.git#tag=$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D fontconfig=enabled \
+    -D glib=enabled \
+    -D png=enabled \
+    -D spectre=disabled \
+    -D tee=enabled \
+    -D tests=disabled \
+    -D xlib=enabled \
+    -D zlib=enabled \
+    build
+
+  meson compile -C build
+}
+
+package() {
+  cd $pkgname
+
+  DESTDIR="$pkgdir/" meson install -C build
+}
