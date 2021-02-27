@@ -3,14 +3,22 @@
 pkgname=fakechroot
 pkgver=2.20.1
 pkgrel=1
+epoch=1
 pkgdesc="Gives a fake chroot environment"
 arch=('x86_64')
 url="https://github.com/dex4er/fakechroot/wiki"
-source=($pkgname-$pkgver.tar.gz::https://github.com/dex4er/fakechroot/archive/$pkgver.tar.gz)
-sha256sums=('7f9d60d0d48611969e195fadf84d05f6c74f71bbf8f41950ad8f5bf061773e18')
+source=(#$pkgname-$pkgver.tar.gz::https://github.com/dex4er/fakechroot/archive/$pkgver.tar.gz
+        git+https://github.com/dex4er/fakechroot.git#commit=b42d1fb9538f680af2f31e864c555414ccba842a)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
@@ -22,13 +30,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make -k check || warning "Check failed."
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
   
