@@ -1,0 +1,176 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=docbook-xsl
+pkgver=1.79.2
+pkgrel=1
+epoch=1
+pkgdesc="XML stylesheets for Docbook-xml transformations"
+arch=('any')
+url="https://docbook.org/"
+depends=(libxml2 libxslt)
+provides=(docbook-xml)
+conflicts=(docbook-xml)
+replaces=(docbook-xml)
+source=(https://github.com/docbook/xslt10-stylesheets/releases/download/release%2F$pkgver/docbook-xsl{,-nons}-$pkgver.tar.gz
+        docbook-xml-4.1.2.zip::https://docbook.org/xml/4.1.2/docbkx412.zip
+        https://docbook.org/xml/4.2/docbook-xml-4.2.zip
+        https://docbook.org/xml/4.3/docbook-xml-4.3.zip
+        https://docbook.org/xml/4.4/docbook-xml-4.4.zip
+        https://docbook.org/xml/4.5/docbook-xml-4.5.zip)
+noextract=(docbook-xml-4.1.2.zip
+           docbook-xml-4.2.zip
+           docbook-xml-4.3.zip
+           docbook-xml-4.4.zip
+           docbook-xml-4.5.zip)
+sha256sums=('966188d7c05fc76eaca115a55893e643dd01a3486f6368733c9ad974fcee7a26'
+            'f89425b44e48aad24319a2f0d38e0cb6059fdc7dbaf31787c8346c748175ca8e'
+            '30f0644064e0ea71751438251940b1431f46acada814a062870f486c772e7772'
+            'acc4601e4f97a196076b7e64b368d9248b07c7abf26b34a02cca40eeebe60fa2'
+            '23068a94ea6fd484b004c5a73ec36a66aa47ea8f0d6b62cc1695931f5c143464'
+            '02f159eb88c4254d95e831c51c144b1863b216d909b5ff45743a1ce6f5273090'
+            '4e4e037a2b83c98c6c94818390d4bdd3f6e10f6ec62dd79188594e26190dc7b4')
+
+_package_xml() {
+  local ver xml
+  local _vers=(4.1.2 4.{2..5})
+
+  mkdir -p "$pkgdir"/etc/xml
+  xmlcatalog --noout --create "$pkgdir"/etc/xml/docbook-xml
+
+  for ver in ${_vers[@]}; do
+    mkdir -p docbook-xml-$ver
+    bsdtar -C docbook-xml-$ver -xf docbook-xml-$ver.zip
+  done
+
+  for ver in ${_vers[@]}; do
+    pushd docbook-xml-$ver
+    mkdir -p "$pkgdir"/usr/share/xml/docbook/xml-dtd-$ver
+    cp -dr docbook.cat *.dtd ent/ *.mod "$pkgdir"/usr/share/xml/docbook/xml-dtd-$ver
+    popd
+
+    xml=
+    case $ver in
+      4.1.2) xml=' XML' ;;&
+      *)
+        xmlcatalog --noout --add "public" \
+          "-//OASIS//DTD DocBook XML V$ver//EN" \
+          "http://www.oasis-open.org/docbook/xml/$ver/docbookx.dtd" \
+          "$pkgdir/etc/xml/docbook-xml"
+        xmlcatalog --noout --add "public" \
+          "-//OASIS//DTD DocBook$xml CALS Table Model V$ver//EN" \
+          "http://www.oasis-open.org/docbook/xml/$ver/calstblx.dtd" \
+          "$pkgdir/etc/xml/docbook-xml"
+        xmlcatalog --noout --add "public" \
+          "-//OASIS//DTD XML Exchange Table Model 19990315//EN" \
+          "http://www.oasis-open.org/docbook/xml/$ver/soextblx.dtd" \
+          "$pkgdir/etc/xml/docbook-xml"
+        xmlcatalog --noout --add "public" \
+          "-//OASIS//ELEMENTS DocBook$xml Information Pool V$ver//EN" \
+          "http://www.oasis-open.org/docbook/xml/$ver/dbpoolx.mod" \
+          "$pkgdir/etc/xml/docbook-xml"
+        xmlcatalog --noout --add "public" \
+          "-//OASIS//ELEMENTS DocBook$xml Document Hierarchy V$ver//EN" \
+          "http://www.oasis-open.org/docbook/xml/$ver/dbhierx.mod" \
+          "$pkgdir/etc/xml/docbook-xml"
+        xmlcatalog --noout --add "public" \
+          "-//OASIS//ENTITIES DocBook$xml Additional General Entities V$ver//EN" \
+          "http://www.oasis-open.org/docbook/xml/$ver/dbgenent.mod" \
+          "$pkgdir/etc/xml/docbook-xml"
+        xmlcatalog --noout --add "public" \
+          "-//OASIS//ENTITIES DocBook$xml Notations V$ver//EN" \
+          "http://www.oasis-open.org/docbook/xml/$ver/dbnotnx.mod" \
+          "$pkgdir/etc/xml/docbook-xml"
+        xmlcatalog --noout --add "public" \
+          "-//OASIS//ENTITIES DocBook$xml Character Entities V$ver//EN" \
+          "http://www.oasis-open.org/docbook/xml/$ver/dbcentx.mod" \
+          "$pkgdir/etc/xml/docbook-xml"
+        ;;&
+      4.[45])
+        xmlcatalog --noout --add "public" \
+          "-//OASIS//ELEMENTS DocBook XML HTML Tables V$ver//EN" \
+          "http://www.oasis-open.org/docbook/xml/$ver/htmltblx.mod" \
+          "$pkgdir/etc/xml/docbook-xml"
+        ;;&
+      *)
+        xmlcatalog --noout --add "rewriteSystem" \
+          "http://www.oasis-open.org/docbook/xml/$ver" \
+          "/usr/share/xml/docbook/xml-dtd-$ver" \
+          "$pkgdir/etc/xml/docbook-xml"
+        xmlcatalog --noout --add "rewriteURI" \
+          "http://www.oasis-open.org/docbook/xml/$ver" \
+          "/usr/share/xml/docbook/xml-dtd-$ver" \
+          "$pkgdir/etc/xml/docbook-xml"
+        ;;
+    esac
+  done
+
+  # fix permissions
+  find "$pkgdir/" -type f -exec chmod -c a-x {} +
+  chmod -Rc u=rwX,go=rX "$pkgdir/"
+
+  xmlcatalog --noout --create "$pkgdir"/etc/xml/catalog
+  xmlcatalog --noout --add "delegatePublic" \
+    "-//OASIS//ENTITIES DocBook XML" \
+    "file:///etc/xml/docbook-xml" \
+    "$pkgdir"/etc/xml/catalog
+  xmlcatalog --noout --add "delegatePublic" \
+    "-//OASIS//DTD DocBook XML" \
+    "file:///etc/xml/docbook-xml" \
+    "$pkgdir"/etc/xml/catalog
+  xmlcatalog --noout --add "delegateSystem" \
+    "http://www.oasis-open.org/docbook/" \
+    "file:///etc/xml/docbook-xml" \
+    "$pkgdir"/etc/xml/catalog
+  xmlcatalog --noout --add "delegateURI" \
+    "http://www.oasis-open.org/docbook/" \
+    "file:///etc/xml/docbook-xml" \
+    "$pkgdir"/etc/xml/catalog
+}
+
+_package_xsl() {
+  local pkgroot ns dir
+
+  for ns in -nons ''; do
+    pkgroot="$pkgdir"/usr/share/xml/docbook/xsl-stylesheets-$pkgver$ns
+    dir=$pkgname$ns-$pkgver
+
+    install -Dm644 $dir/VERSION{,.xsl} -t "$pkgroot/"
+
+    (
+      # ignore missing files
+      shopt -s nullglob 
+      for fn in assembly common eclipse epub epub3 fo highlighting html htmlhelp javahelp lib manpages params profiling roundtrip template website xhtml xhtml-1_1 xhtml5; do
+        install -Dm644 $dir/$fn/*.{xml,xsl,dtd,ent} -t "$pkgroot/$fn"
+      done
+    )
+  done
+
+  for ver in $pkgver current; do
+    for x in "rewriteSystem" "rewriteURI"; do
+      xmlcatalog --noout --add $x \
+        "http://cdn.docbook.org/release/xsl/$ver" \
+        "/usr/share/xml/docbook/xsl-stylesheets-$pkgver" \
+        "$pkgdir"/etc/xml/catalog
+
+      xmlcatalog --noout --add $x \
+        "http://cdn.docbook.org/release/xsl-nons/$ver" \
+        "/usr/share/xml/docbook/xsl-stylesheets-$pkgver-nons" \
+        "$pkgdir"/etc/xml/catalog
+
+      xmlcatalog --noout --add $x \
+        "http://docbook.sourceforge.net/release/xsl-ns/$ver" \
+        "/usr/share/xml/docbook/xsl-stylesheets-$pkgver" \
+        "$pkgdir"/etc/xml/catalog
+
+      xmlcatalog --noout --add $x \
+        "http://docbook.sourceforge.net/release/xsl/$ver" \
+        "/usr/share/xml/docbook/xsl-stylesheets-$pkgver-nons" \
+        "$pkgdir"/etc/xml/catalog
+    done
+  done
+}
+
+package() {
+  _package_xml
+  _package_xsl
+}
