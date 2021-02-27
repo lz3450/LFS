@@ -20,6 +20,4 @@ package() {
   cd xxHash
 
   make DESTDIR="$pkgdir/" PREFIX="/usr/" install
-
-  chmod 555 "$pkgdir"/etc/ssl/certs/
 }
