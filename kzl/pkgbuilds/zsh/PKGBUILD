@@ -7,7 +7,7 @@ epoch=1
 arch=('x86_64')
 url="https://www.zsh.org/"
 depends=(gdbm libcap pcre)
-install=zsh.install
+install=$pkgname.install
 source=(https://www.zsh.org/pub/zsh-$pkgver.tar.xz{,.asc}
         zprofile)
 sha256sums=('dcc4b54cc5565670a65581760261c163d720991f0d06486da61f8d839b52de27'
@@ -38,22 +38,21 @@ build() {
   ./configure \
     --prefix=/usr \
     --enable-zsh-secure-free \
-		--enable-etcdir=/etc/zsh \
-		--enable-zshenv=/etc/zsh/zshenv \
-		--enable-zshrc=/etc/zsh/zshrc \
-		--enable-zprofile=/etc/zsh/zprofile \
-		--enable-zlogin=/etc/zsh/zlogin \
-		--enable-zlogout=/etc/zsh/zlogout \
-		--enable-fndir=/usr/share/zsh/functions \
-		--enable-function-subdirs \
-		--enable-scriptdir=/usr/share/zsh/scripts \
-		--enable-maildir-support \
-		--enable-pcre \
-		--enable-cap \
-		--enable-multibyte \
-		--with-term-lib='ncursesw' \
-		--with-tcsetpgrp
-
+    --enable-etcdir=/etc/zsh \
+    --enable-zshenv=/etc/zsh/zshenv \
+    --enable-zshrc=/etc/zsh/zshrc \
+    --enable-zprofile=/etc/zsh/zprofile \
+    --enable-zlogin=/etc/zsh/zlogin \
+    --enable-zlogout=/etc/zsh/zlogout \
+    --enable-fndir=/usr/share/zsh/functions \
+    --enable-function-subdirs \
+    --enable-scriptdir=/usr/share/zsh/scripts \
+    --enable-maildir-support \
+    --enable-pcre \
+    --enable-cap \
+    --enable-multibyte \
+    --with-term-lib='ncursesw' \
+    --with-tcsetpgrp
 
   make
 }
