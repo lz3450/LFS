@@ -21,7 +21,7 @@ build() {
 check() {
   cd $pkgname
 
-  make quiet-test
+  make quiet-test || warning "Check failed."
 }
 
 package() {
