@@ -27,38 +27,45 @@ kzl_stage1_pkgs=(
 # base
 kzl_stage2_pkgs=(
     ### base
-    # iana-etc tzdata filesystem
-    # ncurses readline bash bash-completion
-    # bzip2 xz zlib lz4 zstd
-    # acl attr gmp keyutils libldap krb5 libcap-ng swig audit libtirpc libxcrypt pam libcap openssl libseccomp file shadow
-    # coreutils util-linux e2fsprogs
-    # db gdbm perl
-    # cmake
-    # expat elfutils gc libffi libunistring guile mpfr gdb
-    # libnsl mpdecimal tcl sqlite valgrind python
-    # findutils icu libxml2 kmod pciutils hwloc libnl openssh openmpi boost
-    # argon2 libaio thin-provisioning-tools device-mapper json-c popt cryptsetup
-    # diffutils gawk m4 autoconf automake autoconf-archive dbus
-    # libmnl libnfnetlink libnetfilter_conntrack libnftnl libpcap iptables
+    iana-etc tzdata filesystem
+    ncurses readline bash bash-completion
+    bzip2 xz zlib lz4 zstd tar
+    acl attr gmp keyutils libldap krb5 libcap-ng swig audit libtirpc libxcrypt pam libcap openssl libseccomp file shadow
+    coreutils util-linux e2fsprogs
+    db gdbm perl
+    pkgconf
+    icu libxml2 docbook-xml libxslt docbook-xsl xmlto intltool
+    expat elfutils gc libffi libunistring guile mpfr gdb
+    libnsl mpdecimal tcl sqlite valgrind python
+    pcre glib2 shared-mime-info gettext sed
+    findutils kmod pciutils hwloc libnl openssh openmpi boost
+    argon2 libaio thin-provisioning-tools device-mapper json-c popt cryptsetup
+    diffutils gawk m4 autoconf automake autoconf-archive dbus
+    libmnl libnfnetlink libnetfilter_conntrack libnftnl libpcap iptables iputils
     libidn2 libtasn1 p11-kit nettle gnutls
-    ca-certificates curl wget git
-    kbd libgcrypt libgpg-error pcre2 gnu-efi libmicrohttpd
-    # systemd
-    # procps-ng
+    ca-certificates libnghttp2 publicsuffix-list libpsl libssh2 curl 
+    pcre2 wget
+    grep git
+    libarchive cmake
+    kbd libgcrypt libgpg-error gnu-efi libmicrohttpd texinfo gperf kexec-tools rpcsvc-proto quota systemd
+    procps-ng psmisc
+    libassuan libksba npth pinentry libusb libusb-compat pcsclite gnupg
+    gpgme pacman
+    po4a fakeroot pacman-contrib arch-install-scripts
+    # linux-firmware linux
 
-    #  ruby
-    #  glib2 gettext po4a fakeroot
-    # llvm clang rust ruby
-    # pacman arch-install-scripts pacman-contrib
+    ### core
     # dosfstools nano parted rsync
+    # llvm clang rust ruby
+    # rsync tmux
     # zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
-    # linux-firmware
-    # libusb usbutils
     # wpa_supplicant
+    # glib2 gobject-introspection graphite harfbuzz ghostscript xxhash texlive
+
+    ### testing
+    # libusb usbutils
     # nvidia cuda cudnn nccl intel-mkl lapack
-    # tmux
-    # gobject-introspection graphite harfbuzz ghostscript xxhash lz4 popt texlive
-    # xmlto help2man po4a
+    # help2man po4a
 )
 
 # ubuntu packages
