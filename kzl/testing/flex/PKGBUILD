@@ -3,6 +3,7 @@
 pkgname=flex
 pkgver=2.6.4
 pkgrel=1
+epoch=1
 pkgdesc="A tool for generating text-scanning programs"
 arch=('x86_64')
 url="https://github.com/westes/flex"
