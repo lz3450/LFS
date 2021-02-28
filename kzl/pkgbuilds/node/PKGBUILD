@@ -1,19 +1,18 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=node
-pkgver=15.1.0
+pkgver=15.10.0
 pkgrel=1
 epoch=1
-pkgdesc="javascript"
+pkgdesc="Evented I/O for V8 javascript"
 arch=('x86_64')
 url="https://nodejs.org/"
 depends=(icu libnghttp2 libuv openssl)
-makedepends=(procps-ng)
 provides=(nodejs npm)
 conflicts=(nodejs npm)
 replaces=(nodejs npm)
-source=($pkgname-$pkgver.tar.gz::https://github.com/nodejs/node/archive/v$pkgver.tar.gz)
-sha256sums=('0ea4f9e1aae21aac619c86374a27376e4afa2c6e830d5f4ed8cb67dcdd9a4851')
+source=(https://github.com/nodejs/node/archive/v$pkgver.tar.gz)
+sha256sums=('c4973dfe68ee7ed9681821c96ce41f3a6e73e5572745e597f76536805b2455fb')
 
 build() {
   cd $pkgname-$pkgver
