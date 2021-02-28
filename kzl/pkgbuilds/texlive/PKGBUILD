@@ -13,7 +13,7 @@ replaces=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontse
 install=$pkgname.install
 source=(http://ftp.math.utah.edu/pub/tex/historic/systems/$pkgname/${pkgver:0:4}/$pkgname-$pkgver-source.tar.xz
         http://ftp.math.utah.edu/pub/tex/historic/systems/$pkgname/${pkgver:0:4}/install-tl-unx.tar.gz
-        # http://ftp.math.utah.edu/pub/tex/historic/systems/$pkgname/${pkgver:0:4}/$pkgname-$pkgver-extra.tar.xz
+        http://ftp.math.utah.edu/pub/tex/historic/systems/$pkgname/${pkgver:0:4}/$pkgname-$pkgver-extra.tar.xz
         # http://ftp.math.utah.edu/pub/tex/historic/systems/$pkgname/${pkgver:0:4}/$pkgname-$pkgver-texmf.tar.xz
         # git+https://github.com/TeX-Live/texlive-source.git#tag=svn$pkgver
         # git+https://github.com/TeX-Live/installer.git
@@ -22,6 +22,7 @@ source=(http://ftp.math.utah.edu/pub/tex/historic/systems/$pkgname/${pkgver:0:4}
 # noextract=($pkgname-$pkgver-texmf.tar.xz)
 sha256sums=('e32f3d08cbbbcf21d8d3f96f2143b64a1f5e4cb01b06b761d6249c8785249078'
             '7c90a50e55533d57170cbc7c0370a010019946eb18570282948e1af6f809382d'
+            '243dfd2b263b7ffcd8b5c0269a28deecb394f0f5644a288186f562cbacc8a64f'
             'dd4bd23f57bfcf60abb2e0c4902840df3fed6eed82674bbe5d98ff0f9d7b4ee5'
             'e00da3460cd3a5b563ac31218f41c9545bdf1ae6e7fe9806f439bc34df0e7e83')
 
@@ -82,6 +83,7 @@ package() {
   make DESTDIR="$pkgdir/" texlinks
 
   cp -r "$srcdir"/install-tl-$pkgver/tlpkg "$pkgdir"/opt/TeXLive/
+  cp -r "$srcdir"/$pkgname-$pkgver-extra/tlpkg "$pkgdir"/opt/TeXLive/
 
   sed -e 's/SELFAUTOPARENT/SELFAUTODIR/g' \
       -i "$pkgdir"/opt/TeXLive/texmf-dist/scripts/texlive/tlmgr.pl
@@ -99,5 +101,4 @@ package() {
 
   # cleanup
   rm -rf "$pkgdir"/opt/TeXLive/texmf-dist/scripts/context/stubs/mswin/
-  rm -rf "$pkgdir"/opt/TeXLive/texmf-dist/scripts/texlive/uninstall-win32.pl
 }
