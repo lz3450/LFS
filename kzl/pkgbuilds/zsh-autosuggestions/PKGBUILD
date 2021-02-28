@@ -8,9 +8,8 @@ pkgdesc="Fish-like autosuggestions for zsh"
 arch=('any')
 url="https://github.com/zsh-users/zsh-autosuggestions"
 depends=(zsh)
-source=(git+https://github.com/zsh-users/zsh-autosuggestions.git#tag=v$pkgver?signed)
+source=(git+https://github.com/zsh-users/zsh-autosuggestions.git#tag=v$pkgver)
 sha256sums=('SKIP')
-validpgpkeys=('5DE3E0509C47EA3CF04A42D34AEE18F83AFDEB23')
 
 build() {
   cd $pkgname
