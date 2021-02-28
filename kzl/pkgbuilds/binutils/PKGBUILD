@@ -42,7 +42,7 @@ build() {
     --with-lib-path=/usr/lib:/usr/local/lib \
     --with-system-zlib \
     --with-pic \
-    --with-debuginfod \
+    --with-debuginfod
 
   make configure-host
   make tooldir="/usr/"
