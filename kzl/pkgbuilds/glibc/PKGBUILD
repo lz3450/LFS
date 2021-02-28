@@ -10,6 +10,7 @@ epoch=1
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
 depends=(tzdata)
+makedepends=(bison)
 options=(!strip)
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
         locale-gen::https://git.archlinux.org/svntogit/packages.git/plain/trunk/locale-gen?h=packages/glibc
