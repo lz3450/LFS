@@ -10,7 +10,7 @@ url="https://github.com/zsh-users/zsh-syntax-highlighting"
 depends=(zsh)
 source=(git+https://github.com/zsh-users/zsh-syntax-highlighting.git#tag=$pkgver?signed)
 sha256sums=('SKIP')
-validpgpkeys=('5DE3E0509C47EA3CF04A42D34AEE18F83AFDEB23')
+validpgpkeys=('E96646BE08C0AF0AA0F90788A5FEEE3AC7937444')
 
 build() {
   cd $pkgname
