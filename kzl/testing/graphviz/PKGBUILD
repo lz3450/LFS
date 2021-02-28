@@ -1,0 +1,118 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=graphviz
+pkgver=2.46.0
+pkgrel=1
+epoch=1
+pkgdesc="Graph visualization software"
+arch=('x86_64')
+url="https://www.graphviz.org/"
+depends=()
+makedepends=()
+optdepends=()
+checkdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=$pkgname.install
+changelog=
+source=($pkgname-$pkgver.tar.gz)
+noextract=()
+sha256sums=()
+validpgpkeys=()
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
+
+###############################################################################
+
+prepare() {
+
+}
+
+###############################################################################
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
+
+###############################################################################
+
+build() {
+  cd $pkgname-$pkgver
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  meson test -C build || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  DESTDIR="$pkgdir/" meson install -C build
+}
+
+###############################################################################
+
+build() {
+  cd $pkgname-$pkgver
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  cmake --build build --target tests || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  cmake --build build --target install -- DESTDIR="$pkgdir/"
+}
