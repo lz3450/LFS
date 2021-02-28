@@ -27,45 +27,134 @@ kzl_stage1_pkgs=(
 # base
 kzl_stage2_pkgs=(
     ### base
-    iana-etc tzdata filesystem
+    # ## filesystem
+    # iana-etc tzdata filesystem
+    # ## zlib
+    # zlib
+    # ## binutils
+    # binutils
+    # ## gcc
+    # gmp mpfr mpc gcc
+    # ## libtool pkgconf
+    # libtool pkgconf
+    ## glibc
+    bison glibc
+    ## ncurses readline bash
     ncurses readline bash bash-completion
-    bzip2 xz zlib lz4 zstd tar
-    acl attr gmp keyutils libldap krb5 libcap-ng swig audit libtirpc libxcrypt pam libcap openssl libseccomp file shadow
-    coreutils util-linux e2fsprogs
-    db gdbm perl
-    pkgconf
-    icu libxml2 docbook-xml libxslt docbook-xsl xmlto intltool
-    expat elfutils gc libffi libunistring guile mpfr gdb
-    libnsl mpdecimal tcl sqlite valgrind python
-    pcre glib2 shared-mime-info gettext sed
-    findutils kmod pciutils hwloc libnl openssh openmpi boost
-    argon2 libaio thin-provisioning-tools device-mapper json-c popt cryptsetup
-    diffutils gawk m4 autoconf automake autoconf-archive dbus
-    libmnl libnfnetlink libnetfilter_conntrack libnftnl libpcap iptables iputils
-    libidn2 libtasn1 p11-kit nettle gnutls
-    ca-certificates libnghttp2 publicsuffix-list libpsl libssh2 curl 
-    pcre2 wget
-    grep git
-    libarchive cmake
-    kbd libgcrypt libgpg-error gnu-efi libmicrohttpd texinfo gperf kexec-tools rpcsvc-proto quota systemd
+    ## bzip2 xz
+    bzip2 xz
+    ## gzip
+    pcre less gzip 
+    ## tar
+    acl attr tar
+    ## grep sed gawk m4
+    grep sed gawk m4
+    ## file which findutils
+    libseccomp file
+    which
+    findutils
+    ## shadow
+    keyutils libldap krb5 libcap-ng swig audit
+    libxcrypt
+    libtirpc pam
+    shadow
+    ## coreutils
+    libcap openssl coreutils
+    ## util-linux
+    util-linux
+    ## e2fsprogs
+    e2fsprogs
+    ## procps-ng psmisc
     procps-ng psmisc
-    libassuan libksba npth pinentry libusb libusb-compat pcsclite gnupg
-    gpgme pacman
+    ## perl
+    db gdbm perl
+    ## autoconf automake
+    diffutils autoconf
+    automake
+    ## patch
+    ed patch
+    ## make
+    gc libffi libunistring guile make
+    ## dbus
+    expat autoconf-archive dbus
+    ## iproute2
+    elfutils
+    libmnl libnfnetlink libnetfilter_conntrack libnftnl libnl libpcap iptables
+    iproute2 
+    ## iputils
+    libidn2 iputils
+    ## systemd
+    argon2 libaio icu hwloc ldns libedit openssh openmpi boost thin-provisioning-tools device-mapper json-c popt cryptsetup
+    kbd
+    kmod
+    libgpg-error libgcrypt
+    libtasn1 p11-kit
+    pcre2
+    ca-certificates libnghttp2 publicsuffix-list libpsl libssh2 curl
+    kexec-tools
+    gnu-efi
+    gperf
+    nettle gnutls libmicrohttpd
+    libxml2 libxslt
+    rpcsvc-proto quota
+    systemd
+    ## pciutils
+    pciutils
+    ## zstd
+    lz4 zstd
+    ## pacman
+    libassuan npth pinentry tcl sqlite libusb libusb-compat pcsclite gnupg gpgme
+    libarchive
+    pacman 
     po4a fakeroot pacman-contrib arch-install-scripts
-    # linux-firmware linux
+    ## python
+    libnsl mpdecimal valgrind python
+    ## cmake
+    jsoncpp
+    libuv
+    rhash
+    glib2 docbook-xsl itstool xmlto shared-mime-info
+    cmake
+    ## git
+    git
+    ## sudo
+    sudo
+    ## gettext texinfo man-db
+    gettext texinfo 
+    groff man-db
+    ## linux
+    bc linux-firmware
+    ## base
+    base
+)
 
+kzl_stage3_pkgs=(
     ### core
-    # dosfstools nano parted rsync
-    # llvm clang rust ruby
-    # rsync tmux
-    # zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
-    # wpa_supplicant
-    # glib2 gobject-introspection graphite harfbuzz ghostscript xxhash texlive
+    ## zsh
+    zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
+    ## tmux
+    libevent libutempter tmux
+    ## utils
+    wpa_supplicant
+    wget 
+    xxhash rsync
+    dosfstools parted
+    nano
+    ## devtools
+    gdb llvm compiler-rt openmp clang rust ruby node
+    ## Xlib
+    xorg-util-macros xorgproto libxau libxdmcp xcb-proto libxcb xtrans libx11 libice libsm libxt libxext libxrender libxpm
+    ## texlive
+    libpng freetype2 graphite gobject-introspection harfbuzz freetype2 harfbuzz fontconfig
+    nasm libjpeg-turbo lcms2 libidn libpaper libtiff openjpeg ghostscript
+    lzo pixman cairo
+    gd libsigsegv 
+    texlive
 
     ### testing
-    # libusb usbutils
+    # usbutils
     # nvidia cuda cudnn nccl intel-mkl lapack
-    # help2man po4a
+    # help2man
 )
 
 # ubuntu packages
@@ -182,9 +271,9 @@ esac
 
 LOGDIR=$BUILDDIR
 
-if [ -d $BUILDDIR/makepkg ]; then
-    rm -rf $BUILDDIR/makepkg
-fi
+# if [ -d $BUILDDIR/makepkg ]; then
+#     rm -rf $BUILDDIR/makepkg
+# fi
 
 # 
 if [ "$TARGET" = "kzl" ]; then
@@ -192,6 +281,7 @@ if [ "$TARGET" = "kzl" ]; then
         0) update-repo --clear -t $TARGET; pkgs=${kzl_stage0_pkgs[@]} ;;
         1) pkgs=${kzl_stage1_pkgs[@]} ;;
         2) pkgs=${kzl_stage2_pkgs[@]} ;;
+        3) pkgs=${kzl_stage3_pkgs[@]} ;;
         *) printf "unknown stage \"$STAGE\""; exit 1 ;;
     esac
 elif [ "$TARGET" = "ubuntu" ]; then
@@ -209,6 +299,9 @@ for p in ${pkgs[@]}; do
 done
 
 wait
+
+# perl: 
+# python: fonttools
 
 for p in ${pkgs[@]}; do
     echo "################################################################################"
