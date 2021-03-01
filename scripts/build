@@ -113,7 +113,7 @@ kzl_stage2_pkgs=(
     jsoncpp
     libuv
     rhash
-    glib2 docbook-xsl itstool xmlto shared-mime-info
+    glib2 docbook itstool xmlto shared-mime-info
     cmake
     ## git
     git
@@ -140,6 +140,7 @@ kzl_stage3_pkgs=(
     xxhash rsync
     dosfstools parted
     nano
+    c-ares aria2
     ## devtools
     gdb llvm compiler-rt openmp clang rust ruby node
     ## Xlib
@@ -151,7 +152,7 @@ kzl_stage3_pkgs=(
     gd libsigsegv 
     texlive
     # ## samba
-    # lmdb jansson ldb talloc tdb samba
+    lmdb jansson liburing samba
     ## ffmpeg
 
     ### testing
@@ -302,9 +303,6 @@ for p in ${pkgs[@]}; do
 done
 
 wait
-
-# perl: 
-# python: fonttools
 
 for p in ${pkgs[@]}; do
     echo "################################################################################"
