@@ -12,8 +12,12 @@ source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
         $pkgname.install)
 sha256sums=('3ef8580c5b86e32ca092ce8de43df204f5e6f714b0cd32bc6237e6cd0f34a8f4'
             'SKIP'
-            '78732c7a3ecc820e6c697bbea5230e6021ecc362384c840f88165ae292db07db')
+            'd01a33a50764aa9cfac1bab1eeb396f05449c9148a90ccf29680ac9a96a4bb40')
 validpgpkeys=('87EA44D150D89615E39A3FEEF0DC8E00B28C5995')
+
+prepare() {
+  cpan Locale::gettext
+}
 
 build() {
   cd $pkgname-$pkgver
