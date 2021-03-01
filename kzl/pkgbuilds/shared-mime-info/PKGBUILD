@@ -8,7 +8,7 @@ pkgdesc="Freedesktop.org Shared MIME Info"
 arch=('x86_64')
 url="https://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec/"
 depends=(glib2 libxml2)
-makedepends=(docbook-xsl itstool xmlto)
+makedepends=(docbook itstool xmlto)
 source=(git+https://gitlab.freedesktop.org/xdg/shared-mime-info.git#commit=c1d1c70684dac11ce6c14a5089b5cb0b64a7dc27
         git+https://gitlab.freedesktop.org/xdg/xdgmime.git#commit=de283fc430460b9b3a7e61432a6d273cd64cb10
         update-mime-database.hook)
