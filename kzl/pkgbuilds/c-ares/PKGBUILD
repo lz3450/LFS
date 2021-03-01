@@ -1,0 +1,35 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=c-ares
+pkgver=1.17.1
+pkgrel=1
+epoch=1
+pkgdesc="A C library for asynchronous DNS requests"
+arch=('x86_64')
+url="https://c-ares.haxx.se/"
+source=(https://github.com/$pkgname/$pkgname/releases/download/${pkgname//-}-${pkgver//./_}/$pkgname-$pkgver.tar.gz{,.asc})
+sha256sums=('d73dd0f6de824afd407ce10750ea081af47eba52b8a6cb307d220131ad93fc40'
+            'SKIP')
+validpgpkeys=('27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2')
+
+build() {
+  cd $pkgname-$pkgver
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=None \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -W no-dev \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  cmake --build build --target install -- DESTDIR="$pkgdir/"
+}
