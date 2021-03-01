@@ -27,18 +27,18 @@ kzl_stage1_pkgs=(
 # base
 kzl_stage2_pkgs=(
     ### base
-    # ## filesystem
-    # iana-etc tzdata filesystem
-    # ## zlib
-    # zlib
-    # ## binutils
-    # binutils
-    # ## gcc
-    # gmp mpfr mpc gcc
-    # ## libtool pkgconf
-    # libtool pkgconf
+    ## filesystem
+    iana-etc tzdata filesystem
+    ## zlib
+    zlib
+    ## binutils
+    binutils
+    ## gcc
+    gmp mpfr mpc gcc
+    ## libtool pkgconf
+    libtool pkgconf
     ## glibc
-    bison glibc
+    glibc
     ## ncurses readline bash
     ncurses readline bash bash-completion
     ## bzip2 xz
@@ -47,8 +47,8 @@ kzl_stage2_pkgs=(
     pcre less gzip 
     ## tar
     acl attr tar
-    ## grep sed gawk m4
-    grep sed gawk m4
+    ## grep sed gawk m4 bison flex
+    grep sed gawk m4 bison flex
     ## file which findutils
     libseccomp file
     which
@@ -78,7 +78,7 @@ kzl_stage2_pkgs=(
     ## dbus
     expat autoconf-archive dbus
     ## iproute2
-    elfutils
+    # elfutils
     libmnl libnfnetlink libnetfilter_conntrack libnftnl libnl libpcap iptables
     iproute2 
     ## iputils
@@ -150,6 +150,9 @@ kzl_stage3_pkgs=(
     lzo pixman cairo
     gd libsigsegv 
     texlive
+    # ## samba
+    # lmdb jansson ldb talloc tdb samba
+    ## ffmpeg
 
     ### testing
     # usbutils
