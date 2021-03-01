@@ -1,6 +1,6 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgname=docbook-xsl
+pkgname=docbook
 pkgver=1.79.2
 pkgrel=1
 epoch=1
@@ -8,9 +8,9 @@ pkgdesc="XML stylesheets for Docbook-xml transformations"
 arch=('any')
 url="https://docbook.org/"
 depends=(libxml2 libxslt)
-provides=(docbook-xml)
-conflicts=(docbook-xml)
-replaces=(docbook-xml)
+provides=(docbook-xml docbook-xsl)
+conflicts=(docbook-xml docbook-xsl)
+replaces=(docbook-xml docbook-xsl)
 source=(https://github.com/docbook/xslt10-stylesheets/releases/download/release%2F$pkgver/docbook-xsl{,-nons}-$pkgver.tar.gz
         docbook-xml-4.1.2.zip::https://docbook.org/xml/4.1.2/docbkx412.zip
         https://docbook.org/xml/4.2/docbook-xml-4.2.zip
