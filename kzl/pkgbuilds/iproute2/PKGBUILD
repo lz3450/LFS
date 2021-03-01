@@ -1,8 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=iproute2
-pkgver=5.6.0
+pkgver=5.11.0
 pkgrel=1
+epoch=1
 pkgdesc="IP Routing Utilities"
 arch=('x86_64')
 url="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git"
@@ -15,7 +16,7 @@ backup=(etc/iproute2/ematch_map
         etc/iproute2/rt_tables)
 options=(staticlibs)
 source=(https://www.kernel.org/pub/linux/utils/net/$pkgname/$pkgname-$pkgver.tar.{xz,sign})
-sha256sums=('1b5b0e25ce6e23da7526ea1da044e814ad85ba761b10dd29c2b027c056b04692'
+sha256sums=('c5e2ea108212b3445051b35953ec267f9f3469e1d5c67ac034ab559849505c54'
             'SKIP')
 validpgpkeys=('9F6FC345B05BE7E766B83C8F80A77F6095CDE47E')
 
