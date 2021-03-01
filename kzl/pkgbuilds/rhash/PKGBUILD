@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=rhash
+pkgver=1.4.1
+pkgrel=2
+pkgdesc="Utility for verifying hash sums of files"
+arch=('x86_64')
+url="https://github.com/rhash/RHash"
+backup=(etc/rhashrc)
+source=(https://github.com/rhash/RHash/archive/v$pkgver.tar.gz
+        https://github.com/rhash/RHash/releases/download/v$pkgver/v$pkgver.tar.gz.asc)
+sha256sums=('430c812733e69b78f07ce30a05db69563450e41e217ae618507a4ce2e144a297'
+            'SKIP')
+validpgpkeys=('2875F6B1C2D27A4F0C8AF60B2A714497E37363AE')
+
+build() {
+  cd RHash-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --extra-cflags="$CFLAGS" \
+    --extra-ldflags="$LDFLAGS"
+
+  make
+}
+
+check() {
+  cd RHash-$pkgver
+
+  make test test-lib || warning "Check failed."
+}
+
+package() {
+  cd RHash-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+  make -C librhash DESTDIR="$pkgdir/" install-lib-headers install-lib-shared install-so-link
+}
