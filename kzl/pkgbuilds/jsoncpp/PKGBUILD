@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=jsoncpp
-pkgver=1.9.2
+pkgver=1.9.4
 pkgrel=1
+epoch=1
 pkgdesc="C++ library for interacting with JSON"
 arch=('x86_64')
 url="https://github.com/open-source-parsers/jsoncpp"
 options=(staticlibs)
 source=($url/archive/$pkgver/$pkgname-$pkgver.tar.gz)
-sha256sums=('77a402fb577b2e0e5d0bdc1cf9c65278915cdb25171e3452c68b6da8a561f8f0')
+sha256sums=('e34a628a8142643b976c7233ef381457efad79468c67cb1ae0b83a33d7493999')
 
 build() {
   cd $pkgname-$pkgver
@@ -20,25 +21,25 @@ build() {
     --sbindir bin \
     --auto-features enabled \
     --buildtype plain \
+    --default-library shared \
     --wrap-mode nodownload \
     -D b_lto=true \
     -D b_pie=true \
-    --default-library shared \
     build
 
   meson compile -C build
 
   msg2 "Building static library..."
   meson setup \
-    -Dauto_features=enabled \
-    -Dbuildtype=plain \
-    -Dwrap_mode=nodownload \
-    -Db_lto=true \
-    -Db_pie=true \
-    -Dprefix=/usr \
-    -Dlibexecdir=lib \
-    -Dsbindir=bin \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
     --default-library static \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
     build-static
 
   meson compile -C build-static
