@@ -1,13 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=samba
-pkgver=4.13.2
+pkgver=4.13.4
 pkgrel=1
 epoch=1
 arch=('x86_64')
 url="https://www.samba.org"
-depends=(acl db jansson ldb libtirpc popt talloc tdb tevent)
+depends=(acl db gnutls gpgme jansson libaio libarchive libldap libtirpc liburing lmdb popt)
+# depends=(acl db gnutls gpgme jansson ldb libaio libarchive libldap libtirpc liburing popt talloc tdb tevent)
 makedepends=(rpcsvc-proto)
+provides=(ldb talloc tdb tevent)
+conflicts=(ldb talloc tdb tevent)
+replaces=(ldb talloc tdb tevent)
 backup=(etc/conf.d/samba
         etc/logrotate.d/samba
         etc/pam.d/samba)
@@ -15,33 +19,50 @@ source=(https://www.samba.org/samba/ftp/stable/$pkgname-$pkgver.tar.{gz,asc}
         samba.logrotate
         samba.pam
         samba.tmpfiles)
-sha256sums=('276464396a05d88b775bda01ac2eb1e5a636ccf7010b0fd28efc3d85583af2b4'
+sha256sums=('a1b34c63f7100cc8626902d80f335c7cb0b45d4707dd3c4b010f7a28ed615c78'
             'SKIP'
             '0b570570ea49f82e6f9da47b1cce3b441859f52de105b54d4d79b873b924623f'
             'a3e28676e9f11136690f6d46ca15b1d548cec2e29db043206ab09582671dc2d5'
             '5398a42ccb36ac3b87cfa42c8050b535efc2ca38ab3b9354a52f4e0fe71b5800')
-validpgpkeys=('52FBC0B86D954B0843324CDC6F33915B6568B7EA')
+validpgpkeys=('81F5E2832BD2545A1897B713AA99442FB680B620')
+
+# TODO: cups ceph-libs
+
+prepare() {
+  cpan Parse::Yapp::Driver
+}
 
 build() {
   cd $pkgname-$pkgver
 
   ./configure \
+    -v \
+    --with-gpgme \
     --with-systemd \
+    --with-ads \
+    --with-ldap \
+    --disable-cups \
+    --disable-iprint \
+    --with-acl-support \
+    --with-libarchive \
     --prefix=/usr \
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib/samba \
     --sysconfdir=/etc \
     --localstatedir=/var \
     --libdir=/usr/lib \
+    --bundled-libraries=!popt \
+    --disable-rpath-install \
+    --enable-fhs \
+    --with-pammodulesdir=/usr/lib/security \
     --with-configdir=/etc/samba \
     --with-lockdir=/var/cache/samba \
     --with-piddir=/run \
     --with-sockets-dir=/run/samba \
-    --bundled-libraries=!ldb,!popt,!talloc,!tdb,!tevent,!pyldb-util,!pytalloc-util \
-    --disable-rpath-install \
-    --enable-fhs \
-    --with-pammodulesdir=/usr/lib/security \
     --systemd-install-services
+
+    # --bundled-libraries=!ldb,!popt,!talloc,!tdb,!tevent,!pyldb-util,!pytalloc-util \
+    # --with-system-mitkrb5
 
   make
 }
@@ -56,11 +77,11 @@ package() {
   # sysconfig
   rm -rf "$pkgdir"/etc/sysconfig
   install -dm755 "$pkgdir"/etc/conf.d
-  sed -i -e '/^EnvironmentFile/s/sysconfig/conf.d/' "$pkgdir"/usr/lib/systemd/system/*.service
+  sed -e '/^EnvironmentFile/s/sysconfig/conf.d/' -i "$pkgdir"/usr/lib/systemd/system/*.service
   install -Dm644 "$srcdir"/samba-$pkgver/packaging/systemd/samba.sysconfig "$pkgdir"/etc/conf.d/samba
 
   # pam
-  install -Dm644 "${srcdir}"/samba.pam "${pkgdir}"/etc/pam.d/samba 
+  install -Dm644 "$srcdir"/samba.pam "${pkgdir}"/etc/pam.d/samba 
 
   # tmpfiles
   install -Dm644 "$srcdir"/samba.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/samba.conf
