@@ -6,8 +6,11 @@ pkgrel=1
 epoch=1
 arch=('x86_64')
 url="https://www.github.com/systemd/systemd-stable"
-depends=(acl audit cryptsetup curl elfutils gnu-efi iptables kbd kmod libcap libgcrypt libidn2 libmicrohttpd libseccomp lz4 openssl p11-kit pam pcre2)
-makedepends=(kexec-tools gperf libxslt quota)
+depends=(acl audit cryptsetup elfutils iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2)
+makedepends=(curl kexec-tools gnu-efi gperf libmicrohttpd libxslt quota)
+optdepends=("curl: machinectl pull-tar and pull-raw"
+            "quota: kernel-level quota management"
+            "libmicrohttpd: remote journald capabilities")
 provides=(systemd-libs systemd-resolvconf systemd-sysvcompat udev systemd-tools nss-myhostname libsystemd.so libudev.so libudev.so)
 conflicts=(systemd-libs systemd-resolvconf systemd-sysvcompat)
 replaces=(systemd-libs systemd-resolvconf systemd-sysvcompat)
