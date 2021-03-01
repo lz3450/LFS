@@ -8,6 +8,9 @@ pkgdesc="An open source JPEG 2000 codec"
 arch=('x86_64')
 url="https://github.com/uclouvain/openjpeg"
 depends=(lcms2 libpng libtiff)
+provides=(openjpeg2)
+conflicts=(openjpeg2)
+replaces=(openjpeg2)
 source=(https://github.com/uclouvain/openjpeg/archive/v$pkgver.tar.gz)
 sha256sums=('8702ba68b442657f11aaeb2b338443ca8d5fb95b0d845757968a7be31ef7f16d')
 
