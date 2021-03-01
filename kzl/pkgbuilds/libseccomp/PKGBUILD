@@ -22,7 +22,8 @@ build() {
   cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --disable-python
 
   make
 }
