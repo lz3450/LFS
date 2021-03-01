@@ -132,7 +132,7 @@ _package_xsl() {
 
   for ns in -nons ''; do
     pkgroot="$pkgdir"/usr/share/xml/docbook/xsl-stylesheets-$pkgver$ns
-    dir=$pkgname$ns-$pkgver
+    dir=$pkgname-xsl$ns-$pkgver
 
     install -Dm644 $dir/VERSION{,.xsl} -t "$pkgroot/"
 
