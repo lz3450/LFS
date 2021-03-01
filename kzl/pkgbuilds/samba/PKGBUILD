@@ -47,7 +47,7 @@ build() {
     --with-libarchive \
     --prefix=/usr \
     --sbindir=/usr/bin \
-    --libexecdir=/usr/lib/samba \
+    --libexecdir=/usr/lib \
     --sysconfdir=/etc \
     --localstatedir=/var \
     --libdir=/usr/lib \
