@@ -1,0 +1,46 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=man-db
+pkgver=2.9.4
+pkgrel=1
+epoch=1
+pkgdesc="A utility for reading man pages"
+arch=('x86_64')
+url="https://www.nongnu.org/man-db/"
+depends=(groff less libpipeline libseccomp)
+makedepends=(po4a)
+backup=(etc/man_db.conf)
+source=(https://savannah.nongnu.org/download/man-db/$pkgname-$pkgver.tar.xz{,.asc})
+sha256sums=('b66c99edfad16ad928c889f87cf76380263c1609323c280b3a9e6963fdb16756'
+            'SKIP')
+validpgpkeys=('AC0A4FF12611B6FCCF01C111393587D97D86500B')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --libexecdir=/usr/lib \
+    --sysconfdir=/etc \
+    --enable-cache-owner=root \
+    --disable-setuid \
+    --enable-mandirs=GNU \
+    --with-db=gdbm \
+    --with-sections="1 n l 8 3 0 2 5 4 9 6 7" \
+    --with-systemdsystemunitdir=/usr/lib/systemd/system
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
