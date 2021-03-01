@@ -30,9 +30,9 @@ build() {
 }
 
 check() {
-  cd ${pkgname}
+  cd $pkgname
 
-  make check
+  make check || warning "Check failed."
 }
 
 package() {
