@@ -8,7 +8,7 @@ pkgdesc="Convert xml to many other formats"
 arch=('x86_64')
 url="https://pagure.io/xmlto/"
 depends=(libxslt)
-makedepends=(docbook-xsl)
+makedepends=(docbook)
 source=(https://releases.pagure.org/xmlto/$pkgname-$pkgver.tar.bz2)
 sha256sums=('1130df3a7957eb9f6f0d29e4aa1c75732a7dfb6d639be013859b5c7ec5421276')
 
