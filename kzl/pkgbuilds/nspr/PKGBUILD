@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=nspr
+pkgver=4.29
+pkgrel=1
+epoch=1
+pkgdesc="Netscape Portable Runtime"
+arch=('x86_64')
+url="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSPR"
+source=(https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$pkgver/src/$pkgname-$pkgver.tar.gz)
+sha256sums=('22286bdb8059d74632cc7c2865c139e63953ecfb33bf4362ab58827e86e92582')
+
+build() {
+  cd $pkgname-$pkgver/$pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --libdir=/usr/lib \
+    --includedir=/usr/include/nspr \
+    --enable-optimize=-O2 \
+    --disable-debug \
+    --enable-64bit
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver/$pkgname
+
+  make DESTDIR="$pkgdir/" install
+  ln -s nspr.pc "$pkgdir"/usr/lib/pkgconfig/mozilla-nspr.pc
+  rm -r "$pkgdir"/usr/bin/{compile-et.pl,prerr.properties} \
+        "$pkgdir"/usr/include/nspr/md
+}

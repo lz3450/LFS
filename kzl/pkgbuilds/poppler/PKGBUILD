@@ -1,0 +1,48 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=poppler
+pkgver=21.03.0
+pkgrel=1
+epoch=1
+pkgdesc=""
+arch=('x86_64')
+url="https://poppler.freedesktop.org/"
+depends=(boost cairo curl fontconfig gobject-introspection lcms2 libjpeg nss openjpeg2 poppler-data)
+provides=(poppler-glib)
+conflicts=(poppler-glib)
+replaces=(poppler-glib)
+source=(https://poppler.freedesktop.org/$pkgname-$pkgver.tar.xz{,.sig})
+sha256sums=('fd51ead4aac1d2f4684fa6e7b0ec06f0233ed21667e720a4e817e4455dd63d27'
+            'SKIP')
+validpgpkeys=('CA262C6C83DE4D2FB28A332A3A6A4DB839EAA6D7')
+
+build() {
+  cd $pkgname-$pkgver
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DENABLE_GTK_DOC=OFF \
+    -DENABLE_QT5=OFF \
+    -DENABLE_QT6=OFF \
+    -DWITH_GTK:BOOL=OFF \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  cmake --build build --target tests || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  cmake --build build --target install -- DESTDIR="$pkgdir/"
+}

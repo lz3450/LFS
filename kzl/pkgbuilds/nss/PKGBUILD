@@ -1,0 +1,67 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=nss
+pkgver=3.62
+pkgrel=1
+epoch=1
+pkgdesc="Network Security Services"
+arch=('x86_64')
+url="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS"
+depends=(nspr sqlite)
+source=(https://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/$pkgname-$pkgver.tar.gz)
+sha256sums=('86d6df7cece25b8d4efa53e4c19af903c484eb79871163f37b5232bb406a5478')
+
+# python: gyp-next
+
+build() {
+  cd $pkgname-$pkgver/$pkgname
+
+  ./build.sh \
+    --opt \
+    --target=x64 \
+    --disable-tests \
+    --system-nspr \
+    --system-sqlite \
+    --enable-libpkix
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  local libdir=/usr/lib
+  local nsprver="$(pkg-config --modversion nspr)"
+
+  sed nss/pkg/pkg-config/nss.pc.in \
+    -e "s,%libdir%,$libdir,g" \
+    -e "s,%prefix%,/usr,g" \
+    -e "s,%exec_prefix%,/usr/bin,g" \
+    -e "s,%includedir%,/usr/include/nss,g" \
+    -e "s,%NSPR_VERSION%,$nsprver,g" \
+    -e "s,%NSS_VERSION%,$pkgver,g" |
+    install -Dm644 /dev/stdin "$pkgdir"/usr/lib/pkgconfig/nss.pc
+
+  install -Dm755 dist/Release/lib/*.so -t "$pkgdir"/usr/lib
+
+  local vmajor vminor vpatch
+  { read vmajor; read vminor; read vpatch; } < <(awk '/#define.*NSS_V(MAJOR|MINOR|PATCH)/ {print $3}' nss/lib/nss/nss.h)
+
+  sed nss/pkg/pkg-config/nss-config.in \
+    -e "s,@libdir@,$libdir,g" \
+    -e "s,@prefix@,/usr/bin,g" \
+    -e "s,@exec_prefix@,/usr/bin,g" \
+    -e "s,@includedir@,/usr/include/nss,g" \
+    -e "s,@MOD_MAJOR_VERSION@,$vmajor,g" \
+    -e "s,@MOD_MINOR_VERSION@,$vminor,g" \
+    -e "s,@MOD_PATCH_VERSION@,$vpatch,g" |
+    install -D /dev/stdin "$pkgdir"/usr/bin/nss-config
+
+  install -Dm755 dist/Release/bin/{*util,shlibsign,signtool,signver,ssltap} -t "$pkgdir"/usr/bin
+
+  install -Dm644 dist/public/nss/*.h -t "$pkgdir"/usr/include/nss
+
+  install -Dm644 nss/doc/nroff/{*util,signtool,signver,ssltap}.1 -t "$pkgdir"/usr/share/man/man1
+
+  # Replace built-in trust with p11-kit connection
+  ln -s pkcs11/p11-kit-trust.so "$pkgdir"/usr/lib/p11-kit-trust.so
+  ln -sf p11-kit-trust.so "$pkgdir"/usr/lib/libnssckbi.so
+}
