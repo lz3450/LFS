@@ -1,6 +1,6 @@
 post_install() {
   sudo python -m ensurepip
-  pip install -U --no-binary :all: pip setuptools wheel meson ninja cython fonttools dnspython
+  pip install -U --no-binary :all: pip setuptools wheel meson ninja cython fonttools dnspython gyp-next
 }
 
 post_upgrade() {
