@@ -149,7 +149,9 @@ kzl_stage3_pkgs=(
     libpng freetype2 graphite gobject-introspection harfbuzz freetype2 harfbuzz fontconfig
     nasm libjpeg-turbo lcms2 libidn libpaper libtiff openjpeg ghostscript
     lzo pixman cairo
-    gd libsigsegv 
+    gd libsigsegv
+    # compatibility problem
+    # nspr nss poppler-data poppler
     texlive
     # ## samba
     lmdb jansson liburing samba
@@ -188,8 +190,8 @@ prepare() {
 get_pkgbase() {
     local pkgbase
     case $1 in
-        device-mapper)  pkgbase=lvm2;;
-        *)              pkgbase=$1;;
+        device-mapper)      pkgbase=lvm2 ;;
+        *)                  pkgbase=$1 ;;
     esac
     echo "$pkgbase"
 }

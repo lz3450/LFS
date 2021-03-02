@@ -110,11 +110,11 @@ if [ ! -f $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION ]; then
     sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION
 fi
 
-for pkg in ${pkgs[@]}; do
-    case $pkg in
-        zlib)       update $TARGET zlib; update $TARGET minizip ;;
-        audit)      update $TARGET audit; update $TARGET python-audit ;;
-        lvm2)       update $TARGET lvm2; update $TARGET device-mapper ;;
-        *)          update $TARGET $pkg ;;
+for pkgbase in ${pkgs[@]}; do
+    update $TARGET $pkgbase
+    case $pkgbase in
+        zlib)       update $TARGET minizip ;;
+        audit)      update $TARGET python-audit ;;
+        lvm2)       update $TARGET device-mapper ;;
     esac
 done
