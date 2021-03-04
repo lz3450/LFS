@@ -16,11 +16,11 @@ source=(cuda.conf
         http://developer.download.nvidia.com/compute/cuda/$pkgver/local_installers/cuda_${pkgver}_${_driverver}_linux.run)
 sha256sums=('a65f7d96e2447eb40b1be9586b90eb0bd776a8938c93d21f9606d2880b548b28'
             '07933525d0affb2bc98aae9d133f0aaef27aefb883ce0e8cdcaa1cf332ad240d'
-            '858cbab091fde94556a249b9580fadff55a46eafbcb4d4a741d2dcd358ab94a5')
+            '1da98cb897cc5f58a7445a4a66ca4f6926867706cb3af58a669cdcd8dc3d17c8')
 
 package() {
   install -dm755 "$pkgdir"/opt/
-  sh cuda_${_cudaver}_linux.run --silent --toolkit --samples --installpath="$pkgdir/opt/cuda"
+  sh cuda_${pkgver}_${_driverver}_linux.run --silent --toolkit --samples --installpath="$pkgdir/opt/cuda"
 
   rm -rf "$pkgdir"/opt/cuda/cuda-uninstaller
 
