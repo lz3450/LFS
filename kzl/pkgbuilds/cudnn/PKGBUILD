@@ -14,7 +14,7 @@ depends=(cuda)
 options=(!strip staticlibs)
 source=(https://developer.download.nvidia.com/compute/redist/cudnn/v$_pkgver/cudnn-$_cudaver-linux-x64-v$pkgver.tgz)
 noextract=(cudnn-$_cudaver-linux-x64-v$pkgver.tgz)
-sha256sums=('8f4c662343afce5998ce963500fe3bb167e9a508c1a1a949d821a4b80fa9beab')
+sha256sums=('dbe82faf071d91ba9bcf00480146ad33f462482dfee56caf4479c1b8dabe3ecb')
 
 prepare() {
   tar -xf cudnn-$_cudaver-linux-x64-v$pkgver.tgz
