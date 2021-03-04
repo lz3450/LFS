@@ -11,8 +11,7 @@ optdepends=("opencl-headers: headers necessary for OpenCL development")
 provides=(opencl-driver)
 options=(!strip)
 source=(https://us.download.nvidia.com/XFree86/Linux-x86_64/$pkgver/NVIDIA-Linux-x86_64-$pkgver.run)
-sha256sums=('b9c775b87829698cee92cd8b0004bd3d34b8b5cb36cef4d96199539fa72f8d15'
-            'e4e1499b15aedc7c0b5c0d30c170858ed1625ab2701d3bb11747ac8c8371da0f')
+sha256sums=('0bf0664078013aa62ed6840caed0637b226884b9398e1fb647e127ad3ad9a37f')
 
 prepare() {
   sh NVIDIA-Linux-x86_64-$pkgver.run --extract-only
@@ -121,7 +120,7 @@ package() {
   install -Dm644 nvidia-persistenced.1.gz "$pkgdir"/usr/share/man/man1/nvidia-persistenced.1.gz
   install -Dm644 nvidia-persistenced-init/systemd/nvidia-persistenced.service.template "$pkgdir"/usr/lib/systemd/system/nvidia-persistenced.service
   sed -i 's/__USER__/nvidia-persistenced/' "$pkgdir"/usr/lib/systemd/system/nvidia-persistenced.service
-  echo "u nvidia-persistenced 143 'NVIDIA Persistence Daemon'" | | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/$pkgname.conf
+  echo "u nvidia-persistenced 143 'NVIDIA Persistence Daemon'" | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/$pkgname.conf
 
   # application profiles
   install -Dm644 nvidia-application-profiles-$pkgver-rc "$pkgdir"/usr/share/nvidia/nvidia-application-profiles-$pkgver-rc
