@@ -36,11 +36,11 @@ build() {
                        -gencode=arch=compute_86,code=sm_86 \
                        -gencode=arch=compute_86,code=compute_86"
 
-  make CUDA_HOME="/opt/cuda" PREFIX="/usr" src.build
+  make CUDA_HOME="/opt/cuda/" PREFIX="/usr/" src.build
 }
 
 package() {
   cd $pkgname
   
-   make PREFIX="$pkgdir/usr" install
+   make PREFIX="$pkgdir/usr/" install
 }
