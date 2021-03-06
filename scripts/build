@@ -135,6 +135,7 @@ kzl_stage3_pkgs=(
     ## tmux
     libevent libutempter tmux
     ## utils
+    usbutils
     wpa_supplicant
     wget 
     xxhash rsync
@@ -156,10 +157,12 @@ kzl_stage3_pkgs=(
     # ## samba
     lmdb jansson liburing samba
     ## ffmpeg
+    ## nvidia
+    nvidia cuda cudnn nccl
 
     ### testing
-    # usbutils
-    # nvidia cuda cudnn nccl intel-mkl lapack
+    # 
+    #  intel-mkl lapack
     # help2man
 )
 
