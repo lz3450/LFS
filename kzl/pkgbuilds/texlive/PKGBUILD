@@ -1,5 +1,5 @@
 pkgname=texlive
-pkgver=20200406
+pkgver=20210325
 pkgrel=1
 epoch=1
 pkgdesc="TeX Live"
@@ -21,9 +21,9 @@ source=(http://ftp.math.utah.edu/pub/tex/historic/systems/$pkgname/${pkgver:0:4}
         09-texlive-fonts.conf
         $pkgname.install)
 noextract=($pkgname-$pkgver-texmf.tar.xz)
-sha256sums=('e32f3d08cbbbcf21d8d3f96f2143b64a1f5e4cb01b06b761d6249c8785249078'
-            '243dfd2b263b7ffcd8b5c0269a28deecb394f0f5644a288186f562cbacc8a64f'
-            '0aa97e583ecfd488e1dc60ff049fec073c1e22dfe7de30a3e4e8c851bb875a95'
+sha256sums=('7aefd96608d72061970f2d73f275be5648ea8ae815af073016d3106acc0d584b'
+            '46a3f385d0b30893eec6b39352135d2929ee19a0a81df2441bfcaa9f6c78339c'
+            'ff12d436c23e99fb30aad55924266104356847eb0238c193e839c150d9670f1c'
             'dd4bd23f57bfcf60abb2e0c4902840df3fed6eed82674bbe5d98ff0f9d7b4ee5'
             'e00da3460cd3a5b563ac31218f41c9545bdf1ae6e7fe9806f439bc34df0e7e83')
 
