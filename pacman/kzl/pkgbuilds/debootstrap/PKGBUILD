@@ -7,10 +7,9 @@ epoch=1
 pkgdesc="Bootstrap a basic Debian system"
 arch=('any')
 url="https://tracker.debian.org/pkg/debootstrap"
-license=('GPL')
 depends=(wget)
 optdepends=("gnupg: check release signatures")
-source=(https://salsa.debian.org/installer-team/debootstrap/-/archive/$pkgver/debootstrap-$pkgver.tar.bz2)
+source=(https://salsa.debian.org/installer-team/debootstrap/-/archive/$pkgver/$pkgname-$pkgver.tar.bz2)
 sha256sums=('ede3cc581720852010372ded8d51c93b9d9df970036be56394a9564033800b87')
 
 prepare() {
