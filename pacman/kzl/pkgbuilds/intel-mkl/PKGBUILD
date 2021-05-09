@@ -8,7 +8,7 @@ pkgdesc="Intel Math Kernel Library"
 arch=('x86_64')
 url="https://software.intel.com/en-us/mkl"
 options=(!strip)
-source=(http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16903/l_mkl_$pkgver.tgz
+source=(wget https://registrationcenter-download.intel.com/akdlm/irc_nas/17431/l_BaseKit_p_2021.1.0.2659_offline.sh
         intel-mkl.sh
         intel-mkl.conf)
 sha256sums=('2b8e434ecc9462491130ba25a053927fd1a2eca05e12acb5936b08c486857a04'
