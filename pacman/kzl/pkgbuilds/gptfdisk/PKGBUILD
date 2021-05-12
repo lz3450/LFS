@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gptfdisk
+pkgver=1.0.7
+pkgrel=1
+epoch=1
+pkgdesc="A text-mode partitioning tool that works on GUID Partition Table (GPT) disks"
+arch=('x86_64')
+url="https://www.rodsbooks.com/gdisk/"
+depends=(popt)
+source=(https://downloads.sourceforge.net/project/$pkgname/$pkgname/$pkgver/$pkgname-$pkgver.tar.gz)
+sha256sums=('754004b7f85b279287c7ac3c0469b1d7e0eae043a97a2e587b0560ca5f3828c0')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  # https://sourceforge.net/p/gptfdisk/discussion/939590/thread/bc29ca06f8/
+  sed -e '/^#include /s:ncursesw/::' -i gptcurses.cc
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make test || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  install -d "$pkgdir"/usr/{bin,share/{doc/gdisk,man/man8}}
+  install {,c,s}gdisk fixparts -t "$pkgdir"/usr/bin
+  install -m644 {{,c,s}gdisk,fixparts}.8 -t "$pkgdir"/usr/share/man/man8
+}
