@@ -31,6 +31,9 @@ echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | t
 # export PATH
 # EOF
 
+sudo rm -rf /etc/environment
+sudo touch /etc/environment
+
 # # time
 # timedatectl set-ntp 1
 
