@@ -9,7 +9,7 @@ echo -e '3450\n3450' | passwd root
 
 # zsh
 wget -O grml-etc-core.deb http://deb.grml.org/pool/main/g/grml-etc-core/grml-etc-core_0.18.0_all.deb || :
-wget -O zsh-autosuggestions.deb http://ftp.debian.org/debian/pool/main/z/zsh-autosuggestions/zsh-autosuggestions_0.6.4-1_all.deb
+wget -O zsh-autosuggestions.deb http://ports.ubuntu.com/ubuntu-ports/pool/universe/z/zsh-autosuggestions/zsh-autosuggestions_0.6.4-1_all.deb
 dpkg -i grml-etc-core.deb || :
 dpkg -i zsh-autosuggestions.deb || :
 rm grml-etc-core.deb || :
