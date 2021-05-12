@@ -4,6 +4,9 @@ bridge-utils
 ibus
 initramfs-tools
 gir1.2-appindicator3-0.1
+locales
+apt-utils
+
 bash-completion
 chromium-browser
 gnome-tweaks
@@ -14,6 +17,7 @@ openssh-server
 vim
 zsh
 zsh-syntax-highlighting
+
 python
 libgstreamer-plugins-bad1.0-0
 libegl1-mesa
