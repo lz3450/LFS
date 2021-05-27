@@ -43,9 +43,16 @@ echo -e '3450\n3450' | passwd kzl
 ###############################################################################
 
 # zsh
-wget http://deb.grml.org/pool/main/g/grml-etc-core/grml-etc-core_0.17.4_all.deb
-dpkg -i grml-etc-core_0.17.4_all.deb
-rm grml-etc-core_0.17.4_all.deb
+wget https://deb.grml.org/pool/main/g/grml-etc-core/grml-etc-core_0.18.0.tar.gz || :
+if [ -f grml-etc-core_0.18.0.tar.gz ]; then
+    tar -xf grml-etc-core_0.18.0.tar.gz
+    pushd grml-etc-core-0.18.0
+    install -Dm644 etc/skel/.zshrc /etc/skel/.zshrc
+    install -Dm644 etc/zsh/keephack /etc/zsh/keephack
+    install -Dm644 etc/zsh/zshrc /etc/zsh/zshrc
+    popd
+    rm -rf grml-etc-core-0.18.0 grml-etc-core_0.18.0.tar.gz
+fi
 
 echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /root/.zshrc
 echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /root/.zshrc
