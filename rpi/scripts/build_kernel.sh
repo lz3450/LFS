@@ -53,9 +53,9 @@ cp "${KERNEL_OUT_DIR}"/arch/arm64/boot/dts/broadcom/*.dtb "${KERNEL_INSTALL_DIR}
 cp "${KERNEL_OUT_DIR}"/arch/arm64/boot/dts/overlays/*.dtb* "${KERNEL_INSTALL_DIR}"/boot/overlays/
 
 rm "${KERNEL_INSTALL_DIR}"/usr/lib/modules/${kernelrelease}/build
-cp -a "${KERNEL_OUT_DIR}" "${KERNEL_INSTALL_DIR}"/lib/modules/${kernelrelease}/build
+cp -a "${KERNEL_OUT_DIR}" "${KERNEL_INSTALL_DIR}"/usr/lib/modules/${kernelrelease}/build
 rm "${KERNEL_INSTALL_DIR}"/usr/lib/modules/${kernelrelease}/source
-cp -a "${source_dir}" "${KERNEL_INSTALL_DIR}"/lib/modules/${kernelrelease}/source
+cp -a "${source_dir}" "${KERNEL_INSTALL_DIR}"/usr/lib/modules/${kernelrelease}/source
 
 while true; do
     read -p "Do you wish to install this program?" yn
