@@ -58,7 +58,7 @@ rm "${KERNEL_INSTALL_DIR}"/usr/lib/modules/${kernelrelease}/source
 cp -a "${source_dir}" "${KERNEL_INSTALL_DIR}"/usr/lib/modules/${kernelrelease}/source
 
 while true; do
-    read -p "Do you wish to install this program?" yn
+    read -p "Do you wish to install this program? " yn
     case $yn in
         [Yy]* ) sudo cp -rf kernel_install/* / ; break;;
         [Nn]* ) exit;;
