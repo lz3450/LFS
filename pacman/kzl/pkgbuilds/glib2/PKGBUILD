@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=glib2
-pkgver=2.66.7
+pkgver=2.68.2
 pkgrel=1
 epoch=1
 pkgdesc="Low level core library"
@@ -28,6 +28,7 @@ build() {
     --sbindir bin \
     --auto-features enabled \
     --buildtype plain \
+    --default-library both \
     --wrap-mode nodownload \
     -D b_lto=true \
     -D b_pie=true \
