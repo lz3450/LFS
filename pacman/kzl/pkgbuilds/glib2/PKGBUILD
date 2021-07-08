@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=glib2
-pkgver=2.68.2
+pkgver=2.68.3
 pkgrel=1
 epoch=1
 pkgdesc="Low level core library"
@@ -10,7 +10,7 @@ url="https://wiki.gnome.org/Projects/GLib"
 depends=(libffi pcre)
 makedepends=(elfutils shared-mime-info)
 optdepends=("elfutils: gresource inspection tool")
-source=(git+https://gitlab.gnome.org/GNOME/glib.git#tag=$pkgver
+source=(git+https://gitlab.gnome.org/GNOME/glib.git#tag=${pkgver}
         gio-querymodules.hook
         glib-compile-schemas.hook)
 sha256sums=('SKIP'
@@ -26,10 +26,8 @@ build() {
     --prefix /usr \
     --libexecdir lib \
     --sbindir bin \
-    --auto-features enabled \
-    --buildtype plain \
+    --buildtype release \
     --default-library both \
-    --wrap-mode nodownload \
     -D b_lto=true \
     -D b_pie=true \
     -D selinux=disabled \
@@ -49,9 +47,9 @@ check() {
 package() {
   cd glib
 
-  DESTDIR="$pkgdir/" meson install -C build
+  DESTDIR="${pkgdir}/" meson install -C build
 
-  sed -e 's/, sysprof-capture-4//' -i "$pkgdir"/usr/lib/pkgconfig/*.pc
+  sed -e 's/, sysprof-capture-4//' -i "${pkgdir}"/usr/lib/pkgconfig/*.pc
 
-  install -Dm644 "$srcdir"/*.hook -t "$pkgdir"/usr/share/libalpm/hooks
+  install -Dm644 "${srcdir}"/*.hook -t "${pkgdir}"/usr/share/libalpm/hooks
 }
