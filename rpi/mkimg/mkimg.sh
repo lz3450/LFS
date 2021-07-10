@@ -27,7 +27,7 @@ create_img() {
     loop=$(sudo losetup -f)
     echo "Loop device is \"$loop\""
 
-    sudo losetup -P $loop ${img}
+    sudo losetup -P ${loop} ${img}
 
     sudo mkfs.fat -F32 ${loop}p1
     sudo mkfs.ext4 ${loop}p2
@@ -41,7 +41,7 @@ create_img() {
 configure_img() {
     # debootstrap
     sudo debootstrap --arch=arm64 --foreign buster ${mountpoint} http://ftp.debian.org/debian
-    sudo cp /usr/bin/qemu-aarch64-static ${mountpoint}/usr/bin
+    # sudo cp /usr/bin/qemu-aarch64-static ${mountpoint}/usr/bin
     sudo LC_ALL=C PATH="${chroot_path}" chroot ${mountpoint} /debootstrap/debootstrap --second-stage
 
     echo "RPi" | sudo tee ${mountpoint}/etc/hostname
@@ -73,14 +73,13 @@ configure_img() {
 cleanup() {
     echo "cleanup"
 
+    sudo umount -R ${mountpoint} || :
+    sudo losetup -D
+
     if [ -f ${img} ]; then
         cp -f ${img} ${script_dir}
         rm ${img}
     fi
-
-    sudo umount -R ${mountpoint} || :
-    sudo losetup -D
-
 }
 trap cleanup EXIT
 
