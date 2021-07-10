@@ -88,7 +88,7 @@ check() {
 package() {
   cd ${pkgname}-${pkgver}
 
-  DESTDIR="${pkgdir}/" meson install -C build
+  meson install -C build --destdir="${pkgdir}/"
 }
 
 ###############################################################################
