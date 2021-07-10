@@ -1,0 +1,83 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=qemu-user-static
+pkgver=6.0.0
+pkgrel=1
+epoch=1
+pkgdesc="Statically linked binaries of Qemu with user emulation (useful for containers/chroot environment with binfmt)"
+arch=('x86_64')
+url="http://wiki.qemu.org/"
+license=('KZL')
+makedepends=(glib2 pcre)
+source=(https://download.qemu.org/qemu-$pkgver.tar.xz{,.sig})
+options=(!strip)
+sha256sums=('87bc1a471ca24b97e7005711066007d443423d19aacda3d442558ae032fa30b9'
+            'SKIP')
+validpgpkeys=('CEACC9E15534EBABB82D3FA03353C9CEF108B584')
+
+build() {
+  cd qemu-${pkgver}
+
+  ./configure \
+    --prefix=/usr \
+    --target-list=aarch64-linux-user \
+    --static \
+    --libdir=/usr/lib \
+    --libexecdir=/usr/lib/qemu \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --disable-system \
+    --enable-linux-user \
+    --disable-bsd-user \
+    --disable-docs \
+    --disable-guest-agent \
+    --disable-pie \
+    --disable-debug-info \
+    --disable-gnutls \
+    --disable-nettle \
+    --disable-gcrypt \
+    --disable-sdl \
+    --disable-gtk \
+    --disable-vte \
+    --disable-vnc \
+    --disable-vnc-sasl \
+    --disable-vnc-jpeg \
+    --disable-vnc-png \
+    --disable-xen \
+    --disable-brlapi \
+    --disable-curl \
+    --disable-fdt \
+    --disable-kvm \
+    --disable-rdma \
+    --disable-vhost-net \
+    --disable-vhost-vsock \
+    --disable-vhost-scsi \
+    --disable-vhost-crypto \
+    --disable-vhost-user \
+    --disable-libiscsi \
+    --disable-libnfs \
+    --disable-bzip2 \
+    --disable-zstd \
+    --disable-seccomp \
+    --disable-glusterfs \
+    --disable-tpm \
+    --disable-libssh \
+    --disable-numa \
+    --disable-libxml2 \
+    --disable-opengl \
+    --disable-qom-cast-debug \
+    --disable-tools \
+    --disable-capstone
+
+  make
+}
+
+package() {
+  cd qemu-${pkgver}
+
+  make DESTDIR="${pkgdir}/" install
+
+  rm -rf "${pkgdir}"/usr/share
+
+  find "${pkgdir}/usr/bin" -type f -exec mv {} {}-static \;
+}
