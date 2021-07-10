@@ -61,7 +61,7 @@ echo 'LANG=en_US.UTF-8' | tee /etc/locale.conf
 locale-gen
 
 # environment variables
-tee -a /home/kzl/.zshenv << EOF 
+sudo -u kzl tee /home/kzl/.zshenv << EOF 
 typeset -U PATH path
 path=("$HOME/.local/bin" "\$path[@]")
 export PATH
