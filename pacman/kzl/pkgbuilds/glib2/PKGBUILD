@@ -10,6 +10,12 @@ url="https://wiki.gnome.org/Projects/GLib"
 depends=(libffi pcre)
 makedepends=(elfutils shared-mime-info)
 optdepends=("elfutils: gresource inspection tool")
+provides=(libgio-2.0.so
+          libglib-2.0.so
+          libgmodule-2.0.so
+          libgobject-2.0.so
+          libgthread-2.0.so)
+options=(!strip staticlibs)
 source=(git+https://gitlab.gnome.org/GNOME/glib.git#tag=${pkgver}
         gio-querymodules.hook
         glib-compile-schemas.hook)
@@ -26,7 +32,9 @@ build() {
     --prefix /usr \
     --libexecdir lib \
     --sbindir bin \
-    --buildtype release \
+    --buildtype plain \
+    --auto-features enabled \
+    --wrap-mode nodownload \
     --default-library both \
     -D b_lto=true \
     -D b_pie=true \
@@ -47,9 +55,15 @@ check() {
 package() {
   cd glib
 
-  DESTDIR="${pkgdir}/" meson install -C build
+  meson install -C build --destdir="${pkgdir}/"
 
   sed -e 's/, sysprof-capture-4//' -i "${pkgdir}"/usr/lib/pkgconfig/*.pc
 
   install -Dm644 "${srcdir}"/*.hook -t "${pkgdir}"/usr/share/libalpm/hooks
+
+  export PYTHONHASHSEED=0
+  python -m compileall -d /usr/share/glib-2.0/codegen \
+    "${pkgdir}/usr/share/glib-2.0/codegen"
+  python -O -m compileall -d /usr/share/glib-2.0/codegen \
+    "${pkgdir}/usr/share/glib-2.0/codegen"
 }
