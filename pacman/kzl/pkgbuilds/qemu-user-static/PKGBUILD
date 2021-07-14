@@ -2,7 +2,7 @@
 
 pkgname=qemu-user-static
 pkgver=6.0.0
-pkgrel=1
+pkgrel=2
 epoch=1
 pkgdesc="Statically linked binaries of Qemu with user emulation (useful for containers/chroot environment with binfmt)"
 arch=('x86_64')
@@ -80,4 +80,10 @@ package() {
   rm -rf "${pkgdir}"/usr/share
 
   find "${pkgdir}/usr/bin" -type f -exec mv {} {}-static \;
+
+  install -dm755 "${pkgdir}"/usr/lib/binfmt.d/
+
+  tee "${pkgdir}"/usr/lib/binfmt.d/qemu-user-static.conf << EOF
+:qemu-aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff:/usr/bin/qemu-aarch64-static:CF
+EOF
 }
