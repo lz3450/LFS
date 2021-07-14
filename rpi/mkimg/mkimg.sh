@@ -19,8 +19,8 @@ create_img() {
     parted -s ${img} \
         mktable msdos \
         unit s \
-        mkpart primary fat32 1s 262143s \
-        mkpart primary ext4 262144s 100% \
+        mkpart primary fat32 1s 524287s \
+        mkpart primary ext4 524288s 100% \
         set 2 lba off \
         print
 

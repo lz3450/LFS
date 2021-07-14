@@ -63,7 +63,7 @@ locale-gen
 # environment variables
 sudo -u kzl tee /home/kzl/.zshenv << EOF 
 typeset -U PATH path
-path=("$HOME/.local/bin" "\$path[@]")
+path=("$HOME/.local/bin" "\$path[@]" "/usr/local/sbin" "/usr/sbin" "/sbin")
 export PATH
 EOF
 
