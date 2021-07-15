@@ -54,6 +54,9 @@ echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | t
 echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | sudo -u kzl tee -a /home/kzl/.zshrc
 echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | sudo -u kzl tee -a /home/kzl/.zshrc
 
+# echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /etc/zsh/zshrc
+# echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /etc/zsh/zshrc
+
 # locale
 sed -i '/^# en_US.UTF-8/s/^#//' /etc/locale.gen
 sed -i '/^# zh_CN.UTF-8/s/^#//' /etc/locale.gen
