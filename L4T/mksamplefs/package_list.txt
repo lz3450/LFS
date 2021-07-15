@@ -12,10 +12,12 @@ libmtp-runtime
 bash-completion
 chromium-browser
 gnome-tweaks
+iputils-ping
 less
 linux-firmware
 nano
 openssh-server
+ssh-import-id
 sudo
 vim
 zsh
