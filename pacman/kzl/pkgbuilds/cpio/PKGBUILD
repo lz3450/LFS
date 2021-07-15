@@ -1,0 +1,41 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=cpio
+pkgver=2.13
+pkgrel=1
+epoch=1
+pkgdesc="A tool to copy files into or out of a cpio or tar archive"
+arch=('x86_64')
+url="https://www.gnu.org/software/cpio"
+license=('KZL')
+source=(https://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz{,.sig})
+sha256sums=('e87470d9c984317f658567c03bfefb6b0c829ff17dbf6b0de48d71a4c8f3db88'
+            'SKIP')
+validpgpkeys=('325F650C4C2B6AD58807327A3602B07F55D0C732')
+
+build() {
+  cd ${pkgname}-${pkgver}
+
+  CFLAGS+=" -fcommon"
+
+  ./configure \
+    --prefix=/usr \
+    --libexecdir=/usr/lib \
+    --disable-mt
+
+  make
+}
+
+check() {
+  cd ${pkgname}-${pkgver}
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+
+  make DESTDIR="${pkgdir}/" install
+
+  rm -rf "${pkgdir}"/usr/share/man/man8
+}
