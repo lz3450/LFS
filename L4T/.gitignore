@@ -1,6 +1,6 @@
 downloads
 *.tbz2
-jetson-210
-tegra186
+jetson/
+jetson-210/
 *.deb
 *.tar.gz
