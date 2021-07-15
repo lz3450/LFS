@@ -202,10 +202,6 @@ save_samplefs() {
     sudo tar --numeric-owner -jcpf "${output_samplefs}" *
     sync
     popd > /dev/null
-    sudo umount -R "${tmpdir}" || :
-    sudo losetup -D
-    sudo rm -rf "${tmpdir}"
-    tmpdir=""
 }
 
 cleanup() {
