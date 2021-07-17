@@ -1,0 +1,48 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=screen
+pkgver=4.8.0
+pkgrel=1
+epoch=1
+pkgdesc="Full-screen window manager that multiplexes a physical terminal"
+arch=('x86_64')
+url="https://www.gnu.org/software/screen/"
+license=('KZL')
+backup=(etc/screenrc
+        etc/pam.d/screen)
+source=(https://ftp.gnu.org/gnu/screen/${pkgname}-${pkgver}.tar.gz{,.sig}
+        pam.d
+        tmpfiles.d)
+sha256sums=('6e11b13d8489925fde25dfb0935bf6ed71f9eb47eff233a181e078fde5655aa1'
+            'SKIP'
+            '971c25929ea97422c09e10679ab98e9e6c59295aae1a4a9970909d2206e23090'
+            '1f33ce4faca7bd05dd80403411af31e682d5d23e79558e884ae5a35f1dd96223')
+validpgpkeys=('2EE59A5D0C50167B5535BBF1B708A383C53EF3A4')
+
+build() {
+  cd ${pkgname}-${pkgver}
+  
+  ./configure \
+		--prefix=/usr \
+		--enable-pam \
+		--enable-telnet \
+		--enable-colors256 \
+		--enable-rxvt_osc \
+		--with-socket-dir=/run/screens \
+		--with-pty-group=5 \
+		--with-sys-screenrc=/etc/screenrc
+
+  make
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+
+  make DESTDIR="${pkgdir}/" install
+
+	install -Dm644 etc/etcscreenrc "${pkgdir}"/etc/screenrc
+	install -Dm644 etc/screenrc "${pkgdir}"/etc/skel/.screenrc
+
+  install -Dm644 "${srcdir}"/pam.d "${pkgdir}"/etc/pam.d/screen
+	install -Dm644 "${srcdir}"/tmpfiles.d "${pkgdir}"/usr/lib/tmpfiles.d/screen.conf
+}
