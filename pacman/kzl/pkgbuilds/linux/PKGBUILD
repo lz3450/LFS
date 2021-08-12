@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=linux
-pkgver=5.10.18
+pkgver=5.10.57
 pkgrel=1
 epoch=1
 pkgdesc="LTS Linux Kernel"
@@ -11,7 +11,7 @@ makedepends=(bc)
 options=(!strip)
 source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.{xz,sign}
         config)
-sha256sums=('3bc1ee2b1bf73b5ba936721953f3f9599fd165cef906cd5163c68d23cb9bb611'
+sha256sums=('00bbaeaac17f82d9a6d93cbc42cafd39d3b2fa3a6087333503d2344fa5e3142d'
             'SKIP'
             '97102883d868603230de4e42d2ec43d4edbf34269986aaef44c6c461b0868aaf')
 validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
@@ -40,18 +40,19 @@ package() {
   cd $pkgname-$pkgver
 
   local kernelrelease=$(make O=build -s kernelrelease)
+  local image_name=$(make O=build -s image_name)
   local modulesdir="/usr/lib/modules/$kernelrelease"
 
   make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
 
   # make INSTALL_PATH="$pkgdir/boot" O=build install
 
-  install -Dm755 build/$(make O=build -s image_name) "$pkgdir/$modulesdir"/vmlinuz
-  install -Dm755 build/$(make O=build -s image_name) "$pkgdir"/boot/vmlinuz-linux
+  install -Dm755 build/$image_name "$pkgdir/$modulesdir"/vmlinuz
+  install -Dm755 build/$image_name "$pkgdir"/boot/vmlinuz-linux
   install -Dm644 build/System.map -t "$pkgdir/$modulesdir/"
   install -Dm644 build/System.map -t "$pkgdir"/boot/
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
-  cp -a build "$pkgdir"/usr/lib/modules/$kernelrelease/build
   cp -a . "$pkgdir"/usr/lib/modules/$kernelrelease/source
+  mv "$pkgdir"/usr/lib/modules/$kernelrelease/{source/,}build
 }

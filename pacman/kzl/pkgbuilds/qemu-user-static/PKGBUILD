@@ -16,7 +16,7 @@ sha256sums=('87bc1a471ca24b97e7005711066007d443423d19aacda3d442558ae032fa30b9'
 validpgpkeys=('CEACC9E15534EBABB82D3FA03353C9CEF108B584')
 
 build() {
-  cd qemu-${pkgver}
+  cd qemu-$pkgver
 
   ./configure \
     --prefix=/usr \
@@ -73,17 +73,17 @@ build() {
 }
 
 package() {
-  cd qemu-${pkgver}
+  cd qemu-$pkgver
 
-  make DESTDIR="${pkgdir}/" install
+  make DESTDIR="$pkgdir/" install
 
-  rm -rf "${pkgdir}"/usr/share
+  rm -rf "$pkgdir"/usr/share
 
-  find "${pkgdir}/usr/bin" -type f -exec mv {} {}-static \;
+  find "$pkgdir/usr/bin" -type f -exec mv {} {}-static \;
 
-  install -dm755 "${pkgdir}"/usr/lib/binfmt.d/
+  install -dm755 "$pkgdir"/usr/lib/binfmt.d/
 
-  tee "${pkgdir}"/usr/lib/binfmt.d/qemu-user-static.conf << EOF
+  tee "$pkgdir"/usr/lib/binfmt.d/qemu-user-static.conf << EOF
 :qemu-aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff:/usr/bin/qemu-aarch64-static:CF
 EOF
 }

@@ -1,22 +1,23 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=clang
-pkgver=11.1.0
+pkgver=12.0.1
 pkgrel=1
 epoch=1
 pkgdesc="C language family frontend for LLVM"
 arch=('x86_64')
 url="https://clang.llvm.org/"
+license=('KZL')
 depends=(compiler-rt llvm)
 optdepends=("openmp: OpenMP support in clang with -fopenmp")
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/clang-$pkgver.src.tar.xz{,.sig}
         https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/clang-tools-extra-$pkgver.src.tar.xz{,.sig}
         https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/llvm-$pkgver.src.tar.xz{,.sig})
-sha256sums=('0a8288f065d1f57cb6d96da4d2965cbea32edc572aa972e466e954d17148558b'
+sha256sums=('6e912133bcf56e9cfe6a346fa7e5c52c2cde3e4e48b7a6cc6fcc7c75047da45f'
             'SKIP'
-            '76707c249de7a9cde3456b960c9a36ed9bbde8e3642c01f0ef61a43d61e0c1a2'
+            '65659efdf97dbed70ae0caee989936b731f249dddc46f1cb4225b2f49b232ae5'
             'SKIP'
-            'ce8508e318a01a63d4e8b3090ab2ded3c598a50258cc49e2625b9120d4c03ea5'
+            '7d9a8405f557cefc5a21bf5672af73903b64749d9bc3a50322239f56f34ffddf'
             'SKIP')
 validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
 

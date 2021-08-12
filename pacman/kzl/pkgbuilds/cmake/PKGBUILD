@@ -10,7 +10,7 @@ url="https://www.cmake.org/"
 depends=(curl jsoncpp libarchive libuv rhash shared-mime-info)
 # makedepends=(qt5)
 # optdepends=("qt5: cmake-gui")
-source=(https://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz)
+source=(https://www.cmake.org/files/v${pkgver%.*}/$pkgname-$pkgver.tar.gz)
 sha256sums=('ec87ab67c45f47c4285f204280c5cde48e1c920cfcfed1555b27fb3b1a1d20ba')
 
 # TODO: --qt-gui

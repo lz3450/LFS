@@ -1,11 +1,12 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=git
-pkgver=2.30.1
+pkgver=2.32.0
 pkgrel=1
 epoch=1
 arch=('x86_64')
 url="https://git-scm.com/"
+license=('KZL')
 depends=(curl expat openssl pcre2)
 makedepends=(xmlto)
 # makedepends=(asciidoc xmlto)
@@ -15,7 +16,7 @@ install=$pkgname.install
 source=(https://www.kernel.org/pub/software/scm/$pkgname/$pkgname-$pkgver.tar.{xz,sign}
         git-daemon.socket
         git-daemon@.service)
-sha256sums=('f988a8a095089978dab2932af4edb22b4d7d67d67b81aaa1986fa29ef45d9467'
+sha256sums=('68a841da3c4389847ecd3301c25eb7e4a51d07edf5f0168615ad6179e3a83623'
             'SKIP'
             'ac4c90d62c44926e6d30d18d97767efc901076d4e0283ed812a349aece72f203'
             '14c0b67cfe116b430645c19d8c4759419657e6809dfa28f438c33a005245ad91')

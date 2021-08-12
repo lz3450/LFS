@@ -1,22 +1,22 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=liburing
-pkgver=0.7
+pkgver=2.0
 pkgrel=1
 epoch=1
 pkgdesc="Linux-native io_uring I/O access library"
 arch=('x86_64')
 url="https://git.kernel.dk/cgit/liburing/"
-source=(git+https://git.kernel.dk/liburing#tag=$pkgname-$pkgver?signed)
+license=('KZL')
+source=(git+https://git.kernel.dk/liburing#commit=8aac320ae8445c5434ab3be1761414a5247e5d42)
 sha256sums=('SKIP')
-validpgpkeys=('C0FC392DCADE26D975FA5E4AF7D358FB2971E0A6')
 
 build() {
   cd $pkgname
 
   ./configure \
     --prefix=/usr \
-    --mandir='/usr/share/man'
+    --mandir=/usr/share/man
 
   make
 }

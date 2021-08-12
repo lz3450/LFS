@@ -1,19 +1,20 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=llvm
-pkgver=11.1.0
+pkgver=12.0.1
 pkgrel=1
 epoch=1
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
 url="https://llvm.org/"
+license=('KZL')
 depends=(libffi)
 provides=(llvm-libs)
 conflicts=(llvm-libs)
 replaces=(llvm-libs)
 options=(staticlibs)
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz{,.sig})
-sha256sums=('ce8508e318a01a63d4e8b3090ab2ded3c598a50258cc49e2625b9120d4c03ea5'
+sha256sums=('7d9a8405f557cefc5a21bf5672af73903b64749d9bc3a50322239f56f34ffddf'
             'SKIP')
 validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
 

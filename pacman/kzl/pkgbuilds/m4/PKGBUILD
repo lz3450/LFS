@@ -1,25 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=m4
-pkgver=1.4.18
+pkgver=1.4.19
 pkgrel=1
 epoch=1
 pkgdesc="The GNU macro processor"
 arch=('x86_64')
 url="https://www.gnu.org/software/m4"
-license=('GPL')
-source=(https://ftp.gnu.org/gnu/m4/$pkgname-$pkgver.tar.xz{,.sig}
-        m4-1.4.18-glibc-change-work-around.patch)
-sha256sums=('f2c1e86ca0a404ff281631bdc8377638992744b175afb806e25871a24a934e07'
-            'SKIP'
-            '8a0813cf02fa6364b1ace6690ed3a76194f7aaa71f32f0d3d2ae269140567dea')
+license=('KZL')
+source=(https://ftp.gnu.org/gnu/m4/$pkgname-$pkgver.tar.xz{,.sig})
+sha256sums=('63aede5c6d33b6d9b13511cd0be2cac046f2e70fd0a07aa9573a04a82783af96'
+            'SKIP')
 validpgpkeys=('71C2CC22B1C4602927D2F3AAA7A16B4A2527436A')
-
-prepare() {
-  cd $pkgname-$pkgver
-  
-	patch -p1 -i "$srcdir"/m4-1.4.18-glibc-change-work-around.patch
-}
 
 build() {
   cd $pkgname-$pkgver

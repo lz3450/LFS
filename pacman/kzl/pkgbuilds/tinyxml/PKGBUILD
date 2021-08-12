@@ -22,7 +22,7 @@ build() {
   cd $pkgname
 
   make
-  g++ "$CXXFLAGS" -fPIC -shared -o lib${pkgname}.so.0.$pkgver -Wl,-soname,"lib${pkgname}.so.0" $(ls *.o | grep -v xmltest)
+  g++ "$CXXFLAGS" -fPIC -shared -o lib$pkgname.so.0.$pkgver -Wl,-soname,"lib$pkgname.so.0" $(ls *.o | grep -v xmltest)
 }
 
 check() {

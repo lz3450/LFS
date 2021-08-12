@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gpgme
-pkgver=1.15.1
+pkgver=1.16.0
 pkgrel=1
 epoch=1
 pkgdesc="A C wrapper library for GnuPG"
@@ -10,13 +10,18 @@ url="https://www.gnupg.org/related_software/gpgme"
 depends=(gnupg libgpg-error)
 makedepends=(swig)
 options=(!emptydirs)
-source=(https://www.gnupg.org/ftp/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('eebc3c1b27f1c8979896ff361ba9bb4778b508b2496c2fc10e3775a40b1de1ad'
-            'SKIP')
-validpgpkeys=('6DAA6E64A76D2840571B4902528897B826403ADA')
+# source=(https://www.gnupg.org/ftp/gcrypt/gpgme/$pkgname-$pkgver.tar.bz2{,.sig})
+source=(git+git://git.gnupg.org/gpgme.git#commit=7cfc93193d535ec5037e48b86544e1b4dbf949f6)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   export PYTHONHASHSEED=0
 
@@ -30,14 +35,14 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check || warning "Check failed."
 }
 
 package_gpgme() {
 
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

@@ -1,54 +1,47 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openssh
-pkgver=8.4
+pkgver=8.6
 pkgrel=1
 epoch=1
 arch=('x86_64')
 url="https://www.openssh.com/portable.html"
+license=('KZL')
 depends=(krb5 ldns libedit libxcrypt openssl)
-makedepends=(libfido2)
-optdepends=("libfido2: FIDO/U2F support"
+# makedepends=(libfido2)
+optdepends=("libfido2: U2F/FIDO support"
             "x11-ssh-askpass: input passphrase in X"
             "xorg-xauth: X11 forwarding")
 backup=(etc/ssh/ssh_config
         etc/ssh/sshd_config
         etc/pam.d/sshd)
-source=(https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/${pkgname}-${pkgver}p${pkgrel}.tar.gz{,.asc}
-        ssh-copy-id.patch::https://github.com/openssh/openssh-portable/commit/d9e727dcc04a52caaac87543ea1d230e9e6b5604.patch
+source=(https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-$pkgverp$pkgrel.tar.gz{,.asc}
         sshd.conf
         sshd.pam
         sshd.service
         sshdgenkeys.service)
-sha256sums=('5a01d22e407eb1c05ba8a8f7c654d388a13e9f226e4ed33bd38748dafa1d2b24'
+sha256sums=('c3e6e4da1621762c850d03b47eed1e48dff4cc9608ddeb547202a234df8ed7ae'
             'SKIP'
-            '8b844b6ed29b270aed508cfe158bed668d09f554780d85c0c486a2607b00bb5e'
             '4effac1186cc62617f44385415103021f72f674f8b8e26447fc1139c670090f6'
             'd447e0d52f12b8b186e6864749d594746966ac997767e8af300190d1fbb74eaf'
             'e40f8b7c8e5e2ecf3084b3511a6c36d5b5c9f9e61f2bb13e3726c71dc7d4fbc7'
             '4031577db6416fcbaacf8a26a024ecd3939e5c10fe6a86ee3f0eea5093d533b7')
-validpgpkeys=('59C2118ED206D927E667EBE3D3E5F56B6D920D30')
+validpgpkeys=('7168B983815A5EEF59A4ADFD2A3F414E736060BA')
 
-prepare() {
-	cd ${pkgname}-${pkgver}p${pkgrel}
-
-  # Fix `EOF: command not found` error in ssh-copy-id
-  patch -p1 -i "$srcdir"/ssh-copy-id.patch
-        
-	autoreconf
-}
+# TODO: libfido2 (--disable-security-key --without-security-key-builtin)
 
 build() {
-  cd ${pkgname}-${pkgver}p${pkgrel}
+  cd $pkgname-$pkgverp$pkgrel
 
   ./configure \
     --prefix=/usr \
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib/ssh \
     --sysconfdir=/etc/ssh \
+    --disable-security-key \
     --with-ldns \
     --with-libedit \
-    --with-security-key-builtin \
+    --without-security-key-builtin \
     --with-ssl-engine \
     --with-pam \
     --with-privsep-user=nobody \
@@ -62,7 +55,7 @@ build() {
 }
 
 package() {
-  cd ${pkgname}-${pkgver}p${pkgrel}
+  cd $pkgname-$pkgverp$pkgrel
 
   make DESTDIR="$pkgdir/" install
 

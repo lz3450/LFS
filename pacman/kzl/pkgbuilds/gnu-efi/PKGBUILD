@@ -20,9 +20,9 @@ build() {
 package() {
   cd $pkgname-$pkgver
 
-  make INSTALLROOT="$pkgdir/" PREFIX="/usr/" LIBDIR="/usr/lib/" install
+  make INSTALLROOT="$pkgdir/" PREFIX="/usr" LIBDIR="/usr/lib" install
 
 
 	install -d "$pkgdir"/usr/share/gnu-efi/apps/$arch/
-	install -D -m0644 "$srcdir"/gnu-efi-$pkgver/$arch/apps/*.efi "${pkgdir}"/usr/share/gnu-efi/apps/$arch/
+	install -Dm0644 "$srcdir"/gnu-efi-$pkgver/$arch/apps/*.efi "$pkgdir"/usr/share/gnu-efi/apps/$arch/
 }

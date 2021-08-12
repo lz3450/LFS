@@ -4,13 +4,14 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
 pkgname=gcc
-pkgver=10.2.0
-_islver=0.21
+pkgver=11.2.0
+_islver=0.24
 pkgrel=2
 epoch=1
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
 url="https://gcc.gnu.org"
+license=('KZL')
 depends=(mpc)
 provides=(gcc-libs gcc-fortran)
 conflicts=(gcc-libs gcc-fortran)
@@ -18,9 +19,9 @@ replaces=(gcc-libs gcc-fortran)
 options=(!emptydirs)
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
         http://isl.gforge.inria.fr/isl-$_islver.tar.xz)
-sha256sums=('b8dd4368bb9c7f0b98188317ee0254dd8cc99d1e3a18d0ff146c855fe16c1d8c'
+sha256sums=('d08edc536b54c372a1010ff6619dd274c0f1603aa49212ba20f7aa2cda36fa8b'
             'SKIP'
-            '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960')
+            '043105cc544f416b48736fff8caf077fb0663a717d06b1113f16e391ac99ebad')
 validpgpkeys=('13975A70E63C361C73AE69EF6EEB81F8981C74C7')
 
 prepare() {

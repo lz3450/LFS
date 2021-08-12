@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gdb
-pkgver=10.1
+pkgver=10.2
 pkgrel=1
 epoch=1
 pkgdesc="The GNU Debugger"
 arch=('x86_64')
 url="https://www.gnu.org/software/gdb"
+license=('KZL')
 depends=(expat guile libelf mpfr)
 # depends=(expat guile libelf mpfr source-highlight)
 provides=(gdb-common)
@@ -14,7 +15,7 @@ conflicts=(gdb-common)
 replaces=(gdb-common)
 backup=(etc/gdb/gdbinit)
 source=(https://ftp.gnu.org/gnu/gdb/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('f82f1eceeec14a3afa2de8d9b0d3c91d5a3820e23e0a01bbb70ef9f0276b62c0'
+sha256sums=('aaa1223d534c9b700a8bec952d9748ee1977513f178727e1bee520ee000b4f29'
             'SKIP')
 validpgpkeys=('F40ADB902B24264AA42E50BF92EDB04BFF325CF3')
 

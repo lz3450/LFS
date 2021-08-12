@@ -7,8 +7,12 @@ epoch=1
 pkgdesc="Freedesktop.org message bus system"
 arch=('x86_64')
 url="https://wiki.freedesktop.org/www/Software/dbus/"
+license=('KZL')
 depends=(audit expat)
 makedepends=(autoconf-archive)
+provides=(libdbus libdbus-1.so)
+conflicts=(libdbus)
+replaces=(libdbus)
 source=(git+https://gitlab.freedesktop.org/dbus/dbus.git#tag=$pkgname-$pkgver?signed
         dbus-reload.hook)
 sha256sums=('SKIP'

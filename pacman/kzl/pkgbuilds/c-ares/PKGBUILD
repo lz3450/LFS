@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=c-ares
-pkgver=1.17.1
+pkgver=1.17.2
 pkgrel=1
 epoch=1
 pkgdesc="A C library for asynchronous DNS requests"
 arch=('x86_64')
 url="https://c-ares.haxx.se/"
-source=(https://github.com/$pkgname/$pkgname/releases/download/${pkgname//-}-${pkgver//./_}/$pkgname-$pkgver.tar.gz{,.asc})
-sha256sums=('d73dd0f6de824afd407ce10750ea081af47eba52b8a6cb307d220131ad93fc40'
+license=('KZL')
+source=(https://github.com/c-ares/c-ares/releases/download/${pkgname//-}-${pkgver//./_}/$pkgname-$pkgver.tar.gz{,.asc})
+sha256sums=('4803c844ce20ce510ef0eb83f8ea41fa24ecaae9d280c468c582d2bb25b3913d'
             'SKIP')
 validpgpkeys=('27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2')
 

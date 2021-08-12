@@ -1,14 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=expat
-pkgver=2.2.10
+pkgver=2.4.1
 pkgrel=1
 epoch=1
 pkgdesc="An XML parser library"
 arch=('x86_64')
 url="https://libexpat.github.io/"
+license=('KZL')
+provides=(libexpat.so)
 source=(https://github.com/libexpat/libexpat/releases/download/R_${pkgver//./_}/expat-$pkgver.tar.bz2{,.asc})
-sha256sums=('b2c160f1b60e92da69de8e12333096aeb0c3bf692d41c60794de278af72135a5'
+sha256sums=('2f9b6a580b94577b150a7d5617ad4643a4301a6616ff459307df3e225bcfbf40'
             'SKIP')
 validpgpkeys=('3176EF7DB2367F1FCA4F306B1F9B0E909AF37285')
 

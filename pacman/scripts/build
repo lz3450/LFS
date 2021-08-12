@@ -3,12 +3,21 @@
 # build
 #
 
-VERSION=1.1
+set -e
+# set -x
+
+umask 0022
+
+version=1.2
 
 # arguments/options
 
-TARGET=kzl
-STAGE=1
+script_name="$(basename "${0}")"
+target=kzl
+stage=1
+repo_dir=
+build_dir=
+log_dir=
 
 # kzl packages
 
@@ -20,8 +29,8 @@ kzl_stage0_pkgs=(
 
 # toolchain
 kzl_stage1_pkgs=(
-    linux-api-headers glibc binutils gcc libtool
-    binutils glibc gcc libtool
+    linux-api-headers glibc binutils
+    gcc libtool binutils glibc
 )
 
 # base
@@ -75,16 +84,17 @@ kzl_stage2_pkgs=(
     ed patch
     ## make
     gc libffi libunistring guile make
+    ## gettext
+    icu libxml2 elfutils glib2 gettext
     ## dbus
     expat autoconf-archive dbus
     ## iproute2
-    # elfutils
     libmnl libnfnetlink libnetfilter_conntrack libnftnl libnl libpcap iptables
     iproute2 
     ## iputils
     libidn2 iputils
     ## systemd
-    argon2 libaio icu hwloc ldns libedit openssh openmpi boost thin-provisioning-tools device-mapper json-c popt cryptsetup
+    argon2 libaio hwloc ldns libedit openssh openmpi boost thin-provisioning-tools device-mapper json-c popt cryptsetup
     kbd
     kmod
     libgpg-error libgcrypt
@@ -95,7 +105,7 @@ kzl_stage2_pkgs=(
     gnu-efi
     gperf
     nettle gnutls libmicrohttpd
-    libxml2 libxslt
+    libxslt
     rpcsvc-proto quota
     systemd
     ## pciutils
@@ -105,7 +115,7 @@ kzl_stage2_pkgs=(
     ## pacman
     libassuan npth pinentry tcl sqlite libusb libusb-compat pcsclite gnupg gpgme
     libarchive
-    pacman 
+    pacman
     po4a fakeroot pacman-contrib arch-install-scripts
     ## python
     libnsl mpdecimal valgrind python
@@ -113,14 +123,14 @@ kzl_stage2_pkgs=(
     jsoncpp
     libuv
     rhash
-    glib2 docbook itstool xmlto shared-mime-info
+    docbook itstool xmlto shared-mime-info
     cmake
     ## git
     git
     ## sudo
     sudo
-    ## gettext texinfo man-db
-    gettext texinfo 
+    ## texinfo man-db
+    texinfo 
     groff man-db
     ## linux
     bc linux-firmware
@@ -143,7 +153,7 @@ kzl_stage3_pkgs=(
     nano
     c-ares aria2
     ## devtools
-    gdb llvm compiler-rt openmp clang rust ruby node
+    gdb llvm compiler-rt openmp clang rust ruby nodejs
     ## Xlib
     xorg-util-macros xorgproto libxau libxdmcp xcb-proto libxcb xtrans libx11 libice libsm libxt libxext libxrender libxpm
     ## texlive
@@ -154,11 +164,11 @@ kzl_stage3_pkgs=(
     # compatibility problem
     # nspr nss poppler-data poppler
     texlive
-    # ## samba
+    ## samba
     lmdb jansson liburing samba
     ## ffmpeg
     ## nvidia
-    nvidia cuda cudnn nccl
+    nvidia #cuda cudnn nccl
 
     ### testing
     # 
@@ -166,25 +176,13 @@ kzl_stage3_pkgs=(
     # help2man
 )
 
-# ubuntu packages
-
-ubuntu_pkgs=(
-
-)
-
-# tegra packages
-
-tegra_pkgs=(
-    pacman pacman-contrib
-)
-
 # functions
 
 prepare() {
     (yes yes || :) | sudo pacman -Scc
 
-    if [ ! -f /home/.repository/$TARGET/$TARGET.db ]; then
-        update-repo -t $TARGET
+    if [ ! -f /home/.repository/$target/$target.db ]; then
+        update-repo -t $target
     fi
 
     (yes yes || :) | sudo pacman -Syy
@@ -205,7 +203,7 @@ update_key() {
     pkgname=$1
     pkgbase=$(get_pkgbase $pkgname)
 
-    cd $ROOTDIR/$TARGET/pkgbuilds/$pkgbase
+    cd $ROOTDIR/$target/pkgbuilds/$pkgbase
 
     updpkgsums
     gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
@@ -217,13 +215,13 @@ build() {
     pkgname=$1
     pkgbase=$(get_pkgbase $pkgname)
 
-    cd $ROOTDIR/$TARGET/pkgbuilds/$pkgbase
+    cd $ROOTDIR/$target/pkgbuilds/$pkgbase
 
     local log
-    if [ -z $STAGE ]; then
-        log="$LOGDIR"/$pkgbase.log
+    if [ -z $stage ]; then
+        log="$log_dir"/$pkgbase.log
     else
-        log="$LOGDIR"/$pkgbase.stage$STAGE.log
+        log="$log_dir"/$pkgbase.stage$stage.log
     fi
     if [ -f $log ]; then
         rm $log
@@ -231,13 +229,19 @@ build() {
     
     makepkg -scCf --noconfirm &>> $log
 
-    update-repo -t $TARGET
+    update-repo -t $target
     (yes yes || :) | sudo pacman -Scc
-    (yes yes || :) | sudo pacman -Sddy --overwrite "*" $pkgname # --config $PACMAN_CONF
+    (yes yes || :) | sudo pacman -Sddy --overwrite "*" $pkgname # --config ${pacman_conf}
 }
 
 usage() {
-    printf "lfs-build (kzl-linux) %s\n" "$VERSION"
+    errno=0
+    if [ -n "$1" ]; then
+        echo "$1"
+        errno=1
+    fi
+
+    printf "lfs-build (kzl-linux) %s\n" "$version"
     echo
     printf "lfs-build will build packages from scratch.\n"
     echo
@@ -248,57 +252,70 @@ usage() {
     echo "    -t, --target      build target (kzl(default), rpi, tegra, ubuntu)"
     echo "    -s, --stage       stage (stage0, stage1(default), stage2, stage3)"
     echo
+
+    exit ${errno}
 }
 
+################################################################################
 # program start
+################################################################################
 
-set -e -u -o pipefail
-# set -x
-
-umask 0022
-
-while (( "$#" )); do
+while [ -n "$1" ]; do
     case "$1" in
-        -h|--help)      usage; exit 0 ;;
-        -v|--version)   printf "$VERSION"; exit 0 ;;
-        -t|--target)    shift; TARGET="$1" ;;
-        -s|--stage)     shift; STAGE="$1" ;;
-        *)              printf "unknown option \"$1\""; exit 1 ;;
+    -h|--help)
+        usage
+        ;;
+    -v|--version)
+        echo "$version"
+        exit 0
+        ;;
+    -t|--target)
+        target="$2"
+        shift 2
+        ;;
+    -s|--stage)
+        stage="$2"
+        shift 2
+        ;;
+    *)
+        usage "Unknown option: $1"
+        ;;
     esac
-    shift
 done
 
-BUILDDIR=
-LOGDIR=
-REPODIR=/home/.repository/$TARGET
-
-case $TARGET in
-    kzl)            BUILDDIR=/tmp ;;
-    ubuntu|tegra)   BUILDDIR=/dev/shm ;;
-    *)              printf "unknown target \"$STAGE\""; exit 1 ;;
+case $target in
+    kzl)
+        build_dir=/tmp
+        case $stage in
+        0)
+            update-repo --clear -t $target
+            pkgs=${kzl_stage0_pkgs[@]}
+            ;;
+        1)
+            pkgs=${kzl_stage1_pkgs[@]}
+            ;;
+        2)
+            pkgs=${kzl_stage2_pkgs[@]}
+            ;;
+        3)
+            pkgs=${kzl_stage3_pkgs[@]}
+            ;;
+        *)
+            printf "Unknown stage \"$stage\""
+            exit 1
+            ;;
+        esac
+        ;;
+    *)
+        echo "Unknown target \"$target\""
+        exit 1
+        ;;
 esac
 
-LOGDIR=$BUILDDIR
+repo_dir=/home/.repository/$target
+log_dir=$build_dir
 
-# if [ -d $BUILDDIR/makepkg ]; then
-#     rm -rf $BUILDDIR/makepkg
-# fi
-
-# 
-if [ "$TARGET" = "kzl" ]; then
-    case $STAGE in
-        0) update-repo --clear -t $TARGET; pkgs=${kzl_stage0_pkgs[@]} ;;
-        1) pkgs=${kzl_stage1_pkgs[@]} ;;
-        2) pkgs=${kzl_stage2_pkgs[@]} ;;
-        3) pkgs=${kzl_stage3_pkgs[@]} ;;
-        *) printf "unknown stage \"$STAGE\""; exit 1 ;;
-    esac
-elif [ "$TARGET" = "ubuntu" ]; then
-    pkgs=${ubuntu_pkgs[@]}
-elif [ "$TARGET" = "tegra" ]; then
-    update-repo --clear -t $TARGET
-    pkgs=${tegra_pkgs[@]}
-fi
+start_time=$(date +%s)
 
 prepare
 
@@ -310,8 +327,17 @@ done
 wait
 
 for p in ${pkgs[@]}; do
-    echo "################################################################################"
-    echo "   building $p ..."
-    echo "################################################################################"
+    echo "****************************************************************"
+    echo "    building $p ..."
+    echo "****************************************************************"
     build $p
 done
+
+end_time=$(date +%s)
+total_time=$((end_time-start_time))
+
+echo "****************************************************************"
+echo "                Execution time Information                "
+echo "****************************************************************"
+echo "${script_name} : End time - $(date)"
+echo "${script_name} : Total time - $(date -d@${total_time} -u +%H:%M:%S)"

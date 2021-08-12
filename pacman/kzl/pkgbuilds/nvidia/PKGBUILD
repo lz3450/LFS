@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=nvidia
-pkgver=460.39
+pkgver=470.63.01
 pkgrel=1
 epoch=1
 arch=('x86_64')
@@ -11,7 +11,7 @@ optdepends=("opencl-headers: headers necessary for OpenCL development")
 provides=(opencl-driver)
 options=(!strip)
 source=(https://us.download.nvidia.com/XFree86/Linux-x86_64/$pkgver/NVIDIA-Linux-x86_64-$pkgver.run)
-sha256sums=('0bf0664078013aa62ed6840caed0637b226884b9398e1fb647e127ad3ad9a37f')
+sha256sums=('6f1a44cc4a2ce27dce749ccd1e403c1db0f4791e2d22c05ec966842101d3ed14')
 
 prepare() {
   sh NVIDIA-Linux-x86_64-$pkgver.run --extract-only
@@ -127,11 +127,11 @@ package() {
   install -Dm644 nvidia-application-profiles-$pkgver-key-documentation "$pkgdir"/usr/share/nvidia/nvidia-application-profiles-$pkgver-key-documentation
 
   # new power management support
-  install -Dm644 nvidia-suspend.service "$pkgdir"/usr/lib/systemd/system/nvidia-suspend.service
-  install -Dm644 nvidia-hibernate.service "$pkgdir"/usr/lib/systemd/system/nvidia-hibernate.service
-  install -Dm644 nvidia-resume.service "$pkgdir"/usr/lib/systemd/system/nvidia-resume.service
-  install -Dm755 nvidia "$pkgdir"/usr/lib/systemd/system-sleep/nvidia
-  install -Dm755 nvidia-sleep.sh "$pkgdir"/usr/bin/nvidia-sleep.sh
+  install -Dm644 systemd/system/nvidia-suspend.service "$pkgdir"/usr/lib/systemd/system/nvidia-suspend.service
+  install -Dm644 systemd/system/nvidia-hibernate.service "$pkgdir"/usr/lib/systemd/system/nvidia-hibernate.service
+  install -Dm644 systemd/system/nvidia-resume.service "$pkgdir"/usr/lib/systemd/system/nvidia-resume.service
+  install -Dm755 systemd/system-sleep/nvidia "$pkgdir"/usr/lib/systemd/system-sleep/nvidia
+  install -Dm755 systemd/nvidia-sleep.sh "$pkgdir"/usr/bin/nvidia-sleep.sh
 
   # nvidia-bug-report
   install -Dm755 nvidia-bug-report.sh "$pkgdir"/usr/bin/nvidia-bug-report.sh

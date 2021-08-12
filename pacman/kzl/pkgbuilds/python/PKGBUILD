@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.9.2
+pkgver=3.9.6
 pkgrel=1
 epoch=1
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
 url="https://www.python.org/"
+license=('KZL')
 depends=(expat gdbm libffi libnsl openssl)
 provides=(cython meson ninja python-dnspython python-fonttools python-setuptools python-wheel gyp)
 conflicts=(cython meson ninja python-dnspython python-fonttools python-setuptools python-wheel gyp)
@@ -16,9 +17,9 @@ makedepends=(mpdecimal sqlite valgrind)
 install=$pkgname.install
 source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc}
         $pkgname.install)
-sha256sums=('3c2034c54f811448f516668dce09d24008a0716c3a794dd8639b5388cbde247d'
+sha256sums=('397920af33efc5b97f2e0b57e91923512ef89fc5b3c1d21dbfc8c4828ce0108a'
             'SKIP'
-            'd5806c2584f2231b70aeb083bc6a691cebe9aeebd01eacf49c2b514d4a44af21')
+            '135b50cf60f9053df02d269b26f84e5a2793b1d9eb8345f5898de33e258325ea')
 validpgpkeys=('E3FF2839C048B25C084DEBE9B26995E310250568')
 
 build() {

@@ -7,22 +7,21 @@ epoch=1
 pkgdesc="Contributed scripts and tools for pacman systems"
 arch=('x86_64')
 url="https://git.archlinux.org/pacman-contrib.git/about/"
+license=('KZL')
 depends=(fakeroot)
 optdepends=("mlocate: pacdiff"
             "vim: default merge program for pacdiff")
-source=(https://git.archlinux.org/$pkgname.git/snapshot/$pkgname-$pkgver.tar.{gz,asc})
-sha256sums=('8746f1352aaad990fe633be34f925d5ab8bd8a19a5f1274e72dbde426deb86bd'
-            'SKIP')
-validpgpkeys=('04DC3FB1445FECA813C27EFAEA4F7B321A906AD9')
+source=(git+https://gitlab.archlinux.org/pacman/$pkgname.git)
+sha256sums=('SKIP')
 
 prepare() {
-  cd pacman-contrib-$pkgver
+  cd $pkgname
 
   ./autogen.sh
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
@@ -34,13 +33,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check || warning "Check failed."
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

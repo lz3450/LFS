@@ -1,16 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=icu
-pkgver=68.2
+pkgver=69.1
 pkgrel=1
 epoch=1
 pkgdesc="International Components for Unicode library"
 arch=('x86_64')
 url="http://site.icu-project.org/home"
-source=(https://github.com/unicode-org/icu/releases/download/release-${pkgver//./-}/${pkgname}4c-${pkgver//./_}-src.tgz{,.asc})
-sha256sums=('c79193dee3907a2199b8296a93b52c5cb74332c26f3d167269487680d479d625'
-            'SKIP')
-validpgpkeys=('0E51E7F06EF719FBD072782A5F56E5AFA63CCD33')
+license=('KZL')
+source=(https://github.com/unicode-org/icu/releases/download/release-${pkgver//./-}/${pkgname}4c-${pkgver//./_}-src.tgz)
+sha256sums=('4cba7b7acd1d3c42c44bb0c14be6637098c7faf2b330ce876bc5f3b915d09745')
 
 build() {
   cd $pkgname/source

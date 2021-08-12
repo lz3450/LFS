@@ -1,11 +1,12 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=base
-pkgver=20210227
+pkgver=20210810
 pkgrel=1
 epoch=1
 pkgdesc="Minimal package set to define a basic KZL Linux installation"
 arch=('any')
+license=('KZL')
 depends=(
   filesystem
   linux-api-headers 
@@ -32,15 +33,3 @@ depends=(
   gettext texinfo man-db
 )
 optdepends=("linux: bare metal support")
-
-
-
-
-
-
-
-
-
-
-
-

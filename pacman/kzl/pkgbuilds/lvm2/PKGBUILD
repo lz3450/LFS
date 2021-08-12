@@ -2,7 +2,7 @@
 
 pkgbase=lvm2
 pkgname=(lvm2 device-mapper)
-pkgver=2.03.11
+pkgver=2.03.13
 pkgrel=1
 epoch=1
 arch=('x86_64')
@@ -72,7 +72,7 @@ package_lvm2() {
   cd $pkgbase
 
   make DESTDIR="$pkgdir/" install_lvm2
-  install -dm755 "${pkgdir}"/etc/lvm/{archive,backup}
+  install -dm755 "$pkgdir"/etc/lvm/{archive,backup}
   make DESTDIR="$pkgdir/" install_systemd_units
   rm -f "$pkgdir"/usr/lib/systemd/system/dm-*
   make DESTDIR="$pkgdir/" install_systemd_generators

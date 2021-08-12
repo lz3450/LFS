@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ca-certificates
-pkgver=2020.10.15
+pkgver=2021.08.10
 pkgrel=1
 epoch=1
 pkgdesc="Common CA certificates form Mozilla CA Certificate Store"
 arch=('any')
 url="https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/"
+license=('KZL')
 depends=(p11-kit)
 provides=(ca-certificates-utils ca-certificates-mozilla)
 conflicts=(ca-certificates-utils ca-certificates-mozilla)
@@ -15,7 +16,7 @@ source=(https://hg.mozilla.org/mozilla-central/raw-file/tip/security/nss/lib/ckf
         https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/nss/trunk/certdata2pem.py
         update-ca-trust
         update-ca-trust.hook)
-sha256sums=('f3bdcd74612952da8476a9d4147f50b29ad0710b7dd95b4c8690500209986d70'
+sha256sums=('c8f6733d1ff4e6a4769c182971a1234f95ae079247a9c439a13423fe8ba5c24f'
             'd2a1579dae05fd16175fac27ef08b54731ecefdf414085c610179afcf62b096c'
             'a6f534bed509e2996ff00a1b6a82fbad070d4a8762c66c55e39aacf932ebcd51'
             '55b230878d71847c629494d3b1d0b43482568027c3272ffa477c1d77e4594bf6')

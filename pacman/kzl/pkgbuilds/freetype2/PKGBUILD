@@ -3,17 +3,19 @@
 # freetype2 (without harfbuzz) -> harfbuzz (without cairo) -> cairo -> harfbuzz (with cairo) -> freetype2 (with harfbuzz)
 
 pkgname=freetype2
-pkgver=2.10.4
+pkgver=2.11.0
 pkgrel=1
 epoch=1
 pkgdesc="Font rasterization library"
 arch=('x86_64')
 url="https://www.freetype.org/"
+license=('KZL')
 depends=(harfbuzz libpng)
+provides=(libfreetype.so)
 backup=(etc/profile.d/freetype2.sh)
 source=(https://download-mirror.savannah.gnu.org/releases/freetype/freetype-$pkgver.tar.xz{,.sig}
         freetype2.sh)
-sha256sums=('86a854d8905b19698bbc8f23b860bc104246ce4854dcea8e3b0fb21284f75784'
+sha256sums=('8bee39bd3968c4804b70614a0a3ad597299ad0e824bc8aad5ce8aaf48067bde7'
             'SKIP'
             'f7f8e09c44f7552c883846e9a6a1efc50377c4932234e74adc4a8ff750606467')
 validpgpkeys=('58E0C111E39F5408C5D3EC76C1A60EACE707FDA5')

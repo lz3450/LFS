@@ -4,21 +4,22 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
 pkgname=glibc
-pkgver=2.33
-pkgrel=1
+pkgver=2.34
+pkgrel=2
 epoch=1
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
+license=('KZL')
 depends=(tzdata)
 options=(!strip)
-source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
         locale-gen::https://git.archlinux.org/svntogit/packages.git/plain/trunk/locale-gen?h=packages/glibc
         locale.gen.txt)
 backup=(etc/gai.conf
         etc/locale.gen
         etc/nscd.conf)
 install=$pkgname.install
-sha256sums=('2e2556000e105dbd57f0b6b2a32ff2cf173bde4f0d85dffccfd8b7e51a0677ff'
+sha256sums=('44d26a1fe20b8853a48f470ead01e4279e869ac149b195dda4e44a195d981ab2'
             'SKIP'
             '83f108f915863c7ed0338e2d3e8f2e071a531a090ef8f8b2eb3a956a3c4f04d7'
             '0540122fb9340d546702a891bcce344fc3e8f21fe482c2c321b71c2e6b36964e')

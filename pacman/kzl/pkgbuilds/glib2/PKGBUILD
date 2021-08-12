@@ -7,6 +7,7 @@ epoch=1
 pkgdesc="Low level core library"
 arch=('x86_64')
 url="https://wiki.gnome.org/Projects/GLib"
+license=('KZL')
 depends=(libffi pcre)
 makedepends=(elfutils shared-mime-info)
 optdepends=("elfutils: gresource inspection tool")
@@ -16,7 +17,7 @@ provides=(libgio-2.0.so
           libgobject-2.0.so
           libgthread-2.0.so)
 options=(!strip staticlibs)
-source=(git+https://gitlab.gnome.org/GNOME/glib.git#tag=${pkgver}
+source=(git+https://gitlab.gnome.org/GNOME/glib.git#commit=a380bfdf93cb3bfd3cd4caedc0127c4e5717545b
         gio-querymodules.hook
         glib-compile-schemas.hook)
 sha256sums=('SKIP'
@@ -55,15 +56,15 @@ check() {
 package() {
   cd glib
 
-  meson install -C build --destdir="${pkgdir}/"
+  meson install -C build --destdir="$pkgdir/"
 
-  sed -e 's/, sysprof-capture-4//' -i "${pkgdir}"/usr/lib/pkgconfig/*.pc
+  sed -e 's/, sysprof-capture-4//' -i "$pkgdir"/usr/lib/pkgconfig/*.pc
 
-  install -Dm644 "${srcdir}"/*.hook -t "${pkgdir}"/usr/share/libalpm/hooks
+  install -Dm644 "$srcdir"/*.hook -t "$pkgdir"/usr/share/libalpm/hooks
 
   export PYTHONHASHSEED=0
   python -m compileall -d /usr/share/glib-2.0/codegen \
-    "${pkgdir}/usr/share/glib-2.0/codegen"
+    "$pkgdir/usr/share/glib-2.0/codegen"
   python -O -m compileall -d /usr/share/glib-2.0/codegen \
-    "${pkgdir}/usr/share/glib-2.0/codegen"
+    "$pkgdir/usr/share/glib-2.0/codegen"
 }

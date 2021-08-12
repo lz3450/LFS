@@ -58,8 +58,8 @@ package() {
 
   install -Dm644 doc/man/man5/ldap.conf.5.tmp "$pkgdir"/usr/share/man/man5/ldap.conf.5
 
-  ln -sf liblber.so "${pkgdir}"/usr/lib/liblber.so.2
-  ln -sf libldap.so "${pkgdir}"/usr/lib/libldap.so.2
+  ln -sf liblber.so "$pkgdir"/usr/lib/liblber.so.2
+  ln -sf libldap.so "$pkgdir"/usr/lib/libldap.so.2
 
   rm "$pkgdir"/etc/openldap/*.default
 }

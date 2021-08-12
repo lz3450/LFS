@@ -1,54 +1,72 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=5.2.2
+pkgver=6.0.0
 pkgrel=1
 epoch=1
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
+license=('KZL')
 depends=(archlinux-keyring curl gpgme libarchive pacman-mirrorlist)
 # checkdepends=(fakechroot)
 backup=(etc/pacman.conf
         etc/makepkg.conf)
-source=(https://sources.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('bb201a9f2fb53c28d011f661d50028efce6eef2c1d2a36728bdd0130189349a0'
-            'SKIP')
-validpgpkeys=('B8151B117037781095514CA7BBDFFC92306B1121')
-              
+source=(https://sources.archlinux.org/other/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
+        pacman-6.0.0-fix-404-download.patch::https://gitlab.archlinux.org/pacman/pacman/-/commit/3401f9e142ac4c701cd98c52618cb13164f2146b.patch
+        pacman-6.0.0-fix-key-import-double-free.patch::https://gitlab.archlinux.org/pacman/pacman/-/commit/542910d684191eb7f25ddc5d3d8fe3060028a267.patch)
+sha256sums=('004448085a7747bdc7a0a4dd5d1fb7556c6b890111a06e029ab088f9905d4808'
+            'SKIP'
+            'f4c1c39b43b52ba19b656b32913688b81085c73685afe32d2018dbb695d5a1e6'
+            'defdf1686d65fc896c19f41d1bc166912fccf9134b72e50da3b24538366cecdf')
+validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  patch -p1 -i "$srcdir"/pacman-6.0.0-fix-404-download.patch
+  patch -p1 -i "$srcdir"/pacman-6.0.0-fix-key-import-double-free.patch
+}
+
 build() {
   cd $pkgname-$pkgver
 
-  ./configure \
-    --prefix=/usr \
-    --sysconfdir=/etc \
-    --localstatedir=/var \
-    --disable-doc \
-    --with-pkg-ext='.pkg.tar.zst' \
-    --with-src-ext='.src.tar.zst' \
-    --with-scriptlet-shell=/bin/bash \
-    --with-ldconfig=/sbin/ldconfig
+    meson setup \
+      --prefix /usr \
+      --libexecdir lib \
+      --sbindir bin \
+      --auto-features enabled \
+      --buildtype plain \
+      --wrap-mode nodownload \
+      -D b_lto=true \
+      -D b_pie=true \
+      -D buildstatic=false \
+      -D doc=disabled \
+      -D doxygen=disabled \
+      -D ldconfig=/usr/bin/ldconfig \
+      -D pkg-ext='.pkg.tar.zst' \
+      -D scriptlet-shell=/usr/bin/bash \
+      -D src-ext='.src.tar.zst' \
+      build
 
-  make
+  meson compile -C build
 }
 
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  meson test -C build || warning "Check failed."
 }
 
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  meson install -C build --destdir="$pkgdir"
   
   sed -e '/CHOST=/s/x86_64-pc-linux-gnu/x86_64-kzl-linux-gnu/' \
-      -e '/CPPFLAGS=/s/^#//' \
-      -e '/CPPFLAGS=/s/"\(.*\)"/"-D_FORTIFY_SOURCE=2"/' \
       -e '/CFLAGS=/s/^#//' \
-      -e '/CFLAGS=/s/"\(.*\)"/"-march=native -O2 -pipe -fno-plt"/' \
+      -e '/CFLAGS=/s/"\(.*\)"/"-march=native -mtune=native -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection"/' \
       -e '/CXXFLAGS=/s/^#//' \
-      -e '/CXXFLAGS=/s/"\(.*\)"/"-march=native -O2 -pipe -fno-plt"/' \
+      -e '/CXXFLAGS=/s/"\(.*\)"/"-march=native -mtune=native -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection "/' \
       -e '/LDFLAGS=/s/^#//' \
       -e '/LDFLAGS=/s/"\(.*\)"/"-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"/' \
       -e '/RUSTFLAGS=/s/^#//' \
