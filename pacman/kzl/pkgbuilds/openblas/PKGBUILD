@@ -1,0 +1,38 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=openblas
+pkgver=0.3.17
+pkgrel=1
+epoch=1
+pkgdesc="An optimized BLAS library based on GotoBLAS2 1.13 BSD"
+arch=('x86_64')
+url="https://www.openblas.net/"
+license=('KZL')
+checkdepends=(cblas)
+provides=(blas)
+conflicts=(blas)
+source=(${pkgname}-${pkgver}.tar.gz::https://github.com/xianyi/OpenBLAS/archive/v${pkgver}.tar.gz)
+sha256sums=('df2934fa33d04fd84d839ca698280df55c690c86a5a1133b3f7266fce1de279f')
+
+build() {
+  cd OpenBLAS-$pkgver
+
+  make NO_STATIC=1 NO_LAPACK=1 NO_LAPACKE=1 NO_CBLAS=1 NO_AFFINITY=1 USE_OPENMP=1 \
+       CFLAGS="$CPPFLAGS $CFLAGS" TARGET=CORE2 DYNAMIC_ARCH=1 \
+       NUM_THREADS=64 MAJOR_VERSION=3 libs shared
+}
+
+package() {
+  cd OpenBLAS-$pkgver
+
+  make PREFIX="$pkgdir/usr" NUM_THREADS=64 MAJOR_VERSION=3 install
+
+  rmdir "$pkgdir"/usr/bin
+  rm "$pkgdir"/usr/include/cblas.h "$pkgdir"/usr/include/lapack*
+
+  ln -s libopenblasp-r$pkgver.so "$pkgdir"/usr/lib/libblas.so
+  ln -s libopenblasp-r$pkgver.so "$pkgdir"/usr/lib/libblas.so.3
+  sed -e "s%$pkgdir%%" -i "$pkgdir"/usr/lib/cmake/openblas/OpenBLASConfig.cmake
+  sed -e "s%$pkgdir%%" -i "$pkgdir"/usr/lib/pkgconfig/openblas.pc
+  ln -s openblas.pc "$pkgdir"/usr/lib/pkgconfig/blas.pc
+}
