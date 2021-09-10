@@ -1,29 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgname=lapack
-pkgver=3.9.0
+pkgbase=lapack
+pkgname=(lapack blas cblas lapacke)
+pkgver=3.10.0
 pkgrel=1
 epoch=1
-pkgdesc="Linear Algebra PACKage"
 arch=('x86_64')
 url="https://www.netlib.org/lapack"
-provides=(blas cblas lapacke)
-conflicts=(blas cblas lapacke)
-replaces=(blas cblas lapacke)
-source=($pkgname-$pkgver.tar.gz::https://github.com/Reference-LAPACK/lapack/archive/v$pkgver.tar.gz
-        lapacke-missing-symbols.patch::https://github.com/Reference-LAPACK/lapack/commit/87536aa3.patch)
-sha256sums=('106087f1bb5f46afdfba7f569d0cbe23dacb9a07cd24733765a0e89dbe1ad573'
-            '327d62ee39eeb967ce48b4ed0b95e78c6210f688b5c3f944810aafe68d2dadfa')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  # https://github.com/Reference-LAPACK/lapack/issues/365
-  patch -p1 -i "$srcdir"/lapacke-missing-symbols.patch
-}
+source=($pkgname-$pkgver.tar.gz::https://github.com/Reference-LAPACK/lapack/archive/v$pkgver.tar.gz)
+sha256sums=('328c1bea493a32cac5257d84157dc686cc3ab0b004e2bea22044e0a59f6f8a19')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgbase-$pkgver
 
   cmake \
     -DCMAKE_INSTALL_PREFIX=/usr \
@@ -42,8 +30,42 @@ build() {
   cmake --build build
 }
 
-package() {
-  cd $pkgname-$pkgver
+package_blas() {
+  pkgdesc="Basic Linear Algebra Subprograms"
 
+  cd $pkgbase-$pkgver
+
+  cmake --build build/BLAS --target install -- DESTDIR="$pkgdir/"
+}
+
+package_cblas() {
+  pkgdesc="C interface to BLAS"
+  depends=(blas)
+  
+  cd $pkgbase-$pkgver
+
+  cmake --build build/CBLAS --target install -- DESTDIR="$pkgdir/"
+}
+
+package_lapack() {
+  pkgdesc="Linear Algebra PACKage"
+  depends=(blas)
+  
+  cd $pkgbase-$pkgver
+  
   cmake --build build --target install -- DESTDIR="$pkgdir/"
+
+  rm -r "$pkgdir"/usr/lib/{libblas.*,libcblas.*,liblapacke.*}
+  rm -r "$pkgdir"/usr/lib/pkgconfig/{blas.*,cblas.*,lapacke.*}
+  rm -r "$pkgdir"/usr/lib/cmake/{cblas*,lapacke*}
+  rm -r "$pkgdir"/usr/include
+}
+
+package_lapacke() {
+  pkgdesc="C interface to LAPACK"
+  depends=(lapack)
+  
+  cd $pkgbase-$pkgver
+
+  cmake --build build/LAPACKE --target install -- DESTDIR="$pkgdir/"
 }
