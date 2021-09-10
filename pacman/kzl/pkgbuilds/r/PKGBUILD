@@ -1,0 +1,53 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=r
+pkgver=4.1.1
+pkgrel=1
+epoch=1
+pkgdesc="The R Project for Statistical Computing"
+arch=('x86_64')
+url="https://www.r-project.org/"
+license=('KZL')
+depends=(curl icu lapack libjpeg-turbo libpng libtiff pcre2 valgrind)
+# makedepends=(tk)
+# optdepends=("tk: tcl/tk interface")
+optdepends=("openblas: faster linear algebra")
+backup=()
+options=(!emptydirs)
+source=(https://cran.r-project.org/src/base/R-${pkgver%%.*}/R-${pkgver}.tar.gz)
+sha256sums=('515e03265752257d0b7036f380f82e42b46ed8473f54f25c7b67ed25bbbdd364')
+
+build() {
+  cd R-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc/R \
+    --libdir=/usr/lib \
+    --datarootdir=/usr/share \
+    rdocdir=/usr/share/doc/R/ \
+    rincludedir=/usr/include/R/ \
+    rsharedir=/usr/share/R/ \
+    --enable-R-shlib \
+    --disable-java \
+    --with-blas \
+    --with-lapack \
+    --without-x \
+    LIBnn=lib
+
+  make
+
+  cd src/nmath/standalone
+
+  make shared
+}
+
+package() {
+  cd R-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  cd src/nmath/standalone
+
+  make DESTDIR="$pkgdir/" install
+}
