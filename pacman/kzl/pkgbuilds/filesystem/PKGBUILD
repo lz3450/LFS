@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=filesystem
-pkgver=20210218
+pkgver=20211103
 pkgrel=1
 epoch=1
 arch=('any')
