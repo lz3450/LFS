@@ -1,0 +1,44 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=mtools
+pkgver=4.0.35
+pkgrel=1
+epoch=2
+pkgdesc="A collection of utilities to access MS-DOS disks"
+arch=('x86_64')
+url="https://www.gnu.org/software/mtools/"
+license=('KZL')
+makedepends=()
+optdepends=()
+backup=(etc/$pkgname.conf)
+source=(https://ftp.gnu.org/gnu/mtools/$pkgname-$pkgver.tar.bz2{,.sig})
+sha256sums=('34769e173751d2f0d891a08c76c80427e929b8ee43438019b8666cc3d7a44749'
+            'SKIP')
+validpgpkeys=('51A23D9D7C4DF41AA48FA893E99CF5537790B839')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  sed -e '/^SAMPLE FILE$/s:^:# :' -i mtools.conf
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --mandir=/usr/share/man \
+    --infodir=/usr/share/info \
+    --sysconfdir=/etc
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  install -Dm644 mtools.conf -t "$pkgdir"/etc/
+  install -Dm644 {README,NEWS} -t "$pkgdir/usr/share/doc/$pkgname"
+}

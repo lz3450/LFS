@@ -1,0 +1,31 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libisoburn
+pkgver=1.5.4
+pkgrel=1
+epoch=1
+pkgdesc="Frontend for libraries libburn and libisofs"
+arch=('x86_64')
+url="https://dev.lovelyhq.com/libburnia"
+license=('KZL')
+depends=(libburn libisofs)
+optdepends=()
+source=(https://files.libburnia-project.org/releases/$pkgname-$pkgver.tar.gz{,.sig})
+sha256sums=('2d89846d43880f17fa591c53b3bea42ffb803628e4e630c680fc2c9184f79132'
+            'SKIP')
+validpgpkeys=('44BC9FD0D688EB007C4DD029E9CBDFC0ABC0A854')
+
+build() {
+  cd $pkgname-${pkgver/.pl01/}
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+package() {
+  cd $pkgname-${pkgver/.pl01/}
+
+  make DESTDIR="$pkgdir/" install
+}

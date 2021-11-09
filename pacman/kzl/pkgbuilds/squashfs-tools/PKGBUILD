@@ -1,0 +1,40 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=squashfs-tools
+pkgver=4.5
+pkgrel=1
+epoch=1
+pkgdesc="Tools for squashfs, a highly compressed read-only filesystem for Linux"
+arch=('x86_64')
+url="https://github.com/plougher/squashfs-tools"
+license=('KZL')
+depends=(lz4 lzo)
+source=($pkgname-$pkgver.tar.gz::https://github.com/plougher/$pkgname/archive/refs/tags/$pkgver.tar.gz
+        $pkgname-4.5-symlink_install.patch)
+sha256sums=('b9e16188e6dc1857fe312633920f7d71cc36b0162eb50f3ecb1f0040f02edddd'
+            'e6794fd3389e6712bad67865b4c6a1cdf65f46e2647d0cc2e036975bee6df1c6')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  patch -Np1 -i "$srcdir/$pkgname-4.5-symlink_install.patch"
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  make -C $pkgname \
+    GZIP_SUPPORT=1 \
+    XZ_SUPPORT=1 \
+    LZO_SUPPORT=1 \
+    LZMA_XZ_SUPPORT=1 \
+    LZ4_SUPPORT=1 \
+    ZSTD_SUPPORT=1 \
+    XATTR_SUPPORT=1
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make -C $pkgname INSTALL_DIR="$pkgdir"/usr/bin install
+}
