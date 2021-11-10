@@ -1,0 +1,43 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=lldb
+pkgver=12.0.1
+pkgrel=1
+epoch=1
+pkgdesc="Next generation, high-performance debugger"
+arch=('x86_64')
+url="https://lldb.llvm.org/"
+license=('KZL')
+depends=(clang llvm)
+makedepends=(swig)
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz{,.sig})
+sha256sums=('e8c4118cd01d4e242090741a457d83c21754ad77299791ef564e41366a90773c'
+            'SKIP')
+validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
+
+build() {
+  cd $pkgname-$pkgver.src
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DLLDB_USE_SYSTEM_SIX=ON \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+check() {
+  cd $pkgname-$pkgver.src
+
+  cmake --build build --target tests || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver.src
+
+  cmake --build build --target install -- DESTDIR="$pkgdir/"
+}
