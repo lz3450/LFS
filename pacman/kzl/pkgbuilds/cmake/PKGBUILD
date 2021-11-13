@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cmake
-pkgver=3.19.6
+pkgver=3.21.4
 pkgrel=1
 epoch=1
 pkgdesc="A cross-platform open-source make system"
@@ -11,7 +11,7 @@ depends=(curl jsoncpp libarchive libuv rhash shared-mime-info)
 # makedepends=(qt5)
 # optdepends=("qt5: cmake-gui")
 source=(https://www.cmake.org/files/v${pkgver%.*}/$pkgname-$pkgver.tar.gz)
-sha256sums=('ec87ab67c45f47c4285f204280c5cde48e1c920cfcfed1555b27fb3b1a1d20ba')
+sha256sums=('d9570a95c215f4c9886dd0f0564ca4ef8d18c30750f157238ea12669c2985978')
 
 # TODO: --qt-gui
 
@@ -25,7 +25,7 @@ build() {
     --mandir=/share/man \
     --docdir=/share/doc/cmake \
     --system-libs \
-    --parallel=$(/usr/bin/getconf _NPROCESSORS_ONLN)
+    --parallel=$(nproc)
 
   make
 }
