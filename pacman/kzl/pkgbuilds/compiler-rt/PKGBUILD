@@ -8,6 +8,7 @@ pkgdesc="Compiler runtime libraries for clang"
 arch=('x86_64')
 url="https://compiler-rt.llvm.org/"
 license=('KZL')
+groups=(llvm-project)
 makedepends=(llvm)
 options=(staticlibs)
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz{,.sig})
@@ -15,27 +16,51 @@ sha256sums=('b4c8d5f2a802332987c1c0a95b5afb35b1a66a96fe44add4e4ed4792c4cba0a4'
             'SKIP')
 validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
 
+_cmake_options=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_INSTALL_PREFIX=/usr
+    -DCMAKE_AR=/usr/bin/llvm-ar
+    -DCMAKE_NM=/usr/bin/llvm-nm
+    -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
+    -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
+    -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
+    -DCMAKE_READELF=/usr/bin/llvm-readelf
+    -DCMAKE_ASM_COMPILER=/usr/bin/clang
+    -DCMAKE_C_COMPILER=/usr/bin/clang
+    -DCMAKE_CXX_COMPILER=/usr/bin/clang++
+    -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
+    -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
+    -DCMAKE_LINKER=/usr/bin/lld
+    -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
+    -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
+    -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+)
+
 build() {
   cd $pkgname-$pkgver.src
 
   cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS" \
-    -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS" \
+    "${_cmake_options[@]}" \
     -S . \
-    -B build
+    -B build \
+    -G Ninja
 
   cmake --build build
+}
+
+check() {
+  cd $pkgname-$pkgver.src
+
+  cmake --build build --target tests || warning "Check failed."
 }
 
 package() {
   cd $pkgname-$pkgver.src
 
-  cmake --build build --target install -- DESTDIR="$pkgdir/"
+  DESTDIR="$pkgdir/" cmake --build build --target install
 
-  install -dm755 "$pkgdir"/usr/lib/clang/$pkgver/
+  install -dm755 "$pkgdir"/usr/lib/clang/$pkgver/{lib,share}
   install -dm755 "$pkgdir"/usr/share/clang/$pkgver/
-  mv "$pkgdir"/usr/lib/{linux,clang/$pkgver/}
+  mv "$pkgdir"/usr/lib/{linux,clang/$pkgver/lib}
   mv "$pkgdir"/usr/share/{*.txt,clang/$pkgver/}
 }

@@ -8,6 +8,7 @@ pkgdesc="Linker from the LLVM project"
 arch=('x86_64')
 url="https://lld.llvm.org/"
 license=('KZL')
+groups=(llvm-project)
 depends=(llvm)
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz{,.sig}
         https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/llvm-$pkgver.src.tar.xz{,.sig}
@@ -20,6 +21,30 @@ sha256sums=('690b3f6a76310e13a783a142f87500ade9cafe003e088b678364487ed873e361'
             'SKIP')
 validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
 
+_cmake_options=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_INSTALL_PREFIX=/usr
+    -DCMAKE_AR=/usr/bin/llvm-ar
+    -DCMAKE_NM=/usr/bin/llvm-nm
+    -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
+    -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
+    -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
+    -DCMAKE_READELF=/usr/bin/llvm-readelf
+    -DCMAKE_C_COMPILER=/usr/bin/clang
+    -DCMAKE_CXX_COMPILER=/usr/bin/clang++
+    -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
+    -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
+    -DCMAKE_LINKER=/usr/bin/lld
+    -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
+    -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
+    -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+)
+
+_llvm_options=(
+    -DLLVM_LINK_LLVM_DYLIB=ON
+    -DLLVM_ENABLE_RTTI=ON
+)
+
 prepare() {
   mv libunwind{-$pkgver.src,}
 }
@@ -29,22 +54,12 @@ build() {
 
   # same as clang
   cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_INSTALL_LIBDIR=lib \
-    -DCMAKE_INSTALL_LIBEXECDIR=lib \
-    -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS" \
-    -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS" \
-    -DLLVM_BUILD_TESTS=ON \
-    -DLLVM_ENABLE_RTTI=ON \
-    -DLLVM_ENABLE_FFI=ON \
-    -DLLVM_BUILD_LLVM_DYLIB=ON \
-    -DLLVM_LINK_LLVM_DYLIB=ON \
-    -DLLVM_INSTALL_UTILS=ON \
-    -DLLVM_LIT="/usr/bin/lit" \
+    "${_cmake_options[@]}" \
+    "${_llvm_options[@]}" \
     -DLLVM_MAIN_SRC_DIR="$srcdir/llvm-$pkgver.src" \
     -S . \
-    -B build
+    -B build \
+    -G Ninja
 
   cmake --build build
 }
@@ -58,5 +73,5 @@ check() {
 package() {
   cd $pkgname-$pkgver.src
 
-  cmake --build build --target install -- DESTDIR="$pkgdir/"
+  DESTDIR="$pkgdir/" cmake --build build --target install
 }
