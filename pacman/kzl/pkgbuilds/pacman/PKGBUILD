@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=6.0.0
+pkgver=6.0.1
 pkgrel=1
 epoch=1
 arch=('x86_64')
@@ -11,21 +11,10 @@ depends=(archlinux-keyring curl gpgme libarchive pacman-mirrorlist)
 # checkdepends=(fakechroot)
 backup=(etc/pacman.conf
         etc/makepkg.conf)
-source=(https://sources.archlinux.org/other/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
-        pacman-6.0.0-fix-404-download.patch::https://gitlab.archlinux.org/pacman/pacman/-/commit/3401f9e142ac4c701cd98c52618cb13164f2146b.patch
-        pacman-6.0.0-fix-key-import-double-free.patch::https://gitlab.archlinux.org/pacman/pacman/-/commit/542910d684191eb7f25ddc5d3d8fe3060028a267.patch)
-sha256sums=('004448085a7747bdc7a0a4dd5d1fb7556c6b890111a06e029ab088f9905d4808'
-            'SKIP'
-            'f4c1c39b43b52ba19b656b32913688b81085c73685afe32d2018dbb695d5a1e6'
-            'defdf1686d65fc896c19f41d1bc166912fccf9134b72e50da3b24538366cecdf')
+source=(https://sources.archlinux.org/other/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
+sha256sums=('0db61456e56aa49e260e891c0b025be210319e62b15521f29d3e93b00d3bf731'
+            'SKIP')
 validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  patch -p1 -i "$srcdir"/pacman-6.0.0-fix-404-download.patch
-  patch -p1 -i "$srcdir"/pacman-6.0.0-fix-key-import-double-free.patch
-}
 
 build() {
   cd $pkgname-$pkgver
@@ -62,34 +51,22 @@ package() {
 
   meson install -C build --destdir="$pkgdir"
   
-  sed -e '/CHOST=/s/x86_64-pc-linux-gnu/x86_64-kzl-linux-gnu/' \
-      -e '/CFLAGS=/s/^#//' \
-      -e '/CFLAGS=/s/"\(.*\)"/"-march=native -mtune=native -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection"/' \
-      -e '/CXXFLAGS=/s/^#//' \
-      -e '/CXXFLAGS=/s/"\(.*\)"/"-march=native -mtune=native -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection "/' \
-      -e '/LDFLAGS=/s/^#//' \
-      -e '/LDFLAGS=/s/"\(.*\)"/"-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"/' \
-      -e '/RUSTFLAGS=/s/^#//' \
-      -e '/RUSTFLAGS=/s/"\(.*\)"/"-C opt-level=2"/' \
-      -e '/MAKEFLAGS=/s/^#//' \
-      -e '/MAKEFLAGS=/s/"\(.*\)"/"-j$(nproc)"/' \
-      -e '/DEBUG_CFLAGS=/s/^#//' \
-      -e '/DEBUG_CFLAGS=/s/"\(.*\)"/"-g -fvar-tracking-assignments"/' \
-      -e '/DEBUG_CXXFLAGS=/s/^#//' \
-      -e '/DEBUG_CXXFLAGS=/s/"\(.*\)"/"-g -fvar-tracking-assignments"/' \
-      -e '/DEBUG_RUSTFLAGS=/s/"\(.*\)"/"-C debuginfo=2"/' \
-      -e '/BUILDDIR=\/tmp\/makepkg/s/^#//' \
-      -e '/PKGDEST=/s/^#//' \
-      -e '/SRCDEST=/s/^#//' \
-      -e '/SRCPKGDEST=/s/^#//' \
-      -e '/LOGDEST=/s/^#//' \
-      -e '/PACKAGER=/s/^#//' \
-      -e '/INTEGRITY_CHECK=/s/md5/sha256/' \
-      -e '/PKGDEST=/s/\/home/~\/makepkg/' \
-      -e '/SRCDEST=/s/\/home/~\/makepkg/' \
-      -e '/SRCPKGDEST=/s/\/home/~\/makepkg/' \
-      -e '/LOGDEST=/s/\/home/~\/makepkg/' \
-      -e '/PACKAGER=/s/John Doe <john@doe.com>/Zelun Kong <zelun.kong@outlook.com>/' \
+  sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-kzl-linux-gnu/' \
+      -e '/^#CFLAGS=/c\CFLAGS="-march=native -mtune=native -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection"' \
+      -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -mtune=native -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection "' \
+      -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \
+      -e '/^#RUSTFLAGS=/c\RUSTFLAGS="-C opt-level=2"' \
+      -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc)"' \
+      -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g -fvar-tracking-assignments"' \
+      -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"' \
+      -e '/^#DEBUG_RUSTFLAGS=/c\DEBUG_RUSTFLAGS="-C debuginfo=2"' \
+      -e '/^#BUILDDIR=/c\BUILDDIR=/dev/shm/makepkg' \
+      -e '/^#INTEGRITY_CHECK=/s/md5/sha256/' \
+      -e '/^#PKGDEST=/c\PKGDEST="~/makepkg/packages"' \
+      -e '/^#SRCDEST=/c\SRCDEST="~/makepkg/sources"' \
+      -e '/^#SRCPKGDEST=/c\SRCPKGDEST="~/makepkg/srcpackages"' \
+      -e '/^#LOGDEST=/c\LOGDEST="~/makepkg/makepkglogs"' \
+      -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
       -i "$pkgdir"/etc/makepkg.conf
 
   cat >> "$pkgdir"/etc/pacman.conf << EOF
