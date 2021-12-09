@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=poppler
-pkgver=21.03.0
+pkgver=21.11.0
 pkgrel=1
 epoch=1
 pkgdesc=""
@@ -12,7 +12,7 @@ provides=(poppler-glib)
 conflicts=(poppler-glib)
 replaces=(poppler-glib)
 source=(https://poppler.freedesktop.org/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('fd51ead4aac1d2f4684fa6e7b0ec06f0233ed21667e720a4e817e4455dd63d27'
+sha256sums=('31b76b5cac0a48612fdd154c02d9eca01fd38fb8eaa77c1196840ecdeb53a584'
             'SKIP')
 validpgpkeys=('CA262C6C83DE4D2FB28A332A3A6A4DB839EAA6D7')
 
