@@ -1,0 +1,23 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=rstudio-server
+pkgver=2021.09.1
+pkgrel=372
+epoch=1
+pkgdesc="RStudio is an integrated development environment (IDE) for the R programming language"
+arch=('x86_64')
+url="https://github.com/rstudio/rstudio"
+license=('KZL')
+depends=(r postgresql)
+makedepends=(dpkg)
+source=(https://download2.rstudio.org/server/bionic/amd64/$pkgname-$pkgver-$pkgrel-amd64.deb
+        rstudio.pam)
+sha256sums=('c58df09468870b89f1796445853dce2dacaa0fc5b7bb1f92b036fa8da1d1f8a3'
+            'ef5632f48943d0ffcfe8fe3d00bc9b46d816ebc81755a15d614bfb88b490b072')
+
+package() {
+  dpkg -x $pkgname-$pkgver-$pkgrel-amd64.deb "$pkgdir"
+
+  install -Dm644 "$srcdir"/rstudio.pam "$pkgdir"/etc/pam.d/rstudio
+  echo 'u rstudio-server - "RStudio Server"' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/rstudio-server.conf
+}
