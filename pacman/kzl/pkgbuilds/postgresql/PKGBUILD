@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=postgresql
-pkgver=12.4
+pkgver=13.4
 pkgrel=1
 epoch=1
 pkgdesc="Sophisticated object-relational DBMS"
@@ -20,7 +20,7 @@ source=(https://ftp.postgresql.org/pub/source/v$pkgver/postgresql-$pkgver.tar.bz
         postgresql.service
         postgresql.sysusers
         postgresql.tmpfiles)
-sha256sums=('bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc'
+sha256sums=('ea93e10390245f1ce461a54eb5f99a48d8cabd3a08ce4d652ec2169a357bc0cd'
             'a32d8907fe4c1dd5643cffa46c7ae045c02dc6c3ee4d35bd6f91a8c9ae9dc4f0'
             'a3e28676e9f11136690f6d46ca15b1d548cec2e29db043206ab09582671dc2d5'
             '25f51732c48d1eb166d5e2b31c9be85c235ee22e979dc8c1b79085e57e0b453c'
