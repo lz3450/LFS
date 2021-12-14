@@ -62,10 +62,10 @@ package() {
       -e '/^#DEBUG_RUSTFLAGS=/c\DEBUG_RUSTFLAGS="-C debuginfo=2"' \
       -e '/^#BUILDDIR=/c\BUILDDIR=/dev/shm/makepkg' \
       -e '/^#INTEGRITY_CHECK=/s/md5/sha256/' \
-      -e '/^#PKGDEST=/c\PKGDEST="~/makepkg/packages"' \
-      -e '/^#SRCDEST=/c\SRCDEST="~/makepkg/sources"' \
-      -e '/^#SRCPKGDEST=/c\SRCPKGDEST="~/makepkg/srcpackages"' \
-      -e '/^#LOGDEST=/c\LOGDEST="~/makepkg/makepkglogs"' \
+      -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
+      -e '/^#SRCDEST=/c\SRCDEST="$HOME/makepkg/sources"' \
+      -e '/^#SRCPKGDEST=/c\SRCPKGDEST="$HOME/makepkg/srcpackages"' \
+      -e '/^#LOGDEST=/c\LOGDEST="$HOME/makepkg/makepkglogs"' \
       -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
       -i "$pkgdir"/etc/makepkg.conf
 
