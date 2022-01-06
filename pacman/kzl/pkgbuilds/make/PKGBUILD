@@ -17,7 +17,7 @@ build() {
   cd $pkgname-$pkgver
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
 
   make
 }
