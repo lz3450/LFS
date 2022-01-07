@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=llvm
-pkgver=12.0.1
+pkgver=13.0.0
 pkgrel=1
 epoch=1
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
@@ -15,28 +15,28 @@ conflicts=(llvm-libs)
 replaces=(llvm-libs)
 options=(staticlibs)
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz{,.sig})
-sha256sums=('7d9a8405f557cefc5a21bf5672af73903b64749d9bc3a50322239f56f34ffddf'
+sha256sums=('408d11708643ea826f519ff79761fcdfc12d641a2510229eec459e72f8163020'
             'SKIP')
 validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
 
 _cmake_options=(
     -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_INSTALL_PREFIX=/usr
-    -DCMAKE_AR=/usr/bin/llvm-ar
-    -DCMAKE_NM=/usr/bin/llvm-nm
-    -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
-    -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
-    -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
-    -DCMAKE_READELF=/usr/bin/llvm-readelf
-    -DCMAKE_ASM_COMPILER=/usr/bin/clang
-    -DCMAKE_C_COMPILER=/usr/bin/clang
-    -DCMAKE_CXX_COMPILER=/usr/bin/clang++
-    -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
-    -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
-    -DCMAKE_LINKER=/usr/bin/lld
-    -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
-    -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
-    -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_ASM_COMPILER=/usr/bin/clang
+    # -DCMAKE_C_COMPILER=/usr/bin/clang
+    # -DCMAKE_CXX_COMPILER=/usr/bin/clang++
+    # -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
+    # -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
+    # -DCMAKE_LINKER=/usr/bin/lld
+    # -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_AR=/usr/bin/llvm-ar
+    # -DCMAKE_NM=/usr/bin/llvm-nm
+    # -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
+    # -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
+    # -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
+    # -DCMAKE_READELF=/usr/bin/llvm-readelf
 )
 
 _llvm_options=(
@@ -71,4 +71,8 @@ package() {
   cd $pkgname-$pkgver.src
 
   DESTDIR="$pkgdir/" cmake --build build --target install
+
+  pushd utils/lit
+  python3 setup.py install --root="$pkgdir" -O1
+  popd
 }

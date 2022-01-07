@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=lldb
-pkgver=12.0.1
+pkgver=13.0.0
 pkgrel=1
 epoch=1
 pkgdesc="Next generation, high-performance debugger"
@@ -12,27 +12,28 @@ groups=(llvm-project)
 depends=(clang llvm)
 makedepends=(swig)
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz{,.sig})
-sha256sums=('e8c4118cd01d4e242090741a457d83c21754ad77299791ef564e41366a90773c'
+sha256sums=('24c65bd5ec0d7cbc37bafdd7533b1783352708bf6338c403a72f47884e406dbd'
             'SKIP')
 validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
 
 _cmake_options=(
     -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_INSTALL_PREFIX=/usr
-    -DCMAKE_AR=/usr/bin/llvm-ar
-    -DCMAKE_NM=/usr/bin/llvm-nm
-    -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
-    -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
-    -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
-    -DCMAKE_READELF=/usr/bin/llvm-readelf
-    -DCMAKE_C_COMPILER=/usr/bin/clang
-    -DCMAKE_CXX_COMPILER=/usr/bin/clang++
-    -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
-    -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
-    -DCMAKE_LINKER=/usr/bin/lld
-    -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
-    -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
-    -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_ASM_COMPILER=/usr/bin/clang
+    # -DCMAKE_C_COMPILER=/usr/bin/clang
+    # -DCMAKE_CXX_COMPILER=/usr/bin/clang++
+    # -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
+    # -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
+    # -DCMAKE_LINKER=/usr/bin/lld
+    # -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_AR=/usr/bin/llvm-ar
+    # -DCMAKE_NM=/usr/bin/llvm-nm
+    # -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
+    # -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
+    # -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
+    # -DCMAKE_READELF=/usr/bin/llvm-readelf
 )
 
 build() {

@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=lld
-pkgver=12.0.1
+pkgver=13.0.0
 pkgrel=1
 epoch=1
 pkgdesc="Linker from the LLVM project"
@@ -13,31 +13,32 @@ depends=(llvm)
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz{,.sig}
         https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/llvm-$pkgver.src.tar.xz{,.sig}
         https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/libunwind-$pkgver.src.tar.xz{,.sig})
-sha256sums=('690b3f6a76310e13a783a142f87500ade9cafe003e088b678364487ed873e361'
+sha256sums=('20d1900bcd64ff62047291f6edb6ba2fed34d782675ff68713bf0c2fc9e69386'
             'SKIP'
-            '7d9a8405f557cefc5a21bf5672af73903b64749d9bc3a50322239f56f34ffddf'
+            '408d11708643ea826f519ff79761fcdfc12d641a2510229eec459e72f8163020'
             'SKIP'
-            '0bea6089518395ca65cf58b0a450716c5c99ce1f041079d3aa42d280ace15ca4'
+            '36f819091216177a61da639244eda67306ccdd904c757d70d135e273278b65e1'
             'SKIP')
 validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
 
 _cmake_options=(
     -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_INSTALL_PREFIX=/usr
-    -DCMAKE_AR=/usr/bin/llvm-ar
-    -DCMAKE_NM=/usr/bin/llvm-nm
-    -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
-    -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
-    -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
-    -DCMAKE_READELF=/usr/bin/llvm-readelf
-    -DCMAKE_C_COMPILER=/usr/bin/clang
-    -DCMAKE_CXX_COMPILER=/usr/bin/clang++
-    -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
-    -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
-    -DCMAKE_LINKER=/usr/bin/lld
-    -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
-    -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
-    -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_ASM_COMPILER=/usr/bin/clang
+    # -DCMAKE_C_COMPILER=/usr/bin/clang
+    # -DCMAKE_CXX_COMPILER=/usr/bin/clang++
+    # -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
+    # -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
+    # -DCMAKE_LINKER=/usr/bin/lld
+    # -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_AR=/usr/bin/llvm-ar
+    # -DCMAKE_NM=/usr/bin/llvm-nm
+    # -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
+    # -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
+    # -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
+    # -DCMAKE_READELF=/usr/bin/llvm-readelf
 )
 
 _llvm_options=(
