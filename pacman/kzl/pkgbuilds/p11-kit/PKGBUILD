@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=p11-kit
-pkgver=0.23.22
+pkgver=0.24.0
 pkgrel=1
 epoch=1
 pkgdesc="Loads and enumerates PKCS#11 modules"
@@ -9,12 +9,13 @@ arch=('x86_64')
 url="https://p11-glue.freedesktop.org"
 depends=(libffi libtasn1)
 makedepends=(bash-completion)
-source=(git+https://github.com/p11-glue/p11-kit?signed#tag=$pkgver)
-sha256sums=('SKIP')
+source=(https://github.com/p11-glue/p11-kit/releases/download/$pkgver/p11-kit-$pkgver.tar.xz{,.sig})
+sha256sums=('81e6140584f635e4e956a1b93a32239acf3811ff5b2d3a5c6094e94e99d2c685'
+            'SKIP')
 validpgpkeys=('462225C3B46F34879FC8496CD605848ED7E69871')
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   meson setup \
     --prefix /usr \
@@ -32,13 +33,13 @@ build() {
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   meson test -C build --print-errorlogs || warning "Check failed."
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   DESTDIR="$pkgdir/" meson install -C build
 }
