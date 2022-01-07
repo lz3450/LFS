@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.9.6
+pkgver=3.10.1
 pkgrel=1
 epoch=1
 pkgdesc="Next generation of the python high-level scripting language"
@@ -14,13 +14,10 @@ conflicts=(cython meson ninja python-dnspython python-fonttools python-setuptool
 replaces=(cython meson ninja python-dnspython python-fonttools python-setuptools python-wheel gyp)
 makedepends=(mpdecimal sqlite valgrind)
 # makedepends=(mpdecimal sqlite tk valgrind)
-install=$pkgname.install
-source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc}
-        $pkgname.install)
-sha256sums=('397920af33efc5b97f2e0b57e91923512ef89fc5b3c1d21dbfc8c4828ce0108a'
-            'SKIP'
-            '135b50cf60f9053df02d269b26f84e5a2793b1d9eb8345f5898de33e258325ea')
-validpgpkeys=('E3FF2839C048B25C084DEBE9B26995E310250568')
+source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc})
+sha256sums=('a7f1265b6e1a5de1ec5c3ec7019ab53413469934758311e9d240c46e5ae6e177'
+            'SKIP')
+validpgpkeys=('A035C8C19219BA821ECEA86B64E628F8D684696D')
 
 build() {
   cd Python-$pkgver
