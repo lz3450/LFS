@@ -22,20 +22,18 @@ validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
 _cmake_options=(
     -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_INSTALL_PREFIX=/usr
-    # -DCMAKE_ASM_COMPILER=/usr/bin/clang
     # -DCMAKE_C_COMPILER=/usr/bin/clang
     # -DCMAKE_CXX_COMPILER=/usr/bin/clang++
     # -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
     # -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
-    # -DCMAKE_LINKER=/usr/bin/lld
     # -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
-    # -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
     # -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+    # -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
     # -DCMAKE_AR=/usr/bin/llvm-ar
     # -DCMAKE_NM=/usr/bin/llvm-nm
+    # -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
     # -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
     # -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
-    # -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
     # -DCMAKE_READELF=/usr/bin/llvm-readelf
 )
 
