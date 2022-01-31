@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gdb
-pkgver=10.2
+pkgver=11.2
 pkgrel=1
 epoch=1
 pkgdesc="The GNU Debugger"
@@ -15,7 +15,7 @@ conflicts=(gdb-common)
 replaces=(gdb-common)
 backup=(etc/gdb/gdbinit)
 source=(https://ftp.gnu.org/gnu/gdb/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('aaa1223d534c9b700a8bec952d9748ee1977513f178727e1bee520ee000b4f29'
+sha256sums=('1497c36a71881b8671a9a84a0ee40faab788ca30d7ba19d8463c3cc787152e32'
             'SKIP')
 validpgpkeys=('F40ADB902B24264AA42E50BF92EDB04BFF325CF3')
 
@@ -56,7 +56,7 @@ package() {
   touch "$pkgdir"/etc/gdb/gdbinit
 
   # conflicts with binutils
-  rm "$pkgdir"/usr/include/{ansidecl,bfd,bfd_stdint,bfdlink,ctf-api,ctf,diagnostics,dis-asm,plugin-api,symcat}.h
+  rm "$pkgdir"/usr/include/{ansidecl,bfd,bfdlink,ctf-api,ctf,diagnostics,dis-asm,plugin-api,symcat}.h
   rm "$pkgdir"/usr/lib/{libbfd,libctf-nobfd,libctf,libopcodes}.{a,la}
   rm -rf "$pkgdir"/usr/share/{locale,info,gdb}
 }
