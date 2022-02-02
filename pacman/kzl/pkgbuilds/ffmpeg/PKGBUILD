@@ -1,0 +1,166 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=ffmpeg
+pkgver=5.0
+pkgrel=1
+epoch=3
+pkgdesc="Complete solution to record, convert and stream audio and video"
+arch=('x86_64')
+url="https://ffmpeg.org/"
+license=('KZL')
+depends=(
+  alsa-lib
+  gmp
+  gnutls
+  # aom
+  # fontconfig
+  # fribidi
+  # gsm
+  # jack
+  # lame
+  # libass.so
+  # libavc1394
+  # libbluray.so
+  # libdav1d.so
+  # libdrm
+  # libfreetype.so
+  # libiec61883
+  # libmfx
+  # libmodplug
+  # libpulse
+  # librav1e.so
+  # libraw1394
+  # libsoxr
+  # libssh
+  # libtheora
+  # libva.so
+  # libva-drm.so
+  # libva-x11.so
+  # libvdpau
+  # libvidstab.so
+  # libvorbisenc.so
+  # libvorbis.so
+  # libvpx.so
+  # libwebp
+  # libx11
+  # libx264.so
+  # libx265.so
+  # libxcb
+  # libxext
+  # libxml2
+  # libxv
+  # libxvidcore.so
+  # libzimg.so
+  # opencore-amr
+  # openjpeg2
+  # opus
+  # sdl2
+  # speex
+  # srt
+  # svt-av1
+  # v4l-utils
+  # vmaf
+)
+makedepends=(
+  amf-headers
+  avisynthplus
+  clang
+  ffnvcodec-headers
+  ladspa
+  nasm
+)
+optdepends=(
+  "avisynthplus: AviSynthPlus support"
+  "intel-media-sdk: Intel QuickSync support"
+  "ladspa: LADSPA filters"
+  "nvidia-utils: Nvidia NVDEC/NVENC support"
+)
+provides=(
+  libavutil.so
+  libavcodec.so
+  libavformat.so
+  libavdevice.so
+  libavfilter.so
+  libswscale.so
+  libswresample.so
+  libpostproc.so
+)
+source=(git+https://git.ffmpeg.org/ffmpeg.git#tag=390d6853d0ef408007feb39c0040682c81c02751)
+cksums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --fatal-warnings \
+    --prefix=/usr \
+    --enable-gpl \
+    --enable-version3 \
+    --disable-static \
+    --enable-shared \
+    --disable-doc \
+    --enable-gmp \
+    --enable-gnutls \
+    --enable-lto \
+    --disable-debug
+
+    # --disable-stripping \
+    # --enable-amf \
+    # --enable-avisynth \
+    # --enable-cuda-llvm \
+    # --enable-fontconfig \
+    # --enable-ladspa \
+    # --enable-libaom \
+    # --enable-libass \
+    # --enable-libbluray \
+    # --enable-libdav1d \
+    # --enable-libdrm \
+    # --enable-libfreetype \
+    # --enable-libfribidi \
+    # --enable-libgsm \
+    # --enable-libiec61883 \
+    # --enable-libjack \
+    # --enable-libmfx \
+    # --enable-libmodplug \
+    # --enable-libmp3lame \
+    # --enable-libopencore_amrnb \
+    # --enable-libopencore_amrwb \
+    # --enable-libopenjpeg \
+    # --enable-libopus \
+    # --enable-libpulse \
+    # --enable-librav1e \
+    # --enable-libsoxr \
+    # --enable-libspeex \
+    # --enable-libsrt \
+    # --enable-libssh \
+    # --enable-libsvtav1 \
+    # --enable-libtheora \
+    # --enable-libv4l2 \
+    # --enable-libvidstab \
+    # --enable-libvmaf \
+    # --enable-libvorbis \
+    # --enable-libvpx \
+    # --enable-libwebp \
+    # --enable-libx264 \
+    # --enable-libx265 \
+    # --enable-libxcb \
+    # --enable-libxml2 \
+    # --enable-libxvid \
+    # --enable-libzimg \
+    # --enable-nvdec \
+    # --enable-nvenc \
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir/" install
+}
