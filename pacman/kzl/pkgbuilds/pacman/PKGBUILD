@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=6.0.1
-pkgrel=1
+pkgrel=2
 epoch=1
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -61,7 +61,7 @@ package() {
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"' \
       -e '/^#DEBUG_RUSTFLAGS=/c\DEBUG_RUSTFLAGS="-C debuginfo=2"' \
       -e '/^#BUILDDIR=/c\BUILDDIR=/dev/shm/makepkg' \
-      -e '/^#INTEGRITY_CHECK=/s/md5/sha256/' \
+      -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
       -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
       -e '/^#SRCDEST=/c\SRCDEST="$HOME/makepkg/sources"' \
       -e '/^#SRCPKGDEST=/c\SRCPKGDEST="$HOME/makepkg/srcpackages"' \
