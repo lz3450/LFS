@@ -83,12 +83,14 @@ elif [ $PLATFORM = "tegra" ]; then
 
 BUILDDIR=/dev/shm
 CUDA_ARCH_LIST="6.2"
-export USE_NCCL=OFF
-export USE_PYTORCH_QNNPACK=OFF
-export USE_QNNPACK=OFF
-export USE_TENSORRT=ON
-export USE_XNNPACK=OFF
-export USE_ZSTD=ON
+export USE_NCCL=0
+export USE_PYTORCH_QNNPACK=0
+export USE_QNNPACK=0
+export USE_TENSORRT=0
+export USE_XNNPACK=0
+export USE_ZSTD=1
+export USE_ROCM=0
+export ONNX_ML=0
 
     sudo apt update
     sudo apt install -y \
