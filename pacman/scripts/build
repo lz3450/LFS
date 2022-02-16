@@ -153,7 +153,7 @@ kzl_stage3_pkgs=(
     nano
     c-ares aria2
     ## devtools
-    gdb llvm compiler-rt openmp clang rust ruby nodejs
+    gdb llvm compiler-rt openmp clang lld lldb rust ruby nodejs
     ## Xlib
     xorg-util-macros xorgproto libxau libxdmcp xcb-proto libxcb xtrans libx11 libice libsm libxt libxext libxrender libxpm
     ## texlive
