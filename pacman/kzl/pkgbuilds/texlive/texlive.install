@@ -1,8 +1,8 @@
 post_install() {
-  source etc//etc/profile.d/texlive.sh
+  source etc/profile.d/texlive.sh
   opt/TeXLive/bin/mktexlsr
   opt/TeXLive/bin/fmtutil-sys --all
-  opt/TeXLive/bin/mtxrun --generate
+  opt/TeXLive/bin/mtxrun --generate >/dev/null
 }
 
 post_upgrade() {

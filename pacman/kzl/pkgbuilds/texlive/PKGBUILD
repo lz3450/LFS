@@ -1,6 +1,5 @@
 pkgname=texlive
-# pkgver=20210325
-pkgver=58837
+pkgver=20210325
 pkgrel=1
 epoch=1
 pkgdesc="TeX Live"
@@ -13,25 +12,25 @@ conflicts=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fonts
 replaces=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 options=(!strip)
 install=$pkgname.install
-source=(#http://ftp.math.utah.edu/pub/tex/historic/systems/$pkgname/${pkgver:0:4}/$pkgname-$pkgver-source.tar.xz
-        #http://ftp.math.utah.edu/pub/tex/historic/systems/$pkgname/${pkgver:0:4}/$pkgname-$pkgver-extra.tar.xz
-        #http://ftp.math.utah.edu/pub/tex/historic/systems/$pkgname/${pkgver:0:4}/$pkgname-$pkgver-texmf.tar.xz
-        # http://ftp.math.utah.edu/pub/tex/historic/systems/$pkgname/${pkgver:0:4}/install-tl-unx.tar.gz
-        git+https://github.com/TeX-Live/texlive-source.git#tag=svn$pkgver
-        git+https://github.com/TeX-Live/installer.git
-        http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
-        09-texlive-fonts.conf
-        $pkgname.install)
+source=(
+  # git+https://github.com/TeX-Live/texlive-source.git#commit=
+  http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-$pkgver-source.tar.xz
+  http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-$pkgver-texmf.tar.xz
+  git+https://github.com/TeX-Live/installer.git
+  http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
+  09-texlive-fonts.conf
+  $pkgname.install
+)
 noextract=($pkgname-$pkgver-texmf.tar.xz)
-sha256sums=('SKIP'
+sha256sums=('7aefd96608d72061970f2d73f275be5648ea8ae815af073016d3106acc0d584b'
+            'ff12d436c23e99fb30aad55924266104356847eb0238c193e839c150d9670f1c'
             'SKIP'
             '3f608fe12855a2ab583f03c8c1aac704ceef5ce4d9a1672b5220185ed4ef7134'
             'fe01050544263a517c9a682942edc1cbb150986c34eab3b6755143f072838e93'
-            'e00da3460cd3a5b563ac31218f41c9545bdf1ae6e7fe9806f439bc34df0e7e83')
+            'af6b83c35bcc7a07397f36e16e70ae203c3a7520225dfbeee10f45fc8adacd3f')
 
 prepare() {
-  # cd $pkgname-$pkgver-source
-  cd $pkgname-source
+  cd $pkgname-$pkgver-source
 
   # FS#27251
   sed -i s/SELFAUTOPARENT/TEXMFROOT/ texk/tex4htk/t4ht.c
@@ -40,8 +39,7 @@ prepare() {
 }
 
 build() {
-  # cd $pkgname-$pkgver-source/build
-  cd $pkgname-source/build
+  cd $pkgname-$pkgver-source/build
 
   ../configure \
     --prefix=/opt/TeXLive \
@@ -79,32 +77,30 @@ build() {
 }
 
 check() {
-  # cd $pkgname-$pkgver-source/build
-  cd $pkgname-source/build
+  cd $pkgname-$pkgver-source/build
 
   make -k check || warning "Check failed."
 }
 
-package() {
-  # cd $pkgname-$pkgver-source/build
-  cd $pkgname-source/build
+package_texlive() {
+  cd $pkgname-$pkgver-source/build
 
   make DESTDIR="$pkgdir/" install-strip
   make DESTDIR="$pkgdir/" texlinks
 
-  # cp -r "$srcdir"/install-tl-$pkgver/tlpkg "$pkgdir"/opt/TeXLive/
-  # cp -r "$srcdir"/$pkgname-$pkgver-extra/tlpkg "$pkgdir"/opt/TeXLive/
-  # tar -xf "$srcdir"/$pkgname-$pkgver-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
-
+  ### enable tlmgr
   mkdir -p "$pkgdir"/opt/TeXLive/tlpkg/{backups,installer,tlpobj}
-  cp -r "$srcdir"/installer/tlpkg/TeXLive "$pkgdir"/opt/TeXLive/tlpkg/
+  cp -r "$srcdir"/installer/tlpkg/{TeXLive,gpg,translations} "$pkgdir"/opt/TeXLive/tlpkg/
   cp -r "$srcdir"/installer/tlpkg/installer/{config.guess,ctan-mirrors.pl} "$pkgdir"/opt/TeXLive/tlpkg/installer/
   cp "$srcdir"/texlive.tlpdb "$pkgdir"/opt/TeXLive/tlpkg/
+
+  ### texmf-dist
+  tar -xf "$srcdir"/$pkgname-$pkgver-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
 
   sed -e 's/SELFAUTOPARENT/SELFAUTODIR/g' \
       -i "$pkgdir"/opt/TeXLive/texmf-dist/scripts/texlive/tlmgr.pl
   sed -e 's/% original/% TeXLive\/KZL/' \
-      -e 's/texlive2021/texlive/g' \
+      -e "s/texlive${pkgver:0:4}/texlive/g" \
       -e '/^TEXMFROOT/s/SELFAUTOPARENT/SELFAUTODIR/' \
       -e '/^TEXMFLOCAL/s/SELFAUTOGRANDPARENT/SELFAUTODIR/' \
       -i "$pkgdir"/opt/TeXLive/texmf-dist/web2c/texmf.cnf
@@ -116,5 +112,5 @@ package() {
   install -Dm644 "$srcdir"/09-texlive-fonts.conf "$pkgdir"/etc/fonts/conf.avail/
 
   # cleanup
-  rm -rf "$pkgdir"/opt/TeXLive/texmf-dist/scripts/context/stubs/mswin/
+  rm -rf "$pkgdir"/opt/TeXLive/texmf-dist/scripts/context/stubs/mswin
 }
