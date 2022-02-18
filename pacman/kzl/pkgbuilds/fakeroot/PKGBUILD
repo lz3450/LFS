@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=fakeroot
-pkgver=1.26
+pkgver=1.27
 pkgrel=1
 epoch=1
 pkgdesc="Tool for simulating superuser privileges"
 arch=('x86_64')
 url="https://packages.debian.org/fakeroot"
 source=(https://deb.debian.org/debian/pool/main/f/$pkgname/${pkgname}_${pkgver}.orig.tar.gz)
-sha256sums=('480a578ffdc5592e73df4c086950d321b4adc78dbdaec56c82e4fe1fb68de8e9')
+sha256sums=('3c45eb2d1802a2762069e2e9d21bdd6fb533592bc0cda74c9aff066ab01caddc')
 
 build() {
   cd $pkgname-$pkgver

@@ -52,8 +52,8 @@ package() {
   meson install -C build --destdir="$pkgdir"
   
   sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-kzl-linux-gnu/' \
-      -e '/^#CFLAGS=/c\CFLAGS="-march=native -mtune=native -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection"' \
-      -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -mtune=native -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection "' \
+      -e '/^#CFLAGS=/c\CFLAGS="-march=native -mtune=intel -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -Wall"' \
+      -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -mtune=intel -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wall"' \
       -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \
       -e '/^#RUSTFLAGS=/c\RUSTFLAGS="-C opt-level=2"' \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc)"' \
