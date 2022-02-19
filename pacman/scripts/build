@@ -29,8 +29,12 @@ kzl_stage0_pkgs=(
 
 # toolchain
 kzl_stage1_pkgs=(
-    linux-api-headers glibc binutils
-    gcc libtool binutils glibc
+    linux-api-headers
+    glibc
+    binutils
+    gcc
+    libtool
+    binutils glibc
 )
 
 # base
