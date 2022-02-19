@@ -4,7 +4,7 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
 pkgname=glibc
-pkgver=2.34
+pkgver=2.35
 pkgrel=2
 epoch=1
 arch=('x86_64')
@@ -13,15 +13,15 @@ license=('KZL')
 depends=(tzdata)
 options=(!strip)
 source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
-        locale-gen::https://git.archlinux.org/svntogit/packages.git/plain/trunk/locale-gen?h=packages/glibc
+        locale-gen
         locale.gen.txt)
 backup=(etc/gai.conf
         etc/locale.gen
         etc/nscd.conf)
 install=$pkgname.install
-sha256sums=('44d26a1fe20b8853a48f470ead01e4279e869ac149b195dda4e44a195d981ab2'
+sha256sums=('5123732f6b67ccd319305efd399971d58592122bcc2a6518a1bd2510dd0cf52e'
             'SKIP'
-            '83f108f915863c7ed0338e2d3e8f2e071a531a090ef8f8b2eb3a956a3c4f04d7'
+            '436293c91051efcf712a71ee27e758387ddc82996ad23079d5ab30c0947963b9'
             '0540122fb9340d546702a891bcce344fc3e8f21fe482c2c321b71c2e6b36964e')
 validpgpkeys=('7273542B39962DF7B299931416792B4EA25340F8')
 
@@ -41,10 +41,7 @@ build() {
   echo "sbindir=/usr/bin" >> configparms
   echo "rootsbindir=/usr/bin" >> configparms
 
-  CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
-  CFLAGS=${CFLAGS/-fno-plt/}
-  CXXFLAGS=${CXXFLAGS/-fno-plt/}
-  LDFLAGS=${LDFLAGS/,-z,now/}
+  CFLAGS=${CFLAGS/-Wp,-D_FORTIFY_SOURCE=2/}
 
   ../configure \
     --prefix=/usr \
@@ -55,10 +52,11 @@ build() {
     --disable-profile \
     --enable-static-pie \
     --disable-timezone-tools \
-    --enable-stackguard-randomization \
     --enable-bind-now \
     --enable-stack-protector=strong \
-    --enable-kernel=5.4 \
+    --enable-kernel=5.10 \
+    --disable-werror \
+    --disable-crypt \
     --enable-cet \
     --with-pkgversion="KZL $pkgver-$pkgrel" \
     --with-headers=/usr/include
@@ -93,6 +91,6 @@ package() {
   install -Dm644 "$srcdir"/locale.gen.txt "$pkgdir"/etc/locale.gen
   sed -e '1,3d' -e 's|/| |g' -e 's|\\| |g' -e 's|^|#|g' ../localedata/SUPPORTED >> "$pkgdir"/etc/locale.gen
 
-  # Provided by libxcrypt
+  # Provided by `libxcrypt'
   rm -f "$pkgdir"/usr/include/crypt.h "$pkgdir"/usr/lib/libcrypt.{a,so}
 }

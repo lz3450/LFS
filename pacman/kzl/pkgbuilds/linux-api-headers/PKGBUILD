@@ -4,7 +4,7 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
 pkgname=linux-api-headers
-pkgver=5.10.18
+pkgver=5.10.101
 pkgrel=1
 epoch=1
 pkgdesc="Kernel headers sanitized for use in userspace"
@@ -12,7 +12,7 @@ arch=('any')
 url='https://www.kernel.org'
 makedepends=(rsync)
 source=(https://www.kernel.org/pub/linux/kernel/v${pkgver:0:1}.x/linux-$pkgver.tar.{xz,sign})
-sha256sums=('3bc1ee2b1bf73b5ba936721953f3f9599fd165cef906cd5163c68d23cb9bb611'
+sha256sums=('0749258cb7ee47c478dfc34857e8930d41bfe0b074e80e9f57cbfa56d0ba1c8e'
             'SKIP')
 validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
 
@@ -26,5 +26,8 @@ build() {
 package() {
   cd linux-$pkgver
 
-  make INSTALL_HDR_PATH="$pkgdir/usr/" headers_install
+  make INSTALL_HDR_PATH="$pkgdir/usr" headers_install
+
+  # use headers from `libdrm'
+  rm -r "$pkgdir/usr/include/drm"
 }

@@ -4,7 +4,7 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
 pkgname=binutils
-pkgver=2.37
+pkgver=2.38
 pkgrel=1
 epoch=1
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
@@ -13,7 +13,7 @@ url="https://www.gnu.org/software/binutils/"
 license=('KZL')
 options=(staticlibs)
 source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('820d9724f020a3e69cb337893a0b63c2db161dadcb0e06fc11dc29eb1e84a32c'
+sha256sums=('e316477a914f567eccc34d5d29785b8b0f5a10208d36bbacedcc39048ecfe024'
             'SKIP')
 validpgpkeys=('3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F')
 
@@ -26,33 +26,56 @@ prepare() {
   sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i libiberty/configure
 }
 
+_general_options=(
+  --prefix=/usr
+  --enable-gold=no
+  --enable-ld=default
+  --enable-pgo-build=lto
+  --enable-lto
+  --disable-nls
+  --with-system-zlib
+)
+
+_binutils_options=(
+  --enable-shared
+  --enable-plugins
+  --enable-targets=x86_64-pep
+  --enable-deterministic-archives
+  --with-pic
+  --with-debuginfod
+)
+
+_gold_options=(
+  --enable-threads
+  --with-lib-path=/usr/lib:/usr/local/lib
+)
+
+_ld_options=(
+  --enable-relro
+)
+
+_libiberty_options=(
+  --enable-install-libiberty
+  --enable-cet
+)
+
 build() {
   cd $pkgname-$pkgver/build
 
   ../configure \
-    --prefix=/usr \
-    --enable-gold \
-    --enable-lto \
-    --enable-plugins \
-    --enable-relro \
-    --enable-targets=x86_64-pep \
-    --enable-threads \
-    --enable-deterministic-archives \
-    --enable-cet \
-    --enable-ld=default \
-    --with-lib-path=/usr/lib:/usr/local/lib \
-    --with-system-zlib \
-    --with-pic \
-    --with-debuginfod
+    "${_general_options[@]}" \
+    "${_binutils_options[@]}" \
+    "${_gold_options[@]}" \
+    "${_ld_options[@]}" \
+    "${_libiberty_options[@]}"
 
-  make configure-host
-  make tooldir="/usr"
+  make -O tooldir="/usr"
 }
 
 check() {
   cd $pkgname-$pkgver/build
 
-  make -k LDFLAGS="" check || warning "Check failed."
+  make -O CFLAGS="-O2 -no-pie" CXXFLAGS="-O2 -no-pie -fno-PIC" CFLAGS_FOR_TARGET="-O2 -g" LDFLAGS="" check || warning "Check failed."
 }
 
 package() {
@@ -60,7 +83,7 @@ package() {
 
   make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
 
-  # Remove unwanted files
+  # clean
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
 
   # No shared linking to these files outside binutils

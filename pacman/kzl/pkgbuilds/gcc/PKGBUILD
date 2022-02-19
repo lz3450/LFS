@@ -17,8 +17,11 @@ provides=(gcc-libs gcc-fortran)
 conflicts=(gcc-libs gcc-fortran)
 replaces=(gcc-libs gcc-fortran)
 options=(!emptydirs)
-source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
-        http://isl.gforge.inria.fr/isl-$_islver.tar.xz)
+source=(
+  https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
+  # http://isl.gforge.inria.fr/isl-$_islver.tar.xz
+  https://libisl.sourceforge.io/isl-${_islver}.tar.xz
+)
 sha256sums=('d08edc536b54c372a1010ff6619dd274c0f1603aa49212ba20f7aa2cda36fa8b'
             'SKIP'
             '043105cc544f416b48736fff8caf077fb0663a717d06b1113f16e391ac99ebad')
@@ -29,7 +32,7 @@ prepare() {
   
   mkdir build
 
-  mv ../isl-$_islver isl
+  ln -s "$srcdir"/isl-$_islver isl
   
   sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i {libiberty,gcc}/configure
 
@@ -45,7 +48,7 @@ build() {
   cd $pkgname-$pkgver/build
 
   ../configure \
-    --with-pkgversion="KZL $pkgver-$pkgrel" \
+    --with-pkgversion="KZL $pkgver-$pkgrel $(date -Ru)" \
     --prefix=/usr \
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib \

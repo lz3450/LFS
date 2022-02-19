@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libtool
-pkgver=2.4.6+42+gb88cebd5
+pkgver=2.4.6+59+gb55b1cc8
 pkgrel=1
 epoch=1
 pkgdesc="A generic library support script"
@@ -10,7 +10,7 @@ url="https://www.gnu.org/software/libtool"
 license=('KZL')
 provides=(libltdl libtool-multilib)
 makedepends=(help2man)
-source=(git+https://git.savannah.gnu.org/git/$pkgname.git#commit=b88cebd510add4420dd8f5367e3cc6e6e1f267cd
+source=(git+https://git.savannah.gnu.org/git/libtool.git#commit=b55b1cc8419b544b5cc3e1c204b2ce85112ed762
         git+https://git.savannah.gnu.org/git/gnulib.git
         gnulib-bootstrap::git+https://github.com/gnulib-modules/bootstrap.git)
 sha256sums=('SKIP'
@@ -47,7 +47,7 @@ build() {
 check() {
   cd $pkgname
 
-  make gl_public_submodule_commit= check || warning "Check failed."
+  make gl_public_submodule_commit="" check || warning "Check failed."
 }
 
 package() {
