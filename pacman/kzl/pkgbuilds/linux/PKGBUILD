@@ -1,7 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgname=linux
-pkgver=5.10.101
+pkgbase=linux
+pkgname=(linux linux-headers)
+pkgver=5.10.102
 pkgrel=1
 epoch=1
 pkgdesc="LTS Linux Kernel"
@@ -12,7 +13,7 @@ makedepends=(bc)
 options=(!strip)
 source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.{xz,sign}
         config)
-sha256sums=('0749258cb7ee47c478dfc34857e8930d41bfe0b074e80e9f57cbfa56d0ba1c8e'
+sha256sums=('e6414895b1c2e406a41a8744160e2b4ef2095e6cebe5363be460d1b198f0e379'
             'SKIP'
             'dc4a8fc3b1c53c343fee598b32a2b026c64efbe45c36428bcf362167f1ef9f02')
 validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
@@ -22,7 +23,7 @@ export KBUILD_BUILD_USER=kzl
 export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgbase-$pkgver
 
   mkdir build
 
@@ -32,13 +33,13 @@ prepare() {
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgbase-$pkgver
 
   make O=build all
 }
 
-package() {
-  cd $pkgname-$pkgver
+package_linux() {
+  cd $pkgbase-$pkgver
 
   local kernelrelease=$(make O=build -s kernelrelease)
   local image_name=$(make O=build -s image_name)
@@ -54,6 +55,12 @@ package() {
   install -Dm644 build/System.map -t "$pkgdir"/boot/
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
+}
+
+package_linux-headers() {
+  cd $pkgbase-$pkgver
+
+  install -d -m 0755 "$pkgdir"/usr/lib/modules/$kernelrelease/
   cp -a . "$pkgdir"/usr/lib/modules/$kernelrelease/source
   mv "$pkgdir"/usr/lib/modules/$kernelrelease/{source/,}build
 }
