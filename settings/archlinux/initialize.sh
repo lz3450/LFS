@@ -27,8 +27,8 @@ bootctl --path=/boot install
 cat loader.conf >> /boot/loader/loader.conf
 nano /boot/loader/loader.conf
 cp archlinux.conf /boot/loader/entries
-blkid >> /boot/loader/entries/archlinux.conf
-nano /boot/loader/entries/archlinux.conf
+blkid >> /boot/loader/entries/kzl-linux.conf
+nano /boot/loader/entries/kzl-linux.conf
 
 # efistub
 # blkid >> /root/efi.sh
