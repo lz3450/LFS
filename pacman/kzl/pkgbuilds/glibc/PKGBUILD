@@ -87,10 +87,10 @@ package() {
 
   install -Dm755 "$srcdir"/locale-gen "$pkgdir"/usr/bin/
 
-  # Create /etc/locale.gen
+  # create /etc/locale.gen
   install -Dm644 "$srcdir"/locale.gen.txt "$pkgdir"/etc/locale.gen
   sed -e '1,3d' -e 's|/| |g' -e 's|\\| |g' -e 's|^|#|g' ../localedata/SUPPORTED >> "$pkgdir"/etc/locale.gen
 
-  # Provided by `libxcrypt'
+  # provided by `libxcrypt'
   rm -f "$pkgdir"/usr/include/crypt.h "$pkgdir"/usr/lib/libcrypt.{a,so}
 }

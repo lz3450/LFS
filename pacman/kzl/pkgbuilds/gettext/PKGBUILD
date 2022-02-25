@@ -7,11 +7,12 @@ epoch=1
 pkgdesc="GNU internationalization library"
 arch=('x86_64')
 url="https://www.gnu.org/software/gettext/"
+license=('KZL')
 depends=(acl glib2 icu libunistring libxml2)
 # depends=(acl glib2 libcroco libunistring libxml2)
 makedepends=(gettext)
 options=(!docs)
-source=(https://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
+source=(https://ftp.gnu.org/pub/gnu/gettext/$pkgname-$pkgver.tar.gz{,.sig})
 sha256sums=('c77d0da3102aec9c07f43671e60611ebff89a996ef159497ce8e59d075786b12'
             'SKIP')
 validpgpkeys=('9001B85AF9E1B83DF1BDA942F5BE8B267C6A406D')
@@ -36,7 +37,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

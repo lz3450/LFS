@@ -1,23 +1,24 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=e2fsprogs
-pkgver=1.46.1
+pkgver=1.46.5
 pkgrel=1
 epoch=1
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('x86_64')
 url="http://e2fsprogs.sourceforge.net"
+license=('KZL')
 backup=(etc/mke2fs.conf)
 options=(staticlibs)
 source=(https://www.kernel.org/pub/linux/kernel/people/tytso/$pkgname/v$pkgver/$pkgname-$pkgver.tar.{xz,sign})
-sha256sums=('bbe6af3b7bb7119556b6f57a78d41b330007738bca8530b2ba95d2ba35430151'
+sha256sums=('2f16c9176704cf645dc69d5b15ff704ae722d665df38b2ed3cfc249757d8d81e'
             'SKIP')
 validpgpkeys=('3AB057B7E78D945C8C5591FBD36F769BC11804F0')
 
 prepare() {
   cd $pkgname-$pkgver
 
-  # Remove unnecessary init.d directory
+  # remove unnecessary init.d directory
   sed -i '/init\.d/s|^|#|' misc/Makefile.in
 }
 
@@ -45,7 +46,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

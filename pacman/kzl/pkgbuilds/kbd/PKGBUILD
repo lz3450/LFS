@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=kbd
-pkgver=2.4.0
+pkgver=v2.4.0+33+g9e085ed
 pkgrel=1
 epoch=1
 pkgdesc="Keytable files and keyboard utilities"
@@ -9,14 +9,28 @@ arch=('x86_64')
 url="http://www.kbd-project.org"
 license=('KZL')
 checkdepends=(check)
-source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git#tag=v$pkgver?signed)
+source=(git+https://github.com/legionus/kbd.git#commit=9e085eda2f018298fea75cb6b7a45ba7aaef1b76?signed)
 sha256sums=('SKIP')
 validpgpkeys=('7F2A3D07298149A0793C9A4EA45ABA544CFFD434')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
 
 prepare() {
   cd $pkgname
 
-  ./autogen.sh -f
+  mv data/keymaps/i386/qwertz/cz{,-qwertz}.map
+  mv data/keymaps/i386/olpc/es{,-olpc}.map
+  mv data/keymaps/i386/olpc/pt{,-olpc}.map
+  mv data/keymaps/i386/fgGIod/trf{,-fgGIod}.map
+  mv data/keymaps/i386/colemak/{en-latin9,colemak}.map
+  unlink data/keymaps/i386/qwertz/sr-latin.map
+  cp data/keymaps/i386/qwertz/{slovene,sr-latin}.map
+
+  ./autogen.sh
 }
 
 build() {
@@ -24,6 +38,7 @@ build() {
 
   ./configure \
     --prefix=/usr \
+    --sysconfdir=/etc \
     --datadir=/usr/share/kbd \
     --mandir=/usr/share/man
 
@@ -33,7 +48,7 @@ build() {
 check() {
   cd $pkgname
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

@@ -1,16 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pkgconf
-pkgver=1.7.3
+pkgver=1.8.0
 pkgrel=1
 epoch=1
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=('x86_64')
-url="https://github.com/pkgconf/pkgconf"
+url="https://github.com/pkgconf/pkgconf.git"
+license=('KZL')
 provides=(pkg-config)
 conflicts=(pkg-config)
 replaces=(pkg-config)
-source=(git+https://git.sr.ht/~kaniini/pkgconf#tag=$pkgname-$pkgver
+source=(git+$url#tag=$pkgname-$pkgver
         x86_64-linux-gnu.personality)
 sha256sums=('SKIP'
             'c8297817ba0b57d003878db247ff34b4c47a7594c9f67dcfe8ff8d6567956cd5')

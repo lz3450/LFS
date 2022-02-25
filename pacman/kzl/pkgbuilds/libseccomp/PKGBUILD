@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libseccomp
-pkgver=2.4.3
+pkgver=2.5.3
 pkgrel=1
 epoch=1
 pkgdesc="Enhanced seccomp library"
 arch=('x86_64')
 url="https://github.com/seccomp/libseccomp"
+license=('KZL')
 checkdepends=(valgrind)
 source=(git+https://github.com/seccomp/$pkgname?signed#tag=v$pkgver)
 sha256sums=('SKIP')
@@ -31,7 +32,7 @@ build() {
 check() {
   cd $pkgname
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=base
-pkgver=20210810
+pkgver=2022.02.21
 pkgrel=1
 epoch=1
 pkgdesc="Minimal package set to define a basic KZL Linux installation"
@@ -16,20 +16,24 @@ depends=(
   bzip2 xz gzip tar
   grep sed gawk m4 bison flex
   file which findutils
-  shadow coreutils util-linux e2fsprogs procps-ng psmisc
+  shadow sudo coreutils util-linux e2fsprogs procps-ng psmisc
   perl
+  autoconf automake
+  patch
+  make
   dbus
   iproute2 iputils
   systemd
   pciutils
   zstd pacman
-  autoconf automake
-  patch
-  make
   python
   cmake
   git
-  sudo
   gettext texinfo man-db
+  linux-firmware
 )
 optdepends=("linux: bare metal support")
+
+pkgver() {
+  date +%Y.%m.%d
+}

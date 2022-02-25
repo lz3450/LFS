@@ -1,0 +1,36 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=mkinitcpio-busybox
+pkgver=1.35.0
+pkgrel=1
+epoch=1
+pkgdesc="The Swiss Army Knife of Embedded Linux"
+arch=('x86_64')
+url="https://www.busybox.net/"
+license=('KZL')
+options=(!buildflags)
+source=(https://busybox.net/downloads/busybox-$pkgver.tar.bz2{,.sig}
+        config)
+sha256sums=('faeeb244c35a348a334f4a59e44626ee870fb07b6884d68c10ae8bc19f83a694'
+            'SKIP'
+            'a5fb91f2248a3e89c4dda4a594f5ff3af4bc7dcd6da26c03dd2cd55a8e855a57')
+validpgpkeys=('C9E9416F76E610DBD09D040F47B70C55ACC9965B')
+
+prepare() {
+  cd busybox-$pkgver
+  
+  # use make oldconfig for updating the config file
+  cp "$srcdir"/config .config
+}
+
+build() {
+  cd busybox-$pkgver
+
+  make
+}
+
+package() {
+  cd busybox-$pkgver
+
+  install -Dm755 busybox "$pkgdir"/usr/lib/initcpio/busybox
+}

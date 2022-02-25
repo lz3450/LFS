@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=linux-firmware
-pkgver=20210208
+pkgver=20220209
 pkgrel=1
 epoch=1
 pkgdesc="Firmware files for Linux"
 arch=('x86_64')
 url="https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git;a=summary"
+license=('KZL')
 options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git#tag=$pkgver?signed)
 sha256sums=('SKIP')

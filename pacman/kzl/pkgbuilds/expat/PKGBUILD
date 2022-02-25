@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=expat
-pkgver=2.4.1
+pkgver=2.4.5
 pkgrel=1
 epoch=1
 pkgdesc="An XML parser library"
@@ -10,7 +10,7 @@ url="https://libexpat.github.io/"
 license=('KZL')
 provides=(libexpat.so)
 source=(https://github.com/libexpat/libexpat/releases/download/R_${pkgver//./_}/expat-$pkgver.tar.bz2{,.asc})
-sha256sums=('2f9b6a580b94577b150a7d5617ad4643a4301a6616ff459307df3e225bcfbf40'
+sha256sums=('fbb430f964c7a2db2626452b6769e6a8d5d23593a453ccbc21701b74deabedff'
             'SKIP')
 validpgpkeys=('3176EF7DB2367F1FCA4F306B1F9B0E909AF37285')
 
@@ -32,7 +32,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  cmake --build build --target tests || warning "Check failed."
+  cmake --build build --target tests
 }
 
 package() {

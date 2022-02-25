@@ -1,16 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libpcap
-pkgver=1.10.0
+pkgver=1.10.1
 pkgrel=1
 epoch=1
 pkgdesc="A system-independent interface for user-level packet capture"
 arch=('x86_64')
 url="https://www.tcpdump.org/"
+license=('KZL')
 depends=(libnl)
 # depends=(bluez libnl)
 source=(https://www.tcpdump.org/release/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('8d12b42623eeefee872f123bd0dc85d535b00df4d42e865f993c40f7bfc92b1e'
+sha256sums=('ed285f4accaf05344f90975757b3dbfe772ba41d1c401c2648b7fa45b711bdd4'
             'SKIP')
 validpgpkeys=('1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D')
 

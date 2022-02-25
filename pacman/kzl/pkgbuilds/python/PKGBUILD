@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.10.1
+pkgver=3.10.2
 pkgrel=1
 epoch=1
 pkgdesc="Next generation of the python high-level scripting language"
@@ -15,7 +15,7 @@ replaces=(cython meson ninja python-dnspython python-fonttools python-setuptools
 makedepends=(mpdecimal sqlite valgrind)
 # makedepends=(mpdecimal sqlite tk valgrind)
 source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc})
-sha256sums=('a7f1265b6e1a5de1ec5c3ec7019ab53413469934758311e9d240c46e5ae6e177'
+sha256sums=('17de3ac7da9f2519aa9d64378c603a73a0e9ad58dffa8812e45160c086de64c7'
             'SKIP')
 validpgpkeys=('A035C8C19219BA821ECEA86B64E628F8D684696D')
 

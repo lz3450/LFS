@@ -17,11 +17,9 @@ provides=(gcc-libs gcc-fortran)
 conflicts=(gcc-libs gcc-fortran)
 replaces=(gcc-libs gcc-fortran)
 options=(!emptydirs)
-source=(
-  https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
-  # http://isl.gforge.inria.fr/isl-$_islver.tar.xz
-  https://libisl.sourceforge.io/isl-${_islver}.tar.xz
-)
+source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
+        # http://isl.gforge.inria.fr/isl-$_islver.tar.xz
+        https://libisl.sourceforge.io/isl-${_islver}.tar.xz)
 sha256sums=('d08edc536b54c372a1010ff6619dd274c0f1603aa49212ba20f7aa2cda36fa8b'
             'SKIP'
             '043105cc544f416b48736fff8caf077fb0663a717d06b1113f16e391ac99ebad')
@@ -34,7 +32,7 @@ prepare() {
 
   ln -s "$srcdir"/isl-$_islver isl
   
-  sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i {libiberty,gcc}/configure
+  sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i gcc/configure
 
   # Do not run fixincludes
   sed -e 's@\./fixinc\.sh@-c true@' -i gcc/Makefile.in
@@ -70,7 +68,7 @@ build() {
     --enable-gnu-unique-object \
     --enable-lto \
     --enable-cet=auto\
-    --enable-install-libiberty \
+    --disable-install-libiberty \
     --enable-plugin \
     --disable-libstdcxx-pch \
     --enable-clocale=gnu
@@ -81,7 +79,7 @@ build() {
 check() {
   cd $pkgname-$pkgver/build
 
-  make -k check || warning "Check failed."
+  make -k check
 }
 
 package() {

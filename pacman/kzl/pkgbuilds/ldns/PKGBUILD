@@ -1,17 +1,18 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ldns
-pkgver=1.7.1
+pkgver=1.8.1
 pkgrel=1
 epoch=1
 pkgdesc="Fast DNS library supporting recent RFCs"
 arch=('x86_64')
 url="https://www.nlnetlabs.nl/projects/ldns/"
+license=('KZL')
 depends=(openssl)
 makedepends=(libpcap)
 optdepends=("libpcap: ldns-dpa tool")
 source=(https://www.nlnetlabs.nl/downloads/$pkgname/$pkgname-$pkgver.tar.gz)
-sha256sums=('8ac84c16bdca60e710eea75782356f3ac3b55680d40e1530d7cea474ac208229')
+sha256sums=('958229abce4d3aaa19a75c0d127666564b17216902186e952ca4aef47c6d7fa3')
 
 build() {
   cd $pkgname-$pkgver
@@ -30,7 +31,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

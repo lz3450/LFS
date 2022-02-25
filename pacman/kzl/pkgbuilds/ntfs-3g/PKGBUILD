@@ -1,0 +1,47 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=ntfs-3g
+pkgver=2021.8.22
+pkgrel=1
+epoch=1
+pkgdesc="NTFS filesystem driver and utilities"
+arch=('x86_64')
+url="https://www.tuxera.com/community/open-source-ntfs-3g/"
+license=('KZL')
+depends=(fuse)
+source=(https://tuxera.com/opensource/${pkgname}_ntfsprogs-${pkgver}.tgz)
+sha256sums=('55b883aa05d94b2ec746ef3966cb41e66bed6db99f22ddd41d1b8b94bb202efb')
+
+# TODO: wait for fuse 3
+
+prepare() {
+  cd ${pkgname}_ntfsprogs-${pkgver}
+
+  sed -e 's|$(DESTDIR)/sbin|$(DESTDIR)/usr/bin|' -i {ntfsprogs,src}/Makefile.in
+}
+
+build() {
+  cd ${pkgname}_ntfsprogs-${pkgver}
+
+  ./configure \
+    --prefix=/usr \
+    --sbin=/usr/bin \
+    --sbin=/usr/bin \
+    --disable-ldconfig \
+    --enable-posix-acls \
+    --enable-xattr-mappings \
+    --enable-crypto \
+    --enable-extras \
+    --disable-static \
+    --with-fuse=external
+
+  make
+}
+
+package() {
+  cd ${pkgname}_ntfsprogs-${pkgver}
+
+  make DESTDIR="$pkgdir/" rootbindir=/usr/bin rootsbindir=/usr/bin rootlibdir=/usr/lib install
+  rm "${pkgdir}"/usr/share/man/man8/ntfsfallocate.8
+  ln -s ntfs-3g "$pkgdir"/usr/bin/mount.ntfs
+}

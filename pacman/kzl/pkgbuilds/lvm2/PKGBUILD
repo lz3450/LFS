@@ -2,11 +2,12 @@
 
 pkgbase=lvm2
 pkgname=(lvm2 device-mapper)
-pkgver=2.03.13
+pkgver=2.03.15
 pkgrel=1
 epoch=1
 arch=('x86_64')
 url="https://sourceware.org/lvm2/"
+license=('KZL')
 makedepends=(thin-provisioning-tools)
 source=(git+https://sourceware.org/git/$pkgbase.git#tag=v${pkgver//./_}?signed)
 sha256sums=('SKIP')

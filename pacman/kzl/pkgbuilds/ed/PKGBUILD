@@ -1,15 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ed
-pkgver=1.17
+pkgver=1.18
 pkgrel=1
 epoch=1
 pkgdesc="A POSIX-compliant line-oriented text editor"
 arch=('x86_64')
 url="https://www.gnu.org/software/ed/ed.html"
+license=('KZL')
 options=(!emptydirs)
 source=(https://ftp.gnu.org/gnu/ed/$pkgname-$pkgver.tar.lz{,.sig})
-sha256sums=('71de39883c25b6fab44add80635382a10c9bf154515b94729f4a6529ddcc5e54'
+sha256sums=('aca8efad9800c587724a20b97aa8fc47e6b5a47df81606feaba831b074462b4f'
             'SKIP')
 validpgpkeys=('1D41C14B272A2219A739FA4F8FE99503132D7742')
 
@@ -30,7 +31,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

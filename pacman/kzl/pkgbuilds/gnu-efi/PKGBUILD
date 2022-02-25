@@ -1,15 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gnu-efi
-pkgver=3.0.12
+pkgver=3.0.14
 pkgrel=1
 epoch=1
 pkgdesc="Library for building UEFI Applications using GNU toolchain"
 arch=('x86_64')
 url="https://sourceforge.net/projects/gnu-efi/"
+license=('KZL')
 options=(!strip !makeflags !buildflags)
 source=(https://download.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.bz2)
-sha256sums=('0196f2e1fd3c334b66e610a608a0e59233474c7a01bec7bc53989639aa327669')
+sha256sums=('b73b643a0d5697d1f396d7431448e886dd805668789578e3e1a28277c9528435')
 
 build() {
   cd $pkgname-$pkgver

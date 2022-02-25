@@ -8,10 +8,7 @@ pkgdesc="Gives a fake chroot environment"
 arch=('x86_64')
 url="https://github.com/dex4er/fakechroot/wiki"
 license=('KZL')
-source=(
-  $pkgname-$pkgver.tar.gz::https://github.com/dex4er/fakechroot/archive/$pkgver.tar.gz
-  # git+https://github.com/dex4er/fakechroot.git
-)
+source=(git+https://github.com/dex4er/fakechroot.git)
 sha256sums=('7f9d60d0d48611969e195fadf84d05f6c74f71bbf8f41950ad8f5bf061773e18')
 
 prepare() {
@@ -35,7 +32,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make -k check || warning "Check failed."
+  make -k check
 }
 
 package() {

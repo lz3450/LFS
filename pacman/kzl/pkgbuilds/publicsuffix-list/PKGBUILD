@@ -1,15 +1,24 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=publicsuffix-list
-pkgver=20200824
+pkgver=20220219.1236.2db6f46
 pkgrel=1
 epoch=1
 pkgdesc="Cross-vendor public domain suffix database"
 arch=('any')
 url="https://github.com/publicsuffix/list"
-source=(git+$url#commit=43f08e178fea1bb2fe329f83c20ca351417c0d52?signed)
+license=('KZL')
+source=(git+$url#commit=2db6f4601303b2ac2a5014a33356b72164088e41)
 sha256sums=('SKIP')
-validpgpkeys=('5DE3E0509C47EA3CF04A42D34AEE18F83AFDEB23')
+
+pkgver() {
+  cd list
+
+  printf "%s.%s.%s" \
+    "$(TZ=UTC git show -s --pretty=%cd --date=format-local:%Y%m%d HEAD)" \
+    "$(git rev-list --count HEAD)" \
+    "$(git rev-parse --short HEAD)"
+}
 
 package() {
   cd list

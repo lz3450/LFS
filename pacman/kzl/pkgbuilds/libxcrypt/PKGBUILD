@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libxcrypt
-pkgver=4.4.18
+pkgver=4.4.28
 pkgrel=1
 epoch=1
 pkgdesc="Modern library for one-way hashing of passwords"
 arch=('x86_64')
 url="https://github.com/besser82/libxcrypt/"
+license=('KZL')
 provides=(libcrypt.so)
 source=(git+https://github.com/besser82/libxcrypt.git#tag=v$pkgver)
 sha256sums=('SKIP')
@@ -22,6 +23,7 @@ build() {
 
   ./configure \
     --prefix=/usr \
+    --disable-werror \
     --disable-static \
     --disable-failure-tokens \
     --disable-obsolete-api \
@@ -33,7 +35,7 @@ build() {
 check() {
   cd $pkgname
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

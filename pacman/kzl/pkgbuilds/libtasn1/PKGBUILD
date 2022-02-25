@@ -1,16 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libtasn1
-pkgver=4.16.0
+pkgver=4.18.0
 pkgrel=1
 epoch=1
 pkgdesc="The ASN.1 library used in GNUTLS"
 arch=('x86_64')
 url="https://www.gnu.org/software/libtasn1/"
+license=('KZL')
 source=(https://ftp.gnu.org/gnu/libtasn1/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('0e0fb0903839117cb6e3b56e68222771bebf22ad7fc2295a0ed7d576e8d4329d'
+sha256sums=('4365c154953563d64c67a024b607d1ee75c6db76e0d0f65709ea80a334cd1898'
             'SKIP')
-validpgpkeys=('1F42418905D8206AA754CCDC29EE58B996865171')
+validpgpkeys=('B1D2BD1375BECB784CF4F8C4D73CF638C53C06BE')
 
 build() {
   cd $pkgname-$pkgver

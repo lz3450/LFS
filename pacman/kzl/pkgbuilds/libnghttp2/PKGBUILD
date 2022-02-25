@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libnghttp2
-pkgver=1.41.0
+pkgver=1.46.0
 pkgrel=1
 epoch=1
 pkgdesc="Framing layer of HTTP/2 is implemented as a reusable C library"
 arch=('x86_64')
 url="https://nghttp2.org"
+license=('KZL')
 source=(https://github.com/nghttp2/nghttp2/releases/download/v$pkgver/nghttp2-$pkgver.tar.xz)
-sha256sums=('abc25b8dc601f5b3fefe084ce50fcbdc63e3385621bee0cbfa7b57f9ec3e67c2')
+sha256sums=('1a68cc4a5732afb735baf50aaac3cb3a6771e49f744bd5db6c49ab5042f12a43')
 
 build() {
   cd nghttp2-$pkgver
@@ -27,7 +28,7 @@ build() {
 check() {
   cd nghttp2-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

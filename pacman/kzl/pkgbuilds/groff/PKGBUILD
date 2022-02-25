@@ -7,6 +7,7 @@ epoch=1
 pkgdesc="GNU troff text-formatting system"
 arch=('x86_64')
 url="https://www.gnu.org/software/groff/groff.html"
+license=('KZL')
 options=(!docs !emptydirs !makeflags)
 source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
 sha256sums=('e78e7b4cb7dec310849004fa88847c44701e8d133b5d4c13057d876c1bad0293'
@@ -25,7 +26,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

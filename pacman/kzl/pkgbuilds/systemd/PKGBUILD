@@ -1,26 +1,31 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=systemd
-pkgver=247.3
+pkgver=249.10
 pkgrel=1
 epoch=1
 arch=('x86_64')
 url="https://www.github.com/systemd/systemd-stable"
+license=('KZL')
 depends=(acl audit cryptsetup elfutils iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2)
-makedepends=(curl kexec-tools gnu-efi gperf libmicrohttpd libxslt quota)
+makedepends=(curl kexec-tools gnu-efi gperf libfido2 libmicrohttpd libxslt quota)
 optdepends=("curl: machinectl pull-tar and pull-raw"
-            "quota: kernel-level quota management"
-            "libmicrohttpd: remote journald capabilities")
+            "libfido2: unlocking LUKS2 volumes with FIDO2 token"
+            "libmicrohttpd: remote journald capabilities"
+            "quota: kernel-level quota management")
 provides=(systemd-libs systemd-resolvconf systemd-sysvcompat udev systemd-tools nss-myhostname libsystemd.so libudev.so libudev.so)
 conflicts=(systemd-libs systemd-resolvconf systemd-sysvcompat)
 replaces=(systemd-libs systemd-resolvconf systemd-sysvcompat)
 backup=(etc/pam.d/systemd-user
         etc/systemd/coredump.conf
+        etc/systemd/homed.conf
         etc/systemd/journald.conf
         etc/systemd/journal-remote.conf
         etc/systemd/journal-upload.conf
         etc/systemd/logind.conf
         etc/systemd/networkd.conf
+        etc/systemd/oomd.conf
+        etc/systemd/pstore.conf
         etc/systemd/resolved.conf
         etc/systemd/sleep.conf
         etc/systemd/system.conf
@@ -29,7 +34,6 @@ backup=(etc/pam.d/systemd-user
         etc/udev/udev.conf)
 install=systemd.install
 source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
-        0001-Use-Arch-Linux-device-access-groups.patch
         systemd.install
         20-systemd-sysusers.hook
         30-systemd-binfmt.hook
@@ -40,7 +44,6 @@ source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
         30-systemd-tmpfiles.hook
         30-systemd-udev-reload.hook)
 sha256sums=('SKIP'
-            '1db4255602b94f5c7b55a2a7c592e1874cbb3c118aefb49da42d27fca9e8f4b3'
             '547976dad8b10bd3ccf1e8b16c208b7b3e3454220261b47c7ee3f07f128d5f3a'
             '61623bab3be1dc5a4c72145e6cf36bccb08e24372142ef41e4e195cc342b2ec7'
             '393c963a4a3e11f7e7c9faa517179c55926e6663d71eaa9f5a7937cfe0e16af0'
@@ -50,29 +53,21 @@ sha256sums=('SKIP'
             '0149385b55f58f8cf8ad160fcfb9bb7bd74351708d8cc13984ccb43d4453ed08'
             '7e21a3d6a8c8916fa152041db04bdc9d686732d856804e83b6ccb9e371f23df5'
             '3b0141de66e70697df5b56f72a85001b5ce1f0070295db298d1b001401fce3c0')
-validpgpkeys=('5C251B5FC54EB2F80F407AAAC54CA336CFEB557E')
-
-prepare() {
-  cd $pkgname-stable
-
-  # Replace cdrom/dialout/tape groups with optical/uucp/storage
-  patch -Np1 -i "$srcdir"/0001-Use-Arch-Linux-device-access-groups.patch
-}
+validpgpkeys=('A9EA9081724FFAE0484C35A1A81CEA22BC8C7E2E')
 
 build() {
   cd $pkgname-stable
 
   local _timeservers=({0..3}.arch.pool.ntp.org)
-  # We use these public name services, ordered by their privacy policy (hopefully):
-  #  * Cloudflare (https://1.1.1.1/)
-  #  * Quad9 without filtering (https://www.quad9.net/)
-  #  * Google (https://developers.google.com/speed/public-dns/)
-  local _nameservers=(1.1.1.1
-                      9.9.9.10
-                      8.8.8.8
-                      2606:4700:4700::1111
-                      2620:fe::10
-                      2001:4860:4860::8888)
+  # Cloudflare (https://1.1.1.1/)
+  # Quad9 without filtering (https://www.quad9.net/)
+  # Google (https://developers.google.com/speed/public-dns/)
+  local _nameservers=("1.1.1.1#cloudflare-dns.com"
+                      "9.9.9.9#dns.quad9.net"
+                      "8.8.8.8#dns.google"
+                      "2606:4700:4700::1111#cloudflare-dns.com"
+                      "2620:fe::9#dns.quad9.net"
+                      "2001:4860:4860::8888#dns.google")
   meson setup \
     --prefix /usr \
     --libexecdir lib \
@@ -89,29 +84,36 @@ build() {
     -D binfmt=true \
     -D blkid=true \
     -D bzip2=true \
+    -D certificate-root=/etc/ssl \
     -D dbus=true \
     -D dbuspolicydir=/usr/share/dbus-1/system.d \
-    -D default-hierarchy=hybrid \
+    -D default-dnssec=no \
+    -D default-hierarchy=unified \
     -D default-kill-user-processes=false \
     -D default-locale=C \
-    -D dns-over-tls=true \
+    -D dns-over-tls=openssl \
     -D dns-servers="${_nameservers[*]}" \
     -D efi=true \
     -D elfutils=true \
-    -D fallback-hostname='kzl-linux' \
+    -D fallback-hostname='KZL-Linux' \
     -D fdisk=true \
-    -D kexec-path=/usr/bin/kexec \
-    -D kmod-path=/usr/bin/kmod \
     -D gnu-efi=true \
     -D gnutls=true \
     -D homed=true \
+    -D hostnamed=true \
+    -D ima=false \
     -D importd=true \
+    -D kexec-path=/usr/bin/kexec \
+    -D kmod-path=/usr/bin/kmod \
     -D kmod=true \
     -D libcryptsetup=true \
     -D libcurl=true \
+    -D libfido2=true \
     -D libidn2=true \
     -D libiptc=true \
+    -D localegen-path=/usr/bin/locale-gen \
     -D lz4=true \
+    -D man=false \
     -D microhttpd=true \
     -D nologin-path=/usr/bin/nologin \
     -D ntp-servers="${_timeservers[*]}" \
@@ -122,10 +124,15 @@ build() {
     -D polkit=true \
     -D pwquality=false \
     -D qrencode=false \
-    -D quotaon-path=/usr/bin/quotaon \
     -D remote=true \
     -D repart=true \
     -D rpmmacrosdir=no \
+    -D sbat-distro='KZL' \
+    -D sbat-distro-generation=1 \
+    -D sbat-distro-pkgname=$pkgname \
+    -D sbat-distro-summary='KZL Linux' \
+    -D sbat-distro-url="https://github.com/kongzelun/LFS" \
+    -D sbat-distro-version=$pkgver \
     -D seccomp=true \
     -D selinux=false \
     -D split-bin=false \
@@ -135,10 +142,11 @@ build() {
     -D telinit-path= \
     -D user-path=/usr/local/bin:/usr/bin \
     -D valgrind=true \
-    -D version-tag="$pkgver-$pkgrel-kzl" \
+    -D version-tag="$pkgver-$pkgrel-kzl $(date -Ru)" \
     -D xz=true \
     -D zlib=true \
     -D zshcompletiondir=/usr/share/zsh/site-functions/ \
+    -D zstd=true \
     build
 
   meson compile -C build
@@ -147,7 +155,7 @@ build() {
 check() {
   cd $pkgname-stable
 
-  meson test -C build || warning "Check failed."
+  meson test -C build
 }
 
 package() {

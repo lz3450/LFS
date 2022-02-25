@@ -54,10 +54,9 @@ kzl_stage2_pkgs=(
     glibc
     ## ncurses readline bash
     ncurses readline bash bash-completion
-    ## bzip2 xz
+    ## bzip2 xz gzip
     bzip2 xz
-    ## gzip
-    pcre less gzip 
+    pcre less gzip
     ## tar
     acl attr tar
     ## grep sed gawk m4 bison flex
@@ -67,16 +66,19 @@ kzl_stage2_pkgs=(
     which
     findutils
     ## shadow
-    keyutils libldap krb5 libcap-ng swig audit
+    keyutils openldap krb5 swig libcap-ng audit
     libxcrypt
-    libtirpc pam
+    libtirpc pam-config pam
     shadow
+    ## sudo
+    openssl sudo
     ## coreutils
-    libcap openssl coreutils
+    libcap coreutils
     ## util-linux
     util-linux
     ## e2fsprogs
-    e2fsprogs
+    fuse e2fsprogs
+    krb5
     ## procps-ng psmisc
     procps-ng psmisc
     ## perl
@@ -94,13 +96,12 @@ kzl_stage2_pkgs=(
     expat autoconf-archive dbus
     ## iproute2
     libmnl libnfnetlink libnetfilter_conntrack libnftnl libnl libpcap iptables
-    iproute2 
+    iproute2
     ## iputils
     libidn2 iputils
-    ## systemd
+    # systemd
     argon2 libaio hwloc ldns libedit openssh openmpi boost thin-provisioning-tools device-mapper json-c popt cryptsetup
-    kbd
-    kmod
+    kbd kmod
     libgpg-error libgcrypt
     libtasn1 p11-kit
     pcre2
@@ -108,16 +109,18 @@ kzl_stage2_pkgs=(
     kexec-tools
     gnu-efi
     gperf
+    libusb hidapi libcbor libfido2
     nettle gnutls libmicrohttpd
     libxslt
     rpcsvc-proto quota
     systemd
+    procps-ng libusb
     ## pciutils
     pciutils
     ## zstd
     lz4 zstd
     ## pacman
-    libassuan npth pinentry tcl sqlite libusb libusb-compat pcsclite gnupg gpgme
+    libassuan npth pinentry tcl sqlite libusb-compat pcsclite gnupg gpgme
     libarchive
     pacman
     po4a fakeroot pacman-contrib arch-install-scripts
@@ -130,34 +133,34 @@ kzl_stage2_pkgs=(
     docbook itstool xmlto shared-mime-info
     cmake
     ## git
-    git
-    ## sudo
-    sudo
+    asciidoc git
     ## texinfo man-db
     texinfo 
     groff man-db
     ## linux
     bc linux-firmware
     ## base
-    base
+    # base
 )
 
 kzl_stage3_pkgs=(
     ### core
-    ## zsh
-    zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
-    ## tmux
-    libevent libutempter tmux
+    # ## zsh
+    # zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
+    # initramfs
+    cpio dracut
+    # ## tmux
+    # libevent libutempter tmux
     ## utils
-    usbutils
-    wpa_supplicant
-    wget 
-    xxhash rsync
-    dosfstools parted
-    nano
+    # usbutils
+    # wpa_supplicant
+    # wget
+    # xxhash rsync
+    # dosfstools parted
+    # nano vim
     c-ares aria2
     ## devtools
-    gdb llvm compiler-rt openmp clang lld lldb rust ruby nodejs
+    gdb llvm-project rust ruby nodejs
     ## Xlib
     xorg-util-macros xorgproto libxau libxdmcp xcb-proto libxcb xtrans libx11 libice libsm libxt libxext libxrender libxpm
     ## texlive
@@ -168,8 +171,8 @@ kzl_stage3_pkgs=(
     # compatibility problem
     # nspr nss poppler-data poppler
     texlive
-    ## samba
-    lmdb jansson liburing samba
+    # ## samba
+    # lmdb jansson liburing samba
     ## ffmpeg
     ## nvidia
     nvidia #cuda cudnn nccl
@@ -209,7 +212,7 @@ update_key() {
 
     cd $ROOTDIR/$target/pkgbuilds/$pkgbase
 
-    updpkgsums
+    updpkgsums > /dev/null
     gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
 }
 
@@ -231,10 +234,10 @@ build() {
         rm $log
     fi
     
-    makepkg -scCf --noconfirm &>> $log
+    makepkg -scCf --noconfirm --nocheck &>> $log
 
     update-repo -t $target
-    (yes yes || :) | sudo pacman -Scc
+    # (yes yes || :) | sudo pacman -Scc
     (yes yes || :) | sudo pacman -Sddy --overwrite "*" $pkgname # --config ${pacman_conf}
 }
 
@@ -323,17 +326,19 @@ start_time=$(date +%s)
 
 prepare
 
-for p in ${pkgs[@]}; do
-    echo "update keys for $p ..."
-    update_key $p &
-done
-
-wait
+# for p in ${pkgs[@]}; do
+#     echo "update keys for $p ..."
+#     update_key $p &
+# done
+# wait
 
 for p in ${pkgs[@]}; do
     echo "****************************************************************"
     echo "    building $p ..."
     echo "****************************************************************"
+    if [ $p != 'base' ]; then
+        update_key $p
+    fi
     build $p
 done
 

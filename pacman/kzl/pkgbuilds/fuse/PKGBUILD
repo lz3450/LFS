@@ -1,0 +1,47 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=fuse
+pkgver=3.10.5
+pkgrel=1
+epoch=1
+pkgdesc="an interface for userspace programs to export a filesystem to the Linux kernel"
+arch=('x86_64')
+url="https://github.com/libfuse/libfuse"
+license=('KZL')
+provides=(fuse fuse-common)
+conflicts=(fuse-common)
+replaces=(fuse-common)
+options=(!emptydirs)
+source=(git+https://github.com/libfuse/libfuse.git#tag=$pkgname-$pkgver?signed)
+sha256sums=('SKIP')
+validpgpkeys=('ED31791B2C5C1613AF388B8AD113FCAC3C4E599F')
+
+build() {
+  cd libfuse
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D examples=false \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd libfuse
+
+  meson test -C build
+}
+
+package() {
+  cd libfuse
+
+  meson install -C build --destdir="$pkgdir/"
+}

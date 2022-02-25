@@ -1,36 +1,36 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=perl
-pkgver=5.32.1
+pkgver=5.34.0
 pkgrel=1
 epoch=1
 pkgdesc="A highly capable, feature-rich programming language"
 arch=('x86_64')
 url="https://www.perl.org"
+license=('KZL')
 depends=(db gdbm libxcrypt)
 options=(!purge)
 source=(https://www.cpan.org/src/5.0/$pkgname-$pkgver.tar.xz)
-sha256sums=('57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309')
+sha256sums=('82c2e5e5c71b0e10487a80d79140469ab1f8056349ca8545140a224dbbed7ded')
 
 build() {
   cd $pkgname-$pkgver
 
   ./Configure -des \
     -Dprefix=/usr \
+    -Dcc=gcc \
+    -Doptimize="$CFLAGS -fPIC" \
+    -Dldflags="$LDFLAGS" \
+    -Duseshrplib \
+    -Dlddlflags="-shared $LDFLAGS" \
+    -Dusethreads \
+    -Dsiteprefix=/usr \
     -Dvendorprefix=/usr \
     -Dman1dir=/usr/share/man/man1 \
     -Dman3dir=/usr/share/man/man3 \
     -Dman1ext=1perl \
     -Dman3ext=3perl \
-    -Doptimize="$CFLAGS" \
-    -Dcccdlflags="-fPIC" \
-    -Dldflags="$LDFLAGS" \
-    -Dlddlflags="-shared $LDFLAGS" \
-    -Duseshrplib \
-    -Dusethreads \
-    -Dmyuname="kzl" \
-    -Dmyhostname="kzl-linux" \
-    -Dcf_time="`date -u --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}"`"
+    -Dinc_version_list=none
 
   make
 }
@@ -45,4 +45,5 @@ package() {
   cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir/" install
+  install -dm755 "$pkgdir"/usr/lib/perl5/vendor_perl
 }

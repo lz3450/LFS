@@ -7,6 +7,7 @@ epoch=1
 pkgdesc="A free library for arbitrary precision arithmetic"
 arch=('x86_64')
 url="https://gmplib.org"
+license=('KZL')
 source=($url/download/$pkgname/$pkgname-$pkgver.tar.lz{,.sig})
 sha256sums=('2c7f4f0d370801b2849c48c9ef3f59553b5f1d3791d070cffb04599f9fc67b41'
             'SKIP')

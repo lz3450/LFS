@@ -1,18 +1,19 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=kmod
-pkgver=28
+pkgver=29
 pkgrel=1
 epoch=1
 pkgdesc="Linux kernel module management tools and library"
 arch=('x86_64')
 url="https://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary"
+license=('KZL')
 depends=(openssl)
 source=(https://www.kernel.org/pub/linux/utils/kernel/$pkgname/$pkgname-$pkgver.tar.{xz,sign}
         depmod.script
         depmod.hook
         depmod-search.conf)
-sha256sums=('3969fc0f13daa98084256337081c442f8749310089e48aa695c9b4dfe1b3a26c'
+sha256sums=('0b80eea7aa184ac6fd20cafa2a1fdf290ffecc70869a797079e2cc5c6225a52a'
             'SKIP'
             '31699f1b8b33f1bd61111328375c10d75c587e49c4fee9b7778e664a9354e4b0'
             'c11c2a0f66ea405493e8617689ca10818dc81dd1dddc19bdb220c8b2917119c1'

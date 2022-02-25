@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=samba
-pkgver=4.14.6
+pkgver=4.15.5
 pkgrel=1
 epoch=1
 arch=('x86_64')
@@ -20,7 +20,7 @@ source=(https://www.samba.org/samba/ftp/stable/$pkgname-$pkgver.tar.{gz,asc}
         samba.logrotate
         samba.pam
         samba.tmpfiles)
-sha256sums=('86760692dd74a04705c0f6d11b31965a477265a50e79eb15838184476146f4b0'
+sha256sums=('69115e33831937ba5151be0247943147765aece658ba743f44741672ad68d17f'
             'SKIP'
             '0b570570ea49f82e6f9da47b1cce3b441859f52de105b54d4d79b873b924623f'
             'a3e28676e9f11136690f6d46ca15b1d548cec2e29db043206ab09582671dc2d5'
@@ -29,15 +29,14 @@ validpgpkeys=('81F5E2832BD2545A1897B713AA99442FB680B620')
 
 # TODO: cups ceph-libs
 
-prepare() {
-  cpan Parse::Yapp::Driver
-}
+# cpan Parse::Yapp::Driver
+# pip markdown
+# pip dnspython
 
 build() {
   cd $pkgname-$pkgver
 
   ./configure \
-    -v \
     --with-gpgme \
     --with-systemd \
     --with-ads \

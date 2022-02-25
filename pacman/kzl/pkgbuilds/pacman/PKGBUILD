@@ -11,7 +11,7 @@ depends=(archlinux-keyring curl gpgme libarchive pacman-mirrorlist)
 # checkdepends=(fakechroot)
 backup=(etc/pacman.conf
         etc/makepkg.conf)
-source=(https://sources.archlinux.org/other/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
+source=(https://sources.archlinux.org/other/pacman/$pkgname-$pkgver.tar.xz{,.sig})
 sha256sums=('0db61456e56aa49e260e891c0b025be210319e62b15521f29d3e93b00d3bf731'
             'SKIP')
 validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD')
@@ -43,7 +43,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  meson test -C build || warning "Check failed."
+  meson test -C build
 }
 
 package() {

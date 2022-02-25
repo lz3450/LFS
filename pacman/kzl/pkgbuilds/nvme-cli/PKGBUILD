@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=nvme-cli
+pkgver=1.16
+pkgrel=1
+epoch=1
+pkgdesc="NVM-Express user space tooling for Linux"
+arch=('x86_64')
+url="https://github.com/linux-nvme/nvme-cli"
+license=('KZL')
+install=$pkgname.install
+source=(https://github.com/linux-nvme/${pkgname}/archive/v${pkgver}.tar.gz
+        $pkgname.install)
+sha256sums=('40f741020ab5c490374901cd2c0c9b6cf98dd5ff5f182517a0aec12c0e9aef55'
+            'cd5fb322b72f70cac28c8d8a6048717b644d575482d622abe641b7b3e26f82ce')
+
+build() {
+  cd $pkgname-$pkgver
+
+  make PREFIX=/usr
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make test
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" PREFIX=/usr SBINDIR=/usr/bin UDEVDIR=/usr/lib/udev install-spec
+	rm "$pkgdir"/etc/nvme/host{nqn,id}
+}

@@ -1,16 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=shared-mime-info
-pkgver=2.0+57+gc1d1c70
+pkgver=2.0+132+g46c2abe
 pkgrel=1
 epoch=1
 pkgdesc="Freedesktop.org Shared MIME Info"
 arch=('x86_64')
 url="https://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec/"
+license=('KZL')
 depends=(glib2 libxml2)
 makedepends=(docbook itstool xmlto)
-source=(git+https://gitlab.freedesktop.org/xdg/shared-mime-info.git#commit=c1d1c70684dac11ce6c14a5089b5cb0b64a7dc27
-        git+https://gitlab.freedesktop.org/xdg/xdgmime.git#commit=de283fc430460b9b3a7e61432a6d273cd64cb10
+source=(git+https://gitlab.freedesktop.org/xdg/shared-mime-info.git#commit=46c2abe8fce53f979bcf1dd4724012aba1a05f89
+        git+https://gitlab.freedesktop.org/xdg/xdgmime.git#commit=92f6a09fda2b23c2ab95cede8eb0612ca96bd0f7
         update-mime-database.hook)
 sha256sums=('SKIP'
             'SKIP'
@@ -25,7 +26,7 @@ pkgver() {
 prepare() {
   cd xdgmime
 
-  CFLAGS= make 
+  make CC=gcc CFLAGS=""
 }
 
 build() {
@@ -50,7 +51,7 @@ build() {
 check() {
   cd $pkgname
 
-  meson test -C build --print-errorlogs || warning "Check failed."
+  meson test -C build --print-errorlogs
 }
 
 package() {

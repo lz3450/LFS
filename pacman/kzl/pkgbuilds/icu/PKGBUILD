@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=icu
-pkgver=69.1
+pkgver=70.1
 pkgrel=1
 epoch=1
 pkgdesc="International Components for Unicode library"
@@ -9,7 +9,7 @@ arch=('x86_64')
 url="http://site.icu-project.org/home"
 license=('KZL')
 source=(https://github.com/unicode-org/icu/releases/download/release-${pkgver//./-}/${pkgname}4c-${pkgver//./_}-src.tgz)
-sha256sums=('4cba7b7acd1d3c42c44bb0c14be6637098c7faf2b330ce876bc5f3b915d09745')
+sha256sums=('8d205428c17bf13bb535300669ed28b338a157b1c01ae66d31d0d3e2d47c3fd5')
 
 build() {
   cd $pkgname/source
@@ -26,7 +26,7 @@ build() {
 check() {
   cd $pkgname/source
 
-  make -k check || warning "Check failed."
+  make -k check
 }
 
 package() {

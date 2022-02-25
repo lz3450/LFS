@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gnupg
-pkgver=2.2.27
+pkgver=2.3.4
 pkgrel=1
 epoch=1
 pkgdesc="Complete and free implementation of the OpenPGP standard"
 arch=('x86_64')
 url="https://www.gnupg.org/"
+license=('KZL')
 depends=(gnutls libassuan libgcrypt libgpg-error libksba npth pinentry sqlite)
 makedepends=(libusb-compat libldap pcsclite)
 optdepends=("libusb-compat: scdaemon"
@@ -14,10 +15,10 @@ optdepends=("libusb-compat: scdaemon"
             "pcsclite: scdaemon")
 checkdepends=(openssh)
 install=$pkgname.install
-source=(https://gnupg.org/ftp/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('34e60009014ea16402069136e0a5f63d9b65f90096244975db5cea74b3d02399'
+source=(https://gnupg.org/ftp/gcrypt/gnupg/$pkgname-$pkgver.tar.bz2{,.sig})
+sha256sums=('f3468ecafb1d7f9ad7b51fd1db7aebf17ceb89d2efa8a05cf2f39b4d405402ae'
             'SKIP')
-validpgpkeys=('6DAA6E64A76D2840571B4902528897B826403ADA')
+validpgpkeys=('AC8E115BF73E2D8D47FA9908E98E9B2D19C6C8BD')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -50,7 +51,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

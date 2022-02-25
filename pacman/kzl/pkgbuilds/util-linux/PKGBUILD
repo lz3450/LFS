@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=util-linux
-pkgver=2.36
-pkgrel=2
+pkgver=2.37
+pkgrel=4
 epoch=1
 pkgdesc="Miscellaneous system utilities for Linux"
 arch=('x86_64')
 url="https://github.com/karelzak/util-linux"
+license=('KZL')
 depends=(coreutils libcap-ng libxcrypt pam shadow)
 optdepends=("words: default dictionary for look")
 provides=(util-linux-libs libutil-linux libblkid.so libfdisk.so libmount.so libsmartcols.so libuuid.so)
@@ -14,17 +15,17 @@ conflicts=(util-linux-libs libutil-linux)
 replaces=(util-linux-libs libutil-linux)
 backup=(etc/pam.d/{chfn,chsh,login,runuser,runuser-l,su,su-l})
 source=(https://www.kernel.org/pub/linux/utils/util-linux/v$pkgver/$pkgname-$pkgver.$pkgrel.tar.{xz,sign}
-        60-rfkill.rules
         pam-{login,common,runuser,su}
+        60-rfkill.rules
         rfkill-block@.service
         rfkill-unblock@.service)
-sha256sums=('f7516ba9d8689343594356f0e5e1a5f0da34adfbc89023437735872bb5024c5f'
+sha256sums=('634e6916ad913366c3536b6468e7844769549b99a7b2bf80314de78ab5655b83'
             'SKIP'
+            '85255982acb2aaab77c1b448b2015b44742b78b292cf0414a8e82ced5b0a0578'
+            'edb8d49134df02aeff67b1d81bfd18e838b2a81cf0ca684c6def36663fb9619c'
+            '1f84a596d27f32a08ffa653e8e66efff4594be8c87b43c34905aa63ac6abf3e7'
+            'c2fb26c4811d88bc670decc8f76465bdf7cbb618ba75039cbaa8fdb24e69187c'
             '7423aaaa09fee7f47baa83df9ea6fef525ff9aec395c8cbd9fe848ceb2643f37'
-            'd1c465f449dc2464d15502dc501fc922f037cef65a9e2e5f81c1e0b782b783cf'
-            '4902920671abb084ab6301302c62718fe22cdb38563f5f95771d54ac7aa70385'
-            '3db80878d889e3321199793c1fe799af72f0a5470787afded05aec485c18376c'
-            '5099e99bb656079136bc82c841a7fdbd211dad93bfe4fd707090620dac13aafb'
             'a22e0a037e702170c7d88460cc9c9c2ab1d3e5c54a6985cd4a164ea7beff1b36'
             '8ccec10a22523f6b9d55e0d6cbf91905a39881446710aa083e935e8073323376')
 validpgpkeys=('B0C64D14301CC6EFAEDF60E4E4B71D5EEC39C284')
@@ -38,7 +39,6 @@ build() {
     --sbindir=/usr/bin \
     --localstatedir=/var \
     --libdir=/usr/lib \
-    --disable-hardlink \
     --enable-mesg \
     --enable-raw \
     --enable-vipw \
@@ -58,17 +58,17 @@ package() {
   make DESTDIR="$pkgdir/" usrsbin_execdir=/usr/bin install
 
   # setuid chfn, chsh and newgrp
-  chmod 4755 "$pkgdir"/usr/bin/{ch{sh,fn},newgrp}
+  chmod 4755 "$pkgdir"/usr/bin/{ch{fn,sh},newgrp}
 
   # install PAM files for login-utils
   install -dm755 "$pkgdir"/etc/pam.d
-  install -m644 "$srcdir"/pam-common "$pkgdir"/etc/pam.d/chfn
-  install -m644 "$srcdir"/pam-common "$pkgdir"/etc/pam.d/chsh
-  install -m644 "$srcdir"/pam-login "$pkgdir"/etc/pam.d/login
-  install -m644 "$srcdir"/pam-runuser "$pkgdir"/etc/pam.d/runuser
-  install -m644 "$srcdir"/pam-runuser "$pkgdir"/etc/pam.d/runuser-l
-  install -m644 "$srcdir"/pam-su "$pkgdir"/etc/pam.d/su
-  install -m644 "$srcdir"/pam-su "$pkgdir"/etc/pam.d/su-l
+  install -Dm644 "$srcdir"/pam-common "$pkgdir"/etc/pam.d/chfn
+  install -Dm644 "$srcdir"/pam-common "$pkgdir"/etc/pam.d/chsh
+  install -Dm644 "$srcdir"/pam-login "$pkgdir"/etc/pam.d/login
+  install -Dm644 "$srcdir"/pam-runuser "$pkgdir"/etc/pam.d/runuser
+  install -Dm644 "$srcdir"/pam-runuser "$pkgdir"/etc/pam.d/runuser-l
+  install -Dm644 "$srcdir"/pam-su "$pkgdir"/etc/pam.d/su
+  install -Dm644 "$srcdir"/pam-su "$pkgdir"/etc/pam.d/su-l
 
   # install systemd-sysusers
   echo 'u uuidd 68\ng rfkill - - -' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/util-linux.conf

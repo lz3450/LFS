@@ -1,15 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cryptsetup
-pkgver=2.3.4
+pkgver=2.4.3
 pkgrel=1
 epoch=1
 pkgdesc="Userspace setup tool for transparent encryption of block devices using dm-crypt"
 arch=('x86_64')
 url="https://gitlab.com/cryptsetup/cryptsetup/"
+license=('KZL')
 depends=(argon2 device-mapper json-c libgcrypt openssl popt)
 source=(https://www.kernel.org/pub/linux/utils/cryptsetup/v${pkgver%.*}/$pkgname-$pkgver.tar.{xz,sign})
-sha256sums=('9d16eebb96b53b514778e813019b8dd15fea9fec5aafde9fae5febf59df83773'
+sha256sums=('fc0df945188172264ec5bf1d0bda08264fadc8a3f856d47eba91f31fe354b507'
             'SKIP')
 validpgpkeys=('2A2918243FDE46648D0686F9D9B0577BD93E98FC')
 

@@ -7,10 +7,10 @@ epoch=1
 pkgdesc="An event notification library"
 arch=('x86_64')
 url="https://libevent.org/"
+license=('KZL')
 depends=(openssl)
-source=(git+https://github.com/libevent/libevent.git#commit=61fc2bf2e9719eb7ca9c56b6e186df2f79f05de7?signed)
+source=(git+https://github.com/libevent/libevent.git#commit=61fc2bf2e9719eb7ca9c56b6e186df2f79f05de7)
 sha256sums=('SKIP')
-validpgpkeys=('5DE3E0509C47EA3CF04A42D34AEE18F83AFDEB23')
 
 build() {
   cd $pkgname
@@ -29,7 +29,7 @@ build() {
 check() {
   cd $pkgname
 
-  cmake --build build --target test || warning "Check failed."
+  cmake --build build --target test
 }
 
 package() {

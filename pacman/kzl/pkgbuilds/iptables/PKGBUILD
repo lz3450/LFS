@@ -3,10 +3,11 @@
 pkgname=iptables
 pkgver=1.8.7
 pkgrel=1
-epoch=1
+epoch=2
 pkgdesc="Linux kernel packet control tool"
 arch=('x86_64')
 url="https://www.netfilter.org/projects/iptables/index.html"
+license=('KZL')
 depends=(libnetfilter_conntrack libnfnetlink libnftnl libpcap)
 provides=(iptables-nft)
 conflicts=(iptables-nft)

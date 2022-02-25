@@ -1,17 +1,18 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cmake
-pkgver=3.21.4
+pkgver=3.22.2
 pkgrel=1
 epoch=1
 pkgdesc="A cross-platform open-source make system"
 arch=('x86_64')
 url="https://www.cmake.org/"
+license=('KZL')
 depends=(curl jsoncpp libarchive libuv rhash shared-mime-info)
 # makedepends=(qt5)
 # optdepends=("qt5: cmake-gui")
 source=(https://www.cmake.org/files/v${pkgver%.*}/$pkgname-$pkgver.tar.gz)
-sha256sums=('d9570a95c215f4c9886dd0f0564ca4ef8d18c30750f157238ea12669c2985978')
+sha256sums=('3c1c478b9650b107d452c5bd545c72e2fad4e37c09b89a1984b9a2f46df6aced')
 
 # TODO: --qt-gui
 

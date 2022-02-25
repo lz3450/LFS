@@ -1,17 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=attr
-pkgver=2.4.48
+pkgver=2.5.1
 pkgrel=1
 epoch=1
 pkgdesc="Extended attribute support library for ACL support"
 arch=('x86_64')
 url="https://savannah.nongnu.org/projects/attr"
 source=(https://download.savannah.gnu.org/releases/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('5ead72b358ec709ed00bbf7a9eaef1654baad937c001c044fe8b74c57f5324e7'
+sha256sums=('bae1c6949b258a0d68001367ce0c741cebdacdd3b62965d17e5eb23cd78adaf8'
             'SKIP')
-validpgpkeys=('600CD204FBCEA418BD2CA74F154343260542DF34'
-              'B902B5271325F892AC251AD441633B9FE837F581')
+validpgpkeys=('259B3792B3D6D319212CC4DCD5BF9FEB0313653A')
 
 build() {
   cd $pkgname-$pkgver

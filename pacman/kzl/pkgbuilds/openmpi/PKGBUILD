@@ -1,17 +1,18 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openmpi
-pkgver=4.0.5
+pkgver=4.1.2
 pkgrel=1
 epoch=1
 pkgdesc="High performance message passing library (MPI)"
 arch=('x86_64')
 url="https://www.open-mpi.org"
+license=('KZL')
 depends=(hwloc libnl openssh)
 makedepends=(valgrind)
 options=(staticlibs)
 source=(https://www.open-mpi.org/software/ompi/v${pkgver%.*}/downloads/$pkgname-$pkgver.tar.bz2)
-sha256sums=('c58f3863b61d944231077f344fe6b4b8fbb83f3d1bc93ab74640bf3e5acac009')
+sha256sums=('9b78c7cf7fc32131c5cf43dd2ab9740149d9d87cadb2e2189f02685749a6b527')
 
 build() {
   cd $pkgname-$pkgver
@@ -37,7 +38,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

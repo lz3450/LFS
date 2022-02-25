@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openssh
-pkgver=8.6
+pkgver=8.8
 pkgrel=1
 epoch=1
 arch=('x86_64')
@@ -15,12 +15,12 @@ optdepends=("libfido2: U2F/FIDO support"
 backup=(etc/ssh/ssh_config
         etc/ssh/sshd_config
         etc/pam.d/sshd)
-source=(https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-$pkgverp$pkgrel.tar.gz{,.asc}
+source=(https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-${pkgver}p${pkgrel}.tar.gz{,.asc}
         sshd.conf
         sshd.pam
         sshd.service
         sshdgenkeys.service)
-sha256sums=('c3e6e4da1621762c850d03b47eed1e48dff4cc9608ddeb547202a234df8ed7ae'
+sha256sums=('4590890ea9bb9ace4f71ae331785a3a5823232435161960ed5fc86588f331fe9'
             'SKIP'
             '4effac1186cc62617f44385415103021f72f674f8b8e26447fc1139c670090f6'
             'd447e0d52f12b8b186e6864749d594746966ac997767e8af300190d1fbb74eaf'
@@ -28,10 +28,10 @@ sha256sums=('c3e6e4da1621762c850d03b47eed1e48dff4cc9608ddeb547202a234df8ed7ae'
             '4031577db6416fcbaacf8a26a024ecd3939e5c10fe6a86ee3f0eea5093d533b7')
 validpgpkeys=('7168B983815A5EEF59A4ADFD2A3F414E736060BA')
 
-# TODO: libfido2 (--disable-security-key --without-security-key-builtin)
+# TODO: libfido2 (--enable-security-key --with-security-key-builtin)
 
 build() {
-  cd $pkgname-$pkgverp$pkgrel
+  cd $pkgname-${pkgver}p${pkgrel}
 
   ./configure \
     --prefix=/usr \
@@ -55,7 +55,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgverp$pkgrel
+  cd $pkgname-${pkgver}p${pkgrel}
 
   make DESTDIR="$pkgdir/" install
 
@@ -69,7 +69,7 @@ package() {
   install -Dm644 contrib/ssh-copy-id.1 "$pkgdir"/usr/share/man/man1/ssh-copy-id.1
 
 	sed -e '/^#ChallengeResponseAuthentication yes$/c ChallengeResponseAuthentication no' \
-      -e '/^#PrintMotd yes$/c PrintMotd no # pam does that' \
+      -e '/^#PrintMotd yes$/c PrintMotd no' \
       -e '/^#UsePAM no$/c UsePAM yes' \
       -i "$pkgdir"/etc/ssh/sshd_config
 }

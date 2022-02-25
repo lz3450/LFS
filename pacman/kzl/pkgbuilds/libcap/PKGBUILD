@@ -1,15 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libcap
-pkgver=2.48
+pkgver=2.63
 pkgrel=1
 epoch=1
 pkgdesc="POSIX 1003.1e capabilities"
 arch=('x86_64')
 url="https://sites.google.com/site/fullycapable/"
+license=('KZL')
 provides=(libcap.so)
 source=(https://kernel.org/pub/linux/libs/security/linux-privs/libcap2/$pkgname-$pkgver.tar.{xz,sign})
-sha256sums=('4de9590ee09a87c282d558737ffb5b6175ccbfd26d580add10df44d0f047f6c2'
+sha256sums=('0c637b8f44fc7d8627787e9cf57f15ac06c1ddccb53e41feec5496be3466f77f'
             'SKIP')
 validpgpkeys=('38A644698C69787344E954CE29EE848AE2CCF3F4')
 
@@ -30,7 +31,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make test || warning "Check failed."
+  make test
 }
 
 package() {

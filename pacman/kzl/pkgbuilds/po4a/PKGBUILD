@@ -1,22 +1,21 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=po4a
-pkgver=0.62
+pkgver=0.66
 pkgrel=1
 epoch=1
 pkgdesc="Tools for helping translation of documentation"
 arch=('any')
 url="https://po4a.org/"
+license=('KZL')
 source=(https://github.com/mquinson/$pkgname/archive/v$pkgver.tar.gz)
-sha256sums=('ef8ea68ceafd810a70c6d2aead57268375542a61d9b7c36ddd2550c9b8708430')
+sha256sums=('8ae65c69b3a3e3911c449284aa9f07c80b74484fd211f6e2a7e6b57e09f3afd8')
 
-prepare() {
-  cpan Module::Build
-  cpan Unicode::LineBreak 
-  cpan YAML::Tiny
-  cpan Locale::gettext
-  cpan Pod::Parser
-}
+# cpan Module::Build
+# cpan Unicode::LineBreak
+# cpan YAML::Tiny
+# cpan Locale::gettext
+# cpan Pod::Parser
 
 build() {
   cd $pkgname-$pkgver

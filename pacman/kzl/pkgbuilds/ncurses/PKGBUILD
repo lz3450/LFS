@@ -7,7 +7,7 @@ epoch=1
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('x86_64')
 url="https://invisible-island.net/ncurses/ncurses.html"
-source=(https://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
+source=(https://ftp.gnu.org/pub/gnu/ncurses/$pkgname-$pkgver.tar.gz{,.sig})
 sha256sums=('30306e0c76e0f9f1f0de987cf1c82a5c21e1ce6568b9227f7da5b71cbea86c9d'
             'SKIP')
 validpgpkeys=('C52048C0C0748FEE227D47A2702353E0F7E48EDB')
@@ -19,6 +19,7 @@ build() {
     --prefix=/usr \
     --mandir=/usr/share/man \
     --without-ada \
+    --with-cxx \
     --with-cxx-binding \
     --with-pkg-config-libdir=/usr/lib/pkgconfig \
     --enable-pc-files \
@@ -26,6 +27,7 @@ build() {
     --with-normal \
     --without-debug \
     --with-cxx-shared \
+    --with-versioned-syms \
     --enable-widec \
     --with-manpage-format=normal
 
@@ -39,13 +41,16 @@ package() {
 
   # trick packages looking to link to non-wide-character ncurses libraries by means of symlinks and linker scripts
   for lib in ncurses ncurses++ form panel menu; do
-    echo "INPUT(-l${lib}w)" > "$pkgdir"/usr/lib/lib${lib}.so
-    ln -s ${lib}w.pc "$pkgdir"/usr/lib/pkgconfig/${lib}.pc
+    printf "INPUT(-l%sw)\n" "${lib}" > "$pkgdir/usr/lib/lib${lib}.so"
+    ln -sv ${lib}w.pc "$pkgdir/usr/lib/pkgconfig/${lib}.pc"
   done
 
+  printf 'INPUT(-lncursesw)\n' > "$pkgdir/usr/lib/libcursesw.so"
+  ln -sv libncurses.so "$pkgdir/usr/lib/libcurses.so"
+
   for lib in tic tinfo; do
-    echo "INPUT(libncursesw.so.${pkgver:0:1})" > "$pkgdir"/usr/lib/lib${lib}.so
-    ln -s libncursesw.so.${pkgver:0:1} "$pkgdir"/usr/lib/lib${lib}.so.${pkgver:0:1}
-    ln -s ncursesw.pc "$pkgdir"/usr/lib/pkgconfig/${lib}.pc
+    printf "INPUT(libncursesw.so.%s)\n" "${pkgver:0:1}" > "$pkgdir/usr/lib/lib${lib}.so"
+    ln -sv libncursesw.so.${pkgver:0:1} "$pkgdir/usr/lib/lib${lib}.so.${pkgver:0:1}"
+    ln -sv ncursesw.pc "$pkgdir/usr/lib/pkgconfig/${lib}.pc"
   done
 }

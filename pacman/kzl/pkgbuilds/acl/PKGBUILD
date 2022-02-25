@@ -1,17 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=acl
-pkgver=2.2.53
+pkgver=2.3.1
 pkgrel=1
 epoch=1
 pkgdesc="Access control list utilities, libraries and headers"
 arch=('x86_64')
 url="https://savannah.nongnu.org/projects/acl/"
 depends=(attr)
-source=(https://download.savannah.gnu.org/releases/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('06be9865c6f418d851ff4494e12406568353b891ffe1f596b34693c387af26c7'
+source=(https://download.savannah.gnu.org/releases/acl/$pkgname-$pkgver.tar.gz{,.sig})
+sha256sums=('760c61c68901b37fdd5eefeeaf4c0c7a26bdfdd8ac747a1edff1ce0e243c11af'
             'SKIP')
-validpgpkeys=('B902B5271325F892AC251AD441633B9FE837F581')
+validpgpkeys=('259B3792B3D6D319212CC4DCD5BF9FEB0313653A')
 
 build() {
   cd $pkgname-$pkgver
@@ -20,6 +20,8 @@ build() {
     --prefix=/usr \
     --libdir=/usr/lib \
     --libexecdir=/usr/lib
+
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
   make
 }

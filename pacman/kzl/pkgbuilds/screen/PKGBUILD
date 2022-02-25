@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=screen
-pkgver=4.8.0
+pkgver=4.9.0
 pkgrel=1
 epoch=1
 pkgdesc="Full-screen window manager that multiplexes a physical terminal"
@@ -11,17 +11,23 @@ license=('KZL')
 backup=(etc/screenrc
         etc/pam.d/screen)
 source=(https://ftp.gnu.org/gnu/screen/$pkgname-$pkgver.tar.gz{,.sig}
-        pam.d
-        tmpfiles.d)
-sha256sums=('6e11b13d8489925fde25dfb0935bf6ed71f9eb47eff233a181e078fde5655aa1'
+        pam
+        tmpfiles)
+sha256sums=('f9335281bb4d1538ed078df78a20c2f39d3af9a4e91c57d084271e0289c730f4'
             'SKIP'
-            '971c25929ea97422c09e10679ab98e9e6c59295aae1a4a9970909d2206e23090'
+            '9573753d2da9e88cfa00f95f1df67b515b855746aea452fd3d4bda805bdb37db'
             '1f33ce4faca7bd05dd80403411af31e682d5d23e79558e884ae5a35f1dd96223')
-validpgpkeys=('2EE59A5D0C50167B5535BBF1B708A383C53EF3A4')
+validpgpkeys=('B4560FD8C9F2DE3BE308EBA3933AD21886F69FBF')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  NOCONFIGURE=1 ./autogen.sh
+}
 
 build() {
   cd $pkgname-$pkgver
-  
+
   ./configure \
 		--prefix=/usr \
 		--enable-pam \
@@ -43,6 +49,6 @@ package() {
 	install -Dm644 etc/etcscreenrc "$pkgdir"/etc/screenrc
 	install -Dm644 etc/screenrc "$pkgdir"/etc/skel/.screenrc
 
-  install -Dm644 "$srcdir"/pam.d "$pkgdir"/etc/pam.d/screen
-	install -Dm644 "$srcdir"/tmpfiles.d "$pkgdir"/usr/lib/tmpfiles.d/screen.conf
+  install -Dm644 "$srcdir"/pam "$pkgdir"/etc/pam.d/screen
+	install -Dm644 "$srcdir"/tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/screen.conf
 }

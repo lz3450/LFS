@@ -1,15 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=jansson
-pkgver=2.13.1
+pkgver=2.14
 pkgrel=1
 epoch=1
 pkgdesc="'C library for encoding, decoding and manipulating JSON data"
 arch=('x86_64')
 url="https://www.digip.org/jansson/"
+license=('KZL')
 options=(staticlibs)
-source=(https://www.digip.org/jansson/releases/$pkgname-$pkgver.tar.bz2{,.asc})
-sha256sums=('ee90a0f879d2b7b7159124ff22b937a2a9a8c36d3bb65d1da7dd3f04370a10bd'
+source=(https://github.com/akheron/jansson/releases/download/v$pkgver/$pkgname-$pkgver.tar.bz2{,.asc})
+sha256sums=('fba956f27c6ae56ce6dfd52fbf9d20254aad42821f74fa52f83957625294afb9'
             'SKIP')
 validpgpkeys=('B5D6953E6D5059ED7ADA0F2FD3657D24D058434C')
 

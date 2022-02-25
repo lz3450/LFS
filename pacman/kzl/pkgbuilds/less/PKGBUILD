@@ -1,16 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=less
-pkgver=563
+pkgver=590
 pkgrel=1
-epoch=1
+epoch=2
 pkgdesc="A terminal based program for viewing text files"
 arch=('x86_64')
 url="http://www.greenwoodsoftware.com/less"
+license=('KZL')
 depends=(pcre)
 source=($url/$pkgname-$pkgver.tar.gz
         $pkgname-$pkgver.tar.gz.sig::$url/$pkgname-$pkgver.sig)
-sha256sums=('ce5b6d2b9fc4442d7a07c93ab128d2dff2ce09a1d4f2d055b95cf28dd0dc9a9a'
+sha256sums=('6aadf54be8bf57d0e2999a3c5d67b1de63808bb90deb8f77b028eafae3a08e10'
             'SKIP')
 validpgpkeys=('AE27252BD6846E7D6EAE1DD6F153A7C833235259')
 

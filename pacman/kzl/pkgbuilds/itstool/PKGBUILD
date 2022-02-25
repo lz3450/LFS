@@ -1,15 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=itstool
-pkgver=2.0.6
+pkgver=2.0.7
 pkgrel=1
-epoch=1
+epoch=2
 pkgdesc="XML to PO and back again"
 arch=('x86_64')
 url="http://itstool.org"
+license=('KZL')
 depends=(libxml2)
 source=(http://files.itstool.org/itstool/$pkgname-$pkgver.tar.bz2)
-sha256sums=('6233cc22726a9a5a83664bf67d1af79549a298c23185d926c3677afa917b92a9')
+sha256sums=('6b9a7cd29a12bb95598f5750e8763cee78836a1a207f85b74d8b3275b27e87ca')
 
 build() {
   cd $pkgname-$pkgver
@@ -23,7 +24,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

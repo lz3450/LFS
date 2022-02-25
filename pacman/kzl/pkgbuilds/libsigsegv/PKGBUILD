@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libsigsegv
-pkgver=2.13
+pkgver=2.14
 pkgrel=1
 epoch=1
 arch=('x86_64')
 pkgdesc="Page fault detection library"
 url="https://www.gnu.org/software/libsigsegv/"
+license=('KZL')
 source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('be78ee4176b05f7c75ff03298d84874db90f4b6c9d5503f0da1226b3a3c48119'
+sha256sums=('cdac3941803364cf81a908499beb79c200ead60b6b5b40cad124fd1e06caa295'
             'SKIP')
 validpgpkeys=('9001B85AF9E1B83DF1BDA942F5BE8B267C6A406D')
 
@@ -25,7 +26,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

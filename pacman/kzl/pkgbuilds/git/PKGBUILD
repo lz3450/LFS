@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=git
-pkgver=2.32.0
+pkgver=2.35.1
 pkgrel=1
 epoch=1
 arch=('x86_64')
@@ -9,18 +9,19 @@ url="https://git-scm.com/"
 license=('KZL')
 depends=(curl expat openssl pcre2)
 makedepends=(xmlto)
-# makedepends=(asciidoc xmlto)
 # optdepends=("tk: gitk and git gui"
 #             "libsecret: libsecret credential helper")
 install=$pkgname.install
 source=(https://www.kernel.org/pub/software/scm/$pkgname/$pkgname-$pkgver.tar.{xz,sign}
         git-daemon.socket
         git-daemon@.service)
-sha256sums=('68a841da3c4389847ecd3301c25eb7e4a51d07edf5f0168615ad6179e3a83623'
+sha256sums=('d768528e6443f65a203036266f1ca50f9d127ba89751e32ead37117ed9191080'
             'SKIP'
             'ac4c90d62c44926e6d30d18d97767efc901076d4e0283ed812a349aece72f203'
             '14c0b67cfe116b430645c19d8c4759419657e6809dfa28f438c33a005245ad91')
 validpgpkeys=('96E07AF25771955980DAD10020D04E5A713660A7')
+
+# pip asciidoc
 
 _make_paths=(
   prefix="/usr"
@@ -64,7 +65,7 @@ check() {
     DEFAULT_TEST_TARGET=prove \
     GIT_PROVE_OPTS=" -Q" \
     GIT_TEST_OPTS="--root=/dev/shm/git-test" \
-    test || warning "Check failed."
+    test
 }
 
 package() {
@@ -74,7 +75,7 @@ package() {
     "${_make_paths[@]}" \
     "${_make_options[@]}" \
     DESTDIR="$pkgdir/" \
-    install
+    install install-man
   
   # sysusers
   echo 'u git - "git daemon user" / /usr/bin/git-shell' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/git.conf

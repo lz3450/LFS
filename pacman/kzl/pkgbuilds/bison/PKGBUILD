@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=bison
-pkgver=3.7.5
+pkgver=3.8.2
 pkgrel=1
 epoch=1
 pkgdesc="The GNU general-purpose parser generator"
 arch=('x86_64')
 url="https://www.gnu.org/software/bison/bison.html"
+license=('KZL')
 source=(https://ftp.gnu.org/gnu/bison/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('e8c53bc5bc396d636622d0f25e31ca92fd53f00b09629f13ef540d564a6b31ab'
+sha256sums=('9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2'
             'SKIP')
 validpgpkeys=('7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E')
 
@@ -25,7 +26,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

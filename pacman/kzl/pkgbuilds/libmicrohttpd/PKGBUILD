@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libmicrohttpd
-pkgver=0.9.72
+pkgver=0.9.75
 pkgrel=1
 epoch=1
 pkgdesc="A small C library that is supposed to make it easy to run an HTTP server as part of another application"
@@ -10,7 +10,7 @@ url="https://www.gnu.org/software/libmicrohttpd/"
 depends=(gnutls)
 checkdepends=(curl)
 source=(https://ftp.gnu.org/gnu/libmicrohttpd/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('0ae825f8e0d7f41201fd44a0df1cf454c1cb0bc50fe9d59c26552260264c2ff8'
+sha256sums=('9278907a6f571b391aab9644fd646a5108ed97311ec66f6359cebbedb0a4e3bb'
             'SKIP')
 validpgpkeys=('EA812DBEFA5A7EF17DA8F2C1460A317C3326D2AE'
               'D8423BCB326C7907033929C7939E6BE1E29FC3CC')

@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=zsh-autosuggestions
-pkgver=0.6.4
+pkgver=0.7.0
 pkgrel=1
 epoch=1
 pkgdesc="Fish-like autosuggestions for zsh"
 arch=('any')
 url="https://github.com/zsh-users/zsh-autosuggestions"
+license=('KZL')
 depends=(zsh)
 source=(git+https://github.com/zsh-users/zsh-autosuggestions.git#tag=v$pkgver)
 sha256sums=('SKIP')

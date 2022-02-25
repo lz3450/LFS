@@ -1,25 +1,27 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=archiso
-pkgver=58
-pkgrel=2
+pkgver=61
+pkgrel=1
 epoch=1
 pkgdesc="Tools for creating Arch Linux live and install iso images"
 arch=('any')
 url="https://gitlab.archlinux.org/archlinux/archiso"
 license=('KZL')
-depends=(arch-install-scripts erofs-utils libisoburn squashfs-tools)
-optdepends=()
+depends=(arch-install-scripts erofs-utils libisoburn mtools squashfs-tools)
+optdepends=("edk2-ovmf: for emulating UEFI with run_archiso"
+            "openssl: for codesigning support when building netboot artifacts"
+            "qemu: for run_archiso")
 checkdepends=()
 source=(git+https://gitlab.archlinux.org/archlinux/archiso.git#tag=v${pkgver}?signed)
 sha256sums=('SKIP')
 validpgpkeys=('C7E7849466FE2358343588377258734B41C31549')
 
-# check() {
-#   cd $pkgname
+check() {
+  cd $pkgname
 
-#   make -k check || warning "Check failed."
-# }
+  make -k check
+}
 
 package() {
   cd $pkgname

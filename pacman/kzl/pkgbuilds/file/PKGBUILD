@@ -1,15 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=file
-pkgver=5.39
+pkgver=5.41
 pkgrel=1
 epoch=1
 pkgdesc="File type identification utility"
 arch=('x86_64')
 url="https://www.darwinsys.com/file/"
+license=('KZL')
 depends=(libseccomp)
 source=(ftp://ftp.astron.com/pub/$pkgname/$pkgname-$pkgver.tar.gz{,.asc})
-sha256sums=('f05d286a76d9556243d0cb05814929c2ecf3a5ba07963f8f70bfaaa70517fad1'
+sha256sums=('13e532c7b364f7d57e23dfeea3147103150cb90593a57af86c10e4f6e411603f'
             'SKIP')
 validpgpkeys=('BE04995BA8F90ED0C0C176C471112AB16CB33B3A')
 
@@ -30,7 +31,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

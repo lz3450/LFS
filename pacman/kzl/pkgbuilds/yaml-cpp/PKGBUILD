@@ -1,0 +1,56 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=yaml-cpp
+pkgver=0.7.0
+pkgrel=1
+epoch=1
+pkgdesc="YAML parser and emitter in C++, written around the YAML 1.2 spec"
+arch=('x86_64')
+url="https://github.com/jbeder/yaml-cpp"
+license=('KZL')
+source=(https://github.com/jbeder/yaml-cpp/archive/$pkgname-$pkgver.tar.gz
+        https://patch-diff.githubusercontent.com/raw/jbeder/yaml-cpp/pull/1037.patch)
+sha256sums=('43e6a9fcb146ad871515f0d0873947e5d497a1c9c60c58cb102a97b47208b7c3'
+            'ddc6769f46355d00515954bb2ece02c590c8f9c618ed418ca865d7c1eb9b76b1')
+
+prepare() {
+  cd $pkgname-$pkgname-$pkgver
+
+  patch -Np1 -i "$srcdir"/1037.patch
+}
+
+build() {
+  cd $pkgname-$pkgname-$pkgver
+
+  cmake \
+    -S . \
+    -B build \
+    -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DBUILD_SHARED_LIBS=ON \
+    -DYAML_BUILD_SHARED_LIBS=ON
+
+  ninja -C build
+}
+
+check() {
+  cd $pkgname-$pkgname-$pkgver
+
+  ninja -C build test
+  build/test/yaml-cpp-tests
+}
+
+package() {
+  cd $pkgname-$pkgname-$pkgver
+
+  DESTDIR="$pkgdir" ninja -C build install
+
+  rm -rf "$pkgdir"/usr/{lib,lib/pkgconfig,include}/*{gtest,gmock}*
+  rm -rf "$pkgdir"/usr/lib/cmake/GTest
+  mv "$pkgdir"/usr/share/{cmake,pkgconfig} "$pkgdir"/usr/lib/
+  rmdir "$pkgdir"/usr/share
+}

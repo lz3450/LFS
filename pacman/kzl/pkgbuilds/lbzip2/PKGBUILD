@@ -1,0 +1,41 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=lbzip2
+pkgver=2.5
+pkgrel=1
+epoch=1
+pkgdesc="A parallel, SMP-based, bzip2-compatible compression utility"
+arch=('x86_64')
+url="http://lbzip2.org"
+license=('KZL')
+source=(http://deb.debian.org/debian/pool/main/l/$pkgname/${pkgname}_${pkgver}.orig.tar.bz2
+        lbzip2-gnulib-build-fix.patch)
+sha256sums=('eec4ff08376090494fa3710649b73e5412c3687b4b9b758c93f73aa7be27555b'
+            '3f4f2239cdbf2b61bd1a130a753192bb7e28f1e73cd193a6c8e571397580695c')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  patch -Np1 -i "${srcdir}"/lbzip2-gnulib-build-fix.patch
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

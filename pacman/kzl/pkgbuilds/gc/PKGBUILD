@@ -1,21 +1,24 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gc
-pkgver=8.0.4
+pkgver=8.2.0
 pkgrel=1
 epoch=1
 pkgdesc="A garbage collector for C and C++"
 arch=('x86_64')
 url="https://www.hboehm.info/gc/"
+license=('KZL')
 source=(https://github.com/ivmai/bdwgc/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz
-        add_stack_bottom_feature.patch::https://github.com/ivmai/bdwgc/commit/5668de71107022a316ee967162bc16c10754b9ce.patch)
-sha256sums=('436a0ddc67b1ac0b0405b61a9675bca9e075c8156f4debd1d06f3a56c7cd289d'
-            '784ade9fe1c2668db77a3c08cd195cd7701331bdf8c9d160038cfce099b77e37')
+        gc-missing-header.patch::https://patch-diff.githubusercontent.com/raw/ivmai/bdwgc/pull/389.patch)
+sha256sums=('2540f7356cb74f6c5b75326c6d38a066edd796361fd7d4ed26e494d9856fed8f'
+            '048bff8e713ec1dbf7a06ff02175ab407db5433a15707d6687b9bcf212e6b1bf')
 
 prepare() {
   cd $pkgname-$pkgver
 
-  patch -p1 -i "$srcdir"/add_stack_bottom_feature.patch
+  patch -p1 -i "$srcdir"/gc-missing-header.patch
+
+  ./autogen.sh
 }
 
 build() {
@@ -25,6 +28,8 @@ build() {
     --prefix=/usr \
     --disable-static \
     --enable-cplusplus
+
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
   make
 }

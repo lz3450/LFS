@@ -7,6 +7,7 @@ epoch=1
 pkgdesc="A high-quality data compression program"
 arch=('x86_64')
 url="https://sourceware.org/bzip2/"
+license=('KZL')
 source=(https://sourceware.org/pub/bzip2/$pkgname-$pkgver.tar.gz{,.sig})
 sha256sums=('ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269'
             'SKIP')
@@ -22,7 +23,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

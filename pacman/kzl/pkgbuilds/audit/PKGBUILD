@@ -2,7 +2,7 @@
 
 pkgbase=audit
 pkgname=(audit python-audit)
-pkgver=3.0.4
+pkgver=3.0.7
 pkgrel=1
 epoch=1
 pkgdesc="Userspace components of the audit framework"
@@ -12,7 +12,7 @@ license=('KZL')
 depends=(krb5 libcap-ng)
 makedepends=(swig)
 source=(${url}/$pkgbase-$pkgver.tar.gz)
-sha256sums=('8c5ae825b9d2837742b626fa93b86cb4a84d15530bf05b6cb42be3f304db8cf6')
+sha256sums=('8b4c78632a9301a1c7f859b0e38fc0b9c260b8214d6b7c771bf28b3d73a62597')
 
 prepare() {
   cd $pkgbase-$pkgver

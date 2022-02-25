@@ -7,6 +7,7 @@ epoch=1
 pkgdesc="Library for the dynamic creation of images by programmer"
 arch=('x86_64')
 url="https://libgd.github.io/"
+license=('KZL')
 depends=(fontconfig libxpm)
 source=(https://github.com/libgd/libgd/archive/$pkgname-$pkgver.tar.gz)
 sha256sums=('795978dcec1bf931148ebcdca9ed1e9cdfa9e71acff8bf035a8867dd1f7af6cd')
@@ -30,7 +31,7 @@ build() {
 check() {
   cd libgd-$pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

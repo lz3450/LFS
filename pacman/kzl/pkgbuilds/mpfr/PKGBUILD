@@ -7,6 +7,7 @@ epoch=1
 pkgdesc="Multiple-precision floating-point library"
 arch=('x86_64')
 url="https://www.mpfr.org/"
+license=('KZL')
 depends=(gmp)
 source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
 sha256sums=('0c98a3f1732ff6ca4ea690552079da9c597872d30e96ec28414ee23c95558a7f'

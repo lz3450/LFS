@@ -1,16 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=zsh
-pkgver=5.8
+pkgver=5.8.1
 pkgrel=1
 epoch=1
 arch=('x86_64')
 url="https://www.zsh.org/"
+license=('KZL')
 depends=(gdbm libcap pcre)
 install=$pkgname.install
 source=(https://www.zsh.org/pub/zsh-$pkgver.tar.xz{,.asc}
         zprofile)
-sha256sums=('dcc4b54cc5565670a65581760261c163d720991f0d06486da61f8d839b52de27'
+sha256sums=('b6973520bace600b4779200269b1e5d79e5f505ac4952058c11ad5bbf0dd9919'
             'SKIP'
             '230832038c3b8f67fdb1b284ac5f68d709cdb7f1bc752b0e60657b9b9d091045')
 validpgpkeys=('7CA7ECAAF06216B90F894146ACF8146CAE8CBBC4')
@@ -60,7 +61,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://dev.lovelyhq.com/libburnia"
 license=('KZL')
 depends=(libburn libisofs)
-optdepends=()
+optdepends=("tk: for xorriso-tcltk frontend")
 source=(https://files.libburnia-project.org/releases/$pkgname-$pkgver.tar.gz{,.sig})
 sha256sums=('2d89846d43880f17fa591c53b3bea42ffb803628e4e630c680fc2c9184f79132'
             'SKIP')

@@ -1,29 +1,19 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libxslt
-pkgver=1.1.34
+pkgver=1.1.35
 pkgrel=1
 epoch=1
 pkgdesc="XML stylesheet transformation library"
 arch=('x86_64')
 url="http://xmlsoft.org/XSLT/"
+license=('KZL')
 depends=(libgcrypt libxml2)
-source=(git+https://gitlab.gnome.org/GNOME/libxslt.git#tag=v$pkgver
-        https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/libxslt/trunk/0001-Make-generate-id-deterministic.patch
-        https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/libxslt/trunk/0002-Fix-manpage.patch)
-sha256sums=('SKIP'
-            '80ffc45016b2c0b8edeb332ba587a8523ea5ed856229e7f531edd0af9742bab3'
-            'd7dea109c91958e2231c06d9b841853855a666f93b001a1999beab42c3345203')
+source=(git+https://gitlab.gnome.org/GNOME/libxslt.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
   cd $pkgname
-  
-  # Make xsltproc output reproducible for packages which use it to generate documentation
-  patch -Np1 -i ../0001-Make-generate-id-deterministic.patch
-
-  # Fix manpage whitespace and rebuild the manpage
-  patch -Np1 -i ../0002-Fix-manpage.patch
-  rm doc/xsltproc.1
 
   NOCONFIGURE=1 ./autogen.sh
 }
@@ -44,7 +34,7 @@ build() {
 check() {
   cd $pkgname
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

@@ -7,6 +7,7 @@ epoch=1
 pkgdesc="A Unit Testing Framework for C"
 arch=('x86_64')
 url="http://cunit.sourceforge.net"
+license=('KZL')
 source=(https://downloads.sourceforge.net/project/cunit/CUnit/$pkgver-$pkgrel/CUnit-$pkgver-$pkgrel.tar.bz2)
 sha256sums=('f5b29137f845bb08b77ec60584fdb728b4e58f1023e6f249a464efa49a40f214')
 
@@ -33,7 +34,7 @@ build() {
 check() {
   cd CUnit-$pkgver-$pkgrel
 
-  ./CUnit/Sources/Test/test_cunit || warning "Check failed."
+  ./CUnit/Sources/Test/test_cunit
 }
 
 package() {

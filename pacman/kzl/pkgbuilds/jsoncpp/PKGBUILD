@@ -1,15 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=jsoncpp
-pkgver=1.9.4
+pkgver=1.9.5
 pkgrel=1
 epoch=1
 pkgdesc="C++ library for interacting with JSON"
 arch=('x86_64')
 url="https://github.com/open-source-parsers/jsoncpp"
+license=('KZL')
 options=(staticlibs)
 source=($url/archive/$pkgver/$pkgname-$pkgver.tar.gz)
-sha256sums=('e34a628a8142643b976c7233ef381457efad79468c67cb1ae0b83a33d7493999')
+sha256sums=('f409856e5920c18d0c2fb85276e24ee607d2a09b5e7d5f0a371368903c275da2')
 
 build() {
   cd $pkgname-$pkgver

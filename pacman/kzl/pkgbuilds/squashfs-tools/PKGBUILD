@@ -9,15 +9,15 @@ arch=('x86_64')
 url="https://github.com/plougher/squashfs-tools"
 license=('KZL')
 depends=(lz4 lzo)
-source=($pkgname-$pkgver.tar.gz::https://github.com/plougher/$pkgname/archive/refs/tags/$pkgver.tar.gz
-        $pkgname-4.5-symlink_install.patch)
-sha256sums=('b9e16188e6dc1857fe312633920f7d71cc36b0162eb50f3ecb1f0040f02edddd'
-            'e6794fd3389e6712bad67865b4c6a1cdf65f46e2647d0cc2e036975bee6df1c6')
+source=($pkgname-$pkgver.tar.gz::https://github.com/plougher/$pkgname/archive/refs/tags/$pkgver.tar.gz)
+sha256sums=('b9e16188e6dc1857fe312633920f7d71cc36b0162eb50f3ecb1f0040f02edddd')
 
 prepare() {
   cd $pkgname-$pkgver
 
-  patch -Np1 -i "$srcdir/$pkgname-4.5-symlink_install.patch"
+  sed -e '/ln -fs \$(INSTALL_DIR)\/unsquashfs/s|\$(INSTALL_DIR)\/||' \
+      -e '/ln -fs \$(INSTALL_DIR)\/mksquashfs/s|\$(INSTALL_DIR)\/||' \
+      -i $pkgname/Makefile
 }
 
 build() {
@@ -25,12 +25,12 @@ build() {
 
   make -C $pkgname \
     GZIP_SUPPORT=1 \
-    XZ_SUPPORT=1 \
-    LZO_SUPPORT=1 \
-    LZMA_XZ_SUPPORT=1 \
     LZ4_SUPPORT=1 \
-    ZSTD_SUPPORT=1 \
-    XATTR_SUPPORT=1
+    LZMA_XZ_SUPPORT=1 \
+    LZO_SUPPORT=1 \
+    XATTR_SUPPORT=1 \
+    XZ_SUPPORT=1 \
+    ZSTD_SUPPORT=1
 }
 
 package() {

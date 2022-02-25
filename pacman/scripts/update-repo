@@ -75,7 +75,7 @@ while (( "$#" )); do
         -t|--target)    shift; TARGET="$1"  ;;
         -R|--replace)   REPLACE=1 ;;
         --clear)        CLEAR=1 ;; 
-        *)              printf "unknown option \"$1\"\n"; exit 1 ;;
+        *)              printf "Unknown option \"$1\"\n"; exit 1 ;;
     esac
     shift
 done
@@ -84,7 +84,7 @@ case $TARGET in
     kzl|ubuntu)     pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds) EXTENSION="zst" ;;
     tegra)          pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds) EXTENSION="gz" ;;
     # unknown repo
-    *)              printf "unknown target \"%s\".\n" "$TARGET"; exit 1 ;;
+    *)              printf "Unknown target \"%s\".\n" "$TARGET"; exit 1 ;;
 esac
 
 if (( CLEAR )); then

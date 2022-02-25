@@ -1,0 +1,27 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=mkinitcpio-archiso
+pkgver=61
+pkgrel=1
+epoch=1
+pkgdesc="Initcpio scripts used by archiso"
+arch=('x86_64')
+url="https://gitlab.archlinux.org/mkinitcpio/mkinitcpio-archiso"
+license=('KZL')
+depends=(device-mapper mkinitcpio)
+# checkdepends=(shellcheck shfmt)
+source=(git+https://gitlab.archlinux.org/mkinitcpio/$pkgname.git#tag=v$pkgver?signed)
+sha256sums=('SKIP')
+validpgpkeys=('C7E7849466FE2358343588377258734B41C31549')
+
+check() {
+  cd $pkgname
+
+  make check
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir/" PREFIX="/usr" install
+}

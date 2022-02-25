@@ -7,13 +7,14 @@ epoch=1
 pkgdesc="Portable foreign function interface library"
 arch=('x86_64')
 url="https://sourceware.org/libffi/"
+license=('KZL')
 source=(https://github.com/libffi/libffi/releases/download/v$pkgver/libffi-$pkgver.tar.gz)
 sha256sums=('540fb721619a6aba3bdeef7d940d8e9e0e6d2c193595bc243241b77ff9e93620')
 
 prepare() {
   cd $pkgname-$pkgver
 
-  autoreconf -fiv
+  autoreconf -ifv
 }
 
 build() {
@@ -29,7 +30,7 @@ build() {
 
 check() {
   cd $pkgname-$pkgver
-  
+
   make check
 }
 

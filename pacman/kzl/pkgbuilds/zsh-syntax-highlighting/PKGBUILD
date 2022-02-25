@@ -7,6 +7,7 @@ epoch=1
 pkgdesc="Fish shell like syntax highlighting for Zsh"
 arch=('any')
 url="https://github.com/zsh-users/zsh-syntax-highlighting"
+license=('KZL')
 depends=(zsh)
 source=(git+https://github.com/zsh-users/zsh-syntax-highlighting.git#tag=$pkgver?signed)
 sha256sums=('SKIP')
@@ -21,7 +22,7 @@ build() {
 check() {
   cd $pkgname
 
-  make quiet-test || warning "Check failed."
+  make quiet-test
 }
 
 package() {

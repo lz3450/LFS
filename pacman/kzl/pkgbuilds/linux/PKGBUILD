@@ -1,19 +1,20 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=linux
-pkgver=5.10.57
+pkgver=5.10.101
 pkgrel=1
 epoch=1
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
 url="https://www.kernel.org"
+license=('KZL')
 makedepends=(bc)
 options=(!strip)
 source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.{xz,sign}
         config)
-sha256sums=('00bbaeaac17f82d9a6d93cbc42cafd39d3b2fa3a6087333503d2344fa5e3142d'
+sha256sums=('0749258cb7ee47c478dfc34857e8930d41bfe0b074e80e9f57cbfa56d0ba1c8e'
             'SKIP'
-            '97102883d868603230de4e42d2ec43d4edbf34269986aaef44c6c461b0868aaf')
+            'dc4a8fc3b1c53c343fee598b32a2b026c64efbe45c36428bcf362167f1ef9f02')
 validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
 
 export KBUILD_BUILD_HOST=kzl-linux

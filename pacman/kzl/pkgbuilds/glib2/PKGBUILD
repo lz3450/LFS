@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=glib2
-pkgver=2.68.3
+pkgver=2.70.4
 pkgrel=1
 epoch=1
 pkgdesc="Low level core library"
@@ -11,11 +11,6 @@ license=('KZL')
 depends=(libffi pcre)
 makedepends=(elfutils shared-mime-info)
 optdepends=("elfutils: gresource inspection tool")
-provides=(libgio-2.0.so
-          libglib-2.0.so
-          libgmodule-2.0.so
-          libgobject-2.0.so
-          libgthread-2.0.so)
 options=(!strip staticlibs)
 source=(git+https://gitlab.gnome.org/GNOME/glib.git#commit=a380bfdf93cb3bfd3cd4caedc0127c4e5717545b
         gio-querymodules.hook
@@ -33,8 +28,8 @@ build() {
     --prefix /usr \
     --libexecdir lib \
     --sbindir bin \
-    --buildtype plain \
     --auto-features enabled \
+    --buildtype plain \
     --wrap-mode nodownload \
     --default-library both \
     -D b_lto=true \
@@ -50,7 +45,7 @@ build() {
 check() {
   cd glib
 
-  meson test -C build --no-suite flaky --print-errorlogs || warning "Check failed."
+  meson test -C build --no-suite flaky --print-errorlogs
 }
 
 package() {
@@ -63,8 +58,6 @@ package() {
   install -Dm644 "$srcdir"/*.hook -t "$pkgdir"/usr/share/libalpm/hooks
 
   export PYTHONHASHSEED=0
-  python -m compileall -d /usr/share/glib-2.0/codegen \
-    "$pkgdir/usr/share/glib-2.0/codegen"
-  python -O -m compileall -d /usr/share/glib-2.0/codegen \
-    "$pkgdir/usr/share/glib-2.0/codegen"
+  python -m compileall -d /usr/share/glib-2.0/codegen "$pkgdir/usr/share/glib-2.0/codegen"
+  python -O -m compileall -d /usr/share/glib-2.0/codegen "$pkgdir/usr/share/glib-2.0/codegen"
 }

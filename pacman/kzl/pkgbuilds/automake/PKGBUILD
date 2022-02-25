@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=automake
-pkgver=1.16.3
+pkgver=1.16.5
 pkgrel=1
 epoch=1
 pkgdesc="A GNU tool for automatically creating Makefiles"
 arch=('any')
 url="https://www.gnu.org/software/automake"
+license=('KZL')
 source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('ff2bf7656c4d1c6fdda3b8bebb21f09153a736bcba169aaf65eab25fa113bf3a'
+sha256sums=('f01d58cd6d9d77fbdca9eb4bbd5ead1988228fdb73d6f7a201f5f8d6b118b469'
             'SKIP')
 validpgpkeys=('E1622F96D2BB4E58018EEF9860F906016E407573'
               'F2A38D7EEB2B66405761070D0ADEE10094604D37'

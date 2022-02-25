@@ -1,17 +1,18 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=krb5
-pkgver=1.18.3
+pkgver=1.19.2
 pkgrel=1
 epoch=1
 pkgdesc="The Kerberos network authentication system"
 arch=('x86_64')
 url="https://web.mit.edu/kerberos/"
+license=('KZL')
 depends=(keyutils libldap)
 backup=(etc/krb5.conf
         var/lib/krb5kdc/kdc.conf)
 source=(https://web.mit.edu/kerberos/dist/krb5/${pkgver:0:4}/$pkgname-$pkgver.tar.gz{,.asc})
-sha256sums=('e61783c292b5efd9afb45c555a80dd267ac67eebabca42185362bee6c4fbd719'
+sha256sums=('10453fee4e3a8f8ce6129059e5c050b8a65dab1c257df68b99b3112eaa0cdf6a'
             'SKIP')
 validpgpkeys=('C4493CB739F4A89F9852CBC20CBA08575F8372DF')
 

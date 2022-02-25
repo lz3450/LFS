@@ -1,17 +1,18 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=man-db
-pkgver=2.9.4
+pkgver=2.10.1
 pkgrel=1
 epoch=1
 pkgdesc="A utility for reading man pages"
 arch=('x86_64')
 url="https://www.nongnu.org/man-db/"
+license=('KZL')
 depends=(groff less libpipeline libseccomp)
 makedepends=(po4a)
 backup=(etc/man_db.conf)
 source=(https://savannah.nongnu.org/download/man-db/$pkgname-$pkgver.tar.xz{,.asc})
-sha256sums=('b66c99edfad16ad928c889f87cf76380263c1609323c280b3a9e6963fdb16756'
+sha256sums=('2ffd8f2e80122fe72e60c740c851e6a3e15c9a7921185eb4752c1c672824bed6'
             'SKIP')
 validpgpkeys=('AC0A4FF12611B6FCCF01C111393587D97D86500B')
 
@@ -36,7 +37,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

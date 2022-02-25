@@ -21,6 +21,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --libexecdir=/usr/lib \
+    --mandir=/usr/share/man \
     --disable-mt
 
   make
@@ -29,7 +30,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=zstd
-pkgver=1.4.8
+pkgver=1.5.2
 pkgrel=1
 epoch=1
 pkgdesc="Zstandard - Fast real-time compression algorithm"
 arch=('x86_64')
 url="https://www.zstd.net/"
+license=('KZL')
 source=(https://github.com/facebook/zstd/archive/v$pkgver.tar.gz)
-sha256sums=('f176f0626cb797022fbf257c3c644d71c1c747bb74c32201f9203654da35e9fa')
+sha256sums=('f7de13462f7a82c29ab865820149e778cbfe01087b3a55b5332707abf9db4a6e')
 
 build() {
   cd $pkgname-$pkgver
@@ -21,7 +22,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check    
+  make check
   make -C contrib/pzstd test
 }
 

@@ -1,23 +1,23 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=vim
-pkgver=8.2.3441
+pkgver=8.2.4106
 pkgrel=1
 epoch=1
 pkgdesc="Vi Improved, a highly configurable, improved version of the vi text editor"
 arch=('x86_64')
 url="https://www.vim.org"
+license=('KZL')
 # depends=(acl gpm libffi libgcrypt pcre)
 depends=(acl libffi libgcrypt pcre)
 # makedepends=(lua ruby tcl)
-makedepends=(ruby tcl)
-optdepends=("ruby: Ruby language support"
-            "lua: Lua language support"
-            "tcl: Tcl language support")
+# optdepends=("lua: Lua language support"
+#             "ruby: Ruby language support"
+#             "tcl: Tcl language support")
 source=(https://github.com/vim/vim/archive/v$pkgver/$pkgname-$pkgver.tar.gz)
-sha256sums=('3db6c3af32b741c2e618358bbf002cffe9db2ab8d21f9ea277110fce54fec4d2')
+sha256sums=('49dc438e8cef4eae387ab2cdd79eb1f0e1ac47acfa8eb25cd209085fc2896179')
 
-# TODO: gpm lua
+# TODO: gpm
 
 build() {
   cd $pkgname-$pkgver
@@ -48,7 +48,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make test || warning "Check failed."
+  make TERM=xterm -j1 test
 }
 
 package() {

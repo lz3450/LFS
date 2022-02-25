@@ -1,19 +1,20 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rhash
-pkgver=1.4.1
+pkgver=1.4.2
 pkgrel=1
 epoch=1
 pkgdesc="Utility for verifying hash sums of files"
 arch=('x86_64')
 url="https://github.com/rhash/RHash"
+license=('KZL')
 provides=(libp11-kit)
 conflicts=(libp11-kit)
 replaces=(libp11-kit)
 backup=(etc/rhashrc)
 source=(https://github.com/rhash/RHash/archive/v$pkgver.tar.gz
         https://github.com/rhash/RHash/releases/download/v$pkgver/v$pkgver.tar.gz.asc)
-sha256sums=('430c812733e69b78f07ce30a05db69563450e41e217ae618507a4ce2e144a297'
+sha256sums=('600d00f5f91ef04194d50903d3c79412099328c42f28ff43a0bdb777b00bec62'
             'SKIP')
 validpgpkeys=('2875F6B1C2D27A4F0C8AF60B2A714497E37363AE')
 
@@ -32,7 +33,7 @@ build() {
 check() {
   cd RHash-$pkgver
 
-  make test test-lib || warning "Check failed."
+  make test test-lib
 }
 
 package() {

@@ -1,18 +1,28 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=sqlite
-pkgver=3340100
+pkgver=3.37.2
+_pkgver=${pkgver:0:1}${pkgver:2:2}0${pkgver:5:5}00
 pkgrel=1
 epoch=1
 pkgdesc="A C library that implements an SQL database engine"
 arch=('x86_64')
 url="https://www.sqlite.org"
+license=('KZL')
 makedepends=(tcl)
-source=($url/2021/$pkgname-src-$pkgver.zip)
-sha256sums=('dddd237996b096dee8b37146c7a37a626a80306d6695103d2ec16ee3b852ff49')
+source=($url/2022/$pkgname-src-$_pkgver.zip)
+sha256sums=('486770b4d5f88b5bb0dba540dd6ee1763067d7539dfee18a7c66fe9bb03d16d9')
 
 build() {
-  cd $pkgname-src-$pkgver
+  cd $pkgname-src-$_pkgver
+
+  export CPPFLAGS="$CPPFLAGS \
+    -DSQLITE_SECURE_DELETE \
+    -DSQLITE_ENABLE_COLUMN_METADATA \
+    -DSQLITE_ENABLE_DBSTAT_VTAB \
+    -DSQLITE_ENABLE_MATH_FUNCTIONS \
+    -DSQLITE_ENABLE_STMTVTAB \
+    -DSQLITE_ENABLE_UNLOCK_NOTIFY"
 
   ./configure \
     --prefix=/usr \
@@ -22,12 +32,6 @@ build() {
     --enable-json1 \
     --enable-rtree
 
-  CFLAGS="$CFLAGS \
-    -DSQLITE_SECURE_DELETE \
-    -DSQLITE_ENABLE_COLUMN_METADATA \
-    -DSQLITE_ENABLE_DBSTAT_VTAB \
-    -DSQLITE_ENABLE_UNLOCK_NOTIFY"
-
   sed -e 's/ -shared / -Wl,-O1,--as-needed\0/g' -i libtool
 
   make
@@ -35,7 +39,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-src-$pkgver
+  cd $pkgname-src-$_pkgver
 
   make DESTDIR="$pkgdir/" install
   install -Dm755 showdb showjournal showstat4 showwal sqldiff sqlite3_analyzer "$pkgdir"/usr/bin/

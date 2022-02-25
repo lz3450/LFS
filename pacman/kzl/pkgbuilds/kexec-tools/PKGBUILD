@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=kexec-tools
-pkgver=2.0.21
+pkgver=2.0.23
 pkgrel=1
 epoch=1
 pkgdesc="Load another kernel from the currently executing Linux kernel"
 arch=('x86_64')
 url="https://kernel.org/pub/linux/utils/kernel/kexec/"
+license=('KZL')
 source=(git://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

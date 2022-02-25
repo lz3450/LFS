@@ -1,0 +1,70 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=openldap
+pkgver=2.6.1
+pkgrel=1
+epoch=1
+pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries"
+arch=('x86_64')
+url="https://www.openldap.org"
+license=('KZL')
+# depends=(libsasl)
+provides=(libldap)
+conflicts=(libldap)
+replaces=(libldap)
+source=($url/software/download/OpenLDAP/openldap-release/$pkgname-$pkgver.tgz)
+sha256sums=('9d576ea6962d7db8a2e2808574e8c257c15aef55f403a1fb5a0faf35de70e6f3')
+
+# TODO: cyrus-sasl argon2
+# TODO: server client contrib 
+# TODO: slapd backends overlays
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  sed -e 's|-m 644 $(LIBRARY)|-m 755 $(LIBRARY)|' -i libraries/{liblber,libldap}/Makefile.in
+  sed -e 's|#define LDAPI_SOCK LDAP_RUNDIR LDAP_DIRSEP "run" LDAP_DIRSEP "ldapi"|#define LDAPI_SOCK LDAP_DIRSEP "run" LDAP_DIRSEP "openldap" LDAP_DIRSEP "ldapi"|' -i include/ldap_defaults.h
+  sed -e 's|%LOCALSTATEDIR%/run|/run/openldap|' -i servers/slapd/slapd.{conf,ldif}
+  sed -e 's|-$(MKDIR) $(DESTDIR)$(localstatedir)/run|-$(MKDIR) $(DESTDIR)/run/openldap|' -i servers/slapd/Makefile.in
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --libexecdir=/usr/lib \
+    --sysconfdir=/etc \
+    --localstatedir=/var/lib/openldap \
+    --disable-debug \
+    --enable-dynamic \
+    --enable-syslog \
+    --enable-ipv6 \
+    --enable-local \
+    --enable-slapd=no \
+    --enable-backends=no \
+    --enable-overlays=no \
+    --without-cyrus-sasl \
+    --with-threads
+
+  make depend
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  for dir in include libraries doc/man/man3 ; do
+    pushd $dir
+    make DESTDIR="$pkgdir/" install
+    popd
+  done
+
+  install -Dm644 doc/man/man5/ldap.conf.5.tmp "$pkgdir"/usr/share/man/man5/ldap.conf.5
+
+  ln -sf liblber.so "$pkgdir"/usr/lib/liblber.so.2
+  ln -sf libldap.so "$pkgdir"/usr/lib/libldap.so.2
+
+  rm "$pkgdir"/etc/openldap/*.default
+}

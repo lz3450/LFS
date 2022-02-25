@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rpcsvc-proto
-pkgver=1.4.2
+pkgver=1.4.3
 pkgrel=1
 epoch=1
 pkgdesc="rpcsvc protocol definitions from glibc"
 arch=('x86_64')
 url="https://github.com/thkukuk/rpcsvc-proto"
+license=('KZL')
 source=(https://github.com/thkukuk/rpcsvc-proto/archive/v$pkgver.tar.gz)
-sha256sums=('9f309fa25507836b0c5de8a9d755c1428bde5554610bf92eb21e32078134aef5')
+sha256sums=('6906e0f81bb016bd0216460fc879d3d9f2f6d743be7dfb0d8b32d140226d5ef8')
 
 prepare() {
   cd $pkgname-$pkgver

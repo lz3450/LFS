@@ -1,18 +1,19 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=valgrind
-pkgver=3.16.1
+pkgver=3.18.1
 pkgrel=1
 epoch=1
 pkgdesc="Tool to help find memory-management problems in programs"
 arch=('x86_64')
 url="http://valgrind.org/"
+license=('KZL')
 makedepends=(gdb)
 checkdepends=(procps-ng)
 source=(https://sourceware.org/pub/$pkgname/$pkgname-$pkgver.tar.bz2{,.asc})
-sha256sums=('c91f3a2f7b02db0f3bc99479861656154d241d2fdb265614ba918cc6720a33ca'
+sha256sums=('00859aa13a772eddf7822225f4b46ee0d39afbe071d32778da4d99984081f7f5'
             'SKIP')
-validpgpkeys=('0E9FFD0C16A1856CF9C7C690BA0166E698FA6035')
+validpgpkeys=('EC3CFE88F6CA0788774F5C1D1AA44BE649DE760A')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -37,7 +38,6 @@ build() {
     --enable-lto \
     --without-mpicc
 
-
   make
 }
 
@@ -46,7 +46,7 @@ check() {
 
   ./vg-in-place --error-exitcode=1 /bin/true
 
-  make check CPPFLAGS= CFLAGS= CXXFLAGS= LDFLAGS=
+  make check CPPFLAGS="" CFLAGS="" CXXFLAGS="" LDFLAGS=""
 }
 
 package() {

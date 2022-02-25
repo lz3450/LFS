@@ -1,15 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=nano
-pkgver=5.6
+pkgver=6.2
 pkgrel=1
 epoch=1
 pkgdesc="Pico editor clone with enhancements"
 arch=('x86_64')
 url="https://www.nano-editor.org"
+license=('KZL')
 backup=(etc/nanorc)
 source=($url/dist/v${pkgver::1}/$pkgname-$pkgver.tar.xz{,.asc})
-sha256sums=('fce183e4a7034d07d219c79aa2f579005d1fd49f156db6e50f53543a87637a32'
+sha256sums=('2bca1804bead6aaf4ad791f756e4749bb55ed860eec105a97fba864bc6a77cb3'
             'SKIP')
 validpgpkeys=('BFD009061E535052AD0DF2150D28D4D2A0ACE884')
 

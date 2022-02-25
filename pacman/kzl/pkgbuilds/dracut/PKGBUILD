@@ -1,0 +1,37 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=dracut
+pkgver=056
+pkgrel=1
+epoch=1
+pkgdesc="An event driven initramfs infrastructure"
+arch=('x86_64')
+url="https://dracut.wiki.kernel.org"
+license=('KZL')
+depends=(cpio kmod)
+makedepends=(asciidoc bash-completion)
+provides=(initramfs)
+backup=(etc/dracut.conf)
+source=(https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut/dracut-056.tar.{xz,sign})
+sha256sums=('e025bbdce9d1209640fb3f5f674f059c7e1f441537ba421703fe56055502421d'
+            'SKIP')
+validpgpkeys=('7F3D64824AC0B6B8009E50504BC0896FB5693595')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --libdir=/usr/lib \
+    --sysconfdir=/etc \
+    --systemdsystemunitdir=/usr/lib/systemd/system \
+    --bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion)
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
