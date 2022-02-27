@@ -7,7 +7,7 @@ epoch=1
 arch=('x86_64')
 url="https://www.github.com/systemd/systemd-stable"
 license=('KZL')
-depends=(acl audit cryptsetup elfutils iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2)
+depends=(acl audit cryptsetup elfutils iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 zstd)
 makedepends=(curl kexec-tools gnu-efi gperf libfido2 libmicrohttpd libxslt quota)
 optdepends=("curl: machinectl pull-tar and pull-raw"
             "libfido2: unlocking LUKS2 volumes with FIDO2 token"
@@ -34,6 +34,7 @@ backup=(etc/pam.d/systemd-user
         etc/udev/udev.conf)
 install=systemd.install
 source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
+        systemd-user.pam
         systemd.install
         20-systemd-sysusers.hook
         30-systemd-binfmt.hook
@@ -44,7 +45,8 @@ source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
         30-systemd-tmpfiles.hook
         30-systemd-udev-reload.hook)
 sha256sums=('SKIP'
-            '547976dad8b10bd3ccf1e8b16c208b7b3e3454220261b47c7ee3f07f128d5f3a'
+            'cd3e8e24b6291e7f1ee13f1826400376ad5fa93090edd3be1d11f8e773aab603'
+            '9ff3bc557f68b5d9a4ec8199c4a3867682d83f177725cbcd14a71e16cab87af5'
             '61623bab3be1dc5a4c72145e6cf36bccb08e24372142ef41e4e195cc342b2ec7'
             '393c963a4a3e11f7e7c9faa517179c55926e6663d71eaa9f5a7937cfe0e16af0'
             '5bc028f276e41553680aed71540fe3ca8255488f7a94ed1f52076aafb4b6f08c'
@@ -165,6 +167,8 @@ package() {
   
   chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
   chmod -R 2755 "$pkgdir"/var/log/journal/
+
+  install -Dm0644 "$srcdir"/systemd-user.pam "$pkgdir"/etc/pam.d/systemd-user
 
   rm -f "$pkgdir"/usr/share/factory/etc/{issue,nsswitch.conf}
 
