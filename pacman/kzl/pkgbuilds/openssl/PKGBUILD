@@ -58,5 +58,4 @@ package() {
   cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir/" MANSUFFIX=ssl install_sw install_ssldirs install_man_docs
-  chmod 555 "$pkgdir"/etc/ssl/certs/
 }
