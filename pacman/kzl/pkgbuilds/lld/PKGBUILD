@@ -1,78 +1,61 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=lld
-pkgver=13.0.0
+pkgver=13.0.1
 pkgrel=1
 epoch=1
 pkgdesc="Linker from the LLVM project"
 arch=('x86_64')
 url="https://lld.llvm.org/"
 license=('KZL')
-groups=(llvm-project)
 depends=(llvm)
-source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz{,.sig}
-        https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/llvm-$pkgver.src.tar.xz{,.sig}
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/llvm-$pkgver.src.tar.xz{,.sig}
+        https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/lld-$pkgver.src.tar.xz.sig
         https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/libunwind-$pkgver.src.tar.xz{,.sig})
-sha256sums=('20d1900bcd64ff62047291f6edb6ba2fed34d782675ff68713bf0c2fc9e69386'
-            'SKIP'
-            '408d11708643ea826f519ff79761fcdfc12d641a2510229eec459e72f8163020'
-            'SKIP'
-            '36f819091216177a61da639244eda67306ccdd904c757d70d135e273278b65e1'
+sha256sums=('326335a830f2e32d06d0a36393b5455d17dc73e0bd1211065227ee014f92cbf8'
             'SKIP')
 validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
 
 _cmake_options=(
-    -DCMAKE_BUILD_TYPE=Release
-    -DCMAKE_INSTALL_PREFIX=/usr
-    # -DCMAKE_ASM_COMPILER=/usr/bin/clang
-    # -DCMAKE_C_COMPILER=/usr/bin/clang
-    # -DCMAKE_CXX_COMPILER=/usr/bin/clang++
-    # -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
-    # -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
-    # -DCMAKE_LINKER=/usr/bin/lld
-    # -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
-    # -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
-    # -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
-    # -DCMAKE_AR=/usr/bin/llvm-ar
-    # -DCMAKE_NM=/usr/bin/llvm-nm
-    # -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
-    # -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
-    # -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
-    # -DCMAKE_READELF=/usr/bin/llvm-readelf
-)
-
-_llvm_options=(
-    -DLLVM_LINK_LLVM_DYLIB=ON
-    -DLLVM_ENABLE_RTTI=ON
+  -DCMAKE_BUILD_TYPE=Release
+  -DCMAKE_INSTALL_PREFIX=/usr
+  -DCMAKE_SKIP_RPATH=ON
+  # -DCMAKE_ASM_COMPILER=/usr/bin/clang
+  # -DCMAKE_C_COMPILER=/usr/bin/clang
+  # -DCMAKE_CXX_COMPILER=/usr/bin/clang++
+  # -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
+  # -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
+  # -DCMAKE_LINKER=/usr/bin/lld
+  # -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
+  # -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
+  # -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+  # -DCMAKE_AR=/usr/bin/llvm-ar
+  # -DCMAKE_NM=/usr/bin/llvm-nm
+  # -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
+  # -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
+  # -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
+  # -DCMAKE_READELF=/usr/bin/llvm-readelf
 )
 
 prepare() {
-  mv libunwind{-$pkgver.src,}
+
+  mv ../libunwind .
 }
 
 build() {
-  cd $pkgname-$pkgver.src
+  cd llvm-project-$pkgver.src/$pkgname
 
-  # same as clang
   cmake \
     "${_cmake_options[@]}" \
-    "${_llvm_options[@]}" \
-    -DLLVM_MAIN_SRC_DIR="$srcdir/llvm-$pkgver.src" \
     -S . \
     -B build \
     -G Ninja
 
-  cmake --build build
-}
-
-check() {
-  cd $pkgname-$pkgver.src
-
-  cmake --build build --target tests || warning "Check failed."
+  ninja -C build
 }
 
 package() {
-  cd $pkgname-$pkgver.src
+  cd llvm-project-$pkgver.src/$pkgname
 
-  DESTDIR="$pkgdir/" cmake --build build --target install
+  DESTDIR="$pkgdir/" ninja -C build install
 }

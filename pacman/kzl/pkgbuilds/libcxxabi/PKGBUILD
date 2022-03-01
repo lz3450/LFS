@@ -1,0 +1,61 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libcxxabi
+pkgver=13.0.1
+pkgrel=1
+epoch=1
+pkgdesc="a new implementation of the C++ standard library, targeting C++11 and above."
+arch=('x86_64')
+url="https://libcxx.llvm.org/"
+license=('KZL')
+depends=(llvm)
+makedepends=(clang lld llvm)
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/llvm-project-$pkgver.src.tar.xz{,.sig})
+sha256sums=('326335a830f2e32d06d0a36393b5455d17dc73e0bd1211065227ee014f92cbf8'
+            'SKIP')
+validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
+
+# https://llvm.org/docs/CMake.html
+
+_cmake_options=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_INSTALL_PREFIX=/usr
+    -DCMAKE_SKIP_RPATH=ON
+    -DCMAKE_C_COMPILER=/usr/bin/clang
+    -DCMAKE_CXX_COMPILER=/usr/bin/clang++
+    -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
+    -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
+    -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
+    -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+    -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
+    -DCMAKE_AR=/usr/bin/llvm-ar
+    -DCMAKE_NM=/usr/bin/llvm-nm
+    -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
+    -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
+    -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
+    -DCMAKE_READELF=/usr/bin/llvm-readelf
+)
+
+_llvm_options=(
+    -DLLVM_ENABLE_LTO=Full
+    -DLLVM_USE_LINKER=lld
+)
+
+build() {
+  cd llvm-project-$pkgver.src/$pkgname
+
+  cmake \
+    "${_cmake_options[@]}" \
+    "${_llvm_options[@]}" \
+    -S . \
+    -B build \
+    -G Ninja
+
+  ninja -C build cxxabi
+}
+
+package() {
+  cd llvm-project-$pkgver.src/$pkgname
+
+  DESTDIR="$pkgdir" ninja -C build install-cxxabi
+}
