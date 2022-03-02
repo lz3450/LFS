@@ -5,6 +5,7 @@ epoch=1
 pkgdesc="TeX Live"
 arch=('x86_64')
 url="https://www.tug.org/historic/"
+license=('KZL')
 depends=(fontconfig freetype2 gmp graphite harfbuzz icu libpng mpfr)
 # depends=(cairo freetype2 gd ghostscript gmp graphite harfbuzz icu gd libjpeg-turbo libpaper libpng mpfr pixman zziplib)
 provides=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
