@@ -29,7 +29,7 @@ update() {
 
     pkgname_regex="$pkg-[0-9]+:\([0-9a-zA-Z]+\.?\)+\(\+[0-9a-zA-Z]+\+g.+\)?-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.$EXTENSION"
 
-    pkgname=$(find ~/makepkg/packages -type f -regex "$HOME/makepkg/packages/$pkgname_regex" -printf "%f\n")
+    pkgname=$(find "$HOME/makepkg/packages" -type f -regex "$HOME/makepkg/packages/$pkgname_regex" -printf "%f\n")
     if [ -f $PACKAGEDIR/$pkgname ]; then
         sudo rm -f $REPODIR/$repo/$pkgname
         sudo cp $PACKAGEDIR/$pkgname $REPODIR/$repo
@@ -81,10 +81,14 @@ while (( "$#" )); do
 done
 
 case $TARGET in
-    kzl|ubuntu)     pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds) EXTENSION="zst" ;;
-    tegra)          pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds) EXTENSION="gz" ;;
+    kzl)
+        pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds)
+        EXTENSION="zst"
+        ;;
     # unknown repo
-    *)              printf "Unknown target \"%s\".\n" "$TARGET"; exit 1 ;;
+    *)
+        printf "Unknown target \"%s\".\n" "$TARGET"; exit 1
+        ;;
 esac
 
 if (( CLEAR )); then
@@ -126,5 +130,6 @@ for pkgbase in ${pkgs[@]}; do
         lapack)     update $TARGET blas
                     update $TARGET cblas
                     update $TARGET lapacke ;;
+        libc++)     update $TARGET "libc\+\+" ;;
     esac
 done

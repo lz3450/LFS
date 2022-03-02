@@ -133,53 +133,49 @@ kzl_stage2_pkgs=(
     docbook itstool xmlto shared-mime-info
     cmake
     ## git
-    asciidoc git
+    git
     ## texinfo man-db
     texinfo 
     groff man-db
     ## linux
     bc linux-firmware
     ## base
-    # base
+    base
 )
 
 kzl_stage3_pkgs=(
     ### core
-    # ## zsh
-    # zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
-    # initramfs
+    ## zsh
+    zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
+    # ## initramfs
     cpio dracut
-    # ## tmux
-    # libevent libutempter tmux
+    ## tmux
+    libevent libutempter tmux
     ## utils
-    # usbutils
-    # wpa_supplicant
-    # wget
-    # xxhash rsync
-    # dosfstools parted
-    # nano vim
+    usbutils
+    wpa_supplicant
+    wget
+    xxhash rsync
+    dosfstools parted
+    nano vim
     c-ares aria2
     ## devtools
-    gdb llvm-project rust ruby nodejs
-    ## Xlib
-    xorg-util-macros xorgproto libxau libxdmcp xcb-proto libxcb xtrans libx11 libice libsm libxt libxext libxrender libxpm
+    gdb llvm-project rust ruby nodejs nasm
+    ## fontconfig
+    libpng freetype2 graphite harfbuzz freetype2 fontconfig
     ## texlive
-    libpng freetype2 graphite gobject-introspection harfbuzz freetype2 harfbuzz fontconfig
-    nasm libjpeg-turbo lcms2 libidn libpaper libtiff openjpeg ghostscript
-    lzo pixman cairo
-    gd libsigsegv
-    # compatibility problem
-    # nspr nss poppler-data poppler
     texlive
-    # ## samba
-    # lmdb jansson liburing samba
-    ## ffmpeg
-    ## nvidia
-    nvidia #cuda cudnn nccl
+    ## samba
+    lmdb jansson liburing samba
+    # ## Xlib
+    # xorg-util-macros xorgproto libxau libxdmcp xcb-proto libxcb xtrans libx11 libice libsm libxt libxext libxrender libxpm
+    # ## ffmpeg
+    # ## nvidia
+    # nvidia #cuda cudnn nccl
 
     ### testing
     # 
-    #  intel-mkl lapack
+    # intel-mkl lapack
     # help2man
 )
 
