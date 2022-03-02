@@ -7,19 +7,12 @@ epoch=1
 pkgdesc="A collection of routines used to create PNG format graphics files"
 arch=('x86_64')
 url="http://www.libpng.org/pub/png/libpng.html"
+license=('KZL')
 source=(https://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.xz
         https://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-$pkgver-apng.patch.gz)
 sha256sums=('505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca'
             '823bb2d1f09dc7dae4f91ff56d6c22b4b533e912cbd6c64e8762255e411100b6')
 validpgpkeys=('8048643BA2C840F4F92A195FF54984BFA16C640F')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  # Add animated PNG (apng) support. Required by Firefox
-  # See http://sourceforge.net/projects/libpng-apng/
-  gzip -cd ../libpng-$_apngver-apng.patch.gz | patch -Np1
-}
 
 build() {
   cd $pkgname-$pkgver
@@ -34,7 +27,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

@@ -5,35 +5,34 @@ epoch=1
 pkgdesc="TeX Live"
 arch=('x86_64')
 url="https://www.tug.org/historic/"
-depends=(cairo freetype2 gd ghostscript gmp graphite harfbuzz icu gd libjpeg-turbo libpaper libpng libsigsegv mpfr pixman)
-# depends=(cairo freetype2 gd ghostscript gmp graphite harfbuzz icu gd libjpeg-turbo libpaper libpng libsigsegv mpfr pixman poppler t1lib zziplib)
+depends=(fontconfig freetype2 gmp graphite harfbuzz icu libpng mpfr)
+# depends=(cairo freetype2 gd ghostscript gmp graphite harfbuzz icu gd libjpeg-turbo libpaper libpng mpfr pixman zziplib)
 provides=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 conflicts=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 replaces=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 options=(!strip)
 install=$pkgname.install
-source=(
-  # git+https://github.com/TeX-Live/texlive-source.git#commit=
-  http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-$pkgver-source.tar.xz
-  http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-$pkgver-texmf.tar.xz
-  git+https://github.com/TeX-Live/installer.git
-  http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
-  09-texlive-fonts.conf
-  $pkgname.install
-)
+source=(http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-$pkgver-source.tar.xz
+        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-$pkgver-texmf.tar.xz
+        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-$pkgver-tlpdb-full.tar.gz
+        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/install-tl-unx.tar.gz
+        # git+https://github.com/TeX-Live/texlive-source.git#commit=
+        # git+https://github.com/TeX-Live/installer.git
+        # http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
+        09-texlive-fonts.conf
+        $pkgname.install)
 noextract=($pkgname-$pkgver-texmf.tar.xz)
 sha256sums=('7aefd96608d72061970f2d73f275be5648ea8ae815af073016d3106acc0d584b'
             'ff12d436c23e99fb30aad55924266104356847eb0238c193e839c150d9670f1c'
-            'SKIP'
-            '3f608fe12855a2ab583f03c8c1aac704ceef5ce4d9a1672b5220185ed4ef7134'
+            '21d218dcf56160081e8c376ec9d6b4cfc750e2a0fea14ee24884b1d5039f2566'
+            '74eac0855e1e40c8db4f28b24ef354bd7263c1f76031bdc02b52156b572b7a1d'
             'fe01050544263a517c9a682942edc1cbb150986c34eab3b6755143f072838e93'
             'af6b83c35bcc7a07397f36e16e70ae203c3a7520225dfbeee10f45fc8adacd3f')
 
 prepare() {
-  cd $pkgname-$pkgver-source
+  mv install-tl-20210324 install-tl
 
-  # FS#27251
-  sed -i s/SELFAUTOPARENT/TEXMFROOT/ texk/tex4htk/t4ht.c
+  cd $pkgname-$pkgver-source
 
   mkdir build
 }
@@ -49,27 +48,25 @@ build() {
     --disable-t1utils \
     --disable-dump-share \
     --disable-aleph \
-    --enable-luatex \
+    --enable-xetex \
     --disable-bibtexu \
     --disable-psutils \
     --enable-shared \
     --disable-static \
     --with-clisp-runtime=default \
-    --with-banner-add="/KZL" \
+    --with-banner-add="/KZL $(date -Ru)" \
     --with-system-harfbuzz \
     --with-system-icu \
     --with-system-graphite2 \
     --without-system-zziplib \
-    --without-system-xpdf \
-    --without-system-poppler \
     --with-system-mpfr \
     --with-system-gmp \
-    --with-system-cairo \
-    --with-system-pixman \
-    --with-system-gd \
+    --without-system-cairo \
+    --without-system-pixman \
+    --without-system-gd \
     --with-system-freetype2 \
     --with-system-libpng \
-    --with-system-libpaper \
+    --without-system-libpaper \
     --with-system-zlib \
     --without-x
 
@@ -79,10 +76,10 @@ build() {
 check() {
   cd $pkgname-$pkgver-source/build
 
-  make -k check || warning "Check failed."
+  make -k check
 }
 
-package_texlive() {
+package() {
   cd $pkgname-$pkgver-source/build
 
   make DESTDIR="$pkgdir/" install-strip
@@ -90,8 +87,8 @@ package_texlive() {
 
   ### enable tlmgr
   mkdir -p "$pkgdir"/opt/TeXLive/tlpkg/{backups,installer,tlpobj}
-  cp -r "$srcdir"/installer/tlpkg/{TeXLive,gpg,translations} "$pkgdir"/opt/TeXLive/tlpkg/
-  cp -r "$srcdir"/installer/tlpkg/installer/{config.guess,ctan-mirrors.pl} "$pkgdir"/opt/TeXLive/tlpkg/installer/
+  cp -r "$srcdir"/install-tl/tlpkg/{TeXLive,gpg,translations} "$pkgdir"/opt/TeXLive/tlpkg/
+  cp -r "$srcdir"/install-tl/tlpkg/installer/{config.guess,ctan-mirrors.pl} "$pkgdir"/opt/TeXLive/tlpkg/installer/
   cp "$srcdir"/texlive.tlpdb "$pkgdir"/opt/TeXLive/tlpkg/
 
   ### texmf-dist

@@ -1,16 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=fontconfig
-pkgver=2.13.91+48+gfcb0420
+pkgver=2.13.96
 pkgrel=1
 epoch=1
 pkgdesc="A library for configuring and customizing font access"
 arch=('x86_64')
 url="https://www.freedesktop.org/wiki/Software/fontconfig/"
+license=('KZL')
 depends=(expat freetype2)
 makedepends=(autoconf-archive gperf json-c)
 install=$pkgname.install
-source=(git+https://gitlab.freedesktop.org/fontconfig/fontconfig.git#commit=fcb042028126d79ea5a5fa015b2b034b98656e73  
+source=(git+https://gitlab.freedesktop.org/fontconfig/fontconfig.git#commit=d37f97223a4715176c0889e91685dc796457e25f    
         fontconfig.hook)
 sha256sums=('SKIP'
             '8883f7e6e9d574ed52b89256507a6224507925715ddc85b3dfab9683df2f1e25')
@@ -46,7 +47,7 @@ build() {
 check() {
   cd $pkgname
 
-  make -k check || warning "Check failed."
+  make -k check
 }
 
 package() {

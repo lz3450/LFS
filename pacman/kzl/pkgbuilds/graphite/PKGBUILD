@@ -7,6 +7,7 @@ epoch=2
 pkgdesc="Reimplementation of the SIL Graphite text processing engine"
 arch=('x86_64')
 url="https://github.com/silnrsi/graphite"
+license=('KZL')
 makedepends=(freetype2)
 options=(!emptydirs)
 source=(https://github.com/silnrsi/graphite/releases/download/$pkgver/graphite2-$pkgver.tgz)
@@ -29,11 +30,11 @@ build() {
 check() {
   cd graphite2-$pkgver
 
-  cmake --build build --target tests || warning "Check failed."
+  cmake --build build --target tests
 }
 
 package() {
   cd graphite2-$pkgver
 
-  cmake --build build --target install -- DESTDIR="$pkgdir/"
+  DESTDIR="$pkgdir/" cmake --build build --target install
 }
