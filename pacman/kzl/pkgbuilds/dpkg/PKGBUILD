@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=dpkg
-pkgver=1.20.9
+pkgver=1.21.1
 pkgrel=1
 epoch=1
 pkgdesc="The Debian Package Manager tools"
 arch=('x86_64')
 url="https://tracker.debian.org/pkg/dpkg"
+license=('KZL')
 source=(git+https://salsa.debian.org/dpkg-team/$pkgname.git#tag=$pkgver
         origin.kzl-linux)
 sha256sums=('SKIP'
@@ -35,7 +36,7 @@ build() {
 check() {
   cd $pkgname
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {
