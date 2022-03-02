@@ -1,15 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=aria2
-pkgver=1.35.0
+pkgver=1.36.0
 pkgrel=1
 epoch=1
 pkgdesc="A lightweight multi-protocol & multi-source command-line download utility"
 arch=('x86_64')
 url="https://aria2.github.io/"
+license=('KZL')
 depends=(c-ares ca-certificates gmp gnutls libssh2 libuv libxml2 nettle sqlite)
 source=(https://github.com/tatsuhiro-t/aria2/releases/download/release-$pkgver/aria2-$pkgver.tar.xz)
-sha256sums=('1e2b7fd08d6af228856e51c07173cfcf987528f1ac97e04c5af4a47642617dfd')
+sha256sums=('58d1e7608c12404f0229a3d9a4953d0d00c18040504498b483305bcb3de907a5')
 
 build() {
   cd $pkgname-$pkgver
