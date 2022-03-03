@@ -1,0 +1,52 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=plocate
+pkgver=1.1.15
+pkgrel=1
+epoch=1
+pkgdesc="Alternative to locate, faster and compatible with mlocate's database"
+arch=('x86_64')
+url="https://plocate.sesse.net"
+license=('KZL')
+depends=(liburing)
+provides=(mlocate locate)
+backup=(etc/updatedb.conf)
+source=($url/download/$pkgname-$pkgver.tar.gz
+        updatedb.conf)
+sha256sums=('d1855954da8b811887de0e12ed8d236c0599ecd959ec5a6851503315507bf150'
+            '0df5222fb9e781b923949a5eb18654d6b0b91b05db227f6477299c2f5895a30b')
+
+build() {
+  cd $pkgname-$pkgver
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D install_cron=false \
+    -D install_systemd=true \
+    -D locategroup=locate \
+    build
+
+  ninja -C build
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  DESTDIR="$pkgdir" ninja -C build install
+  ln -sf plocate "$pkgdir"/usr/bin/locate
+
+  chgrp 21 "$pkgdir"/usr/bin/plocate
+  chmod 2755 "$pkgdir"/usr/bin/plocate
+
+  echo "g locate 21 - -" | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/plocate.conf
+  echo "f /var/lib/plocate/plocate.db   0750 root locate" | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/tmpfiles.d/plocate.conf
+
+  install -Dm644 "$srcdir"/updatedb.conf "$pkgdir"/etc/updatedb.conf
+}
