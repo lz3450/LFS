@@ -236,16 +236,18 @@ make_rootfs() {
         # Set ownership and mode for files and directories
         chown -fh -- 0:0 "${pacstrap_dir}"/etc/shadow
         chmod -f -- 400 "${pacstrap_dir}"/etc/shadow
+        chown -fh -- 0:0 "${pacstrap_dir}"/root
+        chmod -f -- 750 "${pacstrap_dir}"/root
         info "Done!"
     fi
 
-    # Copy custom repository
-    info "Copying custom repository..."
-    cp -af --no-preserve=ownership,mode -- /home/.repository/ "${pacstrap_dir}"
-    info "Done!"
-
     info "Installing packages to '${pacstrap_dir}/'..."
     env -u TMPDIR pacstrap -c -G -M -- "${pacstrap_dir}" "${pkg_list[@]}" &> "${log_dir}"/pacstrap.log
+    info "Done!"
+
+    # Copy custom repository
+    info "Copying custom repository..."
+    cp -af --no-preserve=ownership,mode -- /home/.repository "${pacstrap_dir}"/home/.repository
     info "Done!"
 
     info "Creating a list of installed packages on live-enviroment..."
