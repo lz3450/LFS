@@ -147,16 +147,19 @@ kzl_stage3_pkgs=(
     ### core
     ## zsh
     zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
-    # ## initramfs
+    ## initramfs
     cpio dracut
+    ## iso
+    squashfs-tools mtools dosfstools
     ## tmux
     libevent libutempter tmux
     ## utils
     usbutils
     wpa_supplicant
+    smartmontools nvme-cli
     wget
     xxhash rsync
-    dosfstools parted
+    parted
     nano vim
     c-ares aria2
     ## devtools
@@ -170,8 +173,6 @@ kzl_stage3_pkgs=(
     # ## Xlib
     # xorg-util-macros xorgproto libxau libxdmcp xcb-proto libxcb xtrans libx11 libice libsm libxt libxext libxrender libxpm
     # ## ffmpeg
-    # ## nvidia
-    # nvidia #cuda cudnn nccl
 
     ### testing
     # 
