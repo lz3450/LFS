@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=awk
+pkgver=20220122
+pkgrel=1
+epoch=1
+pkgdesc="The one, true implementation of AWK"
+arch=('x86_64')
+url="https://github.com/onetrueawk/awk.git"
+license=('KZL')
+conflicts=(gawk)
+replaces=(gawk)
+options=(!makeflags)
+source=(git+$url#tag=$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  make CPPFLAGS="-DHAS_ISBLANK $CPPFLAGS" CFLAGS="$CFLAGS $LDFLAGS"
+}
+
+check() {
+  cd $pkgname
+
+  ./REGRESS || warning "Check failed."
+}
+
+package() {
+  cd $pkgname
+
+  install -Dm0755 a.out "$pkgdir/usr/bin/$pkgname"
+  install -Dm0644 $pkgname.1 "$pkgdir/usr/share/man/man1/$pkgname.1"
+}

@@ -37,13 +37,13 @@ package() {
   ln -s /opt/intel/mkl/tools/mkl_link_tool "$pkgdir"/usr/bin/mkl_link_tool
 
   install -dm755 "$pkgdir"/usr/lib/pkgconfig/
-  mv opt/intel/compilers_and_libraries_${pkgver}/linux/mkl/bin/pkgconfig/*.pc "${pkgdir}"/usr/lib/pkgconfig/
+  mv opt/intel/compilers_and_libraries_$pkgver/linux/mkl/bin/pkgconfig/*.pc "$pkgdir"/usr/lib/pkgconfig/
 
   install -dm755 "$pkgdir"/opt/intel/mkl/{include,lib/intel64_lin}/
-  mv opt/intel/compilers_and_libraries_$pkgver/linux/mkl/include/* "${pkgdir}"/opt/intel/mkl/include/
+  mv opt/intel/compilers_and_libraries_$pkgver/linux/mkl/include/* "$pkgdir"/opt/intel/mkl/include/
   mv opt/intel/compilers_and_libraries_$pkgver/linux/mkl/lib/intel64_lin/*.{so,a} "$pkgdir"/opt/intel/mkl/lib/intel64_lin/
   mv opt/intel/compilers_and_libraries_$pkgver/linux/compiler/lib/intel64_lin/*.{so,a} "$pkgdir"/opt/intel/mkl/lib/intel64_lin/
-  ln -s intel64_lin "${pkgdir}"/opt/intel/mkl/lib/intel64
+  ln -s intel64_lin "$pkgdir"/opt/intel/mkl/lib/intel64
 
   install -Dm755 "$srcdir"/intel-mkl.sh "$pkgdir"/etc/profile.d/intel-mkl.sh
   install -Dm644 "$srcdir"/intel-mkl.conf "$pkgdir"/etc/ld.so.conf.d/intel-mkl.conf
