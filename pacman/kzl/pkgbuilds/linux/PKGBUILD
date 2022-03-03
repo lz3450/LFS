@@ -60,6 +60,8 @@ package_linux() {
 package_linux-headers() {
   cd $pkgbase-$pkgver
 
+  local kernelrelease=$(make O=build -s kernelrelease)
+
   install -d -m 0755 "$pkgdir"/usr/lib/modules/$kernelrelease/
   cp -a . "$pkgdir"/usr/lib/modules/$kernelrelease/source
   mv "$pkgdir"/usr/lib/modules/$kernelrelease/{source/,}build
