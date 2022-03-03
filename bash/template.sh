@@ -19,7 +19,7 @@ usage() {
         errno=1
     fi
 
-    echo "Usage: ${script_name} [ -h | --help ] -i|--input <input> [ -V | --verbose ]"
+    echo "Usage: ${script_name} [ -h | --help ] -i | --input <input> [ -V | --verbose ]"
     echo
     echo "    -h, --help        display this help message and exit"
     echo "    -i, --input       option taking input example"
