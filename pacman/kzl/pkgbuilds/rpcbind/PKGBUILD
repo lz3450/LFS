@@ -1,0 +1,49 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=rpcbind
+pkgver=1.2.6
+pkgrel=1
+epoch=1
+pkgdesc="portmap replacement which supports RPC over various protocols"
+arch=('x86_64')
+url="http://git.linux-nfs.org/?p=steved/rpcbind.git;a=summary"
+license=('KZL')
+depends=(libtirpc)
+backup=(etc/conf.d/rpcbind)
+source=(git+git://git.linux-nfs.org/projects/steved/rpcbind.git#tag=$pkgname-${pkgver//./_}
+        rpcbind.conf)
+sha256sums=('SKIP'
+            '3783949332a1f33616c136b5bab2638f11ef703a43307a8cf8cfeceee6076d85')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --enable-warmstarts \
+    --enable-rmtcalls \
+    --with-statedir=/var/lib/rpcbind \
+    --with-rpcuser=rpc
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir/" install
+
+  install -D -m644 "$srcdir"/rpcbind.conf "$pkgdir"/etc/conf.d/rpcbind
+
+  sed -e "/EnvironmentFile/a EnvironmentFile=/etc/conf.d/rpcbind" -i "$pkgdir"/usr/lib/systemd/system/rpcbind.service
+
+  printf "%s" "d /var/lib/rpcbind 0700 rpc rpc" | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/tmpfiles.d/rpcbind.conf
+  printf "%s" 'u rpc 32 "Rpcbind Daemon" /var/lib/rpcbind' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/rpcbind.conf
+}

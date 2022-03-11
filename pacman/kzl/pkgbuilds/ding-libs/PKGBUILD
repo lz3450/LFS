@@ -1,0 +1,36 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=ding-libs
+pkgver=0.6.1
+pkgrel=1
+epoch=1
+pkgdesc="'D is not GLib' utility libraries"
+arch=('x86_64')
+url="https://pagure.io/SSSD/ding-libs/"
+license=('KZL')
+source=(https://releases.pagure.org/SSSD/ding-libs/$pkgname-$pkgver.tar.gz{,.asc})
+sha256sums=('a319a327deb81f2dfab9ce4a4926e80e1dac5dcfc89f4c7e548cec2645af27c1'
+            'SKIP')
+validpgpkeys=('16F24229488E736048952737BA88000FE6398272')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --disable-static
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

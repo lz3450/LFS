@@ -1,0 +1,72 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=nfs-utils
+pkgver=2.6.1
+pkgrel=1
+epoch=1
+pkgdesc="Support programs for Network File Systems"
+arch=('x86_64')
+url="http://nfs.sourceforge.net"
+license=('KZL')
+depends=(device-mapper gssproxy libevent rpcbind)
+makedepends=(sqlite)
+optdepends=("sqlite: for nfsdcltrack usage")
+provides=(nfsidmap)
+conflicts=(nfsidmap)
+replaces=(nfsidmap)
+backup=(etc/{exports,nfs.conf,nfsmount.conf}
+        var/lib/nfs/{etab,rmtab})
+source=(https://www.kernel.org/pub/linux/utils/nfs-utils/$pkgver/$pkgname-$pkgver.tar.{xz,sign}
+        exports)
+sha256sums=('60dfcd94a9f3d72a12bc7058d811787ec87a6d593d70da2123faf9aad3d7a1df'
+            'SKIP'
+            '9249f25e13ec8ce59bbe4b77abf58ba40c69785b4a207dc09d335c098adcf654')
+validpgpkeys=('E1B71E339E20A10A676F7CB69AFB1D681A125177')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  sed -e "s|sbindir = /sbin|sbindir = /usr/bin|g" -i utils/*/Makefile.am
+  sed -e "s|sbin|bin|" -i utils/nfsidmap/id_resolver.conf
+  autoreconf -vfi
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --sysconfdir=/etc \
+    --enable-libmount-mount \
+    --enable-nfsv4server \
+    --with-statedir=/var/lib/nfs \
+    --with-start-statd=/usr/bin/start-statd \
+    --with-systemd
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  install -Dm644 utils/mount/nfsmount.conf "$pkgdir"/etc/nfsmount.conf
+  install -Dm644 nfs.conf "$pkgdir"/etc/nfs.conf
+  install -Dm644 utils/nfsidmap/id_resolver.conf "$pkgdir"/etc/request-key.d/id_resolver.conf
+
+  install -Dm644 "$srcdir"/exports "$pkgdir"/etc/exports
+  install -dm755 "$pkgdir"/etc/exports.d
+
+  install -dm555 "$pkgdir"/var/lib/nfs/rpc_pipefs
+  install -dm755 "$pkgdir"/var/lib/nfs/v4recovery
+
+  install -Dm644 systemd/README  -t "$pkgdir"/usr/share/doc/$pkgname/systemd
+}

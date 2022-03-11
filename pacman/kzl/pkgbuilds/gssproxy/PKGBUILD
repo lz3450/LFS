@@ -1,0 +1,75 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gssproxy
+pkgver=0.8.4
+pkgrel=1
+epoch=1
+pkgdesc="GSSAPI proxy"
+arch=('x86_64')
+url="https://github.com/gssapi/gssproxy"
+license=('KZL')
+depends=(ding-libs krb5 popt)
+backup=(etc/gssproxy/{gssproxy,24-nfs-server,80-httpd,99-nfs-client}.conf
+        etc/gss/mech.d/gssproxy.conf)
+options=(emptydirs)
+source=($url/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz)
+sha256sums=('cf1eb125d6273d7fb2fd382581653b4da24abe2b13e054a3400d22bf2448b8c6')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  # delete unneeded service dependency
+  sed -i "/# GSSPROXY will not be started until syslog is/d" systemd/gssproxy.service.in
+  sed -i "s/syslog.target //" systemd/gssproxy.service.in
+
+  autoreconf -ifv
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  # make it find bundled verto from krb5 without its own pkg-config file
+  export VERTO_CFLAGS="-I/usr/include"
+  export VERTO_LIBS="-L/usr/lib -lverto"
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --with-pubconf-path=/etc/gssproxy \
+    --without-selinux \
+    --with-gpp-default-behavior=REMOTE_FIRST \
+    --with-initscript=systemd
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make test_proxymech
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+
+  # cleanup empty directories
+  rmdir "$pkgdir"/usr/include
+  rmdir "$pkgdir"/usr/share/doc/{gssproxy/doc,gssproxy,}
+
+  # install default config files
+  install -m644 examples/gssproxy.conf "$pkgdir"/etc/gssproxy/gssproxy.conf
+  # nfs services
+  install -m644 examples/24-nfs-server.conf "$pkgdir"/etc/gssproxy/24-nfs-server.conf
+  install -m644 examples/99-nfs-client.conf "$pkgdir"/etc/gssproxy/99-nfs-client.conf
+  # httpd service / use Arch UID/GID http/33 (by pkg filesystem)
+  install -m644 examples/80-httpd.conf "$pkgdir"/etc/gssproxy/80-httpd.conf
+  sed -e "s:euid = apache:euid = http:" -i "$pkgdir"/etc/gssproxy/80-httpd.conf
+
+  install -Dm644 examples/mech  "$pkgdir"/etc/gss/mech.d/gssproxy.conf
+
+  install -dm700 "$pkgdir"/var/lib/gssproxy/rcache
+}
