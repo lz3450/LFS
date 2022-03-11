@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=debootstrap
-pkgver=1.0.124
+pkgver=1.0.126
 pkgrel=1
 epoch=1
 pkgdesc="Bootstrap a basic Debian system"
@@ -10,7 +10,7 @@ url="https://tracker.debian.org/pkg/debootstrap"
 depends=(wget)
 optdepends=("gnupg: check release signatures")
 source=(https://salsa.debian.org/installer-team/debootstrap/-/archive/$pkgver/$pkgname-$pkgver.tar.bz2)
-sha256sums=('e77aa52be6f74d7cb865575d501f6974721b0e5051c4f8ca8d8d0e10dfbf8251')
+sha256sums=('e2032618c887927c566797e1af50eee3f46ab8208a533e6959ce37296416f285')
 
 prepare() {
   cd $pkgname-$pkgver
