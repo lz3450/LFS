@@ -154,7 +154,7 @@ kzl_stage3_pkgs=(
     ## tmux
     libevent libutempter tmux
     ## utils
-    usbutils
+    usbutils minicom
     wpa_supplicant
     smartmontools nvme-cli
     wget
@@ -170,6 +170,8 @@ kzl_stage3_pkgs=(
     texlive
     ## samba
     lmdb jansson liburing samba
+    ## nfs-utils
+    rpcbind gssproxy 
     # ## Xlib
     # xorg-util-macros xorgproto libxau libxdmcp xcb-proto libxcb xtrans libx11 libice libsm libxt libxext libxrender libxpm
     # ## ffmpeg
