@@ -15,9 +15,12 @@ script_dir="$(dirname "${script_path}")"
 pkg_list=(
     arch-install-scripts
     base
+    debootstrap
     diffutils
     dosfstools
+    dpkg
     e2fsprogs
+    f2fs-tools
     gptfdisk
     grml-zsh-config
     less
@@ -40,6 +43,7 @@ pkg_list=(
     tmux
     usbutils
     vim
+    wget
     wpa_supplicant
     zsh
     zsh-autosuggestions
@@ -119,7 +123,7 @@ make_rootfs_squashfs() {
     local image_path="${isofs_dir}/${install_dir}/squashfs.img"
 
     # Create a squashfs image and place it in the ISO 9660 file system.
-    install -dm 0755 -- "${isofs_dir}/${install_dir}"
+    install -dm0755 -- "${isofs_dir}/${install_dir}"
     info "Creating SquashFS image, this may take some time..."
     mksquashfs "${pacstrap_dir}" "${image_path}" -noappend -comp xz -b 1M -Xbcj x86 -Xdict-size 1M &> "${log_dir}"/mksquashfs.log
     info "Done!"
@@ -291,7 +295,7 @@ done
 start_time=$(date +%s)
 
 echo "****************************************************************"
-echo "                bash script template                "
+echo "                mkiso                "
 echo "****************************************************************"
 
 build
