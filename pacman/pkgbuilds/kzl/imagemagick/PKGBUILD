@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=imagemagick
-pkgver=7.0.10
+pkgver=7.1.0.26
 pkgrel=37
 epoch=1
 pkgdesc="An image viewing/manipulation program"
 arch=('x86_64')
 url="https://www.imagemagick.org/"
 depends=(fontconfig freetype2 lcms2 liblqr libltdl libpng libraqm libzip)
-makedepends=(chrpath djvulibre ghostscript jbigkit libheif libraw librsvg libtiff libwebp libwmf libxext libxml2 ocl-icd opencl-headers openexr openjpeg2)
+# makedepends=(chrpath djvulibre ghostscript jbigkit libheif libraw librsvg libtiff libwebp libwmf libxext libxml2 ocl-icd opencl-headers openexr openjpeg2)
+makedepends=(ghostscript jbigkit libheif libraw librsvg libtiff libwebp libwmf libxext libxml2 ocl-icd opencl-headers openexr openjpeg2)
 optdepends=("djvulibre: DJVU support"
             "ghostscript: PS/PDF support"
             "libheif: HEIF support"
@@ -59,7 +60,7 @@ check() {
   cd ImageMagick-$pkgver-$pkgrel
 
   ulimit -n 4096
-  make check || warning "Check failed."
+  make check
 }
 
 package() {
@@ -70,6 +71,4 @@ package() {
   find "$pkgdir"/usr/lib/perl5 -name "*.so" -exec chrpath -d {} +
   rm "$pkgdir"/etc/ImageMagick-${pkgver%%.*}/type-{apple,urw-base35,windows}.xml
   rm "$pkgdir"/usr/lib/*.la
-
-  sed -e '/<\/policymap>/i \ \ <policy domain="delegate" rights="none" pattern="gs" \/>' -i "$pkgdir"/etc/ImageMagick-7/policy.xml
 }

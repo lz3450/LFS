@@ -1,0 +1,53 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gpm
+pkgver=1.20.7+38+ge82d1a6
+pkgrel=1
+epoch=1
+pkgdesc="A mouse server for the console and xterm"
+arch=('x86_64')
+url="https://www.nico.schottelius.org/software/gpm/"
+license=('KZL')
+options=(!makeflags)
+source=(git+https://github.com/telmich/gpm.git#commit=e82d1a653ca94aa4ed12441424da6ce780b1e530
+        gpm.sh
+        gpm.path
+        gpm.service)
+sha256sums=('SKIP'
+            'f98beef43ba22ac53b1cc2b6592ba802f9292e6975ad9d608f7d475c772bbd38'
+            '221a931f4d061573dddf3faa105b5775bde841089493b7cf62b66a4fa3a0772b'
+            '3235e8dd0e3605216b636167dca5d2ebf52bfa5c21b5f378e2b8c3c47330e45e')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --sysconfdir=/etc
+
+  make V=1
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir/" install
+
+  install -D -m0644 "$srcdir"/gpm.sh "$pkgdir"/etc/profile.d/gpm.sh
+  install -D -m0644 "$srcdir"/gpm.path "$pkgdir"/usr/lib/systemd/system/gpm.path
+  install -D -m0644 "$srcdir"/gpm.service "$pkgdir"/usr/lib/systemd/system/gpm.service
+  ln -s libgpm.so.2 "$pkgdir"/usr/lib/libgpm.so
+}

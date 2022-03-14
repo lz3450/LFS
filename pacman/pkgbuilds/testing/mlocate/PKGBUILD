@@ -1,0 +1,121 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=mlocate
+pkgver=
+pkgrel=1
+epoch=1
+pkgdesc=""
+arch=('x86_64')
+url=""
+license=('KZL')
+groups=()
+depends=()
+makedepends=()
+optdepends=()
+checkdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=$pkgname.install
+changelog=
+source=(git+https://pagure.io/mlocate.git#commit=c98bf6595703456558a6f9c163c746cdaa9e591f
+        git+https://git.savannah.gnu.org/git/gnulib.git#commit=5861339993f3014cfad1b94fc7fe366fc2573598)
+noextract=()
+sha256sums=()
+validpgpkeys=()
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
+
+###############################################################################
+
+prepare() {
+
+}
+
+###############################################################################
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}
+
+###############################################################################
+
+build() {
+  cd $pkgname-$pkgver
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  meson test -C build || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  meson install -C build --destdir="$pkgdir/"
+}
+
+###############################################################################
+
+build() {
+  cd $pkgname-$pkgver
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  cmake --build build --target tests || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  DESTDIR="$pkgdir/" cmake --build build --target install
+}

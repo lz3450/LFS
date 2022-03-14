@@ -1,0 +1,31 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=chafa
+pkgver=1.8.0
+pkgrel=1
+epoch=1
+pkgdesc="Image-to-text converter supporting a wide range of symbols and palettes, transparency, animations, etc."
+arch=('x86_64')
+url="https://hpjansson.org/chafa/"
+license=('KZL')
+# depends=(imagemagick)
+source=(https://github.com/hpjansson/chafa/releases/download/$pkgver/chafa-$pkgver.tar.xz{,.asc})
+sha256sums=('21ff652d836ba207098c40c459652b2f1de6c8a64fbffc62e7c6319ced32286b'
+            'SKIP')
+validpgpkeys=('C01EDE5BB0D91E26D003662EC76BB9FEEAD12EA7')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr \
+    --without-tools
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

@@ -1,12 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=lcms2
-pkgver=2.12
+pkgver=2.13.1
 pkgrel=1
 epoch=1
 pkgdesc="Small-footprint color management engine, version 2"
 arch=('x86_64')
 url="http://www.littlecms.com/"
+license=('KZL')
 depends=(libtiff)
 source=(https://github.com/mm2/Little-CMS/archive/$pkgver/$pkgname-$pkgver.tar.gz)
 sha256sums=('e501f1482fc424550ef3abbf86bf1c66090e1661249e89552d39ed5bf935df66')
@@ -23,7 +24,7 @@ build() {
 check() {
   cd Little-CMS-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

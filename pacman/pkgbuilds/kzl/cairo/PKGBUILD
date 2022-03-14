@@ -7,6 +7,7 @@ epoch=1
 pkgdesc="2D graphics library with support for multiple output devices"
 arch=('x86_64')
 url="https://cairographics.org/"
+license=('KZL')
 depends=(fontconfig glib2 libpng libx11 libxext libxrender lzo pixman)
 makedepends=(ghostscript valgrind)
 source=(git+https://gitlab.freedesktop.org/cairo/cairo.git#tag=$pkgver)
