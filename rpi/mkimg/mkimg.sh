@@ -24,57 +24,58 @@ create_img() {
         set 2 lba off \
         print
 
-    loop=$(sudo losetup -f)
+    loop=$(losetup -f)
     echo "Loop device is \"$loop\""
 
-    sudo losetup -P ${loop} ${img}
+    losetup -P ${loop} ${img}
 
-    sudo mkfs.fat -F32 ${loop}p1
-    sudo mkfs.ext4 ${loop}p2
+    mkfs.fat -F32 ${loop}p1
+    mkfs.ext4 ${loop}p2
 
-    sudo mkdir -p ${mountpoint}
-    sudo mount ${loop}p2 ${mountpoint}
-    sudo mkdir -p ${mountpoint}/boot
-    sudo mount ${loop}p1 ${mountpoint}/boot
+    mkdir -p ${mountpoint}
+    mount ${loop}p2 ${mountpoint}
+    mkdir -p ${mountpoint}/boot
+    mount ${loop}p1 ${mountpoint}/boot
 }
 
 configure_img() {
     # debootstrap
-    sudo debootstrap --arch=arm64 --foreign buster ${mountpoint} http://ftp.debian.org/debian
-    # sudo cp /usr/bin/qemu-aarch64-static ${mountpoint}/usr/bin
-    sudo LC_ALL=C PATH="${chroot_path}" chroot ${mountpoint} /debootstrap/debootstrap --second-stage
+    debootstrap --arch=arm64 --foreign testing ${mountpoint} http://ftp.debian.org/debian
+    # debootstrap --arch=arm64 --foreign stable ${mountpoint} http://ftp.debian.org/debian
+    # cp /usr/bin/qemu-aarch64-static ${mountpoint}/usr/bin
+    LC_ALL=C PATH="${chroot_path}" chroot ${mountpoint} /debootstrap/debootstrap --second-stage
 
-    echo "RPi" | sudo tee ${mountpoint}/etc/hostname
-    sudo cp -f fstab ${mountpoint}/etc/
-    sudo cp -f sources.list ${mountpoint}/etc/apt/
-    sudo cp -f raspi.list ${mountpoint}/etc/apt/sources.list.d/
-    sudo cp -f cmdline.txt ${mountpoint}/boot/
-    sudo cp -f config.txt ${mountpoint}/boot/
+    echo "RPi" > ${mountpoint}/etc/hostname
+    cp -f fstab ${mountpoint}/etc/
+    cp -f sources.list ${mountpoint}/etc/apt/
+    cp -f raspi.list ${mountpoint}/etc/apt/sources.list.d/
+    cp -f cmdline.txt ${mountpoint}/boot/
+    cp -f config.txt ${mountpoint}/boot/
 
-    bootpartuuid=$(sudo blkid -s PARTUUID | grep ${loop}p1 | sed -e 's#.*=\"\(.*\)\"#\1#')
-    rootpartuuid=$(sudo blkid -s PARTUUID | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
-    sudo sed -e "s|%BOOTPARTUUID%|${bootpartuuid}|" -i ${mountpoint}/etc/fstab
-    sudo sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i ${mountpoint}/etc/fstab
-    sudo sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i ${mountpoint}/boot/cmdline.txt
+    bootpartuuid=$(blkid -s PARTUUID | grep ${loop}p1 | sed -e 's#.*=\"\(.*\)\"#\1#')
+    rootpartuuid=$(blkid -s PARTUUID | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
+    sed -e "s|%BOOTPARTUUID%|${bootpartuuid}|" -i ${mountpoint}/etc/fstab
+    sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i ${mountpoint}/etc/fstab
+    sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i ${mountpoint}/boot/cmdline.txt
 
-    # sudo tee -a ${mountpoint}/etc/hosts << EOF
+    # tee -a ${mountpoint}/etc/hosts << EOF
     # $(ping -c1 deb.debian.org| head -1 | cut -d '(' -f3 | cut -d ')' -f1)           deb.debian.org
     # $(ping -c1 archive.raspberrypi.org| head -1 | cut -d '(' -f3 | cut -d ')' -f1)  archive.raspberrypi.org
     # $(ping -c1 deb.grml.org| head -1 | cut -d '(' -f3 | cut -d ')' -f1)             deb.grml.org
     # EOF
 
-    sudo cp initialize.sh ${mountpoint}/root
+    cp initialize.sh ${mountpoint}/root
 
-    sudo LC_ALL=C PATH="${chroot_path}" chroot ${mountpoint} /bin/bash -c "/root/initialize.sh"
+    LC_ALL=C PATH="${chroot_path}" chroot ${mountpoint} /bin/bash -c "/root/initialize.sh"
 
-    sudo rm ${mountpoint}/root/initialize.sh
+    rm ${mountpoint}/root/initialize.sh
 }
 
 cleanup() {
     echo "cleanup"
 
-    sudo umount -R ${mountpoint} || :
-    sudo losetup -D
+    umount -R ${mountpoint} || :
+    losetup -D
 
     if [ -f ${img} ]; then
         cp -f ${img} ${script_dir}

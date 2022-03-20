@@ -4,8 +4,8 @@ set -e
 # set -x
 
 # package
-apt-get update || :
-apt-get install -y \
+apt update || :
+apt install -y \
     gnupg \
     wget curl \
     dialog \
@@ -15,10 +15,10 @@ apt-get install -y \
     locales \
     openssh-server \
     sudo
-wget -qO - http://archive.raspberrypi.org/debian/raspberrypi.gpg.key | apt-key add -
-apt-get update
-apt-get upgrade -y
-apt-get install -y \
+wget -qO /etc/apt/trusted.gpg.d/raspberrypi.gpg.key http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
+apt update
+apt upgrade -y
+apt install -y \
     raspberrypi-archive-keyring \
     raspberrypi-bootloader \
     raspberrypi-kernel \
@@ -30,7 +30,6 @@ apt-get install -y \
     rpi-update \
     pi-bluetooth \
     firmware-realtek \
-    vl805fw \
     firmware-misc-nonfree \
     firmware-libertas \
     firmware-brcm80211 \
@@ -51,8 +50,8 @@ echo -e '3450\n3450' | passwd kzl
 # zsh
 echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /root/.zshrc
 echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /root/.zshrc
-echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | sudo -u kzl tee -a /home/kzl/.zshrc
-echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | sudo -u kzl tee -a /home/kzl/.zshrc
+echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /home/kzl/.zshrc
+echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /home/kzl/.zshrc
 
 # echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /etc/zsh/zshrc
 # echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /etc/zsh/zshrc
@@ -64,11 +63,12 @@ echo 'LANG=en_US.UTF-8' | tee /etc/locale.conf
 locale-gen
 
 # environment variables
-sudo -u kzl tee /home/kzl/.zshenv << EOF 
+tee /home/kzl/.zshenv << EOF 
 typeset -U PATH path
 path=("$HOME/.local/bin" "\$path[@]" "/usr/local/sbin" "/usr/sbin" "/sbin")
 export PATH
 EOF
+chown kzl:kzl /home/kzl/.zshenv
 
 # time
 # timedatectl set-ntp 1
