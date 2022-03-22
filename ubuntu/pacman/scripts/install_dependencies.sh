@@ -6,4 +6,5 @@ sudo apt install -y \
     valgrind \
     liblzma-dev \
     swig \
-    libedit-dev
+    libedit-dev \
+    rsync
