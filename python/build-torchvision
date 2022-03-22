@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+BUILDDIR=/dev/shm
+TORCHVISION_VERSION=0.7.0
+
+if [ -f /home/.repository/pip/torchvision-$TORCHVISION_VERSION*-linux_aarch64.whl ]; then
+    pip install --user /home/.repository/pip/torchvision-$TORCHVISION_VERSION*-linux_aarch64.whl
+    exit 0
+fi
+
+cd $BUILDDIR
+git clone https://github.com/pytorch/vision.git -b v$TORCHVISION_VERSION
+cd vision
+
+python setup.py bdist_wheel
+sudo mkdir -p /home/.repository/pip
+sudo cp dist/*.whl /home/.repository/pip
