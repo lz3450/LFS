@@ -1,9 +1,5 @@
 #! /bin/sh
 
-cd
-apt install zsh wget nano zsh-autosuggestions zsh-syntax-highlighting
-wget -O .zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
-
 cat > /etc/apt/sources.list << EOF
 deb http://us.archive.ubuntu.com/ubuntu jammy main restricted universe
 deb-src http://us.archive.ubuntu.com/ubuntu jammy main restricted universe
@@ -16,14 +12,19 @@ deb-src http://us.archive.ubuntu.com/ubuntu/ jammy-updates main restricted unive
 EOF
 
 apt update
-apt upgrade
 
-fallocate -l 8G /mnt/swapfile
+apt install -y \
+    zsh \
+    wget \
+    nano \
+    zsh-autosuggestions \
+    zsh-syntax-highlighting \
+    f2fs-tools
+wget -O .zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+
+fallocate -l 16G /mnt/swapfile
 mkswap /mnt/swapfile
 chmod 600 /mnt/swapfile
-
-# nano /etc/locale.gen
-# locale-gen
 
 dpkg-reconfigure locales
 dpkg-reconfigure tzdata
@@ -45,7 +46,7 @@ cat > /boot/loader/entries/ubuntu.conf << EOF
 title   Ubuntu 22.04
 linux   /vmlinuz
 initrd  /initrd.img
-options root=PARTUUID= rw
+options root=
 EOF
 
 blkid >> /boot/loader/entries/ubuntu.conf
@@ -63,3 +64,13 @@ passwd kzl
 # zsh
 echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /root/.zshrc
 echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /root/.zshrc
+echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | sudo -u kzl tee -a /home/kzl/.zshrc
+echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | sudo -u kzl tee -a /home/kzl/.zshrc
+
+# environment variables
+cat > ~/.zshenv << EOF 
+typeset -U PATH path
+path=("$HOME/.local/bin" "\$path[@]")
+export PATH
+fpath=(/usr/local/share/zsh/site-functions $fpath)
+EOF
