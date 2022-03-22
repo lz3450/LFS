@@ -8,7 +8,7 @@ set -e
 
 # # source
 if [ ! -d linux ]; then
-    git clone --depth 1 -b rpi-5.10.y https://github.com/raspberrypi/linux.git
+    git clone --depth 1 -b rpi-5.15.y https://github.com/raspberrypi/linux.git
 fi
 source_dir="linux"
 
