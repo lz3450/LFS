@@ -82,7 +82,7 @@ done
 
 case $TARGET in
     kzl)
-        pkgs=$(ls $ROOTDIR/$TARGET/pkgbuilds)
+        pkgs=$(ls $ROOTDIR/pkgbuilds/$TARGET)
         EXTENSION="zst"
         ;;
     # unknown repo
