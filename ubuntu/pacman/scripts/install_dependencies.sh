@@ -7,4 +7,5 @@ sudo apt install -y \
     liblzma-dev \
     swig \
     libedit-dev \
-    rsync
+    rsync \
+    libelf-dev
