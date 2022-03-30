@@ -56,8 +56,9 @@ _cmake_options=(
   -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
   -DCMAKE_LINKER=/usb/bin/ld.lld
   -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
-  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
   -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
+  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
+  -DCMAKE_STATIC_LINKER_FLAGS="-fuse-ld=lld"
   -DCMAKE_AR=/usr/bin/llvm-ar
   -DCMAKE_NM=/usr/bin/llvm-nm
   -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
