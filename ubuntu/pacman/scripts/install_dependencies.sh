@@ -8,4 +8,5 @@ sudo apt install -y \
     swig \
     libedit-dev \
     rsync \
-    libelf-dev
+    libelf-dev \
+    libffi-dev
