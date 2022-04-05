@@ -2,7 +2,7 @@
 
 pkgname=llvm-project
 pkgver=13.0.1
-pkgrel=1
+pkgrel=4
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
 url="https://llvm.org/"
@@ -13,29 +13,57 @@ sha256sums=('326335a830f2e32d06d0a36393b5455d17dc73e0bd1211065227ee014f92cbf8')
 
 # https://llvm.org/docs/CMake.html
 
+### full list of projects (find in CMake output)
+# -- clang
+# -- clang-tools-extra
+# -- compiler-rt
+# -- cross-project-tests
+# -- libc
+# -- libclc
+# -- libcxx
+# -- libcxxabi
+# -- libunwind
+# -- lld
+# -- lldb
+# -- mlir
+# -- openmp
+# -- parallel-libs
+# -- polly
+# -- pstl
+# -- flang
+
 ### GNU
 # _cmake_options=(
-#     -DCMAKE_BUILD_TYPE=Release
-#     -DCMAKE_INSTALL_PREFIX=/usr/local
-#     -DCMAKE_INSTALL_LIBDIR=lib
-#     -DCMAKE_INSTALL_LIBEXECDIR=lib
-#     -DCMAKE_INSTALL_SYSCONFDIR=etc
+#   -DCMAKE_BUILD_TYPE=Release
+#   -DCMAKE_INSTALL_PREFIX=/usr/local
+#   -DCMAKE_INSTALL_LIBDIR=lib
+#   -DCMAKE_INSTALL_LIBEXECDIR=lib
+#   -DCMAKE_INSTALL_SYSCONFDIR=etc
 # )
 
 # _llvm_options=(
-#     -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb"
-#     -DLLVM_ENABLE_RUNTIMES="compiler-rt;libc;libcxx;libcxxabi;libunwind;openmp"
-#     -DLLVM_TARGETS_TO_BUILD="X86"
-#     -DLLVM_PARALLEL_COMPILE_JOBS="$(nproc)"
-#     -DLLVM_PARALLEL_LINK_JOBS="$(nproc)"
-#     -DLLVM_BUILD_LLVM_DYLIB=ON
-#     -DLLVM_BUILD_TESTS=ON
-#     -DLLVM_ENABLE_FFI=ON
-#     -DLLVM_ENABLE_LIBCXX=ON
-#     -DLLVM_ENABLE_LTO=OFF
-#     -DLLVM_ENABLE_RTTI=ON
-#     -DLLVM_INSTALL_UTILS=ON
-#     -DLLVM_LINK_LLVM_DYLIB=ON
+#   -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt;libunwind"
+#   -DLLVM_TARGETS_TO_BUILD=Native
+#   -DLLVM_PARALLEL_COMPILE_JOBS="$(nproc)"
+#   -DLLVM_PARALLEL_LINK_JOBS="$(nproc)"
+#   -DLLVM_BUILD_LLVM_DYLIB=ON
+#   -DLLVM_BUILD_TESTS=ON
+#   -DLLVM_ENABLE_FFI=ON
+#   -DLLVM_ENABLE_LIBCXX=OFF
+#   -DLLVM_ENABLE_LTO=OFF
+#   -DLLVM_ENABLE_RTTI=ON
+#   -DLLVM_INSTALL_UTILS=ON
+#   -DLLVM_LINK_LLVM_DYLIB=ON
+# )
+
+# _clang_options=(
+#   # -DCLANG_DEFAULT_CXX_STDLIB=libc++
+#   # -DCLANG_DEFAULT_LINKER=lld
+#   # -DCLANG_DEFAULT_RTLIB=compiler-rt
+#   # -DCLANG_ENABLE_BOOTSTRAP=OFF
+#   # -DLIBCXX_USE_COMPILER_RT=ON
+#   # -DLIBCXXABI_USE_COMPILER_RT=ON
+#   # -DLIBCXXABI_USE_LLVM_UNWINDER=ON
 # )
 
 ### LLVM
@@ -49,11 +77,10 @@ _cmake_options=(
   -DCMAKE_CXX_COMPILER=/usr/local/bin/clang++
   -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
   -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
-  -DCMAKE_LINKER=/usb/bin/ld.lld
-  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
-  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
-  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
-  -DCMAKE_STATIC_LINKER_FLAGS="-fuse-ld=lld"
+  # -DCMAKE_LINKER=/usr/local/bin/ld.lld
+  # -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
+  # -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
+  # -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
   -DCMAKE_AR=/usr/local/bin/llvm-ar
   -DCMAKE_NM=/usr/local/bin/llvm-nm
   -DCMAKE_RANLIB=/usr/local/bin/llvm-ranlib
@@ -63,19 +90,31 @@ _cmake_options=(
 )
 
 _llvm_options=(
-  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb"
-  -DLLVM_ENABLE_RUNTIMES="compiler-rt;libc;libcxx;libcxxabi;libunwind;openmp"
-  -DLLVM_TARGETS_TO_BUILD="X86"
+  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt;libunwind"
+  -DLLVM_TARGETS_TO_BUILD=Native
   -DLLVM_PARALLEL_COMPILE_JOBS="$(nproc)"
   -DLLVM_PARALLEL_LINK_JOBS="$(nproc)"
+  -DLLVM_BUILD_LLVM_DYLIB=ON
   -DLLVM_BUILD_TESTS=ON
   -DLLVM_ENABLE_FFI=ON
+  -DLLVM_ENABLE_LIBCXX=OFF
+  -DLLVM_ENABLE_LTO=OFF
   -DLLVM_ENABLE_RTTI=ON
   -DLLVM_INSTALL_UTILS=ON
-  -DLLVM_USE_LINKER=lld
-  -DLLVM_ENABLE_LTO=OFF
-  -DLLVM_ENABLE_LIBCXX=OFF
-  -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
+  # -DLLVM_USE_LINKER=lld
+  -DLLVM_LINK_LLVM_DYLIB=ON
+)
+
+_clang_options=(
+  # -DCLANG_DEFAULT_CXX_STDLIB=libc++
+  # -DCLANG_DEFAULT_LINKER=lld
+  # -DCLANG_DEFAULT_RTLIB=compiler-rt
+  # -DCLANG_ENABLE_BOOTSTRAP=OFF
+  # -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
+  # -DLIBCXX_USE_COMPILER_RT=ON
+  # -DLIBCXXABI_USE_COMPILER_RT=ON
+  # -DLIBCXXABI_USE_LLVM_UNWINDER=ON
+  # -DLIBOMP_INSTALL_ALIASES=OFF
 )
 
 build() {
@@ -84,6 +123,7 @@ build() {
   cmake \
     "${_cmake_options[@]}" \
     "${_llvm_options[@]}" \
+    "${_clang_options[@]}" \
     -S llvm \
     -B build \
     -G Ninja
