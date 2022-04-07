@@ -20,7 +20,6 @@ pkg_list=(
     dpkg
     f2fs-tools
     gptfdisk
-    grml-zsh-config
     linux
     linux-firmware
     mdadm
@@ -38,9 +37,7 @@ pkg_list=(
     vim
     wget
     wpa_supplicant
-    zsh
-    zsh-autosuggestions
-    zsh-syntax-highlighting
+    zsh zsh-autosuggestions zsh-syntax-highlighting
 )
 work_dir="/tmp/isotmp"
 pacstrap_dir="${work_dir}"/rootfs
@@ -228,6 +225,9 @@ make_rootfs() {
 
     # Copy custom root file system files.
     if [[ -d "${script_dir}/rootfs" ]]; then
+        info "Update rootfs..."
+        ./update_rootfs.sh &> "${log_dir}"/update_rootfs.log
+        info "Done!"
         info "Copying custom airootfs files..."
         cp -af --no-preserve=ownership,mode -- "${script_dir}"/rootfs/. "${pacstrap_dir}"
         # Set ownership and mode for files and directories

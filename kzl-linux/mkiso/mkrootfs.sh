@@ -15,7 +15,6 @@ script_dir="$(dirname "${script_path}")"
 pkg_list=(
     base
     dpkg
-    grml-zsh-config
     nano
     openssh
     pacman-contrib
@@ -25,9 +24,7 @@ pkg_list=(
     usbutils
     vim
     wget
-    zsh
-    zsh-autosuggestions
-    zsh-syntax-highlighting
+    zsh zsh-autosuggestions zsh-syntax-highlighting
 )
 work_dir="/tmp/rootfstmp"
 pacstrap_dir="${work_dir}"/rootfs
@@ -123,6 +120,9 @@ make_rootfs() {
 
     # Copy custom root file system files.
     if [[ -d "${script_dir}/rootfs" ]]; then
+        info "Update rootfs..."
+        ./update_rootfs.sh &> "${log_dir}"/update_rootfs.log
+        info "Done!"
         info "Copying custom airootfs files..."
         cp -af --no-preserve=ownership,mode -- "${script_dir}"/rootfs/. "${pacstrap_dir}"
         # Set ownership and mode for files and directories
@@ -149,9 +149,11 @@ make_rootfs() {
 
 build() {
     # Create working directory
-    if [[ ! -d "${work_dir}" ]]; then
-        install -d -- "${work_dir}"
+    if [[ -d "${work_dir}" ]]; then
+        info "Remove existing work directory..."
+        rm -rf "${work_dir}"
     fi
+    install -d -- "${work_dir}"
 
     make_rootfs
     cleanup_pacstrap_dir

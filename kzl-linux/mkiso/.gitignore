@@ -1,1 +1,4 @@
+*.zsh*
 *.iso
+oh-my-zsh.sh
+.zshrc
