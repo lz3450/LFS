@@ -149,7 +149,7 @@ kzl_stage3_pkgs=(
     ## raid
     mdadm
     ## zsh
-    zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
+    zsh zsh-autosuggestions zsh-syntax-highlighting #grml-zsh-config 
     ## initramfs
     cpio dracut
     ## iso
