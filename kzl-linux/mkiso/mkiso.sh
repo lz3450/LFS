@@ -27,6 +27,7 @@ pkg_list=(
     mtools
     nano
     nvme-cli
+    openssh
     parted
     rsync
     screen

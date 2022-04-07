@@ -17,6 +17,7 @@ pkg_list=(
     dpkg
     grml-zsh-config
     nano
+    openssh
     parted
     rsync
     tmux
