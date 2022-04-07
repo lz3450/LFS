@@ -7,5 +7,5 @@ git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git
 git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git
 cd
 sed -e "/^ZSH_THEME/s/\"robbyrussell\"/random/" \
-    -e "/^plugins=/s/git/zsh-syntax-highlighting zsh-autosuggestions archlinux git vscode python tmux/" \
+    -e "/^plugins=/s/git/archlinux git vscode python tmux zsh-autosuggestions zsh-syntax-highlighting/" \
     -i .zshrc
