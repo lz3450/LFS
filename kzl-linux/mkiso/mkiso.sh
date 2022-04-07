@@ -16,30 +16,21 @@ pkg_list=(
     arch-install-scripts
     base
     debootstrap
-    diffutils
     dosfstools
     dpkg
-    e2fsprogs
     f2fs-tools
     gptfdisk
     grml-zsh-config
-    less
-    libfido2
-    libsigsegv
-    libusb-compat
     linux
     linux-firmware
-    man-db
     mdadm
     mtools
     nano
     nvme-cli
-    openssh
     parted
     rsync
     screen
     smartmontools
-    sudo
     tmux
     usbutils
     vim

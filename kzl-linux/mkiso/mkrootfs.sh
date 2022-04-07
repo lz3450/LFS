@@ -4,7 +4,7 @@
 #
 
 set -e -u
-set -x
+# set -x
 
 umask 0022
 
@@ -13,24 +13,12 @@ script_path="$(readlink -f "${0}")"
 script_dir="$(dirname "${script_path}")"
 
 pkg_list=(
-    arch-install-scripts
     base
-    debootstrap
-    diffutils
     dpkg
     grml-zsh-config
-    less
-    libfido2
-    libsigsegv
-    libusb-compat
-    man-db
-    mdadm
     nano
-    openssh
     parted
     rsync
-    screen
-    sudo
     tmux
     usbutils
     vim
@@ -84,8 +72,8 @@ USAGETEXT
 make_rootfs_archive() {
     info "Creating rootfs archive..."
     tar -czvf "${rootfs_archive_name}" \
-        -C "${out_dir}" \
-        "${pacstrap_dir}" \
+        -C "${pacstrap_dir}" \
+        . \
         &> "${log_dir}"/tar.log
     info "Done!"
 }
@@ -158,8 +146,6 @@ make_rootfs() {
 }
 
 build() {
-    pacstrap_dir="${work_dir}"/rootfs
-
     # Create working directory
     if [[ ! -d "${work_dir}" ]]; then
         install -d -- "${work_dir}"
