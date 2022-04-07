@@ -2,12 +2,13 @@
 
 pkgname=pacman
 pkgver=6.0.1
-pkgrel=2
+pkgrel=3
 epoch=1
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
 license=('KZL')
-depends=(archlinux-keyring curl gpgme libarchive pacman-mirrorlist)
+depends=(curl fakeroot gpgme libarchive pacman-mirrorlist)
+optdepends=("archlinux-keyring: for Arch Linux official packages")
 # checkdepends=(fakechroot)
 backup=(etc/pacman.conf
         etc/makepkg.conf)
