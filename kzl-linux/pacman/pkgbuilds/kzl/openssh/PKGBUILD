@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openssh
-pkgver=8.8
+pkgver=8.9
 pkgrel=1
 epoch=1
 arch=('x86_64')
 url="https://www.openssh.com/portable.html"
 license=('KZL')
 depends=(krb5 ldns libedit libxcrypt openssl)
-# makedepends=(libfido2)
+makedepends=(libfido2)
 optdepends=("libfido2: U2F/FIDO support"
             "x11-ssh-askpass: input passphrase in X"
             "xorg-xauth: X11 forwarding")
@@ -20,15 +20,13 @@ source=(https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-${pkgver}p
         sshd.pam
         sshd.service
         sshdgenkeys.service)
-sha256sums=('4590890ea9bb9ace4f71ae331785a3a5823232435161960ed5fc86588f331fe9'
+sha256sums=('fd497654b7ab1686dac672fb83dfb4ba4096e8b5ffcdaccd262380ae58bec5e7'
             'SKIP'
             '4effac1186cc62617f44385415103021f72f674f8b8e26447fc1139c670090f6'
             'd447e0d52f12b8b186e6864749d594746966ac997767e8af300190d1fbb74eaf'
             'e40f8b7c8e5e2ecf3084b3511a6c36d5b5c9f9e61f2bb13e3726c71dc7d4fbc7'
             '4031577db6416fcbaacf8a26a024ecd3939e5c10fe6a86ee3f0eea5093d533b7')
 validpgpkeys=('7168B983815A5EEF59A4ADFD2A3F414E736060BA')
-
-# TODO: libfido2 (--enable-security-key --with-security-key-builtin)
 
 build() {
   cd $pkgname-${pkgver}p${pkgrel}
@@ -38,10 +36,10 @@ build() {
     --sbindir=/usr/bin \
     --libexecdir=/usr/lib/ssh \
     --sysconfdir=/etc/ssh \
-    --disable-security-key \
+    --enable-security-key \
     --with-ldns \
     --with-libedit \
-    --without-security-key-builtin \
+    --with-security-key-builtin \
     --with-ssl-engine \
     --with-pam \
     --with-privsep-user=nobody \
