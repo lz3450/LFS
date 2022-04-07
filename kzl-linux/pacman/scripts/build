@@ -120,10 +120,11 @@ kzl_stage2_pkgs=(
     ## zstd
     lz4 zstd
     ## pacman
+    po4a fakeroot
     libassuan npth pinentry tcl sqlite libusb-compat pcsclite gnupg gpgme
     libarchive
     pacman
-    po4a fakeroot pacman-contrib arch-install-scripts
+    pacman-contrib arch-install-scripts
     ## python
     libnsl mpdecimal valgrind python
     ## cmake
