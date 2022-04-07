@@ -18,6 +18,7 @@ pkg_list=(
     grml-zsh-config
     nano
     openssh
+    pacman-contrib
     parted
     rsync
     tmux

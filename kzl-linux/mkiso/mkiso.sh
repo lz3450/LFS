@@ -28,6 +28,7 @@ pkg_list=(
     nano
     nvme-cli
     openssh
+    pacman-contrib
     parted
     rsync
     screen
