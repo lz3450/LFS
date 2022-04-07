@@ -37,8 +37,6 @@ apt install -y \
 
 # zsh
 wget -O .zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
-install -Dm644 .zshrc /etc/skel/.zshrc
-install -Dm644 .zshrc /etc/zsh/zshrc
 
 # user
 echo -e '3450\n3450' | passwd
@@ -47,14 +45,9 @@ echo -e '3450\n3450' | passwd kzl
 
 ###############################################################################
 
-# zsh
-echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /root/.zshrc
-echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /root/.zshrc
-echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /home/kzl/.zshrc
-echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /home/kzl/.zshrc
-
-# echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /etc/zsh/zshrc
-# echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /etc/zsh/zshrc
+# grml-zsh-config
+echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a .zshrc
+echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a .zshrc
 
 # locale
 sed -i '/^# en_US.UTF-8/s/^#//' /etc/locale.gen
