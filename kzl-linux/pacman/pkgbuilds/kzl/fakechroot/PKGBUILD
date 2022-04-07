@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=fakechroot
-pkgver=2.20.1
+pkgver=2.20.1.7
 pkgrel=1
 epoch=1
 pkgdesc="Gives a fake chroot environment"
@@ -9,16 +9,22 @@ arch=('x86_64')
 url="https://github.com/dex4er/fakechroot/wiki"
 license=('KZL')
 source=(git+https://github.com/dex4er/fakechroot.git)
-sha256sums=('7f9d60d0d48611969e195fadf84d05f6c74f71bbf8f41950ad8f5bf061773e18')
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed "s/^master\///;s/-g.*//;s/-/./"
+}
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./autogen.sh
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
@@ -30,13 +36,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make -k check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
   
