@@ -15,10 +15,9 @@ echo "kzl password:"
 passwd kzl
 
 # zsh
-echo 'source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /root/.zshrc
-echo 'source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /root/.zshrc
-echo 'source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /home/kzl/.zshrc
-echo 'source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /home/kzl/.zshrc
+wget -O .zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+echo 'source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a .zshrc
+echo 'source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a .zshrc
 
 # locale
 sed -i '/^#en_US.UTF-8/s/^#//' /etc/locale.gen

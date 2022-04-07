@@ -1,4 +1,21 @@
-pacstrap /mnt base linux linux-firmware zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting wpa_supplicant intel-ucode nano
+pkg_list=(
+    base
+    dpkg
+    nano
+    openssh
+    pacman-contrib
+    parted
+    rsync
+    tmux
+    usbutils
+    vim
+    wget
+    wpa_supplicant
+    zsh zsh-autosuggestions zsh-syntax-highlighting
+    linux linux-firmware
+)
+
+pacstrap /mnt "${pkg_list[@]}"
 
 fallocate -l 8G /mnt/swapfile
 chmod 600 /mnt/swapfile
