@@ -145,14 +145,16 @@ kzl_stage2_pkgs=(
 
 kzl_stage3_pkgs=(
     ### core
+    ## raid
+    mdadm
     ## zsh
     zsh grml-zsh-config zsh-autosuggestions zsh-syntax-highlighting
     ## initramfs
     cpio dracut
     ## iso
     squashfs-tools mtools dosfstools
-    ## tmux
-    libevent libutempter tmux
+    ## tmux screen
+    libevent libutempter tmux screen
     ## utils
     usbutils minicom
     wpa_supplicant
