@@ -9,8 +9,8 @@ set -e
 script_name="$(basename "${0}")"
 script_path="$(readlink -f "${0}")"
 script_dir="$(dirname "${script_path}")"
-img="/tmp/raspi.img"
-mountpoint="/tmp/raspi"
+img="/dev/shm/raspi.img"
+mountpoint="/dev/shm/raspi"
 chroot_path="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
 
 create_img() {
@@ -49,6 +49,9 @@ configure_img() {
     cp -f fstab ${mountpoint}/etc/
     cp -f sources.list ${mountpoint}/etc/apt/
     cp -f raspi.list ${mountpoint}/etc/apt/sources.list.d/
+    # wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
+    # gpg --dearmor raspberrypi.gpg.key
+    cp -f raspberrypi.gpg ${mountpoint}/etc/apt/trusted.gpg.d/
     cp -f cmdline.txt ${mountpoint}/boot/
     cp -f config.txt ${mountpoint}/boot/
 
