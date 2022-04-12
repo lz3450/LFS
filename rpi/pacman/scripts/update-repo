@@ -1,0 +1,137 @@
+#!/bin/bash
+# 
+# update-repo
+#
+# 1.1: Add '--clear'.
+#
+
+VERSION=1.1
+REPODIR=/home/.repository
+PACKAGEDIR=~/makepkg/packages
+ARCHIVEDIR=~/makepkg/archive
+EXTENSION="zst"
+
+# options
+REPLACE=0
+CLEAR=0
+TARGET=
+
+# functions
+update() {
+    local repo
+    repo=$1
+    local pkg
+    pkg=$2
+
+    if [ ! -d $ARCHIVEDIR ]; then
+        mkdir $ARCHIVEDIR
+    fi
+
+    pkgname_regex="$pkg-\([0-9]+:\)?\([0-9a-zA-Z]+\.?\)+\(\+[0-9a-zA-Z]+\+g.+\)?-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.$EXTENSION"
+
+    pkgname=$(find "$HOME/makepkg/packages" -type f -regex "$HOME/makepkg/packages/$pkgname_regex" -printf "%f\n")
+    if [ -f $PACKAGEDIR/$pkgname ]; then
+        sudo rm -f $REPODIR/$repo/$pkgname
+        sudo cp $PACKAGEDIR/$pkgname $REPODIR/$repo
+        sudo mv $PACKAGEDIR/$pkgname $ARCHIVEDIR
+        sudo repo-add -R $REPODIR/$repo/$repo.db.tar.$EXTENSION $REPODIR/$repo/$pkgname
+    fi
+
+    if (( REPLACE )) ; then
+        pkgname=$(find $REPODIR/$repo -type f -regex "$REPODIR/$repo/$pkgname_regex" -printf "%f\n")
+        if [ -f $REPODIR/$repo/$pkgname ]; then
+            sudo repo-add -R $REPODIR/$repo/$repo.db.tar.$EXTENSION $REPODIR/$repo/$pkgname
+        fi
+    fi
+}
+
+usage() {
+    printf "update_repo (kzl-linux) %s\n" "$VERSION"
+    echo
+    printf "\"update-repo\" will update the pacman repository.\n"
+    echo
+    printf "Usage: update_repo [ -R | --clear ] [ -t repo ]\n"
+    echo
+    echo "    -h, --help        display this help message and exit"
+    echo "    -v, --version     display version information and exit"
+    echo "    -t, --target      build target (kzl, rpi, tegra, ubuntu)"
+    echo "    -R, --replace     replace old repo"
+    echo "    --clear           clear the specified repository"
+    echo
+}
+
+# program start
+
+set -e
+# set -x
+set -u
+set -o pipefail
+
+# ensure we have a sane umask set
+umask 0022
+
+while (( "$#" )); do
+    case "$1" in
+        -h|--help)      usage; exit 0 ;;
+        -v|--version)   printf "$VERSION"; exit 0 ;;
+        -t|--target)    shift; TARGET="$1"  ;;
+        -R|--replace)   REPLACE=1 ;;
+        --clear)        CLEAR=1 ;; 
+        *)              printf "Unknown option \"$1\"\n"; exit 1 ;;
+    esac
+    shift
+done
+
+case $TARGET in
+    kzl)
+        pkgs=$(ls $ROOTDIR/pkgbuilds/$TARGET)
+        EXTENSION="zst"
+        ;;
+    # unknown repo
+    *)
+        printf "Unknown target \"%s\".\n" "$TARGET"; exit 1
+        ;;
+esac
+
+if (( CLEAR )); then
+    while true; do
+        read -p "Do you wish to clear the repository? " yn
+        case $yn in
+            [Yy]* ) sudo rm -rf $REPODIR/$TARGET; break;;
+            [Nn]* ) exit 0;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+    echo "Repository \"$TARGET\" has been removed."
+    exit 0
+fi
+
+if [ ! -d $REPODIR/$TARGET ]; then
+    sudo mkdir -p $REPODIR/$TARGET
+fi
+
+if [ ! -f $REPODIR/$TARGET ]; then
+    sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION
+fi
+
+if (( REPLACE )); then
+    sudo find $REPODIR/$TARGET -name "$TARGET.*" -delete
+fi
+
+if [ ! -f $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION ]; then
+    sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION
+fi
+
+for pkgbase in ${pkgs[@]}; do
+    update $TARGET $pkgbase
+    case $pkgbase in
+        zlib)       update $TARGET minizip ;;
+        audit)      update $TARGET python-audit ;;
+        lvm2)       update $TARGET device-mapper ;;
+        linux)      update $TARGET linux-headers ;;
+        lapack)     update $TARGET blas
+                    update $TARGET cblas
+                    update $TARGET lapacke ;;
+        libc++)     update $TARGET "libc\+\+" ;;
+    esac
+done
