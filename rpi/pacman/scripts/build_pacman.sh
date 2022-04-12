@@ -6,7 +6,7 @@ BUILDDIR=/dev/shm
 pacmanver=6.0.1
 
 cd $BUILDDIR
-if [ ! -f pacman-$pacmanver.tar.gz ]; then
+if [ ! -f pacman-$pacmanver.tar.xz ]; then
     wget https://sources.archlinux.org/other/pacman/pacman-$pacmanver.tar.xz
 fi
 
