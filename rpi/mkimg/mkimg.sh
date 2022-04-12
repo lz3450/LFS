@@ -103,7 +103,9 @@ configure_img() {
         mount --make-rslave "${mountpoint}"/$fs
     done
 
+    info "Running initialize.sh..."
     LC_ALL=C PATH="${chroot_path}" chroot "${mountpoint}" /bin/bash -c "/root/initialize.sh"
+    LC_ALL=C PATH="${chroot_path}" chroot "${mountpoint}" sync
 
     for fs in dev sys proc run; do
         umount -R "${mountpoint}"/$fs
