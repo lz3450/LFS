@@ -6,15 +6,16 @@ set -e
 # package
 apt update || :
 apt install -y \
+    python-is-python3 \
     gnupg \
     wget curl \
     dialog \
     wpasupplicant \
-    git \
     zsh zsh-autosuggestions zsh-syntax-highlighting \
     locales \
     openssh-server \
-    sudo
+    sudo \
+    systemd-timesyncd
 wget -qO /etc/apt/trusted.gpg.d/raspberrypi.gpg.key http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
 apt update
 apt upgrade -y
@@ -22,18 +23,21 @@ apt install -y \
     raspberrypi-archive-keyring \
     raspberrypi-bootloader \
     raspberrypi-kernel \
-    raspberrypi-kernel-headers \
+    raspberrypi-net-mods \
     raspberrypi-sys-mods \
     raspi-config \
     raspi-gpio \
     raspinfo \
     rpi-update \
+    rpi.gpio-common \
     pi-bluetooth \
     firmware-realtek \
     firmware-misc-nonfree \
     firmware-libertas \
     firmware-brcm80211 \
-    firmware-atheros
+    firmware-atheros \
+    python3-rpi.gpio \
+    userconf-pi
 
 # zsh
 wget -O .zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
