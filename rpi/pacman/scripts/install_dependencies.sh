@@ -11,4 +11,5 @@ sudo apt install -y \
     libelf-dev \
     libffi-dev \
     bash-completion \
-    gettext
+    gettext \
+    file

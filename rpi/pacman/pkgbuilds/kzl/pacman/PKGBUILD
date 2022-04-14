@@ -3,11 +3,11 @@
 pkgname=pacman
 pkgver=6.0.1
 pkgrel=1
-arch=('x86_64')
+arch=('aarch64')
 url="https://www.archlinux.org/pacman/"
 license=('KZL')
-backup=(etc/pacman.conf
-        etc/makepkg.conf)
+backup=(usr/local/etc/pacman.conf
+        usr/local/etc/makepkg.conf)
 source=(https://sources.archlinux.org/other/pacman/$pkgname-$pkgver.tar.xz)
 sha256sums=('0db61456e56aa49e260e891c0b025be210319e62b15521f29d3e93b00d3bf731')
 
@@ -46,9 +46,9 @@ package() {
   cd $pkgname-$pkgver
 
   meson install -C build --destdir="$pkgdir"
-  
-  sed -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2"' \
-      -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS"' \
+
+  sed -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -Wp,-D_FORTIFY_SOURCE=2"' \
+      -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS"' \
       -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \
       -e '/^#RUSTFLAGS=/c\RUSTFLAGS="-C opt-level=2"' \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc)"' \
