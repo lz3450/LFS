@@ -1,0 +1,65 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgbase=linux
+pkgname=(linux linux-headers)
+pkgver=5.15.28
+pkgrel=1
+epoch=1
+pkgdesc="LTS Linux Kernel"
+arch=('x86_64')
+url="https://www.kernel.org"
+license=('KZL')
+options=(!strip)
+source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.xz
+        config)
+sha256sums=('d8a2bbf3b971db9fd9a17b7768559f0a830b167d03c986fab636a57394b010e6'
+            'd605ccab62808d9880b7ec3da98efb32bc26f756e25404b26da28c7b94b40db1')
+
+export KBUILD_BUILD_HOST=Ubuntu
+export KBUILD_BUILD_USER=kzl
+export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
+
+prepare() {
+  cd $pkgbase-$pkgver
+
+  mkdir build
+
+  cp "$srcdir"/config build/.config
+
+  make O=build nconfig
+}
+
+build() {
+  cd $pkgbase-$pkgver
+
+  make O=build all
+}
+
+package_linux() {
+  cd $pkgbase-$pkgver
+
+  local kernelrelease=$(make O=build -s kernelrelease)
+  local image_name=$(make O=build -s image_name)
+  local modulesdir="/usr/lib/modules/$kernelrelease"
+
+  make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
+
+  # make INSTALL_PATH="$pkgdir/boot" O=build install
+
+  install -Dm755 build/$image_name "$pkgdir/$modulesdir"/vmlinuz
+  install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-linux
+  install -Dm644 build/System.map -t "$pkgdir/$modulesdir/"
+  install -Dm644 build/System.map -t "$pkgdir"/boot/efi/
+
+  rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
+}
+
+package_linux-headers() {
+  cd $pkgbase-$pkgver
+
+  local kernelrelease=$(make O=build -s kernelrelease)
+
+  install -d -m 0755 "$pkgdir"/usr/lib/modules/$kernelrelease/
+  cp -a . "$pkgdir"/usr/lib/modules/$kernelrelease/source
+  mv "$pkgdir"/usr/lib/modules/$kernelrelease/{source/,}build
+}
