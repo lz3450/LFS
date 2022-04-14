@@ -55,7 +55,7 @@ extract_samplefs() {
     tmpdir="$(mktemp -d)"
     chmod 755 "${tmpdir}"
     pushd "${tmpdir}" > /dev/null 2>&1
-    sudo tar -xpf "${source_samplefs}" --numeric-owner
+    tar -xpf "${source_samplefs}" --numeric-owner
     popd > /dev/null
 }
 
@@ -63,22 +63,23 @@ debootstrap_samplefs() {
     echo "debootstrap_samplefs"
     tmpdir="$(mktemp -d)"
     chmod 755 "${tmpdir}"
-    
+
     if [ -f ${img_file} ]; then
         rm ${img_file}
     fi
 
-    fallocate -l 6G ${img_file}
-    sudo losetup -D
-    loop=$(sudo losetup -f)
-    echo "Loop device is \"${loop}\""
-    sudo losetup -P ${loop} ${img_file}
-    sudo mkfs.ext4 ${loop}
-    sudo mount ${loop} "${tmpdir}"
+    # fallocate -l 6G ${img_file}
+    # losetup -D
+    # loop=$(losetup -f)
+    # echo "Loop device is \"${loop}\""
+    # losetup -P ${loop} ${img_file}
+    # mkfs.ext4 ${loop}
+    # mount ${loop} "${tmpdir}"
 
     pushd "${tmpdir}" > /dev/null 2>&1
     # --include="${package_list}" --no-merged-usr
-    sudo debootstrap --arch=arm64 --no-merged-usr bionic . http://ports.ubuntu.com/ubuntu-ports/
+    debootstrap --arch=arm64 --no-merged-usr bionic . http://ports.ubuntu.com/ubuntu-ports/
+    cp -f "${script_dir}"/sources.list etc/apt
     popd > /dev/null
 }
 
@@ -90,8 +91,8 @@ install_package() {
     while true
     do
         local ret=0
-        # sudo LC_ALL=C PATH="${chroot_path}" chroot . apt-get -y install "${1}" || ret=$?
-        sudo LC_ALL=C PATH="${chroot_path}" chroot . apt-get -y --no-install-recommends install "${1}" || ret=$?
+        # LC_ALL=C PATH="${chroot_path}" chroot . apt -y install "${1}" || ret=$?
+        LC_ALL=C PATH="${chroot_path}" chroot . apt -y --no-install-recommends install "${1}" || ret=$?
         if [ "${ret}" == "0" ]; then
             return 0
         else
@@ -125,28 +126,29 @@ create_samplefs() {
 	# cp "${host_qemu_path}" "${target_qemu_path}"
     # chmod 755 "${target_qemu_path}"
 
-    sudo mount -o bind /sys ./sys
-    sudo mount -o bind /proc ./proc
-    sudo mount -o bind /dev ./dev
-    sudo mount -o bind /dev/pts ./dev/pts
+    # mount --rbind /sys ./sys
+    # mount --rbind /proc ./proc
+    # mount --rbind /dev ./dev
+    # mount --rbind /run ./run
 
-    sudo mv etc/resolv.conf etc/resolv.conf.saved
+    for fs in dev sys proc run; do
+        mount --rbind /$fs ./$fs
+        mount --make-rslave ./$fs
+    done
+
+    mv etc/resolv.conf etc/resolv.conf.saved
     if [ -e "/run/resolvconf/resolv.conf" ]; then
-        sudo cp /run/resolvconf/resolv.conf etc/
+        cp /run/resolvconf/resolv.conf etc/
     elif [ -e "/etc/resolv.conf" ]; then
-        sudo cp /etc/resolv.conf etc/
+        cp /etc/resolv.conf etc/
     fi
 
-    # copy initialize script
-    sudo cp ${initialize_script_file} ./root/initialize.sh
-    sudo chmod +x ./root/initialize.sh
-
     local ret=0
-    sudo LC_ALL=C PATH="${chroot_path}" chroot . apt-get update || ret=$?
+    LC_ALL=C PATH="${chroot_path}" chroot . apt update || ret=$?
+    LC_ALL=C PATH="${chroot_path}" chroot . apt upgrade -y || ret=$?
+    LC_ALL=C PATH="${chroot_path}" chroot . apt dist-upgrade -y || ret=$?
 
     if [ "${ret}" == "0" ]; then
-        sudo LC_ALL=C PATH="${chroot_path}" chroot . apt-get upgrade -y
-
         package_list=$(cat "${package_list_file}")
 
         if [ ! -z "${package_list}" ]; then
@@ -167,26 +169,34 @@ create_samplefs() {
         fi
     fi
 
-    sudo LC_ALL=C PATH="${chroot_path}" chroot . /bin/bash -c "/root/initialize.sh"
-    sudo LC_ALL=C PATH="${chroot_path}" chroot . sync
-    sudo LC_ALL=C PATH="${chroot_path}" chroot . apt-get clean
-    sudo LC_ALL=C PATH="${chroot_path}" chroot . sync
+    # copy initialize script
+    cp ${initialize_script_file} ./root/initialize.sh
+    chmod +x ./root/initialize.sh
 
-    sudo mv etc/resolv.conf.saved etc/resolv.conf
+    LC_ALL=C PATH="${chroot_path}" chroot . /bin/bash -c "/root/initialize.sh"
+    LC_ALL=C PATH="${chroot_path}" chroot . sync
+    LC_ALL=C PATH="${chroot_path}" chroot . apt clean
+    LC_ALL=C PATH="${chroot_path}" chroot . sync
 
-    sudo umount ./sys
-    sudo umount ./proc
-    sudo umount ./dev/pts
-    sudo umount ./dev
+    mv etc/resolv.conf.saved etc/resolv.conf
 
-    # sudo rm "${target_qemu_path}"
+    # umount -R ./sys
+    # umount -R ./proc
+    # umount -R ./dev
+    # umount -R ./run
 
-    sudo rm -rf var/lib/apt/lists/*
-    sudo rm -rf dev/*
-    sudo rm -rf var/log/*
-    sudo rm -rf var/cache/apt/archives/*.deb
-    sudo rm -rf var/tmp/*
-    sudo rm -rf tmp/*
+    for fs in dev sys proc run; do
+        umount -R ./$fs
+    done
+
+    # rm "${target_qemu_path}"
+
+    rm -rf var/lib/apt/lists/*
+    rm -rf dev/*
+    rm -rf var/log/*
+    rm -rf var/cache/apt/archives/*.deb
+    rm -rf var/tmp/*
+    rm -rf tmp/*
 
     popd > /dev/null
 }
@@ -199,7 +209,7 @@ save_samplefs() {
     fi
 
     pushd "${tmpdir}" > /dev/null 2>&1
-    sudo tar --numeric-owner -jcpf "${output_samplefs}" *
+    tar --numeric-owner -jcpf "${output_samplefs}" *
     sync
     popd > /dev/null
 }
@@ -210,19 +220,22 @@ cleanup() {
 
     if [ -n "${tmpdir}" ]; then
         for attempt in $(seq 10); do
-            mount | grep -q "${tmpdir}/sys" && sudo umount ./sys
-            mount | grep -q "${tmpdir}/proc" && sudo umount ./proc
-            mount | grep -q "${tmpdir}/dev/pts" && sudo umount ./dev/pts
-            mount | grep -q "${tmpdir}/dev" && sudo umount ./dev
-            mount | grep -q "${tmpdir}" && sudo umount "${tmpdir}"
+            # mount | grep -q "${tmpdir}/sys" && umount -R ./sys
+            # mount | grep -q "${tmpdir}/proc" && umount -R ./proc
+            # mount | grep -q "${tmpdir}/dev/pts" && umount -R ./dev
+            # mount | grep -q "${tmpdir}/dev" && umount -R ./dev
+            for fs in dev/pts dev sys proc run; do
+                mount | grep -q "${tmpdir}/$fs" && umount -R ./$fs
+            done
+            mount | grep -q "${tmpdir}" && umount "${tmpdir}"
             if [ $? -ne 0 ]; then
                 break
             fi
             sleep 1
         done
 
-        sudo losetup -D
-        sudo rm -rf "${tmpdir}"
+        losetup -D
+        rm -rf "${tmpdir}"
     fi
 }
 trap cleanup EXIT
@@ -263,8 +276,8 @@ echo "********************************************"
 if [ ! -f "${source_samplefs}" ]; then
     download_samplefs
 fi
-extract_samplefs
-# debootstrap_samplefs
+# extract_samplefs
+debootstrap_samplefs
 
 create_samplefs
 save_samplefs
