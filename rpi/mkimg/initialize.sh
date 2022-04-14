@@ -7,6 +7,7 @@ set -e
 apt update || :
 apt install -y \
     python-is-python3 \
+    f2fs-tools \
     gnupg \
     wget curl \
     dialog \

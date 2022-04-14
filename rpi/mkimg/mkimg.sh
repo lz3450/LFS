@@ -47,7 +47,7 @@ create_img() {
         mktable msdos \
         unit s \
         mkpart primary fat32 1s 262143s \
-        mkpart primary ext4 262144s 100% \
+        mkpart primary f2fs 262144s 100% \
         set 2 lba off \
         print
 
@@ -57,7 +57,7 @@ create_img() {
     losetup -P ${loop} ${img}
 
     mkfs.fat -F32 ${loop}p1
-    mkfs.ext4 ${loop}p2
+    mkfs.f2fs -f ${loop}p2
 
     mkdir -p "${mountpoint}"
     mount ${loop}p2 "${mountpoint}"
