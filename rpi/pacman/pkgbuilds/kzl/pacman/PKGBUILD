@@ -55,7 +55,7 @@ package() {
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g -fvar-tracking-assignments"' \
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"' \
       -e '/^#DEBUG_RUSTFLAGS=/c\DEBUG_RUSTFLAGS="-C debuginfo=2"' \
-      -e '/^#BUILDDIR=/c\BUILDDIR=/dev/shm/makepkg' \
+      -e '/^#BUILDDIR=/c\BUILDDIR=/tmp/makepkg' \
       -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
       -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
       -e '/^#SRCDEST=/c\SRCDEST="$HOME/makepkg/sources"' \
