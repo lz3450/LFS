@@ -9,7 +9,7 @@ set -e
 script_name="$(basename "${0}")"
 bsp_number=""
 bsp_name=""
-bsp_version="32.6.1"
+bsp_version="32.7.1"
 l4t_dir="${ROOTDIR}/${bsp_name}/Linux_for_Tegra"
 chroot_path="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
 

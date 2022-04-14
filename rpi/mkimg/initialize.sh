@@ -7,6 +7,7 @@ set -e
 apt update || :
 apt install -y \
     python-is-python3 \
+    f2fs-tools \
     gnupg \
     wget curl \
     dialog \
@@ -40,7 +41,7 @@ apt install -y \
     userconf-pi
 
 # zsh
-wget -O .zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+wget -O /root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
 
 # user
 echo -e '3450\n3450' | passwd
@@ -50,8 +51,8 @@ echo -e '3450\n3450' | passwd kzl
 ###############################################################################
 
 # grml-zsh-config
-echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a .zshrc
-echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a .zshrc
+echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /root/.zshrc
+echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /root/.zshrc
 
 # locale
 sed -i '/^# en_US.UTF-8/s/^#//' /etc/locale.gen
@@ -62,7 +63,7 @@ locale-gen
 # environment variables
 tee /home/kzl/.zshenv << EOF 
 typeset -U PATH path
-path=("$HOME/.local/bin" "\$path[@]" "/usr/local/sbin" "/usr/sbin" "/sbin")
+path=("\$HOME/.local/bin" "\$path[@]" "/usr/local/sbin" "/usr/sbin" "/sbin")
 export PATH
 EOF
 chown kzl:kzl /home/kzl/.zshenv
@@ -73,7 +74,7 @@ chown kzl:kzl /home/kzl/.zshenv
 # network
 tee /etc/systemd/network/enx.network << EOF
 [Match]
-Name=enxb827eb27917f
+Name=enx*
 
 [Network]
 DHCP=yes
