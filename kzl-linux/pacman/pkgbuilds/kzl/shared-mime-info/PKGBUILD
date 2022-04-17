@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=shared-mime-info
-pkgver=2.0+132+g46c2abe
+pkgver=2.0.144
 pkgrel=1
 epoch=1
 pkgdesc="Freedesktop.org Shared MIME Info"
@@ -10,7 +10,7 @@ url="https://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec/"
 license=('KZL')
 depends=(glib2 libxml2)
 makedepends=(docbook itstool xmlto)
-source=(git+https://gitlab.freedesktop.org/xdg/shared-mime-info.git#commit=46c2abe8fce53f979bcf1dd4724012aba1a05f89
+source=(git+https://gitlab.freedesktop.org/xdg/shared-mime-info.git#commit=13695c7225c2f525a435e72739c33ac32bbfbbb9
         git+https://gitlab.freedesktop.org/xdg/xdgmime.git#commit=92f6a09fda2b23c2ab95cede8eb0612ca96bd0f7
         update-mime-database.hook)
 sha256sums=('SKIP'
@@ -20,7 +20,7 @@ sha256sums=('SKIP'
 pkgver() {
   cd $pkgname
 
-  git describe --long | sed 's/^Release.//;s/\([^-]*-g\)/\1/;s/-/+/g;'
+  git describe --long | sed 's/-g.*//;s/-/./g'
 }
 
 prepare() {
