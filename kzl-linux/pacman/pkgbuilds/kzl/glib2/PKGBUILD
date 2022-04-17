@@ -1,23 +1,27 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=glib2
-pkgver=2.70.4
+pkgver=2.72.1
 pkgrel=1
 epoch=1
 pkgdesc="Low level core library"
 arch=('x86_64')
 url="https://wiki.gnome.org/Projects/GLib"
 license=('KZL')
+# depends=(libffi libsysprof-capture pcre)
 depends=(libffi pcre)
-makedepends=(elfutils shared-mime-info)
+makedepends=(dbus elfutils shared-mime-info)
 optdepends=("elfutils: gresource inspection tool")
 options=(!strip staticlibs)
-source=(git+https://gitlab.gnome.org/GNOME/glib.git#commit=a380bfdf93cb3bfd3cd4caedc0127c4e5717545b
+source=(git+https://gitlab.gnome.org/GNOME/glib.git#tag=$pkgver?signed
         gio-querymodules.hook
         glib-compile-schemas.hook)
 sha256sums=('SKIP'
             '2a6ed172633430753af2d4eb2bc266c2e12713c0a68d8e12e885ea0595a86460'
             '018c62a1087461cb1f5dd2a879667d7218e4990c1b4c322e584dc3ef311342ca')
+validpgpkeys=('923B7025EE03C1C59F42684CF0942E894B2EAFA0')
+
+# TODO: sysprof
 
 build() {
   cd glib
@@ -34,9 +38,10 @@ build() {
     --default-library both \
     -D b_lto=true \
     -D b_pie=true \
-    -D selinux=disabled \
-    -D man=false \
     -D gtk_doc=false \
+    -D man=true \
+    -D selinux=disabled \
+    -D sysprof=disabled \
     build
 
   meson compile -C build
