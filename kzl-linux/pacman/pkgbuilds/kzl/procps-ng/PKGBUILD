@@ -7,11 +7,18 @@ epoch=1
 pkgdesc="Utilities for monitoring your system and its processes"
 arch=('x86_64')
 url="https://gitlab.com/procps-ng/procps"
-source=(https://downloads.sourceforge.net/project/$pkgname/Production/$pkgname-$pkgver.tar.xz)
-sha256sums=('4518b3e7aafd34ec07d0063d250fd474999b20b200218c3ae56f5d2113f141b4')
+license=('KZL')
+source=(git+https://gitlab.com/procps-ng/procps.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd procps
+
+  ./autogen.sh
+}
 
 build() {
-  cd procps-$pkgver
+  cd procps
 
   ./configure \
     --prefix=/usr \
@@ -22,19 +29,20 @@ build() {
     --libdir=/usr/lib \
     --enable-watch8bit \
     --disable-kill \
+    --disable-modern-top \
     --with-systemd
 
   make
 }
 
 check() {
-  cd procps-$pkgver
+  cd procps
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {
-  cd procps-$pkgver
+  cd procps
 
   make DESTDIR="$pkgdir/" install
 }
