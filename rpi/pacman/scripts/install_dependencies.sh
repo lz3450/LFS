@@ -12,4 +12,5 @@ sudo apt install -y \
     libffi-dev \
     bash-completion \
     gettext \
-    file
+    file \
+    libncurses-dev flex bison bc

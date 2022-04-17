@@ -2,7 +2,7 @@
 
 set -e
 
-BUILDDIR=/dev/shm
+BUILDDIR=/tmp
 pacmanver=6.0.1
 
 cd $BUILDDIR
@@ -40,7 +40,8 @@ meson compile -C build
 meson test -C build || :
 sudo meson install -C build
 
-sudo sed -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2"' \
+sudo sed \
+    -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2"' \
     -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS"' \
     -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \
     -e '/^#RUSTFLAGS=/c\RUSTFLAGS="-C opt-level=2"' \
@@ -48,7 +49,7 @@ sudo sed -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions 
     -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g -fvar-tracking-assignments"' \
     -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"' \
     -e '/^#DEBUG_RUSTFLAGS=/c\DEBUG_RUSTFLAGS="-C debuginfo=2"' \
-    -e '/^#BUILDDIR=/c\BUILDDIR=/dev/shm/makepkg' \
+    -e '/^#BUILDDIR=/c\BUILDDIR=/tmp/makepkg' \
     -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
     -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
     -e '/^#SRCDEST=/c\SRCDEST="$HOME/makepkg/sources"' \

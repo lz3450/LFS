@@ -1,65 +1,68 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgbase=linux
-pkgname=(linux linux-headers)
-pkgver=5.15.28
+pkgname=(linux-rpi3 linux-headers-rpi3)
+pkgver=5.15
 pkgrel=1
-epoch=1
 pkgdesc="LTS Linux Kernel"
-arch=('x86_64')
+arch=('aarch64')
 url="https://www.kernel.org"
 license=('KZL')
 options=(!strip)
-source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.xz
+source=(git+https://github.com/raspberrypi/linux.git#branch=rpi-$pkgver.y
         config)
-sha256sums=('d8a2bbf3b971db9fd9a17b7768559f0a830b167d03c986fab636a57394b010e6'
-            'd605ccab62808d9880b7ec3da98efb32bc26f756e25404b26da28c7b94b40db1')
+sha256sums=('SKIP'
+            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
 
-export KBUILD_BUILD_HOST=Ubuntu
+export KBUILD_BUILD_HOST=RPi
 export KBUILD_BUILD_USER=kzl
 export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
 
 prepare() {
-  cd $pkgbase-$pkgver
+  cd $pkgbase
 
   mkdir build
 
-  cp "$srcdir"/config build/.config
+  # cp "$srcdir"/config build/.config
+  make O=build bcmrpi3_defconfig
 
   make O=build nconfig
 }
 
 build() {
-  cd $pkgbase-$pkgver
+  cd $pkgbase
 
-  make O=build all
+  make O=build --output-sync=target Image modules dtbs
 }
 
-package_linux() {
-  cd $pkgbase-$pkgver
+package_linux-rpi3() {
+  cd $pkgbase
 
   local kernelrelease=$(make O=build -s kernelrelease)
-  local image_name=$(make O=build -s image_name)
+  local image_name="arch/arm64/boot/Image"
   local modulesdir="/usr/lib/modules/$kernelrelease"
 
-  make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
+  msg2 "kernelrelease=$kernelrelease"
+  msg2 "image_name=$image_name"
+
+  make INSTALL_MOD_STRIP="--strip-unneeded" INSTALL_MOD_PATH="$pkgdir/usr" O=build --output-sync=target modules_install
 
   # make INSTALL_PATH="$pkgdir/boot" O=build install
 
-  install -Dm755 build/$image_name "$pkgdir/$modulesdir"/vmlinuz
-  install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-linux
-  install -Dm644 build/System.map -t "$pkgdir/$modulesdir/"
-  install -Dm644 build/System.map -t "$pkgdir"/boot/efi/
+  install -Dm755 build/$image_name "$pkgdir/$modulesdir"/kernel8.img
+  install -Dm755 build/$image_name "$pkgdir"/boot/kernel8.img
+  install -Dm644 build/arch/arm64/boot/dts/broadcom/*.dtb -t "$pkgdir"/boot/
+  install -Dm644 build/arch/arm64/boot/dts/overlays/*.dtb* -t "$pkgdir"/boot/overlays/
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
 }
 
-package_linux-headers() {
-  cd $pkgbase-$pkgver
+package_linux-headers-rpi3() {
+  cd $pkgbase
 
   local kernelrelease=$(make O=build -s kernelrelease)
 
-  install -d -m 0755 "$pkgdir"/usr/lib/modules/$kernelrelease/
-  cp -a . "$pkgdir"/usr/lib/modules/$kernelrelease/source
+  install -dm0755 "$pkgdir"/usr/lib/modules/$kernelrelease/
+  cp -a "$srcdir"/$pkgbase "$pkgdir"/usr/lib/modules/$kernelrelease/source
   mv "$pkgdir"/usr/lib/modules/$kernelrelease/{source/,}build
 }

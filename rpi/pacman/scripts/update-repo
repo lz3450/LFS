@@ -125,13 +125,7 @@ fi
 for pkgbase in ${pkgs[@]}; do
     update $TARGET $pkgbase
     case $pkgbase in
-        zlib)       update $TARGET minizip ;;
-        audit)      update $TARGET python-audit ;;
-        lvm2)       update $TARGET device-mapper ;;
-        linux)      update $TARGET linux-headers ;;
-        lapack)     update $TARGET blas
-                    update $TARGET cblas
-                    update $TARGET lapacke ;;
-        libc++)     update $TARGET "libc\+\+" ;;
+        linux)      update $TARGET linux-rpi3
+                    update $TARGET linux-headers-rpi3 ;;
     esac
 done
