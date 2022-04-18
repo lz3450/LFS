@@ -7,6 +7,7 @@ epoch=1
 pkgdesc="The pixel-manipulation library for X and cairo"
 arch=('x86_64')
 url="https://cgit.freedesktop.org/pixman/"
+license=('KZL')
 makedepends=(libpng)
 source=(https://xorg.freedesktop.org/releases/individual/lib/$pkgname-$pkgver.tar.xz)
 sha256sums=('da8ed9fe2d1c5ef8ce5d1207992db959226bd4e37e3f88acf908fd9a71e2704e')
@@ -26,6 +27,7 @@ build() {
     -D arm-simd=disabled \
     -D gtk=disabled \
     -D iwmmxt=disabled \
+    -D libpng=enabled \
     -D loongson-mmi=disabled \
     -D mips-dspr2=disabled \
     -D neon=disabled \
@@ -38,7 +40,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  meson test -C build || warning "Check failed."
+  meson test -C build
 }
 
 package() {
