@@ -6,8 +6,8 @@ pkgdesc="TeX Live"
 arch=('x86_64')
 url="https://www.tug.org/historic/"
 license=('KZL')
-depends=(fontconfig freetype2 gmp graphite harfbuzz icu libpng mpfr)
-# depends=(cairo freetype2 gd ghostscript gmp graphite harfbuzz icu gd libjpeg-turbo libpaper libpng mpfr pixman zziplib)
+depends=(cairo fontconfig freetype2 gmp graphite harfbuzz icu libpng mpfr pixman zlib)
+# depends=(cairo freetype2 gd ghostscript gmp graphite harfbuzz icu libjpeg-turbo libpaper libpng mpfr pixman zziplib)
 provides=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 conflicts=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 replaces=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
@@ -22,7 +22,7 @@ source=(http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/
         # http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
         09-texlive-fonts.conf
         $pkgname.install)
-noextract=($pkgname-$pkgver-texmf.tar.xz)
+noextract=(texlive-$pkgver-texmf.tar.xz)
 sha256sums=('7aefd96608d72061970f2d73f275be5648ea8ae815af073016d3106acc0d584b'
             'ff12d436c23e99fb30aad55924266104356847eb0238c193e839c150d9670f1c'
             '21d218dcf56160081e8c376ec9d6b4cfc750e2a0fea14ee24884b1d5039f2566'
@@ -62,8 +62,8 @@ build() {
     --without-system-zziplib \
     --with-system-mpfr \
     --with-system-gmp \
-    --without-system-cairo \
-    --without-system-pixman \
+    --with-system-cairo \
+    --with-system-pixman \
     --without-system-gd \
     --with-system-freetype2 \
     --with-system-libpng \
