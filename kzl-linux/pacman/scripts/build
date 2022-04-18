@@ -169,6 +169,8 @@ kzl_stage3_pkgs=(
     gdb llvm-project rust ruby nodejs nasm
     ## fontconfig
     libpng freetype2 graphite harfbuzz freetype2 fontconfig
+    ## cairo
+    pixman cairo
     ## texlive
     texlive
     ## samba
