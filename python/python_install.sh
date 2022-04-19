@@ -13,6 +13,8 @@ script_dir="$(dirname "${script_path}")"
 pkgs=()
 uptodate_pkgs=()
 
+USER_INSTALL=0
+
 WHEEL_DIR="$HOME/python/wheels"
 SOURCE_DIR="$HOME/python/sources"
 
@@ -46,10 +48,12 @@ error() {
 usage() {
     printf "%s" "\
 Usage: ${script_name} [ -h | --help ] [ -V | --verbose ] <pkgs>
+    -u      user install
     -h      display this help message
     -v      display version
 
-    pkgs    packages to be installed"
+    pkgs    packages to be installed
+"
 }
 
 # List installed uptodate packages.
@@ -97,7 +101,11 @@ _install_pkg() {
     python3 -m pip wheel -w $WHEEL_DIR --no-binary ${_pkg} --no-deps --no-index --find-links $WHEEL_DIR --find-links $SOURCE_DIR --verbose ${_pkg}
 
     info "Installing package \"${_pkg}\" ..."
-    sudo python3 -m pip install -U --no-deps --no-index --find-links $WHEEL_DIR --verbose ${_pkg}
+    if (( USER_INSTALL )); then
+        python3 -m pip install --user -U --no-deps --no-index --find-links $WHEEL_DIR --verbose ${_pkg}
+    else
+        sudo python3 -m pip install -U --no-deps --no-index --find-links $WHEEL_DIR --verbose ${_pkg}
+    fi
 
 }
 
@@ -127,8 +135,11 @@ python_install() {
 
 ################################################################
 
-while getopts "lvh" arg; do
+while getopts "uvh" arg; do
     case "${arg}" in
+        u)
+            USER_INSTALL=1
+            ;;
         h)
             usage
             exit 0
@@ -137,6 +148,8 @@ while getopts "lvh" arg; do
             ;;
         *)
             error "Invalid argument '${arg}'" 0
+            usage
+            exit 1
             ;;
     esac
 done
