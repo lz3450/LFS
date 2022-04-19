@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pango
-pkgver=1.44.7
+pkgver=1.50.7
 pkgrel=1
+epoch=2
 pkgdesc="A library for layout and rendering of text"
 arch=('x86_64')
 url="https://www.pango.org/"
-depends=()
-makedepends=(cairo freetype2 fribidi glib2 gobject-introspection harfbuzz libthai libxft libxrender)
-checkdepends=(cantarell-fonts ttf-dejavu)
+license=('KZL')
+depends=(cairo fontconfig freetype2 fribidi glib2 harfbuzz libthai )
+makedepends=(gobject-introspection help2man)
 source=(git+https://gitlab.gnome.org/GNOME/pango.git#tag=$pkgver)
 sha256sums=('SKIP')
 
@@ -25,6 +26,7 @@ build() {
     -D b_lto=true \
     -D b_pie=true \
     -D gtk_doc=false \
+    -D xft=disabled \
     build
 
   meson compile -C build
@@ -33,7 +35,7 @@ build() {
 check() {
   cd $pkgname
 
-  meson test -C build --print-errorlogs || warning "Test failed."
+  meson test -C build --print-errorlogs
 }
 
 package() {

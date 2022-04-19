@@ -1,12 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=fribidi
-pkgver=1.0.9
+pkgver=1.0.11
 pkgrel=1
+epoch=1
 pkgdesc="A Free Implementation of the Unicode Bidirectional Algorithm"
 arch=('x86_64')
 url="https://github.com/fribidi/fribidi/"
-source=(git+https://github.com/fribidi/fribidi#tag=v1.0.9)
+license=('KZL')
+source=(git+https://github.com/fribidi/fribidi#tag=v$pkgver)
 sha256sums=('SKIP')
 
 build() {
