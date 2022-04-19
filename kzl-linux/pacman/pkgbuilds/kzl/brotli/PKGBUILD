@@ -1,0 +1,52 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=brotli
+pkgver=1.0.9
+pkgrel=1
+epoch=1
+pkgdesc="Generic-purpose lossless compression algorithm"
+arch=('x86_64')
+url="https://github.com/google/brotli"
+license=('KZL')
+source=(git+$url.git#commit=v$pkgver)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/^v//;s/-/+/g'
+}
+
+prepare() {
+  cd $pkgname
+
+  git cherry-pick -n 09b0992b6acb7faa6fd3b23f9bc036ea117230fc
+}
+
+build() {
+  cd $pkgname
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DBUILD_SHARED_LIBS=True \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+check() {
+  cd $pkgname
+
+  cmake --build build --target test
+}
+
+package() {
+  cd $pkgname
+
+  DESTDIR="$pkgdir/" cmake --build build --target install
+}
