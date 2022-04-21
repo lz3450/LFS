@@ -27,6 +27,7 @@ build() {
     --sbindir bin \
     --auto-features enabled \
     --buildtype plain \
+    --default-library shared \
     --wrap-mode nodownload \
     -D b_lto=true \
     -D b_pie=true \

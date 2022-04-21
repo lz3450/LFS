@@ -11,7 +11,7 @@ license=('KZL')
 makedepends=(nasm)
 provides=(libjpeg)
 source=(https://downloads.sourceforge.net/project/libjpeg-turbo/$pkgver/libjpeg-turbo-$pkgver.tar.gz{,.sig})
-sha256sums=('d74b92ac33b0e3657123ddcf6728788c90dc84dcb6a52013d758af3c4af481bb'
+sha256sums=('467b310903832b033fe56cd37720d1b73a6a3bd0171dbf6ff0b620385f4f76d0'
             'SKIP')
 validpgpkeys=('0338C8D8D9FDA62CF9C421BD7EC2DBB6F4DBF434')
 

@@ -1,0 +1,62 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gdk-pixbuf
+pkgver=2.42.8
+pkgrel=1
+epoch=1
+pkgdesc="An image loading library"
+arch=('x86_64')
+url="https://wiki.gnome.org/Projects/GdkPixbuf"
+license=('KZL')
+# depends=(glib2 libpng libtiff libjpeg shared-mime-info)
+depends=(glib2 libpng libjpeg shared-mime-info)
+makedepends=(docbook gobject-introspection)
+optdepends=("librsvg: Load .svg, .svgz, and .svg.gz")
+install=$pkgname.install
+source=(git+https://gitlab.gnome.org/GNOME/gdk-pixbuf.git#commit=bca00032ad68d0b0aa2c1f7558db931e52bd9cd2
+        $pkgname.install
+        gdk-pixbuf-query-loaders.hook)
+sha256sums=('SKIP'
+            '520801b0032919dae3e7436d1465ad739645c988548043626eb1a606b2dc9320'
+            '4279ee3e5616e3f33b016a3ffe11b278dacebc76ec54f13e8208fa9b918d83ac')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/./g'
+}
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D installed_tests=false \
+    -D introspection=enabled \
+    -D jpeg=enabled \
+    -D png=enabled \
+    -D tiff=disabled \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir="$pkgdir/"
+  install -Dm644 -t "$pkgdir"/usr/share/libalpm/hooks "$srcdir"/gdk-pixbuf-query-loaders.hook
+}

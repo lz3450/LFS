@@ -171,6 +171,8 @@ kzl_stage3_pkgs=(
     libpng freetype2 graphite harfbuzz freetype2 fontconfig
     ## cairo
     pixman cairo
+    ## librsvg
+    libjpeg-turbo gdk-pixbuf librsvg
     ## texlive
     texlive
     ## samba

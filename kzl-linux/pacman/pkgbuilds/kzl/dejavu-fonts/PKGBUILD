@@ -1,0 +1,23 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=dejavu-fonts
+pkgver=2.37
+pkgrel=1
+epoch=1
+pkgdesc="Font family based on the Bitstream Vera Fonts with a wider range of characters"
+arch=('any')
+url="https://dejavu-fonts.github.io/"
+license=('KZL')
+provides=(ttf-font)
+source=(https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_${pkgver//./_}/$pkgname-ttf-$pkgver.tar.bz2)
+sha256sums=('fa9ca4d13871dd122f61258a80d01751d603b4d3ee14095d65453b4e846e17d7')
+
+package() {
+  cd $pkgname-ttf-$pkgver
+
+  install -Dt "$pkgdir"/usr/share/fonts/TTF -m644 ttf/*.ttf
+  install -Dt "$pkgdir"/usr/share/fontconfig/conf.avail -m644 fontconfig/*.conf
+
+  install -dm755 "$pkgdir"/usr/share/fontconfig/conf.default
+  ln -srt "$pkgdir"/usr/share/fontconfig/conf.default "$pkgdir"/usr/share/fontconfig/conf.avail/*
+}
