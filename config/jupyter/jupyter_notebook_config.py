@@ -294,7 +294,7 @@
 
 ## The IP address the notebook server will listen on.
 #  Default: 'localhost'
-c.NotebookApp.ip = 'localhost'
+c.NotebookApp.ip = '0.0.0.0'
 
 ## Supply extra arguments that will be passed to Jinja environment.
 #  Default: {}
