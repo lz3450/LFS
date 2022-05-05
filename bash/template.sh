@@ -9,8 +9,34 @@ set -e
 script_name="$(basename "${0}")"
 script_path="$(readlink -f "${0}")"
 script_dir="$(dirname "${script_path}")"
-
+verbose=false
 input=
+
+# Show an INFO message
+# $1: message string
+info() {
+    local _msg="${1}"
+    printf '[%s] INFO: %s\n' "${script_name}" "${_msg}"
+}
+
+# Show a WARNING message
+# $1: message string
+warning() {
+    local _msg="${1}"
+    printf '[%s] WARNING: %s\n' "${script_name}" "${_msg}" >&2
+}
+
+# Show an ERROR message then exit with status
+# $1: message string
+# $2: exit code number (with 0 does not exit)
+error() {
+    local _msg="${1}"
+    local _error=${2}
+    printf '[%s] ERROR: %s\n' "${script_name}" "${_msg}" >&2
+    if (( _error > 0 )); then
+        exit "${_error}"
+    fi
+}
 
 usage() {
     errno=0
@@ -29,7 +55,7 @@ usage() {
 }
 
 example_function() {
-    echo "example_function"
+    info "example_function"
 
     echo ${input}
 }
