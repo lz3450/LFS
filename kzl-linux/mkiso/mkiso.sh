@@ -39,6 +39,9 @@ pkg_list=(
     wpa_supplicant
     zsh zsh-autosuggestions zsh-syntax-highlighting
 )
+custom_repository_pkgs=(
+    base
+)
 work_dir="/tmp/isotmp"
 pacstrap_dir="${work_dir}"/rootfs
 isofs_dir="${work_dir}"/iso
@@ -103,7 +106,7 @@ make_iso_image() {
         -preparer "prepared by kzl" \
         -partition_offset 16 \
         -append_partition 2 'C12A7328-F81F-11D2-BA4B-00A0C93EC93B' "${work_dir}"/efiboot.img \
-        -appended_part_as_gpt \
+        -appended_part_as=gpt \
         -output "${out_dir}/${image_name}" \
         "${isofs_dir}/" &> "${log_dir}"/xorriso.log
     info "Done!"
@@ -243,7 +246,7 @@ make_rootfs() {
     info "Done!"
 
     # Copy custom repository
-    info "Copying custom repository..."
+    info "Creating custom repository..."
     cp -af --no-preserve=ownership,mode -- /home/.repository "${pacstrap_dir}"/home/.repository
     info "Done!"
 
