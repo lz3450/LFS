@@ -2,7 +2,7 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=5.15.28
+pkgver=5.15.53
 pkgrel=1
 epoch=1
 pkgdesc="LTS Linux Kernel"
@@ -13,9 +13,9 @@ makedepends=(bc)
 options=(!strip)
 source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.{xz,sign}
         config)
-sha256sums=('d8a2bbf3b971db9fd9a17b7768559f0a830b167d03c986fab636a57394b010e6'
+sha256sums=('f3aa717243051f3fcca90ebfe26fe5c3a596c2f6047846e8d1724ea90df77b07'
             'SKIP'
-            'dc4a8fc3b1c53c343fee598b32a2b026c64efbe45c36428bcf362167f1ef9f02')
+            '5608e536ef166453103437a2e13f0e615207513e41fd82eb5882e2cbfb3f4a57')
 validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
 
 export KBUILD_BUILD_HOST=kzl-linux
