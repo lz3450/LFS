@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=systemd
-pkgver=249.10
+pkgver=249.12
 pkgrel=1
 epoch=1
 arch=('x86_64')
@@ -55,7 +55,7 @@ sha256sums=('SKIP'
             '0149385b55f58f8cf8ad160fcfb9bb7bd74351708d8cc13984ccb43d4453ed08'
             '7e21a3d6a8c8916fa152041db04bdc9d686732d856804e83b6ccb9e371f23df5'
             '3b0141de66e70697df5b56f72a85001b5ce1f0070295db298d1b001401fce3c0')
-validpgpkeys=('A9EA9081724FFAE0484C35A1A81CEA22BC8C7E2E')
+validpgpkeys=('5C251B5FC54EB2F80F407AAAC54CA336CFEB557E')
 
 build() {
   cd $pkgname-stable
