@@ -3,10 +3,10 @@ Description=Aria2 Daemon
 After=network.target
 
 [Service]
-Type=simple
+Type=forking
 ExecStart=/usr/bin/aria2c --conf-path=${HOME}/.config/aria2/aria2-rpc.conf
 RestartSec=60
 Restart=always
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
