@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=mdadm
-pkgver=4.2.26
+pkgver=4.2
 pkgrel=1
 epoch=1
 pkgdesc="A tool for managing/monitoring Linux md device arrays, also known as Software RAID"
@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://git.kernel.org/cgit/utils/mdadm"
 license=('KZL')
 backup=(etc/mdadm.conf)
-source=(git+https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git)
+source=(git+https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 
 pkgver() {
@@ -30,6 +30,7 @@ package() {
   make DESTDIR="$pkgdir/" BINDIR=/usr/bin UDEVDIR=/usr/lib/udev install
   make SYSTEMD_DIR="$pkgdir"/usr/lib/systemd/system install-systemd
   install -Dm644 "$srcdir/$pkgname"/mdadm.conf-example "$pkgdir"/etc/mdadm.conf
+  install -Dm755 misc/mdcheck "$pkgdir"/usr/share/mdadm/mdcheck
 
   echo "DEVICE partitions" | tee -a "$pkgdir"/etc/mdadm.conf
 }
