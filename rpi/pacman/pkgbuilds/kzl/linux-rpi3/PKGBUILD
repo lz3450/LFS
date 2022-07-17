@@ -1,6 +1,6 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgbase=linux
+pkgbase=linux-rpi3
 pkgname=(linux-rpi3 linux-headers-rpi3)
 pkgver=5.15
 pkgrel=1
@@ -12,7 +12,7 @@ options=(!strip)
 source=(git+https://github.com/raspberrypi/linux.git#branch=rpi-$pkgver.y
         config)
 sha256sums=('SKIP'
-            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
+            '41a36a952312f380e77d0c1d5b5d312c4414517c4ae45a9e632c68687c085446')
 
 export KBUILD_BUILD_HOST=RPi
 export KBUILD_BUILD_USER=kzl
@@ -24,7 +24,7 @@ prepare() {
   mkdir build
 
   # cp "$srcdir"/config build/.config
-  make O=build bcmrpi3_defconfig
+  make O=build bcm2709_defconfig
 
   make O=build nconfig
 }
