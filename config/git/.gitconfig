@@ -1,7 +1,9 @@
 [user]
-        email = zelun.kong@outlook.com
-        name = Kong, Zelun
+	email = zelun.kong@outlook.com
+	name = Kong, Zelun
 [credential]
-        helper = cache --timeout=86400
+	helper = cache --timeout=86400
 [pull]
-        rebase = false
+	rebase = false
+[init]
+	defaultBranch = main
