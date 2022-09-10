@@ -1,0 +1,44 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=stlink
+pkgver=1.7.0
+pkgrel=1
+epoch=1
+pkgdesc="Open source version of the STMicroelectronics STLINK Tools"
+arch=('x86_64')
+url="https://github.com/stlink-org/stlink"
+license=('KZL')
+depends=(libusb)
+# makedepends=(gtk3)
+# optdepends=("gtk3: GUI application")
+source=(git+https://github.com/stlink-org/stlink.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+
+build() {
+  cd $pkgname
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR:PATH=lib \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DSTLINK_MODPROBED_DIR=/usr/lib/modprobe.d \
+    -DSTLINK_UDEV_RULES_DIR=/usr/lib/udev/rules.d \
+    -S . \
+    -B build
+
+  cmake --build build
+}
+
+check() {
+  cd $pkgname
+
+  cmake --build build --target tests
+}
+
+package() {
+  cd $pkgname
+
+  DESTDIR="$pkgdir/" cmake --build build --target install
+}
