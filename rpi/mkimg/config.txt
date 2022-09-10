@@ -74,8 +74,6 @@ disable_overscan=1
 # (e.g. for USB device mode) or if USB support is not required.
 otg_mode=1
 
-[all]
-
 [pi4]
 # Run as fast as firmware / board allows
 arm_boost=1
