@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgbase=linux
-pkgname=(linux-rpi3 linux-headers-rpi3)
+pkgname=(linux-rpi4 linux-headers-rpi4)
 pkgver=5.15
 pkgrel=1
 pkgdesc="LTS Linux Kernel"
@@ -12,7 +12,7 @@ options=(!strip)
 source=(git+https://github.com/raspberrypi/linux.git#branch=rpi-$pkgver.y
         config)
 sha256sums=('SKIP'
-            '41a36a952312f380e77d0c1d5b5d312c4414517c4ae45a9e632c68687c085446')
+            '2267f4c50b49dd949f01757c5310c6638bdfa1a7e96fcc036b36bf4bf8634814')
 
 export KERNEL=kernel8
 export KBUILD_BUILD_HOST=RPi
@@ -24,8 +24,8 @@ prepare() {
 
   mkdir build
 
-  make O=build bcmrpi3_defconfig
-  cp build/.config "$srcdir"/bcmrpi3_defconfig
+  make O=build bcm2711_defconfig
+  cp build/.config "$srcdir"/bcm2711_defconfig
 
   cp "$srcdir"/config build/.config
 
@@ -38,8 +38,8 @@ build() {
   make O=build --output-sync=target Image modules dtbs
 }
 
-package_linux-rpi3() {
-  conflicts=(linux-rpi4)
+package_linux-rpi4() {
+  conflicts=(linux-rpi3)
 
   cd $pkgbase
 
@@ -62,8 +62,8 @@ package_linux-rpi3() {
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
 }
 
-package_linux-headers-rpi3() {
-  conflicts=(linux-rpi4)
+package_linux-headers-rpi4() {
+  conflicts=(linux-headers-rpi3)
 
   cd $pkgbase
 
