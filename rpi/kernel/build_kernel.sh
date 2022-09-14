@@ -21,8 +21,12 @@ if [ -f "${SCRIPT_DIR}"/config ]; then
     cp "${SCRIPT_DIR}"/config "${KERNEL_OUT_DIR}"/.config
 fi
 
+# if [ ! -f "${KERNEL_OUT_DIR}"/.config ]; then
+#     make -C "${source_dir}" O="${KERNEL_OUT_DIR}" bcm2709_defconfig
+# fi
+
 if [ ! -f "${KERNEL_OUT_DIR}"/.config ]; then
-    make -C "${source_dir}" O="${KERNEL_OUT_DIR}" bcmrpi3_defconfig
+    make -C "${source_dir}" O="${KERNEL_OUT_DIR}" bcm2711_defconfig
 fi
 
 make -C "${source_dir}" O="${KERNEL_OUT_DIR}" -j4 nconfig
