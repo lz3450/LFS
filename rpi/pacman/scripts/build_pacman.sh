@@ -41,8 +41,8 @@ meson test -C build || :
 sudo meson install -C build
 
 sudo sed \
-    -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2"' \
-    -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS"' \
+    -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -Wp,-D_FORTIFY_SOURCE=2"' \
+    -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS"' \
     -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \
     -e '/^#RUSTFLAGS=/c\RUSTFLAGS="-C opt-level=2"' \
     -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc)"' \
