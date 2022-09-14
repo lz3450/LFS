@@ -1,6 +1,6 @@
 pkgname=texlive
-pkgver=20210325
-pkgrel=1
+pkgver=20220321
+pkgrel=2
 epoch=1
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -13,33 +13,35 @@ conflicts=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fonts
 replaces=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 options=(!strip)
 install=$pkgname.install
-source=(http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-$pkgver-source.tar.xz
+source=(git+https://github.com/TeX-Live/texlive-source.git#commit=f7b6aab729bd6e8723b4b13ef0ce910437852d03
+        git+https://github.com/TeX-Live/installer.git
+        http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-$pkgver-source.tar.xz
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-${pkgver:0:6}25-tlpdb-full.tar.gz
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/install-tl-unx.tar.gz
         http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-$pkgver-texmf.tar.xz
-        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/texlive-$pkgver-tlpdb-full.tar.gz
-        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${pkgver:0:4}/install-tl-unx.tar.gz
-        # git+https://github.com/TeX-Live/texlive-source.git#commit=
-        # git+https://github.com/TeX-Live/installer.git
-        # http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
         09-texlive-fonts.conf
         $pkgname.install)
 noextract=(texlive-$pkgver-texmf.tar.xz)
-sha256sums=('7aefd96608d72061970f2d73f275be5648ea8ae815af073016d3106acc0d584b'
-            'ff12d436c23e99fb30aad55924266104356847eb0238c193e839c150d9670f1c'
-            '21d218dcf56160081e8c376ec9d6b4cfc750e2a0fea14ee24884b1d5039f2566'
-            '74eac0855e1e40c8db4f28b24ef354bd7263c1f76031bdc02b52156b572b7a1d'
+sha256sums=('SKIP'
+            'SKIP'
+            '52b295aa4e7471bf69dc14ab86beb9d6de212187d99e10c4dd144c81ad0e7b45'
+            '372b2b07b1f7d1dd12766cfc7f6656e22c34a5a20d03c1fe80510129361a3f16'
             'fe01050544263a517c9a682942edc1cbb150986c34eab3b6755143f072838e93'
             'af6b83c35bcc7a07397f36e16e70ae203c3a7520225dfbeee10f45fc8adacd3f')
 
 prepare() {
-  mv install-tl-20210324 install-tl
+  cd $pkgname-source
 
-  cd $pkgname-$pkgver-source
+  sed -e '/AC_SEARCH_LIBS/a KPSE_KPATHSEA_FLAGS' -i texk/bibtex-x/configure.ac
+  (cd texk/bibtex-x && autoreconf)
+  sed -e 's/SELFAUTOPARENT/TEXMFROOT/' -i texk/tex4htk/t4ht.c
 
   mkdir build
 }
 
 build() {
-  cd $pkgname-$pkgver-source/build
+  cd $pkgname-source/build
 
   ../configure \
     --prefix=/opt/TeXLive \
@@ -74,26 +76,21 @@ build() {
   make
 }
 
-check() {
-  cd $pkgname-$pkgver-source/build
-
-  make -k check
-}
-
 package() {
-  cd $pkgname-$pkgver-source/build
+  cd $pkgname-source/build
 
   make DESTDIR="$pkgdir/" install-strip
   make DESTDIR="$pkgdir/" texlinks
 
   ### enable tlmgr
   mkdir -p "$pkgdir"/opt/TeXLive/tlpkg/{backups,installer,tlpobj}
-  cp -r "$srcdir"/install-tl/tlpkg/{TeXLive,gpg,translations} "$pkgdir"/opt/TeXLive/tlpkg/
-  cp -r "$srcdir"/install-tl/tlpkg/installer/{config.guess,ctan-mirrors.pl} "$pkgdir"/opt/TeXLive/tlpkg/installer/
+  cp -r "$srcdir"/installer/tlpkg/{TeXLive,gpg,translations} "$pkgdir"/opt/TeXLive/tlpkg/
+  cp -r "$srcdir"/installer/tlpkg/installer/{config.guess,ctan-mirrors.pl} "$pkgdir"/opt/TeXLive/tlpkg/installer/
   cp "$srcdir"/texlive.tlpdb "$pkgdir"/opt/TeXLive/tlpkg/
 
   ### texmf-dist
   tar -xf "$srcdir"/$pkgname-$pkgver-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
+  cp -r "$srcdir"/installer/texmf-dist "$pkgdir"/opt/TeXLive
 
   sed -e 's/SELFAUTOPARENT/SELFAUTODIR/g' \
       -i "$pkgdir"/opt/TeXLive/texmf-dist/scripts/texlive/tlmgr.pl
