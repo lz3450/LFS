@@ -107,11 +107,11 @@ configure_img() {
     LC_ALL=C PATH="${chroot_path}" chroot "${mountpoint}" /bin/bash -c "/root/initialize.sh"
     LC_ALL=C PATH="${chroot_path}" chroot "${mountpoint}" sync
 
+    rm "${mountpoint}"/root/initialize.sh
+
     for fs in dev sys proc run; do
         umount -R "${mountpoint}"/$fs
     done
-
-    rm "${mountpoint}"/root/initialize.sh
 
     sudo rm -rf var/lib/apt/lists/*
     sudo rm -rf dev/*

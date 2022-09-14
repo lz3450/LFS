@@ -12,7 +12,7 @@ apt install -y \
     wget curl \
     dialog \
     wpasupplicant \
-    zsh zsh-autosuggestions zsh-syntax-highlighting \
+    zsh \
     locales \
     openssh-server \
     sudo \
@@ -29,14 +29,11 @@ apt install -y \
     raspi-config \
     raspi-gpio \
     raspinfo \
+    rpi-eeprom \
+    rpi-eeprom-images \
     rpi-update \
-    rpi.gpio-common \
+    rpiboot \
     pi-bluetooth \
-    firmware-realtek \
-    firmware-misc-nonfree \
-    firmware-libertas \
-    firmware-brcm80211 \
-    firmware-atheros \
     python3-rpi.gpio \
     userconf-pi
 
@@ -49,10 +46,6 @@ useradd -m -U -G sudo -s /bin/zsh kzl
 echo -e '3450\n3450' | passwd kzl
 
 ###############################################################################
-
-# grml-zsh-config
-echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /root/.zshrc
-echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /root/.zshrc
 
 # locale
 sed -i '/^# en_US.UTF-8/s/^#//' /etc/locale.gen
@@ -72,9 +65,9 @@ chown kzl:kzl /home/kzl/.zshenv
 # timedatectl set-ntp 1
 
 # network
-tee /etc/systemd/network/enx.network << EOF
+tee /etc/systemd/network/eth0.network << EOF
 [Match]
-Name=enx*
+Name=eth0
 
 [Network]
 DHCP=yes
