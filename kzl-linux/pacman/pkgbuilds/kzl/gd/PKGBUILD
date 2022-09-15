@@ -1,19 +1,25 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gd
-pkgver=2.3.1
+pkgver=2.3.3
 pkgrel=1
 epoch=1
 pkgdesc="Library for the dynamic creation of images by programmer"
 arch=('x86_64')
 url="https://libgd.github.io/"
 license=('KZL')
-depends=(fontconfig libxpm)
-source=(https://github.com/libgd/libgd/archive/$pkgname-$pkgver.tar.gz)
-sha256sums=('795978dcec1bf931148ebcdca9ed1e9cdfa9e71acff8bf035a8867dd1f7af6cd')
+depends=(fontconfig)
+source=(https://github.com/libgd/libgd/archive/$pkgname-$pkgver.tar.gz
+        https://github.com/libgd/libgd/commit/bdc281eadb1d58d5c0c7bbc1125ee4674256df08.patch)
+sha256sums=('24429f9d0dbe0f865aaa4b1a63558242396ba9134e6cfd32ca5e486a84483350'
+            '1e7bdb17e76ad6b1384222b449b9011ee131d3e1f105f9b30495a9c34b2cd5eb')
 
 prepare() {
   cd libgd-$pkgname-$pkgver
+
+  # Re-add macros that are used in PHP
+  # See https://github.com/php/php-src/pull/7490
+  patch -p1 -R -i "$srcdir"/bdc281eadb1d58d5c0c7bbc1125ee4674256df08.patch
 
   ./bootstrap.sh
 }
@@ -31,7 +37,7 @@ build() {
 check() {
   cd libgd-$pkgname-$pkgver
 
-  make check
+  TMP=$(mktemp -d) make check
 }
 
 package() {
