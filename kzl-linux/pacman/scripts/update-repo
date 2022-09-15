@@ -29,7 +29,7 @@ update() {
 
     pkgname_regex="$pkg-[0-9]+:\([0-9a-zA-Z]+\.?\)+\(\+[0-9a-zA-Z]+\+g.+\)?-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.$EXTENSION"
 
-    pkgname=$(find "$HOME/makepkg/packages" -type f -regex "$HOME/makepkg/packages/$pkgname_regex" -printf "%f\n")
+    pkgname=$(find "$HOME/makepkg/packages" -type f -regex "$HOME/makepkg/packages/$pkgname_regex" -printf "%T@ %f\n" | sort -n | cut -d ' ' -f 2- | tail -n 1)
     if [ -f $PACKAGEDIR/$pkgname ]; then
         sudo rm -f $REPODIR/$repo/$pkgname
         sudo cp $PACKAGEDIR/$pkgname $REPODIR/$repo
