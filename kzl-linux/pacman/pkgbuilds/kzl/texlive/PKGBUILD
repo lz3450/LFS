@@ -6,8 +6,7 @@ pkgdesc="TeX Live"
 arch=('x86_64')
 url="https://www.tug.org/historic/"
 license=('KZL')
-depends=(cairo fontconfig freetype2 gmp graphite harfbuzz icu libpng mpfr pixman zlib)
-# depends=(cairo freetype2 gd ghostscript gmp graphite harfbuzz icu libjpeg-turbo libpaper libpng mpfr pixman zziplib)
+depends=(cairo fontconfig freetype2 gd gmp graphite harfbuzz icu libpaper libpng mpfr pixman zlib zziplib)
 provides=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 conflicts=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
 replaces=(libsynctex texlive-bibtexextra texlive-bin texlive-core texlive-fontsextra texlive-formatsextra texlive-games texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra texlive-music texlive-pictures texlive-pstricks texlive-publishers texlive-science)
@@ -61,15 +60,15 @@ build() {
     --with-system-harfbuzz \
     --with-system-icu \
     --with-system-graphite2 \
-    --without-system-zziplib \
+    --with-system-zziplib \
     --with-system-mpfr \
     --with-system-gmp \
     --with-system-cairo \
     --with-system-pixman \
-    --without-system-gd \
+    --with-system-gd \
     --with-system-freetype2 \
     --with-system-libpng \
-    --without-system-libpaper \
+    --with-system-libpaper \
     --with-system-zlib \
     --without-x
 
