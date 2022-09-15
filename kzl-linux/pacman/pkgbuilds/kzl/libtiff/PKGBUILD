@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libtiff
-pkgver=4.2.0
+pkgver=4.4.0
 pkgrel=1
 epoch=1
 pkgdesc="Library for manipulation of TIFF images"
@@ -11,9 +11,9 @@ depends=(libjpeg-turbo)
 # makedepends=(freeglut glu jbigkit)
 # optdepends=('freeglut: for using tiffgt')
 source=(https://download.osgeo.org/libtiff/tiff-$pkgver.tar.gz{,.sig})
-sha256sums=('eb0484e568ead8fa23b513e9b0041df7e327f4ee2d22db5a533929dfc19633cb'
+sha256sums=('917223b37538959aca3b790d2d73aa6e626b688e02dcda272aec24c2f498abed'
             'SKIP')
-validpgpkeys=('EBDFDB21B020EE8FD151A88DE301047DE1198975')
+validpgpkeys=('B1FA7D81EEB8E66399178B9733EBBFC47B3DD87D')
 
 # TODO: OpenGL; jbigkit
 
@@ -26,7 +26,7 @@ build() {
 	  --mandir=/usr/share/man \
     --with-docdir=/usr/share/doc/$pkgname
 
-  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+  sed -e 's/ -shared / -Wl,-O1,--as-needed\0/g' -i libtool
 
   make
 }
@@ -34,7 +34,7 @@ build() {
 check() {
   cd tiff-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {
