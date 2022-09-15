@@ -1,6 +1,6 @@
 pkgname=texlive
 pkgver=20220321
-pkgrel=2
+pkgrel=3
 epoch=1
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -27,7 +27,7 @@ sha256sums=('SKIP'
             '52b295aa4e7471bf69dc14ab86beb9d6de212187d99e10c4dd144c81ad0e7b45'
             '372b2b07b1f7d1dd12766cfc7f6656e22c34a5a20d03c1fe80510129361a3f16'
             'fe01050544263a517c9a682942edc1cbb150986c34eab3b6755143f072838e93'
-            'af6b83c35bcc7a07397f36e16e70ae203c3a7520225dfbeee10f45fc8adacd3f')
+            'fd12d52d23a1c6f5dfb8d6818014c6de12ee71a106c486b373fa9073bbb41cf1')
 
 prepare() {
   cd $pkgname-source
@@ -100,7 +100,6 @@ package() {
       -i "$pkgdir"/opt/TeXLive/texmf-dist/web2c/texmf.cnf
   sed -e '/TEXMFSYSVAR     = "selfautoparent:texmf-var"/s/selfautoparent/selfautodir/' \
       -e '/home:.texlive2022/s/texlive2022/texlive/' \
-      -e '/TEXMFOS         = "selfautodir:"/s/selfautodir:/selfautodir:share/' \
       -e '/TEXMFDIST       = "selfautoparent:texmf-dist"/s/selfautoparent/selfautodir/' \
       -i "$pkgdir"/opt/TeXLive/texmf-dist/web2c/texmfcnf.lua
 

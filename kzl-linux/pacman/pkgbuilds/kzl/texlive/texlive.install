@@ -3,6 +3,7 @@ post_install() {
   opt/TeXLive/bin/mktexlsr
   opt/TeXLive/bin/fmtutil-sys --all
   opt/TeXLive/bin/mtxrun --generate >/dev/null
+  opt/TeXLive/bin/updmap-sys
 }
 
 post_upgrade() {
