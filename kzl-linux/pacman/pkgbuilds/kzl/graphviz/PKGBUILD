@@ -1,32 +1,31 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=graphviz
-pkgver=2.50.0
+pkgver=5.0.1
 pkgrel=1
 epoch=1
 pkgdesc="Graph visualization software"
 arch=('x86_64')
 url="https://www.graphviz.org/"
 license=('KZL')
-depends=(expat fontconfig freetype2 gd ghostscript libnsl libpng swig)
-makedepends=(guile r tcl)
+depends=(expat fontconfig freetype2 gd libpng librsvg pango swig)
+makedepends=(guile tcl)
 optdepends=(
   "guile: guile bindings"
-  "r: r bindings"
   "tcl: tcl bindings"
 )
 install=$pkgname.install
 source=(https://gitlab.com/graphviz/graphviz/-/archive/$pkgver/$pkgname-$pkgver.tar.gz
         $pkgname.install)
-sha256sums=('afa48581f764a35e148909cc96a0308ec2356b5225b64af12492f3392f20ef1c'
+sha256sums=('6c704a3ffeaf2f7ae63f7d0da453cd624d93a9306a2e5dbda07e5ec38343d2b8'
             '9e4a7a7c1fdc3c79256194e501a435939a9a981f31ff8ff640dec320d6009f15')
 
-# TODO: librsvg pango gts gsfonts poppler libwebp
+# TODO: language bindings
 
 prepare() {
   cd $pkgname-$pkgver
 
-	./autogen.sh NOCONFIG
+	./autogen.sh
 }
 
 build() {
@@ -37,8 +36,7 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --enable-python=no \
-    --enable-python3=yes
+    --enable-python=no
 
   sed -e 's/ -shared / -Wl,-O1,--as-needed\0/g' -i libtool
 
