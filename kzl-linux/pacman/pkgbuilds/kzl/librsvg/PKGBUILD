@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=librsvg
-pkgver=2.54.0
+pkgver=2.54.5
 pkgrel=1
 epoch=3
 pkgdesc="SVG rendering library"
