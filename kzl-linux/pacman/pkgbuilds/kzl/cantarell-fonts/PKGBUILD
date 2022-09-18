@@ -1,0 +1,36 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=cantarell-fonts
+pkgver=0.303
+pkgrel=1
+epoch=1
+pkgdesc="Humanist sans serif font"
+arch=('any')
+url="https://gitlab.gnome.org/GNOME/cantarell-fonts"
+license=('KZL')
+source=(git+https://gitlab.gnome.org/GNOME/cantarell-fonts.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D useprebuilt=false \
+    build
+
+  meson compile -C build
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir="$pkgdir/"
+}
