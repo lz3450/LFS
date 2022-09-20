@@ -1,0 +1,49 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=dconf
+pkgver=0.40.0
+pkgrel=1
+epoch=1
+pkgdesc="Configuration database system"
+arch=('x86_64')
+url="https://wiki.gnome.org/Projects/dconf"
+license=('KZL')
+depends=(glib2 bash-completion)
+makedepends=(libxslt)
+source=(git+https://gitlab.gnome.org/GNOME/dconf.git#tag=$pkgver)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build --print-errorlogs
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir="$pkgdir/"
+}
