@@ -1,0 +1,14 @@
+## https://www.nano-editor.org/dist/v2.9/nanorc.5.html
+
+set autoindent
+set historylog
+set indicator
+set linenumbers
+set softwrap
+set tabsize 4
+set tabstospaces
+include "/usr/share/nano/autoconf.nanorc"
+include "/usr/share/nano/default.nanorc"
+include "/usr/share/nano/nanohelp.nanorc"
+include "/usr/share/nano/nanorc.nanorc"
+include "/usr/share/nano/sh.nanorc"
