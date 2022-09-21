@@ -1,0 +1,26 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=duktape
+pkgver=2.7.0
+pkgrel=1
+epoch=1
+pkgdesc="Embeddable Javascript engine"
+arch=('x86_64')
+url="https://duktape.org/"
+license=('KZL')
+source=(https://duktape.org/$pkgname-$pkgver.tar.xz)
+sha256sums=('90f8d2fa8b5567c6899830ddef2c03f3c27960b11aca222fa17aa7ac613c2890')
+
+build() {
+  cd $pkgname-$pkgver
+
+  CFLAGS+=" -DDUK_USE_FASTINT"
+
+  make -f Makefile.sharedlibrary INSTALL_PREFIX=/usr 
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make -f Makefile.sharedlibrary INSTALL_PREFIX=/usr DESTDIR="$pkgdir/" install
+}
