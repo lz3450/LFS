@@ -1,0 +1,66 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=polkit
+pkgver=121
+pkgrel=1
+epoch=1
+pkgdesc="Application development toolkit for controlling system-wide privileges"
+arch=('x86_64')
+url="https://gitlab.freedesktop.org/polkit/polkit"
+license=('KZL')
+depends=(duktape expat glib2)
+makedepends=(gobject-introspection)
+backup=(etc/pam.d/polkit-1)
+options=(debug)
+source=(git+https://gitlab.freedesktop.org/polkit/polkit.git#tag=$pkgver)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D examples=true \
+    -D man=true \
+    -D os_type=redhat \
+    -D session_tracking=libsystemd-login \
+    -D tests=true \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  # PyPI: python-dbusmock
+
+  meson test -C build --print-errorlogs -t 3
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir="$pkgdir/"
+
+  install -d -o root -g 102 -m 750 "$pkgdir"/{etc,usr/share}/polkit-1/rules.d
+  mv "$pkgdir"/{etc,usr/share}/polkit-1/rules.d/50-default.rules
+
+  install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/$pkgname.conf <<END
+u polkitd 102 "PolicyKit daemon"
+m polkitd proc
+END
+}
