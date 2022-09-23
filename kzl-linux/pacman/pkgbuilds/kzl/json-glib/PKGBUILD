@@ -1,0 +1,54 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=json-glib
+pkgver=1.6.6
+pkgrel=1
+epoch=1
+pkgdesc="JSON library built on GLib"
+arch=('x86_64')
+url="https://wiki.gnome.org/Projects/JsonGlib"
+license=('KZL')
+depends=(glib2 gobject-introspection)
+makedepends=(docbook)
+source=(git+https://gitlab.gnome.org/GNOME/json-glib.git#tag=$pkgver)
+sha256sums=('SKIP')
+
+# PyPI: gi-docgen
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D man=false \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build --print-errorlogs
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir="$pkgdir/"
+
+  rm -r "$pkgdir"/usr/{lib,share}/installed-tests
+}
