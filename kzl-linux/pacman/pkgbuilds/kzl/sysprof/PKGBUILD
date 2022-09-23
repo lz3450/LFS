@@ -1,0 +1,52 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=sysprof
+pkgver=3.44.0
+pkgrel=1
+epoch=1
+pkgdesc="Kernel based performance profiler"
+arch=('x86_64')
+url="https://wiki.gnome.org/Apps/Sysprof"
+license=('KZL')
+depends=(cairo json-glib polkit)
+options=(debug)
+source=(git+https://gitlab.gnome.org/GNOME/sysprof.git#tag=$pkgver)
+sha256sums=('SKIP')
+
+# TODO: gtk
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D enable_gtk=false \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build --print-errorlogs
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir="$pkgdir/"
+}
