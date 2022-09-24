@@ -1,32 +1,31 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgname=glib2
-pkgver=2.72.1
+pkgname=glib
+pkgver=2.74.0
 pkgrel=1
 epoch=1
 pkgdesc="Low level core library"
 arch=('x86_64')
 url="https://wiki.gnome.org/Projects/GLib"
 license=('KZL')
-# depends=(libffi libsysprof-capture pcre)
 depends=(libffi pcre)
 makedepends=(dbus elfutils shared-mime-info)
 optdepends=("elfutils: gresource inspection tool")
+provides=(glib2)
+conflicts=(glib2)
+replaces=(glib2)
 options=(!strip staticlibs)
 source=(git+https://gitlab.gnome.org/GNOME/glib.git#tag=$pkgver?signed
-        gio-querymodules.hook
+        gio-querymodules.{script,hook}
         glib-compile-schemas.hook)
 sha256sums=('SKIP'
-            '2a6ed172633430753af2d4eb2bc266c2e12713c0a68d8e12e885ea0595a86460'
+            '2d3c1919c09d529cf946bdbc926d53629b78ac87a52a7387b7a9f5d8b999ecae'
+            '6bb6eef2768fe9f1aafabb97c44201d3e0a2a2cf74b479df0f812da2c566b1ce'
             '018c62a1087461cb1f5dd2a879667d7218e4990c1b4c322e584dc3ef311342ca')
-validpgpkeys=('923B7025EE03C1C59F42684CF0942E894B2EAFA0')
-
-# TODO: sysprof
+validpgpkeys=('D4C501DA48EB797A081750939449C2F50996635F')
 
 build() {
-  cd glib
-
-  CFLAGS+=" -DG_DISABLE_CAST_CHECKS"
+  cd $pkgname
 
   meson setup \
     --prefix /usr \
@@ -39,28 +38,26 @@ build() {
     -D b_lto=true \
     -D b_pie=true \
     -D gtk_doc=false \
-    -D man=true \
+    -D man=false \
     -D selinux=disabled \
-    -D sysprof=disabled \
     build
 
   meson compile -C build
 }
 
 check() {
-  cd glib
+  cd $pkgname
 
   meson test -C build --no-suite flaky --print-errorlogs
 }
 
 package() {
-  cd glib
+  cd $pkgname
 
   meson install -C build --destdir="$pkgdir/"
 
-  sed -e 's/, sysprof-capture-4//' -i "$pkgdir"/usr/lib/pkgconfig/*.pc
-
   install -Dm644 "$srcdir"/*.hook -t "$pkgdir"/usr/share/libalpm/hooks
+  install -D "$srcdir"/gio-querymodules.script "$pkgdir"/usr/share/libalpm/scripts/gio-querymodules
 
   export PYTHONHASHSEED=0
   python -m compileall -d /usr/share/glib-2.0/codegen "$pkgdir/usr/share/glib-2.0/codegen"
