@@ -1,0 +1,55 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=glslang
+pkgver=11.11.0
+pkgrel=1
+epoch=1
+pkgdesc="Khronos-reference front end for GLSL/ESSL, partial front end for HLSL, and a SPIR-V generator"
+arch=('x86_64')
+url="https://github.com/KhronosGroup/glslang"
+license=('KZL')
+depends=()
+makedepends=()
+options=(staticlibs)
+source=(git+https://github.com/KhronosGroup/glslang.git#tag=$pkgver)
+sha256sums=('SKIP')
+validpgpkeys=()
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
+
+build() {
+  cd $pkgname
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DBUILD_SHARED_LIBS=ON \
+    -S . \
+    -B build-shared \
+    -G Ninja
+
+  ninja -C build-shared
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DBUILD_SHARED_LIBS=OFF \
+    -S . \
+    -B build-static \
+    -G Ninja
+
+  ninja -C build-static
+}
+
+package() {
+  cd $pkgname
+
+  DESTDIR="${pkgdir}" ninja -C build-shared install
+  DESTDIR="${pkgdir}" ninja -C build-static install
+}
