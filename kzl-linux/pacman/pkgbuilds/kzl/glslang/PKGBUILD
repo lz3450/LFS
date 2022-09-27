@@ -8,12 +8,9 @@ pkgdesc="Khronos-reference front end for GLSL/ESSL, partial front end for HLSL, 
 arch=('x86_64')
 url="https://github.com/KhronosGroup/glslang"
 license=('KZL')
-depends=()
-makedepends=()
 options=(staticlibs)
 source=(git+https://github.com/KhronosGroup/glslang.git#tag=$pkgver)
 sha256sums=('SKIP')
-validpgpkeys=()
 
 pkgver() {
   cd $pkgname
