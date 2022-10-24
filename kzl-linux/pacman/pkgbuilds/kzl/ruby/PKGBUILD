@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ruby
-pkgver=2.7.4
+pkgver=2.7.6
 pkgrel=1
 epoch=1
 pkgdesc="An object-oriented language for quick and easy programming"
@@ -13,7 +13,7 @@ provides=(irb rubygems ruby-bundler)
 conflicts=(irb rubygems ruby-bundler)
 replaces=(irb rubygems ruby-bundler)
 source=(https://cache.ruby-lang.org/pub/ruby/${pkgver:0:3}/$pkgname-$pkgver.tar.xz)
-sha256sums=('2a80824e0ad6100826b69b9890bf55cfc4cf2b61a1e1330fccbcb30c46cef8d7')
+sha256sums=('54dcd3044726c4ab75a9d4604720501442b229a3aed6a55fe909567da8807f24')
 
 build() {
   cd $pkgname-$pkgver
@@ -36,7 +36,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make test || warning "Check failed."
+  make test
 }
 
 package() {
