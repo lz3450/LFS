@@ -1,6 +1,6 @@
 #!/bin/bash
-# 
-# build
+#
+# build.sh
 #
 
 set -e
@@ -90,8 +90,10 @@ kzl_stage2_pkgs=(
     ed patch
     ## make
     gc libffi libunistring guile make
+    ## glib2
+    glib2
     ## gettext
-    icu libxml2 elfutils glib2 gettext
+    icu libxml2 elfutils gettext
     ## dbus
     expat autoconf-archive dbus
     ## iproute2
