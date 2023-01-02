@@ -4,12 +4,12 @@ set -e -u
 
 # EFI: /boot/efi
 
+debootstrap jammy /mnt http://us.archive.ubuntu.com/ubuntu
+
 for fs in dev sys proc run; do
     mount --rbind /$fs /mnt/$fs
     mount --make-rslave /mnt/$fs
 done
-
-debootstrap jammy /mnt http://us.archive.ubuntu.com/ubuntu
 
 cat > /mnt/etc/apt/sources.list << EOF
 deb http://us.archive.ubuntu.com/ubuntu jammy main restricted universe
