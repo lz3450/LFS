@@ -61,4 +61,4 @@ EOF
 cp initialize.sh /mnt/root
 genfstab -t PARTUUID /mnt > /mnt/etc/fstab
 
-LANG=C.UTF-8 PATH=/usr/bin:/usr/sbin chroot /mnt /bin/zsh
+LANG=C.UTF-8 PATH=/usr/bin:/usr/sbin chroot /mnt /bin/bash
