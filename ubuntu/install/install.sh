@@ -53,9 +53,9 @@ echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | t
 # environment variables
 cat > /mnt/root/.zshenv << EOF 
 typeset -U PATH path
-path=("$HOME/.local/bin" "\$path[@]")
+path=("\$HOME/.local/bin" "\$path[@]")
 export PATH
-fpath=(/usr/local/share/zsh/site-functions $fpath)
+fpath=(/usr/local/share/zsh/site-functions \$fpath)
 EOF
 
 cp initialize.sh /mnt/root
