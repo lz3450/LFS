@@ -42,8 +42,8 @@ initrd  /initrd.img
 options root="PARTUUID=" rw
 EOF
 
-blkid >> /boot/efi/loader/entries/ubuntu.conf
-nano /boot/efi/loader/entries/ubuntu.conf
+blkid >> /mnt/boot/efi/loader/entries/ubuntu.conf
+nano /mnt/boot/efi/loader/entries/ubuntu.conf
 
 # zsh
 wget -O /mnt/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
@@ -51,7 +51,7 @@ echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /r
 echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /root/.zshrc
 
 # environment variables
-cat > ~/.zshenv << EOF 
+cat > /mnt/root/.zshenv << EOF 
 typeset -U PATH path
 path=("$HOME/.local/bin" "\$path[@]")
 export PATH
@@ -61,4 +61,4 @@ EOF
 cp initialize.sh /mnt/root
 genfstab -t PARTUUID /mnt > /mnt/etc/fstab
 
-LANG=C.UTF-8 PATH=/usr/bin:/usr/sbin chroot /mnt /bin/bash
+LANG=C.UTF-8 PATH=/usr/bin:/usr/sbin chroot /mnt /bin/zsh
