@@ -39,7 +39,7 @@ cat > /mnt/boot/efi/loader/entries/ubuntu.conf << EOF
 title   Ubuntu 22.04
 linux   /vmlinuz
 initrd  /initrd.img
-options root="PARTUUID=" rw
+options root=PARTUUID="" rw
 EOF
 
 blkid >> /mnt/boot/efi/loader/entries/ubuntu.conf
