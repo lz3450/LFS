@@ -29,13 +29,13 @@ mkswap /mnt/swapfile
 # boot
 mkdir -p /mnt/boot/efi/loader/entries
 
-cat > /boot/efi/loader/loader.conf << EOF
+cat > /mnt/boot/efi/loader/loader.conf << EOF
 timeout 3
 console-mode max
 default ubuntu
 EOF
 
-cat > /boot/efi/loader/entries/ubuntu.conf << EOF
+cat > /mnt/boot/efi/loader/entries/ubuntu.conf << EOF
 title   Ubuntu 22.04
 linux   /vmlinuz
 initrd  /initrd.img
