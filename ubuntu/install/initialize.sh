@@ -5,6 +5,8 @@ set -e -u
 apt update
 
 apt install -y \
+    linux-image-generic \
+    linux-image-lowlatency \
     zsh \
     wget \
     nano \
