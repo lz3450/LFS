@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=kbd
-pkgver=v2.4.0+33+g9e085ed
+pkgver=2.5.1
 pkgrel=1
 epoch=1
 pkgdesc="Keytable files and keyboard utilities"
@@ -9,15 +9,14 @@ arch=('x86_64')
 url="http://www.kbd-project.org"
 license=('KZL')
 checkdepends=(check)
-source=(git+https://github.com/legionus/kbd.git#commit=9e085eda2f018298fea75cb6b7a45ba7aaef1b76?signed)
+source=(git+https://github.com/legionus/kbd.git#tag=v$pkgver)
 sha256sums=('SKIP')
-validpgpkeys=('7F2A3D07298149A0793C9A4EA45ABA544CFFD434')
 
-pkgver() {
-  cd $pkgname
+# pkgver() {
+#   cd $pkgname
 
-  git describe --tags | sed 's/-/+/g'
-}
+#   git describe --tags | sed 's/^v//;s/-/+/g'
+# }
 
 prepare() {
   cd $pkgname
