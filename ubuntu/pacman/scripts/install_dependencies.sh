@@ -9,4 +9,5 @@ sudo apt install -y \
     libedit-dev \
     rsync \
     libelf-dev \
-    libffi-dev
+    libffi-dev \
+    flex bison pahole
