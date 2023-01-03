@@ -1,8 +1,9 @@
 #!/bin/bash
 
-set -e
+set -e -u
+# set -x
 
-BUILDDIR=/dev/shm
+BUILDDIR=/tmp
 pacmanver=6.0.1
 
 cd $BUILDDIR
@@ -49,7 +50,7 @@ sudo sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-kzl-linux-gnu/' \
     -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g -fvar-tracking-assignments"' \
     -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"' \
     -e '/^#DEBUG_RUSTFLAGS=/c\DEBUG_RUSTFLAGS="-C debuginfo=2"' \
-    -e '/^#BUILDDIR=/c\BUILDDIR=/dev/shm/makepkg' \
+    -e '/^#BUILDDIR=/c\BUILDDIR=/tmp/makepkg' \
     -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
     -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
     -e '/^#SRCDEST=/c\SRCDEST="$HOME/makepkg/sources"' \
