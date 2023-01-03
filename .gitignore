@@ -13,16 +13,5 @@
 *.log
 *.sum
 *.xml
-*-[0-9][0-9][0-9]
-**/cython/cython-hash-int-conversion.patch
-**/gc/add_stack_bottom_feature.patch
-**/icu/icu-65.1-initialized-buffer-uloc_getKeywordValue.patch
-**/icu/icu-65.1-prevent-SEGV_MAPERR-in-append.patch
-**/lapack/lapacke-missing-symbols.patch
-**/libpsl/9347024221f4a9d63f9dcafcda13362a7c8d92fe.patch
-!**/GlobalProtect_tar-5.1.0.0-101.tgz
-!**/GlobalProtect_UI_tar-5.1.0.0-101.tgz
-core/wpa_supplicant/CVE-2019-16275.patch
-core/wpa_supplicant/roam-properties.patch
 *.img
-!kzl/pkgbuilds/jdk8/jdk-8u271-linux-x64.tar.gz
+kzl-linux/mkiso/rootfs
