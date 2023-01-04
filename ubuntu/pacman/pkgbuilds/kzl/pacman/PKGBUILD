@@ -1,18 +1,25 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=6.0.1
+pkgver=6.0.1+113+gd35728f9
 pkgrel=1
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
 license=('KZL')
 backup=(etc/pacman.conf
         etc/makepkg.conf)
-source=(https://sources.archlinux.org/other/pacman/$pkgname-$pkgver.tar.xz)
-sha256sums=('0db61456e56aa49e260e891c0b025be210319e62b15521f29d3e93b00d3bf731')
+# source=(https://sources.archlinux.org/other/pacman/$pkgname-$pkgver.tar.xz)
+source=(git+https://gitlab.archlinux.org/pacman/pacman.git#commit=d35728f92421eb9e0980fb70c65e9ce95f95159a)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/^v//;s/-/+/g'
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
     meson setup \
       --prefix /usr/local \
@@ -37,13 +44,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   meson test -C build
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   meson install -C build --destdir="$pkgdir"
   
@@ -56,7 +63,7 @@ package() {
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g -fvar-tracking-assignments"' \
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"' \
       -e '/^#DEBUG_RUSTFLAGS=/c\DEBUG_RUSTFLAGS="-C debuginfo=2"' \
-      -e '/^#BUILDDIR=/c\BUILDDIR=/dev/shm/makepkg' \
+      -e '/^#BUILDDIR=/c\BUILDDIR=/tmp/makepkg' \
       -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
       -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
       -e '/^#SRCDEST=/c\SRCDEST="$HOME/makepkg/sources"' \
