@@ -2,7 +2,7 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=5.15.28
+pkgver=5.15.86
 pkgrel=1
 epoch=1
 pkgdesc="LTS Linux Kernel"
@@ -12,8 +12,8 @@ license=('KZL')
 options=(!strip)
 source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.xz
         config)
-sha256sums=('d8a2bbf3b971db9fd9a17b7768559f0a830b167d03c986fab636a57394b010e6'
-            '5608e536ef166453103437a2e13f0e615207513e41fd82eb5882e2cbfb3f4a57')
+sha256sums=('80fcd9efa443502de9e2750f6dfb59e8de43a5d87a6d2be09dca748d79b5f2ee'
+            'a17b5df4ad609ad0ec764b32143440f9523cd5951361c7b76649997b87768ddc')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
@@ -22,7 +22,7 @@ export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EP
 prepare() {
   cd $pkgbase-$pkgver
 
-  mkdir build
+  mkdir -p build
 
   cp "$srcdir"/config build/.config
 
