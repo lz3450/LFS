@@ -1,6 +1,6 @@
 workdir=/tmp/nvidia
 pkgname=nvidia
-pkgver=515.57
+pkgver=525.60.11
 source=https://us.download.nvidia.com/XFree86/Linux-x86_64/$pkgver/NVIDIA-Linux-x86_64-$pkgver.run
 
 set -e
@@ -10,10 +10,6 @@ cd $workdir
 
 if [ ! -f NVIDIA-Linux-x86_64-$pkgver.run ]; then
     wget $source
-fi
-
-if [ -d NVIDIA-Linux-x86_64-$pkgver ]; then
-    sudo rm -rf NVIDIA-Linux-x86_64-$pkgver
 fi
 
 if [ -d install.log ]; then
