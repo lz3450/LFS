@@ -47,7 +47,7 @@ pacstrap_dir="${work_dir}"/rootfs
 isofs_dir="${work_dir}"/iso
 install_dir="LiveOS"
 iso_name="kzllinux"
-iso_label="KZLLINUX_$(date +%Y%m%d)"
+iso_label="KZLLINUX-$(date +%Y%m%d)"
 iso_publisher="KZL Linux <https://github.com/kongzelun/LFS>"
 iso_application="KZL Linux Live/Rescue CD"
 iso_version="$(date +%Y%m%d)"
@@ -106,7 +106,7 @@ make_iso_image() {
         -preparer "prepared by kzl" \
         -partition_offset 16 \
         -append_partition 2 'C12A7328-F81F-11D2-BA4B-00A0C93EC93B' "${work_dir}"/efiboot.img \
-        -appended_part_as=gpt \
+        -appended_part_as_gpt \
         -output "${out_dir}/${image_name}" \
         "${isofs_dir}/" &> "${log_dir}"/xorriso.log
     info "Done!"
@@ -219,6 +219,8 @@ make_initramfs() {
 }
 
 make_rootfs() {
+    mount -o remount,size=32G tmpfs /tmp
+
     install -dm0755 -o 0 -g 0 -- "${pacstrap_dir}"
     install -dm0755 -- "${isofs_dir}/${install_dir}"
     install -dm0755 -- "${log_dir}"
@@ -246,7 +248,7 @@ make_rootfs() {
     info "Done!"
 
     # Copy custom repository
-    info "Creating custom repository..."
+    info "Copying custom repository..."
     cp -af --no-preserve=ownership,mode -- /home/.repository "${pacstrap_dir}"/home/.repository
     info "Done!"
 
