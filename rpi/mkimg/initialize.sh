@@ -67,7 +67,8 @@ chown kzl:kzl /home/kzl/.zshenv
 # network
 tee /etc/systemd/network/eth0.network << EOF
 [Match]
-Name=eth0
+Name=en*
+Name=eth*
 
 [Network]
 DHCP=yes
