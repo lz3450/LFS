@@ -4,40 +4,36 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
 pkgname=gcc
-pkgver=11.2.0
+pkgver=11.3.0
 _islver=0.24
-pkgrel=2
+pkgrel=1
 epoch=1
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
 url="https://gcc.gnu.org"
 license=('KZL')
 depends=(mpc)
-provides=(gcc-libs gcc-fortran)
-conflicts=(gcc-libs gcc-fortran)
-replaces=(gcc-libs gcc-fortran)
 options=(!emptydirs)
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
-        # http://isl.gforge.inria.fr/isl-$_islver.tar.xz
         https://libisl.sourceforge.io/isl-${_islver}.tar.xz)
-sha256sums=('d08edc536b54c372a1010ff6619dd274c0f1603aa49212ba20f7aa2cda36fa8b'
+sha256sums=('b47cf2818691f5b1e21df2bb38c795fac2cfbd640ede2d0a5e1c89e338a3ac39'
             'SKIP'
             '043105cc544f416b48736fff8caf077fb0663a717d06b1113f16e391ac99ebad')
 validpgpkeys=('13975A70E63C361C73AE69EF6EEB81F8981C74C7')
 
 prepare() {
   cd $pkgname-$pkgver
-  
-  mkdir build
+
+  mkdir -p build
 
   ln -s "$srcdir"/isl-$_islver isl
-  
+
   sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i gcc/configure
 
   # Do not run fixincludes
   sed -e 's@\./fixinc\.sh@-c true@' -i gcc/Makefile.in
 
-  # Set the default directory name for 64-bit libraries to “lib”
+  # Set the default directory name for 64-bit libraries to "lib"
   sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
   sed -e '/mabi.lp64=/s/lib64/lib/' -i.orig gcc/config/aarch64/t-aarch64-linux
 }
@@ -71,7 +67,10 @@ build() {
     --disable-install-libiberty \
     --enable-plugin \
     --disable-libstdcxx-pch \
-    --enable-clocale=gnu
+    --enable-clocale=gnu \
+    --enable-libstdcxx-time=yes \
+    --enable-libstdcxx-debug \
+    --with-default-libstdcxx-abi=new
 
   make
 }
