@@ -4,7 +4,7 @@ set -e
 # set -x
 
 # package
-apt update || :
+apt update
 apt install -y \
     python-is-python3 \
     f2fs-tools \
@@ -47,11 +47,14 @@ echo -e '3450\n3450' | passwd kzl
 
 ###############################################################################
 
+dpkg-reconfigure locales
+dpkg-reconfigure tzdata
+
 # locale
-sed -i '/^# en_US.UTF-8/s/^#//' /etc/locale.gen
-sed -i '/^# zh_CN.UTF-8/s/^#//' /etc/locale.gen
-echo 'LANG=en_US.UTF-8' | tee /etc/locale.conf
-locale-gen
+# sed -i '/^# en_US.UTF-8/s/^#//' /etc/locale.gen
+# sed -i '/^# zh_CN.UTF-8/s/^#//' /etc/locale.gen
+# echo 'LANG=en_US.UTF-8' | tee /etc/locale.conf
+# locale-gen
 
 # environment variables
 tee /home/kzl/.zshenv << EOF 
