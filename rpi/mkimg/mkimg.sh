@@ -64,7 +64,7 @@ create_img() {
         mktable msdos \
         unit s \
         mkpart primary fat32 1s 524287s \
-        mkpart primary f2fs 524288s 100% \
+        mkpart primary ext4 524288s 100% \
         set 2 lba off \
         print
 }
@@ -82,7 +82,7 @@ format_img() {
     info "Formating image..."
 
     mkfs.fat -F32 "${loop}p1"
-    mkfs.f2fs -f "${loop}p2"
+    mkfs.ext4 "${loop}p2"
 }
 
 mount_img() {
@@ -125,7 +125,7 @@ bootstrap_img () {
     #     cp -f config.txt "${mountpoint}"/boot/firmware/
     # fi
     cp -f cmdline.txt "${mountpoint}"/boot/cmdline.txt
-    cp -f config.txt "${mountpoint}"/boot/
+    cp -f "config-${target}.txt" "${mountpoint}"/boot/
 
     cp -f fstab "${mountpoint}"/etc/fstab
     cp -f "sources-${target}.list" "${mountpoint}"/etc/apt/sources.list
@@ -186,7 +186,7 @@ cleanup() {
     if [ -n "${mountpoint}" ]; then
         for attempt in $(seq 10); do
             for fs in dev/pts dev sys proc run; do
-                mount | grep -q "${mountpoint}/$fs" && umount -R "${mountpoint}"/$fs 2> /dev/null
+                mount | grep -q "${mountpoint}/${fs}" && umount -R "${mountpoint}/${fs}" 2> /dev/null
             done
             mount | grep -q "${mountpoint}" && umount -R "${mountpoint}" 2> /dev/null
             if [ $? -ne 0 ]; then
@@ -201,8 +201,8 @@ cleanup() {
         rmdir "${mountpoint}"
     fi
 
-    if [ -f ${img} ]; then
-        rm -f ${img}
+    if [ -f "${img}" ]; then
+        rm -f "${img}"
     fi
 }
 trap cleanup EXIT
