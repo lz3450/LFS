@@ -15,7 +15,7 @@ source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.{xz,sign}
         config)
 sha256sums=('80fcd9efa443502de9e2750f6dfb59e8de43a5d87a6d2be09dca748d79b5f2ee'
             'SKIP'
-            '0afee0f0e3a16d1e8bdea644c6aebff516904dfd92d0663237e0d59c4396ae55')
+            'a17b5df4ad609ad0ec764b32143440f9523cd5951361c7b76649997b87768ddc')
 validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
 
 export KBUILD_BUILD_HOST=kzl-linux
