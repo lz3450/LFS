@@ -11,8 +11,11 @@ script_path="$(readlink -f "${0}")"
 script_dir="$(dirname "${script_path}")"
 img="/tmp/raspi.img"
 mountpoint="/tmp/raspi"
+loop=""
 chroot_path="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
 target=""
+base_only=0
+base_img=""
 
 # Show an INFO message
 # $1: message string
@@ -41,46 +44,66 @@ error() {
 }
 
 usage() {
-    echo "Usage: ${script_name} [ -h | --help ] -b|--bsp <bsp_name> [ -c | --clean ] [ -V | --verbose ]"
-    echo
-    echo "    -h, --help        display this help message and exit"
-    echo "    -t, --target      specify the target image (debian, ubuntu)"
-    echo
+    local _usage="
+    Usage: ${script_name} [ -h | --help ] -t|--target <target> [ -b|--base-onle | -u|--use-base <basee_image> ]
+
+    -h, --help                      display this help message and exit
+    -t, --target                    specify the target image (debian, ubuntu)
+    -b, --base-onle                 only create base image
+    -u, --use-base <base_image>     use existing base image
+"
+    echo "${_usage}"
 }
 
 create_img() {
     info "Creating image..."
-    fallocate -l 4G ${img}
 
-    parted -s ${img} \
+    fallocate -l 3G "${img}"
+
+    parted -s "${img}" \
         mktable msdos \
         unit s \
         mkpart primary fat32 1s 524287s \
         mkpart primary f2fs 524288s 100% \
         set 2 lba off \
         print
-
-    loop=$(losetup -f)
-    info "Loop device is \"$loop\""
-
-    losetup -P ${loop} ${img}
-
-    mkfs.fat -F32 ${loop}p1
-    mkfs.f2fs -f ${loop}p2
-
-    mkdir -p "${mountpoint}"
-    mount ${loop}p2 "${mountpoint}"
-    if [ "${target}" == "debian" ]; then
-        mkdir -p "${mountpoint}"/boot
-        mount ${loop}p1 "${mountpoint}"/boot
-    elif [ "${target}" == "ubuntu" ]; then
-        mkdir -p "${mountpoint}"/boot/firmware
-        mount ${loop}p1 "${mountpoint}"/boot/firmware
-    fi
 }
 
-configure_img() {
-    info "Configuring image..."
+setup_loop() {
+    info "Setup loop device..."
+
+    loop=$(losetup -f)
+    info "Loop device is \"${loop}\""
+
+    losetup -P "${loop}" "${img}"
+}
+
+format_img() {
+    info "Formating image..."
+
+    mkfs.fat -F32 "${loop}p1"
+    mkfs.f2fs -f "${loop}p2"
+}
+
+mount_img() {
+    info "Mounting image..."
+
+    mkdir -p "${mountpoint}"
+    mount "${loop}p2" "${mountpoint}"
+    # if [ "${target}" == "debian" ]; then
+    #     mkdir -p "${mountpoint}"/boot
+    #     mount ${loop}p1 "${mountpoint}"/boot
+    # elif [ "${target}" == "ubuntu" ]; then
+    #     mkdir -p "${mountpoint}"/boot/firmware
+    #     mount ${loop}p1 "${mountpoint}"/boot/firmware
+    # fi
+    mkdir -p "${mountpoint}"/boot
+    mount "${loop}p1" "${mountpoint}"/boot
+
+}
+
+bootstrap_img () {
+    info "Bootstrap image..."
 
     # debootstrap
     if [ "${target}" == "debian" ]; then
@@ -90,52 +113,50 @@ configure_img() {
         debootstrap --arch=arm64 --foreign jammy "${mountpoint}" http://ports.ubuntu.com/ubuntu-ports
     fi
 
-    # cp /usr/bin/qemu-aarch64-static "${mountpoint}"/usr/bin
     LC_ALL=C PATH="${chroot_path}" chroot "${mountpoint}" /debootstrap/debootstrap --second-stage
 
     echo "RPi" > "${mountpoint}"/etc/hostname
-    cp -f fstab "${mountpoint}"/etc/
-    if [ "${target}" == "debian" ]; then
-        cp -f sources-debian.list "${mountpoint}"/etc/apt/sources.list
-        cp -f raspi.list "${mountpoint}"/etc/apt/sources.list.d/
-        cp -f cmdline-debian.txt "${mountpoint}"/boot/cmdline.txt
-        cp -f config.txt "${mountpoint}"/boot/
 
-        wget -qO "${mountpoint}"/etc/apt/trusted.gpg.d/raspberrypi http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
-        gpg --dearmor "${mountpoint}"/etc/apt/trusted.gpg.d/raspberrypi
-        rm -f "${mountpoint}"/etc/apt/trusted.gpg.d/raspberrypi
-    elif [ "${target}" == "ubuntu" ]; then
-        cp -f sources-ubuntu.list "${mountpoint}"/etc/apt/sources.list
-        cp -f cmdline-ubuntu.txt "${mountpoint}"/boot/firmware/cmdline.txt
-        cp -f config.txt "${mountpoint}"/boot/firmware/
-    fi
+    # if [ "${target}" == "debian" ]; then
+    #     cp -f cmdline-debian.txt "${mountpoint}"/boot/cmdline.txt
+    #     cp -f config.txt "${mountpoint}"/boot/
+    # elif [ "${target}" == "ubuntu" ]; then
+    #     cp -f cmdline-ubuntu.txt "${mountpoint}"/boot/firmware/cmdline.txt
+    #     cp -f config.txt "${mountpoint}"/boot/firmware/
+    # fi
+    cp -f cmdline.txt "${mountpoint}"/boot/cmdline.txt
+    cp -f config.txt "${mountpoint}"/boot/
+
+    cp -f fstab "${mountpoint}"/etc/fstab
+    cp -f "sources-${target}.list" "${mountpoint}"/etc/apt/sources.list
+    cp -f raspi.list "${mountpoint}"/etc/apt/sources.list.d/
+    wget -qO "${mountpoint}"/etc/apt/trusted.gpg.d/raspberrypi http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
+    gpg --dearmor "${mountpoint}"/etc/apt/trusted.gpg.d/raspberrypi
+    rm -f "${mountpoint}"/etc/apt/trusted.gpg.d/raspberrypi
 
     # Partation UUID
     bootpartuuid=$(blkid -s PARTUUID | grep ${loop}p1 | sed -e 's#.*=\"\(.*\)\"#\1#')
     rootpartuuid=$(blkid -s PARTUUID | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
     sed -e "s|%BOOTPARTUUID%|${bootpartuuid}|" -i ${mountpoint}/etc/fstab
     sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i ${mountpoint}/etc/fstab
-    if [ "${target}" == "debian" ]; then
-        sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i ${mountpoint}/boot/cmdline.txt
-    elif [ "${target}" == "ubuntu" ]; then
-        sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i ${mountpoint}/boot/firmware/cmdline.txt
-    fi
+    # if [ "${target}" == "debian" ]; then
+    #     sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i ${mountpoint}/boot/cmdline.txt
+    # elif [ "${target}" == "ubuntu" ]; then
+    #     sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i ${mountpoint}/boot/firmware/cmdline.txt
+    # fi
+    sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i ${mountpoint}/boot/cmdline.txt
 
-    # tee -a "${mountpoint}"/etc/hosts << EOF
-    # $(ping -c1 deb.debian.org| head -1 | cut -d '(' -f3 | cut -d ')' -f1)           deb.debian.org
-    # $(ping -c1 archive.raspberrypi.org| head -1 | cut -d '(' -f3 | cut -d ')' -f1)  archive.raspberrypi.org
-    # $(ping -c1 deb.grml.org| head -1 | cut -d '(' -f3 | cut -d ')' -f1)             deb.grml.org
-    # EOF
+    sync
+}
 
-    if [ "${target}" == "debian" ]; then
-        cp initialize-debian.sh "${mountpoint}"/root/initialize.sh
-    elif [ "${target}" == "ubuntu" ]; then
-        cp initialize-ubuntu.sh "${mountpoint}"/root/initialize.sh
-    fi
+configure_img() {
+    info "Configuring image..."
+
+    cp "initialize-${target}.sh" "${mountpoint}"/root/initialize.sh
 
     for fs in dev sys proc run; do
-        mount --rbind /$fs "${mountpoint}"/$fs
-        mount --make-rslave "${mountpoint}"/$fs
+        mount --rbind /"${fs}" "${mountpoint}"/"${fs}"
+        mount --make-rslave "${mountpoint}"/"${fs}"
     done
 
     info "Running initialize.sh..."
@@ -154,6 +175,8 @@ configure_img() {
     rm -rf var/cache/apt/archives/*.deb
     rm -rf var/tmp/*
     rm -rf tmp/*
+
+    sync
 }
 
 cleanup() {
@@ -196,6 +219,13 @@ while [ $# -gt 0 ]; do
         shift
         target="${1}"
         ;;
+    -b|--base-only)
+        base_only=1
+        ;;
+    -u|--use-base)
+        shift
+        base_img="$(readlink -f "${1}")"
+        ;;
     *)
         usage
         error "Unknown option: ${1}" 1
@@ -209,15 +239,39 @@ if [ -z "${target}" ] || ([ ${target} != "debian" ] && [ ${target} != "ubuntu" ]
     error "Incurrect or no <target> provided." 1
 fi
 
+if [ -d "${mountpoint}" ]; then
+    error "${mountpoint} exists, please remove before restart!" 3
+fi
+
 start_time=$(date +%s)
 
 echo "****************************************************************"
 echo "                Create Raspberry Pi image                "
 echo "****************************************************************"
 
-create_img
-configure_img
-cp -f ${img} "${script_dir}/raspi_${target}_$(date +%Y%m%d%H%M%S).img"
+if [ ! -f "${base_img}" ]; then
+    create_img
+    setup_loop
+    format_img
+    mount_img
+    bootstrap_img
+    info "Copy base image..."
+    cp -f "${img}" "${script_dir}/raspi_${target}_base_$(date +%Y%m%d%H%M%S).img"
+    if [ "${base_only}" -eq 0 ]; then
+        configure_img
+        info "Copy full image..."
+        cp -f ${img} "${script_dir}/raspi_${target}_$(date +%Y%m%d%H%M%S).img"
+    fi
+elif [ "${base_only}" -eq 0 ]; then
+    cp "${base_img}" "${img}"
+    setup_loop
+    mount_img
+    configure_img
+    info "Copy full image..."
+    cp -f ${img} "${script_dir}/raspi_${target}_$(date +%Y%m%d%H%M%S).img"
+else
+    error "Nothing to do." 0
+fi
 
 end_time=$(date +%s)
 total_time=$((end_time-start_time))

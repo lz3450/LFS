@@ -6,36 +6,36 @@ set -e
 # package
 apt update
 apt install -y \
+    sudo \
     f2fs-tools \
+    systemd-timesyncd \
+    wpasupplicant \
     gnupg \
     wget curl \
     dialog \
-    wpasupplicant \
-    zsh \
     locales \
     openssh-server \
-    sudo \
-    systemd-timesyncd \
-    linux-firmware-raspi \
-    linux-raspi \
-    linux-image-raspi \
-    linux-headers-raspi \
-    linux-firmware-raspi
+    zsh \
+    zsh-syntax-highlighting \
+    zsh-autosuggestions
+    # linux-image-raspi \
+    # linux-headers-raspi \
+    # linux-firmware-raspi
 apt upgrade -y
 
-# grml-zsh-config
-wget -O rootfs/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
-wget -O rootfs/root/.zsh-autosuggestions.zsh https://raw.githubusercontent.com/zsh-users/zsh-autosuggestions/master/zsh-autosuggestions.zsh
-wget -O rootfs/root/.zsh-syntax-highlighting.zsh https://raw.githubusercontent.com/zsh-users/zsh-syntax-highlighting/master/zsh-syntax-highlighting.zsh
-echo 'source /root/.zsh-syntax-highlighting.zsh' >> rootfs/root/.zshrc
-echo 'source /root/.zsh-autosuggestions.zsh' >> rootfs/root/.zshrc
-
-# user
-echo -e '3450\n3450' | passwd
-useradd -m -U -G sudo -s /bin/zsh kzl
-echo -e '3450\n3450' | passwd kzl
-
-###############################################################################
+wget -qO /etc/apt/trusted.gpg.d/raspberrypi.gpg.key http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
+apt update
+apt install -y linux-base
+rm -rf /etc/kernel/postinst.d/xx-update-initrd-links
+apt install -y \
+    raspberrypi-archive-keyring \
+    raspberrypi-bootloader \
+    raspberrypi-kernel \
+    raspi-config \
+    raspi-gpio \
+    rpi-eeprom \
+    rpi-eeprom-images \
+    rpiboot
 
 dpkg-reconfigure locales
 dpkg-reconfigure tzdata
@@ -45,6 +45,20 @@ dpkg-reconfigure tzdata
 # sed -i '/^# zh_CN.UTF-8/s/^#//' /etc/locale.gen
 # echo 'LANG=en_US.UTF-8' | tee /etc/locale.conf
 # locale-gen
+
+###############################################################################
+
+set +e
+
+# grml-zsh-config
+wget -O /root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> /root/.zshrc
+echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> /root/.zshrc
+
+# user
+echo -e '3450\n3450' | passwd
+useradd -m -U -G sudo -s /bin/zsh kzl
+echo -e '3450\n3450' | passwd kzl
 
 # environment variables
 tee /home/kzl/.zshenv << EOF 
@@ -80,5 +94,8 @@ network={
 }
 EOF
 
-systemctl enable systemd-networkd systemd-resolved wpa_supplicant@wlan0 ssh
+systemctl enable systemd-networkd
+systemctl enable systemd-resolved
+systemctl enable wpa_supplicant@wlan0
+systemctl enable ssh
 ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
