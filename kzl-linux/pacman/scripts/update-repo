@@ -2,8 +2,6 @@
 # 
 # update-repo
 #
-# 1.1: Add '--clear'.
-#
 
 VERSION=1.1
 REPODIR=/home/.repository
@@ -27,7 +25,7 @@ update() {
         mkdir $ARCHIVEDIR
     fi
 
-    pkgname_regex="$pkg-[0-9]+:\([0-9a-zA-Z]+\.?\)+\(\+[0-9a-zA-Z]+\+g.+\)?-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.$EXTENSION"
+    pkgname_regex="$pkg-\([0-9]+:\)?\([0-9a-zA-Z]+\.?\)+\(\+[0-9a-zA-Z]+\+g.+\)?-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.$EXTENSION"
 
     pkgname=$(find "$HOME/makepkg/packages" -type f -regex "$HOME/makepkg/packages/$pkgname_regex" -printf "%T@ %f\n" | sort -n | cut -d ' ' -f 2- | tail -n 1)
     if [ -f $PACKAGEDIR/$pkgname ]; then
@@ -46,36 +44,47 @@ update() {
 }
 
 usage() {
-    printf "update_repo (kzl-linux) %s\n" "$VERSION"
-    echo
-    printf "\"update-repo\" will update the pacman repository.\n"
-    echo
-    printf "Usage: update_repo [ -R | --clear ] [ -t repo ]\n"
-    echo
-    echo "    -h, --help        display this help message and exit"
-    echo "    -v, --version     display version information and exit"
-    echo "    -t, --target      build target (kzl, rpi, tegra, ubuntu)"
-    echo "    -R, --replace     replace old repo"
-    echo "    --clear           clear the specified repository"
-    echo
+    local _usage="
+update_repo (kzl-linux) %s\n
+\"update-repo\" will update the pacman repository.\n
+
+Usage: update_repo [ -c | -R ] [ -t repo ]\n
+
+    -c, --clear       clear the specified repository
+    -h, --help        display this help message and exit
+    -R, --replace     replace old repo
+    -t, --target      build target (kzl, rpi, tegra, ubuntu)
+"
+    echo "${_usage}"
 }
 
-# program start
+################################################################
 
 set -e -u -o pipefail
 # set -x
 
-# ensure we have a sane umask set
 umask 0022
 
-while (( "$#" )); do
+while [ $# -gt 0 ]; do
     case "$1" in
-        -h|--help)      usage; exit 0 ;;
-        -v|--version)   printf "$VERSION"; exit 0 ;;
-        -t|--target)    shift; TARGET="$1"  ;;
-        -R|--replace)   REPLACE=1 ;;
-        --clear)        CLEAR=1 ;; 
-        *)              printf "Unknown option \"$1\"\n"; exit 1 ;;
+        -c|--clear)
+            CLEAR=1
+            ;; 
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -R|--replace)
+            REPLACE=1
+            ;;
+        -t|--target)
+            shift
+            TARGET="$1"
+            ;;
+        *)
+            printf "Unknown option \"$1\"\n";
+            exit 1
+            ;;
     esac
     shift
 done
@@ -87,17 +96,24 @@ case $TARGET in
         ;;
     # unknown repo
     *)
-        printf "Unknown target \"%s\".\n" "$TARGET"; exit 1
+        printf "Unknown target repo \"%s\".\n" "$TARGET"
+        exit 2
         ;;
 esac
 
-if (( CLEAR )); then
+if [ $CLEAR -gt 0 ]; then
     while true; do
         read -p "Do you wish to clear the repository? " yn
         case $yn in
-            [Yy]* ) sudo rm -rf $REPODIR/$TARGET; break;;
-            [Nn]* ) exit 0;;
-            * ) echo "Please answer yes or no.";;
+            [Yy]*)
+                sudo rm -vrf $REPODIR/$TARGET
+                ;;
+            [Nn]*)
+                exit 0
+                ;;
+            *)
+            echo "Please answer yes(y) or no(n)."
+            ;;
         esac
     done
     echo "Repository \"$TARGET\" has been removed."
@@ -112,7 +128,7 @@ if [ ! -f $REPODIR/$TARGET ]; then
     sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION
 fi
 
-if (( REPLACE )); then
+if [ $REPLACE -gt 0 ]; then
     sudo find $REPODIR/$TARGET -name "$TARGET.*" -delete
 fi
 
@@ -120,6 +136,7 @@ if [ ! -f $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION ]; then
     sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION
 fi
 
+### special cases
 for pkgbase in ${pkgs[@]}; do
     update $TARGET $pkgbase
     case $pkgbase in
