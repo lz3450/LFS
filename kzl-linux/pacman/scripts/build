@@ -2,193 +2,33 @@
 #
 # build.sh
 #
+# TODO: build only updated pkgs
 
-set -e
-# set -x
-
-umask 0022
-
-version=1.2
-
-# arguments/options
+SCRIPT_LEVEL_EMPH='\033[1;30m'
 
 script_name="$(basename "${0}")"
-target=kzl
 stage=1
-repo_dir=
-build_dir=
-log_dir=
-
-# kzl packages
+build_dir=/tmp
+repo=kzl
+log_dir=$build_dir
+repo_dir=/home/.repository/$repo
 
 # preparation
 kzl_stage0_pkgs=(
-    base
-    pacman
 )
 
 # toolchain
 kzl_stage1_pkgs=(
-    linux-api-headers
-    glibc
-    binutils
-    gcc
-    libtool
-    binutils glibc
 )
 
 # base
 kzl_stage2_pkgs=(
     ### base
     ## filesystem
-    iana-etc tzdata filesystem
-    ## zlib
-    zlib
-    ## binutils
-    binutils
-    ## gcc
-    gmp mpfr mpc gcc
-    ## libtool pkgconf
-    libtool pkgconf
-    ## glibc
-    glibc
-    ## ncurses readline bash
-    ncurses readline bash bash-completion
-    ## bzip2 xz gzip
-    bzip2 xz
-    pcre less gzip
-    ## tar
-    acl attr tar
-    ## grep sed gawk m4 bison flex
-    grep sed gawk m4 bison flex
-    ## file which findutils
-    libseccomp file
-    which
-    findutils
-    ## shadow
-    keyutils openldap krb5 swig libcap-ng audit
-    libxcrypt
-    libtirpc pam-config pam
-    shadow
-    ## sudo
-    openssl sudo
-    ## coreutils
-    libcap coreutils
-    ## util-linux
-    util-linux
-    ## e2fsprogs
-    fuse e2fsprogs
-    krb5
-    ## procps-ng psmisc
-    procps-ng psmisc
-    ## perl
-    db gdbm perl
-    ## autoconf automake
-    diffutils autoconf
-    automake
-    ## patch
-    ed patch
-    ## make
-    gc libffi libunistring guile make
-    ## glib2
-    glib2
-    ## gettext
-    icu libxml2 elfutils gettext
-    ## dbus
-    expat autoconf-archive dbus
-    ## iproute2
-    libmnl libnfnetlink libnetfilter_conntrack libnftnl libnl libpcap iptables
-    iproute2
-    ## iputils
-    libidn2 iputils
-    # systemd
-    argon2 libaio hwloc ldns libedit openssh openmpi boost thin-provisioning-tools device-mapper json-c popt cryptsetup
-    kbd kmod
-    libgpg-error libgcrypt
-    libtasn1 p11-kit
-    pcre2
-    ca-certificates libnghttp2 publicsuffix-list libpsl libssh2 curl
-    kexec-tools
-    gnu-efi
-    gperf
-    libusb hidapi libcbor libfido2
-    nettle gnutls libmicrohttpd
-    libxslt
-    rpcsvc-proto quota
-    systemd
-    procps-ng libusb
-    ## pciutils
-    pciutils
-    ## zstd
-    lz4 zstd
-    ## pacman
-    po4a fakeroot
-    libassuan npth pinentry tcl sqlite libusb-compat pcsclite gnupg gpgme
-    libarchive
-    pacman
-    pacman-contrib arch-install-scripts
-    ## python
-    libnsl mpdecimal valgrind python
-    ## cmake
-    jsoncpp
-    libuv
-    rhash
-    docbook itstool xmlto shared-mime-info
-    cmake
-    ## git
-    git
-    ## texinfo man-db
-    texinfo 
-    groff man-db
-    ## linux
-    bc linux-firmware
-    ## base
-    base
+    iana-etc # tzdata filesystem
 )
 
 kzl_stage3_pkgs=(
-    ### core
-    ## raid
-    mdadm
-    ## zsh
-    zsh zsh-autosuggestions zsh-syntax-highlighting #grml-zsh-config 
-    ## initramfs
-    cpio dracut
-    ## iso
-    squashfs-tools mtools dosfstools
-    ## tmux screen
-    libevent libutempter tmux screen
-    ## utils
-    usbutils minicom
-    wpa_supplicant
-    smartmontools nvme-cli
-    wget
-    xxhash rsync
-    parted
-    nano vim
-    c-ares aria2
-    ## devtools
-    gdb llvm-project rust ruby nodejs nasm
-    ## fontconfig
-    libpng freetype2 graphite harfbuzz freetype2 fontconfig
-    ## cairo
-    pixman cairo
-    ## librsvg
-    libjpeg-turbo gdk-pixbuf librsvg
-    ## texlive
-    texlive
-    ## samba
-    lmdb jansson liburing samba
-    ## nfs-utils
-    rpcbind gssproxy 
-    # ## Xlib
-    # xorg-util-macros xorgproto libxau libxdmcp xcb-proto libxcb xtrans libx11 libice libsm libxt libxext libxrender libxpm
-    # ## ffmpeg
-
-    ### testing
-    # 
-    # intel-mkl lapack
-    # help2man
 )
 
 # functions
@@ -196,120 +36,112 @@ kzl_stage3_pkgs=(
 prepare() {
     (yes yes || :) | sudo pacman -Scc
 
-    if [ ! -f /home/.repository/$target/$target.db ]; then
-        update-repo -t $target
+    if [ ! -f /home/.repository/$repo/$repo.db ]; then
+        update-repo -t $repo
     fi
 
     (yes yes || :) | sudo pacman -Syy
 }
 
 get_pkgbase() {
-    local pkgbase
+    local _pkgbase
     case $1 in
-        device-mapper)      pkgbase=lvm2 ;;
-        *)                  pkgbase=$1 ;;
+        device-mapper)
+            _pkgbase=lvm2
+            ;;
+        *)
+            _pkgbase=$1
+            ;;
     esac
-    echo "$pkgbase"
-}
-
-update_key() {
-    local pkgbase
-    local pkgname
-    pkgname=$1
-    pkgbase=$(get_pkgbase $pkgname)
-
-    cd $ROOTDIR/$target/pkgbuilds/$pkgbase
-
-    updpkgsums > /dev/null
-    gpg --recv-keys $(grep -E -o "[0-9A-F]{40}" PKGBUILD)
+    echo "$_pkgbase"
 }
 
 build() {
-    local pkgbase
-    local pkgname
-    pkgname=$1
-    pkgbase=$(get_pkgbase $pkgname)
+    local _pkgbase
+    local _pkgname
+    local _updated
+    local _log
 
-    cd $ROOTDIR/$target/pkgbuilds/$pkgbase
+    _pkgname=$1
+    _pkgbase=$(get_pkgbase $_pkgname)
+    _log="$log_dir"/$_pkgbase.stage$stage.log
 
-    local log
-    if [ -z $stage ]; then
-        log="$log_dir"/$pkgbase.log
-    else
-        log="$log_dir"/$pkgbase.stage$stage.log
+    cd $ROOTDIR/pkgbuilds/$repo/$_pkgbase
+
+    _updated=$(bash PKGUPDATE)
+
+    if [ -f $_log ]; then
+        rm $_log
     fi
-    if [ -f $log ]; then
-        rm $log
-    fi
-    
-    makepkg -scCf --noconfirm --nocheck &>> $log
 
-    update-repo -t $target
-    # (yes yes || :) | sudo pacman -Scc
-    (yes yes || :) | sudo pacman -Sddy --overwrite "*" $pkgname # --config ${pacman_conf}
+    # makepkg -scCf --noconfirm --nocheck &>> $_log
+    makepkg -scCf --noconfirm --nocheck &>> $_log
+
+    update-repo -t $repo
+    # (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname --config ${pacman_conf}
+    (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname
 }
 
 usage() {
-    errno=0
-    if [ -n "$1" ]; then
-        echo "$1"
-        errno=1
-    fi
+    local _usage="
+build (kzl-linux)
 
-    printf "lfs-build (kzl-linux) %s\n" "$version"
-    echo
-    printf "lfs-build will build packages from scratch.\n"
-    echo
-    printf "Usage: lfs-build [options]\n"
-    echo
-    echo "    -h, --help        display this help message and exit"
-    echo "    -v, --version     display version information and exit"
-    echo "    -t, --target      build target (kzl(default), rpi, tegra, ubuntu)"
-    echo "    -s, --stage       stage (stage0, stage1(default), stage2, stage3)"
-    echo
+build will build packages from scratch.
 
-    exit ${errno}
+Usage: lfs-build [options]
+
+    -h, --help      display this help message and exit
+    -r, --repo      target repository (kzl, testing, ...)
+    -s, --stage     stage (0, 1(default), 2, 3)
+    -v, --version   display version information and exit
+"
+    echo "$_usage"
 }
 
-################################################################################
-# program start
-################################################################################
+################################################################
 
-while [ -n "$1" ]; do
+set -e
+set -o pipefail
+set -u
+# set -x
+
+umask 0022
+
+while [ $# -gt 0 ]; do
     case "$1" in
     -h|--help)
         usage
-        ;;
-    -v|--version)
-        echo "$version"
         exit 0
         ;;
-    -t|--target)
-        target="$2"
-        shift 2
+    -r|--repo)
+        shift
+        repo="$1"
         ;;
     -s|--stage)
-        stage="$2"
-        shift 2
+        shift
+        stage="$1"
         ;;
     *)
-        usage "Unknown option: $1"
+        usage
+        echo "Unknown option: \"$1\""
+        exit 1
         ;;
     esac
+    shift
 done
 
-case $target in
+case $repo in
     kzl)
-        build_dir=/tmp
         case $stage in
         0)
-            update-repo --clear -t $target
+            update-repo --clear -t $repo
             pkgs=${kzl_stage0_pkgs[@]}
             ;;
         1)
             pkgs=${kzl_stage1_pkgs[@]}
             ;;
         2)
+            echo -e "\033[1;33mBuilding stage 2\033[0m"
             pkgs=${kzl_stage2_pkgs[@]}
             ;;
         3)
@@ -322,39 +154,32 @@ case $target in
         esac
         ;;
     *)
-        echo "Unknown target \"$target\""
-        exit 1
+        echo "Unknown repo name \"$repo\""
+        exit 2
         ;;
 esac
-
-repo_dir=/home/.repository/$target
-log_dir=$build_dir
 
 start_time=$(date +%s)
 
 prepare
 
-# for p in ${pkgs[@]}; do
-#     echo "update keys for $p ..."
-#     update_key $p &
-# done
-# wait
-
 for p in ${pkgs[@]}; do
-    echo "****************************************************************"
-    echo "    building $p ..."
-    echo "****************************************************************"
-    if [ $p != 'base' ]; then
-        update_key $p
-    fi
+    pkg_start_time=$(date +%s)
+    echo -e "\033[1;31mBuilding $p ...\033[0m"
     build $p
+    pkg_end_time=$(date +%s)
+    pkg_total_time=$((pkg_end_time-pkg_start_time))
+    echo -e "$p: End time - $(date)"
+    echo -e "$p: Total time - $(date -d@$pkg_total_time -u +%H:%M:%S)"
 done
 
 end_time=$(date +%s)
 total_time=$((end_time-start_time))
 
-echo "****************************************************************"
-echo "                Execution time Information                "
-echo "****************************************************************"
-echo "${script_name} : End time - $(date)"
-echo "${script_name} : Total time - $(date -d@${total_time} -u +%H:%M:%S)"
+echo -e "$SCRIPT_LEVEL_EMPH"
+echo -e "****************************************************************"
+echo -e "                Execution time Information                "
+echo -e "****************************************************************"
+echo -e "$script_name : End time - $(date)"
+echo -e "$script_name : Total time - $(date -d@$total_time -u +%H:%M:%S)"
+echo -e "\033[0m"
