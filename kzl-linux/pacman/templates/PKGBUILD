@@ -3,7 +3,7 @@
 pkgname=
 pkgver=
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc=""
 arch=('x86_64')
 url=""
@@ -11,8 +11,8 @@ license=('KZL')
 groups=()
 depends=()
 makedepends=()
-optdepends=()
 checkdepends=()
+optdepends=()
 provides=()
 conflicts=()
 replaces=()
@@ -22,8 +22,8 @@ install=$pkgname.install
 changelog=
 source=($pkgname-$pkgver.tar.gz)
 noextract=()
-sha256sums=()
 validpgpkeys=()
+sha256sums=()
 
 pkgver() {
   cd $pkgname

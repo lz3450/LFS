@@ -1,23 +1,31 @@
 pre_install() {
+  # ${1}: new package version
   :
 }
 
 post_install() {
+  # ${1}: new package version
   :
 }
 
 pre_upgrade() {
+  # ${1}: new package version
+  # ${2}: old package version
   :
 }
 
 post_upgrade() {
+  # ${1}: new package version
+  # ${2}: old package version
   :
 }
 
 pre_remove() {
+  # ${1}: old package version
   :
 }
 
 post_remove() {
+  # ${1}: old package version
   :
 }
