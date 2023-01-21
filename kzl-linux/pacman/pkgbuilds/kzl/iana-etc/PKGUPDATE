@@ -5,7 +5,6 @@ source /etc/makepkg.conf
 new_version=$(curl -v --stderr - https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml | grep "Last Updated" -A 1 | grep -E "[0-9]{4}-[0-9]{2}-[0-9]{2}" | sed -e 's/^[ \t]*<dd>//' -e 's/<\/dd>$//' -e 's/-//g')
 old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')
 
-printf "%d %d %d\n" $new_version $old_version $(vercmp $new_version $old_version)
 
 if [ $(vercmp $new_version $old_version) -gt 0 ]; then
     sed -i -e "/^pkgver=/s/$old_version/$new_version/" ./PKGBUILD
@@ -13,4 +12,6 @@ if [ $(vercmp $new_version $old_version) -gt 0 ]; then
     rm $SRCDEST/protocol-numbers.xml
 fi
 
-updpkgsums
+updpkgsums 1>&2
+
+echo "$(vercmp $new_version $old_version)"
