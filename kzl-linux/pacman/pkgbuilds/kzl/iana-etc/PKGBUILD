@@ -1,9 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=iana-etc
-pkgver=20220219
+pkgver=20230104
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="/etc/protocols and /etc/services provided by IANA"
 arch=('any')
 url="https://www.iana.org/protocols"
@@ -12,15 +12,15 @@ groups=(base)
 backup=(etc/{protocols,services})
 source=(https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml
         https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml)
-sha256sums=('978ca9a455b18b19ba3f5a15848b17d6b4680891dd31fb8b708a8245ed4715b8'
-            '1a9570d4a35702a2b5fcb010701a607d874fc08e51d496c5e893e5881ea2837b')
+sha256sums=('80ee7145de4106ade9f671abfb37967b4925f3f4ba0dbd0861f4945471c1a85f'
+            'b6d36185c2331dee5d6dec6a878d1d4c0c8ed86761dd0cbab5a8faa101d1893b')
 
 package() {
   install -dm755 "$pkgdir"/etc
   install -Dm644 service-names-port-numbers.xml "$pkgdir"/usr/share/iana-etc/service-names-port-numbers.xml
   install -Dm644 protocol-numbers.xml "$pkgdir"/usr/share/iana-etc/protocol-numbers.xml
 
-  	awk -F"[<>]" '
+  awk -F"[<>]" '
 BEGIN { print "# Full data: /usr/share/iana-etc/protocol-numbers.xml\n" }
 (/<record/) { v=n="" }
 (/<value/) { v=$3 }
@@ -28,7 +28,7 @@ BEGIN { print "# Full data: /usr/share/iana-etc/protocol-numbers.xml\n" }
 (/<\/record/ && n && v!="") { printf "%-12s %3i %s\n", tolower(n),v,n }
 ' protocol-numbers.xml > "$pkgdir"/etc/protocols
 
-	awk -F"[<>]" '
+  awk -F"[<>]" '
 BEGIN { print "# Full data: /usr/share/iana-etc/service-names-port-numbers.xml\n" }
 (/<record/) { n=u=p=c="" }
 (/<name/ && !/\(/) { n=$3 }
