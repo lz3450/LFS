@@ -45,15 +45,15 @@ update() {
 
 usage() {
     local _usage="
-update_repo (kzl-linux) %s\n
-\"update-repo\" will update the pacman repository.\n
+update_repo (kzl-linux) %s
+\"update-repo\" will update the pacman repository.
 
-Usage: update_repo [ -c | -R ] [ -t repo ]\n
+Usage: update_repo [ -c | -R ] [ -t repo ]
 
-    -c, --clear       clear the specified repository
-    -h, --help        display this help message and exit
-    -R, --replace     replace old repo
-    -t, --target      build target (kzl, rpi, tegra, ubuntu)
+    -c, --clear     clear the specified repository
+    -h, --help      display this help message and exit
+    -R, --replace   replace old repo
+    -t, --target    build target (kzl, rpi, tegra, ubuntu)
 "
     echo "${_usage}"
 }
