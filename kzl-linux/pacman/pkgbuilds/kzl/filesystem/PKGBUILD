@@ -18,7 +18,6 @@ backup=(etc/crypttab
         etc/ld.so.conf
         etc/motd
         etc/nsswitch.conf
-        etc/os-release
         etc/passwd
         etc/profile
         etc/resolv.conf
@@ -36,7 +35,6 @@ source=(crypttab
         ld.so.conf
         motd
         nsswitch.conf
-        os-release
         passwd
         profile
         resolv.conf
@@ -54,7 +52,6 @@ sha256sums=('a6f0ad7acc6054199fbab680a53769a936a4518a2ee751404839b77fb2a4be79'
             'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
             '404c3f2e1d3d4097cedd08a4484119cb37d9adfc0ead49bdf5960e227e9159de'
             'e40e27f06d9f1d5acb727a3119a9b46bef469e09a7999220d81fabcffa8c10f4'
-            'fed64b74458bbb9435f2facc9123849631b516a1fec235f944ac3a731660938f'
             '5e06477834f51abf42ea4e8dc199632afc6afbfd8c44354685a271e9a48d2c0a'
             'c82c8f0c7564c1234a2ccc11d359545b2da69643ec752865e63e0cd0d11beb30'
             '5557d8e601b17a80d1ea7de78a9869be69637cb6a02fbfe334e22fdf64e61d4c'
@@ -87,8 +84,6 @@ package() {
     install -D -m 600 "$srcdir/$f" etc/
     install -D -m 600 "$srcdir/$f" usr/share/factory/etc/
   done
-  install -Dm644 "$srcdir"/os-release etc/os-release
-  install -Dm644 "$srcdir"/os-release usr/share/factory/etc/os-release
 
   # /usr
   install -m 755 -d usr/{bin,include,lib,libexec,share,src}
