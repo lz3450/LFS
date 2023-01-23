@@ -26,6 +26,7 @@ kzl_stage2_pkgs=(
     ## filesystem
     iana-etc filesystem
     tzdata
+    base
 )
 
 kzl_stage3_pkgs=(
@@ -54,7 +55,7 @@ error() {
     local _msg="$1"
     local _error="$2"
     printf '[%s] ERROR: %s\n' "$script_name" "$_msg" >&2
-    if (( _error > 0 )); then
+    if [ "$_error" -gt 0 ]; then
         exit "$_error"
     fi
 }
@@ -101,7 +102,11 @@ build() {
     _updated=0
     updatepkg >> $_log 2>&1 || _updated=$?
 
-    if [ "$build_only_updated" -gt 0 ] && [ $_updated -le 0 ]; then
+    if [ "$_updated" -ge 2 ]; then
+        error "Cannot update the PKGBUILD." 4
+    fi
+
+    if [ "$build_only_updated" -gt 0 ] && [ "$_updated" -le 0 ]; then
         info "Package \"$_pkgbase\" is updated, will not build."
     else
         # remove existing log
@@ -131,10 +136,12 @@ build will build packages from scratch.
 
 Usage: lfs-build [options]
 
-    -h, --help      display this help message and exit
-    -r, --repo      target repository (kzl, testing, ...)
-    -s, --stage     stage (0, 1(default), 2, 3)
-    -v, --version   display version information and exit
+    -h, --help                  display this help message and exit
+    -r, --repo                  target repository (kzl, testing, ...)
+    -s, --stage                 stage (0, 1(default), 2, 3)
+    -n, --no-install            do not install the package after building
+    -u, --build-only-updated     build the package only if the PKGBUILD is updated
+    -v, --version               display version information and exit
 "
     echo "$_usage"
 }
@@ -144,7 +151,7 @@ Usage: lfs-build [options]
 set -e
 set -o pipefail
 set -u
-# set -x
+set -x
 
 umask 0022
 
@@ -170,8 +177,7 @@ while [ $# -gt 0 ]; do
         ;;
     *)
         usage
-        echo "Unknown option: \"$1\""
-        exit 1
+        error "Unknown option: \"$1\"" 1
         ;;
     esac
     shift
@@ -195,14 +201,12 @@ case $repo in
             pkgs=${kzl_stage3_pkgs[@]}
             ;;
         *)
-            printf "Unknown stage \"$stage\""
-            exit 1
+            error "Unknown stage \"$stage\"" 2
             ;;
         esac
         ;;
     *)
-        echo "Unknown repo name \"$repo\""
-        exit 2
+        error "Unknown repo name \"$repo\"" 3
         ;;
 esac
 

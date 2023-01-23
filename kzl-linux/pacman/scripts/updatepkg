@@ -1,32 +1,43 @@
 #!/usr/bin/bash
 
 script_name="$(basename "${0}")"
-
-set -e -o pipefail -u
-
-eval $(grep SRCDEST /etc/makepkg.conf)
+result=1
 
 have_function() {
 	declare -f "$1" >/dev/null
 }
 
+################################################################
+
+set -e -o pipefail -u
+
+if [ ! -f PKGBUILD ]; then
+    exit 0
+fi
+
+eval $(grep SRCDEST /etc/makepkg.conf)
+
 unset new_version old_version remove_old_sources
 if [ -f PKGUPDATE ]; then
     source PKGUPDATE
-else
-    exit 1
-fi
 
-result=$(vercmp $new_version $old_version)
+    result=$(vercmp $new_version $old_version)
 
-if [ $result -gt 0 ]; then
-    printf '[%s] PKGBUILD updated: %s => %s\n' "$script_name" "$old_version" "$new_version"
-    sed -i "/^pkgver=/s/$old_version/$new_version/" PKGBUILD
-    if have_function 'remove_old_sources'; then
-        remove_old_sources
+    if [ $result -gt 0 ]; then
+        printf '[%s] PKGBUILD updated: %s => %s\n' "$script_name" "$old_version" "$new_version"
+        if have_function 'pre_update'; then
+            pre_update
+        fi
+        sed -i "/^pkgver=/s/$old_version/$new_version/" PKGBUILD
+        if have_function 'post_update'; then
+            post_update
+        fi
     fi
 fi
 
-updpkgsums
+updpkgsums || result=2
 
+# 0: no update
+# 1: updated
+# 2: other error
 exit $result
