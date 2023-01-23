@@ -1,15 +1,6 @@
-#!/bin/bash
-
-source /etc/makepkg.conf
-
 new_version=$()
 old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')
 
+remove_old_sources () {
 
-if [ $(vercmp $new_version $old_version) -gt 0 ]; then
-    sed -i -e "/^pkgver=/s/$old_version/$new_version/" ./PKGBUILD
-fi
-
-updpkgsums 1>&2
-
-echo "$(vercmp $new_version $old_version)"
+}
