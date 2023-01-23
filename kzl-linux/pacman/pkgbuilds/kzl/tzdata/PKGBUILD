@@ -1,29 +1,30 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=tzdata
-pkgver=2021e
+pkgver=2022g
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Sources for time zone and daylight saving time data"
 arch=('x86_64')
 url="https://www.iana.org/time-zones"
+license=('KZL')
 options=(!emptydirs)
 source=(https://www.iana.org/time-zones/repository/releases/tzcode$pkgver.tar.gz{,.asc}
         https://www.iana.org/time-zones/repository/releases/$pkgname$pkgver.tar.gz{,.asc})
-sha256sums=('584666393a5424d13d27ec01183da17703273664742e049d4f62f62dab631775'
-            'SKIP'
-            '07ec42b737d0d3c6be9c337f8abb5f00554a0f9cc4fcf01a703d69403b6bb2b1'
-            'SKIP')
 validpgpkeys=('7E3792A9D8ACF7D633BC1588ED97E90E62AA7E34')
+sha256sums=('9610bb0b9656ff404c361a41f3286da53064b5469d84f00c9cb2314c8614da74'
+            'SKIP'
+            '4491db8281ae94a84d939e427bdd83dc389f26764d27d9a5c52d782c16764478'
+            'SKIP')
 
-timezones=('africa' 'antarctica' 'asia' 'australasia' 'europe' 'northamerica' 'southamerica' 'etcetera' 'backward' 'factory')
+_timezones=('africa' 'antarctica' 'asia' 'australasia' 'europe' 'northamerica' 'southamerica' 'etcetera' 'backward' 'factory')
 
 prepare() {
   sed -i "s:sbin:bin:g" Makefile
 }
 
 build() {
-  make LFLAGS=$LDFLAGS
+  make LFLAGS="$LDFLAGS"
 }
 
 package() {
@@ -31,12 +32,11 @@ package() {
   make DESTDIR="$pkgdir/" install
 
   # install tzdata stuff
-  ./zic -d "$pkgdir"/usr/share/zoneinfo ${timezones[@]}
-  ./zic -d "$pkgdir"/usr/share/zoneinfo/posix ${timezones[@]}
-  ./zic -d "$pkgdir"/usr/share/zoneinfo/right -L leapseconds ${timezones[@]}
-  ./zic -b fat -d "$pkgdir"/usr/share/zoneinfo -p America/New_York
-  install -Dm444 iso3166.tab zone1970.tab zone.tab -t "$pkgdir"/usr/share/zoneinfo 
-  
+  ./zic -d "$pkgdir"/usr/share/zoneinfo ${_timezones[@]}
+  ./zic -d "$pkgdir"/usr/share/zoneinfo/posix ${_timezones[@]}
+  ./zic -d "$pkgdir"/usr/share/zoneinfo/right -L leapseconds ${_timezones[@]}
+  ./zic -b fat -d "$pkgdir"/usr/share/zoneinfo -p US/Central
+
   # cleanup
   rm "$pkgdir"/etc/localtime
 }
