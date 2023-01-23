@@ -11,7 +11,11 @@ have_function() {
 }
 
 unset new_version old_version remove_old_sources
-source PKGUPDATE
+if [ -f PKGUPDATE ]; then
+    source PKGUPDATE
+else
+    exit 1
+fi
 
 result=$(vercmp $new_version $old_version)
 
@@ -24,3 +28,5 @@ if [ $result -gt 0 ]; then
 fi
 
 updpkgsums
+
+exit $result

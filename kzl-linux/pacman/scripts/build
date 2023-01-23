@@ -2,7 +2,6 @@
 #
 # build.sh
 #
-# TODO: build only updated pkgs
 
 script_name="$(basename "${0}")"
 stage=1
@@ -10,6 +9,8 @@ build_dir=/tmp
 repo=kzl
 log_dir=$build_dir
 repo_dir=/home/.repository/$repo
+build_only_updated=0
+no_install=0
 
 # preparation
 kzl_stage0_pkgs=(
@@ -23,7 +24,8 @@ kzl_stage1_pkgs=(
 kzl_stage2_pkgs=(
     ### base
     ## filesystem
-    iana-etc tzdata # filesystem
+    iana-etc filesystem
+    tzdata
 )
 
 kzl_stage3_pkgs=(
@@ -96,22 +98,29 @@ build() {
 
     # update pkgbuild
     info "Updating PKGBUILD..."
-    updatepkg >> $_log 2>&1
+    _updated=0
+    updatepkg >> $_log 2>&1 || _updated=$?
 
-    # remove existing log
-    if [ -f $_log ]; then
-        rm $_log
+    if [ "$build_only_updated" -gt 0 ] && [ $_updated -le 0 ]; then
+        info "Package \"$_pkgbase\" is updated, will not build."
+    else
+        # remove existing log
+        if [ -f $_log ]; then
+            rm $_log
+        fi
+
+        info "Building package..."
+        makepkg -scCf --noconfirm --nocheck >> $_log 2>&1
+
+        info "Updating repo..."
+        update-repo -t $repo >> $_log 2>&1
     fi
 
-    info "Building package..."
-    makepkg -scCf --noconfirm --nocheck >> $_log 2>&1
-
-    info "Updating repo..."
-    update-repo -t $repo >> $_log 2>&1
-
-    info "Installing package..."
-    # (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname --config ${pacman_conf}
-    (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname >> $_log 2>&1
+    if [ "$no_install" -le 0 ]; then
+        info "Installing package..."
+        # (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname --config ${pacman_conf}
+        (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname >> $_log 2>&1
+    fi
 }
 
 usage() {
@@ -152,6 +161,12 @@ while [ $# -gt 0 ]; do
     -s|--stage)
         shift
         stage="$1"
+        ;;
+    -n|--no-install)
+        no_install=1
+        ;;
+    -u|--build-only-updated)
+        build_only_updated=1
         ;;
     *)
         usage
