@@ -1,9 +1,10 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=filesystem
-pkgver=2022.03.21
+pkgver=20230123
 pkgrel=1
-epoch=1
+epoch=
+pkgdesc="Root file system"
 arch=('any')
 license=('KZL')
 depends=(iana-etc)
@@ -21,11 +22,11 @@ backup=(etc/crypttab
         etc/passwd
         etc/profile
         etc/resolv.conf
-        etc/securetty
         etc/shadow
-        etc/shells)
+        etc/shells
+        etc/subgid
+        etc/subuid)
 source=(crypttab
-        environment-generator
         fstab
         group
         gshadow
@@ -39,16 +40,12 @@ source=(crypttab
         passwd
         profile
         resolv.conf
-        securetty
         shadow
         shells
-        sysctl
-        sysusers
-        tmpfiles
-        locale.sh)
-sha256sums=('e03bede3d258d680548696623d5979c6edf03272e801a813c81ba5a5c64f4f82'
-            '9c6254a8b8cbc48eca494491d26a1d0d58e6677615c4ea26557f98cc3d2aeffb'
-            'e54626e74ed8fee4173b62a545ab1c3a3a069e4217a0ee8fc398d9933e9c1696'
+        subgid
+        subuid)
+sha256sums=('a6f0ad7acc6054199fbab680a53769a936a4518a2ee751404839b77fb2a4be79'
+            '63ea61478aeaab0640ac76d915e94ddf3a0c8a661ee1188c8365536141c7afc2'
             '244f0718ee2a9d6862ae59d6c18c1dd1568651eada91a704574fa527fbac2b3a'
             '90d879374f77bac47f132164c1e7fc4892e994ff1d1ac376efa0c1c26ea37273'
             '4d7b647169063dfedbff5e1e22cee77bd1a4183dbcfd5e802e68939da4bbf733'
@@ -56,91 +53,59 @@ sha256sums=('e03bede3d258d680548696623d5979c6edf03272e801a813c81ba5a5c64f4f82'
             'd9c7dc6be96564223d7720103136e4ddc13ad7ad5f9cd95dc2718fee0216342f'
             'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
             '404c3f2e1d3d4097cedd08a4484119cb37d9adfc0ead49bdf5960e227e9159de'
-            'd72995e4dee3b73f2c73bbba4791962876aae7c240daa766560497ce9b651c76'
-            'ac0289c7be9aa973d9c484b89cfe9da11a4c4fde1ed60579ff96269b46967011'
+            'e40e27f06d9f1d5acb727a3119a9b46bef469e09a7999220d81fabcffa8c10f4'
+            'fed64b74458bbb9435f2facc9123849631b516a1fec235f944ac3a731660938f'
             '5e06477834f51abf42ea4e8dc199632afc6afbfd8c44354685a271e9a48d2c0a'
-            '5da078777cda24e4df697e2928451723f2303bfdbb2ce9551c822188c7945d25'
+            'c82c8f0c7564c1234a2ccc11d359545b2da69643ec752865e63e0cd0d11beb30'
             '5557d8e601b17a80d1ea7de78a9869be69637cb6a02fbfe334e22fdf64e61d4c'
-            'd88be2b45b43605ff31dd83d6a138069b6c2e92bc8989b7b9ab9eba8da5f8c7b'
-            '8ce994663d7588143ad7ed4441b07f468f4f7d3590164dd73ddfa3ea307ece8e'
+            '9db3df83b448ea95eadb8cec9969fea989695693c1501840fe6d5b68bbf60402'
             'c390b31fffc4a2b5d78ae8c89f5317aadef1f71baac09cfb467b675db1406d61'
-            'f6a2444dc3d6f86d80591e255af2a555d5a90acfe92c1b69e8ba75e85ffeafdd'
-            '173af22b6c17bf995125c03845d70dcd18bf790bf761da250fbec21ef35b5a86'
-            'c8f01b8c7e5388e3c9f7cb03239450bcd7a86caf12b94d2c8ce226b1841d985c'
-            '00cf0e58349f098ba7ef0defaaad1269cd44446b513a896d7a7657835c785e83')
+            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
 
 pkgver() {
-  date +%Y.%m.%d
+  date +%Y%m%d
 }
 
 package() {
   cd $pkgdir
 
   # root filesystem
-  for d in boot dev etc home mnt usr var opt srv run; do
-    install -dm755 $d
-  done
-  install -dm555 proc
-  install -dm555 sys
-  install -dm0750 root
-  install -dm1777 tmp
+  install -m 755 -d {boot,dev,etc,home,mnt,usr,var,opt,srv,run}
+  install -m 0750 -d root
+  install -m 555 -d {proc,sys}
+  install -m 1777 -d tmp
 
   # /etc
-  install -dm755 etc/{skel,profile.d} usr/share/factory/etc
-  for f in fstab group host.conf hosts issue ld.so.conf motd nsswitch.conf passwd profile resolv.conf securetty shells; do
-    install -Dm644 "$srcdir"/$f etc/
-    install -Dm644 "$srcdir"/$f usr/share/factory/etc/
+  install -m 755 -d etc/{skel,profile.d} usr/share/factory/etc
+  for f in fstab group host.conf hosts issue ld.so.conf motd nsswitch.conf passwd profile resolv.conf shells subgid subuid; do
+    install -D -m 644 "$srcdir/$f" etc/
+    install -D -m 644 "$srcdir/$f" usr/share/factory/etc/
   done
   ln -s ../proc/self/mounts etc/mtab
   for f in crypttab gshadow shadow; do
-    install -Dm600 "$srcdir"/$f etc/
-    install -Dm600 "$srcdir"/$f usr/share/factory/etc/
+    install -D -m 600 "$srcdir/$f" etc/
+    install -D -m 600 "$srcdir/$f" usr/share/factory/etc/
   done
-  install -Dm644 "$srcdir"/locale.sh etc/profile.d/locale.sh
   install -Dm644 "$srcdir"/os-release etc/os-release
   install -Dm644 "$srcdir"/os-release usr/share/factory/etc/os-release
 
   # /usr
-  for d in bin include lib share src; do
-    install -dm755 usr/$d
-  done
-  for d in {1..8}; do
-    install -dm755 usr/share/man/man$d
-  done
-
-  # /usr/local
-  for d in bin etc include lib man share src; do
-    install -dm755 usr/local/$d
-  done
-  ln -s bin usr/local/sbin
-  ln -s ../man usr/local/share/man
-
-  # lib symlinks
+  install -m 755 -d usr/{bin,include,lib,libexec,share,src}
+  install -m 755 -d usr/share/man/man{1..8}
   ln -s usr/lib lib
   ln -s usr/lib lib64
   ln -s lib usr/lib64
-
-  # bin symlinks
   ln -s usr/bin bin
   ln -s usr/bin sbin
   ln -s bin usr/sbin
 
+  # /usr/local
+  install -m 755 -d usr/local/{bin,etc,include,lib,libexec,share,src}
+  ln -s bin usr/local/sbin
+
   # var
-  for d in "cache" "empty" "lib" "local" "log" "opt"; do
-    install -dm755 var/$d
-  done
-  install -dm1777 var/{tmp,spool/mail}
-  ln -s spool/mail var/mail
-
-  # sysctl
-  install -Dm644 "$srcdir"/sysctl usr/lib/sysctl.d/10-kzl.conf
-
-  # sysusers
-  install -Dm644 "$srcdir"/sysusers usr/lib/sysusers.d/kzl.conf
-
-  # tmpfiles
-  install -Dm644 "$srcdir"/tmpfiles usr/lib/tmpfiles.d/kzl.conf
-
-  # environment generator
-  install -Dm755 "$srcdir"/environment-generator usr/lib/systemd/system-environment-generators/10-kzl
+  install -m 755 -d var/{cache,crash,lib,local,log,mail,opt,spool}
+  install -m 1777 -d var/{crash,tmp}
+  ln -s ../mail var/spool/mail
 }
