@@ -1,10 +1,8 @@
-#!/bin/bash
+#!/usr/bin/bash
 #
 # build.sh
 #
 # TODO: build only updated pkgs
-
-SCRIPT_LEVEL_EMPH='\033[1;30m'
 
 script_name="$(basename "${0}")"
 stage=1
@@ -25,7 +23,7 @@ kzl_stage1_pkgs=(
 kzl_stage2_pkgs=(
     ### base
     ## filesystem
-    iana-etc # tzdata filesystem
+    iana-etc tzdata # filesystem
 )
 
 kzl_stage3_pkgs=(
@@ -33,14 +31,42 @@ kzl_stage3_pkgs=(
 
 # functions
 
+# Show an INFO message
+# $1: message string
+info() {
+    local _msg="$1"
+    printf '[%s] INFO: %s\n' "$script_name" "$_msg"
+}
+
+# Show a WARNING message
+# $1: message string
+warning() {
+    local _msg="$1"
+    printf '[%s] WARNING: %s\n' "$script_name" "$_msg" >&2
+}
+
+# Show an ERROR message then exit with status
+# $1: message string
+# $2: exit code number (with 0 does not exit)
+error() {
+    local _msg="$1"
+    local _error="$2"
+    printf '[%s] ERROR: %s\n' "$script_name" "$_msg" >&2
+    if (( _error > 0 )); then
+        exit "$_error"
+    fi
+}
+
 prepare() {
-    (yes yes || :) | sudo pacman -Scc
+    info "Removing pacman cache and database..."
+    (yes yes || :) | sudo pacman -Scc > /dev/null 2>&1
 
     if [ ! -f /home/.repository/$repo/$repo.db ]; then
-        update-repo -t $repo
+        info "Creating empty repo \"$repo\"..."
+        update-repo -t $repo > /dev/null 2>&1
     fi
-
-    (yes yes || :) | sudo pacman -Syy
+    info "Synchronizing package databases..."
+    (yes yes || :) | sudo pacman -Syy > /dev/null 2>&1
 }
 
 get_pkgbase() {
@@ -68,18 +94,24 @@ build() {
 
     cd $ROOTDIR/pkgbuilds/$repo/$_pkgbase
 
-    _updated=$(bash PKGUPDATE)
+    # update pkgbuild
+    info "Updating PKGBUILD..."
+    updatepkg >> $_log 2>&1
 
+    # remove existing log
     if [ -f $_log ]; then
         rm $_log
     fi
 
-    # makepkg -scCf --noconfirm --nocheck &>> $_log
-    makepkg -scCf --noconfirm --nocheck &>> $_log
+    info "Building package..."
+    makepkg -scCf --noconfirm --nocheck >> $_log 2>&1
 
-    update-repo -t $repo
+    info "Updating repo..."
+    update-repo -t $repo >> $_log 2>&1
+
+    info "Installing package..."
     # (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname --config ${pacman_conf}
-    (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname
+    (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname >> $_log 2>&1
 }
 
 usage() {
@@ -165,21 +197,20 @@ prepare
 
 for p in ${pkgs[@]}; do
     pkg_start_time=$(date +%s)
-    echo -e "\033[1;31mBuilding $p ...\033[0m"
+    echo -e "\e[1;31mBuilding $p ...\e[0m"
     build $p
     pkg_end_time=$(date +%s)
     pkg_total_time=$((pkg_end_time-pkg_start_time))
-    echo -e "$p: End time - $(date)"
-    echo -e "$p: Total time - $(date -d@$pkg_total_time -u +%H:%M:%S)"
+    echo -e "\e[1;32m$p: $(date -d@$pkg_total_time -u +%H:%M:%S)\e[0m"
 done
 
 end_time=$(date +%s)
 total_time=$((end_time-start_time))
 
-echo -e "$SCRIPT_LEVEL_EMPH"
+echo -e "\e[1;30m"
 echo -e "****************************************************************"
 echo -e "                Execution time Information                "
 echo -e "****************************************************************"
-echo -e "$script_name : End time - $(date)"
-echo -e "$script_name : Total time - $(date -d@$total_time -u +%H:%M:%S)"
-echo -e "\033[0m"
+echo -e "[$script_name]: End time - $(date)"
+echo -e "[$script_name]: Total time - $(date -d@$total_time -u +%H:%M:%S)"
+echo -e "\e[0m"

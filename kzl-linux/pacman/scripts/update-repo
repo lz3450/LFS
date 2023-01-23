@@ -103,21 +103,21 @@ esac
 
 if [ $CLEAR -gt 0 ]; then
     while true; do
-        read -p "Do you wish to clear the repository? " yn
+        read -p "Do you wish to clear the repository \"$TARGET\"? " yn
         case $yn in
             [Yy]*)
                 sudo rm -vrf $REPODIR/$TARGET
+                echo "Repository \"$TARGET\" has been removed."
+                exit 0
                 ;;
             [Nn]*)
                 exit 0
                 ;;
             *)
-            echo "Please answer yes(y) or no(n)."
-            ;;
+                echo "Please answer yes(y) or no(n)."
+                ;;
         esac
     done
-    echo "Repository \"$TARGET\" has been removed."
-    exit 0
 fi
 
 if [ ! -d $REPODIR/$TARGET ]; then
