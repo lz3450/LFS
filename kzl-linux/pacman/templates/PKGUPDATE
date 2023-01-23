@@ -1,6 +1,10 @@
 new_version=$()
 old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')
 
-remove_old_sources () {
+pre_update() {
+
+}
+
+post_update() {
 
 }
