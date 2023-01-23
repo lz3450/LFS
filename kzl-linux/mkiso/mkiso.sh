@@ -58,14 +58,14 @@ log_dir="${work_dir}"/log
 # Show an INFO message
 # $1: message string
 info() {
-    local _msg="${1}"
+    local _msg="$1"
     printf '[%s] INFO: %s\n' "${script_name}" "${_msg}"
 }
 
 # Show a WARNING message
 # $1: message string
 warning() {
-    local _msg="${1}"
+    local _msg="$1"
     printf '[%s] WARNING: %s\n' "${script_name}" "${_msg}" >&2
 }
 
@@ -73,8 +73,8 @@ warning() {
 # $1: message string
 # $2: exit code number (with 0 does not exit)
 error() {
-    local _msg="${1}"
-    local _error=${2}
+    local _msg="$1"
+    local _error="$2"
     printf '[%s] ERROR: %s\n' "${script_name}" "${_msg}" >&2
     if (( _error > 0 )); then
         exit "${_error}"
