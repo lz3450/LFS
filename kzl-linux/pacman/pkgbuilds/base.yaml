@@ -1,0 +1,7 @@
+base:
+  filesystem: [iana-etc]
+  glibc: [filesystem, linux-api-headers, tzdata]
+base-dependency:
+  iana-etc:
+  linux-api-headers:
+  tzdata:

@@ -1,33 +1,28 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 # order
-# linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
+# linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=linux-api-headers
-pkgver=5.10.101
+pkgver=5.15
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Kernel headers sanitized for use in userspace"
 arch=('any')
 url='https://www.kernel.org'
 makedepends=(rsync)
-source=(https://www.kernel.org/pub/linux/kernel/v${pkgver:0:1}.x/linux-$pkgver.tar.{xz,sign})
-sha256sums=('0749258cb7ee47c478dfc34857e8930d41bfe0b074e80e9f57cbfa56d0ba1c8e'
-            'SKIP')
-validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
+source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-5.15.y)
+sha256sums=('SKIP')
 
 build() {
-  cd linux-$pkgver
+  cd linux
 
   make mrproper
   make headers_check
 }
 
 package() {
-  cd linux-$pkgver
+  cd linux
 
   make INSTALL_HDR_PATH="$pkgdir/usr" headers_install
-
-  # use headers from `libdrm'
-  rm -r "$pkgdir/usr/include/drm"
 }

@@ -4,93 +4,94 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
 pkgname=glibc
-pkgver=2.35
-pkgrel=2
-epoch=1
+pkgver=2.36
+pkgrel=1
+epoch=
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
 license=('KZL')
-depends=(tzdata)
-options=(!strip)
-source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
+depends=(filesystem linux-api-headers tzdata)
+options=(staticlibs !lto)
+source=(git+https://sourceware.org/git/glibc.git#branch=release/$pkgver/master
         locale-gen
-        locale.gen.txt)
+        locale.gen)
 backup=(etc/gai.conf
         etc/locale.gen
         etc/nscd.conf)
 install=$pkgname.install
-sha256sums=('5123732f6b67ccd319305efd399971d58592122bcc2a6518a1bd2510dd0cf52e'
-            'SKIP'
+sha256sums=('SKIP'
             '436293c91051efcf712a71ee27e758387ddc82996ad23079d5ab30c0947963b9'
-            '0540122fb9340d546702a891bcce344fc3e8f21fe482c2c321b71c2e6b36964e')
-validpgpkeys=('7273542B39962DF7B299931416792B4EA25340F8')
-
-# TODO: '--enable-systemtap'
+            '949d9660b9ecef93776aebde70ffff161fa58c245636c21d80f3beaa919391ca')
 
 prepare() {
-  cd $pkgname-$pkgver
-  
-  mkdir build
+  cd $pkgname
+
+  mkdir -p build
+
+  echo 'prefix = /usr
+build-programs = yes
+exec_prefix = $(prefix)
+libdir = $(exec_prefix)/lib
+slibdir = $(exec_prefix)/lib
+rtlddir = $(slibdir)
+includedir = $(prefix)/include
+bindir = $(exec_prefix)/bin
+libexecdir = $(exec_prefix)/libexec
+rootsbindir = $(exec_prefix)/bin
+sbindir = $(exec_prefix)/bin
+sysconfdir = /etc' > build/configparms
 }
 
 build() {
-  cd $pkgname-$pkgver/build
+  cd $pkgname/build
 
-  echo "slibdir=/usr/lib" >> configparms
-  echo "rtlddir=/usr/lib" >> configparms
-  echo "sbindir=/usr/bin" >> configparms
-  echo "rootsbindir=/usr/bin" >> configparms
-
-  CFLAGS=${CFLAGS/-Wp,-D_FORTIFY_SOURCE=2/}
+  CFLAGS="${CFLAGS/-Wp,-D_FORTIFY_SOURCE=2/}"
 
   ../configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
-    --libexecdir=/usr/lib \
-    --libdir=/usr/lib \
-    --enable-shared \
+    --with-headers=/usr/include \
+    --enable-kernel=5.15 \
+    --with-nonshared-cflags="-Wp,-D_FORTIFY_SOURCE=2" \
+    --enable-cet \
     --disable-profile \
-    --enable-static-pie \
     --disable-timezone-tools \
-    --enable-bind-now \
     --enable-stack-protector=strong \
-    --enable-kernel=5.10 \
+    --enable-bind-now \
     --disable-werror \
     --disable-crypt \
-    --enable-cet \
-    --with-pkgversion="KZL $pkgver-$pkgrel" \
-    --with-headers=/usr/include
+    --with-pkgversion="KZL $pkgver-$pkgrel"
 
-  make
+  make -O
 }
 
 check() {
-  cd $pkgname-$pkgver/build
+  cd $pkgname/build
 
-  make check || warning "Check failed."
+  make -O check
 }
 
 package() {
-  cd $pkgname-$pkgver/build
+  cd $pkgname/build
 
   make install_root="$pkgdir/" install
 
-  rm -f "$pkgdir"/etc/ld.so.{cache,conf}
+  rm -f "$pkgdir"/etc/ld.so.cache
 
-  install -dm755 "$pkgdir"/usr/lib/{locale,systemd/system,tmpfiles.d}/
-  install -dm755 "$pkgdir"/var/db/nscd/
-  install -Dm644 ../nscd/nscd.conf "$pkgdir"/etc/
-  install -Dm644 ../nscd/nscd.service "$pkgdir"/usr/lib/systemd/system/
-  install -Dm644 ../nscd/nscd.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/
+  # locale
+  install -m755 -d "$pkgdir"/usr/lib/locale
+  install -Dm755 "$srcdir"/locale-gen "$pkgdir"/usr/bin/locale-gen
+  install -Dm644 "$srcdir"/locale.gen "$pkgdir"/etc/locale.gen
+  sed -e '1,3d' -e 's|/| |g' -e 's| \\||g' "$srcdir"/$pkgname/localedata/SUPPORTED > "$pkgdir"/usr/share/i18n/SUPPORTED
+  sed -e 's|^|#|g' "$pkgdir"/usr/share/i18n/SUPPORTED >> "$pkgdir"/etc/locale.gen
+  sed -i -e '/^#en_US\.UTF-8/s/^#//' -e '/^#zh_CN\.UTF-8/s/^#//' "$pkgdir"/etc/locale.gen
 
-  install -Dm644 ../posix/gai.conf "$pkgdir"/etc/gai.conf
+  # name service cache daemon
+  install -m755 -d "$pkgdir"/usr/lib/{systemd/system,tmpfiles.d}
+  install -m755 -d "$pkgdir"/var/db/nscd
+  install -Dm644 "$srcdir"/$pkgname/nscd/nscd.conf "$pkgdir"/etc/nscd.conf
+  install -Dm644 "$srcdir"/$pkgname/nscd/nscd.service "$pkgdir"/usr/lib/systemd/system/nscd.service
+  install -Dm644 "$srcdir"/$pkgname/nscd/nscd.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/nscd.conf
 
-  install -Dm755 "$srcdir"/locale-gen "$pkgdir"/usr/bin/
-
-  # create /etc/locale.gen
-  install -Dm644 "$srcdir"/locale.gen.txt "$pkgdir"/etc/locale.gen
-  sed -e '1,3d' -e 's|/| |g' -e 's|\\| |g' -e 's|^|#|g' ../localedata/SUPPORTED >> "$pkgdir"/etc/locale.gen
-
-  # provided by `libxcrypt'
-  rm -f "$pkgdir"/usr/include/crypt.h "$pkgdir"/usr/lib/libcrypt.{a,so}
+  # getaddrinfo(3) configuration file
+  install -Dm644 "$srcdir"/$pkgname/posix/gai.conf "$pkgdir"/etc/gai.conf
 }
