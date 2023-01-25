@@ -1,32 +1,34 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=elfutils
-pkgver=0.186
+pkgver=0.188
 pkgrel=1
-epoch=1
-pkgdesc="Utilities to handle ELF object files and DWARF debugging information"
+epoch=
+pkgdesc="Utilities and libraries to read, create and modify ELF binary files, find and handle DWARF debug data, symbols, thread state and stacktraces for processes and core files"
 arch=('x86_64')
 url="https://sourceware.org/elfutils/"
 license=('KZL')
-depends=(bzip2 curl libmicrohttpd libarchive sqlite xz zlib zstd)
+depends=(bzip2 libcurl libmicrohttpd libarchive sqlite3 xz zlib zstd)
 provides=(debuginfod libelf)
-conflicts=(debuginfod libelf)
-replaces=(debuginfod libelf)
 options=(staticlibs)
-source=(https://sourceware.org/$pkgname/ftp/$pkgver/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('7f6fb9149b1673d38d9178a0d3e0fb8a1ec4f53a9f4c2ff89469609879641177'
-            'SKIP')
-validpgpkeys=('EC3CFE88F6CA0788774F5C1D1AA44BE649DE760A')
+source=(https://sourceware.org/elfutils/ftp/0.188/$pkgname-$pkgver.tar.bz2)
+sha256sums=('fb8b0e8d0802005b9a309c60c1d8de32dd2951b56f0c3a3cb56d21ce01595dff')
 
 prepare() {
-  # for check
-  cp -av $pkgbase-$pkgver $pkgbase-check-$pkgver
+  cd $pkgname-$pkgver
+
+  # remove failing test
+  # https://bugs.archlinux.org/task/74875
+  sed -i -e 's/run-backtrace-native.sh //g' tests/Makefile.am
+  sed -i -e 's/run-backtrace-native-core.sh //g' tests/Makefile.am
+
+  autoreconf -vfi
 }
 
 build() {
   cd $pkgname-$pkgver
 
-  CFLAGS+=" -ffat-lto-objects"
+  CFLAGS+=" -g -ffat-lto-objects"
 
   ./configure \
     --prefix=/usr \
@@ -34,22 +36,13 @@ build() {
     --program-prefix="eu-" \
     --enable-deterministic-archives
 
-  make
+  make -O
 }
 
 check() {
-  cd $pkgbase-check-$pkgver
+  cd $pkgname-$pkgver
 
-  CFLAGS+=" -ffat-lto-objects"
-  CFLAGS+=" -g"
-
-  ./configure \
-    --prefix=/usr \
-    --sysconfdir=/etc \
-    --program-prefix="eu-" \
-    --enable-deterministic-archives
-
-  make check
+  make -O check
 }
 
 package() {

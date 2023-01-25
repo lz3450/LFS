@@ -1,98 +1,110 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 # order
-# linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
+# linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=binutils
-pkgver=2.38
+pkgver=2.40
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64')
 url="https://www.gnu.org/software/binutils/"
 license=('KZL')
+# depends=(glibc jansson libelf zlib zstd)
+depends=(glibc libelf zlib zstd)
+makedepends=(git)
+# checkdepends=(bc debuginfod dejagnu)
+checkdepends=(bc dejagnu)
+# optdepends=("debuginfod: for debuginfod server/client functionality")
 options=(staticlibs)
-source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
-        20ea3acc727f3be6322dfbd881e506873535231d.patch)
-        # git+https://sourceware.org/git/binutils-gdb.git)
-sha256sums=('e316477a914f567eccc34d5d29785b8b0f5a10208d36bbacedcc39048ecfe024'
-            'SKIP'
-            'efb1e270c147157a4a447109c781bae0d341e615bafc27abde0bb8a71bed07c7')
-validpgpkeys=('3A24BC1E8FB409FA9F14371813FCEF89DD9E3C4F')
+source=(git+https://sourceware.org/git/binutils-gdb.git#branch=$pkgname-${pkgver/./_}-branch)
+sha256sums=('SKIP')
 
-prepare() {
-  cd $pkgname-$pkgver
-
-  mkdir -p build
-
-  sed -e '/^development=/s/true/false/' -i bfd/development.sh
-  sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i libiberty/configure
-
-  patch -Np1 -i "$srcdir"/20ea3acc727f3be6322dfbd881e506873535231d.patch
-}
-
-_general_options=(
+_common_options=(
   --prefix=/usr
-  --enable-gold=no
+  --sysconfdir=/etc
+  --build=x86_64-linux-gnu
+  --host=x86_64-linux-gnu
+  --target=x86_64-linux-gnu
+  --enable-gold=yes
   --enable-ld=default
   --enable-pgo-build=lto
   --enable-lto
-  --disable-nls
+  --enable-host-shared
   --with-system-zlib
-)
-
-_binutils_options=(
+  --with-zstd=auto
+  # subpackage common
   --enable-shared
   --enable-plugins
+  --enable-relro
   --enable-targets=x86_64-pep
-  --enable-deterministic-archives
+  --enable-threads=yes
+  --enable-jansson=no
+  --enable-cet
   --with-pic
-  --with-debuginfod
-)
-
-_gold_options=(
-  --enable-threads
   --with-lib-path=/usr/lib:/usr/local/lib
 )
 
+_binutils_options=(
+  --enable-deterministic-archives
+  --enable-colored-disassembly
+  --with-debuginfod=auto
+)
+
 _ld_options=(
-  --enable-relro
+  --enable-new-dtags
+  --enable-default-execstack
 )
 
 _libiberty_options=(
   --enable-install-libiberty
-  --enable-cet
 )
 
+_gdb_options=(
+  --disable-gdb
+  --disable-gdbserver
+  --disable-gdbsupport
+  --disable-libdecnumber
+  --disable-readline
+  --disable-sim
+)
+
+prepare() {
+  cd binutils-gdb
+
+  mkdir -p build
+
+  sed -i -e '/^development=/s/true/false/' bfd/development.sh
+}
+
 build() {
-  cd $pkgname-$pkgver/build
+  cd binutils-gdb/build
 
   ../configure \
-    "${_general_options[@]}" \
+    "${_common_options[@]}" \
     "${_binutils_options[@]}" \
-    "${_gold_options[@]}" \
     "${_ld_options[@]}" \
-    "${_libiberty_options[@]}"
+    "${_libiberty_options[@]}" \
+    "${_gdb_options[@]}"
 
   make -O tooldir="/usr"
 }
 
 check() {
-  cd $pkgname-$pkgver/build
+  cd binutils-gdb/build
 
   make -O CFLAGS="-O2 -no-pie" CXXFLAGS="-O2 -no-pie -fno-PIC" CFLAGS_FOR_TARGET="-O2 -g" LDFLAGS="" check
 }
 
 package() {
-  cd $pkgname-$pkgver/build
+  cd binutils-gdb/build
 
-  make prefix="$pkgdir/usr" tooldir="$pkgdir/usr" install
+  make DESTDIR="$pkgdir/" tooldir="$pkgdir/usr" install
 
-  # clean
-  rm -f "$pkgdir"/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
+  # install PIC version of libiberty
+  install -m644 libiberty/pic/libiberty.a "$pkgdir"/usr/lib/
 
-  # No shared linking to these files outside binutils
-  rm -f "$pkgdir"/usr/lib/lib{bfd,opcodes}.so
-  echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "$pkgdir"/usr/lib/libbfd.so
-  echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "$pkgdir"/usr/lib/libopcodes.so
+  # remove unnecessary man files
+  rm -f "$pkgdir"/usr/share/man/man1/{dlltool,windmc,windres}*
 }

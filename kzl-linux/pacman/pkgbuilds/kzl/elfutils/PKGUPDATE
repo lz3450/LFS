@@ -1,0 +1,2 @@
+new_version=$(curl -v --stderr - https://sourceware.org/elfutils/ | grep 'release notes:' -A 1 | grep -o -E '0\.[0-9]{3}')
+old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')

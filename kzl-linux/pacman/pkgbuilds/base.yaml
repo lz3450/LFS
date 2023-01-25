@@ -1,7 +1,17 @@
 base:
-  filesystem: [iana-etc]
-  glibc: [filesystem, linux-api-headers, tzdata]
+  filesystem:
+    depends: [iana-etc]
+  glibc:
+    depends: [filesystem, linux-api-headers, tzdata]
+  binutils:
+    depends: [glibc, libelf, zlib, zstd]
+    optdepends: [glibc, libelf, zlib, zstd]
 base-dependency:
   iana-etc:
   linux-api-headers:
   tzdata:
+  elfutils:
+    depends: [bzip2, libcurl, libmicrohttpd, libarchive, sqlite3, xz, zlib, zstd]
+    provides: [debuginfod, libelf]
+    makedepends: [git]
+    checkdepends: [bc, dejagnu]
