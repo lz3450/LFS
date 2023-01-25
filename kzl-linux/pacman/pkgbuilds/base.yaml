@@ -5,11 +5,15 @@ base:
     depends: [filesystem, linux-api-headers, tzdata]
   binutils:
     depends: [glibc, libelf, zlib, zstd]
-    optdepends: [glibc, libelf, zlib, zstd]
+    makedepends: [git]
+    checkdepends: [bc]
 base-dependency:
   iana-etc:
   linux-api-headers:
   tzdata:
+  zlib:
+  zstd:
+    makedepends: [cmake]
   elfutils:
     depends: [bzip2, libcurl, libmicrohttpd, libarchive, sqlite3, xz, zlib, zstd]
     provides: [debuginfod, libelf]

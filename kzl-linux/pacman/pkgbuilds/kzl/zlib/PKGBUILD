@@ -2,19 +2,18 @@
 
 pkgbase=zlib
 pkgname=(zlib minizip)
-pkgver=1.2.11
+pkgver=1.2.13
 pkgrel=1
-epoch=2
+epoch=
 arch=('x86_64')
 url="https://zlib.net"
+license=('KZL')
 options=(staticlibs)
-source=($url/zlib-$pkgver.tar.gz{,.asc})
-sha256sums=('c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1'
-            'SKIP')
-validpgpkeys=('5ED46A6721D365587791E2AA783FCD8E58BCAFBA')
+source=(git+https://github.com/madler/zlib.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd zlib-$pkgver
+  cd zlib
 
   CFLAGS+=" -fPIC -ffat-lto-objects"
 
@@ -28,7 +27,7 @@ build() {
 	cp Makefile Makefile.orig
   cp ../README.contrib readme.txt
 	autoreconf --install
-  
+
 	./configure \
     --prefix=/usr \
     --disable-static
@@ -37,7 +36,7 @@ build() {
 }
 
 check() {
-  cd zlib-$pkgver
+  cd zlib
 
 	make test
 
@@ -47,17 +46,17 @@ check() {
 }
 
 package_zlib() {
-  pkgdesc="Compression library implementing the deflate compression method found in gzip and PKZIP"
+  pkgdesc="A Massively Spiffy Yet Delicately Unobtrusive Compression Library"
 
-  cd zlib-$pkgver
+  cd zlib
 
   make DESTDIR="$pkgdir/" install
 }
 
 package_minizip() {
-	pkgdesc="Mini zip and unzip based on zlib"
+	pkgdesc="Zip and UnZip additionnal library"
 
-	cd zlib-$pkgver/contrib/minizip
+	cd zlib/contrib/minizip
 
   make DESTDIR="$pkgdir/" install
 

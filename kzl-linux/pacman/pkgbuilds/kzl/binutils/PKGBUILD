@@ -12,10 +12,11 @@ arch=('x86_64')
 url="https://www.gnu.org/software/binutils/"
 license=('KZL')
 # depends=(glibc jansson libelf zlib zstd)
-depends=(glibc libelf zlib zstd)
+depends=(glibc zlib zstd)
 makedepends=(git)
 # checkdepends=(bc debuginfod dejagnu)
-checkdepends=(bc dejagnu)
+# checkdepends=(bc dejagnu)
+checkdepends=(bc)
 # optdepends=("debuginfod: for debuginfod server/client functionality")
 options=(staticlibs)
 source=(git+https://sourceware.org/git/binutils-gdb.git#branch=$pkgname-${pkgver/./_}-branch)
@@ -100,7 +101,7 @@ check() {
 package() {
   cd binutils-gdb/build
 
-  make DESTDIR="$pkgdir/" tooldir="$pkgdir/usr" install
+  make DESTDIR="$pkgdir/" tooldir="/usr" install
 
   # install PIC version of libiberty
   install -m644 libiberty/pic/libiberty.a "$pkgdir"/usr/lib/

@@ -3,33 +3,49 @@
 pkgname=zstd
 pkgver=1.5.2
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Zstandard - Fast real-time compression algorithm"
 arch=('x86_64')
-url="https://www.zstd.net/"
+url="http://www.zstd.net/"
 license=('KZL')
-source=(https://github.com/facebook/zstd/archive/v$pkgver.tar.gz)
-sha256sums=('f7de13462f7a82c29ab865820149e778cbfe01087b3a55b5332707abf9db4a6e')
+# depends=(zlib xz lz4)
+makedepends=(cmake)
+source=(git+https://github.com/facebook/zstd.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make
-  make zstdmt
-  make -C contrib/pzstd
+  CFLAGS+=' -ffat-lto-objects'
+  CXXFLAGS+=' -ffat-lto-objects'
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DZSTD_BUILD_CONTRIB=ON \
+    -DZSTD_BUILD_TESTS=ON \
+    -DZSTD_LZ4_SUPPORT=OFF \
+    -DZSTD_LZMA_SUPPORT=OFF \
+    -DZSTD_PROGRAMS_LINK_SHARED=ON \
+    -DZSTD_ZLIB_SUPPORT=OFF \
+    -S build/cmake \
+    -B build \
+    -G Ninja
+
+  cmake --build build
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make check
-  make -C contrib/pzstd test
+  cmake --build build --target test
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make PREFIX="/usr/" DESTDIR="$pkgdir/" install
-  install -Dm755 zstdmt "$pkgdir"/usr/bin/zstdmt
-  install -Dm755 contrib/pzstd/pzstd "$pkgdir"/usr/bin/pzstd
+  DESTDIR="$pkgdir/" cmake --build build --target install
 }
