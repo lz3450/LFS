@@ -25,6 +25,7 @@ sha256sums=('SKIP')
 _common_options=(
   --prefix=/usr
   --sysconfdir=/etc
+  --libdir=/usr/lib
   --build=x86_64-linux-gnu
   --host=x86_64-linux-gnu
   --target=x86_64-linux-gnu

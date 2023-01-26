@@ -11,7 +11,7 @@ pkgdesc="Kernel headers sanitized for use in userspace"
 arch=('any')
 url='https://www.kernel.org'
 makedepends=(rsync)
-source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-5.15.y)
+source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-$pkgver.y)
 sha256sums=('SKIP')
 
 build() {

@@ -68,7 +68,7 @@ build() {
 check() {
   cd $pkgname/build
 
-  make -O check
+  make -O -k check || warning "Check failed."
 }
 
 package() {

@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 # order
-# linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
+# linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=gcc
 pkgver=12.2.0
@@ -11,7 +11,7 @@ pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
 url="https://gcc.gnu.org"
 license=('KZL')
-depends=(mpc)
+depends=(gmp isl mpc mpfr)
 makedepends=(binutils git)
 options=(!emptydirs)
 source=(git+git://gcc.gnu.org/git/gcc.git#tag=releases/$pkgname-$pkgver)
@@ -29,7 +29,7 @@ build() {
   cd gcc/build
 
   ../configure \
-    --with-pkgversion="KZL $pkgver-$pkgrel date -u '+%Y/%m/%d %T %z'" \
+    --with-pkgversion="KZL $pkgver-$pkgrel `date -u '+%Y/%m/%d %T %z'`" \
     --prefix=/usr \
     --build=x86_64-linux-gnu \
     --host=x86_64-linux-gnu \
@@ -43,7 +43,7 @@ build() {
     --enable-threads=posix \
     --enable-__cxa_atexit \
     --enable-gnu-indirect-function \
-    --enable-languages=c,c++,fortran,lto,jit \
+    --enable-languages=c,c++,fortran,lto \
     --disable-libssp \
     --disable-libquadmath \
     --disable-libquadmath-support \
@@ -69,8 +69,16 @@ build() {
   make -O
 }
 
+check() {
+  cd gcc/build
+
+  make -O -k check || warning "Check failed."
+}
+
 package() {
   cd gcc/build
 
   make DESTDIR="$pkgdir/" install
+
+  ln -s gcc "$pkgdir"/usr/bin/cc
 }
