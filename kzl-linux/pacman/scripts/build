@@ -7,7 +7,7 @@ script_name="$(basename "${0}")"
 stage=1
 build_dir=/tmp
 repo=kzl
-log_dir=$build_dir
+log_dir=~/makepkg/log
 repo_dir=/home/.repository/$repo
 build_only_updated=0
 no_install=0
@@ -25,11 +25,11 @@ kzl_stage1_pkgs=(
 # base
 kzl_stage2_pkgs=(
     ### base
-    ## filesystem 
-    iana-etc filesystem
+    ## filesystem
+    # iana-etc filesystem
     ## glibc
     linux-api-headers tzdata
-    glibc
+    # glibc
     ## toolchain
     zlib zstd
     binutils
@@ -80,6 +80,11 @@ prepare() {
     fi
     info "Synchronizing package databases..."
     (yes yes || :) | sudo pacman -Syy > /dev/null 2>&1
+
+    if [ -d "$log_dir" ]; then
+        info "Creating log directory..."
+        mkdir -p "$log_dir"
+    fi
 }
 
 get_pkgbase() {
@@ -107,6 +112,11 @@ build() {
     _pkgbase=$(get_pkgbase $_pkgname)
     _log="$log_dir"/$_pkgbase.stage$stage.log
 
+    # remove existing log
+    if [ -f $_log ]; then
+        rm $_log
+    fi
+
     cd $ROOTDIR/pkgbuilds/$repo/$_pkgbase
 
     # update pkgbuild
@@ -116,16 +126,13 @@ build() {
 
     if [ "$_updated" -ge 2 ]; then
         error "Cannot update the PKGBUILD." 4
+    elif [ "$_updated" -eq 1 ]; then
+        info "Package \"$_pkgbase\" is updated."
     fi
 
-    if [ "$build_only_updated" -gt 0 ] && [ "$_updated" -le 0 ]; then
-        info "Package \"$_pkgbase\" is updated, will not build."
+    if [ "$build_only_updated" -gt 0 -a "$_updated" -eq 0 ]; then
+        info "Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)."
     else
-        # remove existing log
-        if [ -f $_log ]; then
-            rm $_log
-        fi
-
         info "Building package..."
 
         _no_check=''

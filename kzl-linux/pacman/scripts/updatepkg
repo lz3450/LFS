@@ -44,8 +44,10 @@ fi
 
 eval `grep SRCDEST /etc/makepkg.conf`
 
-unset new_version old_version remove_old_sources
+result=0
+
 if [ -f PKGUPDATE ]; then
+    unset new_version old_version remove_old_sources
     source PKGUPDATE
 
     result=$(vercmp $new_version $old_version)
