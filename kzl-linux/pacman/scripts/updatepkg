@@ -3,6 +3,32 @@
 script_name="$(basename "${0}")"
 result=1
 
+# Show an INFO message
+# $1: message string
+info() {
+    local _msg="$1"
+    printf '[%s] INFO: %s\n' "$script_name" "$_msg"
+}
+
+# Show a WARNING message
+# $1: message string
+warning() {
+    local _msg="$1"
+    printf '[%s] WARNING: %s\n' "$script_name" "$_msg" >&2
+}
+
+# Show an ERROR message then exit with status
+# $1: message string
+# $2: exit code number (with 0 does not exit)
+error() {
+    local _msg="$1"
+    local _error="$2"
+    printf '[%s] ERROR: %s\n' "$script_name" "$_msg" >&2
+    if [ "$_error" -gt 0 ]; then
+        exit "$_error"
+    fi
+}
+
 have_function() {
 	declare -f "$1" >/dev/null
 }
@@ -10,12 +36,13 @@ have_function() {
 ################################################################
 
 set -e -o pipefail -u
+# set -x
 
 if [ ! -f PKGBUILD ]; then
-    exit 0
+   error 'PKGBUILD does not exist.' 2
 fi
 
-eval $(grep SRCDEST /etc/makepkg.conf)
+eval `grep SRCDEST /etc/makepkg.conf`
 
 unset new_version old_version remove_old_sources
 if [ -f PKGUPDATE ]; then
@@ -24,18 +51,24 @@ if [ -f PKGUPDATE ]; then
     result=$(vercmp $new_version $old_version)
 
     if [ $result -gt 0 ]; then
-        printf '[%s] PKGBUILD updated: %s => %s\n' "$script_name" "$old_version" "$new_version"
+        info "PKGBUILD updated: $old_version => $new_version"
         if have_function 'pre_update'; then
+            info "running pre_update()..."
             pre_update
         fi
         sed -i "/^pkgver=/s/$old_version/$new_version/" PKGBUILD
+        info "running updpkgsums..."
+        updpkgsums || result=2
         if have_function 'post_update'; then
+            info "running post_update()..."
             post_update
         fi
+    else
+        info "PKGBUILD is already updated."
     fi
+else
+    warning "PKGUPDATE does not exist."
 fi
-
-updpkgsums || result=2
 
 # 0: no update
 # 1: updated

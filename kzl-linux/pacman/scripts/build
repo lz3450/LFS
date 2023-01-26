@@ -11,6 +11,8 @@ log_dir=$build_dir
 repo_dir=/home/.repository/$repo
 build_only_updated=0
 no_install=0
+no_clean=0
+no_check=0
 
 # preparation
 kzl_stage0_pkgs=(
@@ -23,10 +25,18 @@ kzl_stage1_pkgs=(
 # base
 kzl_stage2_pkgs=(
     ### base
-    ## filesystem
+    ## filesystem 
     iana-etc filesystem
-    tzdata
-    base
+    ## glibc
+    linux-api-headers tzdata
+    glibc
+    ## toolchain
+    zlib zstd
+    binutils
+    gmp isl mpfr mpc
+    gcc
+    ## base
+    # base
 )
 
 kzl_stage3_pkgs=(
@@ -89,6 +99,8 @@ build() {
     local _pkgbase
     local _pkgname
     local _updated
+    local _clean
+    local _no_check
     local _log
 
     _pkgname=$1
@@ -115,7 +127,16 @@ build() {
         fi
 
         info "Building package..."
-        makepkg -scCf --noconfirm --nocheck >> $_log 2>&1
+
+        _no_check=''
+        if [ "$no_check" -gt 0 ]; then
+            _no_check='--nocheck'
+        fi
+        _clean=''
+        if [ "$no_clean" -le 0 ]; then
+            _clean='--clean'
+        fi
+        makepkg -sCf  $_clean $_no_check --noconfirm >> $_log 2>&1
 
         info "Updating repo..."
         update-repo -t $repo >> $_log 2>&1
@@ -140,7 +161,9 @@ Usage: lfs-build [options]
     -r, --repo                  target repository (kzl, testing, ...)
     -s, --stage                 stage (0, 1(default), 2, 3)
     -n, --no-install            do not install the package after building
-    -u, --build-only-updated     build the package only if the PKGBUILD is updated
+    -u, --build-only-updated    build the package only if the PKGBUILD is updated
+    --no-clean                  skip cleaning up work files after build
+    --no-check                  do not run the check() function in the PKGBUILD
     -v, --version               display version information and exit
 "
     echo "$_usage"
@@ -151,7 +174,7 @@ Usage: lfs-build [options]
 set -e
 set -o pipefail
 set -u
-set -x
+# set -x
 
 umask 0022
 
@@ -174,6 +197,12 @@ while [ $# -gt 0 ]; do
         ;;
     -u|--build-only-updated)
         build_only_updated=1
+        ;;
+    --no-clean)
+        no_clean=1
+        ;;
+    --no-check)
+        no_check=1
         ;;
     *)
         usage
