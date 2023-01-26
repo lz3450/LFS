@@ -1,0 +1,34 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=isl
+pkgver=0.25
+pkgrel=1
+epoch=
+pkgdesc="A library for manipulating sets and relations of integer points bounded by linear constraints"
+arch=('x86_64')
+url="https://libisl.sourceforge.io"
+license=('KZL')
+depends=(gmp)
+source=($url/$pkgname-$pkgver.tar.xz)
+sha256sums=('be7b210647ccadf90a2f0b000fca11a4d40546374a850db67adb32fad4b230d9')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make check
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

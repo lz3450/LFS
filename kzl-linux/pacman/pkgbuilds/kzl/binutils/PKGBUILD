@@ -32,7 +32,6 @@ _common_options=(
   --enable-ld=default
   --enable-pgo-build=lto
   --enable-lto
-  --enable-host-shared
   --with-system-zlib
   --with-zstd=auto
   # subpackage common

@@ -1,18 +1,18 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=mpfr
-pkgver=4.1.0
+pkgver=4.2.0
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Multiple-precision floating-point library"
 arch=('x86_64')
 url="https://www.mpfr.org/"
 license=('KZL')
 depends=(gmp)
-source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('0c98a3f1732ff6ca4ea690552079da9c597872d30e96ec28414ee23c95558a7f'
+source=(https://www.mpfr.org/mpfr-current/$pkgname-$pkgver.tar.xz{,.asc})
+validpgpkeys=('A534BE3F83E241D918280AEB5831D11A0D4DB02A')
+sha256sums=('06a378df13501248c1b2db5aa977a2c8126ae849a9d9b7be2546fb4a9c26d993'
             'SKIP')
-validpgpkeys=('07F3DBBECC1A39605078094D980C197698C3739D')
 
 build() {
   cd $pkgname-$pkgver
@@ -22,14 +22,14 @@ build() {
     --enable-thread-safe \
     --enable-shared
 
-  make
+  make -O
 }
 
 check() {
   cd $pkgname-$pkgver
-  
-  make check
-  make check-exported-symbols
+
+  make -O check
+  make -O check-exported-symbols
 }
 
 package() {

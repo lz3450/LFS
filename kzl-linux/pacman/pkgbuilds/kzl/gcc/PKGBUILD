@@ -4,87 +4,73 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> binutils -> glibc
 
 pkgname=gcc
-pkgver=11.3.0
-_islver=0.24
+pkgver=12.2.0
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
 url="https://gcc.gnu.org"
 license=('KZL')
 depends=(mpc)
+makedepends=(binutils git)
 options=(!emptydirs)
-source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
-        https://libisl.sourceforge.io/isl-${_islver}.tar.xz)
-sha256sums=('b47cf2818691f5b1e21df2bb38c795fac2cfbd640ede2d0a5e1c89e338a3ac39'
-            'SKIP'
-            '043105cc544f416b48736fff8caf077fb0663a717d06b1113f16e391ac99ebad')
-validpgpkeys=('13975A70E63C361C73AE69EF6EEB81F8981C74C7')
+source=(git+git://gcc.gnu.org/git/gcc.git#tag=releases/$pkgname-$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd gcc
 
   mkdir -p build
 
-  ln -s "$srcdir"/isl-$_islver isl
-
-  sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i gcc/configure
-
-  # Do not run fixincludes
-  sed -e 's@\./fixinc\.sh@-c true@' -i gcc/Makefile.in
-
-  # Set the default directory name for 64-bit libraries to "lib"
-  sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
-  sed -e '/mabi.lp64=/s/lib64/lib/' -i.orig gcc/config/aarch64/t-aarch64-linux
+  sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
 }
 
 build() {
-  cd $pkgname-$pkgver/build
+  cd gcc/build
 
   ../configure \
-    --with-pkgversion="KZL $pkgver-$pkgrel $(date -Ru)" \
+    --with-pkgversion="KZL $pkgver-$pkgrel date -u '+%Y/%m/%d %T %z'" \
     --prefix=/usr \
-    --sbindir=/usr/bin \
-    --libexecdir=/usr/lib \
+    --build=x86_64-linux-gnu \
+    --host=x86_64-linux-gnu \
+    --target=x86_64-linux-gnu \
+    --bindir=/usr/bin \
     --libdir=/usr/lib \
+    --libexecdir=/usr/libexec \
+    --with-slibdir=/usr/lib \
     --enable-shared \
     --disable-multilib \
     --enable-threads=posix \
     --enable-__cxa_atexit \
     --enable-gnu-indirect-function \
-    --enable-languages=c,c++,fortran,lto \
+    --enable-languages=c,c++,fortran,lto,jit \
     --disable-libssp \
+    --disable-libquadmath \
+    --disable-libquadmath-support \
     --enable-default-pie \
     --enable-default-ssp \
     --enable-checking=release \
-    --with-system-zlib \
     --with-isl \
     --enable-linker-build-id \
     --with-linker-hash-style=gnu \
     --enable-gnu-unique-object \
     --enable-lto \
     --enable-cet=auto\
-    --disable-install-libiberty \
+    --with-zstd \
+    --with-target-system-zlib \
     --enable-plugin \
-    --disable-libstdcxx-pch \
+    --disable-install-libiberty \
     --enable-clocale=gnu \
     --enable-libstdcxx-time=yes \
     --enable-libstdcxx-debug \
+    --disable-libstdcxx-pch \
     --with-default-libstdcxx-abi=new
 
-  make
-}
-
-check() {
-  cd $pkgname-$pkgver/build
-
-  make -k check
+  make -O
 }
 
 package() {
-  cd $pkgname-$pkgver/build
+  cd gcc/build
 
   make DESTDIR="$pkgdir/" install
-
-  ln -s gcc "$pkgdir"/usr/bin/cc
 }
