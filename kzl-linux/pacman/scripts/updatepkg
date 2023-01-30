@@ -3,6 +3,8 @@
 script_name="$(basename "${0}")"
 result=1
 
+################################################################
+
 # Show an INFO message
 # $1: message string
 info() {

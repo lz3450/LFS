@@ -35,7 +35,7 @@ update() {
         sudo repo-add -R $REPODIR/$repo/$repo.db.tar.$EXTENSION $REPODIR/$repo/$pkgname
     fi
 
-    if (( REPLACE )) ; then
+    if [ $REPLACE -gt 0 ] ; then
         pkgname=$(find $REPODIR/$repo -type f -regex "$REPODIR/$repo/$pkgname_regex" -printf "%f\n")
         if [ -f $REPODIR/$repo/$pkgname ]; then
             sudo repo-add -R $REPODIR/$repo/$repo.db.tar.$EXTENSION $REPODIR/$repo/$pkgname

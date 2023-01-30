@@ -22,19 +22,32 @@ kzl_stage0_pkgs=(
 kzl_stage1_pkgs=(
 )
 
-# base
-kzl_stage2_pkgs=(
-    ### base
-    ## filesystem
-    # iana-etc filesystem
+_toolchain=(
     ## glibc
     linux-api-headers tzdata
-    # glibc
+    glibc
     ## toolchain
     zlib zstd
     binutils
     gmp isl mpfr mpc
     gcc
+    libtool
+)
+
+# base
+kzl_stage2_pkgs=(
+    ### base
+    ## filesystem
+    # iana-etc filesystem
+    ## toolchain
+    # ${_toolchain[@]}
+    # ${_toolchain[@]}
+    ## GNU tools/lib
+    # ncurses
+    # readline
+    gawk
+    ## bash
+    # bash
     ## base
     # base
 )
