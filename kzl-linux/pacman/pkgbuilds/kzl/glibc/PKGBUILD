@@ -50,6 +50,7 @@ build() {
 
   ../configure \
     --prefix=/usr \
+    --libdir=/usr/lib \
     --with-headers=/usr/include \
     --enable-kernel=5.15 \
     --with-nonshared-cflags="-Wp,-D_FORTIFY_SOURCE=2" \

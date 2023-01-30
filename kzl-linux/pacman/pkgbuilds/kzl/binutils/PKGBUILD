@@ -55,7 +55,7 @@ _binutils_options=(
 
 _ld_options=(
   --enable-new-dtags
-  --enable-default-execstack
+  --enable-default-execstack=no
 )
 
 _libiberty_options=(

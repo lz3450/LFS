@@ -3,38 +3,35 @@
 pkgname=gawk
 pkgver=5.1.0
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="GNU version of awk"
 arch=('x86_64')
-url="https://www.gnu.org/software/gawk/"
+url="https://www.gnu.org/software/gawk"
 license=('KZL')
-depends=(mpfr)
+depends=(glibc mpfr readline)
 provides=(awk)
-source=(https://ftp.gnu.org/pub/gnu/gawk/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('03a0360edcd84bec156fe211bbc4fc8c78790973ce4e8b990a11d778d40b1a26'
-            'SKIP')
-validpgpkeys=('D1967C63788713177D861ED7DF597815937EC0D2')
+source=(git+https://git.savannah.gnu.org/git/gawk.git#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
-    --libexecdir=/usr/lib \
     --sysconfdir=/etc \
     --without-libsigsegv
 
-  make
+  make -O
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make check
+  make -O check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

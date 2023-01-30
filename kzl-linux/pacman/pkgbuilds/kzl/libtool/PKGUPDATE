@@ -1,0 +1,2 @@
+new_version=$(curl -L --stderr - https://gnu.mirror.constant.com/libtool | grep -o -E 'libtool-[0-9]\.[0-9]\.[0-9]' | tail -1 | grep -o -E '[0-9]\.[0-9]\.[0-9]')
+old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')

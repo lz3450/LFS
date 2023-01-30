@@ -2,28 +2,32 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=5.15.86
+pkgver=5.15.90
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
 url="https://www.kernel.org"
 license=('KZL')
 makedepends=(bc)
 options=(!strip)
-source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.{xz,sign}
+source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
-sha256sums=('80fcd9efa443502de9e2750f6dfb59e8de43a5d87a6d2be09dca748d79b5f2ee'
-            'SKIP'
-            'a17b5df4ad609ad0ec764b32143440f9523cd5951361c7b76649997b87768ddc')
-validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
+sha256sums=('SKIP'
+            '273861f755ec818a01ec978200c1110068043cda1bba100a588e4ac72c2e41b4')
 
 export KBUILD_BUILD_HOST=kzl-linux
 export KBUILD_BUILD_USER=kzl
-export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
+export KBUILD_BUILD_TIMESTAMP="$(date -u '+%Y/%m/%d %T %z')"
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed -e 's/^v//' -e 's/bash-//' -e 's/-g.*//' -e 's/-/./'
+}
 
 prepare() {
-  cd $pkgbase-$pkgver
+  cd $pkgbase
 
   mkdir build
 
@@ -33,13 +37,13 @@ prepare() {
 }
 
 build() {
-  cd $pkgbase-$pkgver
+  cd $pkgbase
 
   make O=build all
 }
 
 package_linux() {
-  cd $pkgbase-$pkgver
+  cd $pkgbase
 
   local kernelrelease=$(make O=build -s kernelrelease)
   local image_name=$(make O=build -s image_name)
@@ -58,7 +62,7 @@ package_linux() {
 }
 
 package_linux-headers() {
-  cd $pkgbase-$pkgver
+  cd $pkgbase
 
   local kernelrelease=$(make O=build -s kernelrelease)
 
