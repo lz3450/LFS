@@ -28,3 +28,19 @@ passwd
 useradd -m -U -G sudo -s /bin/zsh kzl
 echo "kzl password:"
 passwd kzl
+
+# network
+cat > /etc/systemd/network/ethernet.network << EOF
+[Match]
+Name=en*
+Name=eth*
+
+[Network]
+DHCP=yes
+EOF
+
+cat > /etc/netplan/network.yaml << EOF
+network:
+  version: 2
+  renderer: NetworkManager
+EOF
