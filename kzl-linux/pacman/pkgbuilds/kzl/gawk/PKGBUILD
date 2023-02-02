@@ -1,16 +1,17 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gawk
-pkgver=5.1.0
+pkgver=5.2.1
 pkgrel=1
 epoch=
 pkgdesc="GNU version of awk"
 arch=('x86_64')
 url="https://www.gnu.org/software/gawk"
 license=('KZL')
-depends=(glibc mpfr readline)
+depends=(glibc libsigsegv mpfr readline)
 provides=(awk)
-source=(git+https://git.savannah.gnu.org/git/gawk.git#tag=$pkgname-$pkgver)
+source=(git+https://git.savannah.gnu.org/git/gawk.git#branch=$pkgname-${pkgver%.*}-stable)
+# source=(git+https://git.savannah.gnu.org/git/gawk.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 
 build() {
@@ -18,8 +19,7 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --sysconfdir=/etc \
-    --without-libsigsegv
+    --sysconfdir=/etc
 
   make -O
 }
