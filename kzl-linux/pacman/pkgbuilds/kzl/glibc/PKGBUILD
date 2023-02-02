@@ -14,13 +14,16 @@ depends=(filesystem linux-api-headers tzdata)
 makedepends=(git)
 options=(staticlibs !lto)
 source=(git+https://sourceware.org/git/glibc.git#branch=release/$pkgver/master
+        ld.so.conf
         locale-gen
         locale.gen)
-backup=(etc/gai.conf
-        etc/locale.gen
+backup=(etc/locale.gen
+        etc/ld.so.conf
+        etc/gai.conf
         etc/nscd.conf)
 install=$pkgname.install
 sha256sums=('SKIP'
+            'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
             '436293c91051efcf712a71ee27e758387ddc82996ad23079d5ab30c0947963b9'
             '949d9660b9ecef93776aebde70ffff161fa58c245636c21d80f3beaa919391ca')
 
@@ -86,6 +89,10 @@ package() {
   sed -e '1,3d' -e 's|/| |g' -e 's| \\||g' "$srcdir"/$pkgname/localedata/SUPPORTED > "$pkgdir"/usr/share/i18n/SUPPORTED
   sed -e 's|^|#|g' "$pkgdir"/usr/share/i18n/SUPPORTED >> "$pkgdir"/etc/locale.gen
   sed -i -e '/^#en_US\.UTF-8/s/^#//' -e '/^#zh_CN\.UTF-8/s/^#//' "$pkgdir"/etc/locale.gen
+
+  # ldconfig
+  install -D -m 644 "$srcdir"/ld.so.conf etc/ld.so.conf
+  install -D -m 644 "$srcdir"/ld.so.conf usr/share/factory/etc/ld.so.conf
 
   # name service cache daemon
   install -m755 -d "$pkgdir"/usr/lib/{systemd/system,tmpfiles.d}

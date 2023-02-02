@@ -2,13 +2,13 @@
 
 pkgname=readline
 pkgver=8.2
-pkgrel=2
+pkgrel=1
 epoch=
 pkgdesc="GNU readline library"
 arch=('x86_64')
 url="https://tiswww.case.edu/php/chet/readline/rltop.html"
 license=('KZL')
-depends=(ncurses)
+depends=(glibc ncurses)
 backup=(etc/inputrc)
 options=(!emptydirs)
 source=(git+https://git.savannah.gnu.org/git/readline.git#branch=master
@@ -20,18 +20,19 @@ build() {
   cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --with-curses
 
   make -O \
     SHOBJ_CFLAGS='-fPIC' \
-    SHLIB_LIBS='-lncurses'
+    SHLIB_LIBS='-lncursesw'
 
 }
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make SHLIB_LIBS='-lncursesw' DESTDIR="$pkgdir/" install
 
   install -Dm644 "$srcdir"/inputrc "$pkgdir"/etc/inputrc
 }

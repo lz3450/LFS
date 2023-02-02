@@ -11,7 +11,7 @@ pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
 url="https://gcc.gnu.org"
 license=('KZL')
-depends=(gmp isl mpc mpfr)
+depends=(isl mpc)
 makedepends=(binutils git)
 options=(!emptydirs)
 source=(git+git://gcc.gnu.org/git/gcc.git#tag=releases/$pkgname-$pkgver)

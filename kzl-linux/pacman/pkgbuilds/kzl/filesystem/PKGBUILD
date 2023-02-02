@@ -15,7 +15,6 @@ backup=(etc/crypttab
         etc/host.conf
         etc/hosts
         etc/issue
-        etc/ld.so.conf
         etc/motd
         etc/nsswitch.conf
         etc/passwd
@@ -32,7 +31,6 @@ source=(crypttab
         host.conf
         hosts
         issue
-        ld.so.conf
         motd
         nsswitch.conf
         passwd
@@ -75,7 +73,7 @@ package() {
 
   # /etc
   install -m 755 -d etc/{skel,profile.d} usr/share/factory/etc
-  for f in fstab group host.conf hosts issue ld.so.conf motd nsswitch.conf passwd profile resolv.conf shells subgid subuid; do
+  for f in fstab group host.conf hosts issue motd nsswitch.conf passwd profile resolv.conf shells subgid subuid; do
     install -D -m 644 "$srcdir/$f" etc/
     install -D -m 644 "$srcdir/$f" usr/share/factory/etc/
   done
