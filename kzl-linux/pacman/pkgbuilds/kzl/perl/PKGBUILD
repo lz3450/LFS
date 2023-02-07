@@ -1,9 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=perl
-pkgver=5.34.0
+pkgver=5.36.0
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="A highly capable, feature-rich programming language"
 arch=('x86_64')
 url="https://www.perl.org"
@@ -11,23 +11,37 @@ license=('KZL')
 depends=(db gdbm libxcrypt)
 options=(!purge)
 source=(https://www.cpan.org/src/5.0/$pkgname-$pkgver.tar.xz)
-sha256sums=('82c2e5e5c71b0e10487a80d79140469ab1f8056349ca8545140a224dbbed7ded')
+sha256sums=('0f386dccbee8e26286404b2cca144e1005be65477979beb9b1ba272d4819bcf0')
 
 build() {
   cd $pkgname-$pkgver
 
+  # https://metacpan.org/dist/perl/view/INSTALL
+
   ./Configure -des \
-    -Dprefix=/usr \
     -Dcc=gcc \
     -Doptimize="$CFLAGS -fPIC" \
     -Dldflags="$LDFLAGS" \
-    -Duseshrplib \
-    -Dlddlflags="-shared $LDFLAGS" \
     -Dusethreads \
-    -Dsiteprefix=/usr \
-    -Dvendorprefix=/usr \
+    -Duseshrplib \
+    -Dprefix=/usr \
+    -Dscriptdir=/usr/bin/core_perl \
+    -Dprivlib=/usr/lib/perl5/core_perl/$pkgver \
+    -Darchlib=/usr/lib/perl5/core_perl/$pkgver \
     -Dman1dir=/usr/share/man/man1 \
     -Dman3dir=/usr/share/man/man3 \
+    -Dsiteprefix=/usr \
+    -Dsitescript=/usr/bin/site_perl \
+    -Dsitelib=/usr/lib/perl5/site_perl/$pkgver \
+    -Dsitearch=/usr/lib/perl5/site_perl/$pkgver \
+    -Dsiteman1dir=/usr/share/man/man1 \
+    -Dsiteman3dir=/usr/share/man/man3 \
+    -Dvendorprefix=/usr \
+    -Dvendorscript=/usr/bin/vendor_perl \
+    -Dvendorlib=/usr/lib/perl5/vendor_perl/$pkgver \
+    -Dvendorarch=/usr/lib/perl5/vendor_perl/$pkgver \
+    -Dvendorman1dir=/usr/share/man/man1 \
+    -Dvendorman3dir=/usr/share/man/man3 \
     -Dman1ext=1perl \
     -Dman3ext=3perl \
     -Dinc_version_list=none
@@ -45,5 +59,6 @@ package() {
   cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir/" install
-  install -dm755 "$pkgdir"/usr/lib/perl5/vendor_perl
+
+  install -m755 -d "$pkgdir"/usr/lib/perl5/vendor_perl/$pkgver
 }

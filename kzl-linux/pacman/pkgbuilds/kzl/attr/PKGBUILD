@@ -7,25 +7,28 @@ epoch=1
 pkgdesc="Extended attribute support library for ACL support"
 arch=('x86_64')
 url="https://savannah.nongnu.org/projects/attr"
-source=(https://download.savannah.gnu.org/releases/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('bae1c6949b258a0d68001367ce0c741cebdacdd3b62965d17e5eb23cd78adaf8'
-            'SKIP')
-validpgpkeys=('259B3792B3D6D319212CC4DCD5BF9FEB0313653A')
+source=(git+https://git.savannah.nongnu.org/git/attr.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
     --libdir=/usr/lib \
-    --libexecdir=/usr/lib \
     --sysconfdir=/etc
 
   make
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

@@ -1,35 +1,25 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=db
-pkgver=5.3.28
+pkgver=6.2.32
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="The Berkeley DB embedded database system"
 arch=('x86_64')
 url="https://www.oracle.com/technology/software/products/berkeley-db/index.html"
-source=(https://download.oracle.com/berkeley-db/db-$pkgver.tar.gz
-        atomic.patch)
-sha256sums=('e0a992d740709892e81f9d93f06daf305cf73fb81b545afe72478043172c3628'
-            'ba0e2b4f53e9cb0ec58f60a979b53b8567b4565f0384886196f1fc1ef111d151')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  # Fix build
-  patch -p0 -i ../atomic.patch
-}
+license=('KZL')
+source=(https://download.oracle.com/berkeley-db/db-$pkgver.tar.gz)
+sha256sums=('a9c5e2b004a5777aa03510cfe5cd766a4a3b777713406b02809c17c8e0e7a8fb')
 
 build() {
   cd $pkgname-$pkgver/build_unix
 
   ../dist/configure \
     --prefix=/usr \
-    --enable-cxx \
     --enable-compat185 \
+    --enable-cxx \
     --enable-stl \
-    --enable-dbm \
-    --enable-shared \
-    --enable-static
+    --enable-dbm
 
   make
 }

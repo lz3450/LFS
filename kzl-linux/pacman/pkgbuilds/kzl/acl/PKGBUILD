@@ -3,31 +3,32 @@
 pkgname=acl
 pkgver=2.3.1
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Access control list utilities, libraries and headers"
 arch=('x86_64')
 url="https://savannah.nongnu.org/projects/acl/"
 depends=(attr)
-source=(https://download.savannah.gnu.org/releases/acl/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('760c61c68901b37fdd5eefeeaf4c0c7a26bdfdd8ac747a1edff1ce0e243c11af'
-            'SKIP')
-validpgpkeys=('259B3792B3D6D319212CC4DCD5BF9FEB0313653A')
+source=(git+https://git.savannah.nongnu.org/git/acl.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
-    --libdir=/usr/lib \
-    --libexecdir=/usr/lib
-
-  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+    --libdir=/usr/lib
 
   make
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

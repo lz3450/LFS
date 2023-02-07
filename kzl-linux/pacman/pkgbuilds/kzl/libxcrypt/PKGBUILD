@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libxcrypt
-pkgver=4.4.28
+pkgver=4.4.33
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Modern library for one-way hashing of passwords"
 arch=('x86_64')
 url="https://github.com/besser82/libxcrypt/"
 license=('KZL')
-provides=(libcrypt.so)
+depends=(glibc)
 source=(git+https://github.com/besser82/libxcrypt.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
