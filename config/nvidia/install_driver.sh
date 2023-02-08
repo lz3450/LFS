@@ -27,7 +27,6 @@ sudo ./nvidia-installer \
     --no-backup \
     --no-distro-scripts \
     --no-wine-files \
-    --no-kernel-module-source \
     --no-check-for-alternate-installs \
     -j 8 \
     --force-libglx-indirect
