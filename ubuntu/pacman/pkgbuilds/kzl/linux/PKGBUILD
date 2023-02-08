@@ -2,7 +2,7 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=5.15.86
+pkgver=5.15.92
 pkgrel=1
 epoch=1
 pkgdesc="LTS Linux Kernel"
@@ -13,7 +13,7 @@ options=(!strip)
 source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.xz
         config)
 sha256sums=('80fcd9efa443502de9e2750f6dfb59e8de43a5d87a6d2be09dca748d79b5f2ee'
-            'a17b5df4ad609ad0ec764b32143440f9523cd5951361c7b76649997b87768ddc')
+            'a66aace8043236dbb44293676f4355e94d4d3500ccd3416cfe176000d50e57ef')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
@@ -46,8 +46,9 @@ package_linux() {
 
   # make INSTALL_PATH="$pkgdir/boot" O=build install
 
-  install -Dm755 build/$image_name "$pkgdir/$modulesdir"/vmlinuz
-  install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-linux
+  install -Dm755 build/$image_name "$pkgdir/$modulesdir"/
+  install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-$pkgver-KZL
+  install -Dm755 build/$image_name "$pkgdir"/boot/vmlinuz-$pkgver-KZL
   install -Dm644 build/System.map -t "$pkgdir/$modulesdir/"
   install -Dm644 build/System.map -t "$pkgdir"/boot/efi/
 
