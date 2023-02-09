@@ -12,8 +12,8 @@ license=('KZL')
 options=(!strip)
 source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.xz
         config)
-sha256sums=('80fcd9efa443502de9e2750f6dfb59e8de43a5d87a6d2be09dca748d79b5f2ee'
-            'a66aace8043236dbb44293676f4355e94d4d3500ccd3416cfe176000d50e57ef')
+sha256sums=('9f420451db99a31a4aade9a46487b39318340d228f5c87c6dc56d83477e6ef91'
+            '74e96cda746260bda7846f20f75c9a9a422cb241781ffc4e31912eca9d582baa')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
