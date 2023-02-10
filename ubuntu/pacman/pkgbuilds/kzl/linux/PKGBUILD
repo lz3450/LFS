@@ -2,7 +2,7 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=5.15.92
+pkgver=6.1.11
 pkgrel=1
 epoch=1
 pkgdesc="LTS Linux Kernel"
@@ -10,17 +10,17 @@ arch=('x86_64')
 url="https://www.kernel.org"
 license=('KZL')
 options=(!strip)
-source=($url/pub/linux/kernel/v${pkgver%%.*}.x/$pkgname-$pkgver.tar.xz
+source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
-sha256sums=('9f420451db99a31a4aade9a46487b39318340d228f5c87c6dc56d83477e6ef91'
-            '74e96cda746260bda7846f20f75c9a9a422cb241781ffc4e31912eca9d582baa')
+sha256sums=('SKIP'
+            'a846883c2b0522e776f010d2e47a60455cf89ffd0952a323f2196753c47e6657')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
 export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
 
 prepare() {
-  cd $pkgbase-$pkgver
+  cd $pkgbase
 
   mkdir -p build
 
@@ -30,13 +30,13 @@ prepare() {
 }
 
 build() {
-  cd $pkgbase-$pkgver
+  cd $pkgbase
 
   make O=build all
 }
 
 package_linux() {
-  cd $pkgbase-$pkgver
+  cd $pkgbase
 
   local kernelrelease=$(make O=build -s kernelrelease)
   local image_name=$(make O=build -s image_name)
@@ -47,8 +47,8 @@ package_linux() {
   # make INSTALL_PATH="$pkgdir/boot" O=build install
 
   install -Dm755 build/$image_name "$pkgdir/$modulesdir"/
-  install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-$pkgver-KZL
-  install -Dm755 build/$image_name "$pkgdir"/boot/vmlinuz-$pkgver-KZL
+  install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-${pkgver%.*}-KZL
+  install -Dm755 build/$image_name "$pkgdir"/boot/vmlinuz-${pkgver%.*}-KZL
   install -Dm644 build/System.map -t "$pkgdir/$modulesdir/"
   install -Dm644 build/System.map -t "$pkgdir"/boot/efi/
 
@@ -56,7 +56,7 @@ package_linux() {
 }
 
 package_linux-headers() {
-  cd $pkgbase-$pkgver
+  cd $pkgbase
 
   local kernelrelease=$(make O=build -s kernelrelease)
 
