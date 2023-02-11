@@ -13,11 +13,11 @@ options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            'a846883c2b0522e776f010d2e47a60455cf89ffd0952a323f2196753c47e6657')
+            '01857962fe249d4ffa6bc619052bf8f69120089415985edb99e5f51881f8e738')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
-export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
+export KBUILD_BUILD_TIMESTAMP="$(date -u '+%Y/%m/%d %T %z')"
 
 prepare() {
   cd $pkgbase
