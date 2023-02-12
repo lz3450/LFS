@@ -3,23 +3,23 @@
 pkgname=keyutils
 pkgver=1.6.3
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Linux Key Management Utilities"
 arch=('x86_64')
-url="https://www.kernel.org/"
+url="https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git"
+depends=(glibc)
 backup=(etc/request-key.conf)
-source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/$pkgname.git#tag=v$pkgver?signed)
+source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git#tag=v$pkgver)
 sha256sums=('SKIP')
-validpgpkeys=('A86E54B0D5E1B4E0AB7C640FFBB7576BA7CB0B6B')
 
 build() {
   cd $pkgname
 
-  make CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" SBINDIR="/usr/bin" BINDIR="/usr/bin"
+  make CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" BINDIR="/usr/bin" SBINDIR="/usr/bin" LIBDIR="/usr/lib" USRLIBDIR="/usr/lib"
 }
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" SBINDIR="/usr/bin" BINDIR="/usr/bin" LIBDIR="/usr/lib" USRLIBDIR="/usr/lib" install
+  make DESTDIR="$pkgdir/" BINDIR="/usr/bin" SBINDIR="/usr/bin" LIBDIR="/usr/lib" USRLIBDIR="/usr/lib" install
 }
