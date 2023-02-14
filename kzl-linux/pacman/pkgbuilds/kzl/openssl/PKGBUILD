@@ -8,7 +8,6 @@ pkgdesc="A Open Source Toolkit for the Transport Layer Security (TLS) protocol f
 arch=('x86_64')
 url="https://www.openssl.org"
 license=('KZL')
-depends=()
 backup=(etc/ssl/openssl.cnf)
 source=(git+https://github.com/openssl/openssl.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
@@ -57,5 +56,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install_sw install_man_docs
+  make DESTDIR="$pkgdir/" install_sw install_ssldirs install_man_docs
 }
