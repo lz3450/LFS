@@ -4,7 +4,7 @@ pkgbase=linux
 pkgname=(linux linux-headers)
 pkgver=6.1.11
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
 url="https://www.kernel.org"
@@ -39,18 +39,14 @@ package_linux() {
   cd $pkgbase
 
   local kernelrelease=$(make O=build -s kernelrelease)
-  local image_name=$(make O=build -s image_name)
+  local imagename=$(make O=build -s image_name)
   local modulesdir="/usr/lib/modules/$kernelrelease"
 
   make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
 
-  # make INSTALL_PATH="$pkgdir/boot" O=build install
-
-  install -Dm755 build/$image_name "$pkgdir/$modulesdir"/
-  install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-${pkgver%.*}-KZL
-  install -Dm755 build/$image_name "$pkgdir"/boot/vmlinuz-${pkgver%.*}-KZL
-  install -Dm644 build/System.map -t "$pkgdir/$modulesdir/"
-  install -Dm644 build/System.map -t "$pkgdir"/boot/efi/
+  install -d -m755 $pkgdir/boot/efi/
+  make INSTALL_PATH="$pkgdir/boot" O=build install
+  cp "$pkgdir"/boot/vmlinuz-$kernelrelease "$pkgdir"/boot/efi/vmlinuz-$kernelrelease
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
 }
