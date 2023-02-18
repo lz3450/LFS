@@ -4,18 +4,43 @@ base:
   glibc:
     depends: [filesystem, linux-api-headers, tzdata]
   binutils:
-    depends: [glibc, libelf, zlib, zstd]
+    depends: [glibc, zlib, zstd]
     makedepends: [git]
     checkdepends: [bc]
+  gcc:
+    depends: [isl, mpc]
+    makedepends: [binutils, git]
+  bash:
+    depends: [glibc, ncurses, readline]
+  perl:
+    depends: [db, gdbm, libxcrypt]
+  openssl:
+    cpan: [Pod::Man]
+  gawk:
+    depends: [glibc, libsigsegv, mpfr, readline]
 base-dependency:
   iana-etc:
+    makedepends: [gawk]
   linux-api-headers:
   tzdata:
   zlib:
   zstd:
     makedepends: [cmake]
-  elfutils:
-    depends: [bzip2, libcurl, libmicrohttpd, libarchive, sqlite3, xz, zlib, zstd]
-    provides: [debuginfod, libelf]
-    makedepends: [git]
-    checkdepends: [bc, dejagnu]
+  mpc:
+    depends: [mpfr]
+  isl:
+   depends: [gmp]
+  ncurses:
+    depends: [glibc]
+    makedepends: [autoconf, autoconf-archive]
+  readline:
+    depends: [glibc, ncurses]
+  libsigsegv:
+    depends: [glibc]
+  libxcrypt:
+    depends: [glibc]
+  db:
+  gdbm:
+    depends: [glibc, readline]
+  libtasn1:
+  libffi:

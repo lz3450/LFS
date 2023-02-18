@@ -1,19 +1,32 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=bash-completion
-pkgver=2.11
+pkgver=2.11.814
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Programmable completion for the bash shell"
 arch=('any')
 url="https://github.com/scop/bash-completion"
 license=('KZL')
+depends=(bash)
 options=(!emptydirs !makeflags)
-source=($url/releases/download/$pkgver/$pkgname-$pkgver.tar.xz)
-sha256sums=('73a8894bad94dee83ab468fa09f628daffd567e8bef1a24277f1e9a0daf911ac')
+source=(git+https://github.com/scop/bash-completion.git)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed -e 's/-g.*//' -e 's/-/./'
+}
+
+prepare() {
+  cd $pkgname
+
+  autoreconf -vfi
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
@@ -23,7 +36,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
   rm "$pkgdir"/etc/profile.d/bash_completion.sh
