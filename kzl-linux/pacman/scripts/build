@@ -31,7 +31,6 @@ _toolchain=(
     binutils
     gmp isl mpfr mpc
     gcc
-    libtool
 )
 
 # base
@@ -42,12 +41,29 @@ kzl_stage2_pkgs=(
     ## toolchain
     # ${_toolchain[@]}
     # ${_toolchain[@]}
-    ## GNU tools/lib
-    # ncurses
-    # readline
-    gawk
     ## bash
-    # bash
+    # ncurses readline
+    # bash bash-completion
+    ## perl
+    # libxcrypt db gdbm
+    # perl
+    ## openssl
+    # openssl
+    ## ca-certificates
+    # libtasn1 libffi p11-kit
+    nspr
+
+    ## pam
+    # keyutils
+    # krb5
+    ## coreutils
+    # attr acl
+    # coreutils
+    ## pacman
+    # pacman
+    ## GNU tools/lib
+    # libsigsegv
+    # gawk
     ## base
     # base
 )
