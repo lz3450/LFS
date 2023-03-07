@@ -1,50 +1,40 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=bzip2
-pkgver=1.0.8
+pkgver=1.0.9
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="A high-quality data compression program"
 arch=('x86_64')
-url="https://sourceware.org/bzip2/"
+url="https://gitlab.com/bzip2/bzip2"
 license=('KZL')
-source=(https://sourceware.org/pub/bzip2/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269'
-            'SKIP')
-validpgpkeys=('EC3CFE88F6CA0788774F5C1D1AA44BE649DE760A')
+depends=(glibc)
+source=(git+https://gitlab.com/bzip2/bzip2.git)
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
-  
-  make -f Makefile-libbz2_so CC="gcc $CFLAGS $LDFLAGS"
-  make CC="gcc $CFLAGS $LDFLAGS"
+  cd $pkgname
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_C_FLAGS="$CPPFLAGS $CFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CPPFLAGS $CXXFLAGS" \
+    -S . \
+    -B build
+
+  cmake --build build
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make check
+  cmake --build build --target tests
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  install -dm755 "$pkgdir"/usr/{bin,lib,include,share/man/man1}
-
-  install -Dm755 bzip2-shared "$pkgdir"/usr/bin/bzip2
-  install -Dm755 bzip2recover bzgrep bzmore bzdiff "$pkgdir"/usr/bin/
-
-  install -Dm644 bzlib.h "$pkgdir"/usr/include/
-
-  install -Dm755 libbz2.so.$pkgver "$pkgdir"/usr/lib/
-  ln -sf libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so
-  ln -sf libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so.${pkgver:0:3}
-
-  install -Dm644 libbz2.a "$pkgdir"/usr/lib/
-
-  ln -sf bzip2 "$pkgdir"/usr/bin/bunzip2
-  ln -sf bzip2 "$pkgdir"/usr/bin/bzcat
-  ln -sf bzmore "$pkgdir"/usr/bin/bzless
-
-  install -Dm644 bzip2.1 bzgrep.1 bzmore.1 bzdiff.1 "$pkgdir"/usr/share/man/man1/
+  DESTDIR="$pkgdir/" cmake --build build --target install
 }

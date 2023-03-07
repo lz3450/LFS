@@ -13,13 +13,15 @@ base:
     depends: [glibc, ncurses, readline]
   perl:
     depends: [db, gdbm, libxcrypt]
+  bzip2:
+    depends: [glibc]
+  gawk:
+    depends: [glibc, libsigsegv, mpfr, readline]
   openssl:
     cpan: [Pod::Man]
   ca-certificates:
     depends: [p11-kit]
     makedepends: [python]
-  gawk:
-    depends: [glibc, libsigsegv, mpfr, readline]
 base-dependency:
   iana-etc:
     makedepends: [gawk]
@@ -37,19 +39,19 @@ base-dependency:
     makedepends: [autoconf, autoconf-archive]
   readline:
     depends: [glibc, ncurses]
-  bash-completion:
-    depends: [bash]
-  libsigsegv:
-    depends: [glibc]
-  libxcrypt:
-    depends: [glibc]
   db:
   gdbm:
     depends: [glibc, readline]
+  libxcrypt:
+    depends: [glibc]
+  libsigsegv:
+    depends: [glibc]
+  help2man:
+    cpan: [Locale::gettext]
   libtasn1:
   libffi:
+  bash-completion:
+    depends: [bash]
   p11-kit:
     depends: [libffi, libtasn1, systemd]
     makedepends: [bash-completion]
-  help2man:
-    cpan: [Locale::gettext]
