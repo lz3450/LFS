@@ -50,9 +50,12 @@ kzl_stage2_pkgs=(
     ## openssl
     # openssl
     ## ca-certificates
-    libtasn1 libffi p11-kit
-    ca-certificates
+    # libtasn1 libffi p11-kit
+    # ca-certificates
     ## pam
+    help2man
+
+    # flex
     # keyutils
 
     ## coreutils

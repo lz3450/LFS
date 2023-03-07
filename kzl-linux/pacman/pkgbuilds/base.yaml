@@ -52,3 +52,5 @@ base-dependency:
   p11-kit:
     depends: [libffi, libtasn1, systemd]
     makedepends: [bash-completion]
+  help2man:
+    cpan: [Locale::gettext]
