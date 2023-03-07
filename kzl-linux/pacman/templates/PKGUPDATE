@@ -1,5 +1,4 @@
 new_version=$()
-old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')
 
 pre_update() {
 

@@ -99,8 +99,8 @@ build() {
   cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
-    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DCMAKE_C_FLAGS="$CPPFLAGS $CFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CPPFLAGS $CXXFLAGS" \
     -S . \
     -B build
 
