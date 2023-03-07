@@ -47,25 +47,25 @@ kzl_stage2_pkgs=(
     ## perl
     # libxcrypt db gdbm
     # perl
+    ## compression tools
+    bzip2
+    ## GNU tools/lib
+    # libsigsegv gawk
+    # m4
+    # help2man flex
     ## openssl
     # openssl
     ## ca-certificates
     # libtasn1 libffi p11-kit
     # ca-certificates
+
     ## pam
-    help2man
-
-    # flex
     # keyutils
-
     ## coreutils
     # attr acl
     # coreutils
     ## pacman
     # pacman
-    ## GNU tools/lib
-    # libsigsegv
-    # gawk
     ## base
     # base
 )
@@ -177,7 +177,7 @@ build() {
         makepkg -sCf  $_clean $_no_check --noconfirm >> $_log 2>&1
 
         info "Updating repo..."
-        update-repo -t $repo >> $_log 2>&1
+        updaterepo -t $repo >> $_log 2>&1
     fi
 
     if [ "$no_install" -le 0 ]; then
