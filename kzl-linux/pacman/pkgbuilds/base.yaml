@@ -5,11 +5,10 @@ base:
     depends: [filesystem, linux-api-headers, tzdata]
   binutils:
     depends: [glibc, zlib, zstd]
-    makedepends: [git]
     checkdepends: [bc]
   gcc:
     depends: [isl, mpc]
-    makedepends: [binutils, git]
+    makedepends: [binutils]
   bash:
     depends: [glibc, ncurses, readline]
   perl:

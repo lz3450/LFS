@@ -13,7 +13,6 @@ url="https://www.gnu.org/software/binutils/"
 license=('KZL')
 # depends=(glibc jansson zlib zstd)
 depends=(glibc zlib zstd)
-makedepends=(git)
 # checkdepends=(bc debuginfod dejagnu)
 checkdepends=(bc)
 # optdepends=("debuginfod: for debuginfod server/client functionality")
