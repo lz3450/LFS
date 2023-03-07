@@ -16,6 +16,9 @@ base:
     depends: [db, gdbm, libxcrypt]
   openssl:
     cpan: [Pod::Man]
+  ca-certificates:
+    depends: [p11-kit]
+    makedepends: [python]
   gawk:
     depends: [glibc, libsigsegv, mpfr, readline]
 base-dependency:
@@ -29,12 +32,14 @@ base-dependency:
   mpc:
     depends: [mpfr]
   isl:
-   depends: [gmp]
+    depends: [gmp]
   ncurses:
     depends: [glibc]
     makedepends: [autoconf, autoconf-archive]
   readline:
     depends: [glibc, ncurses]
+  bash-completion:
+    depends: [bash]
   libsigsegv:
     depends: [glibc]
   libxcrypt:
@@ -44,3 +49,6 @@ base-dependency:
     depends: [glibc, readline]
   libtasn1:
   libffi:
+  p11-kit:
+    depends: [libffi, libtasn1, systemd]
+    makedepends: [bash-completion]
