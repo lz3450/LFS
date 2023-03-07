@@ -1,46 +1,66 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ca-certificates
-pkgver=2022.02.23
+pkgver=2023.03.07
 pkgrel=1
-epoch=1
-pkgdesc="Common CA certificates form Mozilla CA Certificate Store"
+epoch=
+pkgdesc="CA certificates"
 arch=('any')
-url="https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/"
 license=('KZL')
 depends=(p11-kit)
-provides=(ca-certificates-utils ca-certificates-mozilla)
-conflicts=(ca-certificates-utils ca-certificates-mozilla)
-replaces=(ca-certificates-utils ca-certificates-mozilla)
-source=(https://hg.mozilla.org/mozilla-central/raw-file/tip/security/nss/lib/ckfw/builtins/certdata.txt
-        https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/certdata2pem.py
+source=(https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/certdata.txt
+        https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h
+        https://src.fedoraproject.org/rpms/ca-certificates/blob/rawhide/f/certdata2pem.py
         update-ca-trust
         update-ca-trust.hook)
 sha256sums=('d59c5c83ce7a7635fa95521d8d245677949b86d5574bfcc6f855b6a48f2d5566'
+            '1e621fb1cc5a45e317f5dd280c6f682b4c38a37a2bf197d4e26b923684c4ca14'
             'd2a1579dae05fd16175fac27ef08b54731ecefdf414085c610179afcf62b096c'
-            'a6f534bed509e2996ff00a1b6a82fbad070d4a8762c66c55e39aacf932ebcd51'
+            '92deb387e3f4d9dd4301db72c27797235997f775072687029d322808da94cd75'
             '55b230878d71847c629494d3b1d0b43482568027c3272ffa477c1d77e4594bf6')
 
 pkgver() {
   date +%Y.%m.%d
 }
 
+prepare() {
+  mkdir -p certs
+  ln -srf -t certs/ "$srcdir"/{certdata.txt,nssckbi.h,certdata2pem.py}
+}
+
 build() {
+  cd certs
+
   python3 certdata2pem.py
 
-  for p in *.tmp-p11-kit; do
-    cat "$p" >> ca-bundle.trust.p11-kit
+  (
+  cat <<EOF
+# This is a bundle of X.509 certificates of public Certificate Authorities.
+# It was generated from the Mozilla root CA list.
+# These certificates and trust/distrust attributes use the file format accepted by the p11-kit-trust module.
+#
+# Source: nss/lib/ckfw/builtins/certdata.txt
+# Source: nss/lib/ckfw/builtins/nssckbi.h
+#
+# Generated from:
+EOF
+  cat nssckbi.h | grep -w NSS_BUILTINS_LIBRARY_VERSION | awk '{print "# " $2 " " $3}';
+  echo '#';
+  ) > ca-bundle.trust.p11-kit
+
+  for cert in *.tmp-p11-kit; do 
+    cat "$cert" >> ca-bundle.trust.p11-kit
   done
 }
 
 package() {
+  cd certs
+
+  install -d -m755 "$pkgdir"/{etc,usr/share}/$pkgname/trust-source/
+  install -d -m555 "$pkgdir"/etc/$pkgname/extracted/pem-directory-hash/
+
+  install -Dm755 "$srcdir"/update-ca-trust -t "$pkgdir"/usr/bin/
+  install -Dm644 "$srcdir"/update-ca-trust.hook -t "$pkgdir"/usr/share/libalpm/hooks/update-ca-trust.hook
+
   install -Dm644 ca-bundle.trust.p11-kit "$pkgdir"/usr/share/ca-certificates/trust-source/mozilla.trust.p11-kit
-  install -Dm755 update-ca-trust "$pkgdir"/usr/bin/update-ca-trust
-  install -Dm644 update-ca-trust.hook "$pkgdir"/usr/share/libalpm/hooks/update-ca-trust.hook
-
-  install -d "$pkgdir"/{etc,usr/share}/$pkgname/trust-source/{anchors,blacklist}
-  install -d "$pkgdir"/etc/{ssl/certs/{edk2,java},$pkgname/extracted}
-
-  ln -sr "$pkgdir"/etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/cert.pem
-  ln -sr "$pkgdir"/etc/$pkgname/extracted/tls-ca-bundle.pem "$pkgdir"/etc/ssl/certs/ca-certificates.crt
 }
