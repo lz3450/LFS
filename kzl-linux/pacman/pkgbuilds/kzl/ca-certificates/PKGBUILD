@@ -8,6 +8,7 @@ pkgdesc="CA certificates"
 arch=('any')
 license=('KZL')
 depends=(p11-kit)
+makedepends=(python)
 source=(https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/certdata.txt
         https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h
         https://src.fedoraproject.org/rpms/ca-certificates/blob/rawhide/f/certdata2pem.py
