@@ -15,8 +15,13 @@ base:
     depends: [db, gdbm, libxcrypt]
   bzip2:
     depends: [glibc]
+  gzip:
+    depends: [glibc, less]
   gawk:
     depends: [glibc, libsigsegv, mpfr, readline]
+  flex:
+    depends: [glibc, m4]
+    makedepends: [help2man, texinfo]
   openssl:
     cpan: [Pod::Man]
   ca-certificates:
@@ -24,34 +29,42 @@ base:
     makedepends: [python]
 base-dependency:
   iana-etc:
-    makedepends: [gawk]
+      makedepends: [gawk]
   linux-api-headers:
-  tzdata:
+    tzdata:
   zlib:
-  zstd:
-    makedepends: [cmake]
-  mpc:
-    depends: [mpfr]
-  isl:
-    depends: [gmp]
-  ncurses:
-    depends: [glibc]
-    makedepends: [autoconf, autoconf-archive]
-  readline:
-    depends: [glibc, ncurses]
-  db:
-  gdbm:
-    depends: [glibc, readline]
-  libxcrypt:
-    depends: [glibc]
-  libsigsegv:
-    depends: [glibc]
-  help2man:
-    cpan: [Locale::gettext]
-  libtasn1:
-  libffi:
-  bash-completion:
-    depends: [bash]
-  p11-kit:
-    depends: [libffi, libtasn1, systemd]
-    makedepends: [bash-completion]
+    zstd:
+      makedepends: [cmake]
+    mpc:
+      depends: [mpfr]
+    isl:
+      depends: [gmp]
+    ncurses:
+      depends: [glibc]
+      makedepends: [autoconf, autoconf-archive]
+    readline:
+      depends: [glibc, ncurses]
+    db:
+    gdbm:
+      depends: [glibc, readline]
+    libxcrypt:
+      depends: [glibc]
+    libsigsegv:
+      depends: [glibc]
+    pcre2:
+    less:
+      depends: [glibc, ncurses, pcre2]
+    texinfo:
+      depends: [glibc, gzip, ncurses, perl]
+    m4:
+      depends: [libsigsegv]
+      makedepends: [texinfo]
+    help2man:
+      cpan: [Locale::gettext]
+    libtasn1:
+    libffi:
+    bash-completion:
+      depends: [bash]
+    p11-kit:
+      depends: [libffi, libtasn1, systemd]
+      makedepends: [bash-completion]

@@ -1,16 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gzip
-pkgver=1.11
+pkgver=1.12
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="GNU compression utility"
 arch=('x86_64')
 url="https://www.gnu.org/software/gzip/"
 license=('KZL')
-depends=(less)
+depends=(glibc less)
 source=(https://ftp.gnu.org/pub/gnu/gzip/gzip-$pkgver.tar.xz{,.sig})
-sha256sums=('9b9a95d68fdcb936849a4d6fada8bf8686cddf58b9b26c9c4289ed0c92a77907'
+sha256sums=('ce5e03e519f637e1f814011ace35c4f87b33c0bbabeec35baf5fbd3479e91956'
             'SKIP')
 validpgpkeys=('155D3FC500C834486D1EEA677FD9FCCB000BEEEE')
 

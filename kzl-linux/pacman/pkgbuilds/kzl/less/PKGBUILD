@@ -1,33 +1,36 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=less
-pkgver=590
+pkgver=629
 pkgrel=1
-epoch=2
+epoch=
 pkgdesc="A terminal based program for viewing text files"
 arch=('x86_64')
 url="http://www.greenwoodsoftware.com/less"
 license=('KZL')
-depends=(pcre)
-source=($url/$pkgname-$pkgver.tar.gz
-        $pkgname-$pkgver.tar.gz.sig::$url/$pkgname-$pkgver.sig)
-sha256sums=('6aadf54be8bf57d0e2999a3c5d67b1de63808bb90deb8f77b028eafae3a08e10'
-            'SKIP')
-validpgpkeys=('AE27252BD6846E7D6EAE1DD6F153A7C833235259')
+depends=(glibc ncurses pcre2)
+source=(git+https://github.com/gwsw/less.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  make -f Makefile.aut distfiles
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --with-regex=pcre
+    --with-regex=pcre2
 
   make
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

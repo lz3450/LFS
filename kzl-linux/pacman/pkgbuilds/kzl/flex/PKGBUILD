@@ -3,35 +3,39 @@
 pkgname=flex
 pkgver=2.6.4
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="A tool for generating text-scanning programs"
 arch=('x86_64')
 url="https://github.com/westes/flex"
 license=('KZL')
-source=($url/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995'
-            'SKIP')
-validpgpkeys=('56C67868E93390AA1039AD1CE4B29C8D64885307')
+depends=(glibc m4)
+makedepends=(help2man texinfo)
+source=(git+https://github.com/westes/flex.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
 
-  make
+  make -O
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make -k check
+  make -O -k check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
-
-  ln -sf flex "$pkgdir"/usr/bin/lex
 }

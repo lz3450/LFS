@@ -3,15 +3,17 @@
 pkgname=m4
 pkgver=1.4.19
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="The GNU macro processor"
 arch=('x86_64')
 url="https://www.gnu.org/software/m4"
 license=('KZL')
+depends=(libsigsegv)
+makedepends=(texinfo)
 source=(https://ftp.gnu.org/gnu/m4/$pkgname-$pkgver.tar.xz{,.sig})
+validpgpkeys=('71C2CC22B1C4602927D2F3AAA7A16B4A2527436A')
 sha256sums=('63aede5c6d33b6d9b13511cd0be2cac046f2e70fd0a07aa9573a04a82783af96'
             'SKIP')
-validpgpkeys=('71C2CC22B1C4602927D2F3AAA7A16B4A2527436A')
 
 build() {
   cd $pkgname-$pkgver
@@ -19,13 +21,13 @@ build() {
   ./configure \
     --prefix=/usr
 
-  make
+  make -O
 }
 
 check() {
 	cd $pkgname-$pkgver
 
-	make check
+	make -O check
 }
 
 package() {

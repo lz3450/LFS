@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://ftp.gnu.org/gnu/texinfo/ | grep -o -E 'texinfo-([0-9]\.?)+[0-9]'| sort | tail -1 | grep -o -E '([0-9]\.?)+[0-9]')
