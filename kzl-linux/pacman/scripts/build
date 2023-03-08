@@ -47,10 +47,12 @@ kzl_stage2_pkgs=(
     ## perl
     # libxcrypt db gdbm
     # perl
-    ## compression tools
-    bzip2
+    ## compression tools (TODO)
+    # bzip2
+    # pcre2 less gzip
     ## GNU tools/lib
     # libsigsegv gawk
+    # texinfo
     # m4
     # help2man flex
     ## openssl
