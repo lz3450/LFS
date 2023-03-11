@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://www.swig.org/ | grep -o -E 'SWIG-[0-9]\.[0-9]\.[0-9]' | head -1 | grep -o -E '[0-9]\.[0-9]\.[0-9]')

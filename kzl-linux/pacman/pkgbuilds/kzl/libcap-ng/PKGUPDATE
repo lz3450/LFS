@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://people.redhat.com/sgrubb/libcap-ng/ | grep 'Latest Release is' | grep -o -E '[0-9]\.[0-9]\.[0-9]')

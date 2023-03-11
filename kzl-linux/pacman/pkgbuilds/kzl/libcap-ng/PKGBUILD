@@ -1,41 +1,40 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libcap-ng
-pkgver=0.8.2
+pkgver=0.8.3
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Library making programming with POSIX capabilities easier than traditional libcap"
 arch=('x86_64')
 url="https://people.redhat.com/sgrubb/libcap-ng/"
-provides=(libcap-ng.so)
-source=($pkgname-$pkgver.tar.gz::https://github.com/stevegrubb/libcap-ng/archive/v$pkgver.tar.gz)
-sha256sums=('65b86885b8d873e55c05bd49427fd370d559b26f0c2089ac9194828e6a2fe233')
+license=('KZL')
+depends=(glibc)
+source=(git+https://github.com/stevegrubb/libcap-ng.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd libcap-ng
 
-  autoreconf -fiv
+  ./autogen.sh
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd libcap-ng
 
   ./configure \
-    --prefix=/usr \
-    --disable-static \
-    --without-python
+    --prefix=/usr
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd libcap-ng
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd libcap-ng
 
   make DESTDIR="$pkgdir/" install
 }

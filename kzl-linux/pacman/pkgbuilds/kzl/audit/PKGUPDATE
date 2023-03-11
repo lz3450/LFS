@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://people.redhat.com/sgrubb/audit/ | grep 'The latest stable release is' | grep -o -E '[0-9]\.[0-9]')

@@ -1,33 +1,58 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=swig
-pkgver=4.0.2
+pkgver=4.1.1
 pkgrel=1
-epoch=1
-pkgdesc="Generate scripting interfaces to C/C++ code"
+epoch=
+pkgdesc="A software development tool that connects programs written in C and C++ with a variety of high-level programming languages"
 arch=('x86_64')
 url="http://www.swig.org/"
-depends=(pcre)
-source=(https://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz)
-sha256sums=('d53be9730d8d58a16bf0cbd1f8ac0c0c3e1090573168bfa151b01eb47fa906fc')
+depends=(pcre2)
+makedepends=(perl python)
+source=(git+https://github.com/swig/swig.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --with-boost=no \
+    --without-android \
+    --without-csharp \
+    --without-d \
+    --without-go \
+    --without-guile \
+    --without-java \
+    --without-javascript \
+    --without-lua \
+    --without-mzscheme \
+    --without-ocaml \
+    --without-octave \
+    --without-php \
+    --without-python \
+    --without-r \
+    --without-ruby \
+    --without-scilab \
+    --without-tcl
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make check PY3=y || warning "Tests failed"
+  make PY3=1 -k check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }
