@@ -58,7 +58,8 @@ kzl_stage2_pkgs=(
     # base-development
     ########################
     # libsigsegv gawk
-    # diffutils m4 autoconf
+    # diffutils
+    # m4 autoconf
 
     ## compression tools
     # bzip2
