@@ -37,7 +37,9 @@ have_function() {
 
 ################################################################
 
-set -e -o pipefail -u
+set -e
+set -o pipefail
+set -u
 # set -x
 
 if [ ! -f PKGBUILD ]; then
@@ -51,9 +53,7 @@ result=0
 if [ -f PKGUPDATE ]; then
     unset new_version old_version remove_old_sources
     source PKGUPDATE
-    if [ -z "$old_version" ]; then
-        old_version=$(cat PKGBUILD | grep 'pkgver=' | sed 's/^pkgver=//')
-    fi
+    old_version=${old_version:-$(cat PKGBUILD | grep -Po '(?<=pkgver=).+$')}
 
     result=$(vercmp $new_version $old_version)
 
