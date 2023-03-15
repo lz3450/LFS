@@ -51,7 +51,9 @@ result=0
 if [ -f PKGUPDATE ]; then
     unset new_version old_version remove_old_sources
     source PKGUPDATE
-    old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')
+    if [ -z "$old_version" ]; then
+        old_version=$(cat PKGBUILD | grep 'pkgver=' | sed 's/^pkgver=//')
+    fi
 
     result=$(vercmp $new_version $old_version)
 

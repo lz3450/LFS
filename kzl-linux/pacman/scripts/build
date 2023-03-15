@@ -41,13 +41,14 @@ kzl_stage2_pkgs=(
     ## toolchain
     # ${_toolchain[@]}
     # ${_toolchain[@]}
+    # libtool
     ## bash
     # ncurses readline
     # bash bash-completion
     ## perl
     # libxcrypt db gdbm
     # perl
-    ## compression tools (TODO)
+    ## compression tools
     # bzip2
     # pcre2 less gzip
     ## GNU tools/lib
@@ -62,7 +63,9 @@ kzl_stage2_pkgs=(
     # ca-certificates
 
     ## pam
-    # keyutils
+    # swig libcap-ng audit
+    cyrus-sasl
+
     ## coreutils
     # attr acl
     # coreutils
@@ -109,7 +112,7 @@ prepare() {
 
     if [ ! -f /home/.repository/$repo/$repo.db ]; then
         info "Creating empty repo \"$repo\"..."
-        update-repo -t $repo > /dev/null 2>&1
+        updaterepo -t $repo > /dev/null 2>&1
     fi
     info "Synchronizing package databases..."
     (yes yes || :) | sudo pacman -Syy > /dev/null 2>&1
@@ -256,7 +259,7 @@ case $repo in
     kzl)
         case $stage in
         0)
-            update-repo --clear -t $repo
+            updaterepo --clear -t $repo
             pkgs=${kzl_stage0_pkgs[@]}
             ;;
         1)
