@@ -9,6 +9,9 @@ base:
   gcc:
     depends: [isl, mpc]
     makedepends: [binutils]
+  libtool:
+    depends: [glibc]
+    makedepends: [help2man]
   bash:
     depends: [glibc, ncurses, readline]
   perl:
@@ -27,44 +30,58 @@ base:
   ca-certificates:
     depends: [p11-kit]
     makedepends: [python]
+  pam:
+    depends: []
+    makedepends: []
 base-dependency:
   iana-etc:
-      makedepends: [gawk]
+    makedepends: [gawk]
   linux-api-headers:
-    tzdata:
+  tzdata:
   zlib:
-    zstd:
-      makedepends: [cmake]
-    mpc:
-      depends: [mpfr]
-    isl:
-      depends: [gmp]
-    ncurses:
-      depends: [glibc]
-      makedepends: [autoconf, autoconf-archive]
-    readline:
-      depends: [glibc, ncurses]
-    db:
-    gdbm:
-      depends: [glibc, readline]
-    libxcrypt:
-      depends: [glibc]
-    libsigsegv:
-      depends: [glibc]
-    pcre2:
-    less:
-      depends: [glibc, ncurses, pcre2]
-    texinfo:
-      depends: [glibc, gzip, ncurses, perl]
-    m4:
-      depends: [libsigsegv]
-      makedepends: [texinfo]
-    help2man:
-      cpan: [Locale::gettext]
-    libtasn1:
-    libffi:
-    bash-completion:
-      depends: [bash]
-    p11-kit:
-      depends: [libffi, libtasn1, systemd]
-      makedepends: [bash-completion]
+  zstd:
+    makedepends: [cmake]
+  mpc:
+    depends: [mpfr]
+  isl:
+    depends: [gmp]
+  ncurses:
+    depends: [glibc]
+    makedepends: [autoconf, autoconf-archive]
+  readline:
+    depends: [glibc, ncurses]
+  db:
+  gdbm:
+    depends: [glibc, readline]
+  libxcrypt:
+    depends: [glibc]
+  libsigsegv:
+    depends: [glibc]
+  pcre2:
+  less:
+    depends: [glibc, ncurses, pcre2]
+  texinfo:
+    depends: [glibc, gzip, ncurses, perl]
+  m4:
+    depends: [libsigsegv]
+    makedepends: [texinfo]
+  help2man:
+    cpan: [Locale::gettext]
+  libtasn1:
+  libffi:
+  bash-completion:
+    depends: [bash]
+  p11-kit:
+    depends: [libffi, libtasn1, systemd]
+    makedepends: [bash-completion]
+  swig:
+    depends: [pcre2]
+    makedepends: [perl, python]
+  libcap-ng:
+    depends: [glibc]
+    makedepends: [linux-api-headers, python]
+  audit:
+    depends: [glibc, libcap-ng]
+    makedepends: [linux-api-headers, python, swig]
+  cyrus-sasl:
+    depends: [audit, db, e2fsprogs, glibc, keyutils, krb5, libxcrypt, openssl, pam]

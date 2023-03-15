@@ -9,6 +9,7 @@ arch=('x86_64')
 url="https://people.redhat.com/sgrubb/libcap-ng/"
 license=('KZL')
 depends=(glibc)
+makedepends=(linux-api-headers python)
 source=(git+https://github.com/stevegrubb/libcap-ng.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -22,7 +23,9 @@ build() {
   cd libcap-ng
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --with-python=no \
+    --with-python3
 
   make
 }

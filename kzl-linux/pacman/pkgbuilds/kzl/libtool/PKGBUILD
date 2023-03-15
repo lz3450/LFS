@@ -1,15 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libtool
-pkgver=2.4.7
+pkgver=2.4.7.4
 pkgrel=1
 epoch=
 pkgdesc="A generic library support script"
 arch=('x86_64')
 url="https://www.gnu.org/software/libtool"
 license=('KZL')
+depends=(glibc)
 makedepends=(help2man)
-source=(git+https://git.savannah.gnu.org/git/libtool.git#tag=v$pkgver
+source=(git+https://git.savannah.gnu.org/git/libtool.git
         git+https://git.savannah.gnu.org/git/gnulib.git
         gnulib-bootstrap::git+https://github.com/gnulib-modules/bootstrap.git)
 sha256sums=('SKIP'
@@ -19,7 +20,7 @@ sha256sums=('SKIP'
 pkgver() {
   cd $pkgname
 
-  git describe --tags | sed 's/-/+/g;s/^v//'
+  git describe --tags | sed 's/^v//;s/-g.*//;s/-/./'
 }
 
 prepare() {
@@ -28,7 +29,7 @@ prepare() {
   git submodule init
   git config --local submodule.gnulib.url "$srcdir"/gnulib
   git config --local submodule.gl-mod/bootstrap.url "$srcdir"/gnulib-bootstrap
-  git submodule update
+  git -c protocol.file.allow=always submodule update
 
   ./bootstrap
 }
@@ -37,8 +38,7 @@ build() {
   cd $pkgname
 
   ./configure \
-    --prefix=/usr \
-    lt_cv_sys_lib_dlsearch_path_spec="/usr/lib"
+    --prefix=/usr
 
   make -O
 }

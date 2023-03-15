@@ -8,8 +8,8 @@ pkgdesc="Userspace components of the audit framework"
 arch=('x86_64')
 url="https://people.redhat.com/sgrubb/audit"
 license=('KZL')
-depends=(libcap-ng)
-makedepends=(swig python)
+depends=(glibc libcap-ng)
+makedepends=(linux-api-headers python swig)
 backup=(etc/libaudit.conf
         etc/audit/audisp-remote.conf
         etc/audit/auditd.conf
