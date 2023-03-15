@@ -18,9 +18,9 @@ base-development:
     makedepends: [help2man]
   gawk:
     depends: [libsigsegv, mpfr, readline]
+  diffutils:
   autoconf:
     depends: [m4]
-  diffutils:
   help2man:
     - todo
   texinfo:
