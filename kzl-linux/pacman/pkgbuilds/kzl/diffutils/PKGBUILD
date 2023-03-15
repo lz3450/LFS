@@ -1,20 +1,26 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=diffutils
-pkgver=3.8
+pkgver=3.9
 pkgrel=1
-epoch=1
-pkgdesc="Utility programs used for creating patch files"
+epoch=
+pkgdesc="Programs related to finding differences between files"
 arch=('x86_64')
-url="https://www.gnu.org/software/diffutils"
+url="https://www.gnu.org/software/diffutils/"
 license=('KZL')
-source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('a6bdd7d1b31266d11c4f4de6c1b748d4607ab0231af5188fc2533d0ae2438fec'
+source=(git+https://git.savannah.gnu.org/git/diffutils.git#tag=v$pkgver
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
-validpgpkeys=('155D3FC500C834486D1EEA677FD9FCCB000BEEEE')
+
+prepare() {
+  cd $pkgname
+
+  ./bootstrap --gnulib-srcdir="$srcdir/gnulib"
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -23,13 +29,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

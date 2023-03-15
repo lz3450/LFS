@@ -1,2 +1,1 @@
 new_version=$(curl -L --stderr - https://www.gnu.org.ua/software/gdbm/download.html | grep -o -E '1\.[0-9]{2}' | sort | tail -1)
-old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')

@@ -6,16 +6,20 @@ pkgrel=1
 epoch=1
 pkgdesc="A GNU tool for automatically configuring source code"
 arch=('any')
-url="https://www.gnu.org/software/autoconf"
+url="https://www.gnu.org/software/autoconf/"
 license=('KZL')
-depends=(diffutils)
-source=(https://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('f14c83cfebcc9427f2c3cea7258bd90df972d92eb26752da4ddad81c87a0faa4'
-            'SKIP')
-validpgpkeys=('82F854F3CE73174B8B63174091FCC32B6769AA64')
+depends=(m4)
+source=(git+http://git.savannah.gnu.org/r/autoconf.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  autoreconf -vfi
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -24,13 +28,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
 	make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 

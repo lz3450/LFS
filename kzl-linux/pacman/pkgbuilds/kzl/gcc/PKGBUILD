@@ -11,8 +11,8 @@ pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
 url="https://gcc.gnu.org"
 license=('KZL')
-depends=(isl mpc)
-makedepends=(binutils)
+depends=(binutils glibc isl mpc zlib zstd)
+# checkdepends=(dejagnu expect inetutils python)
 options=(!emptydirs)
 source=(git+git://gcc.gnu.org/git/gcc.git#tag=releases/$pkgname-$pkgver)
 sha256sums=('SKIP')

@@ -11,8 +11,8 @@ pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64')
 url="https://www.gnu.org/software/binutils/"
 license=('KZL')
-# depends=(glibc jansson zlib zstd)
-depends=(glibc zlib zstd)
+# depends=(jansson zlib zstd)
+depends=(zlib zstd)
 # checkdepends=(bc debuginfod dejagnu)
 checkdepends=(bc)
 # optdepends=("debuginfod: for debuginfod server/client functionality")
@@ -74,7 +74,7 @@ prepare() {
 
   mkdir -p build
 
-  sed -i -e '/^development=/s/true/false/' bfd/development.sh
+  sed -i '/^development=/s/true/false/' bfd/development.sh
 }
 
 build() {

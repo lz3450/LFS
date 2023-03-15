@@ -1,1 +1,1 @@
-new_version=$(curl -L --stderr - https://www.gnu.org/software/m4/ | grep "latest stable version" | grep -o -E '[0-9]\.[0-9]\.[0-9]{2}')
+new_version=$(curl -L --stderr - https://www.gnu.org/software/m4/ | grep -Po '(?<=latest stable version is )[0-9]\.[0-9]\.[0-9]{2}')

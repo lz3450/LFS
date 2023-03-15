@@ -3,36 +3,32 @@ base:
     depends: [iana-etc]
   glibc:
     depends: [filesystem, linux-api-headers, tzdata]
-  binutils:
-    depends: [glibc, zlib, zstd]
-    checkdepends: [bc]
   gcc:
-    depends: [isl, mpc]
-    makedepends: [binutils]
-  libtool:
-    depends: [glibc]
-    makedepends: [help2man]
+    depends: [binutils, glibc, isl, mpc, zlib, zstd]
   bash:
     depends: [glibc, ncurses, readline]
+    optdepends: [bash-completion]
   perl:
     depends: [db, gdbm, libxcrypt]
-  bzip2:
-    depends: [glibc]
-  gzip:
-    depends: [glibc, less]
+base-development:
+  binutils:
+    depends: [zlib, zstd]
+    checkdepends: [bc]
+  libtool:
+    makedepends: [help2man]
   gawk:
-    depends: [glibc, libsigsegv, mpfr, readline]
-  flex:
-    depends: [glibc, m4]
-    makedepends: [help2man, texinfo]
-  openssl:
-    cpan: [Pod::Man]
-  ca-certificates:
-    depends: [p11-kit]
-    makedepends: [python]
-  pam:
-    depends: []
-    makedepends: []
+    depends: [libsigsegv, mpfr, readline]
+  autoconf:
+    depends: [m4]
+  diffutils:
+  help2man:
+    - todo
+  texinfo:
+    - todo
+  bison:
+    - todo
+  git:
+    - todo
 base-dependency:
   iana-etc:
     makedepends: [gawk]
@@ -40,48 +36,23 @@ base-dependency:
   tzdata:
   zlib:
   zstd:
+    depends: [zlib]
     makedepends: [cmake]
-  mpc:
-    depends: [mpfr]
+    pip: [ninja]
+  bc:
+    - todo
   isl:
     depends: [gmp]
+  mpc:
+    depends: [gmp, mpfr]
   ncurses:
-    depends: [glibc]
-    makedepends: [autoconf, autoconf-archive]
   readline:
-    depends: [glibc, ncurses]
+    depends: [ncurses]
+  bash-completion:
   db:
   gdbm:
-    depends: [glibc, readline]
+    depends: [readline]
   libxcrypt:
-    depends: [glibc]
   libsigsegv:
-    depends: [glibc]
-  pcre2:
-  less:
-    depends: [glibc, ncurses, pcre2]
-  texinfo:
-    depends: [glibc, gzip, ncurses, perl]
   m4:
     depends: [libsigsegv]
-    makedepends: [texinfo]
-  help2man:
-    cpan: [Locale::gettext]
-  libtasn1:
-  libffi:
-  bash-completion:
-    depends: [bash]
-  p11-kit:
-    depends: [libffi, libtasn1, systemd]
-    makedepends: [bash-completion]
-  swig:
-    depends: [pcre2]
-    makedepends: [perl, python]
-  libcap-ng:
-    depends: [glibc]
-    makedepends: [linux-api-headers, python]
-  audit:
-    depends: [glibc, libcap-ng]
-    makedepends: [linux-api-headers, python, swig]
-  cyrus-sasl:
-    depends: [audit, db, e2fsprogs, glibc, keyutils, krb5, libxcrypt, openssl, pam]

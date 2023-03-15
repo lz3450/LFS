@@ -22,37 +22,48 @@ kzl_stage0_pkgs=(
 kzl_stage1_pkgs=(
 )
 
-_toolchain=(
-    ## glibc
-    linux-api-headers tzdata
-    glibc
-    ## toolchain
-    zlib zstd
-    binutils
-    gmp isl mpfr mpc
-    gcc
-)
-
 # base
 kzl_stage2_pkgs=(
-    ### base
-    ## filesystem
+    ################################
+    # base
+    ################################
+
+    ################
+    # filesystem
+    ################
     # iana-etc filesystem
-    ## toolchain
-    # ${_toolchain[@]}
-    # ${_toolchain[@]}
+
+    ################
+    # toolchain
+    ################
+    # linux-api-headers tzdata glibc
+    # zlib zstd binutils
+    # gmp isl mpfr mpc gcc
+    # tzdata glibc
+    # zlib zstd binutils
+    # gmp isl mpfr mpc gcc
     # libtool
-    ## bash
-    # ncurses readline
-    # bash bash-completion
-    ## perl
-    # libxcrypt db gdbm
+
+    ################
+    # bash
+    ################
+    # ncurses readline bash-completion bash
+
+    ################
     # perl
+    ################
+    # libxcrypt db gdbm perl
+
+    ########################
+    # base-development
+    ########################
+    # libsigsegv gawk
+    # diffutils m4 autoconf
+
     ## compression tools
     # bzip2
     # pcre2 less gzip
     ## GNU tools/lib
-    # libsigsegv gawk
     # texinfo
     # m4
     # help2man flex
@@ -64,7 +75,7 @@ kzl_stage2_pkgs=(
 
     ## pam
     # swig libcap-ng audit
-    cyrus-sasl
+    # cyrus-sasl
 
     ## coreutils
     # attr acl

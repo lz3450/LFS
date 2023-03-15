@@ -4,19 +4,24 @@ pkgname=m4
 pkgver=1.4.19
 pkgrel=1
 epoch=
-pkgdesc="The GNU macro processor"
+pkgdesc="An implementation of the traditional Unix macro processor"
 arch=('x86_64')
-url="https://www.gnu.org/software/m4"
+url="https://www.gnu.org/software/m4/"
 license=('KZL')
 depends=(libsigsegv)
-makedepends=(texinfo)
-source=(https://ftp.gnu.org/gnu/m4/$pkgname-$pkgver.tar.xz{,.sig})
-validpgpkeys=('71C2CC22B1C4602927D2F3AAA7A16B4A2527436A')
-sha256sums=('63aede5c6d33b6d9b13511cd0be2cac046f2e70fd0a07aa9573a04a82783af96'
+source=(git+https://git.savannah.gnu.org/git/m4.git#tag=v$pkgver
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
 
+prepare() {
+	cd $pkgname
+
+  ./bootstrap --gnulib-srcdir="$srcdir/gnulib"
+}
+
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -25,13 +30,13 @@ build() {
 }
 
 check() {
-	cd $pkgname-$pkgver
+  cd $pkgname
 
 	make -O check
 }
 
 package() {
-	cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }
