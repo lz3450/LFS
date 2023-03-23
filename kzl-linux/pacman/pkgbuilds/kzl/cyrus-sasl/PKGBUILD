@@ -15,9 +15,7 @@ sha256sums=('SKIP')
 prepare() {
   cd $pkgname
 
-  export NOCONFIGURE=1
-
-  ./autogen.sh
+  NOCONFIGURE=1 ./autogen.sh
 }
 
 build() {

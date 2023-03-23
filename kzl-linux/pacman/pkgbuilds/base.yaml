@@ -1,58 +1,74 @@
 base:
   filesystem:
-    depends: [iana-etc]
+    - iana-etc
   glibc:
-    depends: [filesystem, linux-api-headers, tzdata]
+    - filesystem
+    - linux-api-headers
+    - tzdata
   gcc:
-    depends: [binutils, glibc, isl, mpc, zlib, zstd]
+    - binutils:
+        - zlib
+        - zstd:
+            - zlib
+    - glibc
+    - isl:
+        - gmp
+    - mpc:
+        - gmp
+        - mpfr:
+            - gmp
+    - zlib
+    - zstd
   bash:
-    depends: [glibc, ncurses, readline]
-    optdepends: [bash-completion]
+    - glibc
+    - ncurses
+    - readline:
+        - ncurses
+    - bash-completion
   perl:
-    depends: [db, gdbm, libxcrypt]
-base-development:
-  binutils:
-    depends: [zlib, zstd]
-    checkdepends: [bc]
-  libtool:
-    makedepends: [help2man]
+    - db
+    - gdbm:
+        - readline
+    - glibc
+    - libxcrypt
+  bzip2:
+    - glibc
+  gzip:
+    - glibc
+    - less:
+        - ncurses
+        - pcre2
+  xz:
+    - po4a:
+        - Module::Build: cpan
+        - Pod::Parser: cpan
+  grep:
+    - pcre2
   gawk:
-    depends: [libsigsegv, mpfr, readline]
-  diffutils:
-  autoconf:
-    depends: [m4]
-  help2man:
-    - todo
+    - libsigsegv
+    - mpfr
+    - readline
+  gettext:
+    - acl:
+        - attr
+    - libunistring
+    - libxml2:
+        - icu
+base-development:
+  libtool:
   texinfo:
-    - todo
-  bison:
-    - todo
-  git:
-    - todo
-base-dependency:
-  iana-etc:
-    makedepends: [gawk]
-  linux-api-headers:
-  tzdata:
-  zlib:
-  zstd:
-    depends: [zlib]
-    makedepends: [cmake]
-    pip: [ninja]
-  bc:
-    - todo
-  isl:
-    depends: [gmp]
-  mpc:
-    depends: [gmp, mpfr]
-  ncurses:
-  readline:
-    depends: [ncurses]
-  bash-completion:
-  db:
-  gdbm:
-    depends: [readline]
-  libxcrypt:
-  libsigsegv:
+    - ncurses
+  help2man:
+    - Locale::gettext: cpan
   m4:
-    depends: [libsigsegv]
+    - libsigsegv
+  bison:
+    - m4
+  flex:
+    - m4
+  autoconf:
+    - m4
+  automake:
+  which:
+  diffutils:
+  git: todo

@@ -3,10 +3,12 @@
 pkgname=attr
 pkgver=2.5.1
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Extended attribute support library for ACL support"
 arch=('x86_64')
 url="https://savannah.nongnu.org/projects/attr"
+license=('KZL')
+options=(!libtool)
 source=(git+https://git.savannah.nongnu.org/git/attr.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

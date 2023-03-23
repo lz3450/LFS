@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://icu.unicode.org/home | grep -Po '(?<=ICU )\d\d(\.\d)?(?= is now available.)' | head -1)

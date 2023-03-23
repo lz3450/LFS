@@ -10,7 +10,6 @@ url="http://www.zstd.net/"
 license=('KZL')
 # depends=(zlib xz lz4)
 depends=(zlib)
-makedepends=(cmake)
 source=(git+https://github.com/facebook/zstd.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

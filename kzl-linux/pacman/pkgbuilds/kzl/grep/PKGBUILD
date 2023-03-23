@@ -1,37 +1,42 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=grep
-pkgver=3.7
+pkgver=3.9
 pkgrel=1
-epoch=1
-pkgdesc="A string search utility"
+epoch=
+pkgdesc="Searches one or more input files for lines containing a match to a specified pattern"
 arch=('x86_64')
 url="https://www.gnu.org/software/grep/"
 license=('KZL')
-depends=(pcre)
-source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('5c10da312460aec721984d5d83246d24520ec438dd48d7ab5a05dbc0d6d6823c'
+depends=(pcre2)
+source=(git+https://git.savannah.gnu.org/git/grep.git#tag=v$pkgver
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
-validpgpkeys=('155D3FC500C834486D1EEA677FD9FCCB000BEEEE')
+
+prepare() {
+  cd $pkgname
+
+  ./bootstrap --gnulib-srcdir="$srcdir/gnulib"
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
-    --prefix=/usr \
-    --without-included-regex
+    --prefix=/usr
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

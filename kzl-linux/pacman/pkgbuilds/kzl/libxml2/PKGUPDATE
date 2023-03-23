@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://download.gnome.org/sources/libxml2/cache.json | grep -Po '(?<=LATEST-IS-)\d\.\d+.\d+' | sort -V | tail -1)

@@ -9,9 +9,9 @@ arch=('x86_64')
 url="https://www.gnu.org/software/help2man/"
 license=('KZL')
 source=(https://ftp.gnu.org/gnu/help2man/$pkgname-$pkgver.tar.xz{,.sig})
+validpgpkeys=('87EA44D150D89615E39A3FEEF0DC8E00B28C5995')
 sha256sums=('4d7e4fdef2eca6afe07a2682151cea78781e0a4e8f9622142d9f70c083a2fd4f'
             'SKIP')
-validpgpkeys=('87EA44D150D89615E39A3FEEF0DC8E00B28C5995')
 
 build() {
   cd $pkgname-$pkgver

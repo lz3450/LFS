@@ -3,7 +3,7 @@
 pkgname=autoconf
 pkgver=2.71
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="A GNU tool for automatically configuring source code"
 arch=('any')
 url="https://www.gnu.org/software/autoconf/"

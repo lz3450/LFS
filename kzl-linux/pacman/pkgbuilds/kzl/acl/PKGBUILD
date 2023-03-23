@@ -8,6 +8,7 @@ pkgdesc="Access control list utilities, libraries and headers"
 arch=('x86_64')
 url="https://savannah.nongnu.org/projects/acl/"
 depends=(attr)
+options=(!libtool)
 source=(git+https://git.savannah.nongnu.org/git/acl.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

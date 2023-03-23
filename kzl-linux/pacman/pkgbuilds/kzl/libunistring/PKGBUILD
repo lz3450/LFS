@@ -1,27 +1,27 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libunistring
-pkgver=0.9.10
+pkgver=1.1
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Library for manipulating Unicode strings and C strings"
 arch=('x86_64')
-url="https://www.gnu.org/software/libunistring"
+url="https://www.gnu.org/software/libunistring/"
 license=('KZL')
-source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('eb8fb2c3e4b6e2d336608377050892b54c3c983b646c561836550863003c05d7'
+options=(!libtool)
+source=(git+https://git.savannah.gnu.org/git/libunistring.git#tag=v$pkgver
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
-validpgpkeys=('462225C3B46F34879FC8496CD605848ED7E69871')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  # https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=cca32830b5
-  sed -e '/pragma weak pthread_create/d' -i tests/glthread/thread.h
+  GNULIB_SRCDIR="$srcdir"/gnulib ./autogen.sh
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -30,13 +30,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://po4a.org/ | grep -Po '\d\.\d{2}' | head -1)

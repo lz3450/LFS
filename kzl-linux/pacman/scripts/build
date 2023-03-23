@@ -40,7 +40,7 @@ kzl_stage2_pkgs=(
     # zlib zstd binutils
     # gmp isl mpfr mpc gcc
     # tzdata glibc
-    # zlib zstd binutils
+    # zlib zstd bc binutils
     # gmp isl mpfr mpc gcc
     # libtool
 
@@ -54,20 +54,37 @@ kzl_stage2_pkgs=(
     ################
     # libxcrypt db gdbm perl
 
+    ################
+    # compression utils
+    ################
+    # bzip2
+    # pcre2 less gzip
+    # po4a xz
+
+    ################
+    # utils
+    ################
+    # grep
+    # libsigsegv gawk
+
+    ################
+    # gettext
+    ################
+    # attr acl libunistring icu libxml2 gettext
+
     ########################
     # base-development
     ########################
-    # libsigsegv gawk
-    # diffutils
-    # m4 autoconf
-
-    ## compression tools
-    # bzip2
-    # pcre2 less gzip
-    ## GNU tools/lib
     # texinfo
+    # help2man
     # m4
-    # help2man flex
+    # bison
+    # flex
+    # autoconf automake
+    # which
+    # diffutils
+
+    ## GNU tools/lib
     ## openssl
     # openssl
     ## ca-certificates
@@ -77,14 +94,6 @@ kzl_stage2_pkgs=(
     ## pam
     # swig libcap-ng audit
     # cyrus-sasl
-
-    ## coreutils
-    # attr acl
-    # coreutils
-    ## pacman
-    # pacman
-    ## base
-    # base
 )
 
 kzl_stage3_pkgs=(

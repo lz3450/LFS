@@ -8,8 +8,7 @@ pkgdesc="A tool for generating text-scanning programs"
 arch=('x86_64')
 url="https://github.com/westes/flex"
 license=('KZL')
-depends=(glibc m4)
-makedepends=(help2man texinfo)
+depends=(m4)
 source=(git+https://github.com/westes/flex.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

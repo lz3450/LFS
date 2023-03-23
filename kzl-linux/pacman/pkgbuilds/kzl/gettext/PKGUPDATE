@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://www.gnu.org/software/gettext/ | grep -Po '(?<=The latest release is )\d\.\d{2}\.\d')

@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://tukaani.org/xz/ | grep -Po '\d\.\d\.\d' | sort | tail -1)

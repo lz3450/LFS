@@ -1,31 +1,25 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=po4a
-pkgver=0.66
+pkgver=0.69
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Tools for helping translation of documentation"
 arch=('any')
 url="https://po4a.org/"
 license=('KZL')
-source=(https://github.com/mquinson/$pkgname/archive/v$pkgver.tar.gz)
-sha256sums=('8ae65c69b3a3e3911c449284aa9f07c80b74484fd211f6e2a7e6b57e09f3afd8')
-
-# cpan Module::Build
-# cpan Unicode::LineBreak
-# cpan YAML::Tiny
-# cpan Locale::gettext
-# cpan Pod::Parser
+source=(git+https://github.com/mquinson/po4a.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   perl Build.PL installdirs=vendor create_packlist=0
   LC_ALL=en_US.UTF-8 perl Build
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   perl Build destdir="$pkgdir/" install
   find "$pkgdir/" -name .packlist -o -name perllocal.pod -delete

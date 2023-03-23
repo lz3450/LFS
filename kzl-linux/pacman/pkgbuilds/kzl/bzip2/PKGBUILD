@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=bzip2
-pkgver=1.0.9
+pkgver=1.1.0
 pkgrel=1
 epoch=
 pkgdesc="A high-quality data compression program"
@@ -11,6 +11,12 @@ license=('KZL')
 depends=(glibc)
 source=(git+https://gitlab.com/bzip2/bzip2.git)
 sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  grep -Po '(?<=VERSION )[0-9]\.[0-9]\.[0-9]' CMakeLists.txt
+}
 
 build() {
   cd $pkgname

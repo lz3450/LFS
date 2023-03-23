@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libxml2
-pkgver=2.9.12
+pkgver=2.10.3
 pkgrel=1
-epoch=1
-pkgdesc="XML parsing library, version 2"
+epoch=
+pkgdesc="the XML C parser and toolkit"
 arch=('x86_64')
 url="http://xmlsoft.org"
 license=('KZL')
 depends=(icu)
+options=(!libtool)
 source=(git+https://gitlab.gnome.org/GNOME/libxml2.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -24,12 +25,9 @@ build() {
   ./configure \
     --prefix=/usr \
     --with-history \
-    --with-icu \
-    --with-python=/usr/bin/python3 \
-    --with-threads
+    --with-icu
 
-  PYTHONHASHSEED=0 make
-  find doc -type f -exec chmod 0644 {} +
+  make
 }
 
 package() {

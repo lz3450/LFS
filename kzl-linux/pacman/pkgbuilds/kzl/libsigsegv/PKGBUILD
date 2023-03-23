@@ -8,6 +8,7 @@ arch=('x86_64')
 pkgdesc="Page fault detection library"
 url="https://www.gnu.org/software/libsigsegv/"
 license=('KZL')
+options=(!libtool)
 # source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
 source=(git+https://git.savannah.gnu.org/git/libsigsegv.git#tag=v$pkgver)
 sha256sums=('SKIP')
@@ -39,7 +40,4 @@ package() {
   cd $pkgname
 
   make DESTDIR="$pkgdir/" install
-
-  # remove libtool archives
-  find "$pkgdir" -type f -name "*.la" -delete
 }
