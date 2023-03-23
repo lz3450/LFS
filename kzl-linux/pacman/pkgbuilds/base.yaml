@@ -42,15 +42,19 @@ base:
     - po4a:
         - Module::Build: cpan
         - Pod::Parser: cpan
+  tar:
+    - acl:
+        - attr
   grep:
     - pcre2
   gawk:
     - libsigsegv
     - mpfr
     - readline
+  file:
+    - libseccomp
   gettext:
-    - acl:
-        - attr
+    - acl
     - libunistring
     - libxml2:
         - icu

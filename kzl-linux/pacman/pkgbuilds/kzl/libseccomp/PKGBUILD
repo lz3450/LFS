@@ -1,17 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libseccomp
-pkgver=2.5.3
+pkgver=2.5.4
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Enhanced seccomp library"
 arch=('x86_64')
 url="https://github.com/seccomp/libseccomp"
 license=('KZL')
-checkdepends=(valgrind)
-source=(git+https://github.com/seccomp/$pkgname?signed#tag=v$pkgver)
+options=(!libtool)
+source=(git+https://github.com/seccomp/$pkgname#tag=v$pkgver)
 sha256sums=('SKIP')
-validpgpkeys=('47A68FCE37C7D7024FD65E11356CE62C2B524099')
 
 prepare() {
   cd $pkgname

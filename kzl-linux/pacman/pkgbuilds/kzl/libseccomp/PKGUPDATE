@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://github.com/seccomp/libseccomp/tags | grep -Po '(?<=v)\d\.\d\.\d' | head -1)

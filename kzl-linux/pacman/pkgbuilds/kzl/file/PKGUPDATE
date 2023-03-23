@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - http://ftp.astron.com/pub/file/ | grep -Po '(?<=file-)\d\.\d\d' | tail -1)

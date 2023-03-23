@@ -60,17 +60,19 @@ kzl_stage2_pkgs=(
     # bzip2
     # pcre2 less gzip
     # po4a xz
+    # attr acl tar
 
     ################
     # utils
     ################
     # grep
     # libsigsegv gawk
+    # libseccomp file
 
     ################
     # gettext
     ################
-    # attr acl libunistring icu libxml2 gettext
+    # libunistring icu libxml2 gettext
 
     ########################
     # base-development
