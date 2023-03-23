@@ -66,6 +66,7 @@ kzl_stage2_pkgs=(
     # utils
     ################
     # grep
+    # sed
     # libsigsegv gawk
     # libseccomp file
 

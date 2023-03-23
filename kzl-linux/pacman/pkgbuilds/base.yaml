@@ -47,6 +47,8 @@ base:
         - attr
   grep:
     - pcre2
+  sed:
+    - acl
   gawk:
     - libsigsegv
     - mpfr
