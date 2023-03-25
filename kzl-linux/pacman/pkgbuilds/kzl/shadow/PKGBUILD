@@ -1,117 +1,70 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=shadow
-pkgver=4.11.1
+pkgver=4.13
 pkgrel=1
-epoch=1
-pkgdesc="A package contains programs for handling passwords in a secure way"
+epoch=
+pkgdesc="Programs for converting UNIX password files to the shadow password format, plus programs for managing user and group accounts"
 arch=('x86_64')
 url="https://github.com/shadow-maint/shadow"
-depends=(acl audit libcap-ng libxcrypt pam)
+depends=(acl attr audit libxcrypt pam)
 backup=(etc/default/useradd
-        etc/login.defs
-        etc/pam.d/{chage,chgpasswd,chpasswd,groupadd,groupdel,groupmems,groupmod,newusers,shadow,passwd,useradd,userdel,usermod})
-source=(https://github.com/shadow-maint/shadow/releases/download/v$pkgver/$pkgname-$pkgver.tar.xz{,.asc}
-        chgpasswd
-        chpasswd
-        defaults.pam
-        newusers
-        passwd
+        etc/login.defs)
+source=(git+https://github.com/shadow-maint/shadow.git#tag=$pkgver
         shadow.service
         shadow.timer
         useradd.defaults)
-sha256sums=('41f093ce58b2ae5f389a1c5553e0c18bc73e6fe27f66273891991198a7707c95'
-            'SKIP'
-            'a955ecbd82a801102fad756bb98dca778c1eba14a3367c601d6237b75642c36b'
-            'b3e2c17a8d1dbf2ca571777f22f02f8bf65716a7a55d9a0e54561950fd358b75'
-            'edb8d49134df02aeff67b1d81bfd18e838b2a81cf0ca684c6def36663fb9619c'
-            'b3e2c17a8d1dbf2ca571777f22f02f8bf65716a7a55d9a0e54561950fd358b75'
-            '75428a0f016cccbd9091c012b4d6b778d6ef8d97b607849b5ba1aca0314ed75b'
-            'f679b0e611123f2272ed8c327d243f91ac9d8b0cd86a493575a7b363529edb42'
+sha256sums=('SKIP'
+            '459e1e5632fe390616e352c8f816ca55fb06731f1235ff25314b5c7447cd5c61'
             'c063768e6cd9b52ec4969796b1c988cc2d8d9f6bdec1e293fc9f87b576d84125'
             'bc9fef974321e399fb47c229a82e37d81a8f39424082ef8e4915d0dbee9ff7c2')
-validpgpkeys=('66D0387DB85D320F8408166DB175CFA98F192AF2')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  sed -e '/^MOTD_FILE/c\MOTD_FILE	' \
-      -e '/^ENV_SUPATH/c\ENV_SUPATH	PATH=/usr/local/sbin:/usr/local/bin:/usr/bin' \
-      -e '/^ENV_PATH/c\ENV_PATH	PATH=/usr/local/sbin:/usr/local/bin:/usr/bin' \
-      -e '/^UMASK/c\UMASK		077' \
-      -e '/^PASS_MIN_LEN/c\PASS_MIN_LEN	4' \
-      -e '/^#ENCRYPT_METHOD/c\ENCRYPT_METHOD SHA512' \
-      -i etc/login.defs
+  autoreconf -vfi
 }
 
 build() {
-  cd $pkgname-$pkgver
-  
+  cd $pkgname
+
   ./configure \
     --prefix=/usr \
     --bindir=/usr/bin \
     --sbindir=/usr/bin \
     --sysconfdir=/etc \
     --libdir=/usr/lib \
-    --disable-account-tools-setuid \
-    --with-audit \
-    --with-libpam \
-    --without-selinux \
-    --with-acl \
-    --with-attr \
-    --with-group-name-max-length=32
+    --enable-man=no \
+    --enable-account-tools-setuid=no \
+    --with-audit=yes \
+    --with-libpam=yes \
+    --with-selinux=no \
+    --with-acl=yes \
+    --with-attr=yes \
+    --with-group-name-max-length=32 \
+    --with-su=no \
+    --with-fcaps=yes \
 
   make
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
-  make DESTDIR="$pkgdir" -C man install
 
   # login.defs
-  install -Dm644 etc/login.defs "$pkgdir"/etc/
+  sed -e '/^MOTD_FILE/c\MOTD_FILE' \
+      -e '/^#ISSUE_FILE/s/#//' \
+      -e '/^ENV_SUPATH/c\ENV_SUPATH PATH=/usr/local/sbin:/usr/local/bin:/usr/bin' \
+      -e '/^ENV_PATH/c\ENV_PATH PATH=/usr/local/sbin:/usr/local/bin:/usr/bin' \
+      -e '/^UMASK/c\UMASK 077' \
+      -e '/^PASS_MIN_LEN/c\PASS_MIN_LEN    4' \
+      -e '/^#ENCRYPT_METHOD/c\ENCRYPT_METHOD SHA512' \
+      -i "$pkgdir"/etc/login.defs
 
-  # useradd defaults
+  # useradd defaults (not provided by upstream)
   install -Dm600 "$srcdir"/useradd.defaults "$pkgdir"/etc/default/useradd
-
-  # PAM config - custom
-  rm "$pkgdir"/etc/pam.d/*
-  install -Dm644 "$srcdir"/{chgpasswd,chpasswd,newusers,passwd} "$pkgdir"/etc/pam.d/
-  
-  # PAM config - from source
-  install -Dm644 etc/pam.d/groupmems "$pkgdir"/etc/pam.d/groupmems
-
-  # set the 'defaults.pam' PAM file for other similar utilities
-  for file in chage groupadd groupdel groupmod shadow useradd usermod userdel; do
-    install -Dm644 "$srcdir"/defaults.pam "$pkgdir"/etc/pam.d/$file
-  done
-
-  # remove broken tools
-  rm "$pkgdir"/usr/sbin/logoutd
-
-  # remove utilities provided by `util-linux'
-  rm "$pkgdir"/usr/bin/{chfn,chsh,login,nologin,su,sg}
-  rm "$pkgdir"/usr/sbin/{vipw,vigr}
-  find "$pkgdir"/usr/share/man \
-    '(' -name 'chsh.1'    -o \
-        -name 'chfn.1'    -o \
-        -name 'su.1'      -o \
-        -name 'logoutd.8' -o \
-        -name 'login.1'   -o \
-        -name 'nologin.8' -o \
-        -name 'vipw.8'    -o \
-        -name 'vigr.8'    -o \
-        -name 'newgrp.1' ')' \
-    -delete
-  rmdir "$pkgdir"/usr/share/man/{fi,id,zh_TW}/man1
-  rmdir "$pkgdir"/usr/share/man/{fi,ko/man8}
-
-  mv "$pkgdir"/usr/bin/{newgrp,sg}
-
-  mv "$pkgdir"/usr/sbin/* "$pkgdir"/usr/bin
-  rmdir "$pkgdir"/usr/sbin
 
   # systemd units
   install -Dm644 "$srcdir"/shadow.timer "$pkgdir"/usr/lib/systemd/system/shadow.timer

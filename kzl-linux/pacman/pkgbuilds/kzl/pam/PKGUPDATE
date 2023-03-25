@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://github.com/linux-pam/linux-pam/tags | grep -o -E 'v[0-9]\.[0-9]\.[0-9]' | sort | tail -1 | grep -o -E '[0-9]\.[0-9]\.[0-9]')

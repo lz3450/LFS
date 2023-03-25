@@ -79,9 +79,9 @@ kzl_stage2_pkgs=(
     ################
     # shadow
     ################
-    # e2fsprogs keyutils krb5
-    # swig libcap-ng
-    audit
+    # e2fsprogs keyutils krb5 swig libcap-ng audit
+    # libtirpc pam-config pam
+    # shadow
 
     ########################
     # base-development

@@ -1,4 +1,6 @@
 #%PAM-1.0
+
+auth        optional    pam_faildelay.so    delay=3000000
 auth		include		system-login
 account		include		system-login
 password	include		system-login

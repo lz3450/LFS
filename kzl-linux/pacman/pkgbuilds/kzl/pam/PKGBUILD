@@ -3,40 +3,49 @@
 pkgname=pam
 pkgver=1.5.2
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="PAM (Pluggable Authentication Modules) library"
 arch=('x86_64')
-url="http://linux-pam.org"
+url="https://github.com/linux-pam/linux-pam"
 license=('KZL')
-depends=(libtirpc libxcrypt pam-config)
-source=(https://github.com/linux-pam/linux-pam/releases/download/v$pkgver/Linux-PAM-$pkgver.tar.xz{,.asc})
-sha256sums=('e4ec7131a91da44512574268f493c6d8ca105c87091691b8e9b56ca685d4f94d'
-            'SKIP')
-validpgpkeys=('296D6F29A020808E8717A8842DB5BD89A340AEB7')
+depends=(audit libtirpc libxcrypt pam-config)
+source=(git+https://github.com/linux-pam/linux-pam.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd linux-pam
+
+  ./autogen.sh
+}
 
 build() {
-  cd Linux-PAM-$pkgver
+  cd linux-pam
 
   ./configure \
     --prefix=/usr \
     --sbindir=/usr/bin \
     --libdir=/usr/lib \
-    --disable-db
+    --disable-doc \
+    --disable-prelude \
+    --enable-audit \
+    --enable-db=no \
+    --disable-nis \
+    --disable-selinux \
+    --disable-openssl
 
   make
 }
 
 check() {
-  cd Linux-PAM-$pkgver
+  cd linux-pam
 
   make check
 }
 
 package() {
-  cd Linux-PAM-$pkgver
+  cd linux-pam
 
-  make DESTDIR="$pkgdir/" SCONFIGDIR="/etc/security/" install
+  make DESTDIR="$pkgdir/" install
 
-  chmod +s "$pkgdir"/usr/bin/unix_chkpwd
-  rm -rf "$pkgdir"/usr/share/doc/Linux-PAM/sag-pam_userdb.html
+  chmod 02755 "$pkgdir"/usr/bin/unix_chkpwd
 }

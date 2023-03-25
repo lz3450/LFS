@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://github.com/shadow-maint/shadow/tags | grep -Po '(?<=shadow/releases/tag/)\d\.\d{2}(\.\d)?' | head -1)

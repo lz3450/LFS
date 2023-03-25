@@ -1,38 +1,31 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pam-config
-pkgver=2022.02.23
+pkgver=2023.03.25
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="PAM configuration"
 arch=('x86_64')
 url="https://github.com/kongzelun/LFS"
 license=('KZL')
-provides=(pambase)
-conflicts=(pambase)
-replaces=(pambase)
-backup=(
-  etc/pam.d/system-auth
-  etc/pam.d/system-login
-  etc/pam.d/system-local-login
-  etc/pam.d/system-remote-login
-  etc/pam.d/system-services
-  etc/pam.d/other
-)
-source=(
-  system-auth
-  system-login
-  system-local-login
-  system-remote-login
-  system-services
-  other
-)
-sha256sums=('4c7eb6a08e4c27af51737c559027d1c6f36560caca9fbe369a8b316a5fcfdd53'
-            '6352c15da13b338870583525d7453a6ea67ab3b7a4a1382a695ca74bef0e6952'
-            'b9e48d76ab2f35453c99cdd172c11e86da089b4d2f973e1767e332a5ecdd204b'
-            'b9e48d76ab2f35453c99cdd172c11e86da089b4d2f973e1767e332a5ecdd204b'
-            '75651de1f0d623282109d4b53d979276245d3a9a0e95b3803d53a6d5e2621854'
-            'e4bd297e350007879041ac4be1d6c326fc3f5e38a6e4b85cfe45302d1a101549')
+backup=(etc/pam.d/system-auth
+        etc/pam.d/system-login
+        etc/pam.d/system-local-login
+        etc/pam.d/system-remote-login
+        etc/pam.d/system-services
+        etc/pam.d/other)
+source=(system-auth
+        system-login
+        system-local-login
+        system-remote-login
+        system-services
+        other)
+sha256sums=('560d444419b8f6a93bb20642e26fe22adaf8968c56191e3e664914f9a7412190'
+            '4c77316fe34cbb61990846d58ba0874cca34f1e206510c73ed12bfcb4fe097a9'
+            '5aa47286a79e392138e9b4dc373b4c254e7329f7ef5fdb4f945dd0dc3ee2d41c'
+            '576f789cb80346c92334ac946a8c8e994b476ec55841e45ea7c55e079ea24f89'
+            'bc25506c61d11f2b3111d11c4bb6bbe9878b3649a8dde84965bdc6c5098e9ba9'
+            '0cc049cf3fe79c031091d8342a8aef6e8c1e9aa4df9e362614d68d4231d3ac52')
 
 pkgver() {
   date +%Y.%m.%d

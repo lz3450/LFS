@@ -64,12 +64,20 @@ base:
         - icu
   shadow:
     - acl
+    - attr
     - audit:
         - krb5:
             - e2fsprogs
             - keyutils
         - libcap-ng:
             - swig
+    - libxcrypt
+    - pam:
+        - audit
+        - libxcrypt
+        - libtirpc:
+            - krb5
+        - pam-config
   python: todo
 base-development:
   linux-api-headers:
