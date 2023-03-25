@@ -1,51 +1,55 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=krb5
-pkgver=1.19.2
+pkgver=1.20.1
 pkgrel=1
-epoch=1
-pkgdesc="The Kerberos network authentication system"
+epoch=
+pkgdesc="The Kerberos network authentication protocol"
 arch=('x86_64')
 url="https://web.mit.edu/kerberos/"
 license=('KZL')
-depends=(keyutils libldap)
+# depends=(e2fsprogs keyutils libedit libldap libverto lmdb)
+depends=(e2fsprogs keyutils)
 backup=(etc/krb5.conf
         var/lib/krb5kdc/kdc.conf)
-source=(https://web.mit.edu/kerberos/dist/krb5/${pkgver:0:4}/$pkgname-$pkgver.tar.gz{,.asc})
-sha256sums=('10453fee4e3a8f8ce6129059e5c050b8a65dab1c257df68b99b3112eaa0cdf6a'
-            'SKIP')
-validpgpkeys=('C4493CB739F4A89F9852CBC20CBA08575F8372DF')
+source=(git+https://github.com/krb5/krb5.git#tag=$pkgname-$pkgver-final)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname/src
+
+  autoreconf -vfi
+}
 
 build() {
-  cd $pkgname-$pkgver/src
+  cd $pkgname/src
 
-  CFLAGS+=" -fPIC -fno-strict-aliasing -fstack-protector-all"
-  CPPFLAGS+=" -I/usr/include/et"
+  # https://web.mit.edu/kerberos/krb5-latest/doc/build/options2configure.html
 
   ./configure \
     --prefix=/usr \
     --sbindir=/usr/bin \
     --sysconfdir=/etc \
     --localstatedir=/var/lib \
-    --enable-shared \
     --enable-dns-for-realm \
     --disable-rpath \
     --with-system-et \
     --with-system-ss \
-    --with-ldap \
-    --without-tcl \
+    --without-ldap \
+    --with-keyutils \
+    --without-lmdb \
+    --without-libedit \
+    --with-readline \
     --without-system-verto
 
   make
 }
 
 package() {
-  cd $pkgname-$pkgver/src
+  cd $pkgname/src
 
   make DESTDIR="$pkgdir/" EXAMPLEDIR=/usr/share/doc/$pkgname/examples install
 
   install -Dpm644 config-files/krb5.conf -t "$pkgdir"/etc/
   install -Dpm644 config-files/kdc.conf -t "$pkgdir"/var/lib/krb5kdc/
-
-  # TODO: systemd
 }

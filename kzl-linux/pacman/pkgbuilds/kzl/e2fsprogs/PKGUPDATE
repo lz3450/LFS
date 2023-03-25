@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://e2fsprogs.sourceforge.net/ | grep -Po '(?<=Release )\d\.\d\d\.\d')

@@ -8,8 +8,7 @@ pkgdesc="Library making programming with POSIX capabilities easier than traditio
 arch=('x86_64')
 url="https://people.redhat.com/sgrubb/libcap-ng/"
 license=('KZL')
-depends=(glibc)
-makedepends=(linux-api-headers python)
+makedepends=(swig)
 source=(git+https://github.com/stevegrubb/libcap-ng.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -25,7 +24,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --with-python=no \
-    --with-python3
+    --with-python3=no
 
   make
 }

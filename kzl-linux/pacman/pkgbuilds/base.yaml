@@ -55,12 +55,24 @@ base:
     - readline
   file:
     - libseccomp
+  findutils:
+    - glibc
   gettext:
     - acl
     - libunistring
     - libxml2:
         - icu
+  shadow:
+    - acl
+    - audit:
+        - krb5:
+            - e2fsprogs
+            - keyutils
+        - libcap-ng:
+            - swig
+  python: todo
 base-development:
+  linux-api-headers:
   libtool:
   texinfo:
     - ncurses

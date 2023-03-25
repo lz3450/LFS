@@ -8,8 +8,8 @@ pkgdesc="Userspace components of the audit framework"
 arch=('x86_64')
 url="https://people.redhat.com/sgrubb/audit"
 license=('KZL')
-depends=(glibc libcap-ng)
-makedepends=(linux-api-headers python swig)
+depends=(krb5 libcap-ng)
+makedepends=(swig)
 backup=(etc/libaudit.conf
         etc/audit/audisp-remote.conf
         etc/audit/auditd.conf
@@ -34,11 +34,14 @@ build() {
     --sbindir=/usr/bin \
     --sysconfdir=/etc \
     --disable-zos-remote \
-    --enable-gssapi-krb5=no \
+    --enable-gssapi-krb5=yes \
     --enable-systemd=yes \
     --with-python=no \
-    --with-python3=yes \
+    --with-python3=no \
     --with-golang=no \
+    --with-arm=no \
+    --with-aarch64=no \
+    --with-apparmor=no \
     --with-io_uring \
     --with-libcap-ng=yes
 

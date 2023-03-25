@@ -7,8 +7,8 @@ epoch=
 pkgdesc="A software development tool that connects programs written in C and C++ with a variety of high-level programming languages"
 arch=('x86_64')
 url="http://www.swig.org/"
+# depends=(boost pcre2)
 depends=(pcre2)
-makedepends=(perl python)
 source=(git+https://github.com/swig/swig.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

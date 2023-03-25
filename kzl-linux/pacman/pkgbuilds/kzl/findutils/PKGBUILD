@@ -1,44 +1,52 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=findutils
-pkgver=4.9.0
+pkgver=4.9.0.22
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="GNU utilities to locate files"
 arch=('x86_64')
 url="https://www.gnu.org/software/findutils/"
 license=('KZL')
-source=(https://ftp.gnu.org/pub/gnu/findutils/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('a2bfb8c09d436770edc59f50fa483e785b161a3b7b9d547573cb08065fd462fe'
+depends=(glibc)
+source=(git+https://git.savannah.gnu.org/git/findutils.git
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
-validpgpkeys=('A5189DB69C1164D33002936646502EF796917195')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed "s/^v//;s/-g.*//;s/-/./"
+}
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  # Don't build or install locate because we use mlocate, a secure version of locate.
-  sed -e '/^SUBDIRS/s/locate//' -e 's/frcode locate updatedb//' -i Makefile.in
+  GNULIB_SRCDIR="$srcdir"/gnulib ./bootstrap
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
 
-  # don't build locate, but the docs want a file in there.
-  make -C locate dblocation.texi
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
+  rm "$pkgdir"/usr/bin/{locate,updatedb}
+  rm "$pkgdir"/usr/libexec
+  rm "$pkgdir"/usr/usr/share/man/man1/{locate,updatedb}.1.gz
+  rm -r "$pkgdir"/usr/usr/share/man/man5
 }

@@ -1,40 +1,34 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=e2fsprogs
-pkgver=1.46.5
+pkgver=1.47.0
 pkgrel=1
-epoch=1
-pkgdesc="Ext2/3/4 filesystem utilities"
+epoch=
+pkgdesc="Ext2/3/4 Filesystem Utilities"
 arch=('x86_64')
 url="http://e2fsprogs.sourceforge.net"
 license=('KZL')
-backup=(etc/mke2fs.conf)
-options=(staticlibs)
-source=(https://www.kernel.org/pub/linux/kernel/people/tytso/$pkgname/v$pkgver/$pkgname-$pkgver.tar.{xz,sign})
-sha256sums=('2f16c9176704cf645dc69d5b15ff704ae722d665df38b2ed3cfc249757d8d81e'
-            'SKIP')
-validpgpkeys=('3AB057B7E78D945C8C5591FBD36F769BC11804F0')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  # remove unnecessary init.d directory
-  sed -i '/init\.d/s|^|#|' misc/Makefile.in
-}
+backup=(etc/e2scrub.conf
+        etc/mke2fs.conf)
+source=(git+https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
-    --libdir=/usr/lib \
     --sbindir=/usr/bin \
-    --with-root-prefix="" \
+    --sysconfdir=/etc \
+    --libdir=/usr/lib \
+    --infodir=/usr/share/info \
+    --enable-symlink-install \
     --enable-elf-shlibs \
+    --disable-libuuid \
+    --disable-libblkid \
     --disable-fsck \
     --disable-uuidd \
-    --disable-libuuid \
-    --disable-libblkid
+    --with-root-prefix=""
 
   make
 
@@ -43,23 +37,8 @@ build() {
   make -C po update-gmo
 }
 
-check() {
-  cd $pkgname-$pkgver
-
-  make check
-}
-
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install install-libs
-
-  sed -e 's/^AWK=.*/AWK=awk/' -i "$pkgdir"/usr/bin/compile_et
-
-  # remove references to build directory
-  sed -i -e 's#^SS_DIR=.*#SS_DIR="/usr/share/ss"#' "$pkgdir"/usr/bin/mk_cmds
-  sed -i -e 's#^ET_DIR=.*#ET_DIR="/usr/share/et"#' "$pkgdir"/usr/bin/compile_et
-
-  # remove static libraries with a shared counterpart
-  rm "$pkgdir"/usr/lib/lib{com_err,e2p,ext2fs,ss}.a
 }

@@ -69,11 +69,19 @@ kzl_stage2_pkgs=(
     # sed
     # libsigsegv gawk
     # libseccomp file
+    # findutils
 
     ################
     # gettext
     ################
     # libunistring icu libxml2 gettext
+
+    ################
+    # shadow
+    ################
+    # e2fsprogs keyutils krb5
+    # swig libcap-ng
+    audit
 
     ########################
     # base-development
