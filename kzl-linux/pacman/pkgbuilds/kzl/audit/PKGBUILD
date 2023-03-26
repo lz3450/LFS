@@ -2,7 +2,7 @@
 
 pkgname=audit
 pkgver=3.1
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Userspace components of the audit framework"
 arch=('x86_64')
@@ -31,7 +31,6 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
     --sysconfdir=/etc \
     --disable-zos-remote \
     --enable-gssapi-krb5=yes \
@@ -58,11 +57,6 @@ package() {
   rm -rf \
     "$pkgdir"/etc/rc.d \
     "$pkgdir"/etc/sysconfig
-
-  sed -ri 's|/sbin|/usr/bin|' \
-    "$pkgdir"/etc/audit/*.conf \
-    "$pkgdir"/etc/audit/plugins.d/*.conf \
-    "$pkgdir"/usr/lib/systemd/system/auditd.service
 
   chmod 644 "$pkgdir"/usr/lib/systemd/system/auditd.service
 }

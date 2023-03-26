@@ -1,39 +1,48 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=coreutils
-pkgver=9.0
-pkgrel=1
-epoch=1
-pkgdesc="The basic file, shell and text manipulation utilities of the GNU operating system"
+pkgver=9.2
+pkgrel=4
+epoch=
+pkgdesc="The GNU core utilities"
 arch=('x86_64')
 url="https://www.gnu.org/software/coreutils/"
 license=('KZL')
-depends=(acl attr gmp libcap openssl)
-source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('ce30acdf4a41bc5bb30dd955e9eaa75fa216b4e3deb08889ed32433c7b3b97ce'
+# depends=(acl attr gmp libcap openssl)
+depends=(acl attr gmp libcap)
+source=(git+https://github.com/coreutils/coreutils.git#tag=v$pkgver
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
-validpgpkeys=('6C37DC12121A5006BC1DB804DF6FD971306037D9')
+
+prepare() {
+  cd $pkgname
+
+  ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure  \
-      --prefix=/usr \
-      --libexecdir=/usr/lib \
-      --enable-no-install-program=groups,hostname,kill,uptime \
-      --with-openssl
+    --prefix=/usr \
+    --enable-install-program=arch,hostname \
+    --enable-no-install-program=groups,kill,uptime \
+    --with-linux-crypto \
+    --with-openssl=no \
+    --without-selinux
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

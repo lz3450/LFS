@@ -2,7 +2,7 @@
 
 pkgname=e2fsprogs
 pkgver=1.47.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Ext2/3/4 Filesystem Utilities"
 arch=('x86_64')
@@ -18,7 +18,7 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
+    --sbindir=/usr/sbin \
     --sysconfdir=/etc \
     --libdir=/usr/lib \
     --infodir=/usr/share/info \

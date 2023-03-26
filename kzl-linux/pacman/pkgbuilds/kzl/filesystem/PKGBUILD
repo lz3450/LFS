@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=filesystem
-pkgver=20230314
+pkgver=20230326
 pkgrel=1
 epoch=
 pkgdesc="Root file system"
@@ -83,18 +83,16 @@ package() {
   done
 
   # /usr
-  install -m 755 -d usr/{bin,include,lib,libexec,share,src}
+  install -m 755 -d usr/{bin,sbin,include,lib,libexec,share,src}
   install -m 755 -d usr/share/man/man{1..8}
   ln -s usr/lib lib
   ln -s usr/lib lib64
   ln -s lib usr/lib64
   ln -s usr/bin bin
-  ln -s usr/bin sbin
-  ln -s bin usr/sbin
+  ln -s usr/sbin sbin
 
   # /usr/local
-  install -m 755 -d usr/local/{bin,etc,include,lib,libexec,share,src}
-  ln -s bin usr/local/sbin
+  install -m 755 -d usr/local/{bin,sbin,etc,include,lib,libexec,share,src}
 
   # var
   install -m 755 -d var/{cache,crash,lib,local,log,mail,opt,spool}

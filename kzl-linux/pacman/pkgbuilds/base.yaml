@@ -78,6 +78,12 @@ base:
         - libtirpc:
             - krb5
         - pam-config
+  coreutils:
+    - acl
+    - attr
+    - gmp
+    - libcap:
+        - pam
   python: todo
 base-development:
   linux-api-headers:

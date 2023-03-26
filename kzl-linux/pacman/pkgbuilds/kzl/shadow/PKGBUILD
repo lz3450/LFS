@@ -2,17 +2,17 @@
 
 pkgname=shadow
 pkgver=4.13
-pkgrel=1
+pkgrel=4
 epoch=
 pkgdesc="Programs for converting UNIX password files to the shadow password format, plus programs for managing user and group accounts"
 arch=('x86_64')
 url="https://github.com/shadow-maint/shadow"
 depends=(acl attr audit libxcrypt pam)
 backup=(etc/default/useradd
-        etc/login.defs)
+        etc/login.defs
+        etc/pam.d/{chage,chfn,chgpasswd,chpasswd,chsh,groupadd,groupdel,groupmems,groupmod,login,newusers,passwd,useradd,userdel,usermod})
 source=(git+https://github.com/shadow-maint/shadow.git#tag=$pkgver
-        shadow.service
-        shadow.timer
+        shadow.{service,timer}
         useradd.defaults)
 sha256sums=('SKIP'
             '459e1e5632fe390616e352c8f816ca55fb06731f1235ff25314b5c7447cd5c61'
@@ -34,8 +34,9 @@ build() {
     --sbindir=/usr/bin \
     --sysconfdir=/etc \
     --libdir=/usr/lib \
+    --enable-shadowgrp=yes \
     --enable-man=no \
-    --enable-account-tools-setuid=no \
+    --enable-account-tools-setuid=yes \
     --with-audit=yes \
     --with-libpam=yes \
     --with-selinux=no \
@@ -43,7 +44,7 @@ build() {
     --with-attr=yes \
     --with-group-name-max-length=32 \
     --with-su=no \
-    --with-fcaps=yes \
+    --with-fcaps=yes
 
   make
 }

@@ -1,43 +1,34 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libcap
-pkgver=2.63
-pkgrel=1
-epoch=1
+pkgver=2.68
+pkgrel=2
+epoch=
 pkgdesc="POSIX 1003.1e capabilities"
 arch=('x86_64')
 url="https://sites.google.com/site/fullycapable/"
 license=('KZL')
-provides=(libcap.so)
-source=(https://kernel.org/pub/linux/libs/security/linux-privs/libcap2/$pkgname-$pkgver.tar.{xz,sign})
-sha256sums=('0c637b8f44fc7d8627787e9cf57f15ac06c1ddccb53e41feec5496be3466f77f'
-            'SKIP')
-validpgpkeys=('38A644698C69787344E954CE29EE848AE2CCF3F4')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  sed -e '/SBINDIR=$(exec_prefix)/s/sbin/bin/' \
-      -e '/CFLAGS += -Dlinux/s/-Dlinux/$(CPPFLAGS) -Dlinux/' \
-      -i Make.Rules
-}
+depends=(pam)
+source=(git+https://git.kernel.org/pub/scm/libs/libcap/libcap.git#tag=v1.$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make prefix="/usr" lib="lib" SBINDIR="/usr/bin" KERNEL_HEADERS="/usr/include"
+  # Make.Rules
+  make lib=lib prefix=/usr KERNEL_HEADERS=/usr/include
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make test
+  make -k test
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" prefix="/usr" lib="lib" SBINDIR="/usr/bin" KERNEL_HEADERS="/usr/include" RAISE_SETFCAP="no" install
+  make DESTDIR="$pkgdir/" lib=lib prefix=/usr KERNEL_HEADERS=/usr/include RAISE_SETFCAP=no install
 
   install -Dm644 pam_cap/capability.conf -t "$pkgdir"/usr/share/doc/$pkgname/examples/
 }

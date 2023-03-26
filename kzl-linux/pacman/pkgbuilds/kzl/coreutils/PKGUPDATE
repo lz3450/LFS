@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://ftp.gnu.org/gnu/coreutils/ | grep -Po '(?<=coreutils-)\d\.\d+' | tail -1)
