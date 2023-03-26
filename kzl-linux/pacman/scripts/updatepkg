@@ -54,6 +54,8 @@ if [ -f PKGUPDATE ]; then
     unset new_version old_version remove_old_sources
     source PKGUPDATE
     old_version=${old_version:-$(cat PKGBUILD | grep -Po '(?<=pkgver=).+$')}
+    old_pkgrel=$(cat PKGBUILD | grep -Po '(?<=pkgrel=)\d+$')
+    new_pkgrel=$((old_pkgrel + 1))
 
     result=$(vercmp $new_version $old_version)
 
@@ -64,6 +66,7 @@ if [ -f PKGUPDATE ]; then
             pre_update
         fi
         sed -i "/^pkgver=/s/$old_version/$new_version/" PKGBUILD
+        sed -i "/^pkgrel=/s/$old_pkgrel/1/" PKGBUILD
         info "running updpkgsums..."
         updpkgsums || result=2
         if have_function 'post_update'; then
@@ -71,6 +74,7 @@ if [ -f PKGUPDATE ]; then
             post_update
         fi
     else
+        sed -i "/^pkgrel=/s/$old_pkgrel/$new_pkgrel/" PKGBUILD
         info "PKGBUILD is already updated."
     fi
 else
