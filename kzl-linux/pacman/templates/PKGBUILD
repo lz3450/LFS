@@ -67,10 +67,9 @@ build() {
 
   meson setup \
     --prefix /usr \
-    --libexecdir lib \
     --sbindir bin \
     --auto-features enabled \
-    --buildtype plain \
+    --optimization=2 \
     --wrap-mode nodownload \
     -D b_lto=true \
     -D b_pie=true \
