@@ -67,12 +67,8 @@ build() {
 
   meson setup \
     --prefix /usr \
-    --sbindir bin \
     --auto-features enabled \
     --optimization=2 \
-    --wrap-mode nodownload \
-    -D b_lto=true \
-    -D b_pie=true \
     build
 
   meson compile -C build
@@ -98,10 +94,11 @@ build() {
   cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_C_FLAGS="$CPPFLAGS $CFLAGS" \
-    -DCMAKE_CXX_FLAGS="$CPPFLAGS $CXXFLAGS" \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
     -S . \
-    -B build
+    -B build \
+    -LAH
 
   cmake --build build
 }
