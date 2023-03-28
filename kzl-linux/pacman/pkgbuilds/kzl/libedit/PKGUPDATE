@@ -1,0 +1,1 @@
+new_version=$(curl -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' -L --stderr - https://thrysoee.dk/editline/ | grep -Po '(?<=libedit-)\d{8}-\d\.\d' | head -1 | sed 's/-/./')

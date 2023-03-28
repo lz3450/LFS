@@ -1,28 +1,31 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgname=libssh2
-pkgver=1.10.0
+pkgname=nghttp2
+pkgver=1.52.0
 pkgrel=2
 epoch=
-pkgdesc="A library implementing the SSH2 protocol as defined by Internet Drafts"
+pkgdesc="An implementation of HTTP/2 and its header compression algorithm HPACK in C"
 arch=('x86_64')
-url="https://www.libssh2.org"
+url="https://nghttp2.org"
 license=('KZL')
-depends=(openssl)
-source=(git+https://github.com/libssh2/libssh2.git#tag=$pkgname-$pkgver)
+source=(git+https://github.com/nghttp2/nghttp2.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
 prepare() {
   cd $pkgname
 
+  git submodule update --init
   autoreconf -vfi
+  automake
+  autoconf
 }
 
 build() {
   cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --enable-lib-only
 
   make
 }

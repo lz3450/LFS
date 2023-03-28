@@ -1,48 +1,46 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libpsl
-pkgver=0.21.1
-pkgrel=1
+pkgver=0.21.2
+pkgrel=5
 epoch=1
-pkgdesc="Public Suffix List library"
+pkgdesc="C library to handle the Public Suffix List"
 arch=('x86_64')
 url="https://github.com/rockdaboot/libpsl"
 depends=(libidn2)
-makedepends=(libxslt publicsuffix-list)
-source=($url/releases/download/$pkgver/$pkgname-$pkgver.tar.gz)
-sha256sums=('ac6ce1e1fbd4d0254c4ddb9d37f1fa99dec83619c1253328155206b896210d4c')
+makedepends=(libxslt)
+source=(git+$url.git#tag=$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  rm -rf list
+  git submodule update --init
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  ./configure \
-    --prefix=/usr \
-    --disable-static \
-    --disable-gtk-doc \
-    --disable-man \
-    --enable-runtime=libidn2 \
-    --enable-builtin=libidn2 \
-    --disable-dependency-tracking \
-    --with-psl-file=/usr/share/publicsuffix/public_suffix_list.dat \
-    --with-psl-testfile=/usr/share/publicsuffix/test_psl.txt
+  meson setup \
+    --prefix /usr \
+    --auto-features enabled \
+    --optimization=2 \
+    -D builtin=true \
+    -D docs=false \
+    -D runtime=libidn2 \
+    build
 
-  make
+  meson compile -C build
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make check || warning "Check failed."
+  meson test -C build
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  meson install -C build --destdir="$pkgdir/"
 }

@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ca-certificates
-pkgver=2023.03.07
+pkgver=2023.03.26
 pkgrel=1
 epoch=
 pkgdesc="CA certificates"

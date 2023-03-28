@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/libidn/ | grep -Po '(?<=libidn2-)\d\.\d\.\d' | tail -1)

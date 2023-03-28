@@ -3,42 +3,40 @@
 pkgname=libffi
 pkgver=3.4.4
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="A Portable Foreign Function Interface Library"
 arch=('x86_64')
 url="https://sourceware.org/libffi/"
 license=('KZL')
-source=(https://github.com/libffi/libffi/releases/download/v$pkgver/libffi-$pkgver.tar.gz)
-sha256sums=('d66c56ad259a82cf2a9dfc408b32bf5da52371500b84745f7fb8b645712df676')
+source=(git+https://github.com/libffi/libffi.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  autoreconf -vfi
+  ./autogen.sh
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
-    --disable-static \
-    --enable-pax_emutramp \
-    --disable-exec-static-tramp \
-    --disable-multi-os-directory \
-    --without-gcc-arch
+    --enable-static=no \
+    --disable-docs \
+    --disable-exec-static-tramp
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

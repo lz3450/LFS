@@ -8,29 +8,44 @@ pkgdesc="The ASN.1 library used by GnuTLS, p11-kit"
 arch=('x86_64')
 url="https://www.gnu.org/software/libtasn1/"
 license=('KZL')
-depends=(glibc)
-source=(https://ftp.gnu.org/gnu/libtasn1/$pkgname-$pkgver.tar.gz{,.sig})
-validpgpkeys=('B1D2BD1375BECB784CF4F8C4D73CF638C53C06BE')
-sha256sums=('1613f0ac1cf484d6ec0ce3b8c06d56263cc7242f1c23b30d82d23de345a63f7a'
+# makedepends=(gtk-doc)
+source=(git+https://gitlab.com/gnutls/libtasn1.git#tag=v$pkgver
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
 
+prepare() {
+  cd $pkgname
+
+  sed -e '/^GTK_DOC_CHECK/d' \
+      -e '/doc\/Makefile/d' \
+      -e '/doc\/reference\/Makefile/d' \
+      -i configure.ac
+  sed -e '/--enable-gtk-doc/d' \
+      -i Makefile.am
+
+  ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
+}
+
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --disable-doc \
+    --enable-static=no
 
-  make -O
+  make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

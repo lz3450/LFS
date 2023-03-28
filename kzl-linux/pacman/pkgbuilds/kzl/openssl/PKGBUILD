@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openssl
-pkgver=3.0.8
-pkgrel=1
+pkgver=3.1.0
+pkgrel=2
 epoch=
 pkgdesc="A Open Source Toolkit for the Transport Layer Security (TLS) protocol formerly known as the Secure Sockets Layer (SSL) protocol"
 arch=('x86_64')
@@ -32,11 +32,11 @@ build() {
     enable-ktls \
     enable-ec_nistp_64_gcc_128 \
     CFLAGS="$CFLAGS" \
-    CPPFLAGS="$CPPFLAGS"
+    CPPFLAGS="$CPPFLAGS" \
     LDFLAGS="$LDFLAGS"
 
   make depend
-  make -O
+  make
 }
 
 check() {
@@ -56,5 +56,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install_sw install_ssldirs install_man_docs
+  make DESTDIR="$pkgdir/" install_sw install_ssldirs
 }

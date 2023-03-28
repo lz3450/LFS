@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/rockdaboot/libpsl/tags | grep -Po '(?<=libpsl/releases/tag/)\d\.\d\d\.\d' | head -1)

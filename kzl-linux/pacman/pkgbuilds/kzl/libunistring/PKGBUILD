@@ -8,7 +8,6 @@ pkgdesc="Library for manipulating Unicode strings and C strings"
 arch=('x86_64')
 url="https://www.gnu.org/software/libunistring/"
 license=('KZL')
-options=(!libtool)
 source=(git+https://git.savannah.gnu.org/git/libunistring.git#tag=v$pkgver
         git+https://git.savannah.gnu.org/git/gnulib.git)
 sha256sums=('SKIP'

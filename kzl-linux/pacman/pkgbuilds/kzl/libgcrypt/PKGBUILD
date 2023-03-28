@@ -1,47 +1,43 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libgcrypt
-pkgver=1.10.0
-pkgrel=1
-epoch=1
+pkgver=1.10.1
+pkgrel=3
+epoch=
 pkgdesc="General purpose cryptographic library based on the code from GnuPG"
 arch=('x86_64')
 url="https://www.gnupg.org"
 license=('KZL')
 depends=(libgpg-error)
-source=(https://gnupg.org/ftp/gcrypt/libgcrypt/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('6a00f5c05caa4c4acc120c46b63857da0d4ff61dc4b4b03933fa8d46013fae81'
-            'SKIP')
-validpgpkeys=('6DAA6E64A76D2840571B4902528897B826403ADA')
+source=(git+https://dev.gnupg.org/source/libgcrypt.git#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  sed -e "s:t-secmem::" -i tests/Makefile.am
-  sed -e "s:t-sexp::" -i tests/Makefile.am
-
-  autoreconf -ifv
+  ./autogen.sh --force
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
     --disable-static \
-    --disable-padlock-support
+    --disable-padlock-support \
+    --disable-doc
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

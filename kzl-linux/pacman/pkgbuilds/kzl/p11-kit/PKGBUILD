@@ -2,13 +2,13 @@
 
 pkgname=p11-kit
 pkgver=0.24.1
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Loads and enumerates PKCS#11 modules"
 arch=('x86_64')
 url="https://p11-glue.freedesktop.org"
 license=('KZL')
-depends=(libffi libtasn1 systemd)
+depends=(libffi libtasn1)
 makedepends=(bash-completion)
 source=(git+https://github.com/p11-glue/p11-kit.git#tag=$pkgver)
 sha256sums=('SKIP')
@@ -18,12 +18,8 @@ build() {
 
   meson setup \
     --prefix /usr \
-    --sbindir bin \
     --auto-features enabled \
-    --buildtype debugoptimized \
-    --wrap-mode nodownload \
-    -D b_lto=true \
-    -D b_pie=true \
+    --optimization=2 \
     -D trust_paths=/etc/ca-certificates/trust-source:/usr/share/ca-certificates/trust-source \
     build
 
@@ -39,5 +35,5 @@ check() {
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir/" meson install -C build
+  meson install -C build --destdir="$pkgdir/"
 }

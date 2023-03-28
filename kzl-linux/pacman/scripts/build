@@ -77,6 +77,12 @@ kzl_stage2_pkgs=(
     # libunistring icu libxml2 gettext
 
     ################
+    # ca-certificates & openssl
+    ################
+    # libffi libtasn1 p11-kit ca-certificates
+    # openssl
+
+    ################
     # shadow
     ################
     # e2fsprogs keyutils krb5 swig libcap-ng audit
@@ -88,8 +94,34 @@ kzl_stage2_pkgs=(
     ################
     # libcap coreutils
 
+    ################
+    # llvm
+    ################
+    # libedit llvm-project
+
+    ################
+    # curl
+    ################
+    # brotli
+    # libidn2
+    # nghttp2
+    # libgpg-error libgcrypt libxslt libpsl
+    # libssh2
+    curl
+
+    ################
+    # rust
+    ################
+    # rust
+
+    ################
+    # util-linux
+    ################
+    # thin-provisioning-tools device-mapper json-c popt cryptsetup
+    # util-linux
+
     ########################
-    # base-development
+    # other base-development
     ########################
     # texinfo
     # help2man
@@ -216,7 +248,7 @@ build() {
         if [ "$no_clean" -le 0 ]; then
             _clean='--clean'
         fi
-        makepkg -sCf  $_clean $_no_check --noconfirm >> $_log 2>&1
+        makepkg -sCf $_clean $_no_check --noconfirm >> $_log 2>&1
 
         info "Updating repo..."
         updaterepo -t $repo >> $_log 2>&1
@@ -303,7 +335,7 @@ case $repo in
             pkgs=${kzl_stage1_pkgs[@]}
             ;;
         2)
-            echo -e "\033[1;33mBuilding stage 2\033[0m"
+            echo -e "\033[1;33mBuilding stage 2 ($(date +%H:%M:%S))...\033[0m"
             pkgs=${kzl_stage2_pkgs[@]}
             ;;
         3)
@@ -325,11 +357,11 @@ prepare
 
 for p in ${pkgs[@]}; do
     pkg_start_time=$(date +%s)
-    echo -e "\e[1;31mBuilding $p ...\e[0m"
+    echo -e "\e[1;31mBuilding $p ($(date +%H:%M:%S))...\e[0m"
     build $p
     pkg_end_time=$(date +%s)
     pkg_total_time=$((pkg_end_time-pkg_start_time))
-    echo -e "\e[1;32m$p: $(date -d@$pkg_total_time -u +%H:%M:%S)\e[0m"
+    echo -e "\e[1;32m$p: $(date -d@$pkg_total_time -u +%H:%M:%S) ($(date +%H:%M:%S))\e[0m"
 done
 
 end_time=$(date +%s)

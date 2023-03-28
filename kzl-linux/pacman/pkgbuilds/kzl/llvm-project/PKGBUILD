@@ -1,132 +1,89 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=llvm-project
-pkgver=13.0.1
-pkgrel=1
-epoch=1
+pkgver=16.0.0
+pkgrel=24
+epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
 url="https://llvm.org/"
 license=('KZL')
-depends=(libedit libffi)
-provides=(clang compiler-rt libc++ libc++abi lld lldb llvm llvm-libs openmp)
-conflicts=(clang compiler-rt libc++ libc++abi lld lldb llvm llvm-libs openmp)
-replaces=(clang compiler-rt libc++ libc++abi lld lldb llvm llvm-libs openmp)
-options=(staticlibs)
-source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$pkgver/$pkgname-$pkgver.src.tar.xz{,.sig})
-sha256sums=('326335a830f2e32d06d0a36393b5455d17dc73e0bd1211065227ee014f92cbf8'
-            'SKIP')
-validpgpkeys=('474E22316ABF4785A88C6E8EA2C794A986419D8A')
+depends=(libedit libffi libxml2)
+source=(git+https://github.com/llvm/llvm-project.git#tag=llvmorg-$pkgver)
+sha256sums=('SKIP')
 
 # https://llvm.org/docs/CMake.html
 
 ### full list of projects (find in CMake output)
-# -- clang
-# -- clang-tools-extra
-# -- compiler-rt
-# -- cross-project-tests
-# -- libc
-# -- libclc
-# -- libcxx
-# -- libcxxabi
-# -- libunwind
-# -- lld
-# -- lldb
-# -- mlir
-# -- openmp
-# -- parallel-libs
-# -- polly
-# -- pstl
-# -- flang
+# bolt;clang;clang-tools-extra;compiler-rt;cross-project-tests;libc;libclc;lld;lldb;mlir;openmp;polly;pstl;flang
 
-### GNU
-# _cmake_options=(
-#   -DCMAKE_BUILD_TYPE=Release
-#   -DCMAKE_INSTALL_PREFIX=/usr
-#   -DCMAKE_INSTALL_LIBDIR=lib
-#   -DCMAKE_INSTALL_LIBEXECDIR=lib
-# )
+### full list of runtimes (find in CMake output)
+# libc;libunwind;libcxxabi;pstl;libcxx;compiler-rt;openmp;llvm-libgcc
 
-# _llvm_options=(
-#   -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt;libunwind"
-#   -DLLVM_TARGETS_TO_BUILD=Native
-#   -DLLVM_PARALLEL_COMPILE_JOBS="$(nproc)"
-#   -DLLVM_PARALLEL_LINK_JOBS="$(nproc)"
-#   -DLLVM_BUILD_LLVM_DYLIB=ON
-#   -DLLVM_BUILD_TESTS=ON
-#   -DLLVM_ENABLE_FFI=ON
-#   -DLLVM_ENABLE_LIBCXX=OFF
-#   -DLLVM_ENABLE_LTO=OFF
-#   -DLLVM_ENABLE_RTTI=ON
-#   -DLLVM_INSTALL_UTILS=ON
-#   -DLLVM_LINK_LLVM_DYLIB=ON
-# )
-
-# _clang_options=(
-#   # -DCLANG_DEFAULT_CXX_STDLIB=libc++
-#   # -DCLANG_DEFAULT_LINKER=lld
-#   # -DCLANG_DEFAULT_RTLIB=compiler-rt
-#   # -DCLANG_ENABLE_BOOTSTRAP=OFF
-#   # -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
-#   # -DLIBCXX_USE_COMPILER_RT=ON
-#   # -DLIBCXXABI_USE_COMPILER_RT=ON
-#   # -DLIBCXXABI_USE_LLVM_UNWINDER=ON
-#   # -DLIBOMP_INSTALL_ALIASES=OFF
-# )
-
-### LLVM
 _cmake_options=(
   -DCMAKE_BUILD_TYPE=Release
   -DCMAKE_INSTALL_PREFIX=/usr
   -DCMAKE_INSTALL_LIBDIR=lib
-  -DCMAKE_INSTALL_LIBEXECDIR=lib
+  -DCMAKE_SKIP_RPATH=YES
+  ################
+  # stage 2
+  ################
   -DCMAKE_C_COMPILER=/usr/bin/clang
   -DCMAKE_CXX_COMPILER=/usr/bin/clang++
+  ################
   -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
   -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
-  # -DCMAKE_LINKER=/usb/bin/ld.lld
-  # -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"
-  # -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"
-  # -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"
-  # -DCMAKE_STATIC_LINKER_FLAGS="-fuse-ld=lld"
-  -DCMAKE_AR=/usr/bin/llvm-ar
-  -DCMAKE_NM=/usr/bin/llvm-nm
-  -DCMAKE_RANLIB=/usr/bin/llvm-ranlib
-  -DCMAKE_OBJCOPY=/usr/bin/llvm-objcopy
-  -DCMAKE_OBJDUMP=/usr/bin/llvm-objdump
-  -DCMAKE_READELF=/usr/bin/llvm-readelf
 )
 
 _llvm_options=(
-  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt"
-  -DLLVM_TARGETS_TO_BUILD=Native
+  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb"
+  -DLLVM_ENABLE_RUNTIMES="compiler-rt"
+  -DLLVM_TARGETS_TO_BUILD="X86"
   -DLLVM_PARALLEL_COMPILE_JOBS="$(nproc)"
   -DLLVM_PARALLEL_LINK_JOBS="$(nproc)"
   -DLLVM_BUILD_LLVM_DYLIB=ON
-  -DLLVM_BUILD_TESTS=ON
+  -DLLVM_LINK_LLVM_DYLIB=ON
+  -DLLVM_INCLUDE_DOCS=OFF
+  -DLLVM_BUILD_DOCS=OFF
+  -DLLVM_INCLUDE_TESTS=OFF
+  -DLLVM_BUILD_TESTS=OFF
+  -DLLVM_ENABLE_BINDINGS=OFF
   -DLLVM_ENABLE_FFI=ON
-  -DLLVM_ENABLE_LIBCXX=OFF
-  -DLLVM_ENABLE_LTO=OFF
   -DLLVM_ENABLE_RTTI=ON
   -DLLVM_INSTALL_UTILS=ON
-  # -DLLVM_USE_LINKER=lld
-  -DLLVM_LINK_LLVM_DYLIB=ON
+  ################
+  # libc++
+  ################
+  # -DLLVM_ENABLE_LIBCXX=ON
+  ################
+  ################
+  # stage 2
+  ################
+  -DLLVM_USE_LINKER=lld
+  # -DLLVM_ENABLE_LTO=Full
+  ################
+  -DLLVM_APPEND_VC_REV=OFF
 )
 
 _clang_options=(
+  -DCLANG_ENABLE_BOOTSTRAP=OFF
+  -DCLANG_DEFAULT_LINKER=lld
+  -DCLANG_DEFAULT_RTLIB=compiler-rt
+  -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
+  ################
+  # libc++
+  ################
   # -DCLANG_DEFAULT_CXX_STDLIB=libc++
-  # -DCLANG_DEFAULT_LINKER=lld
-  # -DCLANG_DEFAULT_RTLIB=compiler-rt
-  # -DCLANG_ENABLE_BOOTSTRAP=OFF
-  # -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
   # -DLIBCXX_USE_COMPILER_RT=ON
   # -DLIBCXXABI_USE_COMPILER_RT=ON
   # -DLIBCXXABI_USE_LLVM_UNWINDER=ON
-  # -DLIBOMP_INSTALL_ALIASES=OFF
+  ################
 )
 
+################################################################################
+
 build() {
-  cd $pkgname-$pkgver.src
+  cd $pkgname
 
   cmake \
     "${_cmake_options[@]}" \
@@ -134,25 +91,20 @@ build() {
     "${_clang_options[@]}" \
     -S llvm \
     -B build \
-    -G Ninja
+    -G Ninja \
+    -LAH
 
   ninja -C build
 }
 
 check() {
-  cd $pkgname-$pkgver.src
+  cd $pkgname
 
   LD_LIBRARY_PATH=$PWD/build/lib ninja -C build check
 }
 
 package() {
-  cd $pkgname-$pkgver.src
+  cd $pkgname
 
   DESTDIR="$pkgdir/" ninja -C build install
-
-  sed -e 's|libexec|lib/clang|' -i "$pkgdir"/usr/bin/scan-build
-  mv "$pkgdir"/usr/libexec/* "$pkgdir"/usr/lib/clang/
-  rmdir "$pkgdir"/usr/libexec
-
-  printf "%s" "/usr/lib/x86_64-unknown-linux-gnu" | install -Dm644 /dev/stdin "$pkgdir"/etc/ld.so.conf.d/libc++.conf
 }

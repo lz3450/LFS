@@ -62,6 +62,11 @@ base:
     - libunistring
     - libxml2:
         - icu
+  openssl:
+  ca-certificates:
+    - p11-kit:
+        - libffi
+        - libtasn1
   shadow:
     - acl
     - attr
@@ -84,7 +89,37 @@ base:
     - gmp
     - libcap:
         - pam
-  python: todo
+  curl:
+    - brotli
+    - ca-certificates
+    - krb5
+    - libidn2:
+        - libunistring
+    - nghttp2
+    - libpsl:
+        - libidn2
+        - libxslt:
+            - libgcrypt:
+                - libgpg-error
+            - libxml2
+    - libssh2:
+        - openssl
+  util-linux:
+    - bash-completion
+    - cryptsetup:
+        - device-mapper:
+            - thin-provisioning-tools
+        - json-c
+        - openssl
+        - popt
+    - file
+    - libcap-ng
+    - libxcrypt
+    - ncurses
+    - pam
+    - readline
+    - shadow
+    - systemd
 base-development:
   linux-api-headers:
   libtool:
@@ -103,4 +138,12 @@ base-development:
   automake:
   which:
   diffutils:
+  pkg-config: todo
   git: todo
+  llvm-project:
+    - libedit
+    - libffi
+    - libxml2
+    - PyYAML: pip
+  rust: todo
+  python: todo
