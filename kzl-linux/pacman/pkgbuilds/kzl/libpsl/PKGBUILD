@@ -2,8 +2,8 @@
 
 pkgname=libpsl
 pkgver=0.21.2
-pkgrel=5
-epoch=1
+pkgrel=6
+epoch=
 pkgdesc="C library to handle the Public Suffix List"
 arch=('x86_64')
 url="https://github.com/rockdaboot/libpsl"
@@ -24,7 +24,7 @@ build() {
   meson setup \
     --prefix /usr \
     --auto-features enabled \
-    --optimization=2 \
+    --optimization 2 \
     -D builtin=true \
     -D docs=false \
     -D runtime=libidn2 \

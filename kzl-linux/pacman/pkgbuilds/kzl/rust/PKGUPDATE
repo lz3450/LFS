@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.rust-lang.org/ | grep -Po '(?<=Version )\d\.\d\d\.\d')

@@ -2,22 +2,28 @@
 
 pkgname=argon2
 pkgver=20190702
-pkgrel=1
-epoch=1
+pkgrel=2
+epoch=
 pkgdesc="A password-hashing function (reference C implementation)"
 arch=('x86_64')
 url="https://github.com/P-H-C/phc-winner-argon2"
-source=(https://github.com/P-H-C/phc-winner-argon2/archive/$pkgver/$pkgname-$pkgver.tar.gz)
-sha256sums=('daf972a89577f8772602bf2eb38b6a3dd3d922bf5724d45e7f9589b5e830442c')
+source=(git+$url.git#tag=$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd phc-winner-$pkgname-$pkgver
+  cd phc-winner-$pkgname
 
-  make OPTTARGET='none' LIBRARY_REL='lib'
+  make ARGON2_VERSION='$pkgver' PREFIX='/usr' LIBRARY_REL='lib' OPTTARGET='native'
+}
+
+check() {
+  cd $srcdir/phc-winner-$pkgname
+
+  make ARGON2_VERSION='$pkgver' PREFIX='/usr' LIBRARY_REL='lib' OPTTARGET='native' test
 }
 
 package() {
-  cd phc-winner-$pkgname-$pkgver
+  cd phc-winner-$pkgname
 
-  make OPTTARGET='none' LIBRARY_REL='lib' DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" ARGON2_VERSION='$pkgver' PREFIX='/usr' LIBRARY_REL='lib' OPTTARGET='native' install
 }

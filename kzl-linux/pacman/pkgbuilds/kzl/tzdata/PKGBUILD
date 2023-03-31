@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=tzdata
-pkgver=2022g
-pkgrel=1
+pkgver=2023c
+pkgrel=2
 epoch=
 pkgdesc="Sources for time zone and daylight saving time data"
 arch=('x86_64')
@@ -12,16 +12,12 @@ options=(!emptydirs)
 source=(https://www.iana.org/time-zones/repository/releases/tzcode$pkgver.tar.gz{,.asc}
         https://www.iana.org/time-zones/repository/releases/$pkgname$pkgver.tar.gz{,.asc})
 validpgpkeys=('7E3792A9D8ACF7D633BC1588ED97E90E62AA7E34')
-sha256sums=('9610bb0b9656ff404c361a41f3286da53064b5469d84f00c9cb2314c8614da74'
+sha256sums=('46d17f2bb19ad73290f03a203006152e0fa0d7b11e5b71467c4a823811b214e7'
             'SKIP'
-            '4491db8281ae94a84d939e427bdd83dc389f26764d27d9a5c52d782c16764478'
+            '3f510b5d1b4ae9bb38e485aa302a776b317fb3637bdb6404c4adf7b6cadd965c'
             'SKIP')
 
 _timezones=('africa' 'antarctica' 'asia' 'australasia' 'europe' 'northamerica' 'southamerica' 'etcetera' 'backward' 'factory')
-
-prepare() {
-  sed -i "s:sbin:bin:g" Makefile
-}
 
 build() {
   make LFLAGS="$LDFLAGS"

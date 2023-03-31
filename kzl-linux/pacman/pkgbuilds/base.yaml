@@ -107,7 +107,9 @@ base:
   util-linux:
     - bash-completion
     - cryptsetup:
+        - argon2
         - device-mapper:
+            - libedit
             - thin-provisioning-tools
         - json-c
         - openssl
@@ -118,7 +120,6 @@ base:
     - ncurses
     - pam
     - readline
-    - shadow
     - systemd
 base-development:
   linux-api-headers:
@@ -145,5 +146,8 @@ base-development:
     - libffi
     - libxml2
     - PyYAML: pip
-  rust: todo
+  rust:
+    - curl
+    - llvm-project
+    - libffi
   python: todo

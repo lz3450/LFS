@@ -2,7 +2,7 @@
 
 pkgname=llvm-project
 pkgver=16.0.0
-pkgrel=24
+pkgrel=26
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
@@ -60,7 +60,7 @@ _llvm_options=(
   # stage 2
   ################
   -DLLVM_USE_LINKER=lld
-  # -DLLVM_ENABLE_LTO=Full
+  -DLLVM_ENABLE_LTO=Thin
   ################
   -DLLVM_APPEND_VC_REV=OFF
 )

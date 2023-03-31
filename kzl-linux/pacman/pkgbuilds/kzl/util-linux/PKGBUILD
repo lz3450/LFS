@@ -1,80 +1,82 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=util-linux
-pkgver=2.37
-pkgrel=4
-epoch=1
+pkgver=2.38.1
+pkgrel=14
+epoch=
 pkgdesc="Miscellaneous system utilities for Linux"
 arch=('x86_64')
-url="https://github.com/karelzak/util-linux"
+url="https://github.com/util-linux/util-linux"
 license=('KZL')
-depends=(coreutils libcap-ng libxcrypt pam shadow)
-optdepends=("words: default dictionary for look")
-provides=(util-linux-libs libutil-linux libblkid.so libfdisk.so libmount.so libsmartcols.so libuuid.so)
-conflicts=(util-linux-libs libutil-linux)
-replaces=(util-linux-libs libutil-linux)
-backup=(etc/pam.d/{chfn,chsh,login,runuser,runuser-l,su,su-l})
-source=(https://www.kernel.org/pub/linux/utils/util-linux/v$pkgver/$pkgname-$pkgver.$pkgrel.tar.{xz,sign}
-        pam-{login,common,runuser,su}
-        60-rfkill.rules
-        rfkill-block@.service
-        rfkill-unblock@.service)
-sha256sums=('634e6916ad913366c3536b6468e7844769549b99a7b2bf80314de78ab5655b83'
-            'SKIP'
-            '85255982acb2aaab77c1b448b2015b44742b78b292cf0414a8e82ced5b0a0578'
-            'edb8d49134df02aeff67b1d81bfd18e838b2a81cf0ca684c6def36663fb9619c'
-            '1f84a596d27f32a08ffa653e8e66efff4594be8c87b43c34905aa63ac6abf3e7'
-            'c2fb26c4811d88bc670decc8f76465bdf7cbb618ba75039cbaa8fdb24e69187c'
-            '7423aaaa09fee7f47baa83df9ea6fef525ff9aec395c8cbd9fe848ceb2643f37'
-            'a22e0a037e702170c7d88460cc9c9c2ab1d3e5c54a6985cd4a164ea7beff1b36'
-            '8ccec10a22523f6b9d55e0d6cbf91905a39881446710aa083e935e8073323376')
-validpgpkeys=('B0C64D14301CC6EFAEDF60E4E4B71D5EEC39C284')
+depends=(bash-completion cryptsetup file libcap-ng libxcrypt ncurses pam readline systemd)
+backup=(etc/pam.d/{runuser,runuser-l,su,su-l})
+source=(git+$url.git#tag=v$pkgver
+        pam-{runuser,su})
+sha256sums=('SKIP'
+            '59626ac70847c83b75df53a51c0833579b6959be519d79e80ad1657e13976a67'
+            'a0619c2323c2450f098242af159bf1c9b1c7e1947445241606c4aa48c525e66d')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver.$pkgrel
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
     --bindir=/usr/bin \
-    --sbindir=/usr/bin \
-    --localstatedir=/var \
+    --sbindir=/usr/sbin \
     --libdir=/usr/lib \
-    --enable-mesg \
-    --enable-raw \
-    --enable-vipw \
-    --enable-newgrp \
-    --enable-chfn-chsh \
+    --enable-static=no \
+    --disable-asciidoc \
+    --disable-bfs \
+    --disable-minix \
+    --disable-chfn-chsh \
+    --disable-login \
+    --disable-nologin \
     --enable-write \
-    --enable-fs-paths-default=/usr/bin:/usr/local/bin \
+    --enable-fs-paths-default=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     --enable-usrdir-path \
-    --with-python=3
+    --with-audit \
+    --with-cryptsetup
 
-  make
+    make
+
+  # meson setup \
+  #   --prefix /usr \
+  #   --optimization 2 \
+  #   -D build-bash-completion=enabled \
+  #   -D build-chfn-chsh=disabled \
+  #   -D build-login=disabled \
+  #   -D build-newgrp=disabled \
+  #   -D build-nologin=disabled \
+  #   -D build-python=enabled \
+  #   -D build-rfkill=enabled \
+  #   -D build-runuser=enabled \
+  #   -D build-su=enabled \
+  #   -D build-vipw=disabled \
+  #   -D fs-search-path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+  #   -D python=python3 \
+  #   -D systemd=enabled \
+  #   build
+
+  # meson compile -C build
 }
 
 package() {
-  cd $pkgname-$pkgver.$pkgrel
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" usrsbin_execdir=/usr/bin install
+  make DESTDIR="$pkgdir" install
 
-  # setuid chfn, chsh and newgrp
-  chmod 4755 "$pkgdir"/usr/bin/{ch{fn,sh},newgrp}
+  # meson install -C build --destdir="$pkgdir/"
 
   # install PAM files for login-utils
-  install -dm755 "$pkgdir"/etc/pam.d
-  install -Dm644 "$srcdir"/pam-common "$pkgdir"/etc/pam.d/chfn
-  install -Dm644 "$srcdir"/pam-common "$pkgdir"/etc/pam.d/chsh
-  install -Dm644 "$srcdir"/pam-login "$pkgdir"/etc/pam.d/login
+  install -d -m755 "$pkgdir"/etc/pam.d
   install -Dm644 "$srcdir"/pam-runuser "$pkgdir"/etc/pam.d/runuser
   install -Dm644 "$srcdir"/pam-runuser "$pkgdir"/etc/pam.d/runuser-l
   install -Dm644 "$srcdir"/pam-su "$pkgdir"/etc/pam.d/su
   install -Dm644 "$srcdir"/pam-su "$pkgdir"/etc/pam.d/su-l
-
-  # install systemd-sysusers
-  echo 'u uuidd 68\ng rfkill - - -' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/util-linux.conf
-
-  install -Dm0644 "$srcdir"/60-rfkill.rules "$pkgdir"/usr/lib/udev/rules.d/60-rfkill.rules
-
-  install -Dm0644 "$srcdir"/rfkill-block@.service "$pkgdir"/usr/lib/systemd/system/rfkill-block@.service
-  install -Dm0644 "$srcdir"/rfkill-unblock@.service "$pkgdir"/usr/lib/systemd/system/rfkill-unblock@.service
 }

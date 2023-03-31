@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://sourceware.org/pub/lvm2/ | grep -Po '(?<=LVM2.)\d.\d+.\d+' | tail -1)

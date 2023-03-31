@@ -1,35 +1,24 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=thin-provisioning-tools
-pkgver=0.9.0
-pkgrel=1
-epoch=1
-pkgdesc="Suite of tools for manipulating the metadata of the dm-thin device-mapper target"
+pkgver=1.0.3
+pkgrel=2
+epoch=
+pkgdesc="A suite of tools for manipulating the metadata of the dm-thin, dm-cache and dm-era device-mapper targets"
 arch=('x86_64')
 url="https://github.com/jthornber/thin-provisioning-tools"
 license=('KZL')
-depends=(expat libaio)
-makedepends=(boost)
-source=(https://github.com/jthornber/$pkgname/archive/v$pkgver.tar.gz)
-sha256sums=('a2508d9933ed8a3f6c8d302280d838d416668a1d914a83c4bd0fb01eaf0676e8')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  autoconf
-}
+source=(git+https://github.com/jthornber/thin-provisioning-tools.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  ./configure \
-    --prefix=/usr
-
-  make
+  cargo build --release
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" BINDIR="$pkgdir/usr/bin/" MANDIR="/usr/share/man/" install
+  make DESTDIR="$pkgdir/" BINDIR="$pkgdir/usr/bin" install
 }

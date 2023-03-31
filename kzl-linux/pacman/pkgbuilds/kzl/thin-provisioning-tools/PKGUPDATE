@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://github.com/jthornber/thin-provisioning-tools/tags | grep -Po '(?<=thin-provisioning-tools/releases/tag/v)\d\.\d\.\d' | head -1)

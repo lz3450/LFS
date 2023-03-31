@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://gitlab.com/cryptsetup/cryptsetup/-/raw/main/README.md | grep -Po '(?<=The latest stable cryptsetup release version is )\d\.\d\.\d')

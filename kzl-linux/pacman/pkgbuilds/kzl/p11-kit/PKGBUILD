@@ -19,7 +19,7 @@ build() {
   meson setup \
     --prefix /usr \
     --auto-features enabled \
-    --optimization=2 \
+    --optimization 2 \
     -D trust_paths=/etc/ca-certificates/trust-source:/usr/share/ca-certificates/trust-source \
     build
 

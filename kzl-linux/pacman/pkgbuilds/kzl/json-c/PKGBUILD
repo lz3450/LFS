@@ -3,26 +3,27 @@
 pkgname=json-c
 pkgver=0.15
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="A JSON implementation in C"
 arch=('x86_64')
 url="https://github.com/json-c/json-c/wiki"
-source=(git+https://github.com/$pkgname/$pkgname#tag=$pkgname-$pkgver-20200726)
+license=('KZL')
+source=(git+https://github.com/$pkgname/$pkgname#branch=$pkgname-$pkgver)
 sha256sums=('SKIP')
 
 build() {
   cd $pkgname
 
   cmake \
-    -DCMAKE_BUILD_TYPE=None \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
+    -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
     -DENABLE_THREADING=ON \
-    -DENABLE_RDRAND=OFF \
     -S . \
-    -B build
+    -B build \
+    -LAH
 
   cmake --build build
 }
@@ -30,7 +31,7 @@ build() {
 check() {
   cd $pkgname
 
-  cmake --build build --target tests || warning "Check failed."
+  cmake --build build --target tests
 }
 
 package() {

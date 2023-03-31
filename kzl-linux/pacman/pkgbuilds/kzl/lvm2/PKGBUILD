@@ -2,51 +2,31 @@
 
 pkgbase=lvm2
 pkgname=(lvm2 device-mapper)
-pkgver=2.03.15
-pkgrel=1
-epoch=1
+pkgver=2.03.20
+pkgrel=2
+epoch=
 arch=('x86_64')
 url="https://sourceware.org/lvm2/"
 license=('KZL')
+depends=(libedit)
 makedepends=(thin-provisioning-tools)
-source=(git+https://sourceware.org/git/$pkgbase.git#tag=v${pkgver//./_}?signed)
+source=(git+https://sourceware.org/git/$pkgbase.git#tag=v${pkgver//./_})
 sha256sums=('SKIP')
-validpgpkeys=('D501A478440AE2FD130A1BE8B9112431E509039F')
-
-prepare() {
-  cd $pkgbase
-
-  # remove install section from systemd units that are enabled by default
-  sed -e '/^\[Install\]$/,$d' -i \
-    scripts/dm_event_systemd_red_hat.socket.in \
-    scripts/lvm2_lvmpolld_systemd_red_hat.socket.in \
-    scripts/lvm2_monitoring_systemd_red_hat.service.in
-}
 
 build() {
   cd $pkgbase
 
   ./configure \
-    CONFIG_SHELL=/bin/bash \
     --prefix=/usr \
-    --sbindir=/usr/bin \
-    --sysconfdir=/etc \
-    --localstatedir=/var \
-    --enable-readline \
+    --disable-readline \
+    --enable-editline \
     --enable-lvmpolld \
-    --enable-udev-systemd-background-jobs \
-    --enable-udev_sync \
-    --enable-udev_rules \
     --enable-cmdlib \
     --enable-pkgconfig \
     --enable-dmeventd \
-    --with-thin=internal \
-    --with-cache=internal \
     --with-default-pid-dir=/run \
     --with-default-dm-run-dir=/run \
     --with-default-run-dir=/run/lvm \
-    --with-udev-prefix=/usr \
-    --with-systemdsystemunitdir=/usr/lib/systemd/system \
     --with-default-locking-dir=/run/lock/lvm
 
   make
@@ -58,11 +38,10 @@ package_device-mapper() {
 
   cd $pkgbase
 
-  make DESTDIR="$pkgdir/" install_device-mapper
-  make DESTDIR="$pkgdir/" install_systemd_units
+  make DESTDIR="$pkgdir" install_device-mapper
+  make DESTDIR="$pkgdir" install_systemd_units
+
   rm -f "$pkgdir"/usr/lib/systemd/system/{blk-availability.service,lvm2-*}
-  install -dm0755 "$pkgdir"/usr/lib/systemd/system/sockets.target.wants
-  ln -sf ../dm-event.socket "$pkgdir"/usr/lib/systemd/system/sockets.target.wants/dm-event.socket
 }
 
 package_lvm2() {
@@ -72,9 +51,9 @@ package_lvm2() {
 
   cd $pkgbase
 
-  make DESTDIR="$pkgdir/" install_lvm2
-  install -dm755 "$pkgdir"/etc/lvm/{archive,backup}
-  make DESTDIR="$pkgdir/" install_systemd_units
+  make DESTDIR="$pkgdir" install_lvm2
+  make DESTDIR="$pkgdir" install_systemd_units
+  make DESTDIR="$pkgdir" install_systemd_generators
+
   rm -f "$pkgdir"/usr/lib/systemd/system/dm-*
-  make DESTDIR="$pkgdir/" install_systemd_generators
 }

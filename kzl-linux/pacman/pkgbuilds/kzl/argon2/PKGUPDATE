@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://github.com/P-H-C/phc-winner-argon2/tags | grep -Po '(?<=phc-winner-argon2/releases/tag/)\d{8}' | head -1)

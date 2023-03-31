@@ -1,76 +1,81 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rust
-pkgver=1.60.0
-pkgrel=1
-epoch=2
+pkgver=1.68.2
+pkgrel=36
+epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')
 url="https://www.rust-lang.org/"
 license=('KZL')
-depends=(curl llvm)
-makedepends=(libffi lld)
-optdepends=("lldb: rust-lldb script"
-            "gdb: rust-gdb script")
+depends=(curl llvm-project)
+makedepends=(libffi)
+optdepends=("gdb: rust-gdb script")
 source=(https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz{,.asc})
-sha256sums=('20ca826d1cf674daf8e22c4f8c4b9743af07973211c839b85839742314c838b7'
-            'SKIP')
 validpgpkeys=('108F66205EAEB0AAA8DD5E1C85AB96E6FA1BE5FE')
+sha256sums=('93339c23f7cd4d0c45db58e18b4c6e16d6070f4277aad9d2492d23294bf32e96'
+            'SKIP')
 
 prepare() {
   cd rustc-$pkgver-src
 
-  cp config.toml.example config.toml
+  _options=(
+    --disable-debug
+    --disable-docs
+    --disable-compiler-docs
+    ################
+    # stage2
+    ################
+    --enable-local-rust
+    --local-rust-root=/usr
+    ################
+    --disable-llvm-static-stdcpp
+    --enable-llvm-link-shared
+    --disable-rpath
+    --enable-option-checking
+    --enable-vendor
+    --disable-sanitizers
+    --prefix=/usr
+    --llvm-root=/usr
+    --llvm-config=/usr/bin/llvm-config
+    --llvm-filecheck=/usr/bin/FileCheck
+    --python=/usr/bin/python3
+    --release-channel=stable
+    --disable-manage-submodules
+    --enable-full-bootstrap
+    --enable-extended
+    --tools=cargo,rls,clippy,rustfmt,analysis,src
+    --build=x86_64-unknown-linux-gnu
+    --host=x86_64-unknown-linux-gnu
+    --target=x86_64-unknown-linux-gnu
+    --set target.x86_64-unknown-linux-gnu.linker=clang
+    --set target.x86_64-unknown-linux-gnu.cc=clang
+    --set target.x86_64-unknown-linux-gnu.cxx=clang++
+    --set target.x86_64-unknown-linux-gnu.ar=llvm-ar
+    --set target.x86_64-unknown-linux-gnu.ranlib=llvm-ranlib
+    # --set target.x86_64-unknown-linux-gnu.linker=gcc
+    # --set target.x86_64-unknown-linux-gnu.cc=gcc
+    # --set target.x86_64-unknown-linux-gnu.cxx=g++
+    # --set target.x86_64-unknown-linux-gnu.ar=ar
+    # --set target.x86_64-unknown-linux-gnu.ranlib=ranlib
+  )
 
-  sed -e '/^#link-shared = /c\link-shared = true' \
-      -e '/^#cargo = /c\cargo = "/usr/bin/cargo"' \
-      -e '/^#rustc = /c\rustc = "/usr/bin/rustc"' \
-      -e '/^#rustfmt = /c\rustfmt = "/usr/bin/rustfmt"' \
-      -e '/^#vendor = /c\vendor = true' \
-      -e '/^#extended = /c\extended = true' \
-      -e '/^#tools = /s/^#//' \
-      -e '/^#sanitizers = /c\sanitizers = true' \
-      -e '/^#profiler = /c\profiler = true' \
-      -e '/^#codegen-units-std = /c\codegen-units-std = 1' \
-      -e '/^#prefix = /c\prefix = "/usr"' \
-      -e '/^#channel = /c\channel = "stable"' \
-      -e '/^#rpath = /c\rpath = false' \
-      -e '/^#jemalloc = /c\jemalloc = true' \
-      -e '/^#llvm-config = /c\llvm-config = "/usr/bin/llvm-config"' \
-      -i config.toml
+  ./configure \
+    ${_options[@]} \
+    --release-description="KZL $(date -u '+%Y/%m/%d %T %z')"
 
-  ### bootstrap
-  # sed -e '/^#link-shared = /c\link-shared = true' \
-  #     -e '/^#vendor = /c\vendor = true' \
-  #     -e '/^#extended = /c\extended = true' \
-  #     -e '/^#tools = /s/^#//' \
-  #     -e '/^#sanitizers = /c\sanitizers = true' \
-  #     -e '/^#profiler = /c\profiler = true' \
-  #     -e '/^#codegen-units-std = /c\codegen-units-std = 1' \
-  #     -e '/^#prefix = /c\prefix = "/usr"' \
-  #     -e '/^#channel = /c\channel = "stable"' \
-  #     -e '/^#rpath = /c\rpath = false' \
-  #     -e '/^#jemalloc = /c\jemalloc = true' \
-  #     -e '/^#llvm-config = /c\llvm-config = "/usr/bin/llvm-config"' \
-  #     -i config.toml
-
-  sed -e 's/libexec/lib/' \
-      -i src/bootstrap/dist.rs \
-      -i src/tools/cargo/src/cargo/ops/registry/auth.rs
 }
 
 build() {
   cd rustc-$pkgver-src
 
-  export RUST_BACKTRACE=1
-
-  ./x.py -j "$(nproc)" build
+  RUST_BACKTRACE=full ./x.py -j "$(nproc)" build
 }
 
 check() {
   cd rustc-$pkgver-src
 
-  ./x.py test || warning "Check failed."
+  ./x.py test
 }
 
 package() {
@@ -78,13 +83,8 @@ package() {
 
   DESTDIR="$pkgdir/" ./x.py -j "$(nproc)" install
 
-  # rustbuild always installs copies of the shared libraries to /usr/lib,
-  # overwrite them with symlinks to the per-architecture versions
-  ln -srft "$pkgdir"/usr/lib "$pkgdir"/usr/lib/rustlib/x86_64-unknown-linux-gnu/lib/*.so
+  rm "$pkgdir"/usr/lib/rustlib/{components,install.log,manifest-*,rust-installer-version,uninstall.sh}
 
   install -dm755 "$pkgdir"/usr/share/bash-completion/completions/
-  mv "$pkgdir"/etc/bash_completion.d/* "$pkgdir"/usr/share/bash-completion/completions/
-  rmdir "$pkgdir"/etc/{bash_completion.d,}
-
-  rm "$pkgdir"/usr/lib/rustlib/{components,install.log,manifest-*,rust-installer-version,uninstall.sh}
+  mv "$pkgdir"/etc/bash_completion.d "$pkgdir"/usr/share/bash-completion/completions/
 }

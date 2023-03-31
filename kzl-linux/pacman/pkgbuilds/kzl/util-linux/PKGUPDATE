@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://github.com/util-linux/util-linux/tags | grep -Po '(?<=util-linux/releases/tag/v)\d\.\d\d(\.\d)?(?=")' | head -1)

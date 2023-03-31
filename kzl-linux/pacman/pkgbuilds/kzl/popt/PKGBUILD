@@ -1,18 +1,23 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=popt
-pkgver=1.18
-pkgrel=1
-epoch=1
+pkgver=1.19
+pkgrel=2
+epoch=
 pkgdesc="A commandline option parser"
 arch=('x86_64')
-url="http://rpm5.org"
-options=(staticlibs)
-source=(https://deb.debian.org/debian/pool/main/p/$pkgname/${pkgname}_${pkgver}.orig.tar.gz)
-sha256sums=('5159bc03a20b28ce363aa96765f37df99ea4d8850b1ece17d1e6ad5c24fdc5d1')
+url="https://github.com/rpm-software-management/popt"
+source=(git+https://github.com/rpm-software-management/popt.git#tag=popt-$pkgver-release)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -21,7 +26,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

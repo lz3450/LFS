@@ -1,33 +1,37 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cryptsetup
-pkgver=2.4.3
-pkgrel=1
-epoch=1
-pkgdesc="Userspace setup tool for transparent encryption of block devices using dm-crypt"
+pkgver=2.6.1
+pkgrel=2
+epoch=
+pkgdesc="An open-source utility used to conveniently set up disk encryption based on the dm-crypt kernel module."
 arch=('x86_64')
 url="https://gitlab.com/cryptsetup/cryptsetup/"
 license=('KZL')
-depends=(argon2 device-mapper json-c libgcrypt openssl popt)
-source=(https://www.kernel.org/pub/linux/utils/cryptsetup/v${pkgver%.*}/$pkgname-$pkgver.tar.{xz,sign})
-sha256sums=('fc0df945188172264ec5bf1d0bda08264fadc8a3f856d47eba91f31fe354b507'
-            'SKIP')
-validpgpkeys=('2A2918243FDE46648D0686F9D9B0577BD93E98FC')
+depends=(argon2 device-mapper json-c openssl popt)
+source=(git+https://gitlab.com/cryptsetup/cryptsetup.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
-    --enable-libargon2 \
-    --disable-static
+    --disable-asciidoc \
+    --disable-ssh-token \
+    --enable-libargon2
 
   make
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }
