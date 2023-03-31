@@ -68,7 +68,7 @@ build() {
   meson setup \
     --prefix /usr \
     --auto-features enabled \
-    --optimization=2 \
+    --optimization 2 \
     build
 
   meson compile -C build
