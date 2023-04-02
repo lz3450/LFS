@@ -3,7 +3,7 @@
 # Load profiles from /etc/profile.d
 if [ -d /etc/profile.d/ ]; then
 	for profile in /etc/profile.d/*.sh; do
-    if [ -r "$profile"]; then
+    if [ -r "$profile" ]; then
       . "$profile"
     fi
 	done
