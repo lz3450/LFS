@@ -2,7 +2,7 @@
 
 pkgname=systemd
 pkgver=253.2
-pkgrel=8
+pkgrel=9
 epoch=
 arch=('x86_64')
 url="https://github.com/systemd/systemd-stable"
@@ -37,8 +37,6 @@ backup=(etc/pam.d/systemd-user
 install=systemd.install
 source=(git+$url.git#tag=v$pkgver
         systemd.install
-        sysusers
-        tmpfiles
         20-systemd-sysusers.hook
         30-systemd-binfmt.hook
         30-systemd-catalog.hook
@@ -50,8 +48,6 @@ source=(git+$url.git#tag=v$pkgver
         30-systemd-udev-trigger.hook)
 sha256sums=('SKIP'
             'ed6b88d29cdf3a5f8a7ef19fba2721610485b8613ac5f9f60572113cc450f1bb'
-            '4ff47900d80dc67efeaf2f90dd7b01a644fb43e51067995fbcfee35c69b6ab7d'
-            '5d8e61479f0093852365090e84d8d95b1e7fccfab068274ee25863bde6ff3e07'
             '61623bab3be1dc5a4c72145e6cf36bccb08e24372142ef41e4e195cc342b2ec7'
             '393c963a4a3e11f7e7c9faa517179c55926e6663d71eaa9f5a7937cfe0e16af0'
             '5bc028f276e41553680aed71540fe3ca8255488f7a94ed1f52076aafb4b6f08c'
@@ -160,15 +156,6 @@ package() {
   cd $pkgname-stable
 
   meson install -C build --destdir="$pkgdir"
-
-  # setup default system users/groups
-  install -D -m644 "$srcdir"/sysusers usr/lib/sysusers.d/20-sysusers.conf
-
-  # setup default system files
-  install -D -m644 "$srcdir"/tmpfiles usr/lib/tmpfiles.d/20-tmpfiles.conf
-
-  # # setup systemd.environment-generator
-  # install -D -m755 "$srcdir"/env-generator usr/lib/systemd/system-environment-generators/00-system-environment-generators
 
   chmod -R 2755 "$pkgdir"/var/log/journal/
   # chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/

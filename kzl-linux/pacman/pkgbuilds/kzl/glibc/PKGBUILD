@@ -40,8 +40,8 @@ rtlddir = $(slibdir)
 includedir = $(prefix)/include
 bindir = $(exec_prefix)/bin
 libexecdir = $(exec_prefix)/libexec
-rootsbindir = $(exec_prefix)/bin
-sbindir = $(exec_prefix)/bin
+rootsbindir = $(exec_prefix)/sbin
+sbindir = $(exec_prefix)/sbin
 sysconfdir = /etc' > build/configparms
 }
 

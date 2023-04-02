@@ -18,15 +18,16 @@ backup=(etc/crypttab
         etc/passwd
         etc/profile
         etc/resolv.conf
-        ect/securetty
+        etc/securetty
         etc/shadow
         etc/shells
         etc/subgid
         etc/subuid)
-source=(crypttab
+source=(shadow-convert.sh
+        generate-sysusers.sh
+        crypttab
         fstab
         group
-        gshadow
         host.conf
         hosts
         motd
@@ -34,28 +35,32 @@ source=(crypttab
         profile
         resolv.conf
         securetty
-        shadow
         shells
         subgid
         subuid)
-sha256sums=('a6f0ad7acc6054199fbab680a53769a936a4518a2ee751404839b77fb2a4be79'
+sha256sums=('75e6064eaa43505c8e9ed31850633279857cc678d733571b5bfe636c847b4369'
+            '06f0b3dd5c3116575595d94458c2ec967e538e8cd0b930d86d3619d374a2eac9'
+            'a6f0ad7acc6054199fbab680a53769a936a4518a2ee751404839b77fb2a4be79'
             '63ea61478aeaab0640ac76d915e94ddf3a0c8a661ee1188c8365536141c7afc2'
-            '244f0718ee2a9d6862ae59d6c18c1dd1568651eada91a704574fa527fbac2b3a'
-            '90d879374f77bac47f132164c1e7fc4892e994ff1d1ac376efa0c1c26ea37273'
+            '5be46faf83078411c18ce0f3cb5e5fc5b56b8cb214a7f5a65dbbef6cb8249e16'
             '4d7b647169063dfedbff5e1e22cee77bd1a4183dbcfd5e802e68939da4bbf733'
             'd9cd8a77d9e0aa5e90d7f4ed74c8745c17b525e720e28e4c44364150003c35f9'
             '404c3f2e1d3d4097cedd08a4484119cb37d9adfc0ead49bdf5960e227e9159de'
-            'f3da8bcccac3e1fda767c85c14ab55706c13ba79b56d4d6fb5a6b51375f272b1'
+            '20f397fda486be2f4a6199cf39e7ce4e2a99abcecb571574bd1b375ea0d99228'
             'c82c8f0c7564c1234a2ccc11d359545b2da69643ec752865e63e0cd0d11beb30'
             '5557d8e601b17a80d1ea7de78a9869be69637cb6a02fbfe334e22fdf64e61d4c'
             'd88be2b45b43605ff31dd83d6a138069b6c2e92bc8989b7b9ab9eba8da5f8c7b'
-            '9db3df83b448ea95eadb8cec9969fea989695693c1501840fe6d5b68bbf60402'
             'dd8d9d43fbe6925149c1635728e6570168ffc91fb8fabeb46fb4f6f115f389d5'
             'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
             'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
 
 pkgver() {
   date +%Y%m%d
+}
+
+build() {
+  ./shadow-convert.sh
+  ./generate-sysusers.sh
 }
 
 package() {
@@ -95,4 +100,8 @@ package() {
   install -m 755 -d var/{cache,crash,lib,local,log,mail,opt,spool}
   install -m 1777 -d var/{crash,tmp}
   ln -s ../mail var/spool/mail
+
+  # setup default system groups/users
+  install -D -m644 "$srcdir"/20-basic-groups.conf -t "$pkgdir"/usr/lib/sysusers.d/
+  install -D -m644 "$srcdir"/20-basic-users.conf -t "$pkgdir"/usr/lib/sysusers.d/
 }
