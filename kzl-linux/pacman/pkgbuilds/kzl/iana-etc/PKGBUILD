@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=iana-etc
-pkgver=20230320
-pkgrel=1
+pkgver=20230330
+pkgrel=2
 epoch=
 pkgdesc="/etc/protocols and /etc/services provided by IANA"
 arch=('any')
@@ -12,7 +12,7 @@ backup=(etc/{protocols,services})
 source=(protocol-numbers-$pkgver.xml::https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml
         service-names-port-numbers-$pkgver.xml::https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml)
 sha256sums=('99d939412debbd69e49ad198f4c08b6d512b9e8f2f83e8f69be77da93aba1a24'
-            'e3708c3e8383701cab8ae06394257617e137f072a04e4f2e28bd8514ebfadb32')
+            '92985b42e90daec2b5950a6740af3744e74b098b1df53a97f81e3c76fe37fa18')
 
 package() {
   install -dm755 "$pkgdir"/etc

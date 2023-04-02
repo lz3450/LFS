@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=filesystem
-pkgver=20230326
+pkgver=20230402
 pkgrel=1
 epoch=
 pkgdesc="Root file system"
@@ -44,14 +44,13 @@ sha256sums=('a6f0ad7acc6054199fbab680a53769a936a4518a2ee751404839b77fb2a4be79'
             '90d879374f77bac47f132164c1e7fc4892e994ff1d1ac376efa0c1c26ea37273'
             '4d7b647169063dfedbff5e1e22cee77bd1a4183dbcfd5e802e68939da4bbf733'
             'd9cd8a77d9e0aa5e90d7f4ed74c8745c17b525e720e28e4c44364150003c35f9'
-            'd9c7dc6be96564223d7720103136e4ddc13ad7ad5f9cd95dc2718fee0216342f'
             '404c3f2e1d3d4097cedd08a4484119cb37d9adfc0ead49bdf5960e227e9159de'
-            'e40e27f06d9f1d5acb727a3119a9b46bef469e09a7999220d81fabcffa8c10f4'
-            '5e06477834f51abf42ea4e8dc199632afc6afbfd8c44354685a271e9a48d2c0a'
+            'f3da8bcccac3e1fda767c85c14ab55706c13ba79b56d4d6fb5a6b51375f272b1'
             'c82c8f0c7564c1234a2ccc11d359545b2da69643ec752865e63e0cd0d11beb30'
             '5557d8e601b17a80d1ea7de78a9869be69637cb6a02fbfe334e22fdf64e61d4c'
+            'd88be2b45b43605ff31dd83d6a138069b6c2e92bc8989b7b9ab9eba8da5f8c7b'
             '9db3df83b448ea95eadb8cec9969fea989695693c1501840fe6d5b68bbf60402'
-            'c390b31fffc4a2b5d78ae8c89f5317aadef1f71baac09cfb467b675db1406d61'
+            'dd8d9d43fbe6925149c1635728e6570168ffc91fb8fabeb46fb4f6f115f389d5'
             'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
             'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
 
