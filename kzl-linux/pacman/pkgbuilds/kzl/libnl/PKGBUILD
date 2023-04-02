@@ -1,40 +1,43 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libnl
-pkgver=3.5.0
+pkgver=3.7.0
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Library for applications dealing with netlink sockets"
 arch=('x86_64')
 url="https://github.com/thom311/libnl/"
 license=('KZL')
 backup=(etc/libnl/classid
         etc/libnl/pktloc)
-source=(https://github.com/thom311/libnl/releases/download/libnl${pkgver//./_}/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('352133ec9545da76f77e70ccb48c9d7e5324d67f6474744647a7ed382b5e05fa'
-            'SKIP')
-validpgpkeys=('49EA7C670E0850E7419514F629C2366E4DFC5728')
+source=(git+https://github.com/thom311/libnl.git#tag=$pkgname${pkgver//./_})
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
     --sysconfdir=/etc \
-    --disable-static
+    --enable-static=no
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

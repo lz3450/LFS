@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://ftp.gnu.org/gnu/nettle/ | grep -Po '(?<=nettle-)\d\.\d(\.\d)?' | sort -V | tail -1)

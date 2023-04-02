@@ -121,8 +121,27 @@ kzl_stage2_pkgs=(
     # util-linux
 
     ################
+    # iptables
+    ################
+    # libmnl libnfnetlink libnetfilter_conntrack
+    # libnftnl
+    # expat dbus libnl libpcap
+    # iptables
+
+    ################
     # systemd
     ################
+    # elfutils
+    # kbd
+    # kmod
+    # lz4
+    # kexec-tools
+    # nettle gnutls libmicrohttpd
+    # gnu-efi
+    # gperf
+    # rpcsvc-proto quota
+    # systemd
+    # util-linux dbus systemd
 
     ########################
     # other base-development

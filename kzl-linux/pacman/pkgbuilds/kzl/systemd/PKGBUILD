@@ -1,21 +1,23 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=systemd
-pkgver=249.12
-pkgrel=1
-epoch=1
+pkgver=253.2
+pkgrel=8
+epoch=
 arch=('x86_64')
-url="https://www.github.com/systemd/systemd-stable"
+url="https://github.com/systemd/systemd-stable"
 license=('KZL')
-depends=(acl audit cryptsetup elfutils iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl p11-kit pam pcre2 zstd)
-makedepends=(curl kexec-tools gnu-efi gperf libfido2 libmicrohttpd libxslt quota)
-optdepends=("curl: machinectl pull-tar and pull-raw"
-            "libfido2: unlocking LUKS2 volumes with FIDO2 token"
-            "libmicrohttpd: remote journald capabilities"
-            "quota: kernel-level quota management")
-provides=(systemd-libs systemd-resolvconf systemd-sysvcompat udev systemd-tools nss-myhostname libsystemd.so libudev.so libudev.so)
-conflicts=(systemd-libs systemd-resolvconf systemd-sysvcompat)
-replaces=(systemd-libs systemd-resolvconf systemd-sysvcompat)
+depends=(acl audit bzip2 cryptsetup dbus elfutils iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl pam pcre2 util-linux xz zlib zstd)
+makedepends=(curl kexec-tools gnu-efi gnutls gperf libmicrohttpd libxslt p11-kit quota)
+optdepends=("curl: libcurl support"
+            "gnu-efi: gnu-efi support for sd-boot"
+            "gnutls: gnutls support"
+            "libbpf: build BPF programs from source code in restricted C"
+            "libmicrohttpd: libµhttpd support"
+            "p11-kit: p11kit support"
+            "polkit: polkit support"
+            "quota: support for the quotacheck tools"
+            "tpm2-tss: TPM2 support")
 backup=(etc/pam.d/systemd-user
         etc/systemd/coredump.conf
         etc/systemd/homed.conf
@@ -33,9 +35,10 @@ backup=(etc/pam.d/systemd-user
         etc/systemd/user.conf
         etc/udev/udev.conf)
 install=systemd.install
-source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
-        systemd-user.pam
+source=(git+$url.git#tag=v$pkgver
         systemd.install
+        sysusers
+        tmpfiles
         20-systemd-sysusers.hook
         30-systemd-binfmt.hook
         30-systemd-catalog.hook
@@ -43,10 +46,12 @@ source=(git+https://github.com/systemd/systemd-stable#tag=v$pkgver?signed
         30-systemd-hwdb.hook
         30-systemd-sysctl.hook
         30-systemd-tmpfiles.hook
-        30-systemd-udev-reload.hook)
+        30-systemd-udev-reload.hook
+        30-systemd-udev-trigger.hook)
 sha256sums=('SKIP'
-            'cd3e8e24b6291e7f1ee13f1826400376ad5fa93090edd3be1d11f8e773aab603'
-            '9ff3bc557f68b5d9a4ec8199c4a3867682d83f177725cbcd14a71e16cab87af5'
+            'ed6b88d29cdf3a5f8a7ef19fba2721610485b8613ac5f9f60572113cc450f1bb'
+            '4ff47900d80dc67efeaf2f90dd7b01a644fb43e51067995fbcfee35c69b6ab7d'
+            '5d8e61479f0093852365090e84d8d95b1e7fccfab068274ee25863bde6ff3e07'
             '61623bab3be1dc5a4c72145e6cf36bccb08e24372142ef41e4e195cc342b2ec7'
             '393c963a4a3e11f7e7c9faa517179c55926e6663d71eaa9f5a7937cfe0e16af0'
             '5bc028f276e41553680aed71540fe3ca8255488f7a94ed1f52076aafb4b6f08c'
@@ -54,78 +59,53 @@ sha256sums=('SKIP'
             '2bcfa728a45e1177397ccfa0874ae358388eca5216f2db95876552631314596c'
             '0149385b55f58f8cf8ad160fcfb9bb7bd74351708d8cc13984ccb43d4453ed08'
             '7e21a3d6a8c8916fa152041db04bdc9d686732d856804e83b6ccb9e371f23df5'
-            '3b0141de66e70697df5b56f72a85001b5ce1f0070295db298d1b001401fce3c0')
-validpgpkeys=('5C251B5FC54EB2F80F407AAAC54CA336CFEB557E')
+            '3b0141de66e70697df5b56f72a85001b5ce1f0070295db298d1b001401fce3c0'
+            'e9a8a6263c97768d1431a628e3508340c6de5c5dc09441d4d65aff8931500af7')
 
 build() {
   cd $pkgname-stable
 
   local _timeservers=({0..3}.arch.pool.ntp.org)
-  # Cloudflare (https://1.1.1.1/)
-  # Quad9 without filtering (https://www.quad9.net/)
-  # Google (https://developers.google.com/speed/public-dns/)
-  local _nameservers=("1.1.1.1#cloudflare-dns.com"
-                      "9.9.9.9#dns.quad9.net"
-                      "8.8.8.8#dns.google"
-                      "2606:4700:4700::1111#cloudflare-dns.com"
-                      "2620:fe::9#dns.quad9.net"
-                      "2001:4860:4860::8888#dns.google")
+
   meson setup \
     --prefix /usr \
-    --libexecdir lib \
-    --sbindir bin \
-    --auto-features enabled \
-    --buildtype plain \
-    --wrap-mode nodownload \
+    --optimization 2 \
     -D b_lto=true \
     -D b_pie=true \
     -D acl=true \
     -D apparmor=false \
     -D audit=true \
-    -D bashcompletiondir=/usr/share/bash-completion/completions/ \
-    -D binfmt=true \
+    -D bashcompletiondir=/usr/share/bash-completion/completions \
     -D blkid=true \
+    -D bpf-framework=false \
     -D bzip2=true \
-    -D certificate-root=/etc/ssl \
     -D dbus=true \
-    -D dbuspolicydir=/usr/share/dbus-1/system.d \
     -D default-dnssec=no \
-    -D default-hierarchy=unified \
     -D default-kill-user-processes=false \
-    -D default-locale=C \
-    -D dns-over-tls=openssl \
-    -D dns-servers="${_nameservers[*]}" \
-    -D efi=true \
+    -D dns-servers= \
     -D elfutils=true \
-    -D fallback-hostname='KZL-Linux' \
     -D fdisk=true \
+    -D gcrypt=true \
     -D gnu-efi=true \
     -D gnutls=true \
     -D homed=true \
-    -D hostnamed=true \
-    -D ima=false \
-    -D importd=true \
-    -D kexec-path=/usr/bin/kexec \
-    -D kmod-path=/usr/bin/kmod \
+    -D kexec-path=/usr/sbin/kexec \
     -D kmod=true \
+    -D kmod-path=/usr/bin/kmod \
     -D libcryptsetup=true \
     -D libcurl=true \
-    -D libfido2=true \
     -D libidn2=true \
     -D libiptc=true \
-    -D localegen-path=/usr/bin/locale-gen \
+    -D localegen-path=/usr/sbin/locale-gen \
     -D lz4=true \
-    -D man=false \
     -D microhttpd=true \
-    -D nologin-path=/usr/bin/nologin \
+    -D mode=release \
     -D ntp-servers="${_timeservers[*]}" \
     -D openssl=true \
     -D p11kit=true \
     -D pam=true \
     -D pcre2=true \
-    -D polkit=true \
-    -D pwquality=false \
-    -D qrencode=false \
+    -D polkit=false \
     -D remote=true \
     -D repart=true \
     -D rpmmacrosdir=no \
@@ -136,19 +116,35 @@ build() {
     -D sbat-distro-url="https://github.com/kongzelun/LFS" \
     -D sbat-distro-version=$pkgver \
     -D seccomp=true \
-    -D selinux=false \
-    -D split-bin=false \
+    -D split-bin=true \
     -D split-usr=false \
-    -D sysvinit-path= \
-    -D sysvrcnd-path= \
-    -D telinit-path= \
-    -D user-path=/usr/local/bin:/usr/bin \
-    -D valgrind=true \
-    -D version-tag="$pkgver-$pkgrel-kzl $(date -Ru)" \
+    -D status-unit-format-default=combined \
+    -D tpm2=false \
+    -D ukify=true \
+    -D user-path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    -D valgrind=false \
+    -D version-tag="$pkgver-$pkgrel-kzl $(date -u '+%Y/%m/%d %T %z')" \
     -D xz=true \
     -D zlib=true \
-    -D zshcompletiondir=/usr/share/zsh/site-functions/ \
+    -D zshcompletiondir=/usr/share/zsh/site-functions \
     -D zstd=true \
+    -D adm-gid=4 \
+    -D wheel-gid=10 \
+    -D tty-gid=5 \
+    -D disk-gid=6 \
+    -D lp-gid=7 \
+    -D kmem-gid=9 \
+    -D cdrom-gid=11 \
+    -D dialout-gid=18 \
+    -D utmp-gid=22 \
+    -D tape-gid=33 \
+    -D kvm-gid=36 \
+    -D video-gid=39 \
+    -D audio-gid=63 \
+    -D users-gid=100 \
+    -D input-gid=104 \
+    -D render-gid=105 \
+    -D sgx-gid=106 \
     build
 
   meson compile -C build
@@ -163,14 +159,19 @@ check() {
 package() {
   cd $pkgname-stable
 
-  DESTDIR="$pkgdir/" meson install -C build
-  
-  chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
+  meson install -C build --destdir="$pkgdir"
+
+  # setup default system users/groups
+  install -D -m644 "$srcdir"/sysusers usr/lib/sysusers.d/20-sysusers.conf
+
+  # setup default system files
+  install -D -m644 "$srcdir"/tmpfiles usr/lib/tmpfiles.d/20-tmpfiles.conf
+
+  # # setup systemd.environment-generator
+  # install -D -m755 "$srcdir"/env-generator usr/lib/systemd/system-environment-generators/00-system-environment-generators
+
   chmod -R 2755 "$pkgdir"/var/log/journal/
-
-  install -Dm0644 "$srcdir"/systemd-user.pam "$pkgdir"/etc/pam.d/systemd-user
-
-  rm -f "$pkgdir"/usr/share/factory/etc/{issue,nsswitch.conf}
+  # chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
 
   install -Dm0644 "$srcdir"/*.hook -t "$pkgdir"/usr/share/libalpm/hooks/
 }

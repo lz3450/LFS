@@ -98,12 +98,23 @@ base:
     - nghttp2
     - libpsl:
         - libidn2
-        - libxslt:
+        - libxslt (make):
             - libgcrypt:
                 - libgpg-error
             - libxml2
     - libssh2:
         - openssl
+  iptables:
+    - libnetfilter_conntrack:
+        - libmnl
+        - libnfnetlink
+    - libnftnl:
+        - libmnl
+    - libpcap:
+        - dbus:
+            - audit
+            - expat
+        - libnl
   util-linux:
     - bash-completion
     - cryptsetup:
@@ -121,6 +132,54 @@ base:
     - pam
     - readline
     - systemd
+  systemd:
+    - acl
+    - audit
+    - bzip2
+    - cryptsetup
+    - dbus
+    - elfutils
+    - iptables
+    - kbd
+    - kmod:
+        - openssl
+    - libcap
+    - libgcrypt
+    - libidn2
+    - libseccomp
+    - lz4
+    - openssl
+    - pam
+    - pcre2
+    - util-linux
+    - xz
+    - zlib
+    - zstd
+    - curl (make)
+    - kexec-tools (make)
+    - libmicrohttpd (make):
+        - gnutls:
+            - gmp
+            - libidn2
+            - libtasn1
+            - libunistring
+            - nettle:
+                - gmp
+            - p11-kit
+        - curl (check)
+    - gnu-efi (make)
+    - gnutls (make)
+    - gperf (make)
+    - libxslt (make)
+    - p11-kit (make)
+    # - polkit (make):
+    #     - glib2
+    #     - todo
+    - quota (make):
+        - dbus
+        - libnl
+        - libtirpc
+        - rpcsvc-proto (make)
 base-development:
   linux-api-headers:
   libtool:

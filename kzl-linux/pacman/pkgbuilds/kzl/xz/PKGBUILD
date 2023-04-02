@@ -2,7 +2,7 @@
 
 pkgname=xz
 pkgver=5.4.2
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="Library and command line tools for XZ and LZMA compressed files"
 arch=('x86_64')
@@ -11,24 +11,45 @@ license=('KZL')
 source=(git+https://github.com/tukaani-project/xz.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh --no-po4a --no-doxygen
+}
+
 build() {
   cd $pkgname
 
-  cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_INSTALL_LIBDIR=lib \
-    -DCMAKE_C_FLAGS="$CPPFLAGS $CFLAGS" \
-    -DCMAKE_CXX_FLAGS="$CPPFLAGS $CXXFLAGS" \
-    -DBUILD_SHARED_LIBS=ON \
-    -S . \
-    -B build
+  ./configure \
+    --prefix=/usr \
+    --disable-rpath \
+    --enable-werror
 
-  cmake --build build
+  make
+
+  # cmake \
+  #   -DCMAKE_BUILD_TYPE=Release \
+  #   -DCMAKE_INSTALL_PREFIX=/usr \
+  #   -DCMAKE_INSTALL_LIBDIR=lib \
+  #   -DCMAKE_C_FLAGS="$CPPFLAGS $CFLAGS" \
+  #   -DBUILD_SHARED_LIBS=ON \
+  #   -S . \
+  #   -B build \
+  #   -LAH
+
+  # cmake --build build
+}
+
+check() {
+  cd $pkgname
+
+  make check
 }
 
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir/" cmake --build build --target install
+  make DESTDIR="$pkgdir" install
+
+  # DESTDIR="$pkgdir" cmake --build build --target install
 }

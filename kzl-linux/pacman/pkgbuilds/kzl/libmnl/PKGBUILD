@@ -1,19 +1,23 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libmnl
-pkgver=1.0.4
-pkgrel=1
-epoch=1
-pkgdesc="Minimalistic user-space library oriented to Netlink developers"
+pkgver=1.0.5
+pkgrel=3
+epoch=
+pkgdesc="A minimalistic user-space library oriented to Netlink developers"
 arch=('x86_64')
 url="https://www.netfilter.org/projects/libmnl"
-source=($url/files/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('171f89699f286a5854b72b91d06e8f8e3683064c5901fb09d954a9ab6f551f81'
-            'SKIP')
-validpgpkeys=('C09DB2063F1D7034BA6152ADAB4655A126D292E4')
+source=(git://git.netfilter.org/libmnl#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -22,7 +26,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

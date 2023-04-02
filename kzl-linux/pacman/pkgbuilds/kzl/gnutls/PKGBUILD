@@ -1,31 +1,43 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gnutls
-pkgver=3.7.3
-pkgrel=1
-epoch=1
-pkgdesc="A library which provides a secure layer over a reliable transport layer"
+pkgver=3.8.0
+pkgrel=2
+epoch=
+pkgdesc="A secure communications library implementing the SSL, TLS and DTLS protocols and technologies around them"
 arch=('x86_64')
 url="https://www.gnutls.org/"
 license=('KZL')
-depends=(libidn2 libtasn1 libunistring nettle p11-kit)
-source=(https://www.gnupg.org/ftp/gcrypt/gnutls/v${pkgver%.*}/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('fc59c43bc31ab20a6977ff083029277a31935b8355ce387b634fa433f8f6c49a'
-            'SKIP')
+depends=(gmp libidn2 libtasn1 libunistring nettle p11-kit)
+# makedepends=(tpm2-tss)
+# optiondepends=("tpm2-tss: TPM2 support")
+# source=(git+https://gitlab.com/gnutls/gnutls.git#tag=$pkgver
+#         git+https://git.savannah.gnu.org/git/gnulib.git)
+source=(https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/$pkgname-$pkgver.tar.xz{,.sig})
 validpgpkeys=('462225C3B46F34879FC8496CD605848ED7E69871')
+sha256sums=('0ea0d11a1660a1e63f960f157b197abe6d0c8cb3255be24e1fb3815930b9bdc5'
+            'SKIP')
+
+# prepare() {
+#   cd $pkgname
+
+#   ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
+# }
 
 build() {
   cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr \
-    --enable-openssl-compatibility \
-    --disable-static \
-    --enable-guile \
+    --disable-doc \
+    --disable-rpath \
     --with-idn \
-    --with-default-trust-store-pkcs11="pkcs11:model=p11-kit-trust;manufacturer=PKCS%2311%20Kit"
-
-  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+    --with-p11-kit \
+    --without-tpm2 \
+    --without-tpm \
+    --with-zlib \
+    --with-brotli \
+    --with-zstd
 
   make
 }
@@ -33,7 +45,7 @@ build() {
 check() {
   cd $pkgname-$pkgver
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {

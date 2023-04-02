@@ -14,12 +14,11 @@ backup=(etc/crypttab
         etc/gshadow
         etc/host.conf
         etc/hosts
-        etc/issue
         etc/motd
-        etc/nsswitch.conf
         etc/passwd
         etc/profile
         etc/resolv.conf
+        ect/securetty
         etc/shadow
         etc/shells
         etc/subgid
@@ -30,12 +29,11 @@ source=(crypttab
         gshadow
         host.conf
         hosts
-        issue
         motd
-        nsswitch.conf
         passwd
         profile
         resolv.conf
+        securetty
         shadow
         shells
         subgid
@@ -72,7 +70,7 @@ package() {
 
   # /etc
   install -m 755 -d etc/{skel,profile.d} usr/share/factory/etc
-  for f in fstab group host.conf hosts issue motd nsswitch.conf passwd profile resolv.conf shells subgid subuid; do
+  for f in fstab group host.conf hosts motd passwd profile resolv.conf securetty shells subgid subuid; do
     install -D -m 644 "$srcdir/$f" etc/
     install -D -m 644 "$srcdir/$f" usr/share/factory/etc/
   done

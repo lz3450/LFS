@@ -1,37 +1,36 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libpcap
-pkgver=1.10.1
-pkgrel=1
-epoch=1
+pkgver=1.10.3
+pkgrel=3
+epoch=
 pkgdesc="A system-independent interface for user-level packet capture"
 arch=('x86_64')
 url="https://www.tcpdump.org/"
 license=('KZL')
-depends=(libnl)
-# depends=(bluez libnl)
-source=(https://www.tcpdump.org/release/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('ed285f4accaf05344f90975757b3dbfe772ba41d1c401c2648b7fa45b711bdd4'
-            'SKIP')
-validpgpkeys=('1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D')
+# depends=(bluez dbus libnl)
+depends=(dbus libnl)
+source=(git+https://github.com/the-tcpdump-group/libpcap.git#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
 
-# TODO: bluetooth
+prepare() {
+  cd $pkgname
+
+  autoreconf -vfi
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
-    --enable-ipv6 \
-    --enable-usb \
-    --disable-bluetooth \
-    --with-libnl
+    --enable-bluetooth=no
 
   make
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

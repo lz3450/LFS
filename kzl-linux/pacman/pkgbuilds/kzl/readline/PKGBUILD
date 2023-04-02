@@ -2,7 +2,7 @@
 
 pkgname=readline
 pkgver=8.2
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="GNU readline library"
 arch=('x86_64')
@@ -14,7 +14,7 @@ options=(!emptydirs)
 source=(git+https://git.savannah.gnu.org/git/readline.git#branch=master
         inputrc)
 sha256sums=('SKIP'
-            '1372f6d69c3638d63724c6daecf339c82bb9520a77ead2d497cb66e7114e62bb')
+            '3fcb135d5dfe1ce200057396c13cc7e65551864167fcd64f32868f30fd975cba')
 
 build() {
   cd $pkgname

@@ -1,23 +1,18 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=dbus
-pkgver=1.12.20
-pkgrel=1
-epoch=1
+pkgver=1.14.6
+pkgrel=4
+epoch=
 pkgdesc="Freedesktop.org message bus system"
 arch=('x86_64')
 url="https://wiki.freedesktop.org/www/Software/dbus/"
 license=('KZL')
 depends=(audit expat)
-makedepends=(autoconf-archive)
-provides=(libdbus libdbus-1.so)
-conflicts=(libdbus)
-replaces=(libdbus)
-source=(git+https://gitlab.freedesktop.org/dbus/dbus.git#tag=$pkgname-$pkgver?signed
+source=(git+https://gitlab.freedesktop.org/dbus/dbus.git#tag=$pkgname-$pkgver
         dbus-reload.hook)
 sha256sums=('SKIP'
             '40a68351784cff90591656db57e77c9a97840ebf9e7a63eb1ccd6538e9c090f7')
-validpgpkeys=('DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90')
 
 prepare() {
   cd $pkgname
@@ -30,42 +25,62 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --libexecdir=/usr/lib/dbus-1.0 \
     --sysconfdir=/etc \
     --localstatedir=/var \
-    runstatedir=/run \
-    --disable-static \
+    --runstatedir=/run \
+    --enable-static=no \
+    --enable-asserts \
     --disable-xml-docs \
     --disable-doxygen-docs \
     --disable-ducktype-docs \
+    --disable-selinux \
+    --disable-apparmor \
     --enable-libaudit \
     --enable-inotify \
     --enable-systemd \
     --enable-user-session \
-    --with-system-pid-file=/run/dbus/pid \
     --with-system-socket=/run/dbus/system_bus_socket \
-    --with-console-auth-dir=/run/console \
     --with-dbus-user=dbus \
-    --without-x \
-    --with-systemdsystemunitdir=/usr/lib/systemd/system
+    --without-x
+
+  # meson setup \
+  #   --prefix /usr \
+  #   --optimization 2 \
+  #   -D asserts=true \
+  #   -D dbus_user=dbus \
+  #   -D doxygen_docs=false \
+  #   -D ducktype_docs=false \
+  #   -D inotify=true \
+  #   -D libaudit=true \
+  #   -D qt_help=false \
+  #   -D runtime_dir=/run \
+  #   -D selinux=false \
+  #   -D system_socket=/run/dbus/system_bus_socket \
+  #   -D systemd=true \
+  #   -D user_session=true \
+  #   -D x11_autolaunch=false \
+  #   -D xml_docs=false \
+  #   build
 
   make
+  # meson compile -C build
 }
 
 check() {
   cd $pkgname
 
   make check
+  # meson test -C build
 }
 
 package() {
   cd $pkgname
 
   make DESTDIR="$pkgdir/" install
+  # meson install -C build --destdir="$pkgdir/"
 
   rm -r "$pkgdir"/{etc,var}
 
-  # pre-assigned uid (81)
   echo 'u dbus 81 "System Message Bus"' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/dbus.conf
 
   install -Dm644 "$srcdir"/dbus-reload.hook -t "$pkgdir"/usr/share/libalpm/hooks

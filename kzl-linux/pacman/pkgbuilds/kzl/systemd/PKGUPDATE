@@ -1,0 +1,1 @@
+new_version=$(curl -L --stderr - https://github.com/systemd/systemd-stable/tags | grep -Po '(?<=systemd-stable/releases/tag/v)\d{3}\.\d' | sort -V | tail -1)

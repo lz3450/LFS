@@ -65,13 +65,13 @@ build() {
     --disable-crypt \
     --with-pkgversion="KZL $pkgver-$pkgrel"
 
-  make -O
+  make
 }
 
 check() {
   cd $pkgname/build
 
-  make -O -k check || warning "Check failed."
+  make -k check || warning "Check failed."
 }
 
 package() {
@@ -83,7 +83,7 @@ package() {
 
   # locale
   install -m755 -d "$pkgdir"/usr/lib/locale
-  install -Dm755 "$srcdir"/locale-gen "$pkgdir"/usr/bin/locale-gen
+  install -Dm755 "$srcdir"/locale-gen "$pkgdir"/usr/sbin/locale-gen
   install -Dm644 "$srcdir"/locale.gen "$pkgdir"/etc/locale.gen
   sed -e '1,3d' -e 's|/| |g' -e 's| \\||g' "$srcdir"/$pkgname/localedata/SUPPORTED > "$pkgdir"/usr/share/i18n/SUPPORTED
   sed -e 's|^|#|g' "$pkgdir"/usr/share/i18n/SUPPORTED >> "$pkgdir"/etc/locale.gen

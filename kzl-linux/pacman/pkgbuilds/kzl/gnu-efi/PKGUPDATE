@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://sourceforge.net/projects/gnu-efi/files/ | grep -Po '(?<=gnu-efi-)\d\.\d\.\d\d' | head -1)

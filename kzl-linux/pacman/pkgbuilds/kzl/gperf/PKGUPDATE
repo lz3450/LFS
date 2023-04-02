@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://www.gnu.org/software/gperf/ | grep -A 1 'The latest release is' | grep -Po '(?<=gperf-)\d\.\d' | head -1)

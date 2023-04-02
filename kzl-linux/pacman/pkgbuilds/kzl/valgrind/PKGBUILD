@@ -3,7 +3,7 @@
 pkgname=valgrind
 pkgver=3.18.1
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Tool to help find memory-management problems in programs"
 arch=('x86_64')
 url="http://valgrind.org/"

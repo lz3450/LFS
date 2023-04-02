@@ -1,42 +1,40 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=expat
-pkgver=2.4.5
-pkgrel=1
-epoch=1
+pkgver=2.5.0
+pkgrel=2
+epoch=
 pkgdesc="An XML parser library"
 arch=('x86_64')
 url="https://libexpat.github.io/"
 license=('KZL')
-provides=(libexpat.so)
-source=(https://github.com/libexpat/libexpat/releases/download/R_${pkgver//./_}/expat-$pkgver.tar.bz2{,.asc})
-sha256sums=('fbb430f964c7a2db2626452b6769e6a8d5d23593a453ccbc21701b74deabedff'
-            'SKIP')
-validpgpkeys=('3176EF7DB2367F1FCA4F306B1F9B0E909AF37285')
+source=(git+https://github.com/libexpat/libexpat.git#tag=R_${pkgver//./_})
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd libexpat/$pkgname
 
   cmake \
-    -DCMAKE_BUILD_TYPE=None \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_INSTALL_LIBDIR:PATH=lib \
+    -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
     -S . \
-    -B build
+    -B build \
+    -LAH
 
   cmake --build build
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd libexpat/$pkgname
 
   cmake --build build --target tests
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd libexpat/$pkgname
 
-  cmake --build build --target install -- DESTDIR="$pkgdir/"
+  DESTDIR="$pkgdir/" cmake --build build --target install
 }

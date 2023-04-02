@@ -3,7 +3,7 @@
 pkgname=polkit
 pkgver=121
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Application development toolkit for controlling system-wide privileges"
 arch=('x86_64')
 url="https://gitlab.freedesktop.org/polkit/polkit"
@@ -15,19 +15,12 @@ options=(debug)
 source=(git+https://gitlab.freedesktop.org/polkit/polkit.git#tag=$pkgver)
 sha256sums=('SKIP')
 
-pkgver() {
-  cd $pkgname
-
-  git describe --tags | sed 's/-/+/g'
-}
-
 build() {
   cd $pkgname
 
   meson setup \
     --prefix /usr \
     --libexecdir lib \
-    --sbindir bin \
     --auto-features enabled \
     --buildtype plain \
     --wrap-mode nodownload \

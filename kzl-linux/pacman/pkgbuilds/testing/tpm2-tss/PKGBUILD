@@ -1,0 +1,51 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=tpm2-tss
+pkgver=3.2.0
+pkgrel=1
+epoch=
+pkgdesc="The Trusted Computing Group's (TCG) TPM2 Software Stack (TSS)"
+arch=('x86_64')
+url="https://tpm2-software.github.io/"
+license=('KZL')
+depends=()
+makedepends=()
+checkdepends=()
+backup=()
+source=(git+https://github.com/tpm2-software/tpm2-tss.git#tag=v$pkgver)
+sha256sums=()
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
+
+###############################################################################
+
+prepare() {
+
+}
+
+###############################################################################
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure \
+    --prefix=/usr
+
+  make -O
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  make -O -k check || warning "Check failed."
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make DESTDIR="$pkgdir/" install
+}

@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://github.com/thkukuk/rpcsvc-proto/tags | grep -Po '(?<=rpcsvc-proto/releases/tag/v)\d\.\d\.\d' | head -1)

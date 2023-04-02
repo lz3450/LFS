@@ -9,7 +9,6 @@ arch=('x86_64')
 url="https://p11-glue.freedesktop.org"
 license=('KZL')
 depends=(libffi libtasn1)
-makedepends=(bash-completion)
 source=(git+https://github.com/p11-glue/p11-kit.git#tag=$pkgver)
 sha256sums=('SKIP')
 

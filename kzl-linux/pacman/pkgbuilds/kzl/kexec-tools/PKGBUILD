@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=kexec-tools
-pkgver=2.0.23
-pkgrel=1
-epoch=1
+pkgver=2.0.26
+pkgrel=2
+epoch=
 pkgdesc="Load another kernel from the currently executing Linux kernel"
 arch=('x86_64')
-url="https://kernel.org/pub/linux/utils/kernel/kexec/"
+url="https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git"
 license=('KZL')
-source=(git://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git#tag=v$pkgver)
+source=(git+$url#tag=v$pkgver)
 sha256sums=('SKIP')
 
 prepare() {
@@ -20,12 +20,8 @@ prepare() {
 build() {
   cd $pkgname
 
-  CFLAGS+=" -fcommon"
-
   ./configure \
-    --prefix=/usr \
-    --sbindir=/usr/bin \
-    --without-lzma
+    --prefix=/usr
 
   make
 }

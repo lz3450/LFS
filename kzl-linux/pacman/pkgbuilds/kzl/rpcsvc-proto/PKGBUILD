@@ -2,23 +2,23 @@
 
 pkgname=rpcsvc-proto
 pkgver=1.4.3
-pkgrel=1
-epoch=1
+pkgrel=4
+epoch=
 pkgdesc="rpcsvc protocol definitions from glibc"
 arch=('x86_64')
 url="https://github.com/thkukuk/rpcsvc-proto"
 license=('KZL')
-source=(https://github.com/thkukuk/rpcsvc-proto/archive/v$pkgver.tar.gz)
-sha256sums=('6906e0f81bb016bd0216460fc879d3d9f2f6d743be7dfb0d8b32d140226d5ef8')
+source=(git+$url.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   autoreconf -ifv
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -27,7 +27,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://github.com/thom311/libnl/tags | grep -Po '(?<=libnl/releases/tag/libnl)\d_\d_\d' | head -1 | sed 's/_/./g')

@@ -1,29 +1,30 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gnu-efi
-pkgver=3.0.14
-pkgrel=1
-epoch=1
+pkgver=3.0.15
+pkgrel=3
+epoch=
 pkgdesc="Library for building UEFI Applications using GNU toolchain"
 arch=('x86_64')
 url="https://sourceforge.net/projects/gnu-efi/"
 license=('KZL')
-options=(!strip !makeflags !buildflags)
 source=(https://download.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.bz2)
-sha256sums=('b73b643a0d5697d1f396d7431448e886dd805668789578e3e1a28277c9528435')
+sha256sums=('931a257b9c5c1ba65ff519f18373c438a26825f2db7866b163e96d1b168f20ea')
 
 build() {
   cd $pkgname-$pkgver
 
-  make lib gnuefi inc apps
+  CFLAGS=""
+  LDFLAGS=""
+
+  make
+  make apps
 }
 
 package() {
   cd $pkgname-$pkgver
 
-  make INSTALLROOT="$pkgdir/" PREFIX="/usr" LIBDIR="/usr/lib" install
+  make INSTALLROOT="$pkgdir" PREFIX="/usr" install
 
-
-	install -d "$pkgdir"/usr/share/gnu-efi/apps/$arch/
-	install -Dm0644 "$srcdir"/gnu-efi-$pkgver/$arch/apps/*.efi "$pkgdir"/usr/share/gnu-efi/apps/$arch/
+  install -Dm644 $CARCH/apps/*.efi -t "$pkgdir/usr/share/$pkgname/apps/$CARCH/"
 }

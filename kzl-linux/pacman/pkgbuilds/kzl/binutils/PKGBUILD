@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.40
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64')
@@ -31,7 +31,7 @@ _common_options=(
   --enable-pgo-build=lto
   --enable-lto
   --with-system-zlib
-  --with-zstd=auto
+  --with-zstd=yes
   # subpackage common
   --enable-shared
   --enable-plugins
@@ -47,7 +47,7 @@ _common_options=(
 _binutils_options=(
   --enable-deterministic-archives
   --enable-colored-disassembly
-  --with-debuginfod=auto
+  --with-debuginfod=no
 )
 
 _ld_options=(

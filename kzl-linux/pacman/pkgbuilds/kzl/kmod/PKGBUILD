@@ -1,31 +1,38 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=kmod
-pkgver=29
-pkgrel=1
-epoch=1
+pkgver=30
+pkgrel=7
+epoch=
 pkgdesc="Linux kernel module management tools and library"
 arch=('x86_64')
-url="https://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary"
+url="https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git"
 license=('KZL')
 depends=(openssl)
-source=(https://www.kernel.org/pub/linux/utils/kernel/$pkgname/$pkgname-$pkgver.tar.{xz,sign}
+source=(git+$url#tag=v$pkgver
         depmod.script
         depmod.hook
         depmod-search.conf)
-sha256sums=('0b80eea7aa184ac6fd20cafa2a1fdf290ffecc70869a797079e2cc5c6225a52a'
-            'SKIP'
+sha256sums=('SKIP'
             '31699f1b8b33f1bd61111328375c10d75c587e49c4fee9b7778e664a9354e4b0'
             'c11c2a0f66ea405493e8617689ca10818dc81dd1dddc19bdb220c8b2917119c1'
             '1a92bfeae870f61ce814577e69d2a147a9c0caf6aed1131243e4179241fcc4a8')
-validpgpkeys=('EAB33C9690013C733916AC839BA2A5A630CBEA53')
+
+prepare() {
+  cd $pkgname
+
+  touch libkmod/docs/gtk-doc.make
+
+  autoreconf --force --install --symlink
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
+    --disable-manpages \
     --with-zstd \
     --with-xz \
     --with-zlib \
@@ -35,21 +42,16 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
-  
-  # extra directories
+  make DESTDIR="$pkgdir" install
+
   install -dm755 "$pkgdir"/{etc,usr/lib}/{depmod,modprobe}.d
-
-  for tool in {ins,ls,rm,dep}mod mod{probe,info}; do
+  for tool in lsmod rmmod insmod modinfo modprobe depmod; do
     ln -s kmod "$pkgdir"/usr/bin/$tool
   done
-
-  # install depmod.d file for search/ dir
   install -Dm644 "$srcdir"/depmod-search.conf "$pkgdir"/usr/lib/depmod.d/search.conf
 
-  # hook
   install -Dm644 "$srcdir"/depmod.hook "$pkgdir"/usr/share/libalpm/hooks/60-depmod.hook
   install -Dm755 "$srcdir"/depmod.script "$pkgdir"/usr/share/libalpm/scripts/depmod
 }

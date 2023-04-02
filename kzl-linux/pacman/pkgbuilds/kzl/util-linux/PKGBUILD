@@ -2,7 +2,7 @@
 
 pkgname=util-linux
 pkgver=2.38.1
-pkgrel=14
+pkgrel=16
 epoch=
 pkgdesc="Miscellaneous system utilities for Linux"
 arch=('x86_64')
@@ -33,7 +33,6 @@ build() {
     --enable-static=no \
     --disable-asciidoc \
     --disable-bfs \
-    --disable-minix \
     --disable-chfn-chsh \
     --disable-login \
     --disable-nologin \

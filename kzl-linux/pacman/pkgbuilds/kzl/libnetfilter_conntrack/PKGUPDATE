@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://www.netfilter.org/index.html | grep -Po '(?<=libnetfilter_conntrack )\d\.\d\.\d(?= released)' | head -1)

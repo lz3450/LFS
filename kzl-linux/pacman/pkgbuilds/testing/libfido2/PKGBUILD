@@ -29,6 +29,6 @@ build() {
 
 package() {
   cd $pkgname-$pkgver
-  
+
   cmake --build build --target install -- DESTDIR="$pkgdir/"
 }

@@ -1,44 +1,45 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libmicrohttpd
-pkgver=0.9.75
-pkgrel=1
-epoch=1
-pkgdesc="A small C library that is supposed to make it easy to run an HTTP server as part of another application"
+pkgver=0.9.76
+pkgrel=2
+epoch=
+pkgdesc="A small C library that makes it easy to run an HTTP server as part of another application"
 arch=('x86_64')
 url="https://www.gnu.org/software/libmicrohttpd/"
 depends=(gnutls)
 checkdepends=(curl)
-source=(https://ftp.gnu.org/gnu/libmicrohttpd/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('9278907a6f571b391aab9644fd646a5108ed97311ec66f6359cebbedb0a4e3bb'
-            'SKIP')
-validpgpkeys=('EA812DBEFA5A7EF17DA8F2C1460A317C3326D2AE'
-              'D8423BCB326C7907033929C7939E6BE1E29FC3CC')
+source=(git+https://git.gnunet.org/libmicrohttpd.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
+    --disable-rpath \
+    --disable-doc \
     --enable-curl \
-    --enable-https \
-    --enable-largefile \
-    --enable-messages \
-    --disable-dependency-tracking \
-    --disable-examples \
-    --with-pic
+    --enable-https=yes \
+    --with-gnutls
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

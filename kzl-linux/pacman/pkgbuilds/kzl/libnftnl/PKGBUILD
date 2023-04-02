@@ -1,21 +1,25 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libnftnl
-pkgver=1.2.1
-pkgrel=1
-epoch=1
-pkgdesc="Netfilter library providing interface to the nf_tables subsystem"
+pkgver=1.2.5
+pkgrel=2
+epoch=
+pkgdesc="A userspace library providing a low-level netlink programming interface (API) to the in-kernel nf_tables subsystem"
 arch=('x86_64')
 url="https://netfilter.org/projects/libnftnl"
 license=('KZL')
 depends=(libmnl)
-source=($url/files/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('7508a5c414fab13e3cb3ce8262d0ce4f02c1590a8e4f8628ab497b5b4585937c'
-            'SKIP')
-validpgpkeys=('37D964ACC04981C75500FB9BD55D978A8A1420E4')
+source=(git://git.netfilter.org/libnftnl#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -23,14 +27,8 @@ build() {
   make
 }
 
-check() {
-  cd $pkgname-$pkgver
-
-  make check
-}
-
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

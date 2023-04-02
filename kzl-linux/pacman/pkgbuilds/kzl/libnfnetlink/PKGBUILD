@@ -1,19 +1,23 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libnfnetlink
-pkgver=1.0.1
+pkgver=1.0.2
 pkgrel=1
-epoch=1
-pkgdesc="Low-level library for netfilter related kernel/userspace communication"
+epoch=
+pkgdesc="The low-level library for netfilter related kernel/userspace communication"
 arch=('x86_64')
 url="https://www.netfilter.org/projects/libnfnetlink"
-source=($url/files/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('f270e19de9127642d2a11589ef2ec97ef90a649a74f56cf9a96306b04817b51a'
-            'SKIP')
-validpgpkeys=('57FF5E9C9AA67A860B557AF7A4111F89BB5F58CC') 
+source=(git://git.netfilter.org/libnfnetlink#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -22,7 +26,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir/" install
 }

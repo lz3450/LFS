@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://github.com/lz4/lz4/tags | grep -Po '(?<=lz4/releases/tag/v)\d\.\d\.\d' | head -1)

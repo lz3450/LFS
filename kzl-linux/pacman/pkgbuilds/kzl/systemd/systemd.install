@@ -5,13 +5,13 @@ post_install() {
   journalctl --update-catalog
 
   # add journal acls
-  setfacl -Rnm g:wheel:rx,d:g:wheel:rx,g:adm:rx,d:g:adm:rx var/log/journal/ 2>/dev/null
+  setfacl -Rnm g:wheel:rx,d:g:wheel:rx var/log/journal/ 2>/dev/null
 
   systemctl enable \
     getty@tty1.service \
     remote-fs.target
 
-  chmod 2755 var/log/journal/remote
+  mkdir -m2755 var/log/journal/remote
   chgrp systemd-journal-remote var/log/journal/remote
 }
 
