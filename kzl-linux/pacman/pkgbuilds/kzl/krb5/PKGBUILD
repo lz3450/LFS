@@ -2,14 +2,14 @@
 
 pkgname=krb5
 pkgver=1.20.1
-pkgrel=1
+pkgrel=5
 epoch=
 pkgdesc="The Kerberos network authentication protocol"
 arch=('x86_64')
 url="https://web.mit.edu/kerberos/"
 license=('KZL')
 # depends=(e2fsprogs keyutils libedit libldap libverto lmdb)
-depends=(e2fsprogs keyutils)
+depends=(e2fsprogs keyutils libedit)
 backup=(etc/krb5.conf
         var/lib/krb5kdc/kdc.conf)
 source=(git+https://github.com/krb5/krb5.git#tag=$pkgname-$pkgver-final)
@@ -26,6 +26,13 @@ build() {
 
   # https://web.mit.edu/kerberos/krb5-latest/doc/build/options2configure.html
 
+  _readline_options=(
+    # Using libedit for readline support
+    --with-libedit --without-readline
+    # Using GNU Readline
+    # --without-libedit --with-readline
+  )
+
   ./configure \
     --prefix=/usr \
     --sbindir=/usr/bin \
@@ -38,8 +45,7 @@ build() {
     --without-ldap \
     --with-keyutils \
     --without-lmdb \
-    --without-libedit \
-    --with-readline \
+    ${_readline_options[@]} \
     --without-system-verto
 
   make
