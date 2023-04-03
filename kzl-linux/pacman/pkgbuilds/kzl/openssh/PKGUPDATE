@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://github.com/openssh/openssh-portable/tags | grep -Po '(?<=openssh-portable/releases/tag/V_)\d_\d_P\d' | sed 's/_/./g' | head -1)

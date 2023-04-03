@@ -210,3 +210,9 @@ base-development:
     - llvm-project
     - libffi
   python: todo
+core:
+  openssh:
+    - krb5
+    - libedit
+    - libxcrypt
+    - openssl
