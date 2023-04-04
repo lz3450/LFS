@@ -85,7 +85,7 @@ kzl_stage2_pkgs=(
     ################
     # shadow
     ################
-    # e2fsprogs keyutils krb5 swig libcap-ng audit
+    # e2fsprogs keyutils libedit krb5 swig libcap-ng audit
     # libtirpc pam-config pam
     # shadow
 
@@ -97,7 +97,7 @@ kzl_stage2_pkgs=(
     ################
     # llvm
     ################
-    # libedit llvm-project
+    # llvm-project
 
     ################
     # curl
@@ -154,21 +154,20 @@ kzl_stage2_pkgs=(
     # autoconf automake
     # which
     # diffutils
-
-    ## GNU tools/lib
-    ## openssl
-    # openssl
-    ## ca-certificates
-    # libtasn1 libffi p11-kit
-    # ca-certificates
-
-    ## pam
-    # swig libcap-ng audit
-    # cyrus-sasl
 )
 
 kzl_stage3_pkgs=(
-    openssh
+    ################
+    # openssh
+    ################
+    # openssh
+
+    ################
+    # texlive
+    ################
+    # fontconfig
+    # gd
+    # texlive
 )
 
 # functions

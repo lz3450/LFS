@@ -1,20 +1,17 @@
 post_install() {
   cat << _EOF
-  
-  Fontconfig configuration is done via /etc/fonts/conf.avail and conf.d.
-  Read /etc/fonts/conf.d/README for more information.
 
-  Configuration via /etc/fonts/local.conf is still possible,
-  but is no longer recommended for options available in conf.avail.
+  Use fonts from `/usr/share/fonts`.
+  Find additional fonts `/usr/local/share/fonts`.
+  Use `/usr/share/fontconfig/conf.avail` to store the configuration template files.
+  Use `/etc/fonts/conf.d` to store active configuration files.
 
-  Main systemwide configuration should be done by symlinks
-  (especially for autohinting, sub-pixel and lcdfilter):
-  
+  System-wide configuration should be done by symlinks
+
+  ```
   cd /etc/fonts/conf.d
-  ln -s ../conf.avail/XX-foo.conf
-  
-  Check also https://wiki.archlinux.org/index.php/Font_Configuration
-  and https://wiki.archlinux.org/index.php/Fonts.
+  ln -s /usr/share/fontconfig/conf.avail/font-avail.conf
+  ```
 
 _EOF
 
@@ -23,7 +20,6 @@ _EOF
 
 post_upgrade() {
   echo -n "Rebuilding fontconfig cache..."
-  # a full forced directory scan is required here
   /usr/bin/fc-cache -rs
   echo " Done."
 }
@@ -31,7 +27,7 @@ post_upgrade() {
 post_remove() {
   cat << _EOF
 
-  Check for dead symlinks and leftover files in /etc/fonts/conf.d/
-  
+  Check for dead symlinks and leftover files in `/etc/fonts/conf.d`
+
 _EOF
 }

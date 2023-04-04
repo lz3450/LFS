@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://libgd.github.io/ | grep -Po '(?<=LibGD )\d\.\d\.\d' | head -1)

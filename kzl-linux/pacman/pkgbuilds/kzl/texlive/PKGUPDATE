@@ -1,0 +1,13 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/TeX-Live/texlive-source/tags | grep -Po '(?<=texlive-source/releases/tag/svn)\d{5}' | head -1)
+
+post_update() {
+    texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/`date +%Y`/ | grep -Po '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -1)
+    tlpdb_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/`date +%Y`/ | grep -Po '(?<=texlive-)\d{8}(?=-tlpdb-full.tar)' | head -1)
+
+    if [ -n $texmf_version ] && [ -n $tlpdb_version ]; then
+        sed -e "s/texlive-[0-9]\{8\}-tlpdb-full.tar.gz/texlive-$tlpdb_version-tlpdb-full.tar.gz/" \
+            -e "s/texlive-[0-9]\{8\}-texmf.tar.xz/texlive-$texmf_version-texmf.tar.xz/" \
+            -e "s|^_pkgyear=.*$|_pkgyear=`date +%Y`|" \
+            -i PKGBUILD
+    fi
+}

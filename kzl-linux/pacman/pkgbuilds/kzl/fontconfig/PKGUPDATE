@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.freedesktop.org/wiki/Software/fontconfig/ | grep -Po '(?<=The current stable series is )\d\.\d\d\.\d')

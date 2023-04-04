@@ -2,12 +2,13 @@
 
 pkgname=xz
 pkgver=5.4.2
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="Library and command line tools for XZ and LZMA compressed files"
 arch=('x86_64')
 url="https://tukaani.org/xz/"
 license=('KZL')
+options=(libtool)
 source=(git+https://github.com/tukaani-project/xz.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

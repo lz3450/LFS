@@ -74,6 +74,8 @@ base:
         - krb5:
             - e2fsprogs
             - keyutils
+            - libedit
+            - openldap: todo
         - libcap-ng:
             - swig
     - libxcrypt
@@ -216,3 +218,16 @@ core:
     - libedit
     - libxcrypt
     - openssl
+  samba:
+    - acl
+    - db
+    - gnutls
+    - todo
+  texlive:
+    - gd:
+        - fontconfig:
+            - expat
+            - freetype2: todo
+            - gperf (make)
+    - freetype2
+    - todo
