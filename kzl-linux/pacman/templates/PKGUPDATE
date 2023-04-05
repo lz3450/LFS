@@ -1,4 +1,4 @@
-new_version=$()
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - )
 
 pre_update() {
 
