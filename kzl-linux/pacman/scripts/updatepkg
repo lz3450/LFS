@@ -57,29 +57,32 @@ if [ -f PKGUPDATE ]; then
     old_pkgrel=$(cat PKGBUILD | grep -Po '(?<=pkgrel=)\d+$')
     new_pkgrel=$((old_pkgrel + 1))
 
-    result=$(vercmp $new_version $old_version)
+    # run pre_update
+    if have_function 'pre_update'; then
+        info "running pre_update()..."
+        pre_update
+    fi
 
+    result=$(vercmp $new_version $old_version)
     if [ $result -gt 0 ]; then
         result=1
         info "PKGBUILD updated: $old_version => $new_version"
-        if have_function 'pre_update'; then
-            info "running pre_update()..."
-            pre_update
-        fi
         sed -i "/^pkgver=/s/$old_version/$new_version/" PKGBUILD
         sed -i "/^pkgrel=/s/$old_pkgrel/1/" PKGBUILD
         info "running updpkgsums..."
         updpkgsums || result=2
-        if have_function 'post_update'; then
-            info "running post_update()..."
-            post_update
-        fi
     elif [ $result -eq 0 ] || [ $result -lt 0 ]; then
         result=0
         sed -i "/^pkgrel=/s/$old_pkgrel/$new_pkgrel/" PKGBUILD
         info "PKGBUILD is already updated."
     else
         result=2
+    fi
+
+    # run post_update
+    if have_function 'post_update'; then
+        info "running post_update()..."
+        post_update
     fi
 else
     warning "PKGUPDATE does not exist."
