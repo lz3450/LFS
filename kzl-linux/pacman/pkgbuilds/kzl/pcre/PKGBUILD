@@ -3,15 +3,15 @@
 pkgname=pcre
 pkgver=8.45
 pkgrel=1
-epoch=1
-pkgdesc="A library that implements Perl 5-style regular expressions"
+epoch=
+pkgdesc="Perl Compatible Regular Expressions"
 arch=('x86_64')
 url="https://www.pcre.org/"
 license=('KZL')
 source=(https://versaweb.dl.sourceforge.net/project/pcre/$pkgname/$pkgver/$pkgname-$pkgver.tar.bz2{,.sig})
+validpgpkeys=('45F68D54BBE23FB3039B46E59766E084FB0F43D8')
 sha256sums=('4dae6fdcd2bb0bb6c37b5f97c33c2be954da743985369cddac3546e3218bffb8'
             'SKIP')
-validpgpkeys=('45F68D54BBE23FB3039B46E59766E084FB0F43D8')
 
 build() {
   cd $pkgname-$pkgver
@@ -38,5 +38,5 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

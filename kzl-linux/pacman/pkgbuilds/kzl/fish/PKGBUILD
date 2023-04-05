@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=fish
-pkgver=3.5.1
-pkgrel=1
-epoch=1
+pkgver=3.6.1
+pkgrel=4
+epoch=
 pkgdesc="A smart and user-friendly command line shell"
 arch=('x86_64')
 url="https://fishshell.com/"
 license=('KZL')
-depends=(gettext ncurses pcre2)
+depends=(ncurses pcre2)
 makedepends=()
 optdepends=()
 backup=(etc/fish/config.fish)
@@ -16,18 +16,19 @@ install=$pkgname.install
 source=(git+https://github.com/fish-shell/fish-shell.git#tag=$pkgver)
 sha256sums=('SKIP')
 
-# PyPI: Sphinx
-
 build() {
   cd fish-shell
 
   cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_SYSCONFDIR=/etc \
     -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DBUILD_DOCS=False \
     -S . \
-    -B build
+    -B build \
+    -LAH
 
   cmake --build build
 }
@@ -41,5 +42,5 @@ check() {
 package() {
   cd fish-shell
 
-  DESTDIR="$pkgdir/" cmake --build build --target install
+  DESTDIR="$pkgdir" cmake --build build --target install
 }

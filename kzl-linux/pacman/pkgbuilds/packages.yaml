@@ -218,6 +218,9 @@ core:
     - libedit
     - libxcrypt
     - openssl
+  zsh:
+    - libcap
+    - pcre
   samba:
     - acl
     - db

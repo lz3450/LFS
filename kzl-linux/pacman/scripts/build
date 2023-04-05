@@ -163,6 +163,12 @@ kzl_stage3_pkgs=(
     # openssh
 
     ################
+    # shells
+    ################
+    # pcre zsh
+    # fish
+
+    ################
     # texlive
     ################
     # fontconfig

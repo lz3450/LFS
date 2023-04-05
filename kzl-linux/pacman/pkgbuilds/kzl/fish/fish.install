@@ -1,12 +1,12 @@
 post_install() {
-  if ! grep -qe '^/usr/bin/fish$' etc/shells
-  then
-    echo '/usr/bin/fish' >> etc/shells
-  fi
-
   if ! grep -qe '^/bin/fish$' etc/shells
   then
     echo '/bin/fish' >> etc/shells
+  fi
+
+  if ! grep -qe '^/usr/bin/fish$' etc/shells
+  then
+    echo '/usr/bin/fish' >> etc/shells
   fi
 }
 
@@ -15,5 +15,5 @@ post_upgrade() {
 }
 
 pre_remove() {
-  sed -ri -e '\|^/usr/bin/fish$|d' -e '\|^/bin/fish$|d' etc/shells
+  sed -i -r '/^(\/usr)?\/bin\/fish$/d' etc/shells
 }
