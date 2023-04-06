@@ -8,7 +8,7 @@ pkgdesc="An open-source utility used to conveniently set up disk encryption base
 arch=('x86_64')
 url="https://gitlab.com/cryptsetup/cryptsetup/"
 license=('KZL')
-depends=(argon2 device-mapper json-c openssl popt)
+depends=(argon2 device-mapper json-c popt)
 source=(git+https://gitlab.com/cryptsetup/cryptsetup.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

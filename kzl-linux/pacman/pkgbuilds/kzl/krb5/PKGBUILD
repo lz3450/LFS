@@ -2,14 +2,14 @@
 
 pkgname=krb5
 pkgver=1.20.1
-pkgrel=5
+pkgrel=6
 epoch=
 pkgdesc="The Kerberos network authentication protocol"
 arch=('x86_64')
 url="https://web.mit.edu/kerberos/"
 license=('KZL')
-# depends=(e2fsprogs keyutils libedit libldap libverto lmdb)
-depends=(e2fsprogs keyutils libedit)
+# depends=(e2fsprogs keyutils libedit libverto lmdb)
+depends=(e2fsprogs keyutils libedit openldap)
 backup=(etc/krb5.conf
         var/lib/krb5kdc/kdc.conf)
 source=(git+https://github.com/krb5/krb5.git#tag=$pkgname-$pkgver-final)

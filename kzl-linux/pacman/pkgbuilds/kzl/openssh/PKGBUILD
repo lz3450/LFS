@@ -7,7 +7,7 @@ epoch=
 arch=('x86_64')
 url="https://www.openssh.com/portable.html"
 license=('KZL')
-depends=(krb5 libedit libseccomp libxcrypt openssl)
+depends=(krb5 libedit libseccomp libxcrypt)
 optdepends=("libfido2: U2F/FIDO support"
             "x11-ssh-askpass: input passphrase in X"
             "xorg-xauth: X11 forwarding")

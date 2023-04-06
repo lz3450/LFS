@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.sudo.ws/sudo/ | grep -Po '(?<=sudo-)\d\.\d\.\d\d(p\d)?' | sort -V | tail -1)

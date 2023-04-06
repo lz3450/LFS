@@ -1,70 +1,65 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openldap
-pkgver=2.6.1
-pkgrel=1
-epoch=1
+pkgver=2.6.4
+pkgrel=3
+epoch=
 pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries"
 arch=('x86_64')
 url="https://www.openldap.org"
 license=('KZL')
-# depends=(libsasl)
-provides=(libldap)
-conflicts=(libldap)
-replaces=(libldap)
-source=($url/software/download/OpenLDAP/openldap-release/$pkgname-$pkgver.tgz)
-sha256sums=('9d576ea6962d7db8a2e2808574e8c257c15aef55f403a1fb5a0faf35de70e6f3')
-
-# TODO: cyrus-sasl argon2
-# TODO: server client contrib 
-# TODO: slapd backends overlays
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  sed -e 's|-m 644 $(LIBRARY)|-m 755 $(LIBRARY)|' -i libraries/{liblber,libldap}/Makefile.in
-  sed -e 's|#define LDAPI_SOCK LDAP_RUNDIR LDAP_DIRSEP "run" LDAP_DIRSEP "ldapi"|#define LDAPI_SOCK LDAP_DIRSEP "run" LDAP_DIRSEP "openldap" LDAP_DIRSEP "ldapi"|' -i include/ldap_defaults.h
-  sed -e 's|%LOCALSTATEDIR%/run|/run/openldap|' -i servers/slapd/slapd.{conf,ldif}
-  sed -e 's|-$(MKDIR) $(DESTDIR)$(localstatedir)/run|-$(MKDIR) $(DESTDIR)/run/openldap|' -i servers/slapd/Makefile.in
-}
+depends=(cyrus-sasl)
+source=($url/software/download/OpenLDAP/openldap-release/$pkgname-$pkgver.tgz{,.asc})
+validpgpkeys=('3CE269B5398BC8B785645E987F67D5FD1CE1CBCE')
+sha256sums=('d51704e50178430c06cf3d8aa174da66badf559747a47d920bb54b2d4aa40991'
+            'SKIP')
 
 build() {
   cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
-    --libexecdir=/usr/lib \
     --sysconfdir=/etc \
     --localstatedir=/var/lib/openldap \
-    --disable-debug \
-    --enable-dynamic \
-    --enable-syslog \
-    --enable-ipv6 \
-    --enable-local \
+    --enable-debug=no \
+    --enable-dynamic=yes \
+    \
     --enable-slapd=no \
+    \
     --enable-backends=no \
+    \
     --enable-overlays=no \
-    --without-cyrus-sasl \
-    --with-threads
+    \
+    --enable-static=no \
+    --enable-versioning=yes \
+    \
+    --with-cyrus-sasl
 
   make depend
   make
 }
 
+check() {
+  cd $pkgbase-$pkgver
+
+  make test
+}
+
 package() {
   cd $pkgname-$pkgver
 
-  for dir in include libraries doc/man/man3 ; do
-    pushd $dir
-    make DESTDIR="$pkgdir/" install
-    popd
-  done
+  make DESTDIR="$pkgdir" install
 
-  install -Dm644 doc/man/man5/ldap.conf.5.tmp "$pkgdir"/usr/share/man/man5/ldap.conf.5
+  # for dir in include libraries doc/man/man3 ; do
+  #   pushd $dir
+  #   make DESTDIR="$pkgdir/" install
+  #   popd
+  # done
 
-  ln -sf liblber.so "$pkgdir"/usr/lib/liblber.so.2
-  ln -sf libldap.so "$pkgdir"/usr/lib/libldap.so.2
+  # install -Dm644 doc/man/man5/ldap.conf.5.tmp "$pkgdir"/usr/share/man/man5/ldap.conf.5
 
-  rm "$pkgdir"/etc/openldap/*.default
+  # ln -sf liblber.so "$pkgdir"/usr/lib/liblber.so.2
+  # ln -sf libldap.so "$pkgdir"/usr/lib/libldap.so.2
+
+  # rm "$pkgdir"/etc/openldap/*.default
 }
