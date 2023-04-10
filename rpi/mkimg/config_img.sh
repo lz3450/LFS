@@ -12,7 +12,7 @@ script_dir="$(dirname "${script_path}")"
 img="/tmp/raspi.img"
 mountpoint="/tmp/raspi"
 loop=""
-chroot_path="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 base_img=""
 
 # Show an INFO message
