@@ -1,38 +1,35 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=lmdb
-pkgver=0.9.29
+pkgver=0.9.30
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Symas Lightning Memory-Mapped Database"
 arch=('x86_64')
-url="https://symas.com/mdb"
+url="https://www.symas.com/lmdb"
 license=('KZL')
-options=(!emptydirs)
-source=(https://git.openldap.org/openldap/openldap/-/archive/LMDB_$pkgver/openldap-LMDB_$pkgver.tar.gz
+source=(git+https://git.openldap.org/openldap/openldap.git#tag=LMDB_$pkgver
         lmdb.pc)
-sha256sums=('d4c668167a2d703ef91db733b4069b8b74dbc374405855be6626b45e2a7e2dd3'
-            'f07889cfc8da42cbe89a6fb20f26b4c2ae4a597534681158e1047feb8465bbc0')
+sha256sums=('SKIP'
+            'ec9d026f29553bdd9176ce30b2d082349e7a1d03e9e705ff6b45cdfc63a77280')
 
 build() {
-  cd openldap-LMDB_$pkgver/libraries/liblmdb
+  cd openldap/libraries/liblmdb
 
   make prefix=/usr
 }
 
 check() {
-  cd openldap-LMDB_$pkgver/libraries/liblmdb
+  cd openldap/libraries/liblmdb
 
-  make test || warning "Check failed."
+  make test
 }
 
 package() {
-  cd openldap-LMDB_$pkgver/libraries/liblmdb
+  cd openldap/libraries/liblmdb
 
-  install -dm755 "$pkgdir"/usr/{bin,lib,include,man/man1,share}
-  make DESTDIR="$pkgdir/" prefix=/usr install
-  mv "$pkgdir"/usr/man "$pkgdir"/usr/share/man
-  
-  sed -e "s|@PKGVER@|$pkgver|" -i "$srcdir"/lmdb.pc
-  install -Dm644 "$srcdir"/lmdb.pc "$pkgdir"/usr/lib/pkgconfig/lmdb.pc
+  make DESTDIR="$pkgdir" prefix=/usr install
+
+  install -Dm644 "$srcdir"/lmdb.pc -t "$pkgdir"/usr/lib/pkgconfig/
+  sed -e "s|@PACKAGE_VERSION@|$pkgver|" -i "$pkgdir"/usr/lib/pkgconfig/lmdb.pc
 }

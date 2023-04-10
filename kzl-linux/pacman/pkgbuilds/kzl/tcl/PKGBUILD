@@ -1,21 +1,20 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=tcl
-pkgver=8.6.12
-pkgrel=1
-epoch=1
+pkgver=8.6.13
+pkgrel=3
+epoch=
 pkgdesc="The Tcl scripting language"
 arch=('x86_64')
-url="http://tcl.sourceforge.net/"
+url="https://core.tcl-lang.org/index.html"
 license=('KZL')
 source=(https://downloads.sourceforge.net/sourceforge/tcl/$pkgname$pkgver-src.tar.gz)
-sha256sums=('26c995dd0f167e48b11961d891ee555f680c175f7173ff8cb829f4ebcde4c1a6')
+sha256sums=('43a1fae7412f61ff11de2cfd05d28cfc3a73762f354a417c62370a54e2caf066')
 
 prepare() {
-  cd $pkgname$pkgver
+  cd $pkgname$pkgver/pkgs
 
-  # we build the tcl sqlite interface in sqlite-tcl package
-  rm -rf pkgs/sqlite3*
+  rm -r sqlite*
 }
 
 build() {
@@ -23,6 +22,7 @@ build() {
 
   ./configure \
     --prefix=/usr \
+    --mandir=/usr/share/man \
     --enable-threads \
     --enable-64bit
 
@@ -38,24 +38,25 @@ check() {
 package() {
   cd $pkgname$pkgver/unix
 
-  make DESTDIR="$pkgdir/" install install-private-headers
+  make DESTDIR="$pkgdir" install install-private-headers
 
   ln -sf tclsh${pkgver%.*} "$pkgdir"/usr/bin/tclsh
   ln -sf libtcl${pkgver%.*}.so "$pkgdir"/usr/lib/libtcl.so
   install -Dm644 tcl.m4 -t "$pkgdir"/usr/share/aclocal
 
   sed -e "s#$srcdir/$pkgname$pkgver/unix#/usr/lib#" \
-      -e "s#$srcdir/$pkgname$pkgver/unix#/usr/include#" \
+      -e "s#$srcdir/$pkgname$pkgver#/usr/include#" \
+      -e "s#'{/usr/lib} '#'/usr/lib/$pkgname${pkgver%.*}'#" \
       -i "$pkgdir"/usr/lib/tclConfig.sh
-  
-  tdbcver=tdbc1.1.3
+
+  tdbcver=`ls $srcdir/$pkgname$pkgver/pkgs | grep -Po 'tdbc\d\.\d\.\d'`
   sed -e "s#$srcdir/$pkgname$pkgver/unix/pkgs/$tdbcver#/usr/lib/$tdbcver#" \
       -e "s#$srcdir/$pkgname$pkgver/pkgs/$tdbcver/generic#/usr/include#" \
       -e "s#$srcdir/$pkgname$pkgver/pkgs/$tdbcver/library#/usr/lib/$pkgname${pkgver%.*}#" \
       -e "s#$srcdir/$pkgname$pkgver/pkgs/$tdbcver#/usr/include#" \
       -i "$pkgdir"/usr/lib/$tdbcver/tdbcConfig.sh
 
-  itclver=itcl4.2.2
+  itclver=`ls $srcdir/$pkgname$pkgver/pkgs | grep -Po 'itcl\d\.\d\.\d'`
   sed -e "s#$srcdir/$pkgname$pkgver/unix/pkgs/$itclver#/usr/lib/$itclver#" \
       -e "s#$srcdir/$pkgname$pkgver/pkgs/$itclver/generic#/usr/include#" \
       -e "s#$srcdir/$pkgname$pkgver/pkgs/$itclver#/usr/include#" \

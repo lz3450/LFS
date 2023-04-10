@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://packages.debian.org/source/sid/fakeroot | grep -Po '(?<=fakeroot_)\d\.\d\d(?=.orig)' | head -1)

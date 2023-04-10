@@ -8,7 +8,6 @@ pkgdesc="A library implementing the SSH2 protocol as defined by Internet Drafts"
 arch=('x86_64')
 url="https://www.libssh2.org"
 license=('KZL')
-depends=(openssl)
 source=(git+https://github.com/libssh2/libssh2.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 

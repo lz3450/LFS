@@ -2,13 +2,13 @@
 
 pkgname=cyrus-sasl
 pkgver=2.1.28
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="An implementation of Cyrus Simple Authentication Service Layer (SASL)"
 arch=('x86_64')
 url="http://www.cyrusimap.org/sasl/"
 license=('KZL')
-depends=(audit db e2fsprogs glibc keyutils krb5 libxcrypt openssl pam)
+depends=(gdbm krb5 libxcrypt openssl pam)
 source=(git+https://github.com/cyrusimap/cyrus-sasl.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 
@@ -23,18 +23,21 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
     --enable-static=no \
     --enable-shared=yes \
     --enable-gssapi=yes \
-    --with-dblib=berkeley \
-    --with-saslauthd=/var/run/saslauthd
+    --enable-sql=no \
+    --enable-ldapdb=no \
+    --with-dblib=gdbm \
+    --with-saslauthd=/run/saslauthd \
+    --with-openssl \
+    --with-pam
 
-  make -O
+  make
 }
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

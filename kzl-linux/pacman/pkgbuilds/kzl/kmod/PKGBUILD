@@ -8,7 +8,6 @@ pkgdesc="Linux kernel module management tools and library"
 arch=('x86_64')
 url="https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git"
 license=('KZL')
-depends=(openssl)
 source=(git+$url#tag=v$pkgver
         depmod.script
         depmod.hook

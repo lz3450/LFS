@@ -2,7 +2,7 @@
 
 pkgname=libpsl
 pkgver=0.21.2
-pkgrel=6
+pkgrel=8
 epoch=
 pkgdesc="C library to handle the Public Suffix List"
 arch=('x86_64')
@@ -42,5 +42,5 @@ check() {
 package() {
   cd $pkgname
 
-  meson install -C build --destdir="$pkgdir/"
+  meson install -C build --destdir="$pkgdir"
 }

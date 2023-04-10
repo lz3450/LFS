@@ -2,34 +2,39 @@
 
 pkgname=libksba
 pkgver=1.6.3
-pkgrel=1
-epoch=1
+pkgrel=5
+epoch=
 pkgdesc="A CMS and X.509 access library"
 arch=('x86_64')
 url="https://www.gnupg.org/related_software/libksba/index.html"
 depends=(libgpg-error)
-source=(https://www.gnupg.org/ftp/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('3f72c68db30971ebbf14367527719423f0a4d5f8103fc9f4a1c01a9fa440de5c'
-            'SKIP')
-validpgpkeys=('6DAA6E64A76D2840571B4902528897B826403ADA')
+source=(git://git.gnupg.org/libksba.git#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh --force
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --enable-maintainer-mode
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

@@ -1,40 +1,51 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pinentry
-pkgver=1.2.0
-pkgrel=1
-epoch=1
+pkgver=1.2.1
+pkgrel=3
+epoch=
 pkgdesc="Collection of simple PIN or passphrase entry dialogs which utilize the Assuan protocol"
 arch=('x86_64')
 url="https://gnupg.org/related_software/pinentry/"
 license=('KZL')
 # depends=(libassuan libcap libsecret)
 depends=(libassuan libcap)
-# makedepends=(qt5-base gcr)
-source=(https://www.gnupg.org/ftp/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('10072045a3e043d0581f91cd5676fcac7ffee957a16636adedaa4f583a616470'
-            'SKIP')
-validpgpkeys=('6DAA6E64A76D2840571B4902528897B826403ADA')
+source=(git://git.gnupg.org/pinentry.git#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+	./autogen.sh --force
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
+    --enable-maintainer-mode \
     --enable-pinentry-curses \
-    --enable-pinentry-tty \
     --enable-fallback-curses \
-    --disable-pinentry-emacs \
+    --enable-pinentry-tty \
     --disable-pinentry-gtk2 \
     --disable-pinentry-gnome3 \
     --disable-libsecret \
-    --disable-pinentry-qt 
+    --disable-pinentry-qt \
+    --disable-pinentry-qt5 \
+    --disable-pinentry-qt4
 
   make
 }
 
-package() {
-  cd $pkgname-$pkgver
+check() {
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make check
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
 }

@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://git.openldap.org/openldap/openldap/-/tags | grep -Po '(?<=LMDB_)\d\.\d\.\d\d' | sort -V | tail -1)

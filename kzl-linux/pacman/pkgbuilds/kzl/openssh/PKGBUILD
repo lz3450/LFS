@@ -2,12 +2,12 @@
 
 pkgname=openssh
 pkgver=9.3.P1
-pkgrel=13
+pkgrel=19
 epoch=
 arch=('x86_64')
 url="https://www.openssh.com/portable.html"
 license=('KZL')
-depends=(krb5 libedit libseccomp libxcrypt openssl)
+depends=(krb5 libedit libseccomp libxcrypt)
 optdepends=("libfido2: U2F/FIDO support"
             "x11-ssh-askpass: input passphrase in X"
             "xorg-xauth: X11 forwarding")
@@ -17,13 +17,11 @@ backup=(etc/ssh/ssh_config
 source=(git+https://github.com/openssh/openssh-portable.git#tag=V_${pkgver//./_}
         sshd.pam
         sshd-sysusers.conf
-        sshd-tmpfiles.conf
         sshd-genkeys.service
         sshd.service)
 sha256sums=('SKIP'
             '3b4577cb1307434d19931cb14867423341a59f43859b3a65870de1792fcb419d'
-            'a112cafc6dd9ffc68fc07710f3712c3434520cb4dc1cfb3dea5002eb979b4fab'
-            '90b9f3c554743b9365f70af830e1a3e5bdf05c26ef7a5f3c7cdb38cf2298f1f8'
+            '5f854bea262ac5c1657f7c856b13f581f24fb475299ea8a543b49d03ed171cb0'
             'bb29f91af5512084353709a0fc6bedb23f8b189a492938deda74e595676986f9'
             'b45c3ef051965cfe57b432fd68fad2a1d4c4b0eed7e50e669f2e941123fd8ee4')
 
@@ -48,10 +46,13 @@ build() {
     --without-security-key-builtin \
     --with-ssl-engine \
     --with-pam \
+    --with-privsep-user=sshd \
+    --with-privsep-path=/var/empty \
     --with-sandbox=seccomp_filter \
     --with-kerberos5 \
     --with-default-path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
-    --with-superuser-path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    --with-superuser-path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+    --with-pid-dir=/run
 
   make
 }
@@ -69,10 +70,15 @@ package() {
 
   install -Dm644 "$srcdir"/sshd.pam "$pkgdir"/etc/pam.d/sshd
   install -Dm644 "$srcdir"/sshd-sysusers.conf "$pkgdir"/usr/lib/sysusers.d/sshd.conf
-  install -Dm644 "$srcdir"/sshd-tmpfiles.conf "$pkgdir"/usr/lib/tmpfiles.d/sshd.conf
   install -Dm644 "$srcdir"/sshd-genkeys.service -t "$pkgdir"/usr/lib/systemd/system/
   install -Dm644 "$srcdir"/sshd.service -t "$pkgdir"/usr/lib/systemd/system/
 
   install -Dm755 contrib/findssl.sh "$pkgdir"/usr/bin/findssl.sh
   install -Dm755 contrib/ssh-copy-id "$pkgdir"/usr/bin/ssh-copy-id
+  install -Dm644 contrib/ssh-copy-id.1 "$pkgdir"/usr/share/man/man1/ssh-copy-id.1
+
+	sed -e '/^#KbdInteractiveAuthentication yes$/c KbdInteractiveAuthentication no' \
+      -e '/^#PrintMotd yes$/c PrintMotd no' \
+      -e '/^#UsePAM no$/c UsePAM yes' \
+      -i "$pkgdir"/etc/ssh/sshd_config
 }

@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://sourceware.org/bzip2/index.html | grep -Po '(?<=The current stable version is bzip2 )\d\.\d\.\d' | head -1)

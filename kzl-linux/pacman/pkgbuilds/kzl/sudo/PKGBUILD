@@ -1,37 +1,37 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=sudo
-pkgver=1.9.10
-pkgrel=1
-epoch=1
+pkgver=1.9.13p3
+pkgrel=3
+epoch=
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('x86_64')
-url="https://www.sudo.ws/sudo"
-depends=(libgcrypt libldap pam)
+url="https://www.sudo.ws/sudo/"
+depends=(libgcrypt openldap pam)
 backup=(etc/sudo.conf
         etc/sudoers
         etc/pam.d/sudo)
-source=($url/dist/$pkgname-$pkgver.tar.gz{,.sig}
+source=(git+https://github.com/sudo-project/sudo.git#tag=SUDO_${pkgver//./_}
         sudo.pam)
-sha256sums=('44a1461098e7c7b8e6ac597499c24fb2e43748c0c139a8b4944e57d1349a64f4'
-            'SKIP'
-            'd1738818070684a5d2c9b26224906aad69a4fea77aabd960fc2675aee2df1fa2')
-validpgpkeys=('59D1E9CCBA2B376704FDD35BA9F4C021CEA470FB')
+sha256sums=('SKIP'
+            'b8270d4fbd5896428a83e8cd4a2d7217a3cc04c798da178911933465b1e85d1e')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
-    --libexecdir=/usr/lib \
-    --enable-gcrypt \
+    --libexecdir=/usr/libexec/sudo \
     --enable-tmpfiles.d \
+    --enable-openssl \
+    --with-linux-audit \
     --with-sssd \
     --with-pam \
+    --with-logging=syslog \
     --with-passprompt="[sudo] password for %p: " \
     --with-rundir=/run/sudo \
     --with-vardir=/var/db/sudo \
+    --with-editor="/usr/bin/nano:/usr/bin/vim:/usr/bin/vi" \
     --with-env-editor \
     --with-all-insults \
     --with-ldap \
@@ -41,20 +41,17 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
-  # remove sudoers.dist; not needed since pacman manages updates to sudoers
-  rm "$pkgdir"/etc/sudoers.dist
-
-  # remove /run/sudo directory; create it using systemd-tmpfiles
+  # remove /run/sudo directory, using systemd-tmpfiles
   rmdir "$pkgdir"/run/{sudo,}
 
   install -Dm644 "$srcdir"/sudo.pam "$pkgdir"/etc/pam.d/sudo

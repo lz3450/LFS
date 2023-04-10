@@ -2,33 +2,39 @@
 
 pkgname=npth
 pkgver=1.6
-pkgrel=1
-epoch=1
+pkgrel=2
+epoch=
 pkgdesc="New portable threads library"
 arch=('x86_64')
-url="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git"
-source=(ftp://ftp.gnupg.org/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('1393abd9adcf0762d34798dc34fdcf4d0d22a8410721e76f1e3afcd1daa4e2d1'
-            'SKIP')
-validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6')
+url="https://www.gnupg.org/software/npth/index.html"
+license=('KZL')
+source=(git://git.gnupg.org/npth.git#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+	./autogen.sh --force
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --enable-maintainer-mode
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

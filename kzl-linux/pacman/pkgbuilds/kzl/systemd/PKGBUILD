@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=systemd
-pkgver=253.2
-pkgrel=9
+pkgver=253.3
+pkgrel=2
 epoch=
 arch=('x86_64')
 url="https://github.com/systemd/systemd-stable"
@@ -36,6 +36,7 @@ backup=(etc/pam.d/systemd-user
         etc/udev/udev.conf)
 install=systemd.install
 source=(git+$url.git#tag=v$pkgver
+        systemd-user.pam
         systemd.install
         20-systemd-sysusers.hook
         30-systemd-binfmt.hook
@@ -47,6 +48,7 @@ source=(git+$url.git#tag=v$pkgver
         30-systemd-udev-reload.hook
         30-systemd-udev-trigger.hook)
 sha256sums=('SKIP'
+            'f90be7586197edc4e77ab38bd4f204953e8c5f72b47ef93badd2943e1501444f'
             'ed6b88d29cdf3a5f8a7ef19fba2721610485b8613ac5f9f60572113cc450f1bb'
             '61623bab3be1dc5a4c72145e6cf36bccb08e24372142ef41e4e195cc342b2ec7'
             '393c963a4a3e11f7e7c9faa517179c55926e6663d71eaa9f5a7937cfe0e16af0'
@@ -156,6 +158,8 @@ package() {
   cd $pkgname-stable
 
   meson install -C build --destdir="$pkgdir"
+
+  install -Dm644 "$srcdir"/systemd-user.pam "$pkgdir"/etc/pam.d/systemd-user
 
   chmod -R 2755 "$pkgdir"/var/log/journal/
   # chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/

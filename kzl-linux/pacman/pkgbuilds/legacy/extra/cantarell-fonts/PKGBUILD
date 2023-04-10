@@ -15,7 +15,6 @@ build() {
   meson setup \
     --prefix /usr \
     --libexecdir lib \
-    --sbindir bin \
     --auto-features enabled \
     --buildtype plain \
     --wrap-mode nodownload \

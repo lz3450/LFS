@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libgpg-error
-pkgver=1.46
-pkgrel=5
+pkgver=1.47
+pkgrel=3
 epoch=
 pkgdesc="Support library for libgcrypt"
 arch=('x86_64')
@@ -22,8 +22,7 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --disable-doc \
-    --disable-tests
+    --enable-maintainer-mode
 
   make
 }
@@ -37,5 +36,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

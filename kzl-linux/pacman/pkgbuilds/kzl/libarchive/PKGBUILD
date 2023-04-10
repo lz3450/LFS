@@ -1,39 +1,48 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libarchive
-pkgver=3.6.0
-pkgrel=1
-epoch=1
-pkgdesc="Multi-format archive and compression library"
+pkgver=3.6.2
+pkgrel=3
+epoch=
+pkgdesc="A portable, efficient C library that can read and write streaming archives in a variety of formats"
 arch=('x86_64')
 url="https://libarchive.org/"
 license=('KZL')
-depends=(acl expat lz4 openssl)
-source=(https://github.com/libarchive/libarchive/releases/download/v$pkgver/$pkgname-$pkgver.tar.xz{,.asc})
-sha256sums=('df283917799cb88659a5b33c0a598f04352d61936abcd8a48fe7b64e74950de7'
-            'SKIP')
-validpgpkeys=('A5A45B12AD92D964B89EEE2DEC560C81CEC2276E')
+depends=(acl expat lz4 nettle)
+source=(git+https://github.com/libarchive/libarchive.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./build/autogen.sh
+}
+
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
+    --enable-static=no \
+    --enable-acl \
+    --with-lz4 \
+    --with-nettle \
     --without-xml2 \
-    --without-nettle \
-    --disable-static
+    --with-expat
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
+  sed -i "s/iconv //" "$pkgdir"/usr/lib/pkgconfig/libarchive.pc
 }

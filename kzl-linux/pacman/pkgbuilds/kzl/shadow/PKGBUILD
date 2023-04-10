@@ -2,7 +2,7 @@
 
 pkgname=shadow
 pkgver=4.13
-pkgrel=9
+pkgrel=11
 epoch=
 pkgdesc="Programs for converting UNIX password files to the shadow password format, plus programs for managing user and group accounts"
 arch=('x86_64')
@@ -12,12 +12,16 @@ backup=(etc/default/useradd
         etc/login.defs
         etc/pam.d/{chage,chfn,chgpasswd,chpasswd,chsh,groupadd,groupdel,groupmems,groupmod,login,newusers,passwd,useradd,userdel,usermod})
 source=(git+https://github.com/shadow-maint/shadow.git#tag=$pkgver
-        shadow.{service,timer}
-        useradd.defaults)
+        useradd.defaults
+        login.pam
+        chfn-chsh.pam
+        shadow.{service,timer})
 sha256sums=('SKIP'
+            'bc9fef974321e399fb47c229a82e37d81a8f39424082ef8e4915d0dbee9ff7c2'
+            '2ad75ea2dd54bec8e4dd113bc6a0ac6232213f686c0575aa6e0afe2982177075'
+            '189489175f8344806caec4103e85e2d7b5dedb5b8eff61d9c800086981cf6cc4'
             '459e1e5632fe390616e352c8f816ca55fb06731f1235ff25314b5c7447cd5c61'
-            'c063768e6cd9b52ec4969796b1c988cc2d8d9f6bdec1e293fc9f87b576d84125'
-            'bc9fef974321e399fb47c229a82e37d81a8f39424082ef8e4915d0dbee9ff7c2')
+            'c063768e6cd9b52ec4969796b1c988cc2d8d9f6bdec1e293fc9f87b576d84125')
 
 prepare() {
   cd $pkgname
@@ -31,7 +35,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --bindir=/usr/bin \
-    --sbindir=/usr/bin \
+    --sbindir=/usr/sbin \
     --sysconfdir=/etc \
     --libdir=/usr/lib \
     --enable-shadowgrp=yes \
@@ -52,7 +56,7 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   # login.defs
   sed -e '/^MOTD_FILE/c\MOTD_FILE' \
@@ -66,6 +70,12 @@ package() {
 
   # useradd defaults (not provided by upstream)
   install -Dm600 "$srcdir"/useradd.defaults "$pkgdir"/etc/default/useradd
+
+  # pam.d
+  install -dm755 "$pkgdir"/etc/pam.d/
+  install -Dm644 "$srcdir"/login.pam "$pkgdir"/etc/pam.d/login
+  install -Dm644 "$srcdir"/chfn-chsh.pam "$pkgdir"/etc/pam.d/chfn
+  install -Dm644 "$srcdir"/chfn-chsh.pam "$pkgdir"/etc/pam.d/chsh
 
   # systemd units
   install -Dm644 "$srcdir"/shadow.timer "$pkgdir"/usr/lib/systemd/system/shadow.timer

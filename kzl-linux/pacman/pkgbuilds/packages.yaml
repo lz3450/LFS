@@ -75,7 +75,8 @@ base:
             - e2fsprogs
             - keyutils
             - libedit
-            - openldap: todo
+            - openldap:
+                - cyrus-sasl
         - libcap-ng:
             - swig
     - libxcrypt
@@ -104,8 +105,7 @@ base:
             - libgcrypt:
                 - libgpg-error
             - libxml2
-    - libssh2:
-        - openssl
+    - libssh2
   iptables:
     - libnetfilter_conntrack:
         - libmnl
@@ -143,8 +143,7 @@ base:
     - elfutils
     - iptables
     - kbd
-    - kmod:
-        - openssl
+    - kmod
     - libcap
     - libgcrypt
     - libidn2
@@ -182,6 +181,35 @@ base:
         - libnl
         - libtirpc
         - rpcsvc-proto (make)
+  sudo:
+    - libgcrypt
+    - openldap
+    - pam
+  pacman:
+    - fakeroot
+    - gpgme:
+        - gnupg:
+            - gnutls
+            - libassuan:
+                - libgpg-error
+            - libgcrypt
+            - libgpg-error
+            - libksba:
+                - libgpg-error
+            - npth
+            - pinentry:
+                - libassuan
+                - libcap
+            - sqlite:
+                - tcl (make)
+        - libassuan
+        - libgpg-error
+        - swig (make)
+    - libarchive:
+        - acl
+        - expat
+        - nettle
+        - lz4
 base-development:
   linux-api-headers:
   libtool:
@@ -217,15 +245,22 @@ core:
     - krb5
     - libedit
     - libxcrypt
-    - openssl
+    - openldap
   zsh:
     - libcap
     - pcre
   samba:
     - acl
-    - db
     - gnutls
-    - todo
+    - gpgme
+    - jansson
+    - libarchive
+    - openldap
+    - libtirpc
+    - liburing
+    - lmdb
+    - popt
+    - rpcsvc-proto (make)
   texlive:
     - gd:
         - fontconfig:

@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://git.kernel.dk/cgit/liburing/ | grep -Po '(?<=liburing-)\d\.\d' | head -1)

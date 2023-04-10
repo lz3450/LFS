@@ -2,7 +2,7 @@
 
 pkgname=util-linux
 pkgver=2.38.1
-pkgrel=16
+pkgrel=17
 epoch=
 pkgdesc="Miscellaneous system utilities for Linux"
 arch=('x86_64')
@@ -11,10 +11,10 @@ license=('KZL')
 depends=(bash-completion cryptsetup file libcap-ng libxcrypt ncurses pam readline systemd)
 backup=(etc/pam.d/{runuser,runuser-l,su,su-l})
 source=(git+$url.git#tag=v$pkgver
-        pam-{runuser,su})
+        {runuser,su}.pam)
 sha256sums=('SKIP'
             '59626ac70847c83b75df53a51c0833579b6959be519d79e80ad1657e13976a67'
-            'a0619c2323c2450f098242af159bf1c9b1c7e1947445241606c4aa48c525e66d')
+            '2ff55fcc54dbc334debf12e7230f9631def46287dc065aef07ffa71175c89e59')
 
 prepare() {
   cd $pkgname
@@ -74,8 +74,8 @@ package() {
 
   # install PAM files for login-utils
   install -d -m755 "$pkgdir"/etc/pam.d
-  install -Dm644 "$srcdir"/pam-runuser "$pkgdir"/etc/pam.d/runuser
-  install -Dm644 "$srcdir"/pam-runuser "$pkgdir"/etc/pam.d/runuser-l
-  install -Dm644 "$srcdir"/pam-su "$pkgdir"/etc/pam.d/su
-  install -Dm644 "$srcdir"/pam-su "$pkgdir"/etc/pam.d/su-l
+  install -Dm644 "$srcdir"/runuser.pam "$pkgdir"/etc/pam.d/runuser
+  install -Dm644 "$srcdir"/runuser.pam "$pkgdir"/etc/pam.d/runuser-l
+  install -Dm644 "$srcdir"/su.pam "$pkgdir"/etc/pam.d/su
+  install -Dm644 "$srcdir"/su.pam "$pkgdir"/etc/pam.d/su-l
 }

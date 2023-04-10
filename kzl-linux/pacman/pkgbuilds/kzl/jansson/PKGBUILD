@@ -3,19 +3,22 @@
 pkgname=jansson
 pkgver=2.14
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="'C library for encoding, decoding and manipulating JSON data"
 arch=('x86_64')
-url="https://www.digip.org/jansson/"
+url="https://github.com/akheron/jansson"
 license=('KZL')
-options=(staticlibs)
-source=(https://github.com/akheron/jansson/releases/download/v$pkgver/$pkgname-$pkgver.tar.bz2{,.asc})
-sha256sums=('fba956f27c6ae56ce6dfd52fbf9d20254aad42821f74fa52f83957625294afb9'
-            'SKIP')
-validpgpkeys=('B5D6953E6D5059ED7ADA0F2FD3657D24D058434C')
+source=(git+https://github.com/akheron/jansson.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  autoreconf -vfi
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -24,7 +27,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

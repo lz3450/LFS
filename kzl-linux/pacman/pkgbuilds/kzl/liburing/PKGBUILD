@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=liburing
-pkgver=2.1
-pkgrel=1
-epoch=1
+pkgver=2.3
+pkgrel=2
+epoch=
 pkgdesc="Linux-native io_uring I/O access library"
 arch=('x86_64')
 url="https://git.kernel.dk/cgit/liburing/"
 license=('KZL')
-source=(git+https://git.kernel.dk/liburing#commit=8aac320ae8445c5434ab3be1761414a5247e5d42)
+source=(git+https://git.kernel.dk/liburing#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 
 build() {
@@ -24,5 +24,5 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

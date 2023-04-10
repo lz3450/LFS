@@ -2,35 +2,40 @@
 
 pkgname=libassuan
 pkgver=2.5.5
-pkgrel=1
-epoch=1
-pkgdesc="IPC library used by some GnuPG related software"
+pkgrel=4
+epoch=
+pkgdesc="A small library implementing the so-called Assuan protocol"
 arch=('x86_64')
 url="https://www.gnupg.org/related_software/libassuan/"
 license=('KZL')
 depends=(libgpg-error)
-source=(https://gnupg.org/ftp/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig})
-sha256sums=('8e8c2fcc982f9ca67dcbb1d95e2dc746b1739a4668bc20b3a3c5be632edb34e4'
-            'SKIP')
-validpgpkeys=('6DAA6E64A76D2840571B4902528897B826403ADA')
+source=(git://git.gnupg.org/libassuan.git#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+	./autogen.sh --force
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --enable-maintainer-mode
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.gnupg.org/download/index.html | grep -A 1 'Pinentry' | grep -Po '\d\.\d\.\d')

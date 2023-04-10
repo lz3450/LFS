@@ -2,7 +2,7 @@
 
 pkgname=libxslt
 pkgver=1.1.37
-pkgrel=3
+pkgrel=5
 epoch=
 pkgdesc="An XML language to define transformation for XML"
 arch=('x86_64')
@@ -37,5 +37,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

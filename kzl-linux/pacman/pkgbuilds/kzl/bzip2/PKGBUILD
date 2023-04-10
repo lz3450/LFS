@@ -1,46 +1,45 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=bzip2
-pkgver=1.1.0
-pkgrel=1
+pkgver=1.0.8
+pkgrel=7
 epoch=
 pkgdesc="A high-quality data compression program"
 arch=('x86_64')
-url="https://gitlab.com/bzip2/bzip2"
+url="https://sourceware.org/bzip2/index.html"
 license=('KZL')
-depends=(glibc)
-source=(git+https://gitlab.com/bzip2/bzip2.git)
-sha256sums=('SKIP')
+source=(git+git://sourceware.org/git/bzip2.git#tag=$pkgname-$pkgver
+        $pkgname.pc)
+sha256sums=('SKIP'
+            '74fca826067d5e54ca503e9dff96f80ecda17d317ecf99fc5eeec10ec7f08990')
 
-pkgver() {
+prepare() {
   cd $pkgname
 
-  grep -Po '(?<=VERSION )[0-9]\.[0-9]\.[0-9]' CMakeLists.txt
+  cp "$srcdir"/bzip2.pc bzip2.pc
+  sed "s|@VERSION@|$pkgver|" -i bzip2.pc
 }
 
 build() {
   cd $pkgname
 
-  cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_INSTALL_LIBDIR=lib \
-    -DCMAKE_C_FLAGS="$CPPFLAGS $CFLAGS" \
-    -DCMAKE_CXX_FLAGS="$CPPFLAGS $CXXFLAGS" \
-    -S . \
-    -B build
-
-  cmake --build build
+  make -f Makefile-libbz2_so
+  make
 }
 
 check() {
   cd $pkgname
 
-  cmake --build build --target tests
+  make test
 }
 
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir/" cmake --build build --target install
+  make PREFIX="$pkgdir/usr" install
+  cp -f libbz2.so.$pkgver "$pkgdir"/usr/lib
+  ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so.${pkgver%.*}
+  ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so.${pkgver%%.*}
+  ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so
+  install -Dm644 bzip2.pc -t "$pkgdir"/usr/lib/pkgconfig
 }

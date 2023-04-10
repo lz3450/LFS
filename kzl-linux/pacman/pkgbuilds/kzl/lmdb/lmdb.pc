@@ -1,10 +1,11 @@
 prefix=/usr
-libdir=${prefix}/lib
-includedir=${prefix}/include
-
+exec_prefix=${prefix}
+libdir=$(exec_prefix)/lib
+includedir=$(prefix)/include
+ 
 Name: liblmdb
-Description: Lightning Memory-Mapped Database
-URL: https://symas.com/products/lightning-memory-mapped-database/
-Version: @PKGVER@
+Description: Lightning Memory-mapped key-value database
+URL: https://www.symas.com/lmdb
+Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -llmdb
 Cflags: -I${includedir}

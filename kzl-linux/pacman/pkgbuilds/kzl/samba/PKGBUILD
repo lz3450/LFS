@@ -1,94 +1,76 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=samba
-pkgver=4.15.5
-pkgrel=1
-epoch=1
+pkgver=4.18.1
+pkgrel=7
+epoch=
 arch=('x86_64')
 url="https://www.samba.org"
 license=('KZL')
-depends=(acl db gnutls gpgme jansson libaio libarchive libldap libtirpc liburing lmdb popt)
-# depends=(acl db gnutls gpgme jansson ldb libaio libarchive libldap libtirpc liburing popt talloc tdb tevent)
+depends=(acl gnutls gpgme jansson krb5 libarchive openldap libtirpc liburing lmdb popt)
 makedepends=(rpcsvc-proto)
 provides=(ldb talloc tdb tevent)
 conflicts=(ldb talloc tdb tevent)
 replaces=(ldb talloc tdb tevent)
-backup=(etc/conf.d/samba
-        etc/logrotate.d/samba
-        etc/pam.d/samba)
-source=(https://www.samba.org/samba/ftp/stable/$pkgname-$pkgver.tar.{gz,asc}
-        samba.logrotate
+backup=(etc/sysconfig/samba
+        etc/pam.d/samba
+        etc/logrotate.d/samba)
+source=(git+https://git.samba.org/samba.git#tag=$pkgname-$pkgver
         samba.pam
-        samba.tmpfiles)
-sha256sums=('69115e33831937ba5151be0247943147765aece658ba743f44741672ad68d17f'
-            'SKIP'
-            '0b570570ea49f82e6f9da47b1cce3b441859f52de105b54d4d79b873b924623f'
-            'a3e28676e9f11136690f6d46ca15b1d548cec2e29db043206ab09582671dc2d5'
-            '5398a42ccb36ac3b87cfa42c8050b535efc2ca38ab3b9354a52f4e0fe71b5800')
-validpgpkeys=('81F5E2832BD2545A1897B713AA99442FB680B620')
-
-# TODO: cups ceph-libs
-
-# cpan Parse::Yapp::Driver
-# pip markdown
-# pip dnspython
+        samba.tmpfiles
+        samba.logrotate)
+sha256sums=('SKIP'
+            'aa5345d85235c6452fe8e696f38f8e788e7e6b02b481184636d63c6436df8d95'
+            '5398a42ccb36ac3b87cfa42c8050b535efc2ca38ab3b9354a52f4e0fe71b5800'
+            '44662af59edf16e2a618138bf11752cc1dd2a6ffffdbfb41f0a5357c37f9bf32')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
+    --without-ldb-lmdb \
     --with-gpgme \
-    --with-systemd \
-    --with-ads \
     --with-ldap \
     --disable-cups \
     --disable-iprint \
+    --with-pam \
+    --with-quotas \
     --with-acl-support \
     --with-libarchive \
+    --with-systemd \
+    --with-system-mitkrb5 \
+    --with-experimental-mit-ad-dc \
+    --with-pie \
+    --with-relro \
+    --with-json \
     --prefix=/usr \
-    --sbindir=/usr/bin \
-    --libexecdir=/usr/lib \
+    --destdir="$pkgdir" \
     --sysconfdir=/etc \
     --localstatedir=/var \
     --libdir=/usr/lib \
-    --bundled-libraries=!popt \
+    --bundled-libraries=!popt,talloc,pytalloc,pytalloc-util,tevent,pytevent,tdb,pytdb,ldb,pyldb,pyldb-util \
     --disable-rpath-install \
     --enable-fhs \
-    --with-pammodulesdir=/usr/lib/security \
-    --with-configdir=/etc/samba \
-    --with-lockdir=/var/cache/samba \
-    --with-piddir=/run \
-    --with-sockets-dir=/run/samba \
     --systemd-install-services
-
-    # --bundled-libraries=!ldb,!popt,!talloc,!tdb,!tevent,!pyldb-util,!pytalloc-util \
-    # --with-system-mitkrb5
 
   make
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
+  rm -rf "$pkgdir"/var/run
 
-  rm -rf "$pkgdir"/run
-
-  # sysconfig
-  rm -rf "$pkgdir"/etc/sysconfig
-  install -dm755 "$pkgdir"/etc/conf.d
-  sed -e '/^EnvironmentFile/s/sysconfig/conf.d/' -i "$pkgdir"/usr/lib/systemd/system/*.service
-  install -Dm644 "$srcdir"/$pkgname-$pkgver/packaging/systemd/samba.sysconfig "$pkgdir"/etc/conf.d/samba
+  # smb.conf example
+  install -Dm644 "$srcdir"/samba/examples/smb.conf.default "$pkgdir"/etc/samba/smb.conf.default
 
   # pam
-  install -Dm644 "$srcdir"/samba.pam "$pkgdir"/etc/pam.d/samba 
+  install -Dm644 "$srcdir"/samba.pam "$pkgdir"/etc/pam.d/samba
 
   # tmpfiles
   install -Dm644 "$srcdir"/samba.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/samba.conf
 
   # logrotate
   install -Dm644 "$srcdir"/samba.logrotate "$pkgdir"/etc/logrotate.d/samba
-
-  # smb.conf example
-  install -Dm644 "$srcdir"/samba-$pkgver/examples/smb.conf.default "$pkgdir"/etc/samba/smb.conf.default
 }

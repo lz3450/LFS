@@ -1,5 +1,10 @@
 /var/log/samba/log.smbd /var/log/samba/log.nmbd /var/log/samba/*.log {
-   notifempty
-   missingok
-   copytruncate
+    compress
+    dateext
+    maxage 365
+    rotate 99
+    notifempty
+    olddir /var/log/samba/old
+    missingok
+    copytruncate
 }

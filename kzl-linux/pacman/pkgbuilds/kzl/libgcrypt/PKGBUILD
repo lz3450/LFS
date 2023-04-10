@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libgcrypt
-pkgver=1.10.1
+pkgver=1.10.2
 pkgrel=3
 epoch=
 pkgdesc="General purpose cryptographic library based on the code from GnuPG"
@@ -9,6 +9,7 @@ arch=('x86_64')
 url="https://www.gnupg.org"
 license=('KZL')
 depends=(libgpg-error)
+# makedepends=(fig2dev)
 source=(git+https://dev.gnupg.org/source/libgcrypt.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 
@@ -23,7 +24,8 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --disable-static \
+    --enable-maintainer-mode \
+    --enable-static=no \
     --disable-padlock-support \
     --disable-doc
 
@@ -39,5 +41,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

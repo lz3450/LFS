@@ -2,7 +2,7 @@
 
 pkgname=pam
 pkgver=1.5.2
-pkgrel=1
+pkgrel=4
 epoch=
 pkgdesc="PAM (Pluggable Authentication Modules) library"
 arch=('x86_64')
@@ -23,7 +23,7 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
+    --sbindir=/usr/sbin \
     --libdir=/usr/lib \
     --disable-doc \
     --disable-prelude \
@@ -45,7 +45,5 @@ check() {
 package() {
   cd linux-pam
 
-  make DESTDIR="$pkgdir/" install
-
-  chmod 02755 "$pkgdir"/usr/bin/unix_chkpwd
+  make DESTDIR="$pkgdir" install
 }

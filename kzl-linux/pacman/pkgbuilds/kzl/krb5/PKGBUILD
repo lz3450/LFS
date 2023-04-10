@@ -2,16 +2,16 @@
 
 pkgname=krb5
 pkgver=1.20.1
-pkgrel=5
+pkgrel=9
 epoch=
 pkgdesc="The Kerberos network authentication protocol"
 arch=('x86_64')
 url="https://web.mit.edu/kerberos/"
 license=('KZL')
-# depends=(e2fsprogs keyutils libedit libldap libverto lmdb)
-depends=(e2fsprogs keyutils libedit)
-backup=(etc/krb5.conf
-        var/lib/krb5kdc/kdc.conf)
+# depends=(e2fsprogs keyutils libedit libverto lmdb)
+depends=(e2fsprogs keyutils libedit openldap)
+backup=(etc/$pkgname/krb5.conf
+        var/$pkgname/krb5kdc/kdc.conf)
 source=(git+https://github.com/krb5/krb5.git#tag=$pkgname-$pkgver-final)
 sha256sums=('SKIP')
 
@@ -35,9 +35,8 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
-    --sysconfdir=/etc \
-    --localstatedir=/var/lib \
+    --sysconfdir=/etc/$pkgname \
+    --localstatedir=/var/$pkgname \
     --enable-dns-for-realm \
     --disable-rpath \
     --with-system-et \
@@ -54,8 +53,8 @@ build() {
 package() {
   cd $pkgname/src
 
-  make DESTDIR="$pkgdir/" EXAMPLEDIR=/usr/share/doc/$pkgname/examples install
+  make DESTDIR="$pkgdir" EXAMPLEDIR=/usr/share/doc/$pkgname/examples install
 
-  install -Dpm644 config-files/krb5.conf -t "$pkgdir"/etc/
-  install -Dpm644 config-files/kdc.conf -t "$pkgdir"/var/lib/krb5kdc/
+  install -Dpm644 config-files/krb5.conf -t "$pkgdir"/etc/$pkgname/
+  install -Dpm644 config-files/kdc.conf -t "$pkgdir"/var/$pkgname/krb5kdc/
 }
