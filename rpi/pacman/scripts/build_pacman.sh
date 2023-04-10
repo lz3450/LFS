@@ -20,7 +20,6 @@ cd pacman-$pacmanver
 meson setup \
   --prefix /usr/local \
   --libexecdir lib \
-  --sbindir bin \
   --sysconfdir etc \
   --auto-features enabled \
   --buildtype plain \
