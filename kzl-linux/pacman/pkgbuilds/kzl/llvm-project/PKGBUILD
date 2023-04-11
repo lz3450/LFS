@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=llvm-project
-pkgver=16.0.0
-pkgrel=26
+pkgver=16.0.1
+pkgrel=2
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
@@ -68,7 +68,12 @@ _llvm_options=(
 _clang_options=(
   -DCLANG_ENABLE_BOOTSTRAP=OFF
   -DCLANG_DEFAULT_LINKER=lld
-  -DCLANG_DEFAULT_RTLIB=compiler-rt
+  ################
+  # rtlib
+  ################
+  # -DCLANG_DEFAULT_RTLIB=compiler-rt
+  -DCLANG_DEFAULT_RTLIB=libgcc
+  ################
   -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
   ################
   # libc++
