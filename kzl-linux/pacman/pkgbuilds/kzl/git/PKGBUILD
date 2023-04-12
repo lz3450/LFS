@@ -1,92 +1,63 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=git
-pkgver=2.35.1
-pkgrel=1
-epoch=1
+pkgver=2.40.0
+pkgrel=2
+epoch=
 arch=('x86_64')
 url="https://git-scm.com/"
 license=('KZL')
-depends=(curl expat openssl pcre2)
-makedepends=(xmlto)
+depends=(curl expat pcre2)
+# makedepends=(xmlto)
 # optdepends=("tk: gitk and git gui"
 #             "libsecret: libsecret credential helper")
 install=$pkgname.install
-source=(https://www.kernel.org/pub/software/scm/$pkgname/$pkgname-$pkgver.tar.{xz,sign}
-        git-daemon.socket
-        git-daemon@.service)
-sha256sums=('d768528e6443f65a203036266f1ca50f9d127ba89751e32ead37117ed9191080'
-            'SKIP'
-            'ac4c90d62c44926e6d30d18d97767efc901076d4e0283ed812a349aece72f203'
-            '14c0b67cfe116b430645c19d8c4759419657e6809dfa28f438c33a005245ad91')
-validpgpkeys=('96E07AF25771955980DAD10020D04E5A713660A7')
+source=(git+https://github.com/git/git.git#tag=v$pkgver
+        $pkgname.install)
+sha256sums=('SKIP'
+            'e5676ce50dccf08536f0e89ef4d29f886f07137d186f9b878112f0d055bcfb68')
 
-# pip asciidoc
+prepare() {
+  cd $pkgname
 
-_make_paths=(
-  prefix="/usr"
-  gitexecdir="/usr/lib/git-core"
-  perllibdir="$(/usr/bin/perl -MConfig -wle 'print $Config{installvendorlib}')"
-)
-
-_make_options=(
-  CFLAGS="$CFLAGS"
-  LDFLAGS="$LDFLAGS"
-  INSTALL_SYMLINKS=1
-  MAN_BOLD_LITERAL=1
-  NO_PERL_CPAN_FALLBACKS=1
-  USE_LIBPCRE2=1
-)
+  make configure
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make \
-    "${_make_paths[@]}" \
-    "${_make_options[@]}" \
-    all
+  ./configure \
+    --prefix=/usr \
+    --with-openssl \
+    --with-libpcre2 \
+    --with-curl \
+    --with-expat \
+    --with-editor=/usr/bin/nano \
+    --without-tcltk
+
+
+  make all
 
   # make -C contrib/credential/libsecret
-  make -C contrib/diff-highlight "${_make_paths[@]}"
+  make -C contrib/diff-highlight
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  local jobs
-  jobs=$(expr "$MAKEFLAGS" : '.*\(-j[0-9]*\).*')
-
-  mkdir -p /dev/shm/git-test
-
-  make \
-    "${_make_paths[@]}" \
-    "${_make_options[@]}" \
-    NO_SVN_TESTS=y \
-    DEFAULT_TEST_TARGET=prove \
-    GIT_PROVE_OPTS=" -Q" \
-    GIT_TEST_OPTS="--root=/dev/shm/git-test" \
-    test
+  make test
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make \
-    "${_make_paths[@]}" \
-    "${_make_options[@]}" \
-    DESTDIR="$pkgdir/" \
-    install install-man
-  
+  make DESTDIR="$pkgdir/" install
+
   # sysusers
   echo 'u git - "git daemon user" / /usr/bin/git-shell' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/git.conf
 
   # bash-completion
-  install -dm755 "$pkgdir"/usr/share/bash-completion/completions/
   install -Dm0644 contrib/completion/git-completion.bash "$pkgdir"/usr/share/bash-completion/completions/git
   # git prompt
-  install -dm755 "$pkgdir"/usr/share/git/
   install -Dm0644 contrib/completion/git-prompt.sh "$pkgdir"/usr/share/git/git-prompt.sh
-  # git-daemon via systemd socket activationupd
-  install -D -m 0644 "$srcdir"/git-daemon@.service "$pkgdir"/usr/lib/systemd/system/git-daemon@.service
-  install -D -m 0644 "$srcdir"/git-daemon.socket "$pkgdir"/usr/lib/systemd/system/git-daemon.socket
 }
