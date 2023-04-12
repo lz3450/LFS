@@ -75,6 +75,7 @@ base:
             - e2fsprogs
             - keyutils
             - libedit
+            - lmdb
             - openldap:
                 - cyrus-sasl
         - libcap-ng:

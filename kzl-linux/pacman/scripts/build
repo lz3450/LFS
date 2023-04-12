@@ -85,7 +85,7 @@ kzl_stage2_pkgs=(
     ################
     # shadow
     ################
-    # e2fsprogs keyutils libedit cyrus-sasl openldap krb5 swig libcap-ng audit
+    # e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 swig libcap-ng audit
     # libtirpc pam-config pam
     # shadow
 
@@ -191,7 +191,6 @@ kzl_stage3_pkgs=(
     ################
     # jansson
     # liburing
-    # lmdb
     # samba
 
     ################
