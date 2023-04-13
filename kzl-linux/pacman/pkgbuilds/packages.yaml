@@ -235,7 +235,6 @@ base-development:
     - libedit
     - libffi
     - libxml2
-    - PyYAML: pip
   rust:
     - curl
     - llvm-project
@@ -269,6 +268,8 @@ core:
     - lmdb
     - popt
     - rpcsvc-proto (make)
+    - Markdown: pip
+    - dnspython: pip
   texlive:
     - gd:
         - fontconfig:

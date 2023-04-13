@@ -236,6 +236,13 @@ kzl_stage3_pkgs=(
     # texlive
 )
 
+kzl_stage4_pkgs=(
+    ################
+    # python update
+    ################
+    # libxml2 llvm-project util-linux samba
+)
+
 # functions
 
 # Show an INFO message
@@ -428,7 +435,12 @@ case $repo in
             pkgs=${kzl_stage2_pkgs[@]}
             ;;
         3)
+            echo -e "\033[1;33mBuilding stage 3 ($(date +%H:%M:%S))...\033[0m"
             pkgs=${kzl_stage3_pkgs[@]}
+            ;;
+        4)
+            echo -e "\033[1;33mBuilding stage 4 (post python update) ($(date +%H:%M:%S))...\033[0m"
+            pkgs=${kzl_stage4_pkgs[@]}
             ;;
         *)
             error "Unknown stage \"$stage\"" 2

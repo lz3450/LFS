@@ -2,7 +2,7 @@
 
 pkgname=util-linux
 pkgver=2.38.1
-pkgrel=17
+pkgrel=18
 epoch=
 pkgdesc="Miscellaneous system utilities for Linux"
 arch=('x86_64')

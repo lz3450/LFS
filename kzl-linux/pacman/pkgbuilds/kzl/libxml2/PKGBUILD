@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libxml2
-pkgver=2.10.3
+pkgver=2.10.4
 pkgrel=1
 epoch=
 pkgdesc="the XML C parser and toolkit"
@@ -33,5 +33,5 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
