@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.python.org/downloads/source/ | grep -Po '(?<=Latest Python 3 Release - Python )\d\.\d\d\.\d(\d)?')

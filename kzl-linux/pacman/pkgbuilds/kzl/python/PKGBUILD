@@ -1,55 +1,50 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.10.2
-pkgrel=1
-epoch=1
+pkgver=3.11.3
+pkgrel=3
+epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
 url="https://www.python.org/"
 license=('KZL')
-depends=(expat gdbm libffi libnsl openssl)
-provides=(cython meson ninja python-dnspython python-fonttools python-setuptools python-wheel gyp)
-conflicts=(cython meson ninja python-dnspython python-fonttools python-setuptools python-wheel gyp)
-replaces=(cython meson ninja python-dnspython python-fonttools python-setuptools python-wheel gyp)
-makedepends=(mpdecimal sqlite valgrind)
-# makedepends=(mpdecimal sqlite tk valgrind)
-source=(https://www.python.org/ftp/python/$pkgver/Python-$pkgver.tar.xz{,.asc})
-sha256sums=('17de3ac7da9f2519aa9d64378c603a73a0e9ad58dffa8812e45160c086de64c7'
-            'SKIP')
-validpgpkeys=('A035C8C19219BA821ECEA86B64E628F8D684696D')
+depends=(expat gdbm libffi libnsl libxcrypt)
+makedepends=(sqlite)
+# makedepends=(sqlite tk)
+source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd Python-$pkgver
+  cd cpython
 
   CFLAGS="${CFLAGS/-O2/-O3} -fno-semantic-interposition"
   LDFLAGS+=" -fno-semantic-interposition"
 
   ./configure \
     --prefix=/usr \
-    --enable-shared \
-    --enable-optimizations \
-    --enable-loadable-sqlite-extensions \
-    --enable-ipv6 \
-    --enable-big-digits \
-    --with-universal-archs="intel-64" \
-    --with-lto \
+    --enable-shared=yes \
+    --enable-optimizations=yes \
+    --enable-loadable-sqlite-extensions=yes \
+    --enable-ipv6=yes \
+    --enable-big-digits=30 \
+    --with-pkg-config=yes \
+    --with-lto=no \
     --with-tzpath=/usr/share/zoneinfo \
-    --with-system-expat \
-    --with-system-ffi \
-    --with-system-libmpdec \
+    --with-system-expat=yes \
+    --with-system-ffi=yes \
+    --with-system-libmpdec=no \
+    --with-decimal-contextvar=yes \
     --with-dbmliborder=gdbm:ndbm \
-    --with-valgrind \
-    --with-computed-gotos \
-    --with-ensurepip=no
+    --with-ensurepip=install \
 
-  make EXTRA_CFLAGS="$CFLAGS"
+  make
 }
 
 package() {
-  cd Python-$pkgver
+  cd cpython
 
-  make DESTDIR="$pkgdir/" EXTRA_CFLAGS="$CFLAGS" install
+  make DESTDIR="$pkgdir" install
 
   ln -s python${pkgver:0:4} "$pkgdir"/usr/bin/python
+  ln -s pip3 "$pkgdir"/usr/bin/pip
 }

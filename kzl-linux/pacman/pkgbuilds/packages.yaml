@@ -240,7 +240,14 @@ base-development:
     - curl
     - llvm-project
     - libffi
-  python: todo
+  python:
+    - expat
+    - gdbm
+    - libffi
+    - libnsl:
+        - libtirpc
+    - libxcrypt
+    - sqlite (make)
 core:
   openssh:
     - krb5

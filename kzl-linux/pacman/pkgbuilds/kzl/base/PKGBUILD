@@ -1,38 +1,30 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=base
-pkgver=20230123
+pkgver=20230413
 pkgrel=1
 epoch=
 pkgdesc="Minimal package set"
 arch=('any')
 license=('KZL')
-depends=( filesystem
-          linux-api-headers
-          zlib
-          glibc binutils gcc libtool pkgconf
-          ncurses readline bash
-          bzip2 xz gzip tar
-          grep sed gawk m4 bison flex
-          file which findutils
-          shadow sudo coreutils util-linux e2fsprogs procps-ng psmisc
-          perl
-          autoconf automake
-          patch
-          make
-          dbus
-          iproute2 iputils
-          systemd
-          pciutils
-          zstd pacman
-          python
-          cmake
-          git
-          gettext texinfo man-db
-          linux-firmware)
-optdepends=("linux: bare metal support")
-backup=(etc/os-release)
+depends=(filesystem
+         glibc gcc
+         bash perl
+         zlib zstd bzip2 gzip xz tar
+         grep sed gawk file findutils
+         gettext
+         ca-certificates openssl
+         shadow coreutils util-linux
+         iptables
+         systemd
+         sudo
+         pacman
+         procps-ng psmisc
+         iputils iproute2
+         pciutils usbutils)
+optdepends=("linux: Linux kernel")
 source=(os-release)
+sha256sums=('c9bd31b149f9e44fecfa5db1153318914132f0bedf2090a35736d122cef0ceb8')
 
 pkgver() {
   date +%Y%m%d
@@ -42,4 +34,3 @@ package() {
   install -D -m 644 "$srcdir"/os-release "$pkgdir"/etc/os-release
   install -D -m 644 "$srcdir"/os-release "$pkgdir"/usr/share/factory/etc/os-release
 }
-sha256sums=('fed64b74458bbb9435f2facc9123849631b516a1fec235f944ac3a731660938f')
