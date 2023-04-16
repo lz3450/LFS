@@ -127,7 +127,7 @@ kzl_stage2_pkgs=(
     ################
     # curl
     ################
-    brotli
+    # brotli
     # libidn2
     # nghttp2
     # libgpg-error libgcrypt libxslt libpsl
@@ -260,7 +260,7 @@ kzl_stage3_pkgs=(
     # node
     ################
     # c-ares libuv
-    node
+    # node
 
     ################
     # texlive

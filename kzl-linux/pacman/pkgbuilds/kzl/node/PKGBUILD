@@ -2,7 +2,7 @@
 
 pkgname=node
 pkgver=18.16.0
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="An open-source, cross-platform JavaScript runtime environment"
 arch=('x86_64')

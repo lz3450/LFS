@@ -2,7 +2,7 @@
 
 pkgname=nghttp2
 pkgver=1.52.0
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="An implementation of HTTP/2 and its header compression algorithm HPACK in C"
 arch=('x86_64')
@@ -39,5 +39,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
