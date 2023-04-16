@@ -1,32 +1,27 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=f2fs-tools
-pkgver=1.14.0
-pkgrel=3
-epoch=1
+pkgver=1.16.0
+pkgrel=2
+epoch=
 pkgdesc="Tools for Flash-Friendly File System (F2FS)"
 arch=('x86_64')
 url="https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git"
 license=('KZL')
-source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git#tag=v$pkgver)
+source=(git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git#tag=v$pkgver)
 sha256sums=('SKIP')
-validpgpkeys=('D3452A79D8C2B4EAC656F4224014A87E824850D2')
 
 prepare() {
   cd $pkgname
 
-  # resize.f2fs: fix wrong ovp calculation
-  git cherry-pick -n f056fbeff08d30a6d9acdb9e06704461ceee3500
-
-  autoreconf -ifv
+  ./autogen.sh
 }
 
 build() {
   cd $pkgname
 
   ./configure \
-    --prefix=/usr \
-    --sbindir=/usr/bin
+    --prefix=/usr
 
   make
 }
@@ -34,5 +29,5 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" sbindir=/usr/bin install
+  make DESTDIR="$pkgdir" install
 }

@@ -8,6 +8,7 @@ pkgdesc="Library and command line tools for XZ and LZMA compressed files"
 arch=('x86_64')
 url="https://tukaani.org/xz/"
 license=('KZL')
+depends=(glibc)
 options=(libtool)
 source=(git+https://github.com/tukaani-project/xz.git#tag=v$pkgver)
 sha256sums=('SKIP')
@@ -23,7 +24,6 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --disable-rpath \
     --enable-werror
 
   make

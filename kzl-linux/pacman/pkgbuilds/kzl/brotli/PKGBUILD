@@ -3,7 +3,7 @@
 pkgname=brotli
 pkgver=1.0.9.66
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Generic-purpose lossless compression algorithm"
 arch=('x86_64')
 url="https://github.com/google/brotli"
@@ -26,7 +26,7 @@ build() {
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -DBUILD_SHARED_LIBS=True \
-    -DBUILD_TESTING=OFF
+    -DBUILD_TESTING=OFF \
     -S . \
     -B build \
     -LAH
@@ -43,5 +43,5 @@ check() {
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir/" cmake --build build --target install
+  DESTDIR="$pkgdir" cmake --build build --target install
 }

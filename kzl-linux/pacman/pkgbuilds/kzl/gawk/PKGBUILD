@@ -8,7 +8,7 @@ pkgdesc="GNU version of awk"
 arch=('x86_64')
 url="https://www.gnu.org/software/gawk"
 license=('KZL')
-depends=(libsigsegv mpfr readline)
+depends=(glibc libsigsegv mpfr readline)
 provides=(awk)
 source=(git+https://git.savannah.gnu.org/git/gawk.git#branch=$pkgname-${pkgver%.*}-stable)
 # source=(git+https://git.savannah.gnu.org/git/gawk.git#tag=$pkgname-$pkgver)
@@ -33,5 +33,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

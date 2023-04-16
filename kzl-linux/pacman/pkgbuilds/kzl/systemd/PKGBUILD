@@ -119,7 +119,7 @@ build() {
     -D status-unit-format-default=combined \
     -D tpm2=false \
     -D ukify=true \
-    -D user-path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    -D user-path=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin \
     -D valgrind=false \
     -D version-tag="$pkgver-$pkgrel-kzl $(date -u '+%Y/%m/%d %T %z')" \
     -D xz=true \

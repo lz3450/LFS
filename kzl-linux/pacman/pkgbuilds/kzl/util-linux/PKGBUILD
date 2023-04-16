@@ -37,7 +37,7 @@ build() {
     --disable-login \
     --disable-nologin \
     --enable-write \
-    --enable-fs-paths-default=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    --enable-fs-paths-default=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin \
     --enable-usrdir-path \
     --with-audit \
     --with-cryptsetup
@@ -57,7 +57,7 @@ build() {
   #   -D build-runuser=enabled \
   #   -D build-su=enabled \
   #   -D build-vipw=disabled \
-  #   -D fs-search-path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+  #   -D fs-search-path=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin \
   #   -D python=python3 \
   #   -D systemd=enabled \
   #   build

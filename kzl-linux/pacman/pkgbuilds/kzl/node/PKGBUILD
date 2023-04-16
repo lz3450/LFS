@@ -1,0 +1,45 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=node
+pkgver=18.16.0
+pkgrel=2
+epoch=
+pkgdesc="An open-source, cross-platform JavaScript runtime environment"
+arch=('x86_64')
+url="https://nodejs.org/"
+license=('KZL')
+depends=(brotli c-ares icu nghttp2 libuv)
+source=(git+https://github.com/nodejs/node.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  CFLAGS="${CFLAGS/-O2/-O3}"
+  CXXFLAGS="${CXXFLAGS/-O2/-O3}"
+
+  ./configure \
+    --prefix=/usr \
+    --enable-lto \
+    --shared-libuv \
+    --shared-nghttp2 \
+    --shared-openssl \
+    --shared-zlib \
+    --shared-brotli \
+    --shared-cares \
+    --with-intl=system-icu
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make test
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}

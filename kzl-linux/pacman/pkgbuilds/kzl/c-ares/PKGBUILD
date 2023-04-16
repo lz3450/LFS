@@ -1,36 +1,35 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=c-ares
-pkgver=1.18.1
-pkgrel=1
-epoch=1
+pkgver=1.19.0
+pkgrel=2
+epoch=
 pkgdesc="A C library for asynchronous DNS requests"
 arch=('x86_64')
-url="https://c-ares.haxx.se/"
+url="https://c-ares.org/"
 license=('KZL')
-source=(https://github.com/c-ares/c-ares/releases/download/${pkgname//-}-${pkgver//./_}/$pkgname-$pkgver.tar.gz{,.asc})
-sha256sums=('1a7d52a8a84a9fbffb1be9133c0f6e17217d91ea5a6fa61f6b4729cda78ebbcf'
-            'SKIP')
-validpgpkeys=('27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2')
+source=(git+https://github.com/c-ares/c-ares.git#tag=cares-${pkgver//./_})
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   cmake \
     -DCMAKE_BUILD_TYPE=None \
-    -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
     -W no-dev \
     -S . \
-    -B build
+    -B build \
+    -LAH
 
   cmake --build build
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  cmake --build build --target install -- DESTDIR="$pkgdir/"
+  DESTDIR="$pkgdir" cmake --build build --target install
 }

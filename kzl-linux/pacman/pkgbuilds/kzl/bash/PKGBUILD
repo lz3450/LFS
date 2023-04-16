@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://www.gnu.org/software/bash/"
 license=('KZL')
 depends=(glibc ncurses readline)
-optdepends=("bash-completion: for tab completion")
+optdepends=("bash-completion")
 provides=(sh)
 source=(git+https://git.savannah.gnu.org/git/bash.git#branch=master
         dot.bashrc
@@ -35,8 +35,8 @@ build() {
 
   # config-top.h
   _bashconfig=(
-    -DDEFAULT_PATH_VALUE=\'\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"\'
-    -DSTANDARD_UTILS_PATH=\'\"/usr/bin\"\'
+    -DDEFAULT_PATH_VALUE=\'\"/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin\"\'
+    -DSTANDARD_UTILS_PATH=\'\"/bin:/usr/bin:/sbin:/usr/sbin\"\'
     -DSYS_BASHRC=\'\"/etc/bash.bashrc\"\'
     -DSYS_BASH_LOGOUT=\'\"/etc/bash.bash_logout\"\'
     -DNON_INTERACTIVE_LOGIN_SHELLS
@@ -46,9 +46,9 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --with-curses \
     --enable-readline \
-    --without-bash-malloc \
+    --with-bash-malloc=no \
+    --with-curses \
     --with-installed-readline
 
   make -O

@@ -15,7 +15,7 @@ sha256sums=('SKIP')
 prepare() {
   cd $pkgname
 
-  autoreconf -vfi
+  ./bootstrap --force
 }
 
 build() {
@@ -36,5 +36,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

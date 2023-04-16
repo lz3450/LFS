@@ -1,24 +1,24 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libuv
-pkgver=1.43.0
-pkgrel=1
-epoch=1
-pkgdesc="Multi-platform support library with a focus on asynchronous I/O"
+pkgver=1.44.2
+pkgrel=2
+epoch=
+pkgdesc="A multi-platform support library with a focus on asynchronous I/O"
 arch=('x86_64')
 url="https://github.com/libuv/libuv"
 license=('KZL')
-source=($url/archive/v$pkgver/$pkgname-$pkgver.tar.gz)
-sha256sums=('9e27825a55279de69a7c43e42d509fd1337c9bece2547c761e91a1592e91cc4d')
+source=(git+https://github.com/libuv/libuv.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
 	./autogen.sh
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -27,13 +27,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

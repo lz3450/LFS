@@ -50,8 +50,8 @@ build() {
     --with-privsep-path=/var/empty \
     --with-sandbox=seccomp_filter \
     --with-kerberos5 \
-    --with-default-path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
-    --with-superuser-path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+    --with-default-path="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin" \
+    --with-superuser-path="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin" \
     --with-pid-dir=/run
 
   make

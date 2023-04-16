@@ -20,12 +20,8 @@ kzl_stage0_pkgs=(
 
 # toolchain
 kzl_stage1_pkgs=(
-)
-
-# base
-kzl_stage2_pkgs=(
     ################################
-    # base
+    # toolchain
     ################################
 
     ################
@@ -34,25 +30,65 @@ kzl_stage2_pkgs=(
     # iana-etc filesystem
 
     ################
-    # toolchain
+    # glibc
     ################
-    # linux-api-headers tzdata glibc
-    # zlib zstd binutils
-    # gmp isl mpfr mpc gcc
+    # linux-api-headers
+    # tzdata
+    # glibc
+
+    ################
+    # binutils
+    ################
+    # jansson
+    # zlib
+    # zstd
+    # binutils
+
+    ################
+    # gcc
+    ################
+    # gmp isl
+    # mpfr mpc
+    # gcc
+)
+
+# base
+kzl_stage2_pkgs=(
+    ################################
+    # base
+    ################################
+
+    ################################
+    # toolchain
+    ################################
     # tzdata glibc
-    # zlib zstd bc binutils
+    # jansson zlib zstd bc binutils
     # gmp isl mpfr mpc gcc
     # libtool
 
     ################
     # bash
     ################
-    # ncurses readline bash-completion bash
+    # ncurses readline bash bash-completion
 
     ################
     # perl
     ################
     # libxcrypt db gdbm perl
+
+    ################
+    # ca-certificates & openssl
+    ################
+    # libffi libtasn1 p11-kit ca-certificates
+    # openssl
+
+    ################
+    # python
+    ################
+    # expat
+    # e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 libtirpc libnsl
+    # tcl sqlite
+    # python
 
     ################
     # compression utils
@@ -77,16 +113,10 @@ kzl_stage2_pkgs=(
     # libunistring icu libxml2 gettext
 
     ################
-    # ca-certificates & openssl
-    ################
-    # libffi libtasn1 p11-kit ca-certificates
-    # openssl
-
-    ################
     # shadow
     ################
-    # e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 swig libcap-ng audit
-    # libtirpc pam-config pam
+    # swig libcap-ng audit
+    # pam-config pam
     # shadow
 
     ################
@@ -95,19 +125,19 @@ kzl_stage2_pkgs=(
     # libcap coreutils
 
     ################
-    # llvm
-    ################
-    # llvm-project
-
-    ################
     # curl
     ################
-    # brotli
+    brotli
     # libidn2
     # nghttp2
     # libgpg-error libgcrypt libxslt libpsl
     # libssh2
     # curl
+
+    ################
+    # llvm
+    ################
+    # llvm-project
 
     ################
     # rust
@@ -125,7 +155,7 @@ kzl_stage2_pkgs=(
     ################
     # libmnl libnfnetlink libnetfilter_conntrack
     # libnftnl
-    # expat dbus libnl libpcap
+    # dbus libnl libpcap
     # iptables
 
     ################
@@ -152,7 +182,7 @@ kzl_stage2_pkgs=(
     # pacman
     ################
     # fakeroot
-    # libassuan libksba npth pinentry tcl sqlite gnupg gpgme
+    # libassuan libksba npth pinentry gnupg gpgme
     # libarchive
     # pacman
 
@@ -193,12 +223,6 @@ kzl_stage2_pkgs=(
     # diffutils
 
     ################
-    # python
-    ################
-    # libnsl
-    # python
-
-    ################
     # base
     ################
     # base
@@ -222,11 +246,21 @@ kzl_stage3_pkgs=(
     # git
 
     ################
+    # f2fs
+    ################
+    # f2fs-tools
+
+    ################
     # samba
     ################
-    # jansson
     # liburing
     # samba
+
+    ################
+    # node
+    ################
+    # c-ares libuv
+    node
 
     ################
     # texlive
@@ -234,13 +268,6 @@ kzl_stage3_pkgs=(
     # fontconfig
     # gd
     # texlive
-)
-
-kzl_stage4_pkgs=(
-    ################
-    # python update
-    ################
-    # libxml2 llvm-project util-linux samba
 )
 
 # functions
@@ -437,10 +464,6 @@ case $repo in
         3)
             echo -e "\033[1;33mBuilding stage 3 ($(date +%H:%M:%S))...\033[0m"
             pkgs=${kzl_stage3_pkgs[@]}
-            ;;
-        4)
-            echo -e "\033[1;33mBuilding stage 4 (post python update) ($(date +%H:%M:%S))...\033[0m"
-            pkgs=${kzl_stage4_pkgs[@]}
             ;;
         *)
             error "Unknown stage \"$stage\"" 2

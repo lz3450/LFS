@@ -11,9 +11,9 @@ pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64')
 url="https://www.gnu.org/software/binutils/"
 license=('KZL')
-# depends=(jansson zlib zstd)
-depends=(zlib zstd)
-# checkdepends=(debuginfod dejagnu)
+depends=(jansson zlib zstd)
+# checkdepends=(bc debuginfod dejagnu)
+checkdepends=(bc)
 # optdepends=("debuginfod: for debuginfod server/client functionality")
 options=(staticlibs)
 source=(git+https://sourceware.org/git/binutils-gdb.git#branch=$pkgname-${pkgver/./_}-branch)
@@ -38,7 +38,7 @@ _common_options=(
   --enable-relro
   --enable-targets=x86_64-pep
   --enable-threads=yes
-  --enable-jansson=no
+  --enable-jansson=yes
   --enable-cet
   --with-pic
   --with-lib-path=/usr/lib:/usr/local/lib
@@ -86,22 +86,22 @@ build() {
     "${_libiberty_options[@]}" \
     "${_gdb_options[@]}"
 
-  make -O tooldir="/usr"
+  make tooldir="/usr"
 }
 
 check() {
   cd binutils-gdb/build
 
-  make -O CFLAGS="-O2 -no-pie" CXXFLAGS="-O2 -no-pie -fno-PIC" CFLAGS_FOR_TARGET="-O2 -g" LDFLAGS="" check
+  make check
 }
 
 package() {
   cd binutils-gdb/build
 
-  make DESTDIR="$pkgdir/" tooldir="/usr" install
+  make DESTDIR="$pkgdir" tooldir="/usr" install
 
   # install PIC version of libiberty
-  install -m644 libiberty/pic/libiberty.a "$pkgdir"/usr/lib/
+  install -Dm644 libiberty/pic/libiberty.a "$pkgdir"/usr/lib/
 
   # remove unnecessary man files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,windmc,windres}*

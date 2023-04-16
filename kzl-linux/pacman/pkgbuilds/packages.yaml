@@ -1,216 +1,233 @@
-base:
-  filesystem:
-    - iana-etc
-  glibc:
-    - filesystem
-    - linux-api-headers
-    - tzdata
-  gcc:
-    - binutils:
-        - zlib
-        - zstd:
-            - zlib
-    - glibc
-    - isl:
-        - gmp
-    - mpc:
-        - gmp
-        - mpfr:
-            - gmp
-    - zlib
-    - zstd
-  bash:
-    - glibc
-    - ncurses
-    - readline:
-        - ncurses
-    - bash-completion
-  perl:
-    - db
-    - gdbm:
-        - readline
-    - glibc
-    - libxcrypt
-  bzip2:
-    - glibc
-  gzip:
-    - glibc
-    - less:
-        - ncurses
-        - pcre2
-  xz:
-    - po4a:
-        - Module::Build: cpan
-        - Pod::Parser: cpan
-  tar:
-    - acl:
-        - attr
-  grep:
-    - pcre2
-  sed:
-    - acl
-  gawk:
-    - libsigsegv
-    - mpfr
-    - readline
-  file:
-    - libseccomp
-  findutils:
-    - glibc
-  gettext:
-    - acl
-    - libunistring
-    - libxml2:
-        - icu
-  openssl:
-  ca-certificates:
-    - p11-kit:
-        - libffi
-        - libtasn1
-  shadow:
-    - acl
-    - attr
-    - audit:
-        - krb5:
-            - e2fsprogs
-            - keyutils
-            - libedit
-            - lmdb
-            - openldap:
-                - cyrus-sasl
-        - libcap-ng:
-            - swig
-    - libxcrypt
-    - pam:
-        - audit
-        - libxcrypt
-        - libtirpc:
-            - krb5
-        - pam-config
-  coreutils:
-    - acl
-    - attr
-    - gmp
-    - libcap:
-        - pam
-  curl:
-    - brotli
-    - ca-certificates
-    - krb5
-    - libidn2:
-        - libunistring
-    - nghttp2
-    - libpsl:
-        - libidn2
-        - libxslt (make):
-            - libgcrypt:
-                - libgpg-error
-            - libxml2
-    - libssh2
-  iptables:
-    - libnetfilter_conntrack:
-        - libmnl
-        - libnfnetlink
-    - libnftnl:
-        - libmnl
-    - libpcap:
-        - dbus:
-            - audit
-            - expat
-        - libnl
-  util-linux:
-    - bash-completion
-    - cryptsetup:
-        - argon2
-        - device-mapper:
-            - libedit
-            - thin-provisioning-tools
-        - json-c
-        - openssl
-        - popt
-    - file
-    - libcap-ng
-    - libxcrypt
-    - ncurses
-    - pam
-    - readline
-    - systemd
-  systemd:
-    - acl
-    - audit
-    - bzip2
-    - cryptsetup
-    - dbus
-    - elfutils
-    - iptables
-    - kbd
-    - kmod
-    - libcap
-    - libgcrypt
-    - libidn2
-    - libseccomp
-    - lz4
-    - openssl
-    - pam
-    - pcre2
-    - util-linux
-    - xz
-    - zlib
-    - zstd
-    - curl (make)
-    - kexec-tools (make)
-    - libmicrohttpd (make):
-        - gnutls:
-            - gmp
-            - libidn2
-            - libtasn1
-            - libunistring
-            - nettle:
-                - gmp
-            - p11-kit
-        - curl (check)
-    - gnu-efi (make)
-    - gnutls (make)
-    - gperf (make)
-    - libxslt (make)
-    - p11-kit (make)
-    # - polkit (make):
-    #     - glib2
-    #     - todo
-    - quota (make):
-        - dbus
-        - libnl
-        - libtirpc
-        - rpcsvc-proto (make)
-  sudo:
-    - libgcrypt
-    - openldap
-    - pam
-  pacman:
-    - fakeroot
-    - gpgme:
-        - gnupg:
-            - gnutls
-            - libassuan:
-                - libgpg-error
-            - libgcrypt
-            - libgpg-error
-            - libksba:
-                - libgpg-error
-            - npth
-            - pinentry:
-                - libassuan
-                - libcap
-            - sqlite:
-                - tcl (make)
-        - libassuan
-        - libgpg-error
-        - swig (make)
-    - libarchive:
-        - acl
-        - expat
-        - nettle
-        - lz4
+filesystem:
+  - iana-etc
+glibc:
+  - filesystem
+  - linux-api-headers
+  - tzdata
+gcc:
+  - binutils:
+      - jansson
+      - zlib
+      - zstd:
+          - zlib
+      - bc: check
+  - glibc
+  - isl:
+      - gmp
+  - mpc:
+      - gmp
+      - mpfr:
+          - gmp
+  - zlib
+  - zstd
+bash:
+  - glibc
+  - ncurses
+  - readline:
+      - ncurses
+  - bash-completion: optional
+perl:
+  - db
+  - gdbm:
+      - readline
+  - glibc
+  - libxcrypt
+openssl:
+  - glibc
+ca-certificates:
+  - p11-kit:
+      - libffi
+      - libtasn1
+python:
+  - expat
+  - gdbm
+  - libffi
+  - libnsl:
+      - libtirpc:
+          - krb5:
+              - e2fsprogs
+              - keyutils
+              - libedit
+              - lmdb
+              - openldap:
+                  - cyrus-sasl
+  - libxcrypt
+  - sqlite: make
+  - sqlite:
+      - tcl: make
+bzip2:
+  - glibc
+gzip:
+  - glibc
+  - less:
+      - ncurses
+      - pcre2
+xz:
+  - glibc
+  - po4a:
+      - Module::Build: cpan
+      - Pod::Parser: cpan
+tar:
+  - glibc
+  - acl:
+      - attr
+grep:
+  - glibc
+  - pcre2
+sed:
+  - glibc
+  - acl
+gawk:
+  - glibc
+  - libsigsegv
+  - mpfr
+  - readline
+file:
+  - glibc
+  - libseccomp
+findutils:
+  - glibc
+gettext:
+  - acl
+  - libunistring
+  - libxml2:
+      - icu
+shadow:
+  - acl
+  - attr
+  - audit:
+      - krb5
+      - libcap-ng:
+          - swig
+  - libxcrypt
+  - pam:
+      - audit
+      - libxcrypt
+      - libtirpc
+      - pam-config
+coreutils:
+  - acl
+  - attr
+  - gmp
+  - libcap:
+      - pam
+curl:
+  - brotli
+  - ca-certificates
+  - krb5
+  - libidn2:
+      - libunistring
+  - nghttp2
+  - libpsl:
+      - libidn2
+      - libxslt (make):
+          - libgcrypt:
+              - libgpg-error
+          - libxml2
+  - libssh2
+iptables:
+  - libnetfilter_conntrack:
+      - libmnl
+      - libnfnetlink
+  - libnftnl:
+      - libmnl
+  - libpcap:
+      - dbus:
+          - audit
+          - expat
+      - libnl
+util-linux:
+  - bash-completion
+  - cryptsetup:
+      - argon2
+      - device-mapper:
+          - libedit
+          - thin-provisioning-tools
+      - json-c
+      - openssl
+      - popt
+  - file
+  - libcap-ng
+  - libxcrypt
+  - ncurses
+  - pam
+  - readline
+  - systemd
+systemd:
+  - acl
+  - audit
+  - bzip2
+  - cryptsetup
+  - dbus
+  - elfutils
+  - iptables
+  - kbd
+  - kmod
+  - libcap
+  - libgcrypt
+  - libidn2
+  - libseccomp
+  - lz4
+  - openssl
+  - pam
+  - pcre2
+  - util-linux
+  - xz
+  - zlib
+  - zstd
+  - curl (make)
+  - kexec-tools (make)
+  - libmicrohttpd (make):
+      - gnutls:
+          - gmp
+          - libidn2
+          - libtasn1
+          - libunistring
+          - nettle:
+              - gmp
+          - p11-kit
+      - curl (check)
+  - gnu-efi (make)
+  - gnutls (make)
+  - gperf (make)
+  - libxslt (make)
+  - p11-kit (make)
+  # - polkit (make):
+  #     - glib2
+  #     - todo
+  - quota (make):
+      - dbus
+      - libnl
+      - libtirpc
+      - rpcsvc-proto (make)
+sudo:
+  - libgcrypt
+  - openldap
+  - pam
+pacman:
+  - fakeroot
+  - gpgme:
+      - gnupg:
+          - gnutls
+          - libassuan:
+              - libgpg-error
+          - libgcrypt
+          - libgpg-error
+          - libksba:
+              - libgpg-error
+          - npth
+          - pinentry:
+              - libassuan
+              - libcap
+          - sqlite
+      - libassuan
+      - libgpg-error
+      - swig (make)
+  - libarchive:
+      - acl
+      - expat
+      - nettle
+      - lz4
 base-development:
   linux-api-headers:
   libtool:
@@ -239,14 +256,6 @@ base-development:
     - curl
     - llvm-project
     - libffi
-  python:
-    - expat
-    - gdbm
-    - libffi
-    - libnsl:
-        - libtirpc
-    - libxcrypt
-    - sqlite (make)
 core:
   openssh:
     - krb5

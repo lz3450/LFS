@@ -7,7 +7,7 @@ epoch=
 pkgdesc="Utility to create tar archives"
 arch=('x86_64')
 url="https://www.gnu.org/software/tar/"
-depends=(acl)
+depends=(acl glibc)
 source=(https://ftp.gnu.org/gnu/tar/$pkgname-$pkgver.tar.xz{,.sig})
 # source=(git+https://git.savannah.gnu.org/git/tar.git#tag=release_${pkgver//./_}
 #         git+https://git.savannah.gnu.org/git/gnulib.git)
@@ -33,5 +33,5 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
