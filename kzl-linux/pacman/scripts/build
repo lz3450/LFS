@@ -223,6 +223,14 @@ kzl_stage2_pkgs=(
     # diffutils
 
     ################
+    # cmake
+    ################
+    # jsoncpp
+    # libuv
+    # rhash
+    # cmake
+
+    ################
     # base
     ################
     # base
@@ -259,7 +267,7 @@ kzl_stage3_pkgs=(
     ################
     # node
     ################
-    # c-ares libuv
+    # c-ares
     # node
 
     ################

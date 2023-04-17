@@ -248,6 +248,14 @@ base-development:
   diffutils:
   pkg-config: todo
   git: todo
+  cmake:
+    - curl
+    - expat
+    - jsoncpp
+    - libarchive
+    - libuv
+    - nghttp2
+    - rhash
   llvm-project:
     - libedit
     - libffi

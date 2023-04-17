@@ -9,7 +9,6 @@ arch=('x86_64')
 url="http://xmlsoft.org"
 license=('KZL')
 depends=(icu)
-options=(!libtool)
 source=(git+https://gitlab.gnome.org/GNOME/libxml2.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

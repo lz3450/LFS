@@ -2,12 +2,13 @@
 
 pkgname=libffi
 pkgver=3.4.4
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="A Portable Foreign Function Interface Library"
 arch=('x86_64')
 url="https://sourceware.org/libffi/"
 license=('KZL')
+options=(libtool)
 source=(git+https://github.com/libffi/libffi.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -38,5 +39,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

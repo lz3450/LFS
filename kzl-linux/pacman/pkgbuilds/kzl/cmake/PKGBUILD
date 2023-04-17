@@ -1,38 +1,47 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cmake
-pkgver=3.22.2
-pkgrel=1
-epoch=1
+pkgver=3.26.3
+pkgrel=3
+epoch=
 pkgdesc="A cross-platform open-source make system"
 arch=('x86_64')
 url="https://www.cmake.org/"
 license=('KZL')
-depends=(curl jsoncpp libarchive libuv rhash shared-mime-info)
-# makedepends=(qt5)
-# optdepends=("qt5: cmake-gui")
-source=(https://www.cmake.org/files/v${pkgver%.*}/$pkgname-$pkgver.tar.gz)
-sha256sums=('3c1c478b9650b107d452c5bd545c72e2fad4e37c09b89a1984b9a2f46df6aced')
-
-# TODO: --qt-gui
+depends=(curl expat jsoncpp libarchive libuv nghttp2 rhash)
+# makedepends=(qt6)
+# optdepends=("qt6: Qt-based GUI")
+source=(git+https://github.com/Kitware/CMake.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
-
-  export CXXFLAGS+=" $CPPFLAGS"
+  cd CMake
 
   ./bootstrap \
     --prefix=/usr \
-    --mandir=/share/man \
-    --docdir=/share/doc/cmake \
+    --datadir=share/cmake \
+    --docdir=share/doc/cmake \
+    --mandir=share/man \
     --system-libs \
-    --parallel=$(nproc)
+    --system-curl \
+    --system-expat \
+    --system-jsoncpp \
+    --system-zlib \
+    --system-bzip2 \
+    --system-liblzma \
+    --system-nghttp2 \
+    --system-zstd \
+    --system-libarchive \
+    --system-librhash \
+    --system-libuv \
+    --parallel=$(nproc) \
+    --no-qt-gui
 
   make
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd CMake
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

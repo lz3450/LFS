@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/open-source-parsers/jsoncpp/tags | grep -Po '(?<=jsoncpp/releases/tag/)\d\.\d\.\d' | head -1)

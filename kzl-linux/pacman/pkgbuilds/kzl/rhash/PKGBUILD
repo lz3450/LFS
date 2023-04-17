@@ -1,29 +1,25 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rhash
-pkgver=1.4.2
+pkgver=1.4.3
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Utility for verifying hash sums of files"
 arch=('x86_64')
 url="https://github.com/rhash/RHash"
 license=('KZL')
-provides=(libp11-kit)
-conflicts=(libp11-kit)
-replaces=(libp11-kit)
 backup=(etc/rhashrc)
-source=(https://github.com/rhash/RHash/archive/v$pkgver.tar.gz
-        https://github.com/rhash/RHash/releases/download/v$pkgver/v$pkgver.tar.gz.asc)
-sha256sums=('600d00f5f91ef04194d50903d3c79412099328c42f28ff43a0bdb777b00bec62'
-            'SKIP')
-validpgpkeys=('2875F6B1C2D27A4F0C8AF60B2A714497E37363AE')
+source=(git+https://github.com/rhash/RHash.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd RHash-$pkgver
+  cd RHash
 
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
+    --enable-lib-static \
+    --enable-lib-shared \
     --extra-cflags="$CFLAGS" \
     --extra-ldflags="$LDFLAGS"
 
@@ -31,14 +27,13 @@ build() {
 }
 
 check() {
-  cd RHash-$pkgver
+  cd RHash
 
   make test test-lib
 }
 
 package() {
-  cd RHash-$pkgver
+  cd RHash
 
-  make DESTDIR="$pkgdir/" install
-  make -C librhash DESTDIR="$pkgdir/" install-lib-headers install-lib-shared install-so-link
+  make DESTDIR="$pkgdir" install install-lib-so-link
 }
