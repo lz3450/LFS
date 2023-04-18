@@ -5,5 +5,8 @@ pre_update() {
 }
 
 post_update() {
-
+    makepkg -o
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > $PKGBUILDDIR/help.txt
+    meson configure | tee $PKGBUILDDIR/help.txt
 }
