@@ -1,17 +1,25 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=psmisc
-pkgver=23.4
-pkgrel=1
-epoch=1
+pkgver=23.6
+pkgrel=4
+epoch=
 pkgdesc="Miscellaneous procfs tools"
 arch=('x86_64')
-url="http://psmisc.sourceforge.net/"
-source=(https://downloads.sourceforge.net/psmisc/$pkgname-$pkgver.tar.xz)
-sha256sums=('7f0cceeace2050c525f3ebb35f3ba01d618b8d690620580bdb8cd8269a0c1679')
+url="https://gitlab.com/psmisc/psmisc"
+license=('KZL')
+depends=(glibc ncurses)
+source=(git+https://gitlab.com/psmisc/psmisc.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -20,7 +28,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

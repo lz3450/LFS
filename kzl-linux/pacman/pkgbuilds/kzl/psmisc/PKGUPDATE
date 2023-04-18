@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://gitlab.com/psmisc/psmisc/-/tags | grep -Po '(?<=/psmisc/psmisc/-/tags/v)\d\d\.\d' | head -1)
+
+post_update() {
+    makepkg -o
+    $BUILDDIR/$pkgname/src/$pkgname/configure --help > help.txt
+}

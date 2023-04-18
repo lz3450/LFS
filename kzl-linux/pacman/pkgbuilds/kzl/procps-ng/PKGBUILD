@@ -1,13 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=procps-ng
-pkgver=3.3.17
-pkgrel=1
-epoch=1
+pkgver=4.0.3
+pkgrel=5
+epoch=
 pkgdesc="Utilities for monitoring your system and its processes"
 arch=('x86_64')
 url="https://gitlab.com/procps-ng/procps"
 license=('KZL')
+depends=(glibc ncurses)
+makedepends=(systemd)
 source=(git+https://gitlab.com/procps-ng/procps.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -15,6 +17,8 @@ prepare() {
   cd procps
 
   ./autogen.sh
+
+  sed 's:<ncursesw/:<:g' -i src/watch.c
 }
 
 build() {
@@ -22,14 +26,8 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --exec-prefix=/ \
-    --bindir=/usr/bin \
-    --sbindir=/usr/bin \
-    --sysconfdir=/etc \
-    --libdir=/usr/lib \
     --enable-watch8bit \
     --disable-kill \
-    --disable-modern-top \
     --with-systemd
 
   make
@@ -44,5 +42,5 @@ check() {
 package() {
   cd procps
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
