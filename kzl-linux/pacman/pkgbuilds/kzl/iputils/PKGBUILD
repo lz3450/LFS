@@ -8,7 +8,7 @@ pkgdesc="Network monitoring tools, including ping"
 arch=('x86_64')
 url="https://github.com/iputils/iputils"
 license=('KZL')
-depends=(libcap libidn2)
+depends=(glibc libcap libidn2)
 makedepends=(systemd)
 source=(git+https://github.com/iputils/iputils.git#commit=$pkgver)
 sha256sums=('SKIP')

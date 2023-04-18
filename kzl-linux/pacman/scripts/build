@@ -209,6 +209,8 @@ kzl_stage2_pkgs=(
     ################
     # pciutils
     ################
+    # hwdata
+    pciutils
 
     ################
     # usbutils

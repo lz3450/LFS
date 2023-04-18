@@ -1,0 +1,7 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usbutils.git/ | grep -Po '(?<=/usbutils.git/tag/\?h=v)\d\d\d' | head -1)
+
+post_update() {
+    makepkg -o
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > $PKGBUILDDIR/help.txt
+}

@@ -1,43 +1,42 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=usbutils
-pkgver=014
-pkgrel=1
-epoch=1
+pkgver=015
+pkgrel=3
+epoch=
 pkgdesc="USB Device Utilities"
 arch=('x86_64')
+url="https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usbutils.git"
 license=('KZL')
-depends=(libusb)
-source=(https://www.kernel.org/pub/linux/utils/usb/usbutils/$pkgname-$pkgver.tar{.xz,.sign})
-sha256sums=('3a079cfad60560227b67192482d7813bf96326fcbb66c04254839715f276fc69'
-            'SKIP')
-validpgpkeys=('647F28654894E3BD457199BE38DBBDC86092693E')
+depends=(glibc hwdata libusb)
+makedepends=(systemd)
+source=(git+git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usbutils.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  autoreconf -fiv
+  autoreconf -vfi
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
-    --datadir=/usr/share/hwdata \
-    --disable-zlib
+    --datadir=/usr/share/hwdata
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

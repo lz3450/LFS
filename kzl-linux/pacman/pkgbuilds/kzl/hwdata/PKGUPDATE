@@ -1,0 +1,1 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/vcrhonek/hwdata/tags | grep -Po '(?<=/hwdata/releases/tag/v)\d\.\d\d\d' | head -1)

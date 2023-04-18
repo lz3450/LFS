@@ -1,0 +1,26 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=hwdata
+pkgver=0.369
+pkgrel=4
+epoch=
+pkgdesc="Hardware identification and configuration data"
+arch=('any')
+url="https://github.com/vcrhonek/hwdata"
+license=('KZL')
+source=(git+https://github.com/vcrhonek/hwdata.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --disable-blacklist
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}
