@@ -46,7 +46,9 @@ if [ ! -f PKGBUILD ]; then
    error 'PKGBUILD does not exist.' 2
 fi
 
-eval `grep SRCDEST /etc/makepkg.conf`
+. /etc/makepkg.conf
+. PKGBUILD
+PKGBUILDDIR=$(pwd)
 
 result=0
 
