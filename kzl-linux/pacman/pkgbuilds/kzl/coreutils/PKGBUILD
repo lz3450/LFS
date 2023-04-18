@@ -8,8 +8,7 @@ pkgdesc="The GNU core utilities"
 arch=('x86_64')
 url="https://www.gnu.org/software/coreutils/"
 license=('KZL')
-# depends=(acl attr gmp libcap openssl)
-depends=(acl attr gmp libcap)
+depends=(acl attr glibc gmp libcap openssl)
 source=(git+https://github.com/coreutils/coreutils.git#tag=v$pkgver
         git+https://git.savannah.gnu.org/git/gnulib.git)
 sha256sums=('SKIP'
@@ -44,5 +43,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

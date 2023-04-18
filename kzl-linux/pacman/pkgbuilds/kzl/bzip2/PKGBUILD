@@ -8,6 +8,7 @@ pkgdesc="A high-quality data compression program"
 arch=('x86_64')
 url="https://sourceware.org/bzip2/index.html"
 license=('KZL')
+depends=(glibc)
 source=(git+git://sourceware.org/git/bzip2.git#tag=$pkgname-$pkgver
         $pkgname.pc)
 sha256sums=('SKIP'

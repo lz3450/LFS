@@ -8,7 +8,7 @@ pkgdesc="An implementation of Cyrus Simple Authentication Service Layer (SASL)"
 arch=('x86_64')
 url="http://www.cyrusimap.org/sasl/"
 license=('KZL')
-depends=(gdbm krb5 libxcrypt openssl pam)
+depends=(gdbm krb5 libxcrypt pam)
 source=(git+https://github.com/cyrusimap/cyrus-sasl.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 

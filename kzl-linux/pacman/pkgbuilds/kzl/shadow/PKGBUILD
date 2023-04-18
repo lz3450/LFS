@@ -7,7 +7,7 @@ epoch=
 pkgdesc="Programs for converting UNIX password files to the shadow password format, plus programs for managing user and group accounts"
 arch=('x86_64')
 url="https://github.com/shadow-maint/shadow"
-depends=(acl attr audit libxcrypt pam)
+depends=(acl attr audit glibc libxcrypt pam)
 backup=(etc/default/useradd
         etc/login.defs
         etc/pam.d/{chage,chfn,chgpasswd,chpasswd,chsh,groupadd,groupdel,groupmems,groupmod,login,newusers,passwd,useradd,userdel,usermod})

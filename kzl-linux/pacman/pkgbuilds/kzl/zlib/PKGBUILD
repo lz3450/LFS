@@ -8,7 +8,6 @@ epoch=
 arch=('x86_64')
 url="https://zlib.net"
 license=('KZL')
-options=(staticlibs)
 source=(git+https://github.com/madler/zlib.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -47,6 +46,7 @@ check() {
 
 package_zlib() {
   pkgdesc="A Massively Spiffy Yet Delicately Unobtrusive Compression Library"
+  depends=(glibc)
 
   cd zlib
 
@@ -55,6 +55,7 @@ package_zlib() {
 
 package_minizip() {
 	pkgdesc="Zip and UnZip additionnal library"
+  depends=(zlib)
 
 	cd zlib/contrib/minizip
 

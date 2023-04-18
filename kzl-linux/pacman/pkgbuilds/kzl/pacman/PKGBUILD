@@ -7,7 +7,7 @@ epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
 license=('KZL')
-depends=(curl fakeroot gpgme libarchive libseccomp)
+depends=(curl fakeroot glibc gpgme libarchive libseccomp)
 optdepends=("archlinux-keyring: for Arch Linux official packages")
 backup=(etc/pacman.conf
         etc/makepkg.conf)

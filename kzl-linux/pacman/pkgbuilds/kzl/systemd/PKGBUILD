@@ -7,8 +7,8 @@ epoch=
 arch=('x86_64')
 url="https://github.com/systemd/systemd-stable"
 license=('KZL')
-depends=(acl audit bzip2 cryptsetup dbus elfutils iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl pam pcre2 util-linux xz zlib zstd)
-makedepends=(curl kexec-tools gnu-efi gnutls gperf libmicrohttpd libxslt p11-kit quota)
+depends=(acl audit bzip2 cryptsetup dbus elfutils glibc iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl pam pcre2 xz zlib zstd)
+makedepends=(curl kexec-tools gnu-efi gnutls gperf libmicrohttpd libxslt p11-kit quota util-linux)
 optdepends=("curl: libcurl support"
             "gnu-efi: gnu-efi support for sd-boot"
             "gnutls: gnutls support"

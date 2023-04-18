@@ -8,7 +8,7 @@ pkgdesc="The userspace command line program used to configure the Linux 2.4.x an
 arch=('x86_64')
 url="https://www.netfilter.org/projects/iptables/index.html"
 license=('KZL')
-depends=(libnetfilter_conntrack libnftnl libpcap)
+depends=(glibc libnetfilter_conntrack libnftnl libpcap)
 source=(git://git.netfilter.org/iptables#tag=v$pkgver)
 sha256sums=('SKIP')
 

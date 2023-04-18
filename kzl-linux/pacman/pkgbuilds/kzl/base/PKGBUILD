@@ -8,13 +8,17 @@ pkgdesc="Minimal package set"
 arch=('any')
 license=('KZL')
 depends=(filesystem
-         glibc gcc
+         glibc 
+         zlib bzip2 gzip lz4 xz zstd tar
+         gcc
          bash perl
-         zlib zstd bzip2 gzip xz tar
          grep sed gawk file findutils
          gettext
-         ca-certificates openssl
-         shadow coreutils util-linux
+         openssl ca-certificates 
+         pam shadow
+         curl
+         python
+         coreutils util-linux
          iptables
          systemd
          sudo

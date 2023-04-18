@@ -8,7 +8,7 @@ pkgdesc="GNU internationalization library"
 arch=('x86_64')
 url="https://www.gnu.org/software/gettext/"
 license=('KZL')
-depends=(acl attr libunistring libxml2)
+depends=(acl glibc libunistring libxml2)
 source=(https://ftp.gnu.org/pub/gnu/gettext/$pkgname-$pkgver.tar.gz{,.sig})
 # source=(git+https://git.savannah.gnu.org/git/gettext.git#tag=v$pkgver
 #         git+https://git.savannah.gnu.org/git/gnulib.git)

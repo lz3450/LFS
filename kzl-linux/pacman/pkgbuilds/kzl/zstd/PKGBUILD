@@ -8,8 +8,7 @@ pkgdesc="Zstandard - Fast real-time compression algorithm"
 arch=('x86_64')
 url="http://www.zstd.net/"
 license=('KZL')
-# depends=(zlib xz lz4)
-depends=(zlib)
+depends=(glibc lz4 xz zlib)
 source=(git+https://github.com/facebook/zstd.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -27,8 +26,8 @@ build() {
     -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
     -DZSTD_BUILD_CONTRIB=ON \
     -DZSTD_BUILD_TESTS=ON \
-    -DZSTD_LZ4_SUPPORT=OFF \
-    -DZSTD_LZMA_SUPPORT=OFF \
+    -DZSTD_LZ4_SUPPORT=ON \
+    -DZSTD_LZMA_SUPPORT=ON \
     -DZSTD_PROGRAMS_LINK_SHARED=ON \
     -DZSTD_ZLIB_SUPPORT=ON \
     -S build/cmake \

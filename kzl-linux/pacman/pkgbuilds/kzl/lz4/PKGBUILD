@@ -8,6 +8,7 @@ pkgdesc="Extremely fast compression algorithm"
 arch=('x86_64')
 url="http://www.lz4.org"
 license=('KZL')
+depends=(glibc)
 source=(git+https://github.com/lz4/lz4.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

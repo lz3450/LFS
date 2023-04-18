@@ -8,7 +8,8 @@ pkgdesc="Miscellaneous system utilities for Linux"
 arch=('x86_64')
 url="https://github.com/util-linux/util-linux"
 license=('KZL')
-depends=(bash-completion cryptsetup file libcap-ng libxcrypt ncurses pam readline systemd)
+depends=(bash-completion cryptsetup file glibc libcap-ng libxcrypt ncurses pam readline)
+makedepends=(systemd)
 backup=(etc/pam.d/{runuser,runuser-l,su,su-l})
 source=(git+$url.git#tag=v$pkgver
         {runuser,su}.pam)

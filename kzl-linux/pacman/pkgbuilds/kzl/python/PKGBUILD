@@ -8,7 +8,7 @@ pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
 url="https://www.python.org/"
 license=('KZL')
-depends=(expat gdbm libffi libnsl libxcrypt)
+depends=(expat gdbm glibc libffi libnsl libxcrypt)
 makedepends=(sqlite)
 # makedepends=(sqlite tk)
 source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
