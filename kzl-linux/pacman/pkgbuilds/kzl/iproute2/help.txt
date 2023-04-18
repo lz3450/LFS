@@ -1,0 +1,9 @@
+Usage: ./configure [OPTIONS]
+	--include_dir <dir>		Path to iproute2 include dir
+	--libdir <dir>			Path to iproute2 lib dir
+	--libbpf_dir <dir>		Path to libbpf DESTDIR
+	--libbpf_force <on|off>		Enable/disable libbpf by force. Available options:
+					  on: require link against libbpf, quit config if no libbpf support
+					  off: disable libbpf probing
+	--prefix <dir>			Path prefix of the lib files to install
+	-h | --help			Show this usage info

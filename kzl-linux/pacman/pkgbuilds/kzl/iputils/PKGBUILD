@@ -1,15 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=iputils
-pkgver=20211215
-pkgrel=1
-epoch=1
+pkgver=20221126
+pkgrel=7
+epoch=
 pkgdesc="Network monitoring tools, including ping"
 arch=('x86_64')
-url="http://www.skbuff.net/iputils/"
+url="https://github.com/iputils/iputils"
 license=('KZL')
 depends=(libcap libidn2)
-install=$pkgname.install
+makedepends=(systemd)
 source=(git+https://github.com/iputils/iputils.git#commit=$pkgver)
 sha256sums=('SKIP')
 
@@ -18,14 +18,11 @@ build() {
 
   meson setup \
     --prefix /usr \
-    --libexecdir lib \
-    --sbindir bin \
     --auto-features enabled \
-    --buildtype plain \
-    --wrap-mode nodownload \
+    --optimization 2 \
     -D b_lto=true \
     -D b_pie=true \
-    -D BUILD_RARPD=true \
+    -D NO_SETCAP_OR_SUID=false \
     build
 
   meson compile -C build
@@ -34,5 +31,5 @@ build() {
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir/" meson install -C build
+  meson install -C build --destdir="$pkgdir"
 }

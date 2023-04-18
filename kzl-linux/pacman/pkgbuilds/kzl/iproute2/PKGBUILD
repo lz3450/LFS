@@ -1,36 +1,29 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=iproute2
-pkgver=5.16.0
-pkgrel=1
-epoch=1
+pkgver=6.2.0
+pkgrel=3
+epoch=
 pkgdesc="IP Routing Utilities"
 arch=('x86_64')
 url="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git"
 license=('KZL')
-depends=(elfutils iptables)
-backup=(etc/iproute2/ematch_map
-        etc/iproute2/rt_dsfield
-        etc/iproute2/rt_protos
-        etc/iproute2/rt_realms
-        etc/iproute2/rt_scopes
-        etc/iproute2/rt_tables)
-options=(staticlibs)
-source=(https://www.kernel.org/pub/linux/utils/net/$pkgname/$pkgname-$pkgver.tar.{xz,sign})
-sha256sums=('c064b66f6b001c2a35aa5224b5b1ac8aa4bee104d7dce30d6f10a84cb8b01e2f'
-            'SKIP')
-validpgpkeys=('9F6FC345B05BE7E766B83C8F80A77F6095CDE47E')
+depends=(db elfutils glibc iptables libcap libtirpc libmnl)
+backup=(etc/{ethertypes,xtables.conf})
+source=(git://git.kernel.org/pub/scm/network/iproute2/iproute2.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  ./configure
+  ./configure \
+    --prefix=/usr
 
   make
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" SBINDIR="/usr/bin/" install
+  make DESTDIR="$pkgdir" SBINDIR="/usr/sbin" install
 }
