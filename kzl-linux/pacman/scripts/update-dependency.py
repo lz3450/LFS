@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import os
-import subprocess
 import yaml
 
 ROOT_DIRECTORY = '/home/kzl/LFS/kzl-linux/pacman/pkgbuilds/kzl'
