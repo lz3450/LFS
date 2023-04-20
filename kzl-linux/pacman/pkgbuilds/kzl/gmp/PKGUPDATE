@@ -1,2 +1,7 @@
-new_version=$(curl -v -L --stderr - https://gmplib.org/ | grep -o 'GMP [0-9]\.[0-9]\.[0-9]' | sort -r | head -1 | grep -o -E '[0-9]\.[0-9]\.[0-9]')
-old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')
+new_version=$(curl -v -L --stderr - https://gmplib.org/ | grep -Po '(?<=GMP )\d\.\d\.\d' | sort -V | tail -1)
+
+post_update() {
+    makepkg -o
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
+    ./configure --help > $PKGBUILDDIR/help.txt
+}

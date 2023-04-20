@@ -2,7 +2,7 @@
 
 pkgname=swig
 pkgver=4.1.1
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="A software development tool that connects programs written in C and C++ with a variety of high-level programming languages"
 arch=('x86_64')
@@ -22,25 +22,7 @@ build() {
   cd $pkgname
 
   ./configure \
-    --prefix=/usr \
-    --with-boost=no \
-    --without-android \
-    --without-csharp \
-    --without-d \
-    --without-go \
-    --without-guile \
-    --without-java \
-    --without-javascript \
-    --without-lua \
-    --without-mzscheme \
-    --without-ocaml \
-    --without-octave \
-    --without-php \
-    --without-python \
-    --without-r \
-    --without-ruby \
-    --without-scilab \
-    --without-tcl
+    --prefix=/usr
 
   make
 }
@@ -54,5 +36,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

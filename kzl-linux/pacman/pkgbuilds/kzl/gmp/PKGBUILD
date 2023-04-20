@@ -2,7 +2,7 @@
 
 pkgname=gmp
 pkgver=6.2.1
-pkgrel=1
+pkgrel=4
 epoch=
 pkgdesc="A free library for arbitrary precision arithmetic"
 arch=('x86_64')
@@ -33,5 +33,5 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
