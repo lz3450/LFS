@@ -1,0 +1,67 @@
+#!/usr/bin/bash
+
+# find /etc \
+#     -type d \( \
+#         -path /etc/systemd/network -o \
+#         -path /etc/wpa_supplicant -o \
+#         -path /etc/ca-certificates -o \
+#         -path /etc/ssh -o \
+#         -path /etc/modprobe.d -o \
+#         -path /etc/samba -o \
+#         -path /etc/vulkan -o \
+#         -path /etc/OpenCL -o \
+#         -path /etc/pacman.d -o \
+#         -path "/usr/lib/python*/site-packages" \
+#     \) -prune -o \
+#     -type f \
+#     ! \( \
+#         -name hostname -o \
+#         -name locale.conf -o \
+#         -name resolv.conf.backup -o \
+#         -name machine-id -o \
+#         -wholename '/etc/*-' -o \
+#         -name ld.so.cache \
+#     \) -print \
+#     2> /dev/null \
+#     | pacman -Qqo - 2>&1 >&- >/dev/null | cut -d ' ' -f 5-
+
+# find /usr \
+#     -type d \( \
+#         -path /usr/lib/python3.10/site-packages -o \
+#         -path /usr/lib/perl5/site_perl \
+#     \) -prune -o \
+#     -type f \
+#     ! \( \
+#         -wholename '/usr/share/man/man1/*.1perl' -o \
+#         -wholename '/usr/share/man/man3/*.3perl' \
+#     \) -print \
+#     2> /dev/null \
+#     | pacman -Qqo - 2>&1 >&- >/dev/null | cut -d ' ' -f 5-
+
+# find /opt \
+#     -type d \( \
+#         -path /opt/TeXLive/texmf-dist -o \
+#         -path /opt/TeXLive/texmf-var -o \
+#         -path /opt/TeXLive/tlpkg \
+#     \) -prune -o \
+#     -type f \
+#     ! \( \
+#         -wholename /opt/TeXLive/install-tl -o \
+#         -wholename /opt/TeXLive/doc.html \
+#     \) \
+#     -print \
+#     2> /dev/null \
+#     | pacman -Qqo - 2>&1 >&- >/dev/null | cut -d ' ' -f 5-
+
+find /boot \
+    -type f \
+    ! \( \
+        -wholename /boot/EFI/systemd/systemd-bootx64.efi -o \
+        -wholename /boot/EFI/BOOT/BOOTX64.EFI -o \
+        -wholename /boot/loader/entries/kzl-linux.conf -o \
+        -wholename /boot/loader/loader.conf -o \
+        -wholename /boot/loader/random-seed \
+    \) \
+    -print \
+    2> /dev/null \
+    | pacman -Qqo - 2>&1 >&- >/dev/null | cut -d ' ' -f 5-
