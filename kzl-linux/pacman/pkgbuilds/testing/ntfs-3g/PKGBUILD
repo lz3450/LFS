@@ -14,19 +14,11 @@ sha256sums=('55b883aa05d94b2ec746ef3966cb41e66bed6db99f22ddd41d1b8b94bb202efb')
 
 # TODO: wait for fuse 3
 
-prepare() {
-  cd ${pkgname}_ntfsprogs-${pkgver}
-
-  sed -e 's|$(DESTDIR)/sbin|$(DESTDIR)/usr/bin|' -i {ntfsprogs,src}/Makefile.in
-}
-
 build() {
   cd ${pkgname}_ntfsprogs-${pkgver}
 
   ./configure \
     --prefix=/usr \
-    --sbin=/usr/bin \
-    --sbin=/usr/bin \
     --disable-ldconfig \
     --enable-posix-acls \
     --enable-xattr-mappings \

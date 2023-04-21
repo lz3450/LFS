@@ -1,0 +1,71 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=mesa
+pkgver=22.2.0
+pkgrel=1
+epoch=1
+pkgdesc="The Mesa 3D Graphics Library"
+arch=('x86_64')
+url="https://www.mesa3d.org/"
+license=('KZL')
+depends=()
+makedepends=(glslang)
+source=(https://mesa.freedesktop.org/archive/mesa-$pkgver.tar.xz)
+sha256sums=('b1f9c8fd08f2cae3adf83355bef4d2398e8025f44947332880f2d0066bdafa8c')
+
+build() {
+  cd $pkgname-$pkgver
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D b_ndebug=true \
+    -D dri3=enabled \
+    -D egl=enabled \
+    -D gallium-drivers=nouveau,swrast,i915,iris \
+    -D gallium-extra-hud=true \
+    -D gallium-nine=true \
+    -D gallium-omx=bellagio \
+    -D gallium-opencl=icd \
+    -D gallium-va=enabled \
+    -D gallium-vdpau=disabled \
+    -D gallium-xa=enabled \
+    -D gallium-xvmc=disabled \
+    -D gbm=enabled \
+    -D gles1=disabled \
+    -D gles2=enabled \
+    -D glvnd=true \
+    -D glx=dri \
+    -D libunwind=enabled \
+    -D llvm=enabled \
+    -D lmsensors=enabled \
+    -D microsoft-clc=disabled \
+    -D osmesa=true \
+    -D platforms=x11,wayland \
+    -D shared-glapi=enabled \
+    -D valgrind=enabled \
+    -D video-codecs=vc1dec,h264dec,h264enc,h265dec,h265enc \
+    -D vulkan-drivers=amd,intel,swrast \
+    -D vulkan-layers=device-select,intel-nullhw,overlay \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname-$pkgver
+
+  meson test -C build
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  meson install -C build --destdir="$pkgdir/"
+}

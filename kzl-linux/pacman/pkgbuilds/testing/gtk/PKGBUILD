@@ -1,0 +1,59 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gtk
+pkgver=4.8.1
+pkgrel=1
+epoch=1
+pkgdesc="GObject-based multi-platform GUI toolkit"
+arch=('x86_64')
+url="https://www.gtk.org/"
+license=('KZL')
+depends=(cairo freetype2 fribidi gdk-pixbuf glib2 gobject-introspection pango)
+makedepends=()
+options=(debug)
+source=(git+https://gitlab.gnome.org/GNOME/gtk.git#tag=$pkgver
+        gtk-4.0-query-immodules.hook)
+sha256sums=('SKIP'
+            'a0319b6795410f06d38de1e8695a9bf9636ff2169f40701671580e60a108e229')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
+
+build() {
+  cd $pkgname
+
+  # CFLAGS+=" -DG_DISABLE_CAST_CHECKS"
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D broadway-backend=true \
+    -D cloudproviders=enabled \
+    -D colord=enabled \
+    -D tracker=enabled \
+    -D x11-backend=false \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir="$pkgdir/"
+}
