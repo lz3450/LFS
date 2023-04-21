@@ -1,9 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgname=glib
+pkgname=glib2
 pkgver=2.74.0
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Low level core library"
 arch=('x86_64')
 url="https://wiki.gnome.org/Projects/GLib"
@@ -11,10 +11,6 @@ license=('KZL')
 depends=(libffi pcre)
 makedepends=(dbus elfutils shared-mime-info)
 optdepends=("elfutils: gresource inspection tool")
-provides=(glib2)
-conflicts=(glib2)
-replaces=(glib2)
-options=(!strip staticlibs)
 source=(git+https://gitlab.gnome.org/GNOME/glib.git#tag=$pkgver?signed
         gio-querymodules.{script,hook}
         glib-compile-schemas.hook)

@@ -1,118 +1,51 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=graphviz
-pkgver=2.46.0
+pkgver=5.0.1
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Graph visualization software"
 arch=('x86_64')
 url="https://www.graphviz.org/"
-depends=()
-makedepends=()
-optdepends=()
-checkdepends=()
-provides=()
-conflicts=()
-replaces=()
-backup=()
-options=()
+license=('KZL')
+depends=(expat fontconfig freetype2 gd libpng librsvg pango swig)
+makedepends=(guile tcl)
+optdepends=("guile: guile bindings"
+            "tcl: tcl bindings")
 install=$pkgname.install
-changelog=
-source=($pkgname-$pkgver.tar.gz)
-noextract=()
-sha256sums=()
-validpgpkeys=()
+source=(https://gitlab.com/graphviz/graphviz/-/archive/$pkgver/$pkgname-$pkgver.tar.gz
+        $pkgname.install)
+sha256sums=('6c704a3ffeaf2f7ae63f7d0da453cd624d93a9306a2e5dbda07e5ec38343d2b8'
+            '9e4a7a7c1fdc3c79256194e501a435939a9a981f31ff8ff640dec320d6009f15')
 
-pkgver() {
-  cd $pkgname
-
-  git describe --tags | sed 's/-/+/g'
-}
-
-###############################################################################
+# TODO: language bindings
 
 prepare() {
+  cd $pkgname-$pkgver
 
+	./autogen.sh
 }
-
-###############################################################################
 
 build() {
   cd $pkgname-$pkgver
 
+	export CXXFLAGS+=" -fPIC -fpermissive"
+	export LIBPOSTFIX=/
+
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --enable-python=no
+
+  sed -e 's/ -shared / -Wl,-O1,--as-needed\0/g' -i libtool
 
   make
-}
-
-check() {
-  cd $pkgname-$pkgver
-
-  make check || warning "Check failed."
 }
 
 package() {
   cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir/" install
-}
 
-###############################################################################
-
-build() {
-  cd $pkgname-$pkgver
-
-  meson setup \
-    --prefix /usr \
-    --libexecdir lib \
-    --sbindir bin \
-    --auto-features enabled \
-    --buildtype plain \
-    --wrap-mode nodownload \
-    -D b_lto=true \
-    -D b_pie=true \
-    build
-
-  meson compile -C build
-}
-
-check() {
-  cd $pkgname-$pkgver
-
-  meson test -C build || warning "Check failed."
-}
-
-package() {
-  cd $pkgname-$pkgver
-
-  DESTDIR="$pkgdir/" meson install -C build
-}
-
-###############################################################################
-
-build() {
-  cd $pkgname-$pkgver
-
-  cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
-    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
-    -S . \
-    -B build
-
-  cmake --build build
-}
-
-check() {
-  cd $pkgname-$pkgver
-
-  cmake --build build --target tests || warning "Check failed."
-}
-
-package() {
-  cd $pkgname-$pkgver
-
-  cmake --build build --target install -- DESTDIR="$pkgdir/"
+	rm -rf "$pkgdir"/usr/lib/tcl8.6/graphviz
+	ln -s ../graphviz/tcl "$pkgdir"/usr/lib/tcl8.6/graphviz
 }

@@ -1,0 +1,48 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libepoxy
+pkgver=1.5.10
+pkgrel=1
+epoch=1
+pkgdesc="Library handling OpenGL function pointer management"
+arch=('x86_64')
+url="https://github.com/anholt/libepoxy"
+license=('KZL')
+changelog=
+source=(git+https://github.com/anholt/libepoxy#tag=$pkgver)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g'
+}
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --libexecdir lib \
+    --auto-features enabled \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D x11=false \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build --print-errorlogs
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir="$pkgdir/"
+}
