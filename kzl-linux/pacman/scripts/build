@@ -210,11 +210,13 @@ kzl_stage2_pkgs=(
     # pciutils
     ################
     # hwdata
-    pciutils
+    # pciutils
 
     ################
     # usbutils
     ################
+    # libusb
+    # usbutils
 
     ################################
     # other base-development
@@ -227,6 +229,12 @@ kzl_stage2_pkgs=(
     # autoconf automake
     # which
     # diffutils
+
+    ################
+    # make
+    ################
+    # gc guile
+    # make
 
     ################
     # cmake
@@ -253,6 +261,11 @@ kzl_stage3_pkgs=(
     ################
     # pcre zsh
     # fish
+
+    ################
+    # nano
+    ################
+    # nano
 
     ################
     # git

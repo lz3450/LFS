@@ -1,0 +1,7 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.nano-editor.org | grep -A 1 'Latest version:' | grep -Po '\d\.\d')
+
+post_update() {
+    makepkg -Co
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > $PKGBUILDDIR/help.txt
+}

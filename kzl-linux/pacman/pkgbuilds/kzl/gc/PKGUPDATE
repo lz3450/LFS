@@ -1,0 +1,7 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - $url| grep -Po '(?<=gc-)\d\.\d\.\d(?=\.tar\.gz)' | sort -V | tail -1)
+
+post_update() {
+    makepkg -o
+    cd "$BUILDDIR/$pkgname/src/bdwgc"
+    ./configure --help > $PKGBUILDDIR/help.txt
+}

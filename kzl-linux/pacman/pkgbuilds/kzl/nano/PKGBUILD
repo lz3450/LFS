@@ -1,21 +1,28 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=nano
-pkgver=6.2
-pkgrel=1
-epoch=1
+pkgver=7.2
+pkgrel=7
+epoch=
 pkgdesc="Pico editor clone with enhancements"
 arch=('x86_64')
 url="https://www.nano-editor.org"
 license=('KZL')
 backup=(etc/nanorc)
-source=($url/dist/v${pkgver::1}/$pkgname-$pkgver.tar.xz{,.asc})
-sha256sums=('2bca1804bead6aaf4ad791f756e4749bb55ed860eec105a97fba864bc6a77cb3'
+source=(git://git.savannah.gnu.org/nano.git#tag=v$pkgver
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
-validpgpkeys=('BFD009061E535052AD0DF2150D28D4D2A0ACE884')
+
+prepare() {
+  cd $pkgname
+
+  ln -s ../gnulib
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
@@ -28,8 +35,8 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
-  install -Dm644 "$srcdir"/$pkgname-$pkgver/doc/sample.nanorc "$pkgdir"/etc/nanorc
+  make DESTDIR="$pkgdir" install
+  install -Dm644 "$srcdir"/$pkgname/doc/sample.nanorc "$pkgdir"/etc/nanorc
 }

@@ -1,0 +1,7 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://git.savannah.gnu.org/cgit/make.git | grep -Po '(?<=make-)\d\.\d(\.\d)?' | sort -V | tail -1)
+
+post_update() {
+    makepkg -Co
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > $PKGBUILDDIR/help.txt
+}

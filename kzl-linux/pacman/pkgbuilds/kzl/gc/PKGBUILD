@@ -1,47 +1,40 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gc
-pkgver=8.2.0
-pkgrel=1
-epoch=1
+pkgver=8.2.2
+pkgrel=3
+epoch=
 pkgdesc="A garbage collector for C and C++"
 arch=('x86_64')
 url="https://www.hboehm.info/gc/"
 license=('KZL')
-source=(https://github.com/ivmai/bdwgc/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz
-        gc-missing-header.patch::https://patch-diff.githubusercontent.com/raw/ivmai/bdwgc/pull/389.patch)
-sha256sums=('2540f7356cb74f6c5b75326c6d38a066edd796361fd7d4ed26e494d9856fed8f'
-            '048bff8e713ec1dbf7a06ff02175ab407db5433a15707d6687b9bcf212e6b1bf')
+source=(git+https://github.com/ivmai/bdwgc.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
-  cd $pkgname-$pkgver
-
-  patch -p1 -i "$srcdir"/gc-missing-header.patch
+  cd bdwgc
 
   ./autogen.sh
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd bdwgc
 
   ./configure \
     --prefix=/usr \
-    --disable-static \
     --enable-cplusplus
-
-  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd bdwgc
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd bdwgc
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
