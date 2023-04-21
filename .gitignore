@@ -1,6 +1,7 @@
 **/src
 **/pkg
 **/log
+**/__pycache__
 *.zip
 *.xz
 *.gz
