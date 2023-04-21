@@ -167,7 +167,7 @@ def dump_dependency_map(dependency_map: list, filename='packages.yaml'):
 def dump_base():
     dependency_map = compute_dependency_map(['base'])
     print(dependency_map)
-    dump_dependency_map(dependency_map[0]['base'], 'base.yaml')
+    dump_dependency_map(dependency_map[0]['base'], '../pkgbuilds/base.yaml')
 
 
 def dump_package_list():
