@@ -398,7 +398,9 @@ build() {
         if [ "$no_clean" -le 0 ]; then
             _clean='--clean'
         fi
-        makepkg -sCf $_clean $_no_check --noconfirm >> $_log 2>&1
+        # calling makepkg without `-C` since updatepkg already removed existing `$srcdir/`
+        # makepkg -srCf $_clean $_no_check --noconfirm >> $_log 2>&1
+        makepkg -esrf $_clean $_no_check --noconfirm >> $_log 2>&1
 
         info "Updating repo..."
         updaterepo -t $repo >> $_log 2>&1

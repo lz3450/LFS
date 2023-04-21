@@ -53,7 +53,7 @@ PKGBUILDDIR=$(pwd)
 result=0
 
 if [ -f PKGUPDATE ]; then
-    unset new_version old_version remove_old_sources
+    unset new_version old_version pre_update post_update
     source PKGUPDATE
     old_version=${old_version:-$(cat PKGBUILD | grep -Po '(?<=pkgver=).+$')}
     old_pkgrel=$(cat PKGBUILD | grep -Po '(?<=pkgrel=)\d+$')
@@ -82,10 +82,9 @@ if [ -f PKGUPDATE ]; then
     fi
 
     # run post_update
-    if have_function 'post_update'; then
-        info "running post_update()..."
-        post_update
-    fi
+    info "running post_update()..."
+    makepkg -Co
+    post_update
 else
     warning "PKGUPDATE does not exist."
 fi

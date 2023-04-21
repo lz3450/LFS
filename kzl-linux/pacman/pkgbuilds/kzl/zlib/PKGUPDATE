@@ -1,7 +1,6 @@
 new_version=$(curl -v --stderr - https://zlib.net | grep "<CENTER>" -A 6 | grep -Po '1.2.\d+')
 
 post_update() {
-    makepkg -o
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     ./configure --help > $PKGBUILDDIR/help.txt
 }

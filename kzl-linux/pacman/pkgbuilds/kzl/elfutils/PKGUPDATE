@@ -1,7 +1,6 @@
 new_version=$(curl -v --stderr - https://sourceware.org/elfutils/ | grep -A 1 'release notes:' | grep -Po '0\.[0-9]{3}')
 
 post_update() {
-    makepkg -o
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     ./configure --help > $PKGBUILDDIR/help.txt
 }

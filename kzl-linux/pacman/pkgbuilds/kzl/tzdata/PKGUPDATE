@@ -1,5 +1,4 @@
 new_version=$(curl -v --stderr - https://www.iana.org/time-zones | grep -o -E "tzdata[0-9]{4}[a-z]\.tar\.gz" | head -1 | sed -e 's/.tar.gz$//' -e 's/^tzdata//')
-old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')
 
 post_update () {
     rm -f $SRCDEST/tzcode$old_version.tar.gz{,.asc}

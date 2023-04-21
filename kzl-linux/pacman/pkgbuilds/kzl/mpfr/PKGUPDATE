@@ -1,5 +1,4 @@
-new_version=$(curl -L --stderr - https://www.mpfr.org/mpfr-current/ | grep -o -E 'GNU MPFR version [0-9]\.[0-9]\.[0-9]' | grep -o -E '[0-9]\.[0-9]\.[0-9]')
-old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')
+new_version=$(curl -L --stderr - https://www.mpfr.org/mpfr-current/ | grep -Po '(?<=GNU MPFR version )\d\.\d\.\d')
 
 post_update() {
   local _keys

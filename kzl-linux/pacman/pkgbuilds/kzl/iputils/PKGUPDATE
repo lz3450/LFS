@@ -1,7 +1,6 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/iputils/iputils/tags | grep -Po '(?<=<a href="/iputils/iputils/releases/tag/)\d{8}' | head -1)
 
 post_update() {
-    makepkg -o
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     meson configure | tee $PKGBUILDDIR/help.txt
 }

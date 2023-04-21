@@ -1,6 +1,5 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://gitlab.com/procps-ng/procps/-/tags | grep -Po '(?<=/procps-ng/procps/-/tags/v)\d\.\d\.\d' | head -1)
 
 post_update() {
-    makepkg -o
     $BUILDDIR/$pkgname/src/procps/configure --help > help.txt
 }

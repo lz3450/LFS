@@ -1,7 +1,6 @@
 new_version=$(curl -L --stderr - https://libexpat.github.io | grep -Po '(?<=R_)\d_\d_\d' | sort -V | tail -1 | sed 's/_/./g')
 
 post_update() {
-    makepkg -o
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     cmake -LAH -S . -B tmp -DCMAKE_BUILD_TYPE=Release > $PKGBUILDDIR/help.txt
 }

@@ -1,7 +1,6 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/libusb/libusb/tags | grep -Po '(?<=/libusb/releases/tag/v)\d\.\d\.\d\d' | head -1)
 
 post_update() {
-    makepkg -o
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     ./configure --help > $PKGBUILDDIR/help.txt
 }

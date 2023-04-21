@@ -1,7 +1,6 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.gnu.org/software/guile/download/ | grep -Po "(?<=The latest release of Guile's 3.0.x series is )\d\.\d\.\d")
 
 post_update() {
-    makepkg -o
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     ./configure --help > $PKGBUILDDIR/help.txt
 }

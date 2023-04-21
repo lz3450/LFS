@@ -1,7 +1,6 @@
 new_version=$(curl -v -L --stderr - https://gmplib.org/ | grep -Po '(?<=GMP )\d\.\d\.\d' | sort -V | tail -1)
 
 post_update() {
-    makepkg -o
     cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
     ./configure --help > $PKGBUILDDIR/help.txt
 }
