@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://www.libpng.org/pub/png/libpng.html | grep -Po '(?<=libpng )\d\.\d\.\d\d' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
+    ./configure --help > $PKGBUILDDIR/help.txt
+}

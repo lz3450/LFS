@@ -3,15 +3,14 @@
 # freetype2 (without harfbuzz) -> harfbuzz -> freetype2 (with harfbuzz)
 
 pkgname=freetype2
-pkgver=2.12.0
-pkgrel=1
-epoch=1
+pkgver=2.13.0
+pkgrel=3
+epoch=
 pkgdesc="Font rasterization library"
 arch=('x86_64')
 url="https://www.freetype.org/"
 license=('KZL')
 depends=(brotli harfbuzz libpng)
-# makedepends=(librsvg)
 backup=(etc/profile.d/freetype2.sh)
 source=(git+https://gitlab.freedesktop.org/freetype/freetype.git#tag=VER-${pkgver//./-}
         freetype2.sh)
@@ -23,12 +22,8 @@ build() {
 
   meson setup \
     --prefix /usr \
-    --libexecdir lib \
-    --sbindir bin \
     --auto-features enabled \
-    --buildtype plain \
-    --default-library shared \
-    --wrap-mode nodownload \
+    --optimization 2 \
     -D b_lto=true \
     -D b_pie=true \
     -D brotli=enabled \
@@ -48,7 +43,5 @@ check() {
 package() {
   cd freetype
 
-  DESTDIR="$pkgdir/" meson install -C build
-
-  install -Dm644 "$srcdir"/freetype2.sh -t "$pkgdir"/etc/profile.d
+  meson install -C build --destdir="$pkgdir"
 }

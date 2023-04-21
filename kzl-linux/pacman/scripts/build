@@ -292,6 +292,8 @@ kzl_stage3_pkgs=(
     ################
     # texlive
     ################
+    # libpng
+    # freetype2
     # fontconfig
     # gd
     # texlive
