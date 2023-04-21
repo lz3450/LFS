@@ -11,12 +11,10 @@ depends=(runc)
 makedepends=(btrfs-progs go libseccomp)
 source=(git+https://github.com/containerd/containerd.git#tag=v$pkgver?signed)
 sha256sums=('SKIP')
-validpgpkeys=('8C7A111C21105794B0E8A27BF58C5D0A4405ACDB')
 
 prepare () {
   mkdir -p src/github.com/containerd
   cp -r $pkgname src/github.com/containerd
-  sed -e 's,/sbin,/usr/bin,;s,/usr/local,/usr,' -i src/github.com/containerd/$pkgname/containerd.service
 }
 
 build() {
