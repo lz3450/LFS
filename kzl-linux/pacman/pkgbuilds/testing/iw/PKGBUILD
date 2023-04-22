@@ -1,14 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=iw
-pkgver=5.4
+pkgver=5.16
 pkgrel=1
+epoch=1
 pkgdesc="nl80211 based CLI configuration utility for wireless devices"
 arch=('x86_64')
-url="https://wireless.kernel.org/en/users/Documentation/iw"
+url="https://wireless.wiki.kernel.org/en/users/documentation/iw"
+license=('KZL')
 depends=(libnl)
 source=(https://www.kernel.org/pub/software/network/$pkgname/$pkgname-$pkgver.tar.{xz,sign})
-sha256sums=('a2469f677088d7b1070a7fbb28f3c747041697e8f6ec70783339cb1bc27a395f'
+sha256sums=('4c44e42762f903f9094ba5a598998c800a97a62afd6fd31ec1e0a799e308659c'
             'SKIP')
 validpgpkeys=('C0EBC440F6DA091C884D8532E0F373F37BF9099A')
 
@@ -27,5 +29,5 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" SBINDIR="/usr/bin" install
+  make DESTDIR="$pkgdir/" SBINDIR=/usr/bin install
 }

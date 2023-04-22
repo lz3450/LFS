@@ -3,7 +3,7 @@
 pkgname=harfbuzz
 pkgver=4.2.0
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="OpenType text shaping engine"
 arch=('x86_64')
 url="https://www.freedesktop.org/wiki/Software/HarfBuzz"
@@ -27,11 +27,8 @@ build() {
 
   meson setup \
     --prefix /usr \
-    --libexecdir lib \
-    --sbindir bin \
     --auto-features enabled \
-    --buildtype plain \
-    --wrap-mode nodownload \
+    --optimization 2 \
     -D b_lto=true \
     -D b_pie=true \
     -D cairo=enabled \
@@ -56,5 +53,5 @@ check() {
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir/" meson install -C build
+  meson install -C build --destdir="$pkgdir"
 }
