@@ -2,7 +2,7 @@
 
 pkgname=findutils
 pkgver=4.9.0.22
-pkgrel=1
+pkgrel=4
 epoch=
 pkgdesc="GNU utilities to locate files"
 arch=('x86_64')
@@ -44,9 +44,8 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
   rm "$pkgdir"/usr/bin/{locate,updatedb}
-  rm "$pkgdir"/usr/libexec
-  rm "$pkgdir"/usr/usr/share/man/man1/{locate,updatedb}.1.gz
-  rm -r "$pkgdir"/usr/usr/share/man/man5
+  rm "$pkgdir"/usr/share/man/man1/{locate,updatedb}.1
+  rm -r "$pkgdir"/usr/share/man/man5
 }
