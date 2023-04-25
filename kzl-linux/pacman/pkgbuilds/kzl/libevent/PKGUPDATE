@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://libevent.org/ | grep -Po '(?<=libevent-)\d\.\d\.\d\d' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cmake -LAH -S . -B tmp -DCMAKE_BUILD_TYPE=Release > $PKGBUILDDIR/help.txt
+}

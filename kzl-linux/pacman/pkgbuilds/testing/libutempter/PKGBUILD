@@ -2,16 +2,16 @@
 
 pkgname=libutempter
 pkgver=1.2.1
-pkgrel=1
-epoch=1
+pkgrel=2
+epoch=
 pkgdesc="Interface for terminal emulators such as screen and xterm to record user sessions to utmp and wtmp files"
 arch=('x86_64')
-url="ftp://ftp.altlinux.org/pub/people/ldv/utempter"
+url="http://ftp.altlinux.org/pub/people/ldv/utempter/"
 license=('KZL')
 source=(ftp://ftp.altlinux.org/pub/people/ldv/utempter/$pkgname-$pkgver.tar.gz{,.asc})
+validpgpkeys=('296D6F29A020808E8717A8842DB5BD89A340AEB7')
 sha256sums=('967fef372f391de501843ad87570c6cf5dabd9651f00f1783090fbc12b2a34cb'
             'SKIP')
-validpgpkeys=('296D6F29A020808E8717A8842DB5BD89A340AEB7')
 
 build() {
   cd $pkgname-$pkgver
@@ -22,7 +22,7 @@ build() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   chown root:utmp "$pkgdir"/usr/lib/utempter/utempter
   chmod 2755 "$pkgdir"/usr/lib/utempter/utempter

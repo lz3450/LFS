@@ -297,6 +297,11 @@ kzl_stage3_pkgs=(
     # fontconfig
     # gd
     # texlive
+
+    ################
+    # tmux
+    ################
+    # libevent tmux
 )
 
 # functions

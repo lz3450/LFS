@@ -2,8 +2,8 @@
 
 pkgname=libevent
 pkgver=2.1.12
-pkgrel=1
-epoch=1
+pkgrel=2
+epoch=
 pkgdesc="An event notification library"
 arch=('x86_64')
 url="https://libevent.org/"
@@ -17,11 +17,11 @@ build() {
 
   cmake \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
     -DCMAKE_BUILD_TYPE=Release  \
     -DEVENT__LIBRARY_TYPE=SHARED \
     -S . \
-    -B build
+    -B build \
+    -LAH
 
   cmake --build build
 }
@@ -35,5 +35,5 @@ check() {
 package() {
   cd $pkgname
 
-  cmake --build build --target install -- DESTDIR="$pkgdir/"
+  DESTDIR="$pkgdir/" cmake --build build --target install
 }
