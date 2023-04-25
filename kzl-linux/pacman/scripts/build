@@ -302,6 +302,11 @@ kzl_stage3_pkgs=(
     # tmux
     ################
     # libevent tmux
+
+    ################
+    # other libraries
+    ################
+    openblas
 )
 
 # functions

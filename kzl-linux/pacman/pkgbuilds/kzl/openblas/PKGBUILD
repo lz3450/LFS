@@ -1,57 +1,38 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openblas
-pkgver=0.3.20
-pkgrel=1
-epoch=1
+pkgver=0.3.23
+pkgrel=3
+epoch=
 pkgdesc="An optimized BLAS library based on GotoBLAS2 1.13 BSD"
 arch=('x86_64')
-url="https://www.openblas.net/"
+url="https://www.openblas.net"
 license=('KZL')
-provides=(blas cblas lapack lapacke)
-conflicts=(blas cblas lapack lapacke)
-source=($pkgname-$pkgver.tar.gz::https://github.com/xianyi/OpenBLAS/archive/v${pkgver}.tar.gz)
-sha256sums=('8495c9affc536253648e942908e88e097f2ec7753ede55aca52e5dead3029e3c')
+source=(git+https://github.com/xianyi/OpenBLAS.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
 # Makefile.rule
 _config=(
-  FC=gfortran
   USE_THREAD=1
-  USE_OPENMP=1
-  NUM_THREADS=64
-  NO_STATIC=1
-  USE_TLS=1
+  NUM_THREADS=$(nproc)
 )
 
 build() {
-  cd OpenBLAS-$pkgver
+  cd OpenBLAS
 
-  make ${_config[*]} libs netlib shared
+  make ${_config[*]}
 }
 
 check() {
-  cd OpenBLAS-$pkgver
+  cd OpenBLAS
 
   make ${_config[*]} test
 }
 
 package() {
-  cd OpenBLAS-$pkgver
+  cd OpenBLAS
 
-  make ${_config[*]} PREFIX=/usr DESTDIR="${pkgdir}" install
-
-  # blas
-  ln -s libopenblasp-r$pkgver.so "$pkgdir"/usr/lib/libblas.so
-  ln -s libopenblasp-r$pkgver.so "$pkgdir"/usr/lib/libblas.so.3
-  # cblas
-  ln -s libopenblasp-r$pkgver.so "$pkgdir"/usr/lib/libcblas.so
-  ln -s libopenblasp-r$pkgver.so "$pkgdir"/usr/lib/libcblas.so.3
-  # lapack
-  ln -s libopenblasp-r$pkgver.so "$pkgdir"/usr/lib/liblapack.so
-  ln -s libopenblasp-r$pkgver.so "$pkgdir"/usr/lib/liblapack.so.3
-  # lapacke
-  ln -s libopenblasp-r$pkgver.so "$pkgdir"/usr/lib/liblapacke.so
-  ln -s libopenblasp-r$pkgver.so "$pkgdir"/usr/lib/liblapacke.so.3
+  make ${_config[*]} DESTDIR="$pkgdir" PREFIX=/usr install
 
   rmdir "$pkgdir"/usr/bin
 }
