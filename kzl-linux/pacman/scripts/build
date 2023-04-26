@@ -306,7 +306,8 @@ kzl_stage3_pkgs=(
     ################
     # other libraries
     ################
-    openblas
+    # openblas
+    # nasm libjpeg-turbo
 )
 
 # functions

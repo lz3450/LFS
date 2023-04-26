@@ -1,15 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=nasm
-pkgver=2.15.05
-pkgrel=1
-epoch=1
+pkgver=2.16.01
+pkgrel=2
+epoch=
 pkgdesc="80x86 assembler designed for portability and modularity"
 arch=('x86_64')
 url="https://www.nasm.us"
 license=('KZL')
 source=(https://www.nasm.us/pub/nasm/releasebuilds/$pkgver/$pkgname-$pkgver.tar.xz)
-sha256sums=('3caf6729c1073bf96629b57cee31eeb54f4f8129b01902c73428836550b30a3f')
+sha256sums=('c77745f4802375efeee2ec5c0ad6b7f037ea9c87c92b149a9637ff099f162558')
 
 build() {
   cd $pkgname-$pkgver
@@ -23,5 +23,6 @@ build() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install install_rdf
+  make strip
+  make DESTDIR="$pkgdir" install
 }

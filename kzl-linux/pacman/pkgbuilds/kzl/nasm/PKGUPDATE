@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.nasm.us/ | grep -A 2 "Stable" | grep -Po '(?<=/nasm/releasebuilds/)\d\.\d\d\.\d\d')
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}
