@@ -2,7 +2,7 @@
 
 pkgname=libjpeg-turbo
 pkgver=2.1.5.1
-pkgrel=4
+pkgrel=6
 epoch=
 pkgdesc="JPEG image codec with accelerated baseline compression and decompression"
 arch=('x86_64')
@@ -19,7 +19,7 @@ build() {
   cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
     -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -DWITH_JAVA=OFF \
     -DWITH_JPEG8=ON \

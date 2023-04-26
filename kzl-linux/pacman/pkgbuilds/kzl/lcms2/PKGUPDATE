@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/mm2/Little-CMS/tags | grep -Po '(?<=/Little-CMS/releases/tag/lcms)\d\.\d\d(\.\d)?' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/Little-CMS"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

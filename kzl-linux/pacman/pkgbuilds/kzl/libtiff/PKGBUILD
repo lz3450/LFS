@@ -1,44 +1,40 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libtiff
-pkgver=4.4.0
-pkgrel=1
-epoch=1
+pkgver=4.5.0
+pkgrel=5
+epoch=
 pkgdesc="Library for manipulation of TIFF images"
 arch=('x86_64')
 url="http://www.simplesystems.org/libtiff/"
 depends=(libjpeg-turbo)
-# makedepends=(freeglut glu jbigkit)
-# optdepends=('freeglut: for using tiffgt')
-source=(https://download.osgeo.org/libtiff/tiff-$pkgver.tar.gz{,.sig})
-sha256sums=('917223b37538959aca3b790d2d73aa6e626b688e02dcda272aec24c2f498abed'
-            'SKIP')
-validpgpkeys=('B1FA7D81EEB8E66399178B9733EBBFC47B3DD87D')
+source=(git+https://gitlab.com/libtiff/libtiff.git#tag=v$pkgver)
+sha256sums=('SKIP')
 
-# TODO: OpenGL; jbigkit
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd tiff-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
-	  --sysconfdir=/etc \
-	  --mandir=/usr/share/man \
-    --with-docdir=/usr/share/doc/$pkgname
-
-  sed -e 's/ -shared / -Wl,-O1,--as-needed\0/g' -i libtool
+    --disable-sphinx
 
   make
 }
 
 check() {
-  cd tiff-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd tiff-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
