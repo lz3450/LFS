@@ -2,18 +2,24 @@
 
 pkgname=minicom
 pkgver=2.8
-pkgrel=1
-epoch=1
+pkgrel=2
+epoch=
 pkgdesc="A serial communication program"
 arch=('x86_64')
 url="https://salsa.debian.org/minicom-team/minicom"
 license=('KZL')
 backup=('etc/minirc.dfl')
-source=(https://salsa.debian.org/minicom-team/minicom/-/archive/$pkgver/minicom-${pkgver}.tar.gz)
-cksums=('1432862364')
+source=(git+https://salsa.debian.org/minicom-team/minicom.git#tag=$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
@@ -23,15 +29,15 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   install -Dm644 doc/minirc.dfl $pkgdir/etc/minirc.dfl
 }

@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://salsa.debian.org/minicom-team/minicom/-/tags | grep -Po '(?<=/minicom/-/tags/)\d\.\d(\.\d)?' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}
