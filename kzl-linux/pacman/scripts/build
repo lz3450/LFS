@@ -229,6 +229,7 @@ kzl_stage2_pkgs=(
     # autoconf automake
     # which
     # diffutils
+    # ed bc
 
     ################
     # make

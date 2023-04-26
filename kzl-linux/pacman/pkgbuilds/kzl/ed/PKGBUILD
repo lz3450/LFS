@@ -1,26 +1,23 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ed
-pkgver=1.18
-pkgrel=1
-epoch=1
+pkgver=1.19
+pkgrel=4
+epoch=
 pkgdesc="A POSIX-compliant line-oriented text editor"
 arch=('x86_64')
 url="https://www.gnu.org/software/ed/ed.html"
 license=('KZL')
-options=(!emptydirs)
 source=(https://ftp.gnu.org/gnu/ed/$pkgname-$pkgver.tar.lz{,.sig})
-sha256sums=('aca8efad9800c587724a20b97aa8fc47e6b5a47df81606feaba831b074462b4f'
-            'SKIP')
 validpgpkeys=('1D41C14B272A2219A739FA4F8FE99503132D7742')
+sha256sums=('ce2f2e5c424790aa96d09dacb93d9bbfdc0b7eb6249c9cb7538452e8ec77cd48'
+            'SKIP')
 
 build() {
   cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr \
-    --mandir=/usr/share/man \
-    --infodir=/usr/share/info \
     "CPPFLAGS=$CPPFLAGS" \
     "CFLAGS=$CFLAGS" \
     "LDFLAGS=$LDFLAGS"
@@ -37,5 +34,5 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

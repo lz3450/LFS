@@ -1,0 +1,23 @@
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+To assign makefile variables (e.g., CC, CFLAGS...), specify them as
+arguments to configure in the form VAR=VALUE.
+
+Options and variables: [defaults in brackets]
+  -h, --help            display this help and exit
+  -V, --version         output version information and exit
+  --srcdir=DIR          find the source code in DIR [. or ..]
+  --prefix=DIR          install into DIR [/usr/local]
+  --exec-prefix=DIR     base directory for arch-dependent files [$(prefix)]
+  --bindir=DIR          user executables directory [$(exec_prefix)/bin]
+  --datarootdir=DIR     base directory for doc and data [$(prefix)/share]
+  --infodir=DIR         info files directory [$(datarootdir)/info]
+  --mandir=DIR          man pages directory [$(datarootdir)/man]
+  --program-prefix=NAME install program and documentation prefixed with NAME
+  CC=COMPILER           C compiler to use [gcc]
+  CPPFLAGS=OPTIONS      command line options for the preprocessor []
+  CFLAGS=OPTIONS        command line options for the C compiler [-Wall -W -O2]
+  CFLAGS+=OPTIONS       append options to the current value of CFLAGS
+  LDFLAGS=OPTIONS       command line options for the linker []
+  MAKEINFO=NAME         makeinfo program to use [makeinfo]
+
