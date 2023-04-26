@@ -83,7 +83,7 @@ if [ -f PKGUPDATE ]; then
 
     # run post_update
     info "running post_update()..."
-    makepkg -Co
+    makepkg -Co || result=2
     post_update || result=2
 else
     warning "PKGUPDATE does not exist."
