@@ -1,36 +1,32 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pkgconf
-pkgver=1.8.0
-pkgrel=1
-epoch=1
+pkgver=1.9.5
+pkgrel=3
+epoch=
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=('x86_64')
 url="https://github.com/pkgconf/pkgconf.git"
 license=('KZL')
 provides=(pkg-config)
-conflicts=(pkg-config)
-replaces=(pkg-config)
 source=(git+$url#tag=$pkgname-$pkgver
         x86_64-linux-gnu.personality)
 sha256sums=('SKIP'
-            'c8297817ba0b57d003878db247ff34b4c47a7594c9f67dcfe8ff8d6567956cd5')
+            '59eb8ed7efb433423a50fdab0762403c1066901931bde2112a9617001f32dbd9')
 
 prepare() {
   cd $pkgname
-
-  mkdir build
 
   ./autogen.sh
 }
 
 build() {
-  cd $pkgname/build
+  cd $pkgname
 
-  ../configure \
+  ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --disable-static \
+    --enable-static=no \
     --with-pkg-config-dir="/usr/lib/pkgconfig:/usr/share/pkgconfig" \
     --with-system-libdir="/usr/lib" \
     --with-system-includedir="/usr/include"
@@ -39,11 +35,11 @@ build() {
 }
 
 package() {
-  cd $pkgname/build
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   ln -s pkgconf "$pkgdir"/usr/bin/pkg-config
-  
+
   install -Dm644 "$srcdir"/x86_64-linux-gnu.personality -t "$pkgdir"/usr/share/pkgconfig/personality.d
 }

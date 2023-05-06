@@ -2,7 +2,7 @@
 
 pkgname=findutils
 pkgver=4.9.0.22
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="GNU utilities to locate files"
 arch=('x86_64')
@@ -23,7 +23,7 @@ pkgver() {
 prepare() {
   cd $pkgname
 
-  GNULIB_SRCDIR="$srcdir"/gnulib ./bootstrap
+  GNULIB_REFDIR="$srcdir"/gnulib ./bootstrap
 }
 
 build() {

@@ -2,7 +2,7 @@
 
 pkgname=sed
 pkgver=4.9
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="GNU stream editor"
 arch=('x86_64')
@@ -17,7 +17,7 @@ sha256sums=('SKIP'
 prepare() {
   cd $pkgname
 
-  GNULIB_SRCDIR="$srcdir"/gnulib ./bootstrap
+  GNULIB_REFDIR="$srcdir"/gnulib ./bootstrap
 }
 
 build() {

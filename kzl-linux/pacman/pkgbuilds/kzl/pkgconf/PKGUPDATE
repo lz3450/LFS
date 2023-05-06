@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/pkgconf/pkgconf/tags | grep -Po '(?<=/pkgconf/releases/tag/pkgconf-)\d\.\d\.\d' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

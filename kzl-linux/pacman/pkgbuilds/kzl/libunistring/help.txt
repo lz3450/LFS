@@ -1,4 +1,4 @@
-`configure' configures GNU findutils 4.9.0.22-fc47 to adapt to many kinds of systems.
+`configure' configures this package to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -47,7 +47,7 @@ Fine tuning of the installation directories:
   --infodir=DIR           info documentation [DATAROOTDIR/info]
   --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
   --mandir=DIR            man documentation [DATAROOTDIR/man]
-  --docdir=DIR            documentation root [DATAROOTDIR/doc/findutils]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/PACKAGE]
   --htmldir=DIR           html documentation [DOCDIR]
   --dvidir=DIR            dvi documentation [DOCDIR]
   --pdfdir=DIR            pdf documentation [DOCDIR]
@@ -68,61 +68,43 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-silent-rules   less verbose build output (undo: "make V=1")
   --disable-silent-rules  verbose build output (undo: "make V=0")
-  --enable-leaf-optimisation
-                          Enable an optimisation which saves lstat calls to
-                          identify subdirectories on filesystems having
-                          traditional Unix semantics
-  --enable-d_type-optimization
-                          Make use of the file type data returned in struct
-                          dirent.d_type by readdir()
-  --enable-d_type-optimisation
-                          Synonym for --enable-d_type-optimization
   --enable-dependency-tracking
                           do not reject slow dependency extractors
   --disable-dependency-tracking
                           speeds up one-time build
+  --disable-largefile     omit support for large files
   --enable-threads={isoc|posix|isoc+posix|windows}
                           specify multithreading API
   --disable-threads       build without multithread safety
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-static[=PKGS]  build static libraries [default=yes]
+  --enable-fast-install[=PKGS]
+                          optimize for fast installation [default=yes]
+  --disable-libtool-lock  avoid locking (might break parallel builds)
   --enable-cross-guesses={conservative|risky}
                           specify policy for cross-compilation guesses
-  --disable-assert        turn off assertions
-  --enable-compiler-warnings
-                          Enable many compiler warnings
-  --enable-compiler-warnings-are-errors
-                          Compiler warnings are errors
-  --disable-nls           do not use Native Language Support
   --disable-rpath         do not hardcode runtime library paths
-  --disable-year2038      do not support timestamps after 2038
-  --disable-largefile     omit support for large files
+  --enable-relocatable    install a package that can be moved in the file
+                          system
+  --disable-namespacing   build a library that exports undesired symbols
+  --enable-year2038       support timestamps after 2038
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --without-included-regex
-                          don't compile regex; this is the default on systems
-                          with recent-enough versions of the GNU C Library
-                          (use with caution on other systems).
-  --without-selinux       do not use SELinux, even on systems with SELinux
-  --with-packager         String identifying the packager of this software
-  --with-packager-version Packager-specific version information
-  --with-packager-bug-reports
-                          Packager info for bug reports (URL/e-mail/...)
+  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+                          both]
+  --with-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
+                          compiler's sysroot if not specified).
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
-  --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
-  --without-libintl-prefix     don't search for libintl in includedir and libdir
-  --with-python-sys-prefix
-                          use Python's sys.prefix and sys.exec_prefix values
-  --with-python_prefix    override the default PYTHON_PREFIX
-  --with-python_exec_prefix
-                          override the default PYTHON_EXEC_PREFIX
 
 Some influential environment variables:
-  DEFAULT_ARG_SIZE
-              Default size of arguments to child processes of find and xargs,
-              128k if unspecified
   CC          C compiler command
   CFLAGS      C compiler flags
   LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
@@ -131,18 +113,10 @@ Some influential environment variables:
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
   CPP         C preprocessor
-  YACC        The "Yet Another C Compiler" implementation to use. Defaults to
-              'bison -o y.tab.c'. Values other than 'bison -o y.tab.c' will
-              most likely break on most systems.
-  YFLAGS      YFLAGS contains the list arguments that will be passed by
-              default to Bison. This script will default YFLAGS to the empty
-              string to avoid a default value of '-d' given by some make
-              applications.
-  PYTHON      the Python interpreter
+  LT_SYS_LIBRARY_PATH
+              User-defined run-time library search path.
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
-Report bugs to <bug-findutils@gnu.org>.
-GNU findutils home page: <https://www.gnu.org/software/findutils/>.
-General help using GNU software: <https://www.gnu.org/gethelp/>.
+Report bugs to the package provider.

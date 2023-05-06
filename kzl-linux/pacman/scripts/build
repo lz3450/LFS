@@ -246,6 +246,17 @@ kzl_stage2_pkgs=(
     # cmake
 
     ################
+    # pkgconf
+    ################
+    pkgconf
+
+    ################
+    # man-db
+    ################
+    # groff libpipeline
+    # man-db
+
+    ################
     # base
     ################
     # base
