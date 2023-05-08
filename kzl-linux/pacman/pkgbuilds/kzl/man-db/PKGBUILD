@@ -1,47 +1,52 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=man-db
-pkgver=2.10.1
-pkgrel=1
-epoch=1
+pkgver=2.11.2
+pkgrel=2
+epoch=
 pkgdesc="A utility for reading man pages"
 arch=('x86_64')
 url="https://www.nongnu.org/man-db/"
 license=('KZL')
-depends=(groff less libpipeline libseccomp)
+# depends=(groff less libpipeline libseccomp)
+depends=(less libpipeline libseccomp)
 makedepends=(po4a)
 backup=(etc/man_db.conf)
-source=(https://savannah.nongnu.org/download/man-db/$pkgname-$pkgver.tar.xz{,.asc})
-sha256sums=('2ffd8f2e80122fe72e60c740c851e6a3e15c9a7921185eb4752c1c672824bed6'
+source=(git+https://gitlab.com/man-db/man-db.git#tag=$pkgver
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
-validpgpkeys=('AC0A4FF12611B6FCCF01C111393587D97D86500B')
+
+prepare() {
+  cd $pkgname
+
+  GNULIB_REFDIR="$srcdir"/gnulib ./bootstrap
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
-    --sbindir=/usr/bin \
-    --libexecdir=/usr/lib \
+    --sbindir=/usr/sbin \
     --sysconfdir=/etc \
     --enable-cache-owner=root \
     --disable-setuid \
     --enable-mandirs=GNU \
     --with-db=gdbm \
-    --with-sections="1 n l 8 3 0 2 5 4 9 6 7" \
-    --with-systemdsystemunitdir=/usr/lib/systemd/system
+    --with-sections="1 n l 8 3 0 2 5 4 9 6 7"
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

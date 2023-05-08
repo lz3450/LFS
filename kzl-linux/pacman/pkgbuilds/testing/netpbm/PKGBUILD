@@ -1,0 +1,43 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=netpbm
+pkgver=10.73.43
+pkgrel=3
+epoch=
+pkgdesc=""
+arch=('x86_64')
+url="http://netpbm.sourceforge.net/"
+license=('KZL')
+depends=(libjpeg-turbo libtiff libpng)
+makedepends=()
+source=(https://downloads.sourceforge.net/project/netpbm/super_stable/$pkgver/$pkgname-$pkgver.tgz)
+sha256sums=('f9fd9a7f932258224d1925bfce61396a15e0fad93e3853d6324ac308d1adebf8')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  cp config.mk.in config.mk
+
+  sed -e '/^#CFLAGS_SHLIB = -fPIC/s/#//' \
+      -e '/^#TIFFLIB = libtiff.so/s/#//' \
+      -e '/^#JPEGLIB = libjpeg.so/s/#//' \
+      -e '/^#PNGLIB = libpng$(PNGVER).so/s/#//' \
+      -e '/^#ZLIB = libz.so/s/#//' \
+      -i config.mk
+
+  sed -i 's|misc|share/netpbm|' common.mk
+  sed -i 's|/link|/lib|' lib/Makefile
+  sed -i 's|install.manwebmain install.manweb install.man|install.man|' GNUmakefile
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  make pkgdir="$pkgdir/usr" install-run install-dev
+}

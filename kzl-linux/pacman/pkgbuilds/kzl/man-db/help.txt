@@ -1,0 +1,203 @@
+`configure' configures man-db 2.11.2 to adapt to many kinds of systems.
+
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+To assign environment variables (e.g., CC, CFLAGS...), specify them as
+VAR=VALUE.  See below for descriptions of some of the useful variables.
+
+Defaults for the options are specified in brackets.
+
+Configuration:
+  -h, --help              display this help and exit
+      --help=short        display options specific to this package
+      --help=recursive    display the short help of all the included packages
+  -V, --version           display version information and exit
+  -q, --quiet, --silent   do not print `checking ...' messages
+      --cache-file=FILE   cache test results in FILE [disabled]
+  -C, --config-cache      alias for `--cache-file=config.cache'
+  -n, --no-create         do not create output files
+      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+
+Installation directories:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr/local]
+  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                          [PREFIX]
+
+By default, `make install' will install all the files in
+`/usr/local/bin', `/usr/local/lib' etc.  You can specify
+an installation prefix other than `/usr/local' using `--prefix',
+for instance `--prefix=$HOME'.
+
+For better control, use the options below.
+
+Fine tuning of the installation directories:
+  --bindir=DIR            user executables [EPREFIX/bin]
+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR        program executables [EPREFIX/libexec]
+  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+  --libdir=DIR            object code libraries [EPREFIX/lib]
+  --includedir=DIR        C header files [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR           info documentation [DATAROOTDIR/info]
+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR            man documentation [DATAROOTDIR/man]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/man-db]
+  --htmldir=DIR           html documentation [DOCDIR]
+  --dvidir=DIR            dvi documentation [DOCDIR]
+  --pdfdir=DIR            pdf documentation [DOCDIR]
+  --psdir=DIR             ps documentation [DOCDIR]
+
+Program names:
+  --program-prefix=PREFIX            prepend PREFIX to installed program names
+  --program-suffix=SUFFIX            append SUFFIX to installed program names
+  --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
+  --enable-dependency-tracking
+                          do not reject slow dependency extractors
+  --disable-dependency-tracking
+                          speeds up one-time build
+  --enable-cache-owner=ARG
+                          make system-wide cache files be owned by user ARG
+                          [arg=man]
+  --disable-cache-owner   don't constrain ownership of system-wide cache files
+  --enable-setuid         install man setuid
+  --disable-setuid        don't install man setuid
+  --enable-undoc=COMMAND  suggest COMMAND for missing manual pages
+  --enable-automatic-create
+                          allow man to create user databases on the fly
+  --disable-automatic-update
+                          don't allow man to update databases on the fly
+  --disable-cats          don't allow man to create/update cat files
+  --enable-mandirs=OS     select manual page hierarchy organization (GNU,
+                          HPUX, IRIX, Solaris, BSD)
+  --disable-manual        don't build or install the man-db manual
+  --disable-largefile     omit support for large files
+  --disable-year2038      omit support for timestamps past the year 2038
+  --enable-threads={isoc|posix|isoc+posix|windows}
+                          specify multithreading API
+  --disable-threads       build without multithread safety
+  --enable-gcc-warnings=TYPE
+                          control generation of GCC warnings. The TYPE 'no'
+                          disables warnings; 'yes' generates cheap warnings if
+                          available (default); 'expensive' in addition
+                          generates expensive-to-compute warnings if available
+  --enable-static[=PKGS]  build static libraries [default=no]
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-fast-install[=PKGS]
+                          optimize for fast installation [default=yes]
+  --disable-libtool-lock  avoid locking (might break parallel builds)
+  --enable-mb-groff       expect groff with Debian multibyte patch or real
+                          Unicode support
+  --enable-cross-guesses={conservative|risky}
+                          specify policy for cross-compilation guesses
+  --disable-nls           do not use Native Language Support
+  --disable-rpath         do not hardcode runtime library paths
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-device=DEVICE    use nroff with the output device DEVICE
+  --with-db=LIBRARY       use database library LIBRARY (db5, db4, db3, db2,
+                          db1, db, gdbm, ndbm)
+  --with-config-file=CF   use config file CF [CF=SYSCONFDIR/man_db.conf]
+  --with-sections=SECTIONS
+                          use manual page sections SECTIONS [1 n l 8 3 0 2
+                          3type 5 4 9 6 7]
+  --with-override-dir=OVERRIDE
+                          use OVERRIDE as relative override dir inside the man
+                          path - the first directory to be searched when
+                          looking for man pages
+  --with-systemdtmpfilesdir=DIR
+                          Directory for systemd tmpfiles configuration
+                          (disable with "no")
+  --with-systemdsystemunitdir=DIR
+                          Directory for systemd service files (disable with
+                          "no")
+  --with-snapdir=DIR      use snap system directory DIR [DIR=/snap]
+  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+                          both]
+  --with-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
+                          compiler's sysroot if not specified).
+  --with-browser=BROWSER  use BROWSER as default web browser
+  --with-pager=PAGER      use PAGER as default pager
+  --with-nroff=NROFF      use NROFF as roff formatter for character devices
+  --with-eqn=EQN          use EQN to preprocess equations
+  --with-neqn=NEQN        use NEQN to preprocess equations for character
+                          devices
+  --with-tbl=TBL          use TBL to preprocess tables
+  --with-col=COL          use COL to filter formatting characters from output
+  --with-vgrind=VGRIND    use VGRIND to preprocess program sources
+  --with-refer=REFER      use REFER to preprocess bibliographic references
+  --with-grap=GRAP        use GRAP to preprocess graphs
+  --with-pic=PIC          use PIC to preprocess pictures
+  --with-gzip=GZIP        use GZIP as GNU compression utility
+  --with-compress=COMPRESS
+                          use COMPRESS as UNIX compression utility
+  --with-bzip2=BZIP2      use BZIP2 as block-sorting compression utility
+  --with-xz=XZ            use XZ as Lempel-Ziv-Markov chain-Algorithm
+                          compression utility
+  --with-lzma=LZMA        use LZMA as Lempel-Ziv-Markov chain-Algorithm
+                          compression utility
+  --with-lzip=LZIP        use LZIP as Lempel-Ziv-Markov chain-Algorithm
+                          compression utility
+  --with-zstd=ZSTD        use ZSTD as LZ77/entropy-coding compression utility
+  --without-included-regex
+                          don't compile regex; this is the default on systems
+                          with recent-enough versions of the GNU C Library
+                          (use with caution on other systems).
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
+  --without-libiconv-prefix     don't search for libiconv in includedir and libdir
+  --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
+  --without-libintl-prefix     don't search for libintl in includedir and libdir
+  --without-libseccomp    do not confine subprocesses using seccomp
+
+Some influential environment variables:
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  CPP         C preprocessor
+  LT_SYS_LIBRARY_PATH
+              User-defined run-time library search path.
+  libpipeline_CFLAGS
+              C compiler flags for libpipeline, overriding pkg-config
+  libpipeline_LIBS
+              linker flags for libpipeline, overriding pkg-config
+  libseccomp_CFLAGS
+              C compiler flags for libseccomp, overriding pkg-config
+  libseccomp_LIBS
+              linker flags for libseccomp, overriding pkg-config
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to <cjwatson@debian.org>.

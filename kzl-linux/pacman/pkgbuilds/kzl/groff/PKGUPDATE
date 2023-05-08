@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.gnu.org/software/groff/groff.html | grep -Po '(?<=current version is )\d\.\d\d\.\d')
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

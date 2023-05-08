@@ -248,13 +248,13 @@ kzl_stage2_pkgs=(
     ################
     # pkgconf
     ################
-    pkgconf
+    # pkgconf
 
     ################
     # man-db
     ################
-    # groff libpipeline
-    # man-db
+    groff libpipeline
+    man-db
 
     ################
     # base

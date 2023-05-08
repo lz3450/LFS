@@ -1,20 +1,26 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libpipeline
-pkgver=1.5.6
-pkgrel=1
-epoch=1
-pkgdesc="a C library for manipulating pipelines of subprocesses in a flexible and convenient way"
+pkgver=1.5.7
+pkgrel=3
+epoch=
+pkgdesc="A C library for manipulating pipelines of subprocesses in a flexible and convenient way"
 arch=('x86_64')
-url="https://nongnu.org/libpipeline/"
+url="https://libpipeline.gitlab.io/libpipeline/"
 license=('KZL')
-source=(https://download.savannah.gnu.org/releases/libpipeline/$pkgname-$pkgver.tar.gz{,.asc})
-sha256sums=('60fbb9e7dc398528e5f3a776af57bb28ca3fe5d9f0cd8a961ac6cebfe6e9b797'
+source=(git+https://gitlab.com/libpipeline/libpipeline.git#tag=$pkgver
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
-validpgpkeys=(AC0A4FF12611B6FCCF01C111393587D97D86500B)
+
+prepare() {
+  cd $pkgname
+
+  GNULIB_REFDIR="$srcdir"/gnulib ./bootstrap
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
@@ -23,13 +29,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make check || warning "Check failed."
+  make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
