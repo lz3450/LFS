@@ -1,19 +1,33 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=aria2
-pkgver=1.36.0
-pkgrel=1
-epoch=1
+pkgver=1.36.0.35
+pkgrel=5
+epoch=
 pkgdesc="A lightweight multi-protocol & multi-source command-line download utility"
 arch=('x86_64')
 url="https://aria2.github.io/"
 license=('KZL')
-depends=(c-ares ca-certificates gmp gnutls libssh2 libuv libxml2 nettle sqlite)
-source=(https://github.com/tatsuhiro-t/aria2/releases/download/release-$pkgver/aria2-$pkgver.tar.xz)
-sha256sums=('58d1e7608c12404f0229a3d9a4953d0d00c18040504498b483305bcb3de907a5')
+depends=(c-ares ca-certificates gmp gnutls libssh2 libuv libxml2 nettle openssl sqlite)
+# source=(git+https://github.com/aria2/aria2.git#tag=release-$pkgver)
+source=(git+https://github.com/aria2/aria2.git)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/release-//;s/-g.*//;s/-/./g'
+}
+
+prepare() {
+  cd $pkgname
+
+  autoreconf -vfi || :
+  autoreconf -vfi
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
@@ -25,10 +39,10 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
-  install -Dm644 "$pkgdir"/usr/share/doc/aria2/bash_completion/aria2c "$pkgdir"/usr/share/bash-completion/completions/aria2c
-  rm -rf "$pkgdir"/usr/share/doc/aria2/bash_completion
+  install -d -m755 "$pkgdir"/usr/share/bash-completion/completions/
+  mv "$pkgdir"/usr/share/doc/aria2/bash_completion/aria2c "$pkgdir"/usr/share/bash-completion/completions/
 }

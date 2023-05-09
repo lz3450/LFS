@@ -322,6 +322,11 @@ kzl_stage3_pkgs=(
     # rsync
 
     ################
+    # aria2
+    ################
+    aria2
+
+    ################
     # other libraries
     ################
     # openblas
