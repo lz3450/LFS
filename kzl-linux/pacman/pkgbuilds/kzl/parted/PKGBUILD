@@ -1,38 +1,42 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=parted
-pkgver=3.4
-pkgrel=1
-epoch=1
+pkgver=3.6
+pkgrel=4
+epoch=
 pkgdesc="A program for creating, destroying, resizing, checking and copying partitions"
 arch=('x86_64')
 url="https://www.gnu.org/software/parted/parted.html"
 license=('KZL')
 depends=(device-mapper)
-source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('e1298022472da5589b7f2be1d5ee3c1b66ec3d96dfbad03dc642afd009da5342'
+source=(git+https://git.savannah.gnu.org/git/parted.git
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
-validpgpkeys=('B4C6B451E4FA8B4232CA191E117E8C168EFE3A7F') 
+
+prepare() {
+  cd $pkgname
+
+  GNULIB_REFDIR="$srcdir"/gnulib ./bootstrap
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
-    --prefix=/usr \
-    --sbindir=/usr/bin \
-    --disable-rpath
+    --prefix=/usr
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

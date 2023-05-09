@@ -3,7 +3,7 @@
 pkgname=wpa_supplicant
 pkgver=2.10
 pkgrel=1
-epoch=3
+epoch=
 pkgdesc="A utility providing key negotiation for WPA wireless networks"
 arch=('x86_64')
 url="https://w1.fi/wpa_supplicant/"
