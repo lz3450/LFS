@@ -2,9 +2,9 @@
 
 pkgname=xxhash
 pkgver=0.8.1
-pkgrel=1
-epoch=1
-pkgdesc="Extremely fast non-cryptographic hash algorithm"
+pkgrel=3
+epoch=
+pkgdesc="An extremely fast non-cryptographic hash algorithm"
 arch=('x86_64')
 url="https://cyan4973.github.io/xxHash/"
 license=('KZL')

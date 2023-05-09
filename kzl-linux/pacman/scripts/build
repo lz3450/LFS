@@ -316,6 +316,12 @@ kzl_stage3_pkgs=(
     # libevent tmux
 
     ################
+    # rsync
+    ################
+    # xxhash
+    # rsync
+
+    ################
     # other libraries
     ################
     # openblas

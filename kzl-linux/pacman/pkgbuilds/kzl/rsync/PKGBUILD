@@ -1,9 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rsync
-pkgver=3.2.3
-pkgrel=1
-epoch=1
+pkgver=3.2.7
+pkgrel=5
+epoch=
 pkgdesc="'A fast and versatile file copying tool for remote and local files"
 arch=('x86_64')
 url="https://rsync.samba.org/"
@@ -11,29 +11,8 @@ license=('KZL')
 depends=(acl openssl popt xxhash)
 backup=(etc/rsyncd.conf
         etc/xinetd.d/rsync)
-source=(git+https://github.com/WayneD/rsync#tag=v$pkgver?signed
-        rsyncd.conf)
-sha256sums=('SKIP'
-            'b4ee4134c02203b05c799d0c4bd48758648e2fb934eb8dcbe52eab2aeea5cebb')
-validpgpkeys=('0048C8B026D4C96F0E589C2F6C859FB14B96A8C5')
-
-# TODO: rsyncd
-
-prepare() {
-	cd "$srcdir/rsync"
-
-	# rsync-ssl: Verify the hostname in the certificate when using openssl.
-	git cherry-pick -n c3f7414c450faaf6a8281cc4a4403529aeb7d859
-
-	# Force HAVE_LCHMOD off for Linux (for now).
-	# Work around glibc's lchmod() issue a better way.
-	git cherry-pick -n \
-		85b8dc8abaca96fc3ea7421e09101b6ac41b6718 \
-		9dd62525f3b98d692e031f22c02be8f775966503
-
-	# Add test and fix regression for --delay-updates (#192) (#204)
-	git cherry-pick -n efc81c93a9fca45ba08119145a2d282f477f01b4
-}
+source=(git+https://github.com/WayneD/rsync#tag=v$pkgver)
+sha256sums=('SKIP')
 
 build() {
   cd $pkgname
@@ -41,7 +20,6 @@ build() {
   ./configure \
     --prefix=/usr \
 		--disable-debug \
-    --disable-md2man \
 		--with-included-popt=no \
 		--with-included-zlib=no
 
@@ -58,10 +36,14 @@ package() {
   cd $pkgname
 
   make DESTDIR="$pkgdir/" install
-	install -Dm0644 "$srcdir"/rsyncd.conf "$pkgdir"/etc/rsyncd.conf
+
+  install -Dm0644 stunnel-rsyncd.conf "$pkgdir"/etc/stunnel-rsyncd.conf
+
 	install -Dm0644 packaging/lsb/rsync.xinetd "$pkgdir"/etc/xinetd.d/rsync
+
 	install -Dm0644 packaging/systemd/rsync.service "$pkgdir"/usr/lib/systemd/system/rsyncd.service
 	install -Dm0644 packaging/systemd/rsync.socket "$pkgdir"/usr/lib/systemd/system/rsyncd.socket
 	install -Dm0644 packaging/systemd/rsync@.service "$pkgdir"/usr/lib/systemd/system/rsyncd@.service
+
 	install -Dm0755 support/rrsync "$pkgdir"/usr/lib/rsync/rrsync
 }

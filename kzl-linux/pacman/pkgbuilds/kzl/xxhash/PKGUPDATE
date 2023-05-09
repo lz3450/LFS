@@ -1,0 +1,5 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/Cyan4973/xxHash/tags | grep -Po '(?<=/xxHash/releases/tag/v)\d\.\d\.\d' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/xxHash"
+}
