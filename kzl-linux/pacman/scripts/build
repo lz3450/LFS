@@ -253,8 +253,8 @@ kzl_stage2_pkgs=(
     ################
     # man-db
     ################
-    groff libpipeline
-    man-db
+    # groff libpipeline
+    # man-db
 
     ################
     # base
