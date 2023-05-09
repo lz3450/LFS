@@ -185,6 +185,8 @@ kzl_stage2_pkgs=(
     # libassuan libksba npth pinentry gnupg gpgme
     # libarchive
     # pacman
+    # pacman-contrib
+    # arch-install-scripts
 
     ################
     # procps-ng
@@ -299,7 +301,7 @@ kzl_stage3_pkgs=(
     # Wireless Network
     ################################
     # iw
-    wpa_supplicant
+    # wpa_supplicant
 
     ################
     # samba

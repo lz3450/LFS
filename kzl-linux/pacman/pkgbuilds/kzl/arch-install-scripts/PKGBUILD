@@ -1,12 +1,12 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=arch-install-scripts
-pkgver=24
-pkgrel=1
-epoch=1
+pkgver=28
+pkgrel=2
+epoch=
 pkgdesc="Scripts to aid in installing Arch Linux"
 arch=('any')
-url="https://projects.archlinux.org/arch-install-scripts.git"
+url="https://github.com/archlinux/arch-install-scripts"
 license=('KZL')
 source=(git+https://github.com/archlinux/$pkgname.git#tag=v$pkgver)
 sha256sums=('SKIP')
@@ -32,5 +32,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" PREFIX="/usr" install
+  make DESTDIR="$pkgdir" PREFIX="/usr" install
 }

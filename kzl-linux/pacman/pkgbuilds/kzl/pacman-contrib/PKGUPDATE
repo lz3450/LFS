@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://gitlab.archlinux.org/pacman/pacman-contrib/-/tags | grep -Po '(?<=/pacman-contrib/-/tags/v)\d\.\d\.\d' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}
