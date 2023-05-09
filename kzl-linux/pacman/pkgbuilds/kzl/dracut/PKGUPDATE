@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/dracutdevs/dracut/tags | grep -Po '(?<=/dracut/releases/tag/)\d\d\d' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cp configure "$PKGBUILDDIR"/help.txt
+}

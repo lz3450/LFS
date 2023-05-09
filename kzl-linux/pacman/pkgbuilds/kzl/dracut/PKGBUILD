@@ -1,29 +1,26 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=dracut
-pkgver=056
-pkgrel=1
-epoch=1
+pkgver=059
+pkgrel=4
+epoch=
 pkgdesc="An event driven initramfs infrastructure"
 arch=('x86_64')
-url="https://dracut.wiki.kernel.org"
+url="https://github.com/dracutdevs/dracut/wiki/"
 license=('KZL')
 depends=(cpio kmod)
-makedepends=(asciidoc bash-completion)
-provides=(initramfs)
 backup=(etc/dracut.conf)
-source=(https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut/dracut-056.tar.{xz,sign})
-sha256sums=('e025bbdce9d1209640fb3f5f674f059c7e1f441537ba421703fe56055502421d'
-            'SKIP')
-validpgpkeys=('7F3D64824AC0B6B8009E50504BC0896FB5693595')
+source=(git+https://github.com/dracutdevs/dracut.git#tag=$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
     --libdir=/usr/lib \
     --sysconfdir=/etc \
+    --disable-documentation \
     --systemdsystemunitdir=/usr/lib/systemd/system \
     --bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion)
 
@@ -31,7 +28,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
