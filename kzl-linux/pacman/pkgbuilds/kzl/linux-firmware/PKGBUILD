@@ -1,20 +1,19 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=linux-firmware
-pkgver=20220209
+pkgver=20230404
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Firmware files for Linux"
 arch=('x86_64')
-url="https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git;a=summary"
+url="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git"
 license=('KZL')
 options=(!strip)
-source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git#tag=$pkgver?signed)
+source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git#tag=$pkgver)
 sha256sums=('SKIP')
-validpgpkeys=('4CDE8575E547BF835FE15807A31B6BD72486CFD6')
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" FIRMWAREDIR="/usr/lib/firmware" install
+  make DESTDIR="$pkgdir" FIRMWAREDIR="/usr/lib/firmware" install
 }

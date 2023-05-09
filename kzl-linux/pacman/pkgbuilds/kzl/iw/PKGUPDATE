@@ -1,0 +1,5 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://kernel.org/pub/software/network/iw/ | grep -Po '(?<=iw-)\d\.\d\.\d' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+}

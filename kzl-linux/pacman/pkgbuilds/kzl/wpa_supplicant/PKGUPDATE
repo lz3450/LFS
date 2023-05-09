@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://w1.fi/releases/ | grep -Po '(?<=wpa_supplicant-)\d\.\d+' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver/$pkgname"
+    cp defconfig "$PKGBUILDDIR"/defconfig
+}

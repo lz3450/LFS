@@ -257,6 +257,11 @@ kzl_stage2_pkgs=(
     # man-db
 
     ################
+    # linux-firmware
+    ################
+    # linux-firmware
+
+    ################
     # base
     ################
     # base
@@ -289,6 +294,12 @@ kzl_stage3_pkgs=(
     ################################
     # f2fs-tools
     # parted
+
+    ################################
+    # Wireless Network
+    ################################
+    # iw
+    wpa_supplicant
 
     ################
     # samba

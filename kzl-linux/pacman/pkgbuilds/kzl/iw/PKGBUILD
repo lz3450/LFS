@@ -1,0 +1,25 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=iw
+pkgver=5.19
+pkgrel=5
+epoch=
+pkgdesc="A new nl80211 based CLI configuration utility for wireless devices"
+arch=('x86_64')
+url="https://wireless.wiki.kernel.org/en/users/documentation/iw"
+license=('KZL')
+depends=(libnl)
+source=(git://git.kernel.org/pub/scm/linux/kernel/git/jberg/iw.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}
