@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=base
-pkgver=20230418
+pkgver=20230509
 pkgrel=1
 epoch=
 pkgdesc="Minimal package set"
@@ -21,6 +21,7 @@ depends=(filesystem
          coreutils util-linux
          iptables
          systemd
+         wget2
          sudo
          pacman
          procps-ng psmisc
@@ -35,6 +36,6 @@ pkgver() {
 }
 
 package() {
-  install -D -m 644 "$srcdir"/os-release "$pkgdir"/etc/os-release
-  install -D -m 644 "$srcdir"/os-release "$pkgdir"/usr/share/factory/etc/os-release
+  install -Dm644 "$srcdir"/os-release "$pkgdir"/etc/os-release
+  install -Dm644 "$srcdir"/os-release "$pkgdir"/usr/share/factory/etc/os-release
 }
