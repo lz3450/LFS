@@ -363,7 +363,9 @@ kzl_stage3_pkgs=(
     ################
     # other utils
     ################
+    # libmd dpkg
     # debootstrap
+    # tree
     # minicom
 )
 

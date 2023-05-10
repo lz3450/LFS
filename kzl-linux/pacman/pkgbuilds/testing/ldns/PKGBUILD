@@ -3,7 +3,7 @@
 pkgname=ldns
 pkgver=1.8.1
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Fast DNS library supporting recent RFCs"
 arch=('x86_64')
 url="https://www.nlnetlabs.nl/projects/ldns/"

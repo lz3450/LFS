@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libmd
+pkgver=1.0.4
+pkgrel=4
+epoch=
+pkgdesc="Message Digest functions from BSD systems"
+arch=('x86_64')
+url="https://www.hadrons.org/software/libmd/"
+license=('KZL')
+source=(git+https://git.hadrons.org/git/libmd.git#tag=$pkgver)
+sha256sums=('SKIP')
+
+prepare(){
+  cd $pkgname
+
+  ./autogen
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make -k check
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}

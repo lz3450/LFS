@@ -1,0 +1,5 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://mama.indstate.edu/users/ice/tree/ | grep -Po '(?<=tree-)\d\.\d\.\d' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/unix-tree"
+}
