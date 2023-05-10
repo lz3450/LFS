@@ -78,18 +78,22 @@ if [ -f PKGUPDATE ]; then
         sed -i "/^pkgrel=/s/$old_pkgrel/$new_pkgrel/" PKGBUILD
         info "PKGBUILD is already updated."
     else
-        result=2
+        result=-1
     fi
 
     # run post_update
     info "running post_update()..."
-    makepkg -Co || result=2
-    post_update || result=2
+    makepkg -Co || result=3
+    post_update || result=4
 else
     warning "PKGUPDATE does not exist."
+    result=2
 fi
 
+# -1: old version is newer
 # 0: no update
 # 1: updated
-# 2: other error
+# 2: PKGUPDATE does not exist
+# 3: makepkg -Co error
+# 4: post_update -Co error
 exit $result
