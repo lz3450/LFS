@@ -1,34 +1,42 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=autoconf-archive
-pkgver=2022.02.11
-pkgrel=1
-epoch=1
+pkgver=2023.02.20
+pkgrel=4
+epoch=
 pkgdesc="A collection of freely re-usable Autoconf macros"
 arch=('x86_64')
 url="https://www.gnu.org/software/autoconf-archive/"
-source=(https://ftpmirror.gnu.org/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('78a61b611e2eeb55a89e0398e0ce387bcaf57fe2dd53c6fe427130f777ad1e8c'
+source=(git://git.savannah.gnu.org/autoconf-archive.git#tag=v$pkgver
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
             'SKIP')
-validpgpkeys=('1A4F63A13A4649B632F65EE141BC28FE99089D72')
+
+prepare() {
+  cd $pkgname
+
+  ln -rs "$srcdir"/gnulib gnulib
+  ./bootstrap.sh
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr
 
+  make maintainer-all
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

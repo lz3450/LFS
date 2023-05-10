@@ -234,7 +234,7 @@ kzl_stage2_pkgs=(
     # m4
     # bison
     # flex
-    # autoconf automake
+    # autoconf automake autoconf-archive
     # which
     # diffutils
     # ed bc
