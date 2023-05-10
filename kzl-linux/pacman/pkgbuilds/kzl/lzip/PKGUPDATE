@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://download.savannah.gnu.org/releases/lzip/ | grep -Po '(?<=lzip-)\d\.\d\d' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

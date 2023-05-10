@@ -1,0 +1,57 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=wget2
+pkgver=2.0.1
+pkgrel=6
+epoch=
+pkgdesc="Network utility to retrieve files from the Web"
+arch=('x86_64')
+url="https://www.gnu.org/software/wget/wget.html"
+license=('KZL')
+depends=(brotli gnutls gpgme libidn2 libmicrohttpd libpsl lzip nghttp2 pcre2)
+optdepends=("ca-certificates: HTTPS downloads")
+source=(git+https://gitlab.com/gnuwget/wget2.git#tag=v$pkgver
+        git+https://git.savannah.gnu.org/git/gnulib.git)
+sha256sums=('SKIP'
+            'SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --with-ssl=gnutls \
+    --with-libpsl \
+    --with-libnghttp2 \
+    --with-gpgme \
+    --with-bzip2 \
+    --with-zlib \
+    --with-lzma \
+    --with-brotlidec \
+    --with-zstd \
+    --with-lzip \
+    --with-libidn2 \
+    --with-libpcre2 \
+    --with-libmicrohttpd
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make check
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}
