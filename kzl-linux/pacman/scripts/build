@@ -238,6 +238,7 @@ kzl_stage2_pkgs=(
     # which
     # diffutils
     # ed bc
+    # patch
 
     ################
     # make
