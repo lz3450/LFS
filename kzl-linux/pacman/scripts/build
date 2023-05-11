@@ -368,6 +368,7 @@ kzl_stage3_pkgs=(
     # debootstrap
     # tree
     # minicom
+    # dfu-util
 )
 
 # functions
