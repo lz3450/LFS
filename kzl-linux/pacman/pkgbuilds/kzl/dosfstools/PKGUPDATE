@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/dosfstools/dosfstools/tags | grep -Po '(?<=/dosfstools/releases/tag/v)\d\.\d' | sort -V | tail -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

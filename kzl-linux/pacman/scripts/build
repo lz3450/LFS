@@ -301,6 +301,7 @@ kzl_stage3_pkgs=(
     ################################
     # File system utils
     ################################
+    # dosfstools
     # f2fs-tools
     # parted
 
