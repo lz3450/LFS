@@ -1,0 +1,95 @@
+#!/usr/bin/bash
+
+script_name="$(basename "${0}")"
+result=1
+
+################################################################
+
+# Show an INFO message
+# $1: message string
+info() {
+    local _msg="$1"
+    printf '[%s] INFO: %s\n' "$script_name" "$_msg"
+}
+
+# Show a WARNING message
+# $1: message string
+warning() {
+    local _msg="$1"
+    printf '[%s] WARNING: %s\n' "$script_name" "$_msg" >&2
+}
+
+# Show an ERROR message then exit with status
+# $1: message string
+# $2: exit code number (with 0 does not exit)
+error() {
+    local _msg="$1"
+    local _error="$2"
+    printf '[%s] ERROR: %s\n' "$script_name" "$_msg" >&2
+    if [ "$_error" -gt 0 ]; then
+        exit "$_error"
+    fi
+}
+
+have_function() {
+	declare -f "$1" >/dev/null
+}
+
+################################################################
+
+set -e
+set -o pipefail
+set -u
+# set -x
+
+if [ ! -f PKGBUILD ]; then
+   error 'PKGBUILD does not exist.' 2
+fi
+
+. /usr/local/etc/makepkg.conf
+. PKGBUILD
+PKGBUILDDIR=$(pwd)
+
+result=0
+
+if [ -f PKGUPDATE ]; then
+    unset new_version old_version pre_update post_update
+    source PKGUPDATE
+    old_version=${old_version:-$(cat PKGBUILD | grep -Po '(?<=pkgver=).+$')}
+    old_pkgrel=$(cat PKGBUILD | grep -Po '(?<=pkgrel=)\d+$')
+    new_pkgrel=$((old_pkgrel + 1))
+
+    # run pre_update
+    if have_function 'pre_update'; then
+        info "running pre_update()..."
+        pre_update
+    fi
+
+    result=$(vercmp $new_version $old_version)
+    if [ $result -gt 0 ]; then
+        result=1
+        info "PKGBUILD updated: $old_version => $new_version"
+        sed -i "/^pkgver=/s/$old_version/$new_version/" PKGBUILD
+        sed -i "/^pkgrel=/s/$old_pkgrel/1/" PKGBUILD
+        info "running updpkgsums..."
+        updpkgsums || result=2
+    elif [ $result -eq 0 ] || [ $result -lt 0 ]; then
+        result=0
+        sed -i "/^pkgrel=/s/$old_pkgrel/$new_pkgrel/" PKGBUILD
+        info "PKGBUILD is already updated."
+    else
+        result=2
+    fi
+
+    # run post_update
+    info "running post_update()..."
+    makepkg -Co || result=2
+    post_update || result=2
+else
+    warning "PKGUPDATE does not exist."
+fi
+
+# 0: no update
+# 1: updated
+# 2: other error
+exit $result
