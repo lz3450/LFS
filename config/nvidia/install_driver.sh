@@ -5,23 +5,22 @@ source=https://us.download.nvidia.com/XFree86/Linux-x86_64/$pkgver/NVIDIA-Linux-
 
 set -e
 
-mkdir -p $workdir
+if [ ! -f $HOME/Downloads/NVIDIA-Linux-x86_64-$pkgver.run ]; then
+    wget -P $HOME/Downloads $source
+fi
+
+rm -rf $workdir
+bash $HOME/Downloads/NVIDIA-Linux-x86_64-$pkgver.run --extract-only --target $workdir
 cd $workdir
-
-if [ ! -f NVIDIA-Linux-x86_64-$pkgver.run ]; then
-    wget $source
-fi
-
-if [ -d install.log ]; then
-    sudo rm -rf install.log
-fi
-
-bash NVIDIA-Linux-x86_64-$pkgver.run --extract-only
-cd NVIDIA-Linux-x86_64-$pkgver
 
 sudo ./nvidia-installer \
     --accept-license \
     --expert \
-    --log-file-name=$HOME/nvidia-driver-install.log
+    --no-install-compat32-libs \
+    --log-file-name=$HOME/nvidia-driver-install.log \
+    --run-nvidia-xconfig \
+    --no-dkms \
+    --no-check-for-alternate-installs \
+    -j $(nproc)
 
 # printf "%s" "blacklist nouveau" | sudo install -Dm644 /dev/stdin /etc/modprobe.d/nouveau_blacklist.conf
