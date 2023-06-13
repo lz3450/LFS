@@ -2,7 +2,7 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=6.1.31
+pkgver=6.1.33
 pkgrel=1
 epoch=
 pkgdesc="LTS Linux Kernel"
@@ -13,7 +13,7 @@ options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            '7a553fc218326f87fe7c82b237f94a0039f06955b52dece45a87dda27e9b63cd')
+            '776c674051aa5fcc43d7373f4b6b7194213c87e51699d79aff5b866c61d4bae0')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
@@ -39,12 +39,12 @@ package_linux() {
   cd $pkgbase
 
   local kernelrelease=$(make O=build -s kernelrelease)
-  local imagename=$(make O=build -s image_name)
+  local image_name=$(make O=build -s image_name)
   local modulesdir="/usr/lib/modules/$kernelrelease"
 
   make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
 
-  install -d -m755 $pkgdir/boot/efi/
+  install -d -m 755 $pkgdir/boot/efi/
   make INSTALL_PATH="$pkgdir/boot" O=build install
   cp "$pkgdir"/boot/vmlinuz-$kernelrelease "$pkgdir"/boot/efi/vmlinuz-$kernelrelease
 
@@ -57,6 +57,6 @@ package_linux-headers() {
   local kernelrelease=$(make O=build -s kernelrelease)
 
   install -d -m 0755 "$pkgdir"/usr/lib/modules/$kernelrelease/
-  cp -a . "$pkgdir"/usr/lib/modules/$kernelrelease/source
-  mv "$pkgdir"/usr/lib/modules/$kernelrelease/{source/,}build
+  cp -a "$srcdir/$pkgbase" "$pkgdir"/usr/lib/modules/$kernelrelease/source
+  ln -sr "$pkgdir"/usr/lib/modules/$kernelrelease/source/build "$pkgdir"/usr/lib/modules/$kernelrelease/build
 }
