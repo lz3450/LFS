@@ -3,7 +3,7 @@
 pkgbase=linux
 pkgname=(linux linux-headers)
 pkgver=6.1.33
-pkgrel=1
+pkgrel=7
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -13,7 +13,7 @@ options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            '776c674051aa5fcc43d7373f4b6b7194213c87e51699d79aff5b866c61d4bae0')
+            '1e8aa3cdb898369694986d09086d806e45ed1afc239f55d723fcc5f22bb76701')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
