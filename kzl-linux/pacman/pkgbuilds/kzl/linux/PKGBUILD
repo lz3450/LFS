@@ -51,12 +51,8 @@ package_linux() {
 
   make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
 
-  # make INSTALL_PATH="$pkgdir/boot" O=build install
-
-  install -Dm755 build/$image_name "$pkgdir/$modulesdir"/vmlinuz
-  install -Dm755 build/$image_name "$pkgdir"/boot/vmlinuz-linux
-  install -Dm644 build/System.map -t "$pkgdir/$modulesdir/"
-  install -Dm644 build/System.map -t "$pkgdir"/boot/
+  install -d -m 755 $pkgdir/boot/
+  make INSTALL_PATH="$pkgdir/boot" O=build install
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
 }
@@ -68,5 +64,5 @@ package_linux-headers() {
 
   install -d -m 0755 "$pkgdir"/usr/lib/modules/$kernelrelease/
   cp -a . "$pkgdir"/usr/lib/modules/$kernelrelease/source
-  mv "$pkgdir"/usr/lib/modules/$kernelrelease/{source/,}build
+  ln -sr "$pkgdir"/usr/lib/modules/$kernelrelease/source/build "$pkgdir"/usr/lib/modules/$kernelrelease/build
 }
