@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=6.0.1.119
+pkgver=6.0.2
 pkgrel=1
 epoch=
 arch=('x86_64')
@@ -11,7 +11,7 @@ depends=(curl fakeroot glibc gpgme libarchive libseccomp)
 optdepends=("archlinux-keyring: for Arch Linux official packages")
 backup=(etc/pacman.conf
         etc/makepkg.conf)
-source=(git+https://gitlab.archlinux.org/pacman/pacman.git)
+source=(git+https://gitlab.archlinux.org/pacman/pacman.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
 pkgver() {
@@ -87,17 +87,17 @@ Server = file:///home/.repository/\$repo
 #[testing]
 #Include = /etc/pacman.d/mirrorlist
 
-[core]
-Include = /etc/pacman.d/mirrorlist
+#[core]
+#Include = /etc/pacman.d/mirrorlist
 
-[extra]
-Include = /etc/pacman.d/mirrorlist
+#[extra]
+#Include = /etc/pacman.d/mirrorlist
 
 #[community-testing]
 #Include = /etc/pacman.d/mirrorlist
 
-[community]
-Include = /etc/pacman.d/mirrorlist
+#[community]
+#Include = /etc/pacman.d/mirrorlist
 
 # If you want to run 32 bit applications on your x86_64 system,
 # enable the multilib repositories as required here.
