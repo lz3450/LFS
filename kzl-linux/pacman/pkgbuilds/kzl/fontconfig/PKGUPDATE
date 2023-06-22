@@ -2,5 +2,5 @@ new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.freedesktop.org/wi
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    meson configure | tee $PKGBUILDDIR/help.txt
+    meson configure > $PKGBUILDDIR/help.txt
 }
