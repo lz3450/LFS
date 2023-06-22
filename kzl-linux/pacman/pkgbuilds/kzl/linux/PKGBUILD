@@ -23,7 +23,7 @@ export KBUILD_BUILD_TIMESTAMP="$(date -u '+%Y/%m/%d %T %z')"
 pkgver() {
   cd $pkgname
 
-  git describe --tags | sed -e 's/^v//' -e 's/bash-//' -e 's/-g.*//' -e 's/-/./'
+  git describe --tags | sed -e 's/^v//'
 }
 
 prepare() {
@@ -55,6 +55,8 @@ package_linux() {
   make INSTALL_PATH="$pkgdir/boot" O=build install
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
+  ln -sf /usr/src/linux-headers-$kernelrelease "$pkgdir"/usr/lib/modules/$kernelrelease/source
+  ln -sf /usr/src/linux-headers-$kernelrelease/build "$pkgdir"/usr/lib/modules/$kernelrelease/build
 }
 
 package_linux-headers() {
@@ -62,7 +64,6 @@ package_linux-headers() {
 
   local kernelrelease=$(make O=build -s kernelrelease)
 
-  install -d -m 0755 "$pkgdir"/usr/lib/modules/$kernelrelease/
-  cp -a . "$pkgdir"/usr/lib/modules/$kernelrelease/source
-  ln -sr "$pkgdir"/usr/lib/modules/$kernelrelease/source/build "$pkgdir"/usr/lib/modules/$kernelrelease/build
+  install -d -m 0755 "$pkgdir"/usr/src/
+  cp -a "$srcdir/$pkgbase" "$pkgdir"/usr/src/linux-headers-$kernelrelease
 }
