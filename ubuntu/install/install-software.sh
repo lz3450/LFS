@@ -5,7 +5,7 @@
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install software-properties-common apt-transport-https wget
+sudo apt install software-properties-common apt-transport-https
 
 ### microsoft
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo install -o root -g root -m 644 /dev/stdin /etc/apt/trusted.gpg.d/microsoft.gpg

@@ -5,11 +5,9 @@ set -e -u
 apt update
 
 apt install -y \
-    linux-image-generic \
     zsh \
-    wget \
+    wget curl \
     nano \
-    f2fs-tools \
     zsh-autosuggestions \
     zsh-syntax-highlighting
 

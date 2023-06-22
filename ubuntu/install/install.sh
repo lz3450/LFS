@@ -32,7 +32,7 @@ mkdir -p /mnt/boot/efi/loader/entries
 cat > /mnt/boot/efi/loader/loader.conf << EOF
 timeout 3
 console-mode max
-default ubuntu
+default ubuntu.conf
 EOF
 
 cat > /mnt/boot/efi/loader/entries/ubuntu.conf << EOF
@@ -60,7 +60,11 @@ EOF
 
 cp initialize.sh /mnt/root
 
-genfstab -t PARTUUID /mnt > /mnt/etc/fstab
+if [ -f "/usr/bin/genfstab" ]; then
+    genfstab -t PARTUUID /mnt > /mnt/etc/fstab
+else
+    blkid > /mnt/etc/fstab
+fi
 nano /mnt/etc/fstab
 
-LANG=C.UTF-8 PATH=/usr/bin:/usr/sbin chroot /mnt /bin/bash
+LANG=C.UTF-8 PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin chroot /mnt /bin/bash
