@@ -46,7 +46,13 @@ if [ ! -f PKGBUILD ]; then
    error 'PKGBUILD does not exist.' 2
 fi
 
-. /etc/makepkg.conf
+if [ -f "/etc/makepkg.conf" ]; then
+    . /etc/makepkg.conf
+elif [ -f "/usr/local/etc/makepkg.conf" ]; then
+    . /usr/local/etc/makepkg.conf
+else
+    error 'makepkg.conf NOT found.' 5
+fi
 . PKGBUILD
 PKGBUILDDIR=$(pwd)
 
@@ -96,4 +102,5 @@ fi
 # 2: PKGUPDATE does not exist
 # 3: makepkg -Co error
 # 4: post_update -Co error
+# 5: makepkg.conf not found
 exit $result
