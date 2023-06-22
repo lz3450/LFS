@@ -9,7 +9,7 @@ if [ ! -f $HOME/Downloads/NVIDIA-Linux-x86_64-$pkgver.run ]; then
     wget -P $HOME/Downloads $source
 fi
 
-rm -rf $workdir
+sudo rm -rf $workdir
 bash $HOME/Downloads/NVIDIA-Linux-x86_64-$pkgver.run --extract-only --target $workdir
 cd $workdir
 
