@@ -7,6 +7,6 @@ pre_update() {
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     ./configure --help > "$PKGBUILDDIR"/help.txt
-    meson configure | tee "$PKGBUILDDIR"/help.txt
+    meson configure > "$PKGBUILDDIR"/help.txt
     cmake -LAH -S . -B tmp -DCMAKE_BUILD_TYPE=Release > "$PKGBUILDDIR"/help.txt
 }
