@@ -4,15 +4,15 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=glibc
-pkgver=2.36
-pkgrel=1
+pkgver=2.37
+pkgrel=2
 epoch=
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
 license=('KZL')
 depends=(filesystem linux-api-headers tzdata)
 options=(staticlibs !lto)
-source=(git+https://sourceware.org/git/glibc.git#branch=release/$pkgver/master
+source=(git+https://sourceware.org/git/glibc.git#tag=$pkgname-$pkgver
         ld.so.conf
         locale-gen
         locale.gen)

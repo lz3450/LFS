@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=zstd
-pkgver=1.5.4
-pkgrel=1
+pkgver=1.5.5
+pkgrel=8
 epoch=
 pkgdesc="Zstandard - Fast real-time compression algorithm"
 arch=('x86_64')
@@ -13,7 +13,7 @@ source=(git+https://github.com/facebook/zstd.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
 build() {
-  cd $pkgname
+  cd $pkgname/build/cmake
 
   CFLAGS+=' -ffat-lto-objects'
   CXXFLAGS+=' -ffat-lto-objects'
@@ -30,7 +30,7 @@ build() {
     -DZSTD_LZMA_SUPPORT=ON \
     -DZSTD_PROGRAMS_LINK_SHARED=ON \
     -DZSTD_ZLIB_SUPPORT=ON \
-    -S build/cmake \
+    -S . \
     -B build \
     -G Ninja
 
@@ -38,13 +38,13 @@ build() {
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname/build/cmake
 
   cmake --build build --target test
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname/build/cmake
 
-  DESTDIR="$pkgdir/" cmake --build build --target install
+  DESTDIR="$pkgdir" cmake --build build --target install
 }

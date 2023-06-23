@@ -205,25 +205,19 @@ systemd:
   - p11-kit (make)
   - quota (make)
   - util-linux (make)
-sudo:
-  - glibc
-  - libgcrypt
-  - openldap
-  - pam
-pacman:
-  - curl
-  - fakeroot
-  - glibc
+wget2:
+  - brotli
+  - gnutls:
+      - gmp
+      - libidn2
+      - libtasn1
+      - libunistring
+      - nettle:
+          - gmp
+      - p11-kit
   - gpgme:
       - gnupg:
-          - gnutls:
-              - gmp
-              - libidn2
-              - libtasn1
-              - libunistring
-              - nettle:
-                  - gmp
-              - p11-kit
+          - gnutls
           - libassuan:
               - libgpg-error
           - libgcrypt
@@ -240,6 +234,23 @@ pacman:
       - libassuan
       - libgpg-error
       - swig (make)
+  - libidn2
+  - libmicrohttpd:
+      - gnutls
+  - libpsl
+  - lzip
+  - nghttp2
+  - pcre2
+sudo:
+  - glibc
+  - libgcrypt
+  - openldap
+  - pam
+pacman:
+  - curl
+  - fakeroot
+  - glibc
+  - gpgme
   - libarchive:
       - acl
       - expat

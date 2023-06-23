@@ -2,7 +2,7 @@
 
 pkgname=mpfr
 pkgver=4.2.0
-pkgrel=1
+pkgrel=7
 epoch=
 pkgdesc="Multiple-precision floating-point library"
 arch=('x86_64')
@@ -22,18 +22,18 @@ build() {
     --enable-thread-safe \
     --enable-shared
 
-  make -O
+  make
 }
 
 check() {
   cd $pkgname-$pkgver
 
-  make -O check
-  make -O check-exported-symbols
+  make check
+  make check-exported-symbols
 }
 
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

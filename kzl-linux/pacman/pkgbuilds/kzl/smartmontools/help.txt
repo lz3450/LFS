@@ -1,0 +1,167 @@
+`configure' configures smartmontools 7.3 to adapt to many kinds of systems.
+
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+To assign environment variables (e.g., CC, CFLAGS...), specify them as
+VAR=VALUE.  See below for descriptions of some of the useful variables.
+
+Defaults for the options are specified in brackets.
+
+Configuration:
+  -h, --help              display this help and exit
+      --help=short        display options specific to this package
+      --help=recursive    display the short help of all the included packages
+  -V, --version           display version information and exit
+  -q, --quiet, --silent   do not print `checking ...' messages
+      --cache-file=FILE   cache test results in FILE [disabled]
+  -C, --config-cache      alias for `--cache-file=config.cache'
+  -n, --no-create         do not create output files
+      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+
+Installation directories:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr/local]
+  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                          [PREFIX]
+
+By default, `make install' will install all the files in
+`/usr/local/bin', `/usr/local/lib' etc.  You can specify
+an installation prefix other than `/usr/local' using `--prefix',
+for instance `--prefix=$HOME'.
+
+For better control, use the options below.
+
+Fine tuning of the installation directories:
+  --bindir=DIR            user executables [EPREFIX/bin]
+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR        program executables [EPREFIX/libexec]
+  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+  --libdir=DIR            object code libraries [EPREFIX/lib]
+  --includedir=DIR        C header files [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR           info documentation [DATAROOTDIR/info]
+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR            man documentation [DATAROOTDIR/man]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/smartmontools]
+  --htmldir=DIR           html documentation [DOCDIR]
+  --dvidir=DIR            dvi documentation [DOCDIR]
+  --pdfdir=DIR            pdf documentation [DOCDIR]
+  --psdir=DIR             ps documentation [DOCDIR]
+
+Program names:
+  --program-prefix=PREFIX            prepend PREFIX to installed program names
+  --program-suffix=SUFFIX            append SUFFIX to installed program names
+  --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
+  --enable-maintainer-mode
+                          enable make rules and dependencies not useful (and
+                          sometimes confusing) to the casual installer
+  --enable-dependency-tracking
+                          do not reject slow dependency extractors
+  --disable-dependency-tracking
+                          speeds up one-time build
+  --enable-sample         Enables appending .sample to the installed smartd rc
+                          script and configuration file
+  --enable-scsi-cdb-check do sanity check on each SCSI cdb
+  --disable-fast-lebe     use generic little-endian/big-endian code instead
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-initscriptdir=[DIR|no]
+                          Location of init scripts [no]
+  --with-exampledir=DIR   Location of example scripts [DOCDIR/examplescripts]
+  --with-drivedbinstdir[=DIR|yes|no]
+                          Optional separate install location of drive database
+                          file [no] (yes=DATADIR/smartmontools)
+  --with-drivedbdir[=DIR|yes|no]
+                          Location of drive database file
+                          [DATADIR/smartmontools or
+                          LOCALSTATEDIR/lib/smartmontools if separate INSTDIR]
+  --with-update-smart-drivedb[=yes|no|X.Y]
+                          Install update-smart-drivedb script (and backport it
+                          to branches/RELEASE_X_Y_DRIVEDB) [yes]
+  --with-gnupg[=FILE|yes|no]
+                          GnuPG used to verify drivedb.h [gpg]
+  --with-smartdscriptdir=DIR
+                          Location of smartd_warning.sh script [SYSCONFDIR]
+  --with-smartdplugindir=[DIR|no]
+                          Location of smartd_warning.sh plugin scripts
+                          [SMARTDSCRIPTDIR/smartd_warning.d]
+  --with-scriptpath=[PATH|no]
+                          PATH variable set within scripts
+                          [/usr/local/bin:/usr/bin:/bin]
+  --with-savestates[=PREFIX|yes|no]
+                          Enable default smartd state files [no]
+                          (yes=LOCALSTATEDIR/lib/smartmontools/smartd.)
+  --with-attributelog[=PREFIX|yes|no]
+                          Enable default smartd attribute log files [no]
+                          (yes=LOCALSTATEDIR/lib/smartmontools/attrlog.)
+  --with-os-deps='os_module.o ...'
+                          Specify OS dependent module(s) [guessed]
+  --with-selinux[=yes|no] Enables SELinux support [no]
+  --with-libcap-ng[=auto|yes|no]
+                          Add Libcap-ng support to smartd [auto]
+  --with-libsystemd[=auto|yes|no]
+                          Add systemd 'Type=notify' support to smartd [auto]
+  --with-systemdsystemunitdir[=DIR|auto|yes|no]
+                          Location of systemd service files [auto]
+  --with-systemdenvfile[=FILE|auto|yes|no]
+                          Path of systemd EnvironmentFile [auto]
+  --with-nvme-devicescan[=yes|no]
+                          Include NVMe devices in smartd DEVICESCAN
+                          [Linux,Windows:yes;Others:no]
+  --with-solaris-sparc-ata[=yes|no]
+                          Enable legacy ATA support on Solaris SPARC (requires
+                          os_solaris_ata.s from SVN repository) [no]
+  --with-signal-func=[sigaction|sigset|signal]
+                          Function to set signal(2) action [sigaction]
+  --with-mingw-aslr[=auto|yes|low|no]
+                          Enable ASLR for MinGW executables [auto]
+  --with-cxx11-option=[OPTION|auto|no]
+                          Compiler option to enable C++11 support, 'no' to
+                          skip check [auto]
+  --with-cxx11-regex[=yes|no]
+                          Use C++11 std::regex instead of POSIX regex(3) [no]
+
+Some influential environment variables:
+  CXX         C++ compiler command
+  CXXFLAGS    C++ compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  CCAS        assembler compiler command (defaults to CC)
+  CCASFLAGS   assembler compiler flags (defaults to CFLAGS)
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  NM          Symbol list command
+  WINDMC      Windows message compiler command
+  WINDRES     Windows resource compiler command
+  MAKENSIS    NSIS compiler command
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to <smartmontools-support@listi.jpberlin.de>.

@@ -1,9 +1,12 @@
-new_version=$(curl -L --stderr - https://www.mpfr.org/mpfr-current/ | grep -Po '(?<=GNU MPFR version )\d\.\d\.\d')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.mpfr.org/mpfr-current/ | grep -oP 'GNU MPFR version \K\d\.\d\.\d')
 
 post_update() {
   local _keys
-  _keys=`curl -L --stderr - https://www.mpfr.org/mpfr-current/ | grep -o -E 'gpg --recv-keys [0-9A-F]{16}' | grep -o -E '[0-9A-F]{16}'`
+  _keys=`curl -L -A 'Mozilla/5.0' --stderr - https://www.mpfr.org/mpfr-current/ | grep -oP 'gpg --recv-keys \K[0-9A-F]{16}'`
   gpg --recv-keys $_keys
-  _keys=`gpg --list-keys $_keys | grep -o -E '[0-9A-F]{40}'`
+  _keys=`gpg --list-keys $_keys | grep -oP '[0-9A-F]{40}'`
   sed -i -E "/^validpgpkeys=/s/[0-9A-F]{40}/$_keys/" PKGBUILD
+
+  cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
+  ./configure --help > "$PKGBUILDDIR"/help.txt
 }
