@@ -60,9 +60,12 @@ result=0
 
 if [ -f PKGUPDATE ]; then
     unset new_version old_version pre_update post_update
-    source PKGUPDATE
-    old_version=${old_version:-$(cat PKGBUILD | grep -Po '(?<=pkgver=).+$')}
-    old_pkgrel=$(cat PKGBUILD | grep -Po '(?<=pkgrel=)\d+$')
+    . PKGUPDATE || :
+    if [ -z $new_version ]; then
+        error 'Cannot get new version.' 6
+    fi
+    old_version=${old_version:-$(cat PKGBUILD | grep -oP 'pkgver=\K.+$')}
+    old_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
     new_pkgrel=$((old_pkgrel + 1))
 
     # run pre_update
@@ -101,6 +104,7 @@ fi
 # 1: updated
 # 2: PKGUPDATE does not exist
 # 3: makepkg -Co error
-# 4: post_update -Co error
+# 4: post_update error
 # 5: makepkg.conf not found
+# 6: PKGUPDATE error
 exit $result
