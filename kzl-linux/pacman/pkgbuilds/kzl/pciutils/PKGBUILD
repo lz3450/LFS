@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pciutils
-pkgver=3.9.0
-pkgrel=3
+pkgver=3.10.0
+pkgrel=5
 epoch=
 pkgdesc="PCI bus configuration space access library and tools"
 arch=('x86_64')
@@ -17,20 +17,11 @@ build() {
   make \
     OPT="$CFLAGS" \
     ZLIB=no \
-    SHARED=no \
-    LIBKMOD=yes \
-    PREFIX=/usr \
-    IDSDIR=/usr/share/hwdata \
-    MANDIR=/usr/share/man
-
-  make \
-    OPT="$CFLAGS" \
-    ZLIB=no \
     SHARED=yes \
     LIBKMOD=yes \
+    HWDB=yes \
     PREFIX=/usr \
-    IDSDIR=/usr/share/hwdata \
-    MANDIR=/usr/share/man
+    IDSDIR=/usr/share/hwdata
 }
 
 package() {
@@ -42,9 +33,9 @@ package() {
     ZLIB=no \
     SHARED=yes \
     LIBKMOD=yes \
+    HWDB=yes \
     PREFIX=/usr \
     IDSDIR=/usr/share/hwdata \
-    MANDIR=/usr/share/man \
     install install-lib
 
   # provided by `hwdata`

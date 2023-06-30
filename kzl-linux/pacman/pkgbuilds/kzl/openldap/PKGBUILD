@@ -2,7 +2,7 @@
 
 pkgname=openldap
 pkgver=2.6.4
-pkgrel=5
+pkgrel=7
 epoch=
 pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries"
 arch=('x86_64')

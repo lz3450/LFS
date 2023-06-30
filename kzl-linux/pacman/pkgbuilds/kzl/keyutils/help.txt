@@ -1,0 +1,24 @@
+CPPFLAGS	:= -I.
+CFLAGS		:= -g -Wall -Werror
+CXXFLAGS	:= -g -Wall -Werror
+INSTALL		:= install
+DESTDIR		:=
+SPECFILE	:= keyutils.spec
+NO_GLIBC_KEYERR	:= 0
+NO_ARLIB	:= 0
+NO_SOLIB	:= 0
+ETCDIR		:= /etc
+BINDIR		:= /bin
+SBINDIR		:= /sbin
+SHAREDIR	:= /usr/share/keyutils
+MANDIR		:= /usr/share/man
+MAN1		:= $(MANDIR)/man1
+MAN3		:= $(MANDIR)/man3
+MAN5		:= $(MANDIR)/man5
+MAN7		:= $(MANDIR)/man7
+MAN8		:= $(MANDIR)/man8
+INCLUDEDIR	:= /usr/include
+LN		:= ln
+LNS		:= $(LN) -sf
+PREFIX 		:= /usr
+

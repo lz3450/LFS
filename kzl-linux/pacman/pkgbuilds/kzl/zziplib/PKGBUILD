@@ -38,5 +38,5 @@ check() {
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir/" cmake --build build --target install
+  DESTDIR="$pkgdir" cmake --build build --target install
 }

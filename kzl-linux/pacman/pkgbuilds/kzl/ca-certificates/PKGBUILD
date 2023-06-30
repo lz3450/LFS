@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ca-certificates
-pkgver=2023.03.26
-pkgrel=1
+pkgver=2023.06.23
+pkgrel=4
 epoch=
 pkgdesc="CA certificates"
 arch=('any')
@@ -11,18 +11,14 @@ depends=(p11-kit)
 makedepends=(python)
 source=(https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/certdata.txt
         https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h
-        https://src.fedoraproject.org/rpms/ca-certificates/blob/rawhide/f/certdata2pem.py
+        https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/certdata2pem.py
         update-ca-trust
         update-ca-trust.hook)
-sha256sums=('d59c5c83ce7a7635fa95521d8d245677949b86d5574bfcc6f855b6a48f2d5566'
+sha256sums=('c47475103fb05bb562bbadff0d1e72346b03236154e1448a6ca191b740f83507'
             '1e621fb1cc5a45e317f5dd280c6f682b4c38a37a2bf197d4e26b923684c4ca14'
             'd2a1579dae05fd16175fac27ef08b54731ecefdf414085c610179afcf62b096c'
             '92deb387e3f4d9dd4301db72c27797235997f775072687029d322808da94cd75'
             '55b230878d71847c629494d3b1d0b43482568027c3272ffa477c1d77e4594bf6')
-
-pkgver() {
-  date +%Y.%m.%d
-}
 
 prepare() {
   mkdir -p certs

@@ -1,2 +1,6 @@
-new_version=$(curl -L --stderr - https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git | grep -A 1 'Tag' | grep -o -E '[0-9]\.[0-9]\.[0-9]' | head -1)
-old_version=$(cat PKGBUILD | grep 'pkgver=' | sed -e 's/^pkgver=//')
+new_version=$(git ls-remote --tags https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git | grep -oP "refs/tags/v\K[0-9]+\.[0-9]+" | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    head -n24 Makefile > "$PKGBUILDDIR"/help.txt
+}

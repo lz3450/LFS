@@ -2,7 +2,7 @@
 
 pkgname=lmdb
 pkgver=0.9.30
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="Symas Lightning Memory-Mapped Database"
 arch=('x86_64')

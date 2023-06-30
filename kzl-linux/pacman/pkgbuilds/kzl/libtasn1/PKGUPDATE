@@ -1,1 +1,7 @@
-new_version=$(curl -L --stderr - https://ftp.gnu.org/gnu/libtasn1/ | grep -Po '(?<=libtasn1-)\d\.\d+\.\d' | tail -1)
+# new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/libtasn1/ | grep -oP 'libtasn1-\K[0-9]+\.[0-9]+' | sort -V | tail -n1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/libtasn1/ | grep -oP 'libtasn1-\K[0-9]+\.[0-9]+' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

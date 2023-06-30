@@ -1,1 +1,7 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://git.openldap.org/openldap/openldap/-/tags | grep -Po '(?<=LMDB_)\d\.\d\.\d\d' | sort -V | tail -1)
+new_version=$(git ls-remote --tags https://git.openldap.org/openldap/openldap.git | grep -oP "refs/tags/LMDB_\K[0-9]\.[0-9]\.[0-9]+" | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/openldap/libraries/liblmdb"
+    head -n37 Makefile  > "$PKGBUILDDIR"/help.txt
+}

@@ -2,7 +2,7 @@
 
 pkgname=smartmontools
 pkgver=7.3
-pkgrel=6
+pkgrel=7
 epoch=
 pkgdesc="Control and monitor storage systems using the Self-Monitoring, Analysis and Reporting Technology System (SMART) built into most modern ATA/SATA, SCSI/SAS and NVMe disks"
 arch=('x86_64')
@@ -32,6 +32,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
+    --localstatedir=/var \
     --with-drivedbdir=yes \
     --with-smartdscriptdir=/usr/share/smartmontools \
     --with-smartdplugindir=/usr/share/smartmontools/smartd_warning.d \

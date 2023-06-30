@@ -27,7 +27,7 @@ build() {
 package() {
   cd $pkgname-$pkgver/build_unix
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   rm -r "$pkgdir"/usr/docs
 }

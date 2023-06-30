@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libxcrypt
-pkgver=4.4.33
+pkgver=4.4.35
 pkgrel=1
 epoch=
 pkgdesc="Modern library for one-way hashing of passwords"
@@ -40,5 +40,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

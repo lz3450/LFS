@@ -1,7 +1,7 @@
 pkgname=texlive
 pkgver=66539
 _pkgyear=2023
-pkgrel=10
+pkgrel=11
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')

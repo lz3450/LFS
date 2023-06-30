@@ -1,0 +1,215 @@
+`configure' configures gnupg 2.2.41 to adapt to many kinds of systems.
+
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+To assign environment variables (e.g., CC, CFLAGS...), specify them as
+VAR=VALUE.  See below for descriptions of some of the useful variables.
+
+Defaults for the options are specified in brackets.
+
+Configuration:
+  -h, --help              display this help and exit
+      --help=short        display options specific to this package
+      --help=recursive    display the short help of all the included packages
+  -V, --version           display version information and exit
+  -q, --quiet, --silent   do not print `checking ...' messages
+      --cache-file=FILE   cache test results in FILE [disabled]
+  -C, --config-cache      alias for `--cache-file=config.cache'
+  -n, --no-create         do not create output files
+      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+
+Installation directories:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr/local]
+  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                          [PREFIX]
+
+By default, `make install' will install all the files in
+`/usr/local/bin', `/usr/local/lib' etc.  You can specify
+an installation prefix other than `/usr/local' using `--prefix',
+for instance `--prefix=$HOME'.
+
+For better control, use the options below.
+
+Fine tuning of the installation directories:
+  --bindir=DIR            user executables [EPREFIX/bin]
+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR        program executables [EPREFIX/libexec]
+  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+  --libdir=DIR            object code libraries [EPREFIX/lib]
+  --includedir=DIR        C header files [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR           info documentation [DATAROOTDIR/info]
+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR            man documentation [DATAROOTDIR/man]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/gnupg]
+  --htmldir=DIR           html documentation [DOCDIR]
+  --dvidir=DIR            dvi documentation [DOCDIR]
+  --pdfdir=DIR            pdf documentation [DOCDIR]
+  --psdir=DIR             ps documentation [DOCDIR]
+
+Program names:
+  --program-prefix=PREFIX            prepend PREFIX to installed program names
+  --program-suffix=SUFFIX            append SUFFIX to installed program names
+  --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
+  --enable-dependency-tracking
+                          do not reject slow dependency extractors
+  --disable-dependency-tracking
+                          speeds up one-time build
+  --disable-gpg           do not build the gpg program
+  --disable-gpgsm         do not build the gpgsm program
+  --disable-scdaemon      do not build the scdaemon program
+  --enable-g13            build the g13 program
+  --disable-dirmngr       do not build the dirmngr program
+  --disable-doc           do not build the doc program
+  --disable-gpgtar        do not build the gpgtar program
+  --disable-wks-tools     do not build the wks-tools program
+  --enable-gpg-is-gpg2    Set installed name of gpg to gpg2
+  --enable-selinux-support
+                          enable SELinux support
+  --enable-large-secmem   allocate extra secure memory
+  --disable-trust-models  disable all trust models except "always"
+  --disable-tofu          disable the TOFU trust model
+  --disable-libdns        do not build with libdns support
+  --disable-gpg-rsa       disable the RSA public key algorithm in gpg
+  --disable-gpg-ecdh      disable the ECDH public key algorithm in gpg
+  --disable-gpg-ecdsa     disable the ECDSA public key algorithm in gpg
+  --disable-gpg-eddsa     disable the EdDSA public key algorithm in gpg
+  --disable-gpg-idea      disable the IDEA cipher algorithm in gpg
+  --disable-gpg-cast5     disable the CAST5 cipher algorithm in gpg
+  --disable-gpg-blowfish  disable the BLOWFISH cipher algorithm in gpg
+  --disable-gpg-aes128    disable the AES128 cipher algorithm in gpg
+  --disable-gpg-aes192    disable the AES192 cipher algorithm in gpg
+  --disable-gpg-aes256    disable the AES256 cipher algorithm in gpg
+  --disable-gpg-twofish   disable the TWOFISH cipher algorithm in gpg
+  --disable-gpg-camellia128
+                          disable the CAMELLIA128 cipher algorithm in gpg
+  --disable-gpg-camellia192
+                          disable the CAMELLIA192 cipher algorithm in gpg
+  --disable-gpg-camellia256
+                          disable the CAMELLIA256 cipher algorithm in gpg
+  --disable-gpg-md5       disable the MD5 hash algorithm in gpg
+  --disable-gpg-rmd160    disable the RIPE-MD160 hash algorithm in gpg
+  --disable-gpg-sha224    disable the SHA-224 hash algorithm in gpg
+  --disable-gpg-sha384    disable the SHA-384 hash algorithm in gpg
+  --disable-gpg-sha512    disable the SHA-512 hash algorithm in gpg
+  --disable-zip           disable the ZIP and ZLIB compression algorithm
+  --disable-bzip2         disable the BZIP2 compression algorithm
+  --disable-exec          disable all external program execution
+  --disable-photo-viewers disable photo ID viewers
+  --enable-key-cache=SIZE Set key cache to SIZE (default 4096)
+  --disable-card-support  disable smartcard support
+  --disable-ccid-driver   disable the internal CCID driver
+  --disable-dirmngr-auto-start
+                          disable auto starting of the dirmngr
+  --enable-maintainer-mode
+                          enable make rules and dependencies not useful (and
+                          sometimes confusing) to the casual installer
+  --disable-largefile     omit support for large files
+  --disable-sqlite        disable the use of SQLITE
+  --enable-npth-debug     build with debug version of npth
+  --disable-ntbtls        disable the use of NTBTLS as TLS library
+  --disable-gnutls        disable GNUTLS as fallback TLS library
+  --disable-ldap          disable LDAP support
+  --disable-rpath         do not hardcode runtime library paths
+  --disable-nls           do not use Native Language Support
+  --disable-endian-check  disable the endian check and trust the OS provided
+                          macros
+  --disable-optimization  disable compiler optimization
+  --enable-werror         append -Werror to CFLAGS
+  --enable-all-tests      let "make check" run all tests
+  --disable-tests         do not run any tests
+
+  --enable-run-gnupg-user-socket
+                          try /run/gnupg/user for sockets prior to /run/user
+  --enable-build-timestamp
+                          set an explicit build timestamp for reproducibility.
+                          (default is the current time in ISO-8601 format)
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-agent-pgm=PATH  Use PATH as the default for the agent)
+  --with-pinentry-pgm=PATH  Use PATH as the default for the pinentry)
+  --with-scdaemon-pgm=PATH  Use PATH as the default for the scdaemon)
+  --with-dirmngr-pgm=PATH  Use PATH as the default for the dirmngr)
+  --with-protect-tool-pgm=PATH  Use PATH as the default for the protect-tool)
+  --with-dirmngr-ldap-pgm=PATH  Use PATH as the default for the dirmngr ldap wrapper)
+  --with-agent-s2k-calibration=MSEC
+                          calibrate passphrase stretching (s2k) to MSEC
+                          milliseconds
+  --with-photo-viewer=FIXED_VIEWER  set a fixed photo ID viewer
+  --with-capabilities     use linux capabilities default=no
+  --with-tar=PATH         look for a tar program in PATH
+  --with-libgpg-error-prefix=PFX
+                          prefix where GPG Error is installed (optional)
+
+  --with-libgcrypt-prefix=PFX
+                          prefix where LIBGCRYPT is installed (optional)
+  --with-libassuan-prefix=PFX
+                          prefix where LIBASSUAN is installed (optional)
+  --with-libksba-prefix=PFX
+                          prefix where KSBA is installed (optional)
+  --with-npth-prefix=PFX  prefix where NPTH is installed (optional)
+  --with-ntbtls-prefix=PFX
+                          prefix where NTBTLS is installed (optional)
+  --with-default-trust-store-file=FILE
+                          Use FILE as system trust store
+  --with-ldap=DIR         look for the LDAP library in DIR
+  --with-mailprog=NAME    use "NAME -t" for mail transport
+  --with-gnu-ld           assume the C compiler uses GNU ld default=no
+  --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
+  --without-libiconv-prefix     don't search for libiconv in includedir and libdir
+  --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
+  --without-libintl-prefix     don't search for libintl in includedir and libdir
+  --with-zlib=DIR         use libz in DIR
+  --with-bzip2=DIR        look for bzip2 in DIR
+  --with-readline=DIR     look for the readline library in DIR
+
+Some influential environment variables:
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  SYSROOT     locate config scripts also below that directory
+  CPP         C preprocessor
+  YAT2M       tool to convert texi to man pages
+  CC_FOR_BUILD
+              build system C compiler
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  SQLITE3_CFLAGS
+              C compiler flags for SQLITE3, overriding pkg-config
+  SQLITE3_LIBS
+              linker flags for SQLITE3, overriding pkg-config
+  LIBGNUTLS_CFLAGS
+              C compiler flags for LIBGNUTLS, overriding pkg-config
+  LIBGNUTLS_LIBS
+              linker flags for LIBGNUTLS, overriding pkg-config
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to <https://bugs.gnupg.org>.

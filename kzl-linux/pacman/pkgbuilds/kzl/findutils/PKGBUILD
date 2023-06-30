@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=findutils
-pkgver=4.9.0.22
-pkgrel=5
+pkgver=4.9.0.32
+pkgrel=2
 epoch=
 pkgdesc="GNU utilities to locate files"
 arch=('x86_64')
@@ -45,7 +45,9 @@ package() {
   cd $pkgname
 
   make DESTDIR="$pkgdir" install
+
   rm "$pkgdir"/usr/bin/{locate,updatedb}
   rm "$pkgdir"/usr/share/man/man1/{locate,updatedb}.1
   rm -r "$pkgdir"/usr/share/man/man5
+  rm -r "$pkgdir"/usr/var
 }

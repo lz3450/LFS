@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.python.org/downloads/source/ | grep -Po '(?<=Latest Python 3 Release - Python )\d\.\d\d\.\d(\d)?')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.python.org/downloads/source/ | grep -oP 'Latest Python 3 Release - Python \K\d\.\d\d\.\d(\d)?')
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/cpython"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

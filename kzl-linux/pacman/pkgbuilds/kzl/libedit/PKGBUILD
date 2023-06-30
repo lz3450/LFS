@@ -2,7 +2,7 @@
 
 pkgname=libedit
 pkgver=20221030.3.1
-pkgrel=2
+pkgrel=7
 epoch=
 pkgdesc="Command line editor library providing generic line editing, history, and tokenization functions"
 arch=('x86_64')

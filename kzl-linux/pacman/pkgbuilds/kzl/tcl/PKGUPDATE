@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://www.tcl-lang.org/software/tcltk/download.html | grep -Po '(?<=tcl)\d\.\d\.\d\d' | head -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://www.tcl-lang.org/software/tcltk/download.html | grep -oP 'tcl\K\d\.\d\.\d\d' | head -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname$pkgver/unix"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}
