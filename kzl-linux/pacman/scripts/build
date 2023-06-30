@@ -332,6 +332,7 @@ kzl_stage3_pkgs=(
     ################
     # texlive
     ################
+    # libpaper
     # libpng
     # freetype2
     # fontconfig
@@ -369,6 +370,8 @@ kzl_stage3_pkgs=(
     # tree
     # minicom
     # dfu-util
+    # mtools
+    # smartmontools
 )
 
 # functions
