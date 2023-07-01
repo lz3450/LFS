@@ -95,7 +95,7 @@ kzl_stage2_pkgs=(
     ################
     # bzip2
     # pcre2 less gzip
-    # po4a xz
+    # xz
     # attr acl tar
 
     ################
@@ -458,8 +458,14 @@ build() {
     updatepkg >> $_log 2>&1 || _updated=$?
 
     _cleanbuild='C'
-    if [ "$_updated" -ge 3 ]; then
-        error "Cannot update the PKGBUILD." 4
+    if [ "$_updated" -eq -1 ]; then
+        warning "Current version is newer."
+    elif [ "$_updated" -eq 0 ]; then
+        info "PKGBUILD is up to date."
+    elif [ "$_updated" -eq 2 ]; then
+        warning "PKGUPDATE does not exist."
+    elif [ "$_updated" -ge 3 ]; then
+        error "Cannot update the PKGBUILD (error code: $_updated)." 4
     elif [ "$_updated" -eq 1 ]; then
         info "Package \"$_pkgbase\" is updated."
         _cleanbuild='e'

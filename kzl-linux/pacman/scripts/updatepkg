@@ -59,14 +59,14 @@ PKGBUILDDIR=$(pwd)
 result=0
 
 if [ -f PKGUPDATE ]; then
-    unset new_version old_version pre_update post_update
+    unset new_version current_version pre_update post_update
     . PKGUPDATE || :
     if [ -z $new_version ]; then
         error 'Cannot get new version.' 6
     fi
-    old_version=${old_version:-$(cat PKGBUILD | grep -oP 'pkgver=\K.+$')}
-    old_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
-    new_pkgrel=$((old_pkgrel + 1))
+    current_version=${current_version:-$(cat PKGBUILD | grep -oP 'pkgver=\K.+$')}
+    current_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
+    new_pkgrel=$((current_pkgrel + 1))
 
     # run pre_update
     if have_function 'pre_update'; then
@@ -74,18 +74,18 @@ if [ -f PKGUPDATE ]; then
         pre_update
     fi
 
-    result=$(vercmp $new_version $old_version)
+    result=$(vercmp $new_version $current_version)
     if [ $result -gt 0 ]; then
         result=1
-        info "PKGBUILD updated: $old_version => $new_version"
-        sed -i "/^pkgver=/s/$old_version/$new_version/" PKGBUILD
-        sed -i "/^pkgrel=/s/$old_pkgrel/1/" PKGBUILD
+        info "PKGBUILD updated: $current_version => $new_version"
+        sed -i "/^pkgver=/s/$current_version/$new_version/" PKGBUILD
+        sed -i "/^pkgrel=/s/$current_pkgrel/1/" PKGBUILD
         info "running updpkgsums..."
         updpkgsums || result=2
     elif [ $result -eq 0 ] || [ $result -lt 0 ]; then
         result=0
-        sed -i "/^pkgrel=/s/$old_pkgrel/$new_pkgrel/" PKGBUILD
-        info "PKGBUILD is already updated."
+        sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" PKGBUILD
+        info "PKGBUILD is up to date."
     else
         result=-1
     fi
@@ -99,7 +99,7 @@ else
     result=2
 fi
 
-# -1: old version is newer
+# -1: current version is newer
 # 0: no update
 # 1: updated
 # 2: PKGUPDATE does not exist
