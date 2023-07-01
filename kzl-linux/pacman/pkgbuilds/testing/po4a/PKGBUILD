@@ -2,7 +2,7 @@
 
 pkgname=po4a
 pkgver=0.69
-pkgrel=1
+pkgrel=8
 epoch=
 pkgdesc="Tools for helping translation of documentation"
 arch=('any')
@@ -21,6 +21,6 @@ build() {
 package() {
   cd $pkgname
 
-  perl Build destdir="$pkgdir/" install
+  perl Build destdir="$pkgdir" install
   find "$pkgdir/" -name .packlist -o -name perllocal.pod -delete
 }
