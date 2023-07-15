@@ -2,7 +2,7 @@
 
 pkgname=libsigsegv
 pkgver=2.14
-pkgrel=1
+pkgrel=2
 epoch=
 arch=('x86_64')
 pkgdesc="Page fault detection library"
@@ -26,17 +26,17 @@ build() {
     --prefix=/usr \
     --enable-shared
 
-  make -O
+  make
 }
 
 check() {
   cd $pkgname
 
-  make -O check
+  make check
 }
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
