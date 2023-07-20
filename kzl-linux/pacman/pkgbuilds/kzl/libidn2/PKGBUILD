@@ -2,7 +2,7 @@
 
 pkgname=libidn2
 pkgver=2.3.4
-pkgrel=7
+pkgrel=9
 epoch=
 pkgdesc="Free software implementation of IDNA2008, Punycode and TR46"
 arch=('x86_64')
@@ -36,5 +36,5 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

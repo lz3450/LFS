@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pam-config
-pkgver=2023.04.09
+pkgver=2023.07.18
 pkgrel=1
 epoch=
 pkgdesc="PAM configuration"

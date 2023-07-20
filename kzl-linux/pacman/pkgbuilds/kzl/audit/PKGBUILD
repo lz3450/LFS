@@ -2,7 +2,7 @@
 
 pkgname=audit
 pkgver=3.1
-pkgrel=2
+pkgrel=4
 epoch=
 pkgdesc="Userspace components of the audit framework"
 arch=('x86_64')

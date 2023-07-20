@@ -2,7 +2,7 @@
 
 pkgname=libcap-ng
 pkgver=0.8.3
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Library making programming with POSIX capabilities easier than traditional libcap"
 arch=('x86_64')
@@ -38,5 +38,5 @@ check() {
 package() {
   cd libcap-ng
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

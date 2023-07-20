@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://people.redhat.com/sgrubb/libcap-ng/ | grep -Po '(?<=Latest Release is )\d\.\d\.\d')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://people.redhat.com/sgrubb/libcap-ng/ | grep -Po '(?<=Latest Release is )\d\.\d\.\d')
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}
