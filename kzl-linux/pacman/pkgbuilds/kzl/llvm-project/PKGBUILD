@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=llvm-project
-pkgver=16.0.1
-pkgrel=3
+pkgver=16.0.6
+pkgrel=2
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
@@ -111,5 +111,5 @@ check() {
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir/" ninja -C build install
+  DESTDIR="$pkgdir" ninja -C build install
 }
