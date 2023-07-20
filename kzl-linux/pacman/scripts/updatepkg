@@ -106,5 +106,5 @@ fi
 # 3: makepkg -Co error
 # 4: post_update error
 # 5: makepkg.conf not found
-# 6: PKGUPDATE error
+# 6: cannot get new version
 exit $result
