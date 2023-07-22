@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://github.com/P-H-C/phc-winner-argon2/tags | grep -Po '(?<=phc-winner-argon2/releases/tag/)\d{8}' | head -1)
+new_version=$(git ls-remote --tags https://github.com/P-H-C/phc-winner-argon2.git | grep -Po '(?<=refs/tags/)\d{8}' | sort -V | head -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/phc-winner-$pkgname"
+    cat Makefile > "$PKGBUILDDIR"/help.txt
+}

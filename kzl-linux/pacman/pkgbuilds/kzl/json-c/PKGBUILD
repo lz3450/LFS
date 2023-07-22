@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=json-c
-pkgver=0.15
+pkgver=0.16
 pkgrel=1
 epoch=
 pkgdesc="A JSON implementation in C"
@@ -37,5 +37,5 @@ check() {
 package() {
   cd $pkgname
 
-  cmake --build build --target install -- DESTDIR="$pkgdir/"
+  DESTDIR="$pkgdir" cmake --build build --target install
 }

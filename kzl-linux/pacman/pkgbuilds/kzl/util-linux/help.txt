@@ -1,0 +1,365 @@
+`configure' configures util-linux 2.39.1 to adapt to many kinds of systems.
+
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+To assign environment variables (e.g., CC, CFLAGS...), specify them as
+VAR=VALUE.  See below for descriptions of some of the useful variables.
+
+Defaults for the options are specified in brackets.
+
+Configuration:
+  -h, --help              display this help and exit
+      --help=short        display options specific to this package
+      --help=recursive    display the short help of all the included packages
+  -V, --version           display version information and exit
+  -q, --quiet, --silent   do not print `checking ...' messages
+      --cache-file=FILE   cache test results in FILE [disabled]
+  -C, --config-cache      alias for `--cache-file=config.cache'
+  -n, --no-create         do not create output files
+      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+
+Installation directories:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr]
+  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                          [PREFIX]
+
+By default, `make install' will install all the files in
+`/usr/bin', `/usr/lib' etc.  You can specify
+an installation prefix other than `/usr' using `--prefix',
+for instance `--prefix=$HOME'.
+
+For better control, use the options below.
+
+Fine tuning of the installation directories:
+  --bindir=DIR            user executables [EPREFIX/bin]
+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR        program executables [EPREFIX/libexec]
+  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+  --libdir=DIR            object code libraries [EPREFIX/lib]
+  --includedir=DIR        C header files [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR           info documentation [DATAROOTDIR/info]
+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR            man documentation [DATAROOTDIR/man]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/util-linux]
+  --htmldir=DIR           html documentation [DOCDIR]
+  --dvidir=DIR            dvi documentation [DOCDIR]
+  --pdfdir=DIR            pdf documentation [DOCDIR]
+  --psdir=DIR             ps documentation [DOCDIR]
+
+Program names:
+  --program-prefix=PREFIX            prepend PREFIX to installed program names
+  --program-suffix=SUFFIX            append SUFFIX to installed program names
+  --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-dependency-tracking
+                          do not reject slow dependency extractors
+  --disable-dependency-tracking
+                          speeds up one-time build
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
+  --enable-werror         make all compiler warnings into errors
+  --enable-asan           compile with Address Sanitizer
+  --enable-ubsan          compile with UBsan
+  --enable-fuzzing-engine compile with fuzzing engine
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-static[=PKGS]  build static libraries [default=yes]
+  --enable-fast-install[=PKGS]
+                          optimize for fast installation [default=yes]
+  --disable-libtool-lock  avoid locking (might break parallel builds)
+  --disable-symvers       disable library symbol versioning [default=auto]
+  --enable-gtk-doc        use gtk-doc to build documentation [[default=no]]
+  --disable-largefile     omit support for large files
+  --disable-assert        turn off assertions
+  --disable-nls           do not use Native Language Support
+  --disable-rpath         do not hardcode runtime library paths
+  --enable-static-programs=LIST
+                          link static the programs in LIST (comma-separated,
+                          supported for blkid, fdisk, losetup, mount, nsenter,
+                          sfdisk, umount, unshare)
+  --disable-all-programs  disable everything, might be overridden by
+                          --enable-<name>
+  --disable-asciidoc      do not generate man pages from asciidoc
+  --disable-poman         generate translated man pages
+  --disable-tls           disable use of thread local support
+  --disable-widechar      do not compile wide character support
+  --disable-libuuid       do not build libuuid and uuid utilities
+  --enable-libuuid-force-uuidd
+                          support uuidd even though the daemon is not built
+  --disable-libblkid      do not build libblkid and many related utilities
+  --disable-libmount      do not build libmount
+  --disable-libmount-mountfd-support
+                          do not use new mount API based on FDs
+  --disable-libsmartcols  do not build libsmartcols
+  --disable-libfdisk      do not build libfdisk
+  --disable-fdisks        do not build fdisk(8), sfdisk(8) and cfdisk(8)
+  --disable-mount         do not build mount(8) and umount(8)
+  --disable-losetup       do not build losetup
+  --disable-zramctl       do not build zramctl
+  --disable-fsck          do not build fsck
+  --disable-partx         do not build addpart, delpart, partx
+  --disable-uuidd         do not build the uuid daemon
+  --disable-uuidgen       do not build uuidgen
+  --disable-blkid         do not build blkid(8)
+  --disable-wipefs        do not build wipefs
+  --disable-mountpoint    do not build mountpoint
+  --disable-fallocate     do not build fallocate
+  --disable-unshare       do not build unshare
+  --disable-nsenter       do not build nsenter
+  --disable-setpriv       do not build setpriv
+  --disable-hardlink      do not build hardlink
+  --disable-eject         do not build eject
+  --disable-agetty        do not build agetty
+  --disable-plymouth_support
+                          do not care about plymouth in sylogin(8) and
+                          agetty(8)
+  --disable-cramfs        do not build fsck.cramfs, mkfs.cramfs
+  --disable-bfs           do not build mkfs.bfs
+  --disable-minix         do not build fsck.minix, mkfs.minix
+  --enable-fdformat       build fdformat
+  --disable-hwclock       do not build hwclock
+  --disable-hwclock-cmos  do not use CMOS clock
+  --disable-hwclock-gplv3 do not use datetime parsing GPLv3 code
+  --disable-mkfs          do not build mkfs(8)
+  --disable-fstrim        do not build fstrim(8)
+  --disable-swapon        do not build swapon(8) and swapoff(8)
+  --disable-lscpu         do not build lscpu
+  --disable-lsfd          do not build lsfd
+  --disable-lslogins      do not build lslogins
+  --disable-wdctl         do not build wdctl
+  --disable-cal           do not build cal
+  --disable-logger        do not build logger
+  --disable-whereis       do not build whereis
+  --disable-pipesz        do not build pipesz
+  --disable-waitpid       do not build waitpid
+  --disable-switch_root   do not build switch_root
+  --disable-pivot_root    do not build pivot_root
+  --disable-lsmem         do not build lsmem
+  --disable-chmem         do not build chmem
+  --disable-ipcmk         do not build ipcmk
+  --disable-ipcrm         do not build ipcrm
+  --disable-ipcs          do not build ipcs
+  --disable-irqtop        do not build irqtop
+  --disable-lsirq         do not build lsirq
+  --disable-lsns          do not build lsns
+  --disable-rfkill        do not build rfkill
+  --disable-scriptutils   do not build script, scriptreplay and scriptlive
+  --enable-tunelp         build tunelp
+  --disable-kill          do not build kill
+  --disable-last          do not build last
+  --disable-utmpdump      do not build utmpdump
+  --enable-line           build line
+  --disable-mesg          do not build mesg
+  --disable-raw           do not build raw
+  --disable-rename        do not build rename
+  --enable-vipw           build vipw
+  --enable-newgrp         build newgrp
+  --disable-chfn-chsh-password
+                          do not require the user to enter the password in
+                          chfn and chsh
+  --disable-chfn-chsh     do not build chfn and chsh
+  --disable-chsh-only-listed
+                          chsh: allow shells not in /etc/shells
+  --disable-login         do not build login
+  --enable-login-chown-vcs
+                          let login chown /dev/vcsN
+  --enable-login-stat-mail
+                          let login stat() the mailbox
+  --disable-nologin       do not build nologin
+  --disable-sulogin       do not build sulogin
+  --disable-su            do not build su
+  --disable-runuser       do not build runuser
+  --disable-ul            do not build ul
+  --disable-more          do not build more
+  --enable-pg             build pg
+  --disable-setterm       do not build setterm
+  --disable-schedutils    do not build chrt, ionice, taskset
+  --disable-wall          do not build wall
+  --enable-write          build write
+  --disable-bash-completion
+                          do not install bash completion files
+  --disable-pylibmount    do not build pylibmount
+  --disable-pg-bell       let pg not ring the bell on invalid keys
+  --enable-fs-paths-default=paths
+                          default search path for fs helpers
+                          [/sbin:/sbin/fs.d:/sbin/fs]
+  --enable-fs-paths-extra=paths
+                          additional search paths for fs helpers
+  --disable-use-tty-group do not install wall and write setgid tty
+  --enable-sulogin-emergency-mount
+                          use emergency mount of /dev and /proc for sulogin
+  --enable-usrdir-path    use only /usr paths in PATH env. variable
+                          (recommended on systems with /bin -> /usr/bin
+                          symlinks)
+  --disable-makeinstall-chown
+                          do not do chown-like operations during "make
+                          install"
+  --disable-makeinstall-setuid
+                          do not do setuid chmod operations during "make
+                          install"
+  --disable-colors-default
+                          do not colorize output from utils by default
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+                          both]
+  --with-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
+                          compiler's sysroot if not specified).
+  --with-pkgconfigdir     pkg-config installation directory
+                          ['${usrlib_execdir}/pkgconfig']
+  --with-html-dir=PATH    path to installed docs
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
+  --without-libiconv-prefix     don't search for libiconv in includedir and libdir
+  --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
+  --without-libintl-prefix     don't search for libintl in includedir and libdir
+  --without-util          compile without libutil
+  --with-selinux          compile with SELinux support
+  --with-audit            compile with audit support
+  --without-udev          compile without udev support
+  --without-ncursesw      do not build with wide-char ncurses
+  --with-ncurses          build with non-wide ncurses
+  --with-slang            compile cfdisk with slang rather than ncurses
+  --without-tinfo         compile without libtinfo
+  --without-readline      do not build with GNU Readline support
+  --with-utempter         compile script(1) with libutempter
+  --without-cap-ng        compile without libcap-ng
+  --without-libz          compile without libz
+  --without-libmagic      compile without libmagic
+  --without-user          compile without libuser (remote chsh)
+  --without-btrfs         do not build with btrfs support
+  --without-systemd       do not build with systemd support
+  --with-systemdsystemunitdir=DIR
+                          directory for systemd unit files (requires systemd
+                          support)
+  --with-smack            build with SMACK support
+  --without-econf         do not use libeconf
+  --with-vendordir=DIR    Directory for distribution provided configuration
+                          files
+  --with-bashcompletiondir=DIR
+                          Bash completions directory
+  --without-python        do not build python bindings, use
+                          --with-python={2,3} to force version
+  --with-python-sys-prefix
+                          use Python's sys.prefix and sys.exec_prefix values
+  --with-python_prefix    override the default PYTHON_PREFIX
+  --with-python_exec_prefix
+                          override the default PYTHON_EXEC_PREFIX
+  --with-cryptsetup       compile with cryptsetup support
+
+Some influential environment variables:
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  SYSCONFSTATICDIR
+              Path to static system configuration, default ${prefix}/lib
+  YACC        The `Yet Another Compiler Compiler' implementation to use.
+              Defaults to the first program found out of: `bison -y', `byacc',
+              `yacc'.
+  YFLAGS      The list of arguments that will be passed by default to $YACC.
+              This script will default YFLAGS to the empty string to avoid a
+              default value of `-d' given by some make applications.
+  CPP         C preprocessor
+  CXX         C++ compiler command
+  CXXFLAGS    C++ compiler flags
+  LT_SYS_LIBRARY_PATH
+              User-defined run-time library search path.
+  CXXCPP      C++ preprocessor
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  SELINUX_CFLAGS
+              C compiler flags for SELINUX, overriding pkg-config
+  SELINUX_LIBS
+              linker flags for SELINUX, overriding pkg-config
+  NCURSESW_CFLAGS
+              C compiler flags for NCURSESW, overriding pkg-config
+  NCURSESW_LIBS
+              linker flags for NCURSESW, overriding pkg-config
+  NCURSES_CFLAGS
+              C compiler flags for NCURSES, overriding pkg-config
+  NCURSES_LIBS
+              linker flags for NCURSES, overriding pkg-config
+  TINFOW_CFLAGS
+              C compiler flags for TINFOW, overriding pkg-config
+  TINFOW_LIBS linker flags for TINFOW, overriding pkg-config
+  TINFO_CFLAGS
+              C compiler flags for TINFO, overriding pkg-config
+  TINFO_LIBS  linker flags for TINFO, overriding pkg-config
+  LIBUSER_CFLAGS
+              C compiler flags for LIBUSER, overriding pkg-config
+  LIBUSER_LIBS
+              linker flags for LIBUSER, overriding pkg-config
+  SYSTEMD_CFLAGS
+              C compiler flags for SYSTEMD, overriding pkg-config
+  SYSTEMD_LIBS
+              linker flags for SYSTEMD, overriding pkg-config
+  SYSTEMD_DAEMON_CFLAGS
+              C compiler flags for SYSTEMD_DAEMON, overriding pkg-config
+  SYSTEMD_DAEMON_LIBS
+              linker flags for SYSTEMD_DAEMON, overriding pkg-config
+  SYSTEMD_JOURNAL_CFLAGS
+              C compiler flags for SYSTEMD_JOURNAL, overriding pkg-config
+  SYSTEMD_JOURNAL_LIBS
+              linker flags for SYSTEMD_JOURNAL, overriding pkg-config
+  with_systemdsystemunitdir
+              value of systemdsystemunitdir for systemd, overriding pkg-config
+  ECONF_CFLAGS
+              C compiler flags for ECONF, overriding pkg-config
+  ECONF_LIBS  linker flags for ECONF, overriding pkg-config
+  with_bashcompletiondir
+              value of completionsdir for bash-completion, overriding
+              pkg-config
+  PYTHON      the Python interpreter
+  PYTHON_CFLAGS
+              C compiler flags for PYTHON, overriding pkg-config
+  PYTHON_LIBS linker flags for PYTHON, overriding pkg-config
+  CRYPTSETUP_CFLAGS
+              C compiler flags for CRYPTSETUP, overriding pkg-config
+  CRYPTSETUP_LIBS
+              linker flags for CRYPTSETUP, overriding pkg-config
+  SUID_CFLAGS CFLAGS used for binaries which are usually with the suid bit
+  SUID_LDFLAGS
+              LDFLAGS used for binaries which are usually with the suid bit
+  DAEMON_CFLAGS
+              CFLAGS used for binaries which are usually executed as daemons
+  DAEMON_LDFLAGS
+              LDFLAGS used for binaries which are usually executed as daemons
+  SOLIB_CFLAGS
+              CFLAGS used for shared libraries
+  SOLIB_LDFLAGS
+              LDFLAGS used for shared libraries
+  ADJTIME_PATH
+              Path to hwclock adjtime file, default /etc/adjtime
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to <kzak@redhat.com>.
+util-linux home page: <https://www.kernel.org/pub/linux/utils/util-linux/>.

@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://github.com/json-c/json-c/tags | grep -Po '(?<=json-c/releases/tag/json-c-)\d\.\d\d(?=-\d{8})')
+new_version=$(git ls-remote --tags https://github.com/json-c/json-c.git | grep -oP '(?<=refs/tags/json-c-)\d\.\d\d(?=-\d{8})' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cmake -LAH -S . -B tmp -DCMAKE_BUILD_TYPE=Release > "$PKGBUILDDIR"/help.txt
+}

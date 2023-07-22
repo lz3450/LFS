@@ -1,0 +1,440 @@
+-- The C compiler identification is GNU 13.1.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Looking for sys/resource.h
+-- Looking for sys/resource.h - found
+-- Looking for getrusage
+-- Looking for getrusage - found
+-- Wrote /home/kzl/makepkg/build/json-c/src/json-c/tmp/apps_config.h
+-- Looking for fcntl.h
+-- Looking for fcntl.h - found
+-- Looking for inttypes.h
+-- Looking for inttypes.h - found
+-- Looking for stdarg.h
+-- Looking for stdarg.h - found
+-- Looking for strings.h
+-- Looking for strings.h - found
+-- Looking for string.h
+-- Looking for string.h - found
+-- Looking for syslog.h
+-- Looking for syslog.h - found
+-- Looking for 4 include files stdlib.h, ..., float.h
+-- Looking for 4 include files stdlib.h, ..., float.h - found
+-- Looking for unistd.h
+-- Looking for unistd.h - found
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for dlfcn.h
+-- Looking for dlfcn.h - found
+-- Looking for endian.h
+-- Looking for endian.h - found
+-- Looking for limits.h
+-- Looking for limits.h - found
+-- Looking for locale.h
+-- Looking for locale.h - found
+-- Looking for memory.h
+-- Looking for memory.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stdlib.h
+-- Looking for stdlib.h - found
+-- Looking for sys/cdefs.h
+-- Looking for sys/cdefs.h - found
+-- Looking for sys/param.h
+-- Looking for sys/param.h - found
+-- Looking for sys/random.h
+-- Looking for sys/random.h - found
+-- Looking for sys/stat.h
+-- Looking for sys/stat.h - found
+-- Looking for xlocale.h
+-- Looking for xlocale.h - not found
+-- Looking for _isnan
+-- Looking for _isnan - not found
+-- Looking for _finite
+-- Looking for _finite - not found
+-- Looking for INFINITY
+-- Looking for INFINITY - found
+-- Looking for isinf
+-- Looking for isinf - found
+-- Looking for isnan
+-- Looking for isnan - found
+-- Looking for nan
+-- Looking for nan - found
+-- Looking for _doprnt
+-- Looking for _doprnt - not found
+-- Looking for snprintf
+-- Looking for snprintf - found
+-- Looking for vasprintf
+-- Looking for vasprintf - found
+-- Looking for vsnprintf
+-- Looking for vsnprintf - found
+-- Looking for vprintf
+-- Looking for vprintf - found
+-- Looking for arc4random
+-- Looking for arc4random - found
+-- Looking for open
+-- Looking for open - found
+-- Looking for realloc
+-- Looking for realloc - found
+-- Looking for setlocale
+-- Looking for setlocale - found
+-- Looking for uselocale
+-- Looking for uselocale - found
+-- Looking for strcasecmp
+-- Looking for strcasecmp - found
+-- Looking for strncasecmp
+-- Looking for strncasecmp - found
+-- Looking for strdup
+-- Looking for strdup - found
+-- Looking for strerror
+-- Looking for strerror - found
+-- Looking for vsyslog
+-- Looking for vsyslog - found
+-- Looking for getrandom
+-- Looking for getrandom - found
+-- Looking for strtoll
+-- Looking for strtoll - found
+-- Looking for strtoull
+-- Looking for strtoull - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of int
+-- Check size of int - done
+-- Check size of int64_t
+-- Check size of int64_t - done
+-- Check size of long
+-- Check size of long - done
+-- Check size of long long
+-- Check size of long long - done
+-- Check size of size_t
+-- Check size of size_t - done
+-- Check size of ssize_t
+-- Check size of ssize_t - done
+-- Performing Test HAS_GNU_WARNING_LONG
+-- Performing Test HAS_GNU_WARNING_LONG - Failed
+-- Performing Test HAVE_ATOMIC_BUILTINS
+-- Performing Test HAVE_ATOMIC_BUILTINS - Success
+-- Performing Test HAVE___THREAD
+-- Performing Test HAVE___THREAD - Success
+-- Wrote /home/kzl/makepkg/build/json-c/src/json-c/tmp/config.h
+-- Wrote /home/kzl/makepkg/build/json-c/src/json-c/tmp/json_config.h
+-- Performing Test REENTRANT_WORKS
+-- Performing Test REENTRANT_WORKS - Success
+-- Performing Test BSYMBOLIC_WORKS
+-- Performing Test BSYMBOLIC_WORKS - Success
+-- Performing Test VERSION_SCRIPT_WORKS
+-- Performing Test VERSION_SCRIPT_WORKS - Success
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Configuring done (4.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/kzl/makepkg/build/json-c/src/json-c/tmp
+-- Cache values
+// Default to building shared libraries
+BUILD_SHARED_LIBS:BOOL=ON
+
+// Default to building static libraries
+BUILD_STATIC_LIBS:BOOL=ON
+
+// Build the testing tree.
+BUILD_TESTING:BOOL=ON
+
+// Path to a program.
+CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
+
+// Path to a program.
+CMAKE_AR:FILEPATH=/usr/bin/ar
+
+// Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ...
+CMAKE_BUILD_TYPE:STRING=Release
+
+// Enable/Disable color output during build.
+CMAKE_COLOR_MAKEFILE:BOOL=ON
+
+// C compiler
+CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
+
+// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
+CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
+
+// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
+CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
+
+// Flags used by the C compiler during all build types.
+CMAKE_C_FLAGS:STRING=
+
+// Flags used by the C compiler during DEBUG builds.
+CMAKE_C_FLAGS_DEBUG:STRING=-g
+
+// Flags used by the C compiler during MINSIZEREL builds.
+CMAKE_C_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG
+
+// Flags used by the C compiler during RELEASE builds.
+CMAKE_C_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
+
+// Flags used by the C compiler during RELWITHDEBINFO builds.
+CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
+
+// Path to a program.
+CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
+
+// Flags used by the linker during all build types.
+CMAKE_EXE_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during DEBUG builds.
+CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during MINSIZEREL builds.
+CMAKE_EXE_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during RELEASE builds.
+CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during RELWITHDEBINFO builds.
+CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// Enable/Disable output of compile commands during generation.
+CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
+
+// User executables (bin)
+CMAKE_INSTALL_BINDIR:PATH=bin
+
+// Read-only architecture-independent data (DATAROOTDIR)
+CMAKE_INSTALL_DATADIR:PATH=
+
+// Read-only architecture-independent data root (share)
+CMAKE_INSTALL_DATAROOTDIR:PATH=share
+
+// Documentation root (DATAROOTDIR/doc/PROJECT_NAME)
+CMAKE_INSTALL_DOCDIR:PATH=
+
+// C header files (include)
+CMAKE_INSTALL_INCLUDEDIR:PATH=include
+
+// Info documentation (DATAROOTDIR/info)
+CMAKE_INSTALL_INFODIR:PATH=
+
+// Object code libraries (lib64)
+CMAKE_INSTALL_LIBDIR:PATH=lib64
+
+// Program executables (libexec)
+CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
+
+// Locale-dependent data (DATAROOTDIR/locale)
+CMAKE_INSTALL_LOCALEDIR:PATH=
+
+// Modifiable single-machine data (var)
+CMAKE_INSTALL_LOCALSTATEDIR:PATH=var
+
+// Man documentation (DATAROOTDIR/man)
+CMAKE_INSTALL_MANDIR:PATH=
+
+// C header files for non-gcc (/usr/include)
+CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
+
+// Install path prefix, prepended onto install directories.
+CMAKE_INSTALL_PREFIX:PATH=/usr/local
+
+// Run-time variable data (LOCALSTATEDIR/run)
+CMAKE_INSTALL_RUNSTATEDIR:PATH=
+
+// System admin executables (sbin)
+CMAKE_INSTALL_SBINDIR:PATH=sbin
+
+// Modifiable architecture-independent data (com)
+CMAKE_INSTALL_SHAREDSTATEDIR:PATH=com
+
+// Read-only single-machine data (etc)
+CMAKE_INSTALL_SYSCONFDIR:PATH=etc
+
+// Path to a program.
+CMAKE_LINKER:FILEPATH=/usr/bin/ld
+
+// Path to a program.
+CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
+
+// Flags used by the linker during the creation of modules during all build types.
+CMAKE_MODULE_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during the creation of modules during DEBUG builds.
+CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during the creation of modules during MINSIZEREL builds.
+CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during the creation of modules during RELEASE builds.
+CMAKE_MODULE_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during the creation of modules during RELWITHDEBINFO builds.
+CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// Path to a program.
+CMAKE_NM:FILEPATH=/usr/bin/nm
+
+// Path to a program.
+CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
+
+// Path to a program.
+CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
+
+// Path to a program.
+CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
+
+// Path to a program.
+CMAKE_READELF:FILEPATH=/usr/bin/readelf
+
+// Flags used by the linker during the creation of shared libraries during all build types.
+CMAKE_SHARED_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during the creation of shared libraries during DEBUG builds.
+CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during the creation of shared libraries during MINSIZEREL builds.
+CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during the creation of shared libraries during RELEASE builds.
+CMAKE_SHARED_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during the creation of shared libraries during RELWITHDEBINFO builds.
+CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// If set, runtime paths are not added when installing shared libraries, but are added when building.
+CMAKE_SKIP_INSTALL_RPATH:BOOL=NO
+
+// If set, runtime paths are not added when using shared libraries.
+CMAKE_SKIP_RPATH:BOOL=NO
+
+// Flags used by the linker during the creation of static libraries during all build types.
+CMAKE_STATIC_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during the creation of static libraries during DEBUG builds.
+CMAKE_STATIC_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during the creation of static libraries during MINSIZEREL builds.
+CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during the creation of static libraries during RELEASE builds.
+CMAKE_STATIC_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during the creation of static libraries during RELWITHDEBINFO builds.
+CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// Path to a program.
+CMAKE_STRIP:FILEPATH=/usr/bin/strip
+
+// If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.
+CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
+
+// Path to the coverage program that CTest uses for performing coverage inspection
+COVERAGE_COMMAND:FILEPATH=/usr/bin/gcov
+
+// Extra command line flags to pass to the coverage tool
+COVERAGE_EXTRA_FLAGS:STRING=-l
+
+// Enable to build Debian packages
+CPACK_BINARY_DEB:BOOL=OFF
+
+// Enable to build FreeBSD packages
+CPACK_BINARY_FREEBSD:BOOL=OFF
+
+// Enable to build IFW packages
+CPACK_BINARY_IFW:BOOL=OFF
+
+// Enable to build NSIS packages
+CPACK_BINARY_NSIS:BOOL=OFF
+
+// Enable to build RPM packages
+CPACK_BINARY_RPM:BOOL=OFF
+
+// Enable to build STGZ packages
+CPACK_BINARY_STGZ:BOOL=ON
+
+// Enable to build TBZ2 packages
+CPACK_BINARY_TBZ2:BOOL=OFF
+
+// Enable to build TGZ packages
+CPACK_BINARY_TGZ:BOOL=ON
+
+// Enable to build TXZ packages
+CPACK_BINARY_TXZ:BOOL=OFF
+
+// Enable to build TZ packages
+CPACK_BINARY_TZ:BOOL=ON
+
+// Enable to build RPM source packages
+CPACK_SOURCE_RPM:BOOL=OFF
+
+// Enable to build TBZ2 source packages
+CPACK_SOURCE_TBZ2:BOOL=ON
+
+// Enable to build TGZ source packages
+CPACK_SOURCE_TGZ:BOOL=ON
+
+// Enable to build TXZ source packages
+CPACK_SOURCE_TXZ:BOOL=ON
+
+// Enable to build TZ source packages
+CPACK_SOURCE_TZ:BOOL=ON
+
+// Enable to build ZIP source packages
+CPACK_SOURCE_ZIP:BOOL=OFF
+
+// How many times to retry timed-out CTest submissions.
+CTEST_SUBMIT_RETRY_COUNT:STRING=3
+
+// How long to wait between timed-out CTest submissions.
+CTEST_SUBMIT_RETRY_DELAY:STRING=5
+
+// Maximum time allowed before CTest will kill the test.
+DART_TESTING_TIMEOUT:STRING=1500
+
+// Avoid linking with -Bsymbolic-function.
+DISABLE_BSYMBOLIC:BOOL=OFF
+
+// Avoid linking against extra libraries, such as libbsd.
+DISABLE_EXTRA_LIBS:BOOL=OFF
+
+// Disable JSON pointer (RFC6901) support.
+DISABLE_JSON_POINTER:BOOL=OFF
+
+// Disable using Thread-Local Storage (HAVE___THREAD).
+DISABLE_THREAD_LOCAL_STORAGE:BOOL=OFF
+
+// Avoid treating compiler warnings as fatal errors.
+DISABLE_WERROR:BOOL=OFF
+
+// Dot tool for use with Doxygen
+DOXYGEN_DOT_EXECUTABLE:FILEPATH=DOXYGEN_DOT_EXECUTABLE-NOTFOUND
+
+// Doxygen documentation generation tool (https://www.doxygen.nl)
+DOXYGEN_EXECUTABLE:FILEPATH=DOXYGEN_EXECUTABLE-NOTFOUND
+
+// Enable RDRAND Hardware RNG Hash Seed.
+ENABLE_RDRAND:BOOL=OFF
+
+// Enable partial threading support.
+ENABLE_THREADING:BOOL=OFF
+
+// Path to a program.
+GITCOMMAND:FILEPATH=/usr/bin/git
+
+// Installation directory for pkgconfig (.pc) files
+INSTALL_PKGCONFIG_DIR:PATH=lib64/pkgconfig
+
+// Command to build the project
+MAKECOMMAND:STRING=/usr/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}" -- -i
+
+// Path to the memory checking command, used for memory error detection.
+MEMORYCHECK_COMMAND:FILEPATH=MEMORYCHECK_COMMAND-NOTFOUND
+
+// File that contains suppressions for the memory checker
+MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
+
+// Override json_c_get_random_seed() with custom code.
+OVERRIDE_GET_RANDOM_SEED:BOOL=OFF
+
+// Name of the computer/site where compile is being run
+SITE:STRING=LAB
+
