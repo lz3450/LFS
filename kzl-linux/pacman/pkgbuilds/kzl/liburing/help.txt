@@ -1,0 +1,13 @@
+
+Usage: configure [options]
+Options: [defaults in brackets after descriptions]
+  --help                   print this message
+  --prefix=PATH            install in PATH [/usr]
+  --includedir=PATH        install headers in PATH [/usr/include]
+  --libdir=PATH            install runtime libraries in PATH [/usr/lib]
+  --libdevdir=PATH         install development libraries in PATH [/usr/lib]
+  --mandir=PATH            install man pages in PATH [/usr/man]
+  --datadir=PATH           install shared data in PATH [/usr/share]
+  --cc=CMD                 use CMD as the C compiler
+  --cxx=CMD                use CMD as the C++ compiler
+  --nolibc                 build liburing without libc
