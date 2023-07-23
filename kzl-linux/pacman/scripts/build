@@ -147,7 +147,7 @@ kzl_stage2_pkgs=(
     ################
     # util-linux
     ################
-    # thin-provisioning-tools argon2 device-mapper json-c popt cryptsetup
+    # thin-provisioning-tools argon2 libaio device-mapper json-c popt cryptsetup
     # util-linux
 
     ################
