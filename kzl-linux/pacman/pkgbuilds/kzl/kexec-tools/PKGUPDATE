@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git | grep -Po '(?<=v)\d\.\d\.\d\d' | sort -V | tail -1)
+new_version=$(git ls-remote --tags https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git | grep -oP '(?<=refs/tags/v)\d\.\d\.\d\d' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

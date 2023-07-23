@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman-contrib
-pkgver=1.9.0
+pkgver=1.9.1
 pkgrel=2
 epoch=
 pkgdesc="Contributed scripts and tools for pacman systems"

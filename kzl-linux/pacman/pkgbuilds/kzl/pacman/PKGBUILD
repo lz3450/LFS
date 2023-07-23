@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=6.0.2
-pkgrel=1
+pkgrel=2
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -57,6 +57,7 @@ package() {
   meson install -C build --destdir="$pkgdir"
   
   sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-kzl-linux-gnu/' \
+      -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
       -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2"' \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS"' \
       -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \

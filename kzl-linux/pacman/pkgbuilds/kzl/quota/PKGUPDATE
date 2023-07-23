@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://sourceforge.net/projects/linuxquota/files/quota-tools/ | grep -Po '(?<=/projects/linuxquota/files/quota-tools/)\d\.\d\d' | head -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://sourceforge.net/projects/linuxquota/files/quota-tools/ | grep -oP '(?<=/projects/linuxquota/files/quota-tools/)\d\.\d\d' | head -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

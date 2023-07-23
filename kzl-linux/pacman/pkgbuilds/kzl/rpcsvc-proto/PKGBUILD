@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rpcsvc-proto
-pkgver=1.4.3
-pkgrel=4
+pkgver=1.4.4
+pkgrel=3
 epoch=
 pkgdesc="rpcsvc protocol definitions from glibc"
 arch=('x86_64')
@@ -29,5 +29,5 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

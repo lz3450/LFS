@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libpcap
-pkgver=1.10.3
-pkgrel=3
+pkgver=1.10.4
+pkgrel=1
 epoch=
 pkgdesc="A system-independent interface for user-level packet capture"
 arch=('x86_64')
@@ -32,5 +32,5 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libksba
-pkgver=1.6.3
-pkgrel=5
+pkgver=1.6.4
+pkgrel=1
 epoch=
 pkgdesc="A CMS and X.509 access library"
 arch=('x86_64')

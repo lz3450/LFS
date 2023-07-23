@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://www.netfilter.org/index.html | grep -Po '(?<=libnetfilter_conntrack )\d\.\d\.\d(?= released)' | head -1)
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://www.netfilter.org/index.html | grep -oP '(?<=libnetfilter_conntrack )\d\.\d\.\d(?= released)' | head -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

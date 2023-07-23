@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gpgme
-pkgver=1.19.0
-pkgrel=2
+pkgver=1.21.0
+pkgrel=1
 epoch=
 pkgdesc="A C wrapper library for GnuPG"
 arch=('x86_64')

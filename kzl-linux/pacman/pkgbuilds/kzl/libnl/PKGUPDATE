@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://github.com/thom311/libnl/tags | grep -Po '(?<=libnl/releases/tag/libnl)\d_\d_\d' | head -1 | sed 's/_/./g')
+new_version=$(git ls-remote --tags https://github.com/thom311/libnl.git | grep -oP '(?<=refs/tags/libnl)\d_\d_\d' | sort -V | tail -n1 | sed 's/_/./g')
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

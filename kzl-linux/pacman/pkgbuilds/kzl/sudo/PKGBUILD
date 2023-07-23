@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=sudo
-pkgver=1.9.13p3
-pkgrel=3
+pkgver=1.9.14p2
+pkgrel=1
 epoch=
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('x86_64')

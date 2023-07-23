@@ -85,7 +85,7 @@ Main project options:
   datadir                        share                                                             Data file directory                                          
   includedir                     include                                                           Header file directory                                        
   infodir                        share/info                                                        Info page directory                                          
-  libdir                         lib/x86_64-linux-gnu                                              Library directory                                            
+  libdir                         lib                                                               Library directory                                            
   libexecdir                     libexec                                                           Library executable directory                                 
   licensedir                                                                                       Licenses directory                                           
   localedir                      share/locale                                                      Locale data directory                                        
@@ -114,7 +114,6 @@ Main project options:
   file-seccomp                   auto                             [enabled, disabled, auto]        determine whether file is seccomp-enabled                    
   gpgme                          auto                             [enabled, disabled, auto]        use GPGME for PGP signature verification                     
   i18n                           true                             [true, false]                    enable localization of pacman, libalpm and scripts           
-  keyringdir                     pacman/keyrings                                                   Where to look for keyring files under datarootdir            
   ldconfig                       /sbin/ldconfig                                                    set the full path to ldconfig                                
   makepkg-template-dir           /usr/share/makepkg-template                                       template dir used by makepkg-template                        
   pkg-ext                        .pkg.tar.gz                                                       set the file extension used by packages                      

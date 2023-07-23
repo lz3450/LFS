@@ -1,5 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/archlinux/arch-install-scripts/tags | grep -Po '(?<=/arch-install-scripts/releases/tag/v)\d\d' | sort -V | tail -1)
+new_version=$(git ls-remote --tags https://github.com/archlinux/arch-install-scripts.git | grep -Po '(?<=refs/tags/v)\d\d' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cat Makefile > "$PKGBUILDDIR"/help.txt
 }

@@ -1,0 +1,237 @@
+`configure' configures dbus 1.14.8 to adapt to many kinds of systems.
+
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+To assign environment variables (e.g., CC, CFLAGS...), specify them as
+VAR=VALUE.  See below for descriptions of some of the useful variables.
+
+Defaults for the options are specified in brackets.
+
+Configuration:
+  -h, --help              display this help and exit
+      --help=short        display options specific to this package
+      --help=recursive    display the short help of all the included packages
+  -V, --version           display version information and exit
+  -q, --quiet, --silent   do not print `checking ...' messages
+      --cache-file=FILE   cache test results in FILE [disabled]
+  -C, --config-cache      alias for `--cache-file=config.cache'
+  -n, --no-create         do not create output files
+      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+
+Installation directories:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr/local]
+  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                          [PREFIX]
+
+By default, `make install' will install all the files in
+`/usr/local/bin', `/usr/local/lib' etc.  You can specify
+an installation prefix other than `/usr/local' using `--prefix',
+for instance `--prefix=$HOME'.
+
+For better control, use the options below.
+
+Fine tuning of the installation directories:
+  --bindir=DIR            user executables [EPREFIX/bin]
+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR        program executables [EPREFIX/libexec]
+  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+  --libdir=DIR            object code libraries [EPREFIX/lib]
+  --includedir=DIR        C header files [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR           info documentation [DATAROOTDIR/info]
+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR            man documentation [DATAROOTDIR/man]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/dbus]
+  --htmldir=DIR           html documentation [DOCDIR]
+  --dvidir=DIR            dvi documentation [DOCDIR]
+  --pdfdir=DIR            pdf documentation [DOCDIR]
+  --psdir=DIR             ps documentation [DOCDIR]
+
+Program names:
+  --program-prefix=PREFIX            prepend PREFIX to installed program names
+  --program-suffix=SUFFIX            append SUFFIX to installed program names
+  --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
+  --disable-maintainer-mode
+                          disable make rules and dependencies not useful (and
+                          sometimes confusing) to the casual installer
+  --enable-developer      set defaults to be appropriate for a D-Bus developer
+                          instead of a distribution/end-user
+  --enable-debug=[yes/info/profile/no]
+                          compile with debugging
+  --enable-dependency-tracking
+                          do not reject slow dependency extractors
+  --disable-dependency-tracking
+                          speeds up one-time build
+  --disable-largefile     omit support for large files
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-static[=PKGS]  build static libraries [default=yes]
+  --enable-fast-install[=PKGS]
+                          optimize for fast installation [default=yes]
+  --disable-libtool-lock  avoid locking (might break parallel builds)
+  --enable-ansi           enable -ansi -pedantic gcc flags
+  --enable-verbose-mode   support verbose debug mode
+  --enable-asserts        include assertion checks
+  --enable-checks         include sanity checks on public API
+  --enable-xml-docs       build XML documentation (requires xmlto)
+  --enable-doxygen-docs   build DOXYGEN documentation (requires Doxygen)
+  --enable-ducktype-docs  build Ducktype documentation (requires Ducktype)
+  --enable-selinux        build with SELinux support
+  --enable-apparmor       build with AppArmor support
+  --enable-libaudit       build audit daemon support for SELinux
+  --enable-inotify        build with inotify support (linux only)
+  --enable-kqueue         build with kqueue support
+  --enable-console-owner-file
+                          enable console owner file
+  --enable-launchd        build with launchd auto-launch support
+  --enable-systemd        build with systemd at_console support
+  --disable-traditional-activation
+                          Do not build support for service activation without
+                          using SystemdService
+  --enable-embedded-tests enable unit test code in the library and binaries
+  --enable-modular-tests  enable modular regression tests (requires GLib)
+  --enable-tests          enable/disable all tests, overriding
+                          embedded-tests/modular-tests
+  --enable-installed-tests
+                          enable unit test code in the library and binaries
+  --enable-code-coverage  Whether to enable code coverage support
+  --enable-epoll          use epoll(4) on Linux
+  --enable-x11-autolaunch build with X11 auto-launch support
+  --enable-compile-warnings=[no/yes/error]
+                          Enable compiler warnings and errors
+  --disable-Werror        Unconditionally make all compiler warnings non-fatal
+  --enable-ld-version-script
+                          enable linker version script (default is enabled
+                          when possible)
+  --enable-qt-help=auto|yes|no
+                          Build Qt help documentation
+  --enable-relocation=yes/no/auto
+                          Make pkg-config metadata relocatable [default=auto]
+  --disable-stats         disable bus daemon usage statistics
+  --enable-user-session   enable user-session semantics for session bus under
+                          systemd
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+                          both]
+  --with-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
+                          compiler's sysroot if not specified).
+  --with-session-socket-dir=dirname
+                          Where to put sockets for the per-login-session
+                          message bus
+  --with-test-socket-dir=dirname
+                          Where to put sockets for make check
+  --with-system-pid-file=pidfile
+                          PID file for systemwide daemon
+  --with-system-socket=filename
+                          UNIX domain socket for systemwide daemon
+  --with-console-auth-dir=dirname
+                          directory to check for console ownerhip
+  --with-console-owner-file=filename
+                          file whose owner determines current console owner
+  --with-launchd-agent-dir=dirname
+                          directory to put the launchd agent (default:
+                          /Library/LaunchAgents)
+  --with-dbus-user=<user> User for running the DBUS daemon (messagebus)
+  --with-test-user=<user> Unprivileged user for regression tests, other than
+                          root and the dbus_user (default: nobody)
+  --with-dbus-daemondir=dirname
+                          Directory for installing the DBUS daemon
+  --with-gcov=GCOV        use given GCOV for coverage (GCOV=gcov).
+  --with-valgrind         Add instrumentation to help valgrind to understand
+                          our allocator
+  --without-x             build without X11 support
+  --with-qchdir=DIR       Directory for installing Qt help file
+  --with-systemdsystemunitdir=DIR
+                          Directory for systemd service files
+  --with-systemduserunitdir=DIR
+                          Directory for systemd user service files
+  --with-dbus-test-dir=dirname
+                          path where the tests tools are available
+  --with-dbus-session-bus-listen-address=ADDRESS
+                          default address for a session bus to listen on (see
+                          configure.ac)
+  --with-dbus-session-bus-connect-address=ADDRESS
+                          fallback address for a session bus client to connect
+                          to (see configure.ac)
+
+Some influential environment variables:
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  CXX         C++ compiler command
+  CXXFLAGS    C++ compiler flags
+  LT_SYS_LIBRARY_PATH
+              User-defined run-time library search path.
+  CXXCPP      C++ preprocessor
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  GLIB_CFLAGS C compiler flags for GLIB, overriding pkg-config
+  GLIB_LIBS   linker flags for GLIB, overriding pkg-config
+  GIO_UNIX_CFLAGS
+              C compiler flags for GIO_UNIX, overriding pkg-config
+  GIO_UNIX_LIBS
+              linker flags for GIO_UNIX, overriding pkg-config
+  EXPAT_CFLAGS
+              C compiler flags for EXPAT, overriding pkg-config
+  EXPAT_LIBS  linker flags for EXPAT, overriding pkg-config
+  THREAD_LIBS
+  SELINUX_CFLAGS
+              C compiler flags for SELINUX, overriding pkg-config
+  SELINUX_LIBS
+              linker flags for SELINUX, overriding pkg-config
+  APPARMOR_CFLAGS
+              C compiler flags for APPARMOR, overriding pkg-config
+  APPARMOR_LIBS
+              linker flags for APPARMOR, overriding pkg-config
+  APPARMOR_2_10_CFLAGS
+              C compiler flags for APPARMOR_2_10, overriding pkg-config
+  APPARMOR_2_10_LIBS
+              linker flags for APPARMOR_2_10, overriding pkg-config
+  SYSTEMD_CFLAGS
+              C compiler flags for SYSTEMD, overriding pkg-config
+  SYSTEMD_LIBS
+              linker flags for SYSTEMD, overriding pkg-config
+  VALGRIND_CFLAGS
+              C compiler flags for VALGRIND, overriding pkg-config
+  VALGRIND_LIBS
+              linker flags for VALGRIND, overriding pkg-config
+  X_CFLAGS    C compiler flags for X, overriding pkg-config
+  X_LIBS      linker flags for X, overriding pkg-config
+  SANITIZE_CFLAGS
+              Extra CFLAGS for modules that are instrumented for
+              error-checking
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to <https://gitlab.freedesktop.org/dbus/dbus/issues>.

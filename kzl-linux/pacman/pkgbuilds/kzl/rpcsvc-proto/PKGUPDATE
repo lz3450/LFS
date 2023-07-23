@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://github.com/thkukuk/rpcsvc-proto/tags | grep -Po '(?<=rpcsvc-proto/releases/tag/v)\d\.\d\.\d' | head -1)
+new_version=$(git ls-remote --tags https://github.com/thkukuk/rpcsvc-proto.git | grep -oP '(?<=refs/tags/v)\d\.\d\.\d' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}
