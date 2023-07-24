@@ -2,7 +2,7 @@
 
 pkgname=libnfnetlink
 pkgver=1.0.2
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="The low-level library for netfilter related kernel/userspace communication"
 arch=('x86_64')
@@ -28,5 +28,5 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

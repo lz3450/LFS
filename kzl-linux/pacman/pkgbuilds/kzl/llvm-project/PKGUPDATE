@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://llvm.org/ | grep -Po '(?<=: LLVM )\d+\.\d\.\d(?= is now )')
+new_version=$(curl -L --stderr - https://llvm.org/ | grep -oP '(?<=: LLVM )\d+\.\d\.\d(?= is now )')
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cmake -LAH -S llvm -B tmp -DCMAKE_BUILD_TYPE=Release > "$PKGBUILDDIR"/help.txt
+}

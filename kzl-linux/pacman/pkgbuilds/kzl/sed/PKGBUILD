@@ -2,7 +2,7 @@
 
 pkgname=sed
 pkgver=4.9
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="GNU stream editor"
 arch=('x86_64')

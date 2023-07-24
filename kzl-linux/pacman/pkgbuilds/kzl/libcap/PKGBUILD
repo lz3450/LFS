@@ -2,7 +2,7 @@
 
 pkgname=libcap
 pkgver=2.68
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="POSIX 1003.1e capabilities"
 arch=('x86_64')

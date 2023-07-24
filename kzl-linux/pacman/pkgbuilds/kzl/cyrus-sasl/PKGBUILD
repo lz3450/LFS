@@ -2,7 +2,7 @@
 
 pkgname=cyrus-sasl
 pkgver=2.1.28
-pkgrel=2
+pkgrel=4
 epoch=
 pkgdesc="An implementation of Cyrus Simple Authentication Service Layer (SASL)"
 arch=('x86_64')

@@ -1,1 +1,6 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.libssh2.org/ | grep -Po '(?<=libssh2-)\d\.\d\d\.\d' | head -1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

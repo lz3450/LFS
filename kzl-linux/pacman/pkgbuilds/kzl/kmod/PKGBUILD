@@ -2,7 +2,7 @@
 
 pkgname=kmod
 pkgver=30
-pkgrel=7
+pkgrel=12
 epoch=
 pkgdesc="Linux kernel module management tools and library"
 arch=('x86_64')
@@ -14,7 +14,7 @@ source=(git+$url#tag=v$pkgver
         depmod-search.conf)
 sha256sums=('SKIP'
             '31699f1b8b33f1bd61111328375c10d75c587e49c4fee9b7778e664a9354e4b0'
-            'c11c2a0f66ea405493e8617689ca10818dc81dd1dddc19bdb220c8b2917119c1'
+            '98b99f05eb6898690da96a52d82f53235baaafeeeb97d2fa5fbbc0b86eaa927e'
             '1a92bfeae870f61ce814577e69d2a147a9c0caf6aed1131243e4179241fcc4a8')
 
 prepare() {

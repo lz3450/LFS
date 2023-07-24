@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://ftp.gnu.org/gnu/grep/ | grep -Po '(?<=grep-)\d\.\d' | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/grep/ | grep -oP 'grep-\K[0-9]+(\.[0-9]+)?' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

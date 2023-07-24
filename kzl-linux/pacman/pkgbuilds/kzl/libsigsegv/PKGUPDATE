@@ -1,0 +1,6 @@
+new_version=$(git ls-remote --tags https://git.savannah.gnu.org/git/libsigsegv.git | grep -oP "refs/tags/v\K[0-9]+\.[0-9]+" | sort -V | tail -n1)
+
+post_update() {
+  cd "$BUILDDIR/$pkgname/src/$pkgname"
+  ./configure --help > "$PKGBUILDDIR"/help.txt
+}

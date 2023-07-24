@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pam
-pkgver=1.5.2
-pkgrel=4
+pkgver=1.5.3
+pkgrel=2
 epoch=
 pkgdesc="PAM (Pluggable Authentication Modules) library"
 arch=('x86_64')

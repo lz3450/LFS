@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libxslt
-pkgver=1.1.37
-pkgrel=5
+pkgver=1.1.38
+pkgrel=1
 epoch=
 pkgdesc="An XML language to define transformation for XML"
 arch=('x86_64')

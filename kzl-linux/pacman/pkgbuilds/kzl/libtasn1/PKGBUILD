@@ -2,33 +2,35 @@
 
 pkgname=libtasn1
 pkgver=4.19.0
-pkgrel=1
+pkgrel=6
 epoch=
 pkgdesc="The ASN.1 library used by GnuTLS, p11-kit"
 arch=('x86_64')
 url="https://www.gnu.org/software/libtasn1/"
 license=('KZL')
 # makedepends=(gtk-doc)
-source=(git+https://gitlab.com/gnutls/libtasn1.git#tag=v$pkgver
-        git+https://git.savannah.gnu.org/git/gnulib.git)
+# source=(git+https://gitlab.com/gnutls/libtasn1.git#tag=v$pkgver
+#         git+https://git.savannah.gnu.org/git/gnulib.git)
+source=(https://ftp.gnu.org/gnu/libtasn1/$pkgname-$pkgver.tar.gz{,.sig})
+validpgpkeys=('B1D2BD1375BECB784CF4F8C4D73CF638C53C06BE')
 sha256sums=('SKIP'
             'SKIP')
 
-prepare() {
-  cd $pkgname
+# prepare() {
+#   cd $pkgname
 
-  sed -e '/^GTK_DOC_CHECK/d' \
-      -e '/doc\/Makefile/d' \
-      -e '/doc\/reference\/Makefile/d' \
-      -i configure.ac
-  sed -e '/--enable-gtk-doc/d' \
-      -i Makefile.am
+#   sed -e '/^GTK_DOC_CHECK/d' \
+#       -e '/doc\/Makefile/d' \
+#       -e '/doc\/reference\/Makefile/d' \
+#       -i configure.ac
+#   sed -e '/--enable-gtk-doc/d' \
+#       -i Makefile.am
 
-  ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
-}
+#   ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
+# }
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr \
@@ -39,13 +41,13 @@ build() {
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make check
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

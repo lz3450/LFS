@@ -1,0 +1,105 @@
+Usage: ./configure [options]
+
+Options
+	--enable-debug                 enables debugging environment; does not affect optimization of bootstrapped code
+	--enable-docs                  build standard library documentation
+	--enable-compiler-docs         build compiler documentation
+	--enable-optimize-tests        build tests with optimizations
+	--enable-verbose-tests         enable verbose output when running tests
+	--enable-ccache                invoke gcc/clang via ccache to reuse object files between builds
+	--enable-sccache               invoke gcc/clang via sccache to reuse object files between builds
+	--enable-local-rust            use an installed rustc rather than downloading a snapshot
+	--local-rust-root=VAL          set prefix for local rust binary
+	--enable-local-rebuild         assume local-rust matches the current version, for rebuilds; implies local-rust, and is implied if local-rust already matches the current version
+	--enable-llvm-static-stdcpp    statically link to libstdc++ for LLVM
+	--enable-llvm-link-shared      prefer shared linking to LLVM (llvm-config --link-shared)
+	--enable-rpath                 build rpaths into rustc itself
+	--enable-codegen-tests         run the tests/codegen tests
+	--enable-option-checking       complain about unrecognized options in this configure script
+	--enable-ninja                 build LLVM using the Ninja generator (for MSVC, requires building in the correct environment)
+	--enable-locked-deps           force Cargo.lock to be up to date
+	--enable-vendor                enable usage of vendored Rust crates
+	--enable-sanitizers            build the sanitizer runtimes (asan, lsan, msan, tsan, hwasan)
+	--enable-dist-src              when building tarballs enables building a source tarball
+	--enable-cargo-native-static   static native libraries in cargo
+	--enable-profiler              build the profiler runtime
+	--enable-full-tools            enable all tools
+	--enable-lld                   build lld
+	--enable-clang                 build clang
+	--enable-missing-tools         allow failures when building tools
+	--enable-use-libcxx            build LLVM with libc++
+	--enable-control-flow-guard    Enable Control Flow Guard
+	--llvm-cflags=VAL              build LLVM with these extra compiler flags
+	--llvm-cxxflags=VAL            build LLVM with these extra compiler flags
+	--llvm-ldflags=VAL             build LLVM with these extra linker flags
+	--llvm-libunwind=VAL           use LLVM libunwind
+	--enable-optimize-llvm         build optimized LLVM
+	--enable-llvm-assertions       build LLVM with assertions
+	--enable-llvm-plugins          build LLVM with plugin interface
+	--enable-debug-assertions      build with debugging assertions
+	--enable-debug-assertions-std  build the standard library with debugging assertions
+	--enable-overflow-checks       build with overflow checks
+	--enable-overflow-checks-std   build the standard library with overflow checks
+	--enable-llvm-release-debuginfo build LLVM with debugger metadata
+	--debuginfo-level=VAL          debuginfo level for Rust code
+	--debuginfo-level-rustc=VAL    debuginfo level for the compiler
+	--debuginfo-level-std=VAL      debuginfo level for the standard library
+	--debuginfo-level-tools=VAL    debuginfo level for the tools
+	--debuginfo-level-tests=VAL    debuginfo level for the test suites run with compiletest
+	--save-toolstates=VAL          save build and test status of external tools into this file
+	--prefix=VAL                   set installation prefix
+	--localstatedir=VAL            local state directory
+	--datadir=VAL                  install data
+	--sysconfdir=VAL               install system configuration files
+	--infodir=VAL                  install additional info
+	--libdir=VAL                   install libraries
+	--mandir=VAL                   install man pages in PATH
+	--docdir=VAL                   install documentation in PATH
+	--bindir=VAL                   install binaries
+	--llvm-root=VAL                set LLVM root
+	--llvm-config=VAL              set path to llvm-config
+	--llvm-filecheck=VAL           set path to LLVM's FileCheck utility
+	--python=VAL                   set path to python
+	--musl-root=VAL                MUSL root installation directory (deprecated)
+	--musl-root-x86_64=VAL         x86_64-unknown-linux-musl install directory
+	--musl-root-i586=VAL           i586-unknown-linux-musl install directory
+	--musl-root-i686=VAL           i686-unknown-linux-musl install directory
+	--musl-root-arm=VAL            arm-unknown-linux-musleabi install directory
+	--musl-root-armhf=VAL          arm-unknown-linux-musleabihf install directory
+	--musl-root-armv5te=VAL        armv5te-unknown-linux-musleabi install directory
+	--musl-root-armv7=VAL          armv7-unknown-linux-musleabi install directory
+	--musl-root-armv7hf=VAL        armv7-unknown-linux-musleabihf install directory
+	--musl-root-aarch64=VAL        aarch64-unknown-linux-musl install directory
+	--musl-root-mips=VAL           mips-unknown-linux-musl install directory
+	--musl-root-mipsel=VAL         mipsel-unknown-linux-musl install directory
+	--musl-root-mips64=VAL         mips64-unknown-linux-muslabi64 install directory
+	--musl-root-mips64el=VAL       mips64el-unknown-linux-muslabi64 install directory
+	--musl-root-riscv32gc=VAL      riscv32gc-unknown-linux-musl install directory
+	--musl-root-riscv64gc=VAL      riscv64gc-unknown-linux-musl install directory
+	--qemu-armhf-rootfs=VAL        rootfs in qemu testing, you probably don't want to use this
+	--qemu-aarch64-rootfs=VAL      rootfs in qemu testing, you probably don't want to use this
+	--qemu-riscv64-rootfs=VAL      rootfs in qemu testing, you probably don't want to use this
+	--experimental-targets=VAL     experimental LLVM targets to build
+	--release-channel=VAL          the name of the release channel to build
+	--release-description=VAL      optional descriptive string for version output
+	--dist-compression-formats=VAL List of compression formats to use
+	--default-linker=VAL           the default linker
+	--enable-manage-submodules     let the build manage the git submodules
+	--enable-full-bootstrap        build three compilers instead of two (not recommended except for testing reproducible builds)
+	--enable-extended              build an extended rust tool set
+	--tools=VAL                    List of extended tools will be installed
+	--codegen-backends=VAL         List of codegen backends to build
+	--build=VAL                    GNUs ./configure syntax LLVM build triple
+	--host=VAL                     List of GNUs ./configure syntax LLVM host triples
+	--target=VAL                   List of GNUs ./configure syntax LLVM target triples
+	--set=VAL                      set arbitrary key/value pairs in TOML configuration
+
+This configure script is a thin configuration shim over the true
+configuration system, `config.toml`. You can explore the comments
+in `config.example.toml` next to this configure script to see
+more information about what each option is. Additionally you can
+pass `--set` as an argument to set arbitrary key/value pairs
+in the TOML configuration if desired
+
+Also note that all options which take `--enable` can similarly
+be passed with `--disable-foo` to forcibly disable the option

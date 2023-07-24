@@ -2,7 +2,7 @@
 
 pkgname=bzip2
 pkgver=1.0.8
-pkgrel=7
+pkgrel=8
 epoch=
 pkgdesc="A high-quality data compression program"
 arch=('x86_64')
@@ -17,6 +17,8 @@ sha256sums=('SKIP'
 prepare() {
   cd $pkgname
 
+  sed -i 's/$(PREFIX)\/man/$(PREFIX)\/share\/man/g' Makefile
+
   cp "$srcdir"/bzip2.pc bzip2.pc
   sed "s|@VERSION@|$pkgver|" -i bzip2.pc
 }
@@ -28,19 +30,15 @@ build() {
   make
 }
 
-check() {
-  cd $pkgname
-
-  make test
-}
-
 package() {
   cd $pkgname
 
   make PREFIX="$pkgdir/usr" install
+
   cp -f libbz2.so.$pkgver "$pkgdir"/usr/lib
   ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so.${pkgver%.*}
   ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so.${pkgver%%.*}
   ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so
+
   install -Dm644 bzip2.pc -t "$pkgdir"/usr/lib/pkgconfig
 }

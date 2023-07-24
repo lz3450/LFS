@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.sqlite.org/index.html | grep -Po '(?<=Version )\d\.\d\d\.\d')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.sqlite.org/index.html | grep -oP '(?<=Version )\d\.\d\d\.\d')
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

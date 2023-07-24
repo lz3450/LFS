@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.11.3
-pkgrel=3
+pkgver=3.11.4
+pkgrel=7
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
@@ -35,7 +35,7 @@ build() {
     --with-system-libmpdec=no \
     --with-decimal-contextvar=yes \
     --with-dbmliborder=gdbm:ndbm \
-    --with-ensurepip=install \
+    --with-ensurepip=no \
 
   make
 }
@@ -46,5 +46,5 @@ package() {
   make DESTDIR="$pkgdir" install
 
   ln -s python${pkgver:0:4} "$pkgdir"/usr/bin/python
-  ln -s pip3 "$pkgdir"/usr/bin/pip
+  # ln -s pip3 "$pkgdir"/usr/bin/pip
 }

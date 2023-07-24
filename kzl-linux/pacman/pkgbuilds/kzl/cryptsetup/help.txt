@@ -1,0 +1,261 @@
+`configure' configures cryptsetup 2.6.1 to adapt to many kinds of systems.
+
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+To assign environment variables (e.g., CC, CFLAGS...), specify them as
+VAR=VALUE.  See below for descriptions of some of the useful variables.
+
+Defaults for the options are specified in brackets.
+
+Configuration:
+  -h, --help              display this help and exit
+      --help=short        display options specific to this package
+      --help=recursive    display the short help of all the included packages
+  -V, --version           display version information and exit
+  -q, --quiet, --silent   do not print `checking ...' messages
+      --cache-file=FILE   cache test results in FILE [disabled]
+  -C, --config-cache      alias for `--cache-file=config.cache'
+  -n, --no-create         do not create output files
+      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+
+Installation directories:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr]
+  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                          [PREFIX]
+
+By default, `make install' will install all the files in
+`/usr/bin', `/usr/lib' etc.  You can specify
+an installation prefix other than `/usr' using `--prefix',
+for instance `--prefix=$HOME'.
+
+For better control, use the options below.
+
+Fine tuning of the installation directories:
+  --bindir=DIR            user executables [EPREFIX/bin]
+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR        program executables [EPREFIX/libexec]
+  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+  --libdir=DIR            object code libraries [EPREFIX/lib]
+  --includedir=DIR        C header files [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR           info documentation [DATAROOTDIR/info]
+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR            man documentation [DATAROOTDIR/man]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/cryptsetup]
+  --htmldir=DIR           html documentation [DOCDIR]
+  --dvidir=DIR            dvi documentation [DOCDIR]
+  --pdfdir=DIR            pdf documentation [DOCDIR]
+  --psdir=DIR             ps documentation [DOCDIR]
+
+Program names:
+  --program-prefix=PREFIX            prepend PREFIX to installed program names
+  --program-suffix=SUFFIX            append SUFFIX to installed program names
+  --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
+  --enable-dependency-tracking
+                          do not reject slow dependency extractors
+  --disable-dependency-tracking
+                          speeds up one-time build
+  --enable-static[=PKGS]  build static libraries [default=no]
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-fast-install[=PKGS]
+                          optimize for fast installation [default=yes]
+  --disable-libtool-lock  avoid locking (might break parallel builds)
+  --disable-asciidoc      do not generate man pages from asciidoc
+  --disable-keyring       disable kernel keyring support and builtin kernel
+                          keyring token
+  --disable-largefile     omit support for large files
+  --disable-external-tokens
+                          disable external LUKS2 tokens
+  --disable-ssh-token     disable LUKS2 ssh-token
+  --disable-luks2-reencryption
+                          disable LUKS2 online reencryption extension
+  --disable-nls           do not use Native Language Support
+  --disable-rpath         do not hardcode runtime library paths
+  --enable-fips           enable FIPS mode restrictions
+  --enable-pwquality      enable password quality checking using pwquality
+                          library
+  --enable-fuzz-targets   enable building fuzz targets
+  --enable-passwdqc[=CONFIG_PATH]
+                          enable password quality checking using passwdqc
+                          library (optionally with CONFIG_PATH)
+  --enable-static-cryptsetup
+                          enable build of static version of tools
+  --disable-cryptsetup    disable cryptsetup support
+  --disable-veritysetup   disable veritysetup support
+  --disable-integritysetup
+                          disable integritysetup support
+  --disable-selinux       disable selinux support [default=auto]
+  --disable-udev          disable udev support
+  --disable-kernel_crypto disable kernel userspace crypto (no benchmark and
+                          tcrypt)
+		  --enable-gcrypt-pbkdf2  force enable internal gcrypt PBKDF2
+  --disable-internal-argon2
+                          disable internal implementation of Argon2 PBKDF
+  --enable-libargon2      enable external libargon2 (PHC) library (disables
+                          internal bundled version)
+  --enable-internal-sse-argon2
+                          enable internal SSE implementation of Argon2 PBKDF
+  --disable-blkid         disable use of blkid for device signature detection
+                          and wiping
+  --enable-dev-random     use /dev/random by default for key generation
+                          (otherwise use /dev/urandom)
+  --disable-luks-adjust-xts-keysize
+                          XTS mode requires two keys, double default LUKS
+                          keysize if needed
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+                          both]
+  --with-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
+                          compiler's sysroot if not specified).
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
+  --without-libiconv-prefix     don't search for libiconv in includedir and libdir
+  --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
+  --without-libintl-prefix     don't search for libintl in includedir and libdir
+  --with-crypto_backend=BACKEND
+                          crypto backend (gcrypt/openssl/nss/kernel/nettle)
+                          [openssl]
+  --with-libgcrypt-prefix=PFX
+                          prefix where LIBGCRYPT is installed (optional)
+  --with-plain-hash       default password hashing function for plain mode
+                          [ripemd160]
+  --with-plain-cipher     default cipher for plain mode [aes]
+  --with-plain-mode       default cipher mode for plain mode
+                          [cbc-essiv:sha256]
+  --with-plain-keybits    default key length in bits for plain mode [256]
+  --with-luks1-hash       default hash function for LUKS1 header [sha256]
+  --with-luks1-cipher     default cipher for LUKS1 [aes]
+  --with-luks1-mode       default cipher mode for LUKS1 [xts-plain64]
+  --with-luks1-keybits    default key length in bits for LUKS1 [256]
+  --with-luks2-pbkdf      default Default PBKDF algorithm (pbkdf2 or
+                          argon2i/argon2id) for LUKS2 [argon2id]
+  --with-luks1-iter-time  default PBKDF2 iteration time for LUKS1 (in ms)
+                          [2000]
+  --with-luks2-iter-time  default Argon2 PBKDF iteration time for LUKS2 (in
+                          ms) [2000]
+  --with-luks2-memory-kb  default Argon2 PBKDF memory cost for LUKS2 (in kB)
+                          [1048576]
+  --with-luks2-parallel-threads
+                          default Argon2 PBKDF max parallel cost for LUKS2 (if
+                          CPUs available) [4]
+  --with-luks2-keyslot-cipher
+                          default fallback cipher for LUKS2 keyslot (if data
+                          encryption is incompatible) [aes-xts-plain64]
+  --with-luks2-keyslot-keybits
+                          default fallback key size for LUKS2 keyslot (if data
+                          encryption is incompatible) [512]
+  --with-loopaes-cipher   default cipher for loop-AES mode [aes]
+  --with-loopaes-keybits  default key length in bits for loop-AES mode [256]
+  --with-keyfile-size-maxkb
+                          default maximum keyfile size (in KiB) [8192]
+  --with-integrity-keyfile-size-maxkb
+                          default maximum integritysetup keyfile size (in KiB)
+                          [4]
+  --with-passphrase-size-max
+                          default maximum passphrase size (in characters)
+                          [512]
+  --with-verity-hash      default hash function for verity mode [sha256]
+  --with-verity-data-block
+                          default data block size for verity mode [4096]
+  --with-verity-hash-block
+                          default hash block size for verity mode [4096]
+  --with-verity-salt-size default salt size for verity mode [32]
+  --with-verity-fec-roots default parity bytes for verity FEC [2]
+  --with-tmpfilesdir      default override default path to directory with
+                          systemd temporary files []
+  --with-luks2-lock-path  default path to directory for LUKSv2 locks
+                          [/run/cryptsetup]
+  --with-luks2-lock-dir-perms
+                          default default luks2 locking directory permissions
+                          [0700]
+  --with-luks2-external-tokens-path
+                          default path to directory with LUKSv2 external token
+                          handlers (plugins) [LIBDIR/cryptsetup]
+  --with-default-luks-format=FORMAT
+                          default LUKS format version (LUKS1/LUKS2) [LUKS2]
+
+Some influential environment variables:
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  CPP         C preprocessor
+  CXX         C++ compiler command
+  CXXFLAGS    C++ compiler flags
+  LT_SYS_LIBRARY_PATH
+              User-defined run-time library search path.
+  CXXCPP      C++ preprocessor
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  PWQUALITY_CFLAGS
+              C compiler flags for PWQUALITY, overriding pkg-config
+  PWQUALITY_LIBS
+              linker flags for PWQUALITY, overriding pkg-config
+  DEVMAPPER_CFLAGS
+              C compiler flags for DEVMAPPER, overriding pkg-config
+  DEVMAPPER_LIBS
+              linker flags for DEVMAPPER, overriding pkg-config
+  JSON_C_CFLAGS
+              C compiler flags for JSON_C, overriding pkg-config
+  JSON_C_LIBS linker flags for JSON_C, overriding pkg-config
+  LIBSSH_CFLAGS
+              C compiler flags for LIBSSH, overriding pkg-config
+  LIBSSH_LIBS linker flags for LIBSSH, overriding pkg-config
+  OPENSSL_CFLAGS
+              C compiler flags for OPENSSL, overriding pkg-config
+  OPENSSL_LIBS
+              linker flags for OPENSSL, overriding pkg-config
+  OPENSSL_STATIC_CFLAGS
+              C compiler flags for OPENSSL_STATIC, overriding pkg-config
+  OPENSSL_STATIC_LIBS
+              linker flags for OPENSSL_STATIC, overriding pkg-config
+  NSS_CFLAGS  C compiler flags for NSS, overriding pkg-config
+  NSS_LIBS    linker flags for NSS, overriding pkg-config
+  LIBARGON2_CFLAGS
+              C compiler flags for LIBARGON2, overriding pkg-config
+  LIBARGON2_LIBS
+              linker flags for LIBARGON2, overriding pkg-config
+  BLKID_CFLAGS
+              C compiler flags for BLKID, overriding pkg-config
+  BLKID_LIBS  linker flags for BLKID, overriding pkg-config
+  DEVMAPPER_STATIC_CFLAGS
+              C compiler flags for DEVMAPPER_STATIC, overriding pkg-config
+  DEVMAPPER_STATIC_LIBS
+              linker flags for DEVMAPPER_STATIC, overriding pkg-config
+  systemd_tmpfilesdir
+              value of tmpfilesdir for systemd, overriding pkg-config
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to the package provider.

@@ -1,0 +1,6 @@
+new_version=$(git ls-remote --tags https://pagure.io/libaio.git | grep -oP '(?<=refs/tags/libaio-)\d\.\d\.\d{3}' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cat Makefile > "$PKGBUILDDIR"/help.txt
+}

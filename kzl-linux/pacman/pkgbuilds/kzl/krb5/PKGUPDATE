@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://web.mit.edu/kerberos | grep -Po '(?<=krb5-)\d\.\d{2}\.\d' | sort -V | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://web.mit.edu/kerberos | grep -oP 'krb5-\K[0-9]+\.[0-9]+(\.[0-9]+)?' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname/src"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

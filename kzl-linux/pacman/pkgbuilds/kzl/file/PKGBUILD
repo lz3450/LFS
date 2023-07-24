@@ -2,20 +2,26 @@
 
 pkgname=file
 pkgver=5.44
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="File type identification utility"
 arch=('x86_64')
 url="https://www.darwinsys.com/file/"
 license=('KZL')
 depends=(glibc libseccomp)
-source=(ftp://ftp.astron.com/pub/$pkgname/$pkgname-$pkgver.tar.gz{,.asc})
-validpgpkeys=('BE04995BA8F90ED0C0C176C471112AB16CB33B3A')
-sha256sums=('3751c7fba8dbc831cb8d7cc8aff21035459b8ce5155ef8b0880a27d028475f3b'
-            'SKIP')
+# source=(ftp://ftp.astron.com/pub/$pkgname/$pkgname-$pkgver.tar.gz{,.asc})
+source=(git+https://github.com/file/file.git#tag=FILE${pkgver/./_})
+# validpgpkeys=('BE04995BA8F90ED0C0C176C471112AB16CB33B3A')
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  autoreconf -vfi
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
     --prefix=/usr \
@@ -26,13 +32,13 @@ build() {
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir" install
 }

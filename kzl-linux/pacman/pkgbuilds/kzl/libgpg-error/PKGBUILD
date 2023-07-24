@@ -2,7 +2,7 @@
 
 pkgname=libgpg-error
 pkgver=1.47
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="Support library for libgcrypt"
 arch=('x86_64')

@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.tcpdump.org/ | grep -Po '(?<=libpcap-)\d\.\d\d\.\d(?=\.tar)' | head -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.tcpdump.org/ | grep -oP '(?<=libpcap-)\d\.\d\d\.\d(?=\.tar)' | head -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

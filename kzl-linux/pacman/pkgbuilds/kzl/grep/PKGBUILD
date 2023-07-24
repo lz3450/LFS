@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=grep
-pkgver=3.9
+pkgver=3.11
 pkgrel=1
 epoch=
 pkgdesc="Searches one or more input files for lines containing a match to a specified pattern"

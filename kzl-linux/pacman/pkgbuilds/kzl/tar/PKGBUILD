@@ -2,36 +2,73 @@
 
 pkgname=tar
 pkgver=1.34
-pkgrel=1
+pkgrel=13
 epoch=
 pkgdesc="Utility to create tar archives"
 arch=('x86_64')
 url="https://www.gnu.org/software/tar/"
 depends=(acl glibc)
-source=(https://ftp.gnu.org/gnu/tar/$pkgname-$pkgver.tar.xz{,.sig})
-# source=(git+https://git.savannah.gnu.org/git/tar.git#tag=release_${pkgver//./_}
-#         git+https://git.savannah.gnu.org/git/gnulib.git)
-validpgpkeys=('325F650C4C2B6AD58807327A3602B07F55D0C732')
+source=(git+https://git.savannah.gnu.org/git/tar.git#tag=release_${pkgver//./_}
+        git+https://git.savannah.gnu.org/git/gnulib.git
+        git+git://git.sv.gnu.org/paxutils.git)
+# source=(https://ftp.gnu.org/gnu/tar/$pkgname-$pkgver.tar.xz{,.sig})
+# validpgpkeys=('325F650C4C2B6AD58807327A3602B07F55D0C732')
 sha256sums=('SKIP'
+            'SKIP'
             'SKIP')
 
+prepare() {
+  cd $pkgname
+
+  rmdir gnulib
+  ln -sr "$srcdir"/gnulib
+
+  rmdir paxutils
+  ln -sr "$srcdir"/paxutils
+
+  GNULIB_SRCDIR="$srcdir"/gnulib ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
+}
+
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --libexecdir=/usr/libexec/tar
 
-  make
+  make WERROR_CFLAGS=
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir" install
 }
+
+# build() {
+#   cd $pkgname-$pkgver
+
+#   ./configure \
+#     --prefix=/usr \
+#     --libexecdir=/usr/libexec/tar
+
+#   make
+# }
+
+# check() {
+#   cd $pkgname-$pkgver
+
+#   make check
+# }
+
+# package() {
+#   cd $pkgname-$pkgver
+
+#   make DESTDIR="$pkgdir" install
+# }

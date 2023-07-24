@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://ftp.gnu.org/gnu/gawk | grep -o -E 'gawk-[0-9]\.[0-9]\.[0-9]' | tail -1 | grep -o -E '[0-9]\.[0-9]\.[0-9]')
+new_version=$(git ls-remote --tags https://git.savannah.gnu.org/git/gawk.git | grep -oP "refs/tags/gawk-\K[0-9]+\.[0-9]+\.[0-9]+" | sort -V | tail -n1)
+
+post_update() {
+  cd "$BUILDDIR/$pkgname/src/$pkgname"
+  ./configure --help > "$PKGBUILDDIR"/help.txt
+}

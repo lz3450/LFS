@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://github.com/jthornber/thin-provisioning-tools/tags | grep -Po '(?<=thin-provisioning-tools/releases/tag/v)\d\.\d\.\d' | head -1)
+new_version=$(git ls-remote --tags https://github.com/jthornber/thin-provisioning-tools.git | grep -oP '(?<=refs/tags/v)\d\.\d\.\d' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cat Cargo.toml > "$PKGBUILDDIR"/help.txt
+}

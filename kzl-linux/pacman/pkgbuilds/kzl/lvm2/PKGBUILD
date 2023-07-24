@@ -2,13 +2,13 @@
 
 pkgbase=lvm2
 pkgname=(lvm2 device-mapper)
-pkgver=2.03.20
-pkgrel=2
+pkgver=2.03.21
+pkgrel=3
 epoch=
 arch=('x86_64')
 url="https://sourceware.org/lvm2/"
 license=('KZL')
-depends=(libedit)
+depends=(libaio libedit)
 makedepends=(thin-provisioning-tools)
 source=(git+https://sourceware.org/git/$pkgbase.git#tag=v${pkgver//./_})
 sha256sums=('SKIP')

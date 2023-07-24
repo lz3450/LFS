@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gettext
-pkgver=0.21.1
-pkgrel=1
+pkgver=0.22
+pkgrel=3
 epoch=
 pkgdesc="GNU internationalization library"
 arch=('x86_64')
@@ -13,7 +13,7 @@ source=(https://ftp.gnu.org/pub/gnu/gettext/$pkgname-$pkgver.tar.gz{,.sig})
 # source=(git+https://git.savannah.gnu.org/git/gettext.git#tag=v$pkgver
 #         git+https://git.savannah.gnu.org/git/gnulib.git)
 validpgpkeys=('9001B85AF9E1B83DF1BDA942F5BE8B267C6A406D')
-sha256sums=('e8c3650e1d8cee875c4f355642382c1df83058bd5a11ee8555c0cf276d646d45'
+sha256sums=('49f089be11b490170bbf09ed2f51e5f5177f55be4cc66504a5861820e0fb06ab'
             'SKIP')
 
 build() {
@@ -42,5 +42,5 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

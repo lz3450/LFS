@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=brotli
-pkgver=1.0.9.66
+pkgver=1.0.9.102
 pkgrel=1
 epoch=
 pkgdesc="Generic-purpose lossless compression algorithm"
 arch=('x86_64')
 url="https://github.com/google/brotli"
 license=('KZL')
-source=(git+$url.git)
+source=(git+https://github.com/google/brotli.git)
 sha256sums=('SKIP')
 
 pkgver() {

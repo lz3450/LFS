@@ -1,0 +1,58 @@
+[package]
+name = "thinp"
+version = "1.0.4"
+authors = ["Joe Thornber <ejt@redhat.com>"]
+edition = "2021"
+license = "GPL3"
+
+[dependencies]
+atty = "0.2"
+anyhow = "1.0"
+base64 = "0.20"
+byteorder = "1.4"
+clap = "3.2"
+crc32c = { git = "https://github.com/zowens/crc32c", branch = "master" }
+data-encoding = "2.3"
+exitcode = "1.1.2"
+fixedbitset = "0.4"
+futures = "0.3"
+flate2 = "1.0"
+iovec = "0.1"
+indicatif = "0.17"
+libc = "0.2"
+nom = "7.1"
+num_cpus = "1.14"
+num-derive = "0.3"
+num-traits = "0.2"
+quick-xml = "0.23.1"
+rand = "0.8"
+rangemap = "1.1"
+roaring = "0.10"
+rio = { git = "https://github.com/jthornber/rio", branch = "master", optional = true }
+safemem = "0.3"
+threadpool = "1.8"
+thiserror = "1.0"
+tui = { version = "0.16", optional = true }
+termion = { version = "1.5", optional = true }
+zstd = "0.11"
+
+[dev-dependencies]
+duct = "0.13"
+json = "0.12"
+mockall = "0.11"
+quickcheck = "0.9"
+quickcheck_macros = "0.9"
+rand = { version = "0.8", features = ["small_rng"] }
+tempfile = "3.3"
+thinp = { path = ".", features = ["devtools"] }
+
+[features]
+devtools = ["tui", "termion"]
+io_uring = ["dep:rio"]
+
+[profile.release]
+debug = true
+
+[[bin]]
+name = "pdata_tools_dev"
+required-features = ["devtools"]

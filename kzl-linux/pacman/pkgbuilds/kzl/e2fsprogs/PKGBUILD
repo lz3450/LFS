@@ -2,7 +2,7 @@
 
 pkgname=e2fsprogs
 pkgver=1.47.0
-pkgrel=2
+pkgrel=5
 epoch=
 pkgdesc="Ext2/3/4 Filesystem Utilities"
 arch=('x86_64')
@@ -40,5 +40,5 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir" install install-libs
+  make DESTDIR="$pkgdir" install
 }

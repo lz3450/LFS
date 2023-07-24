@@ -2,7 +2,7 @@
 
 pkgname=libgcrypt
 pkgver=1.10.2
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="General purpose cryptographic library based on the code from GnuPG"
 arch=('x86_64')

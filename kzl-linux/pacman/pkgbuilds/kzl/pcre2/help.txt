@@ -1,0 +1,178 @@
+`configure' configures PCRE2 10.42 to adapt to many kinds of systems.
+
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+To assign environment variables (e.g., CC, CFLAGS...), specify them as
+VAR=VALUE.  See below for descriptions of some of the useful variables.
+
+Defaults for the options are specified in brackets.
+
+Configuration:
+  -h, --help              display this help and exit
+      --help=short        display options specific to this package
+      --help=recursive    display the short help of all the included packages
+  -V, --version           display version information and exit
+  -q, --quiet, --silent   do not print `checking ...' messages
+      --cache-file=FILE   cache test results in FILE [disabled]
+  -C, --config-cache      alias for `--cache-file=config.cache'
+  -n, --no-create         do not create output files
+      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+
+Installation directories:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr/local]
+  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                          [PREFIX]
+
+By default, `make install' will install all the files in
+`/usr/local/bin', `/usr/local/lib' etc.  You can specify
+an installation prefix other than `/usr/local' using `--prefix',
+for instance `--prefix=$HOME'.
+
+For better control, use the options below.
+
+Fine tuning of the installation directories:
+  --bindir=DIR            user executables [EPREFIX/bin]
+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR        program executables [EPREFIX/libexec]
+  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+  --libdir=DIR            object code libraries [EPREFIX/lib]
+  --includedir=DIR        C header files [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR           info documentation [DATAROOTDIR/info]
+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR            man documentation [DATAROOTDIR/man]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/pcre2]
+  --htmldir=DIR           html documentation [DOCDIR]
+  --dvidir=DIR            dvi documentation [DOCDIR]
+  --pdfdir=DIR            pdf documentation [DOCDIR]
+  --psdir=DIR             ps documentation [DOCDIR]
+
+Program names:
+  --program-prefix=PREFIX            prepend PREFIX to installed program names
+  --program-suffix=SUFFIX            append SUFFIX to installed program names
+  --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
+  --enable-dependency-tracking
+                          do not reject slow dependency extractors
+  --disable-dependency-tracking
+                          speeds up one-time build
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-static[=PKGS]  build static libraries [default=yes]
+  --enable-fast-install[=PKGS]
+                          optimize for fast installation [default=yes]
+  --disable-libtool-lock  avoid locking (might break parallel builds)
+  --disable-largefile     omit support for large files
+
+  --disable-pcre2-8       disable 8 bit character support
+  --enable-pcre2-16       enable 16 bit character support
+  --enable-pcre2-32       enable 32 bit character support
+  --enable-debug          enable debugging code
+  --enable-jit            enable Just-In-Time compiling support
+  --enable-jit-sealloc    enable SELinux compatible execmem allocator in JIT
+                          (experimental)
+  --disable-pcre2grep-jit disable JIT support in pcre2grep
+  --disable-pcre2grep-callout
+                          disable callout script support in pcre2grep
+  --disable-pcre2grep-callout-fork
+                          disable callout script fork support in pcre2grep
+  --enable-rebuild-chartables
+                          rebuild character tables in current locale
+  --disable-unicode       disable Unicode support
+  --enable-newline-is-cr  use CR as newline character
+  --enable-newline-is-lf  use LF as newline character (default)
+  --enable-newline-is-crlf
+                          use CRLF as newline sequence
+  --enable-newline-is-anycrlf
+                          use CR, LF, or CRLF as newline sequence
+  --enable-newline-is-any use any valid Unicode newline sequence
+  --enable-newline-is-nul use NUL (binary zero) as newline character
+  --enable-bsr-anycrlf    \R matches only CR, LF, CRLF by default
+  --enable-never-backslash-C
+                          use of \C causes an error
+  --enable-ebcdic         assume EBCDIC coding rather than ASCII; incompatible
+                          with --enable-utf; use only in (uncommon) EBCDIC
+                          environments; it implies --enable-rebuild-chartables
+  --enable-ebcdic-nl25    set EBCDIC code for NL to 0x25 instead of 0x15; it
+                          implies --enable-ebcdic
+  --enable-pcre2grep-libz link pcre2grep with libz to handle .gz files
+  --enable-pcre2grep-libbz2
+                          link pcre2grep with libbz2 to handle .bz2 files
+  --enable-pcre2test-libedit
+                          link pcre2test with libedit
+  --enable-pcre2test-libreadline
+                          link pcre2test with libreadline
+  --enable-valgrind       enable valgrind support
+  --enable-coverage       enable code coverage reports using gcov
+  --enable-fuzz-support   enable fuzzer support
+  --disable-percent-zt    disable the use of z and t formatting modifiers
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+                          both]
+  --with-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
+                          compiler's sysroot if not specified).
+  --with-pcre2grep-bufsize=N
+                          pcre2grep initial buffer size (default=20480,
+                          minimum=8192)
+  --with-pcre2grep-max-bufsize=N
+                          pcre2grep maximum buffer size (default=1048576,
+                          minimum=8192)
+  --with-link-size=N      internal link size (2, 3, or 4 allowed; default=2)
+  --with-parens-nest-limit=N
+                          nested parentheses limit (default=250)
+  --with-heap-limit=N     default limit on heap memory (kibibytes,
+                          default=20000000)
+  --with-match-limit=N    default limit on internal looping (default=10000000)
+  --with-match-limit-depth=N
+                          default limit on match tree depth
+                          (default=MATCH_LIMIT)
+
+
+Some influential environment variables:
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  LT_SYS_LIBRARY_PATH
+              User-defined run-time library search path.
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  VALGRIND_CFLAGS
+              C compiler flags for VALGRIND, overriding pkg-config
+  VALGRIND_LIBS
+              linker flags for VALGRIND, overriding pkg-config
+  LCOV        the ltp lcov program
+  GENHTML     the ltp genhtml program
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to the package provider.

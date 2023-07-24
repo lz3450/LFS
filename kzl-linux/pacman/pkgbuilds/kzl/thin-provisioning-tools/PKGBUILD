@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=thin-provisioning-tools
-pkgver=1.0.3
-pkgrel=2
+pkgver=1.0.4
+pkgrel=3
 epoch=
 pkgdesc="A suite of tools for manipulating the metadata of the dm-thin, dm-cache and dm-era device-mapper targets"
 arch=('x86_64')
@@ -20,5 +20,5 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" BINDIR="$pkgdir/usr/bin" install
+  make DESTDIR="$pkgdir" BINDIR="$pkgdir/usr/bin" install
 }

@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://www.gnu.org/software/tar/ | grep -Po '(?<=<td>)\d\.\d\d(?=</td>)' | sort -V | tail -1)
+new_version=$(git ls-remote --tags https://git.savannah.gnu.org/git/tar.git | grep -oP "refs/tags/release_\K[0-9]_[0-9]{2}" | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

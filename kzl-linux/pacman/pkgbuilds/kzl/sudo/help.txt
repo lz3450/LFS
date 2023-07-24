@@ -1,0 +1,286 @@
+'configure' configures sudo 1.9.14p2 to adapt to many kinds of systems.
+
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+To assign environment variables (e.g., CC, CFLAGS...), specify them as
+VAR=VALUE.  See below for descriptions of some of the useful variables.
+
+Defaults for the options are specified in brackets.
+
+Configuration:
+  -h, --help              display this help and exit
+      --help=short        display options specific to this package
+      --help=recursive    display the short help of all the included packages
+  -V, --version           display version information and exit
+  -q, --quiet, --silent   do not print 'checking ...' messages
+      --cache-file=FILE   cache test results in FILE [disabled]
+  -C, --config-cache      alias for '--cache-file=config.cache'
+  -n, --no-create         do not create output files
+      --srcdir=DIR        find the sources in DIR [configure dir or '..']
+
+Installation directories:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr/local]
+  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                          [PREFIX]
+
+By default, 'make install' will install all the files in
+'/usr/local/bin', '/usr/local/lib' etc.  You can specify
+an installation prefix other than '/usr/local' using '--prefix',
+for instance '--prefix=$HOME'.
+
+For better control, use the options below.
+
+Fine tuning of the installation directories:
+  --bindir=DIR            user executables [EPREFIX/bin]
+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR        program executables [EPREFIX/libexec]
+  --sysconfdir=DIR        read-only single-machine data [/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+  --libdir=DIR            object code libraries [EPREFIX/lib]
+  --includedir=DIR        C header files [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR           info documentation [DATAROOTDIR/info]
+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR            man documentation [DATAROOTDIR/man]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/sudo]
+  --htmldir=DIR           html documentation [DOCDIR]
+  --dvidir=DIR            dvi documentation [DOCDIR]
+  --pdfdir=DIR            pdf documentation [DOCDIR]
+  --psdir=DIR             ps documentation [DOCDIR]
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --disable-authentication
+                          Do not require authentication by default
+  --disable-root-mailer   Don't run the mailer as root, run as the user
+  --disable-setreuid      Don't try to use the setreuid() function
+  --disable-setresuid     Don't try to use the setresuid() function
+  --disable-shadow        Never use shadow passwords
+  --disable-root-sudo     Don't allow root to run sudo
+  --enable-log-host       Log the hostname in the log file
+  --enable-noargs-shell   If sudo is given no arguments run a shell
+  --enable-shell-sets-home
+                          Set $HOME to target user in shell mode
+  --disable-path-info     Print 'command not allowed' not 'command not found'
+  --enable-env-debug      Whether to enable environment debugging.
+  --enable-zlib[=PATH]    Whether to enable or disable zlib
+  --enable-env-reset      Whether to enable environment resetting by default.
+  --enable-warnings       Whether to enable compiler warnings
+  --enable-werror         Whether to enable the -Werror compiler option
+  --disable-ssp           Do not compile using the -fstack-protector option.
+  --disable-hardening     Do not use compiler/linker exploit mitigation
+                          options
+  --enable-pie            Build sudo as a position independent executable.
+  --enable-sanitizer      Build sudo with sanitizer support.
+  --enable-fuzzer         Build sudo with LLVM libFuzzer support.
+  --enable-fuzzer-engine  Link fuzz targets with the specified fuzzer engine
+                          instead of the default.
+  --enable-fuzzer-linker  Use the specified linker when building fuzz targets
+                          instead of the default C compiler.
+  --disable-leaks         Prevent some harmless memory leaks.
+  --disable-poll          Use select() instead of poll().
+  --enable-admin-flag[=PATH]
+                          Whether to create a Ubuntu-style admin flag file
+  --disable-nls           Disable natural language support using gettext
+  --disable-rpath         Disable passing of -Rpath to the linker
+  --enable-static-sudoers Build the sudoers policy module as part of the sudo
+                          binary instead as a plugin
+  --disable-shared-libutil
+                          Disable use of the libsudo_util shared library.
+  --enable-tmpfiles.d=DIR Set the path to the systemd tmpfiles.d directory.
+  --enable-devsearch=PATH The colon-delimited path to search for device nodes
+                          when determining the tty name.
+  --enable-sasl           Enable/disable LDAP SASL support
+  --timestamp-type=TYPE   Set the default time stamp record type to global,
+                          ppid or tty.
+  --enable-offensive-insults
+                          Enable potentially offensive sudo insults.
+  --enable-package-build  Enable options for package building.
+  --enable-gss-krb5-ccache-name
+                          Use GSS-API to set the Kerberos V cred cache name
+  --enable-pvs-studio     Create a PVS-Studio.cfg file.
+  --disable-log-server    Disable building the sudo_logsrvd log server.
+  --disable-log-client    Disable sudoers support for using the sudo_logsrvd
+                          log server.
+  --enable-openssl        Use OpenSSL's TLS and sha2 functions
+  --enable-openssl-pkgconfig-template
+                          A printf format string used to construct the OpenSSL
+                          pkg-config name
+  --enable-wolfssl        Use wolfSSL's TLS and sha2 functions
+  --enable-gcrypt         Use GNU crypt's sha2 functions
+  --enable-python         Compile python plugin support
+  --enable-adminconf[=DIR]
+                          Use configuration files from adminconfdir in
+                          preference to sysconfdir
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-static[=PKGS]  build static libraries [default=yes]
+  --enable-fast-install[=PKGS]
+                          optimize for fast installation [default=yes]
+  --disable-libtool-lock  avoid locking (might break parallel builds)
+  --enable-intercept      fully qualified pathname of sudo_intercept.so
+  --disable-sia           Disable SIA on Digital UNIX
+  --disable-largefile     omit support for large files
+  --disable-pam-session   Disable PAM session support
+  --enable-kerb5-instance instance string to append to the username (separated
+                          by a slash)
+  --disable-year2038      don't support timestamps after 2038
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-otp-only         deprecated
+  --with-alertmail        deprecated
+  --with-pc-insults       deprecated
+  --with-devel            add development options
+  --with-CC               C compiler to use
+  --with-rpath            deprecated, use --disable-rpath
+  --with-blibpath[=PATH]  deprecated
+  --with-bsm-audit        enable BSM audit support
+  --with-linux-audit      enable Linux audit support
+  --with-solaris-audit    enable Solaris audit support
+  --with-sssd             enable SSSD support
+  --with-sssd-conf        path to the SSSD config file
+  --with-sssd-lib         path to the SSSD library
+  --with-incpath          additional places to look for include files
+  --with-libpath          additional places to look for libraries
+  --with-libraries        additional libraries to link with
+  --with-csops            add CSOps standard options
+  --without-passwd        don't use passwd/shadow file for authentication
+  --with-skey[=DIR]       enable S/Key support
+  --with-opie[=DIR]       enable OPIE support
+  --with-long-otp-prompt  use a two line OTP (skey/opie) prompt
+  --with-SecurID[=DIR]    enable SecurID support
+  --with-fwtk[=DIR]       enable FWTK AuthSRV support
+  --with-kerb5[=DIR]      enable Kerberos V support
+  --with-aixauth          enable AIX general authentication support
+  --with-pam              enable PAM support
+  --with-AFS              enable AFS support
+  --with-DCE              enable DCE support
+  --with-logincap         enable BSD login class support
+  --with-bsdauth          enable BSD authentication support
+  --with-project          enable Solaris project support
+  --without-lecture       don't print lecture for first-time sudoer
+  --with-logging          log via syslog, file, or both
+  --with-logfac           syslog facility to log with (default is "auth")
+  --with-goodpri          syslog priority for commands (def is "notice")
+  --with-badpri           syslog priority for failures (def is "alert")
+  --with-logpath          path to the sudo log file
+  --with-loglen           maximum length of a log file line (default is 80)
+  --with-ignore-dot       ignore '.' in the PATH
+  --without-mail-if-no-user
+                          do not send mail if user not in sudoers
+  --with-mail-if-no-host  send mail if user in sudoers but not for this host
+  --with-mail-if-noperms  send mail if user not allowed to run command
+  --with-mailto           who should get sudo mail (default is "root")
+  --with-mailsubject      subject of sudo mail
+  --with-passprompt       default password prompt
+  --with-badpass-message  message the user sees when the password is wrong
+  --with-fqdn             expect fully qualified hosts in sudoers
+  --with-timedir=DIR      deprecated
+  --with-rundir=DIR       directory for sudo-specific files that do not
+                          survive a system reboot, e.g. '/var/run/sudo'
+  --with-vardir=DIR       directory for sudo-specific files that survive a
+                          system reboot, e.g. '/var/db/sudo' or
+                          '/var/lib/sudo'
+  --with-iologdir=DIR     directory to store sudo I/O log files in
+  --with-relaydir=DIR     directory to store sudo_logsrvd relay temporary
+                          files in
+  --with-tzdir=DIR        path to the time zone data directory
+  --with-sendmail         set path to sendmail
+  --without-sendmail      do not send mail at all
+  --with-sudoers-mode     mode of sudoers file (defaults to 0440)
+  --with-sudoers-uid      uid that owns sudoers file (defaults to 0)
+  --with-sudoers-gid      gid that owns sudoers file (defaults to 0)
+  --with-umask            umask with which the prog should run (default is
+                          022)
+  --without-umask         Preserves the umask of the user invoking sudo.
+  --with-umask-override   Use the umask specified in sudoers even if it is
+                          less restrictive than the user's.
+  --with-runas-default    User to run commands as (default is "root")
+  --with-exempt=group     no passwd needed for users in this group
+  --with-editor=path      Default editor for visudo (defaults to vi)
+  --with-env-editor       Use the environment variable EDITOR for visudo
+  --with-passwd-tries     number of tries to enter password (default is 3)
+  --with-timeout          minutes before sudo asks for passwd again (def is 5
+                          minutes)
+  --with-password-timeout passwd prompt timeout in minutes (default is 5
+                          minutes)
+  --with-tty-tickets      use a different ticket file for each tty
+  --with-insults          insult the user for entering an incorrect password
+  --with-all-insults      include all the sudo insult sets
+  --with-classic-insults  include the insults from the "classic" sudo
+  --with-csops-insults    include CSOps insults
+  --with-hal-insults      include 2001-like insults
+  --with-goons-insults    include the insults from the "Goon Show"
+  --with-python-insults   include the insults from "Monty Python's Flying
+                          Circus"
+  --with-nsswitch[=PATH]  path to nsswitch.conf
+  --with-ldap[=DIR]       enable LDAP support
+  --with-ldap-conf-file   path to LDAP configuration file
+  --with-ldap-secret-file path to LDAP secret password file
+  --with-secure-path      override the user's path with a built-in one
+  --without-interfaces    don't try to read the ip addr of network interfaces
+  --with-askpass=PATH     Fully qualified pathname of askpass helper
+  --with-exampledir=DIR   path to install sudo examples in
+  --with-plugindir=DIR    set directory to load plugins from
+  --with-man              manual pages use man macros
+  --with-mdoc             manual pages use mdoc macros
+  --with-selinux          enable SELinux support
+  --with-apparmor         enable AppArmor support
+  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+                          both]
+  --with-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
+                          compiler's sysroot if not specified).
+  --with-libtool=PATH     specify path to libtool
+  --with-noexec[=PATH]    fully qualified pathname of sudo_noexec.so
+  --with-netsvc[=PATH]    path to netsvc.conf
+  --with-pam-login        enable specific PAM session for sudo -i
+
+Some influential environment variables:
+  SENDMAILPROG
+              The fully-qualified path to the sendmail program to use.
+  VIPROG      The fully-qualified path to the vi program to use.
+  MVPROG      The fully-qualified path to the mv program to use.
+  BSHELLPROG  The fully-qualified path to the Bourne shell to use.
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  CPP         C preprocessor
+  LT_SYS_LIBRARY_PATH
+              User-defined run-time library search path.
+  YACC        The 'Yet Another Compiler Compiler' implementation to use.
+              Defaults to the first program found out of: 'bison -y', 'byacc',
+              'yacc'.
+  YFLAGS      The list of arguments that will be passed by default to $YACC.
+              This script will default YFLAGS to the empty string to avoid a
+              default value of '-d' given by some make applications.
+  PYTHON      the Python interpreter
+  PYTHON_INCLUDE
+              Include flags for python, bypassing python-config
+  PYTHON_LIBS Linker flags for python, bypassing python-config
+  PYTHON_CONFIG
+              Path to python-config
+
+Use these variables to override the choices made by 'configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to <https://bugzilla.sudo.ws/>.

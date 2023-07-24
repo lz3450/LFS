@@ -43,7 +43,15 @@ build() {
   cd $pkgname-$pkgver
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --bindir=/usr/bin \
+    --sbindir=/usr/sbin \
+    --libexecdir=/usr/libexec/$pkgname \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --runstatedir=/run \
+    --datarootdir=/usr/share
+
 
   make
 }

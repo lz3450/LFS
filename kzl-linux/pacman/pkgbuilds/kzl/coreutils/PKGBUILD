@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=coreutils
-pkgver=9.2
-pkgrel=4
+pkgver=9.3
+pkgrel=1
 epoch=
 pkgdesc="The GNU core utilities"
 arch=('x86_64')

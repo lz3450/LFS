@@ -1,8 +1,8 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/TeX-Live/texlive-source/tags | grep -Po '(?<=texlive-source/releases/tag/svn)\d{5}' | head -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/TeX-Live/texlive-source/tags | grep -oP 'texlive-source/releases/tag/svn\K\d{5}' | head -n1)
 
 post_update() {
-    texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/`date +%Y`/ | grep -Po '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -1)
-    tlpdb_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/`date +%Y`/ | grep -Po '(?<=texlive-)\d{8}(?=-tlpdb-full.tar)' | head -1)
+    texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/`date +%Y`/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
+    tlpdb_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/`date +%Y`/ | grep -oP '(?<=texlive-)\d{8}(?=-tlpdb-full.tar)' | head -n1)
 
     if [ -n $texmf_version ] && [ -n $tlpdb_version ]; then
         sed -e "s/texlive-[0-9]\{8\}-tlpdb-full.tar.gz/texlive-$tlpdb_version-tlpdb-full.tar.gz/" \
@@ -10,4 +10,7 @@ post_update() {
             -e "s|^_pkgyear=.*$|_pkgyear=`date +%Y`|" \
             -i PKGBUILD
     fi
+
+    cd "$BUILDDIR/$pkgname/src/$pkgname-source"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
 }

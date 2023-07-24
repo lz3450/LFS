@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/wget/ | grep -Po '(?<=wget2-)\d\.\d+\.\d' | sort -V | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/wget/ | grep -oP '(?<=wget2-)\d\.\d+\.\d' | sort -V | tail -n1)
 
 
 post_update() {

@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=systemd
-pkgver=253.3
-pkgrel=2
+pkgver=253.7
+pkgrel=3
 epoch=
 arch=('x86_64')
 url="https://github.com/systemd/systemd-stable"

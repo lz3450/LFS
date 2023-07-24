@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://e2fsprogs.sourceforge.net/ | grep -Po '(?<=Release )\d\.\d\d\.\d')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://e2fsprogs.sourceforge.net/ | grep -oP 'e2fsprogs-\K[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

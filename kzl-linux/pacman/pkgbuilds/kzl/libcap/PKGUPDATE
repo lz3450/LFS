@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://sites.google.com/site/fullycapable/release-notes-for-libcap | grep -Po '(?<=Release notes for )\d\.\d\d' | sort -V | tail -1)
+new_version=$(git ls-remote --tags https://git.kernel.org/pub/scm/libs/libcap/libcap.git | grep -Po '(?<=refs/tags/v)\d\.\d\.\d{2}' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cat Make.Rules > "$PKGBUILDDIR"/help.txt
+}

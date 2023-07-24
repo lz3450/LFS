@@ -2,7 +2,7 @@
 
 pkgname=guile
 pkgver=3.0.9
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="Portable, embeddable Scheme implementation written in C"
 arch=('x86_64')
@@ -37,4 +37,5 @@ package() {
   cd $pkgname
 
   make DESTDIR="$pkgdir" install
+  rm "$pkgdir"/usr/lib/libguile-3.?.so.*-gdb.scm
 }

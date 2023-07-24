@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=krb5
-pkgver=1.20.1
-pkgrel=11
+pkgver=1.21
+pkgrel=2
 epoch=
 pkgdesc="The Kerberos network authentication protocol"
 arch=('x86_64')
@@ -17,7 +17,7 @@ sha256sums=('SKIP')
 prepare() {
   cd $pkgname/src
 
-  autoreconf -vfi
+  autoreconf -ifv
 }
 
 build() {

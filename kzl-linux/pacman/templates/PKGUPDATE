@@ -1,5 +1,5 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - @URL@ | grep -Po '(?<=)' | sort -V | tail -n1)
-new_version=$(git ls-remote --tags @URL@ | grep -Po '(?<=)' | sort -V | tail -n1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - @URL@ | grep -oP '(?<=)' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags @URL@ | grep -oP '(?<=refs/tags/)' | sort -V | tail -n1)
 
 pre_update() {
 

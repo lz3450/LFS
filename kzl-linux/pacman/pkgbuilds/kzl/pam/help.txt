@@ -1,0 +1,210 @@
+`configure' configures Linux-PAM 1.5.3 to adapt to many kinds of systems.
+
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+To assign environment variables (e.g., CC, CFLAGS...), specify them as
+VAR=VALUE.  See below for descriptions of some of the useful variables.
+
+Defaults for the options are specified in brackets.
+
+Configuration:
+  -h, --help              display this help and exit
+      --help=short        display options specific to this package
+      --help=recursive    display the short help of all the included packages
+  -V, --version           display version information and exit
+  -q, --quiet, --silent   do not print `checking ...' messages
+      --cache-file=FILE   cache test results in FILE [disabled]
+  -C, --config-cache      alias for `--cache-file=config.cache'
+  -n, --no-create         do not create output files
+      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+
+Installation directories:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr]
+  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                          [PREFIX]
+
+By default, `make install' will install all the files in
+`/usr/bin', `/usr/lib' etc.  You can specify
+an installation prefix other than `/usr' using `--prefix',
+for instance `--prefix=$HOME'.
+
+For better control, use the options below.
+
+Fine tuning of the installation directories:
+  --bindir=DIR            user executables [EPREFIX/bin]
+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR        program executables [EPREFIX/libexec]
+  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+  --libdir=DIR            object code libraries [EPREFIX/lib]
+  --includedir=DIR        C header files [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR           info documentation [DATAROOTDIR/info]
+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR            man documentation [DATAROOTDIR/man]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/Linux-PAM]
+  --htmldir=DIR           html documentation [DOCDIR]
+  --dvidir=DIR            dvi documentation [DOCDIR]
+  --pdfdir=DIR            pdf documentation [DOCDIR]
+  --psdir=DIR             ps documentation [DOCDIR]
+
+Program names:
+  --program-prefix=PREFIX            prepend PREFIX to installed program names
+  --program-suffix=SUFFIX            append SUFFIX to installed program names
+  --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
+  --enable-dependency-tracking
+                          do not reject slow dependency extractors
+  --disable-dependency-tracking
+                          speeds up one-time build
+  --enable-static[=PKGS]  build static libraries [default=no]
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-fast-install[=PKGS]
+                          optimize for fast installation [default=yes]
+  --disable-libtool-lock  avoid locking (might break parallel builds)
+  --disable-largefile     omit support for large files
+  --enable-Werror         turn on -Werror compiler option
+  --disable-pie           disable position-independent executables (PIE)
+  --disable-doc           Do not generate or install documentation
+  --disable-prelude       do not use prelude
+  --enable-debug          specify you are building with debugging on
+  --enable-docbook-rng=FILE
+                          RNG file for checking XML files
+                          [default=http://docbook.org/xml/5.0/rng/docbookxi.rng]
+  --enable-html-stylesheet=FILE
+                          html stylesheet path
+                          [default=http://docbook.sourceforge.net/release/xsl-ns/current/html/chunk.xsl]
+  --enable-txt-stylesheet=FILE
+                          text stylesheet path
+                          [default=http://docbook.sourceforge.net/release/xsl-ns/current/html/docbook.xsl]
+  --enable-pdf-stylesheet=FILE
+                          pdf stylesheet path
+                          [default=http://docbook.sourceforge.net/release/xsl-ns/current/fo/docbook.xsl]
+  --enable-man-stylesheet=FILE
+                          man stylesheet path
+                          [default=http://docbook.sourceforge.net/release/xsl-ns/current/manpages/profile-docbook.xsl]
+  --enable-securedir=DIR  path to location of PAMs [default=$libdir/security]
+  --enable-isadir=DIR     path to arch-specific module files
+                          [default=../../(basename of $libdir)/security]
+  --enable-sconfigdir=DIR path to module conf files
+                          [default=$sysconfdir/security]
+  --enable-pamlocking     configure libpam to observe a global authentication
+                          lock
+  --enable-read-both-confs
+                          read both /etc/pam.d and /etc/pam.conf files
+  --disable-lckpwdf       do not use the lckpwdf function
+  --disable-audit         do not enable audit support
+  --enable-db=(db|ndbm|yes|no)
+                          Default behavior 'yes', which is to check for libdb
+                          first, followed by ndbm. Use 'no' to disable db
+                          support.
+  --disable-nis           Disable building NIS/YP support in pam_unix
+  --enable-usergroups     sets the usergroups option default to enabled
+  --disable-selinux       do not use SELinux
+  --disable-logind        Disable logind support
+  --disable-econf         do not use libeconf
+  --enable-vendordir=DIR  Directory for distribution provided configuration
+                          files
+  --enable-openssl        use OpenSSL crypto libraries
+  --disable-regenerate-docu
+                          Don't re-build documentation from XML sources
+  --disable-nls           do not use Native Language Support
+  --disable-rpath         do not hardcode runtime library paths
+  --disable-unix          do not build pam_unix module
+  --enable-lastlog        do build pam_lastlog module
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+                          both]
+  --with-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
+                          compiler's sysroot if not specified).
+  --with-libprelude-prefix=PFX
+                          Prefix where libprelude is installed (optional)
+  --with-mailspool        path to mail spool directory
+                          default _PATH_MAILDIR if defined in paths.h, otherwise /var/spool/mail
+  --with-xauth            additional path to check for xauth when it is called from pam_xauth
+                          added to the default of /usr/X11R6/bin/xauth, /usr/bin/xauth, /usr/bin/X11/xauth
+  --with-randomdev=(<path>|yes|no)
+                          use specified random device instead of /dev/urandom
+                          or 'no' to disable
+  --with-db-uniquename=extension
+                          Unique name for db libraries and functions.
+  --with-xml-catalog=CATALOG
+                          path to xml catalog to use
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
+  --without-libiconv-prefix     don't search for libiconv in includedir and libdir
+  --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
+  --without-libintl-prefix     don't search for libintl in includedir and libdir
+  --with-uidmin=<number>  default value for regular user min uid (1000)
+  --with-kernel-overflow-uid=<number>
+                          kernel overflow uid, default (uint16_t)-2=65534
+  --with-systemdunitdir=DIR
+                          path to systemd service directory
+  --with-misc-conv-bufsize=<number>
+                          Size of input buffer for libpam_misc's misc_conv()
+                          conversation function, default=4096
+
+Some influential environment variables:
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  LT_SYS_LIBRARY_PATH
+              User-defined run-time library search path.
+  YACC        The `Yet Another Compiler Compiler' implementation to use.
+              Defaults to the first program found out of: `bison -y', `byacc',
+              `yacc'.
+  YFLAGS      The list of arguments that will be passed by default to $YACC.
+              This script will default YFLAGS to the empty string to avoid a
+              default value of `-d' given by some make applications.
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  CRYPT_CFLAGS
+              C compiler flags for CRYPT, overriding pkg-config
+  CRYPT_LIBS  linker flags for CRYPT, overriding pkg-config
+  TIRPC_CFLAGS
+              C compiler flags for TIRPC, overriding pkg-config
+  TIRPC_LIBS  linker flags for TIRPC, overriding pkg-config
+  NSL_CFLAGS  C compiler flags for NSL, overriding pkg-config
+  NSL_LIBS    linker flags for NSL, overriding pkg-config
+  SYSTEMD_CFLAGS
+              C compiler flags for SYSTEMD, overriding pkg-config
+  SYSTEMD_LIBS
+              linker flags for SYSTEMD, overriding pkg-config
+  ECONF_CFLAGS
+              C compiler flags for ECONF, overriding pkg-config
+  ECONF_LIBS  linker flags for ECONF, overriding pkg-config
+  CPP         C preprocessor
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to the package provider.

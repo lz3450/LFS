@@ -1,0 +1,383 @@
+WARNING: The source directory instead of the build directory was specified.
+WARNING: Only the default values for the project are printed, and all command line parameters are ignored.
+
+Core properties:
+  Source dir /home/kzl/makepkg/build/systemd/src/systemd-stable
+
+Main project options:
+  
+  Core options                   Default Value                    Possible Values                  Description                                                  
+  --------------                 -------------                    ---------------                  -----------                                                  
+  auto_features                  auto                             [enabled, disabled, auto]        Override value of all 'auto' features                        
+  backend                        ninja                            [ninja, vs, vs2010, vs2012,      Backend to use                                               
+                                                                   vs2013, vs2015, vs2017, vs2019,                                                              
+                                                                   vs2022, xcode, none]                                                                         
+  buildtype                      debug                            [plain, debug, debugoptimized,   Build type to use                                            
+                                                                   release, minsize, custom]                                                                    
+  cmake_prefix_path              []                               []                               List of additional prefixes for cmake to search              
+  debug                          true                             [true, false]                    Enable debug symbols and other information                   
+  default_library                shared                           [shared, static, both]           Default library type                                         
+  force_fallback_for             []                               []                               Force fallback for those subprojects                         
+  install_umask                  0022                             [preserve, 0000-0777]            Default umask to apply on permissions of installed files     
+  layout                         mirror                           [mirror, flat]                   Build directory layout                                       
+  optimization                   0                                [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
+  pkg_config_path                []                               []                               List of additional paths for pkg-config to search            
+  prefer_static                  false                            [true, false]                    Whether to try static linking before shared linking          
+  strip                          false                            [true, false]                    Strip targets on install                                     
+  unity                          off                              [on, off, subprojects]           Unity build                                                  
+  unity_size                     4                                >=2                              Unity block size                                             
+  vsenv                          false                            [true, false]                    Activate Visual Studio environment                           
+  warning_level                  2                                [0, 1, 2, 3, everything]         Compiler warning level to use                                
+  werror                         false                            [true, false]                    Treat warnings as errors                                     
+  wrap_mode                      default                          [default, nofallback,            Wrap mode                                                    
+                                                                   nodownload, forcefallback,                                                                   
+                                                                   nopromote]                                                                                   
+  build.cmake_prefix_path        []                               []                               List of additional prefixes for cmake to search              
+  build.pkg_config_path          []                               []                               List of additional paths for pkg-config to search            
+  
+  Backend options                Default Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  backend_max_links              0                                >=0                              Maximum number of linker processes to run or 0 for no limit  
+  
+  Base options                   Default Value                    Possible Values                  Description                                                  
+  --------------                 -------------                    ---------------                  -----------                                                  
+  b_asneeded                     true                             [true, false]                    Use -Wl,--as-needed when linking                             
+  b_colorout                     always                           [auto, always, never]            Use colored output                                           
+  b_coverage                     false                            [true, false]                    Enable coverage tracking.                                    
+  b_lto                          false                            [true, false]                    Use link time optimization                                   
+  b_lto_threads                  0                                                                 Use multiple threads for Link Time Optimization              
+  b_lundef                       true                             [true, false]                    Use -Wl,--no-undefined when linking                          
+  b_ndebug                       false                            [true, false, if-release]        Disable asserts                                              
+  b_pch                          true                             [true, false]                    Use precompiled headers                                      
+  b_pgo                          off                              [off, generate, use]             Use profile guided optimization                              
+  b_pie                          false                            [true, false]                    Build executables as position independent                    
+  b_sanitize                     none                             [none, address, thread,          Code sanitizer to use                                        
+                                                                   undefined, memory, leak,                                                                     
+                                                                   address,undefined]                                                                           
+  b_staticpic                    true                             [true, false]                    Build static libraries as position independent               
+  
+  Compiler options               Default Value                    Possible Values                  Description                                                  
+  ------------------             -------------                    ---------------                  -----------                                                  
+  c_args                         []                               []                               Extra arguments passed to the c compiler                     
+  c_link_args                    []                               []                               Extra arguments passed to the c linker                       
+  c_std                          gnu11                            [none, c89, c99, c11, c17, c18,  C language standard to use                                   
+                                                                   c2x, gnu89, gnu99, gnu11,                                                                    
+                                                                   gnu17, gnu18, gnu2x]                                                                         
+  build.c_args                   []                               []                               Extra arguments passed to the c compiler                     
+  build.c_link_args              []                               []                               Extra arguments passed to the c linker                       
+  build.c_std                    none                             [none, c89, c99, c11, c17, c18,  C language standard to use                                   
+                                                                   c2x, gnu89, gnu99, gnu11,                                                                    
+                                                                   gnu17, gnu18, gnu2x]                                                                         
+  
+  pkgconfig module options       Default Value                    Possible Values                  Description                                                  
+  --------------------------     -------------                    ---------------                  -----------                                                  
+  pkgconfig.relocatable          false                            [true, false]                    Generate pkgconfig files as relocatable                      
+  
+  python module options          Default Value                    Possible Values                  Description                                                  
+  -----------------------        -------------                    ---------------                  -----------                                                  
+  python.install_env             prefix                           [auto, prefix, system, venv]     Which python environment to install to                       
+  python.platlibdir                                                                                Directory for site-specific, platform-specific files.        
+  python.purelibdir                                                                                Directory for site-specific, non-platform-specific files.    
+  
+  Directories                    Default Value                    Possible Values                  Description                                                  
+  -------------                  -------------                    ---------------                  -----------                                                  
+  bindir                         bin                                                               Executable directory                                         
+  datadir                        share                                                             Data file directory                                          
+  includedir                     include                                                           Header file directory                                        
+  infodir                        share/info                                                        Info page directory                                          
+  libdir                         lib                                                               Library directory                                            
+  libexecdir                     libexec                                                           Library executable directory                                 
+  licensedir                                                                                       Licenses directory                                           
+  localedir                      share/locale                                                      Locale data directory                                        
+  localstatedir                  /var                                                              Localstate data directory                                    
+  mandir                         share/man                                                         Manual page directory                                        
+  prefix                         /usr                                                              Installation prefix                                          
+  sbindir                        sbin                                                              System executable directory                                  
+  sharedstatedir                 /var/lib                                                          Architecture-independent data directory                      
+  sysconfdir                     /etc                                                              Sysconf data directory                                       
+  
+  Testing options                Default Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  errorlogs                      true                             [true, false]                    Whether to print the logs from failing tests                 
+  stdsplit                       true                             [true, false]                    Split stdout and stderr in test logs                         
+  
+  Project options                Default Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  acl                            auto                             [auto, true, false]              libacl support                                               
+  adm-gid                        0                                                                 soft-static allocation for the "adm" group                   
+  adm-group                      true                             [true, false]                    the ACL for adm group should be added                        
+  analyze                        true                             [true, false]                    install systemd-analyze                                      
+  apparmor                       auto                             [auto, true, false]              AppArmor support                                             
+  audio-gid                      0                                                                 soft-static allocation for the "audio" group                 
+  audit                          auto                             [auto, true, false]              libaudit support                                             
+  backlight                      true                             [true, false]                    support for restoring backlight state                        
+  bashcompletiondir                                                                                directory for bash completion scripts ["no" disables]        
+  binfmt                         true                             [true, false]                    support for custom binary formats                            
+  blkid                          auto                             [auto, true, false]              libblkid support                                             
+  bpf-compiler                   clang                            [clang, gcc]                     compiler used to build BPF programs, note: gcc is            
+                                                                                                   experimental                                                 
+  bpf-framework                  auto                             [auto, true, false]              build BPF programs from source code in restricted C          
+  bump-proc-sys-fs-file-max      true                             [true, false]                    bump /proc/sys/fs/file-max to LONG_MAX                       
+  bump-proc-sys-fs-nr-open       true                             [true, false]                    bump /proc/sys/fs/nr_open to INT_MAX                         
+  bzip2                          auto                             [auto, true, false]              bzip2 compression support                                    
+  cdrom-gid                      0                                                                 soft-static allocation for the "cdrom" group                 
+  certificate-root               /etc/ssl                                                          the prefix for TLS certificates                              
+  clock-valid-range-usec-max     473364000000000                                                   maximum value in microseconds for the difference between RTC 
+                                                                                                   and epoch, exceeding which is considered an RTC error ["0"   
+                                                                                                   disables]                                                    
+  compat-mutable-uid-boundaries  false                            [true, false]                    look at uid boundaries in /etc/login.defs for compatibility  
+  container-uid-base-max         1878982656                                                        maximum container UID base                                   
+  container-uid-base-min         524288                                                            minimum container UID base                                   
+  coredump                       true                             [true, false]                    install the coredump handler                                 
+  create-log-dirs                true                             [true, false]                    create /var/log/journal{,/remote}                            
+  cryptolib                      auto                             [auto, openssl, gcrypt]          whether to use openssl or gcrypt where both are supported    
+  dbus                           auto                             [auto, true, false]              libdbus support (for tests only)                             
+  dbus-interfaces-dir                                                                              export D-Bus introspection XML as standalone files           
+  dbuspolicydir                                                                                    D-Bus policy directory                                       
+  dbussessionservicedir                                                                            D-Bus session service directory                              
+  dbussystemservicedir                                                                             D-Bus system service directory                               
+  debug-extra                    []                               [hashmap, mmap-cache, siphash]   enable extra debugging                                       
+  debug-shell                    /bin/sh                                                           path to debug shell binary                                   
+  debug-tty                      /dev/tty9                                                         specify the tty device for debug shell                       
+  default-compression            auto                             [auto, zstd, lz4, xz]            default compression algorithm                                
+  default-dns-over-tls           no                               [yes, opportunistic, no]         default DNS-over-TLS mode                                    
+  default-dnssec                 allow-downgrade                  [yes, allow-downgrade, no]       default DNSSEC mode                                          
+  default-hierarchy              unified                          [legacy, hybrid, unified]        default cgroup hierarchy                                     
+  default-kill-user-processes    true                             [true, false]                    the default value for KillUserProcesses= setting             
+  default-llmnr                  yes                              [yes, resolve, no]               default LLMNR mode                                           
+  default-locale                 C.UTF-8                                                           default locale used when /etc/locale.conf does not exist     
+  default-mdns                   yes                              [yes, resolve, no]               default MulticastDNS mode                                    
+  default-net-naming-scheme      latest                                                            default net.naming-scheme= value                             
+  default-timeout-sec            90                                                                default timeout for system unit start/stop                   
+  default-user-shell             /bin/bash                                                         default interactive shell                                    
+  default-user-timeout-sec       90                                                                default timeout for user unit start/stop                     
+  dev-kvm-mode                   0666                                                              /dev/kvm access mode                                         
+  dialout-gid                    0                                                                 soft-static allocation for the "dialout" group               
+  disk-gid                       0                                                                 soft-static allocation for the "disk" group                  
+  dns-over-tls                   auto                             [auto, gnutls, openssl, true,    DNS-over-TLS support                                         
+                                                                   false]                                                                                       
+  dns-servers                    1.1.1.1#cloudflare-dns.com                                        space-separated list of default DNS servers                  
+                                 8.8.8.8#dns.google                                                                                                             
+                                 1.0.0.1#cloudflare-dns.com                                                                                                     
+                                 8.8.4.4#dns.google                                                                                                             
+                                 2606:4700:4700::1111#cloudflare-                                                                                               
+                                 dns.com                                                                                                                        
+                                 2001:4860:4860::8888#dns.google                                                                                                
+                                 2606:4700:4700::1001#cloudflare-                                                                                               
+                                 dns.com                                                                                                                        
+                                 2001:4860:4860::8844#dns.google                                                                                                
+  docdir                                                                                           documentation directory                                      
+  dynamic-uid-max                65519                                                             maximum dynamic UID                                          
+  dynamic-uid-min                61184                                                             minimum dynamic UID                                          
+  efi                            true                             [true, false]                    enable systemd-boot and bootctl                              
+  efi-cflags                     []                               []                               additional flags for EFI compiler                            
+  efi-color-edit                 black,lightgray                                                   boot loader color for option line edit                       
+  efi-color-entry                lightgray,black                                                   boot loader color for entries                                
+  efi-color-highlight            black,lightgray                                                   boot loader color for selected entries                       
+  efi-color-normal               lightgray,black                                                   general boot loader color in "foreground,background" form,   
+                                                                                                   see constants from eficon.h                                  
+  efi-includedir                 /usr/include/efi                                                  path to the EFI header directory                             
+  efi-ld                         auto                             [auto, bfd, gold]                the linker to use for EFI modules                            
+  efi-libdir                                                                                       path to the EFI lib directory                                
+  elfutils                       auto                             [auto, true, false]              elfutils support                                             
+  environment-d                  true                             [true, false]                    support for environment.d                                    
+  extra-net-naming-schemes                                                                         comma-separated list of extra net.naming-scheme= definitions 
+  fallback-hostname              localhost                                                         the hostname used if none configured                         
+  fdisk                          auto                             [auto, true, false]              libfdisk support                                             
+  fexecve                        false                            [true, false]                    use fexecve() to spawn children                              
+  first-boot-full-preset         false                            [true, false]                    during first boot, do full preset-all (default will be       
+                                                                                                   changed to true later)                                       
+  firstboot                      true                             [true, false]                    support for firstboot mechanism                              
+  fuzz-tests                     false                            [true, false]                    run the fuzzer regression tests by default (with sanitizers) 
+  gcrypt                         auto                             [auto, true, false]              gcrypt support                                               
+  glib                           auto                             [auto, true, false]              libglib support (for tests only)                             
+  gnu-efi                        auto                             [auto, true, false]              gnu-efi support for sd-boot                                  
+  gnutls                         auto                             [auto, true, false]              gnutls support                                               
+  group-render-mode              0666                                                              Access mode for devices owned by render group (e.g.          
+                                                                                                   /dev/dri/renderD*, /dev/kfd).                                
+  gshadow                        true                             [true, false]                    support for shadow group                                     
+  hibernate                      true                             [true, false]                    support for hibernation                                      
+  homed                          auto                             [auto, true, false]              install the systemd-homed stack                              
+  hostnamed                      true                             [true, false]                    install the systemd-hostnamed stack                          
+  html                           false                            [auto, true, false]              build and install html pages                                 
+  hwdb                           true                             [true, false]                    support for the hardware database                            
+  idn                            true                             [true, false]                    use IDN when printing hostnames                              
+  ima                            true                             [true, false]                    IMA support                                                  
+  importd                        auto                             [auto, true, false]              install the systemd-importd daemon                           
+  initrd                         true                             [true, false]                    install services for use when running systemd in initrd      
+  input-gid                      0                                                                 soft-static allocation for the "input" group                 
+  install-sysconfdir             true                             [true, no-samples, false]        install configuration files and directories to $sysconfdir   
+  install-tests                  false                            [true, false]                    install test executables                                     
+  kernel-install                 true                             [true, false]                    install kernel-install and associated files                  
+  kexec-path                                                                                       path to kexec                                                
+  kmem-gid                       0                                                                 soft-static allocation for the "kmem" group                  
+  kmod                           auto                             [auto, true, false]              support for loadable modules                                 
+  kmod-path                                                                                        path to kmod                                                 
+  kvm-gid                        0                                                                 soft-static allocation for the "kvm" group                   
+  ldconfig                       true                             [true, false]                    support for dynamic linker cache creation                    
+  libcryptsetup                  auto                             [auto, true, false]              libcryptsetup support                                        
+  libcryptsetup-plugins          auto                             [auto, true, false]              libcryptsetup LUKS2 external token handlers support (plugins)
+  libcryptsetup-plugins-dir                                                                        directory for libcryptsetup plugins                          
+  libcurl                        auto                             [auto, true, false]              libcurl support                                              
+  libfido2                       auto                             [auto, true, false]              FIDO2 support                                                
+  libidn                         auto                             [auto, true, false]              libidn support                                               
+  libidn2                        auto                             [auto, true, false]              libidn2 support                                              
+  libiptc                        auto                             [auto, true, false]              libiptc support                                              
+  link-boot-shared               true                             [true, false]                    link bootctl and systemd-bless-boot against libsystemd-      
+                                                                                                   shared.so                                                    
+  link-journalctl-shared         true                             [true, false]                    link journalctl against libsystemd-shared.so                 
+  link-networkd-shared           true                             [true, false]                    link systemd-networkd and its helpers to libsystemd-shared.so
+  link-systemctl-shared          true                             [true, false]                    link systemctl against libsystemd-shared.so                  
+  link-timesyncd-shared          true                             [true, false]                    link systemd-timesyncd and its helpers to libsystemd-        
+                                                                                                   shared.so                                                    
+  link-udev-shared               true                             [true, false]                    link systemd-udevd and its helpers to libsystemd-shared.so   
+  llvm-fuzz                      false                            [true, false]                    build against LLVM libFuzzer                                 
+  loadkeys-path                                                                                    path to loadkeys                                             
+  localed                        true                             [true, false]                    install the systemd-localed stack                            
+  localegen-path                                                                                   absolute path to the locale-gen binary in case the system is 
+                                                                                                   using locale-gen                                             
+  log-message-verification       auto                             [auto, true, false]              do fake printf() calls to verify format strings              
+  log-trace                      false                            [true, false]                    enable low level debug logging                               
+  logind                         true                             [true, false]                    install the systemd-logind stack                             
+  lp-gid                         0                                                                 soft-static allocation for the "lp" group                    
+  lz4                            auto                             [auto, true, false]              lz4 compression support                                      
+  machined                       true                             [true, false]                    install the systemd-machined stack                           
+  man                            false                            [auto, true, false]              build and install man pages                                  
+  memory-accounting-default      true                             [true, false]                    enable MemoryAccounting= by default                          
+  microhttpd                     auto                             [auto, true, false]              libµhttpd support                                            
+  mode                           developer                        [developer, release]             autoenable features suitable for systemd development/release 
+                                                                                                   builds                                                       
+  mount-path                                                                                       path to mount                                                
+  networkd                       true                             [true, false]                    install the systemd-networkd stack                           
+  nobody-group                   nobody                                                            The name of the nobody group (the one with GID 65534)        
+  nobody-user                    nobody                                                            The name of the nobody user (the one with UID 65534)         
+  nologin-path                                                                                     path to nologin                                              
+  nscd                           true                             [true, false]                    build support for flushing of the nscd caches                
+  nspawn-locale                  C.UTF-8                                                           default locale used by systemd-nspawn when executing commands
+                                                                                                   in a container                                               
+  nss-myhostname                 true                             [true, false]                    install nss-myhostname module                                
+  nss-mymachines                 auto                             [auto, true, false]              install nss-mymachines module                                
+  nss-resolve                    auto                             [auto, true, false]              install nss-resolve module                                   
+  nss-systemd                    true                             [true, false]                    install nss-systemd module                                   
+  ntp-servers                    time1.google.com                                                  space-separated list of default NTP servers                  
+                                 time2.google.com                                                                                                               
+                                 time3.google.com                                                                                                               
+                                 time4.google.com                                                                                                               
+  ok-color                       green                            [black, red, green, yellow,      color of the "OK" status message                             
+                                                                   blue, magenta, cyan, white,                                                                  
+                                                                   highlight-black, highlight-red,                                                              
+                                                                   highlight-green, highlight-                                                                  
+                                                                   yellow, highlight-blue,                                                                      
+                                                                   highlight-magenta, highlight-                                                                
+                                                                   cyan, highlight-white]                                                                       
+  oomd                           true                             [true, false]                    install the userspace oom killer                             
+  openssl                        auto                             [auto, true, false]              openssl support                                              
+  oss-fuzz                       false                            [true, false]                    build against oss-fuzz                                       
+  p11kit                         auto                             [auto, true, false]              p11kit support                                               
+  pam                            auto                             [auto, true, false]              PAM support                                                  
+  pamconfdir                                                                                       directory for PAM configuration ["no" disables]              
+  pamlibdir                                                                                        directory for PAM modules                                    
+  pcre2                          auto                             [auto, true, false]              regexp matching support using pcre2                          
+  pkgconfigdatadir                                                                                 directory for arch-independent pkg-config files              
+  pkgconfiglibdir                                                                                  directory for standard pkg-config files                      
+  polkit                         auto                             [auto, true, false]              polkit support                                               
+  portabled                      true                             [true, false]                    install the systemd-portabled stack                          
+  pstore                         true                             [true, false]                    install the pstore archival tool                             
+  pwquality                      auto                             [auto, true, false]              libpwquality support                                         
+  qrencode                       auto                             [auto, true, false]              libqrencode support                                          
+  quotacheck                     true                             [true, false]                    support for the quotacheck tools                             
+  quotacheck-path                                                                                  path to quotacheck                                           
+  quotaon-path                                                                                     path to quotaon                                              
+  randomseed                     true                             [true, false]                    support for restoring random seed                            
+  rc-local                       /etc/rc.local                                                     rc-local                                                     
+  remote                         auto                             [auto, true, false]              support for "journal over the network"                       
+  render-gid                     0                                                                 soft-static allocation for the "render" group                
+  repart                         auto                             [auto, true, false]              install the systemd-repart tool                              
+  resolve                        true                             [true, false]                    systemd-resolved stack                                       
+  rfkill                         true                             [true, false]                    support for the rfkill tools                                 
+  rootlibdir                                                                                       [/usr]/lib/x86_64-linux-gnu or such                          
+  rootprefix                                                                                       override the root prefix [default '/' if split-usr and '/usr'
+                                                                                                   otherwise]                                                   
+  rpmmacrosdir                   lib/rpm/macros.d                                                  directory for rpm macros ["no" disables]                     
+  sbat-distro                    auto                                                              SBAT distribution ID, e.g. fedora, or auto for autodetection 
+  sbat-distro-generation         1                                                                 SBAT distribution generation                                 
+  sbat-distro-pkgname                                                                              SBAT distribution package name, e.g. systemd                 
+  sbat-distro-summary                                                                              SBAT distribution summary, e.g. Fedora                       
+  sbat-distro-url                                                                                  SBAT distribution URL, e.g.                                  
+                                                                                                   https://src.fedoraproject.org/rpms/systemd                   
+  sbat-distro-version                                                                              SBAT distribution package version, e.g. 248-7.fc34           
+  seccomp                        auto                             [auto, true, false]              SECCOMP support                                              
+  selinux                        auto                             [auto, true, false]              SELinux support                                              
+  service-watchdog               3min                                                              default watchdog setting for systemd services                
+  setfont-path                                                                                     path to setfont                                              
+  sgx-gid                        0                                                                 soft-static allocation for the "sgx" group                   
+  shared-lib-tag                                                                                   override the private shared library version tag (defaults to 
+                                                                                                   project version)                                             
+  skip-deps                      false                            [true, false]                    skip optional dependencies                                   
+  slow-tests                     false                            [true, false]                    run the slow tests by default                                
+  smack                          true                             [true, false]                    SMACK support                                                
+  smack-default-process-label                                                                      default SMACK label for executed processes                   
+  smack-run-label                                                                                  run systemd --system itself with a specific SMACK label      
+  split-bin                      auto                             [auto, true, false]              sbin is not a symlink to bin                                 
+  split-usr                      auto                             [auto, true, false]              /bin, /sbin aren't symlinks into /usr                        
+  standalone-binaries            false                            [true, false]                    also build standalone versions of supported binaries         
+  static-libsystemd              false                            [false, true, pic, no-pic]       install a static library for libsystemd                      
+  static-libudev                 false                            [false, true, pic, no-pic]       install a static library for libudev                         
+  status-unit-format-default     auto                             [auto, description, name,        use unit name or description in messages by default          
+                                                                   combined]                                                                                    
+  sulogin-path                                                                                     path to sulogin                                              
+  support-url                    https://lists.freedesktop.org/ma                                  the support URL to show in catalog entries included in       
+                                 ilman/listinfo/systemd-devel                                      systemd                                                      
+  sysext                         true                             [true, false]                    install the systemd-sysext stack                             
+  system-alloc-gid-min           0                                                                 minimum system GID used when allocating                      
+  system-alloc-uid-min           0                                                                 minimum system UID used when allocating                      
+  system-gid-max                 0                                                                 maximum system GID                                           
+  system-uid-max                 0                                                                 maximum system UID                                           
+  systemd-journal-gid            0                                                                 soft-static allocation for the systemd-journal group         
+  systemd-network-uid            0                                                                 soft-static allocation for the systemd-network user          
+  systemd-resolve-uid            0                                                                 soft-static allocation for the systemd-resolve user          
+  systemd-timesync-uid           0                                                                 soft-static allocation for the systemd-timesync user         
+  sysupdate                      auto                             [auto, true, false]              install the systemd-sysupdate tool                           
+  sysusers                       true                             [true, false]                    support for the sysusers configuration                       
+  sysvinit-path                  /etc/init.d                                                       the directory where the SysV init scripts are located        
+  sysvrcnd-path                  /etc/rc.d                                                         the base directory for SysV rcN.d directories                
+  tape-gid                       0                                                                 soft-static allocation for the "tape" group                  
+  telinit-path                   /lib/sysvinit/telinit                                             path to telinit                                              
+  tests                          true                             [true, unsafe, false]            enable extra tests with =unsafe                              
+  time-epoch                     0                                                                 time epoch for time clients                                  
+  timedated                      true                             [true, false]                    install the systemd-timedated daemon                         
+  timesyncd                      true                             [true, false]                    install the systemd-timesyncd daemon                         
+  tmpfiles                       true                             [true, false]                    support for tmpfiles.d                                       
+  tpm                            true                             [true, false]                    TPM should be used to log events and extend the registers    
+  tpm2                           auto                             [auto, true, false]              TPM2 support                                                 
+  translations                   true                             [true, false]                    build and install translations                               
+  tty-gid                        5                                                                 the numeric GID of the "tty" group                           
+  ukify                          auto                             [auto, true, false]              install ukify                                                
+  umount-path                                                                                      path to umount                                               
+  update-helper-user-timeout-sec 15                                                                timeout for user manager package operations                  
+  urlify                         true                             [true, false]                    enable pager Hyperlink ANSI sequence support                 
+  user-path                                                                                        $PATH to use for user sessions                               
+  userdb                         true                             [true, false]                    install the systemd-userdbd stack                            
+  users-gid                      0                                                                 soft-static allocation for the "users" group                 
+  utmp                           true                             [true, false]                    support for utmp/wtmp log handling                           
+  utmp-gid                       0                                                                 soft-static allocation for the "utmp" group                  
+  valgrind                       false                            [true, false]                    do extra operations to avoid valgrind warnings               
+  vconsole                       true                             [true, false]                    support for vconsole configuration                           
+  version-tag                                                                                      override the git version string                              
+  video-gid                      0                                                                 soft-static allocation for the "video" group                 
+  wheel-gid                      0                                                                 soft-static allocation for the "wheel" group                 
+  wheel-group                    true                             [true, false]                    the ACL for wheel group should be added                      
+  www-target                     www.freedesktop.org:/srv/www.fre                                  the address and dir to upload docs too                       
+                                 edesktop.org/www/software/system                                                                                               
+                                 d                                                                                                                              
+  xdg-autostart                  true                             [true, false]                    install the xdg-autostart-generator and unit                 
+  xenctrl                        auto                             [auto, true, false]              support for Xen kexec                                        
+  xinitrcdir                                                                                       directory for xinitrc files                                  
+  xkbcommon                      auto                             [auto, true, false]              xkbcommon keymap support                                     
+  xz                             auto                             [auto, true, false]              xz compression support                                       
+  zlib                           auto                             [auto, true, false]              zlib compression support                                     
+  zshcompletiondir                                                                                 directory for zsh completion scripts ["no" disables]         
+  zstd                           auto                             [auto, true, false]              zstd compression support                                     
+
+WARNING: The source directory instead of the build directory was specified.
+WARNING: Only the default values for the project are printed, and all command line parameters are ignored.

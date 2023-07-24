@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gawk
-pkgver=5.2.1
-pkgrel=1
+pkgver=5.2.2
+pkgrel=2
 epoch=
 pkgdesc="GNU version of awk"
 arch=('x86_64')

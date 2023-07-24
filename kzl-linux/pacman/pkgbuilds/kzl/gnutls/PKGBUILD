@@ -2,7 +2,7 @@
 
 pkgname=gnutls
 pkgver=3.8.0
-pkgrel=2
+pkgrel=4
 epoch=
 pkgdesc="A secure communications library implementing the SSL, TLS and DTLS protocols and technologies around them"
 arch=('x86_64')
@@ -51,5 +51,5 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

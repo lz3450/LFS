@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=util-linux
-pkgver=2.38.1
-pkgrel=18
+pkgver=2.39.1
+pkgrel=3
 epoch=
 pkgdesc="Miscellaneous system utilities for Linux"
 arch=('x86_64')

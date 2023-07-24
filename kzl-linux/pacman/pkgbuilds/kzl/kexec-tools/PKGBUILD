@@ -2,7 +2,7 @@
 
 pkgname=kexec-tools
 pkgver=2.0.26
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Load another kernel from the currently executing Linux kernel"
 arch=('x86_64')
@@ -29,5 +29,5 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

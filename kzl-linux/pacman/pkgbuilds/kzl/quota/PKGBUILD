@@ -2,7 +2,7 @@
 
 pkgname=quota
 pkgver=4.09
-pkgrel=4
+pkgrel=6
 epoch=
 pkgdesc="Tools to manage kernel-level quotas in Linux"
 arch=('x86_64')

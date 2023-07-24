@@ -2,7 +2,7 @@
 
 pkgname=gnupg
 pkgver=2.2.41
-pkgrel=4
+pkgrel=7
 epoch=
 pkgdesc="Complete and free implementation of the OpenPGP standard"
 arch=('x86_64')
@@ -28,7 +28,6 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --libexecdir=/usr/libexe/gnupg \
     --sysconfdir=/etc \
     --disable-scdaemon \
     --enable-large-secmem \

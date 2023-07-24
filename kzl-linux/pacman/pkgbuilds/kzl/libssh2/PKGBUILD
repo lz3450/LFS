@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libssh2
-pkgver=1.10.0
-pkgrel=2
+pkgver=1.11.0
+pkgrel=1
 epoch=
 pkgdesc="A library implementing the SSH2 protocol as defined by Internet Drafts"
 arch=('x86_64')

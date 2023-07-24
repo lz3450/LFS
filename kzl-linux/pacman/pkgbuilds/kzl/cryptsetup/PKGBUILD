@@ -2,7 +2,7 @@
 
 pkgname=cryptsetup
 pkgver=2.6.1
-pkgrel=2
+pkgrel=4
 epoch=
 pkgdesc="An open-source utility used to conveniently set up disk encryption based on the dm-crypt kernel module."
 arch=('x86_64')
@@ -33,5 +33,5 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

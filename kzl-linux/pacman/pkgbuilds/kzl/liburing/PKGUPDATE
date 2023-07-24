@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://git.kernel.dk/cgit/liburing/ | grep -Po '(?<=liburing-)\d\.\d' | head -1)
+new_version=$(git ls-remote --tags git://git.kernel.dk/liburing.git | grep -oP '(?<=refs/tags/liburing-)\d\.\d' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

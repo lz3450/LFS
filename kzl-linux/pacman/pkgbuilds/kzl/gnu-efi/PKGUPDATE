@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://sourceforge.net/projects/gnu-efi/files/ | grep -Po '(?<=gnu-efi-)\d\.\d\.\d\d' | head -1)
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://sourceforge.net/projects/gnu-efi/files/ | grep -oP '(?<=gnu-efi-)\d\.\d\.\d\d' | head -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
+    cat Makefile > "$PKGBUILDDIR"/help.txt
+}

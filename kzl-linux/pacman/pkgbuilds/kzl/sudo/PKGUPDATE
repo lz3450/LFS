@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.sudo.ws/sudo/ | grep -Po '(?<=sudo-)\d\.\d\.\d\d(p\d)?' | sort -V | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.sudo.ws/sudo/ | grep -oP '(?<=sudo-)\d\.\d\.\d\d(p\d)?' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

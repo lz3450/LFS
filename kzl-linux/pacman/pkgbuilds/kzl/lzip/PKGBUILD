@@ -2,7 +2,7 @@
 
 pkgname=lzip
 pkgver=1.23
-pkgrel=9
+pkgrel=10
 epoch=
 pkgdesc="A lossless data compressor with a user interface similar to the one of gzip or bzip2"
 arch=('x86_64')

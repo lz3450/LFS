@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libnftnl
-pkgver=1.2.5
+pkgver=1.2.6
 pkgrel=2
 epoch=
 pkgdesc="A userspace library providing a low-level netlink programming interface (API) to the in-kernel nf_tables subsystem"
@@ -30,5 +30,5 @@ build() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

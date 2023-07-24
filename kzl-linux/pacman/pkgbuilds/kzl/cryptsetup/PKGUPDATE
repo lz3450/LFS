@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://gitlab.com/cryptsetup/cryptsetup/-/raw/main/README.md | grep -Po '(?<=The latest stable cryptsetup release version is )\d\.\d\.\d')
+new_version=$(git ls-remote --tags https://gitlab.com/cryptsetup/cryptsetup.git | grep -oP '(?<=refs/tags/v)\d\.\d\.\d' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

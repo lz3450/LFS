@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://www.openldap.org/ | grep -Po '(?<=OpenLDAP Feature Release )\d\.\d\.\d')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.openldap.org/ | grep -Po 'OpenLDAP Feature Release \K\d\.\d\.\d')
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

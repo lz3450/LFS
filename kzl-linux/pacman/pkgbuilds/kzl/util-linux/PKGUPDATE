@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://github.com/util-linux/util-linux/tags | grep -Po '(?<=util-linux/releases/tag/v)\d\.\d\d(\.\d)?(?=")' | head -1)
+new_version=$(git ls-remote --tags https://github.com/util-linux/util-linux.git | grep -oP '(?<=refs/tags/v)\d\.\d\d(\.\d)?' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

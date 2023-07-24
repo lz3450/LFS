@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=sqlite
-pkgver=3.41.2
-pkgrel=4
+pkgver=3.42.0
+pkgrel=1
 epoch=
 pkgdesc="A C library that implements an SQL database engine"
 arch=('x86_64')
