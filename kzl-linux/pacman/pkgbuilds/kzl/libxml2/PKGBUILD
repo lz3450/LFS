@@ -2,7 +2,7 @@
 
 pkgname=libxml2
 pkgver=2.11.4
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="the XML C parser and toolkit"
 arch=('x86_64')

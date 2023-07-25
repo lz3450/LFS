@@ -2,7 +2,7 @@
 
 pkgname=ncurses
 pkgver=6.4
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('x86_64')
@@ -36,11 +36,11 @@ build() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   for lib in ncurses ncurses++ form menu panel; do
     printf "INPUT(-l%sw)\n" "$lib" > "$pkgdir/usr/lib/lib$lib.so"
-    ln -sv $libw.pc "$pkgdir/usr/lib/pkgconfig/$lib.pc"
+    ln -sv ${lib}w.pc "$pkgdir/usr/lib/pkgconfig/$lib.pc"
   done
 
   printf 'INPUT(-lncursesw)\n' > "$pkgdir/usr/lib/libcursesw.so"

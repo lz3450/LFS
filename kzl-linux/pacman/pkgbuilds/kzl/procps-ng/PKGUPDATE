@@ -1,5 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://gitlab.com/procps-ng/procps/-/tags | grep -Po '(?<=/procps-ng/procps/-/tags/v)\d\.\d\.\d' | head -1)
+new_version=$(git ls-remote --tags https://gitlab.com/procps-ng/procps.git | grep -oP '(?<=refs/tags/v)\d\.\d\.\d' | sort -V | tail -n1)
 
 post_update() {
-    $BUILDDIR/$pkgname/src/procps/configure --help > help.txt
+    cd "$BUILDDIR/$pkgname/src/procps"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
 }

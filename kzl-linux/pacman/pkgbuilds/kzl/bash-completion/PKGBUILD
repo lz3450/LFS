@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=bash-completion
-pkgver=2.11.1322
+pkgver=2.11.1327
 pkgrel=1
 epoch=
 pkgdesc="Programmable completion for the bash shell"

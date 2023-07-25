@@ -2,7 +2,7 @@
 
 pkgname=procps-ng
 pkgver=4.0.3
-pkgrel=5
+pkgrel=9
 epoch=
 pkgdesc="Utilities for monitoring your system and its processes"
 arch=('x86_64')
@@ -26,9 +26,11 @@ build() {
 
   ./configure \
     --prefix=/usr \
+    --disable-nls \
     --enable-watch8bit \
     --disable-kill \
-    --with-systemd
+    --with-systemd \
+    --disable-modern-top
 
   make
 }

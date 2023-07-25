@@ -1,6 +1,6 @@
 `configure' configures procps-ng 4.0.3 to adapt to many kinds of systems.
 
-Usage: /home/kzl/makepkg/build/procps-ng/src/procps/configure [OPTION]... [VAR=VALUE]...
+Usage: ./configure [OPTION]... [VAR=VALUE]...
 
 To assign environment variables (e.g., CC, CFLAGS...), specify them as
 VAR=VALUE.  See below for descriptions of some of the useful variables.

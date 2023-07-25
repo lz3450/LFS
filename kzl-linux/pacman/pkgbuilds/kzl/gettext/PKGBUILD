@@ -2,7 +2,7 @@
 
 pkgname=gettext
 pkgver=0.22
-pkgrel=3
+pkgrel=9
 epoch=
 pkgdesc="GNU internationalization library"
 arch=('x86_64')
@@ -10,11 +10,20 @@ url="https://www.gnu.org/software/gettext/"
 license=('KZL')
 depends=(acl glibc libunistring libxml2)
 source=(https://ftp.gnu.org/pub/gnu/gettext/$pkgname-$pkgver.tar.gz{,.sig})
-# source=(git+https://git.savannah.gnu.org/git/gettext.git#tag=v$pkgver
-#         git+https://git.savannah.gnu.org/git/gnulib.git)
 validpgpkeys=('9001B85AF9E1B83DF1BDA942F5BE8B267C6A406D')
 sha256sums=('49f089be11b490170bbf09ed2f51e5f5177f55be4cc66504a5861820e0fb06ab'
             'SKIP')
+# source=(git+https://git.savannah.gnu.org/git/gettext.git#tag=v$pkgver
+#         git+https://git.savannah.gnu.org/git/gnulib.git)
+# sha256sums=('SKIP'
+#             'SKIP')
+
+# prepare() {
+#   cd $pkgname-$pkgver
+
+#   GNULIB_SRCDIR="$srcdir"/gnulib ./autopull.sh
+#   GNULIB_SRCDIR="$srcdir"/gnulib ./autogen.sh
+# }
 
 build() {
   cd $pkgname-$pkgver
