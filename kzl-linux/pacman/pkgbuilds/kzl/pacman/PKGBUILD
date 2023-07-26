@@ -55,7 +55,7 @@ package() {
   cd $pkgname
 
   meson install -C build --destdir="$pkgdir"
-  
+
   sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-kzl-linux-gnu/' \
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
       -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2"' \
