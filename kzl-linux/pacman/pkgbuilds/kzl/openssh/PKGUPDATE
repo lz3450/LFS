@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://github.com/openssh/openssh-portable/tags | grep -Po '(?<=openssh-portable/releases/tag/V_)\d_\d_P\d' | sed 's/_/./g' | head -1)
+new_version=$(git ls-remote --tags https://github.com/openssh/openssh-portable.git | grep -oP '(?<=refs/tags/V_)\d_\d_P\d' | sed 's/_/./g' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname-portable"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

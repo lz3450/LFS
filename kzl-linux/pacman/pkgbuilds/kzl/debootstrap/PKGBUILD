@@ -21,7 +21,7 @@ pkgver() {
 prepare() {
   cd $pkgname
 
-  sed -e 's|export PATH|export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"|' -i debootstrap
+  sed -e 's|export PATH|export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"|' -i debootstrap
 }
 
 package() {
