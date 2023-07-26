@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/iputils/iputils/tags | grep -Po '(?<=<a href="/iputils/iputils/releases/tag/)\d{8}' | head -1)
+new_version=$(git ls-remote --tags https://github.com/iputils/iputils.git | grep -oP '(?<=refs/tags/)\d{8}' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

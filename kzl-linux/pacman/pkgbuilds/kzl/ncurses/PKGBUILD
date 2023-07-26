@@ -2,7 +2,7 @@
 
 pkgname=ncurses
 pkgver=6.4
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('x86_64')
@@ -30,7 +30,7 @@ build() {
     --enable-stripping \
     --with-xterm-kbs=del
 
-  make -O
+  make
 }
 
 package() {
@@ -39,16 +39,34 @@ package() {
   make DESTDIR="$pkgdir" install
 
   for lib in ncurses ncurses++ form menu panel; do
-    printf "INPUT(-l%sw)\n" "$lib" > "$pkgdir/usr/lib/lib$lib.so"
+    printf "INPUT(-l%sw)\n" "$lib" > "$pkgdir/usr/lib/lib$lib.so.$pkgver"
+    chmod +x "$pkgdir/usr/lib/lib$lib.so.$pkgver"
+    ln -sv lib$lib.so.$pkgver "$pkgdir/usr/lib/lib$lib.so.${pkgver:0:1}"
+    ln -sv lib$lib.so.${pkgver:0:1} "$pkgdir/usr/lib/lib$lib.so"
     ln -sv ${lib}w.pc "$pkgdir/usr/lib/pkgconfig/$lib.pc"
   done
 
-  printf 'INPUT(-lncursesw)\n' > "$pkgdir/usr/lib/libcursesw.so"
-  ln -sv libncurses.so "$pkgdir/usr/lib/libcurses.so"
+  printf "INPUT(-lncursesw)\n" > "$pkgdir/usr/lib/libcursesw.so.$pkgver"
+  chmod +x "$pkgdir/usr/lib/libcursesw.so.$pkgver"
+  ln -sv libcursesw.so.$pkgver "$pkgdir/usr/lib/libcursesw.so.${pkgver:0:1}"
+  ln -sv libcursesw.so.${pkgver:0:1} "$pkgdir/usr/lib/libcursesw.so"
+
+  printf "INPUT(-lncursesw)\n" > "$pkgdir/usr/lib/libcurses.so.$pkgver"
+  chmod +x "$pkgdir/usr/lib/libcurses.so.$pkgver"
+  ln -sv libcurses.so.$pkgver "$pkgdir/usr/lib/libcurses.so.${pkgver:0:1}"
+  ln -sv libcurses.so.${pkgver:0:1} "$pkgdir/usr/lib/libcurses.so"
 
   for lib in tic tinfo; do
-    printf "INPUT(libncursesw.so.%s)\n" "${pkgver:0:1}" > "$pkgdir/usr/lib/lib$lib.so"
-    ln -sv libncursesw.so.${pkgver:0:1} "$pkgdir/usr/lib/lib$lib.so.${pkgver:0:1}"
+    printf "INPUT(libncursesw.so.%s)\n" "$pkgver" > "$pkgdir/usr/lib/lib$lib.so.$pkgver"
+    chmod +x "$pkgdir/usr/lib/lib$lib.so.$pkgver"
+    ln -sv lib$lib.so.$pkgver "$pkgdir/usr/lib/lib$lib.so.${pkgver:0:1}"
+    ln -sv lib$lib.so.${pkgver:0:1} "$pkgdir/usr/lib/lib$lib.so"
     ln -sv ncursesw.pc "$pkgdir/usr/lib/pkgconfig/$lib.pc"
+  done
+
+  mkdir "$pkgdir"/usr/include/ncurses{,w}
+  for include in "$pkgdir"/usr/include/*.h; do
+    ln -sv ../$(basename $include) "$pkgdir"/usr/include/ncurses
+    ln -sv ../$(basename $include) "$pkgdir"/usr/include/ncursesw
   done
 }
