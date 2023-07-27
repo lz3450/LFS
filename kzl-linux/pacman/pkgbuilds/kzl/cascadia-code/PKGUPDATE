@@ -1,0 +1,6 @@
+new_version=$(git ls-remote --tags https://github.com/microsoft/cascadia-code.git | grep -oP '(?<=refs/tags/v)\d{4}\.\d{2}' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/ttf"
+    ls -R > "$PKGBUILDDIR"/help.txt
+}
