@@ -38,7 +38,7 @@ build() {
     --disable-login \
     --disable-nologin \
     --enable-write \
-    --enable-fs-paths-default=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    --enable-fs-paths-default="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
     --enable-usrdir-path \
     --with-audit \
     --with-cryptsetup
