@@ -64,14 +64,6 @@ kzl_stage2_pkgs=(
     # base
     ################################
 
-    ################################
-    # toolchain
-    ################################
-    tzdata glibc
-    jansson zlib zstd bc binutils
-    gmp isl mpfr mpc gcc
-    libtool
-
     ################
     # bash
     ################
