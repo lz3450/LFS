@@ -4,7 +4,7 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=gcc
-pkgver=13.1.0
+pkgver=12.3.0
 pkgrel=2
 epoch=
 pkgdesc="The GNU Compiler Collection"
@@ -14,7 +14,7 @@ license=('KZL')
 depends=(binutils glibc isl mpc zlib zstd)
 # checkdepends=(dejagnu expect inetutils python)
 options=(!emptydirs)
-source=(git+git://gcc.gnu.org/git/gcc.git#tag=releases/$pkgname-$pkgver)
+source=(git+git://gcc.gnu.org/git/gcc.git#tag=releases/gcc-$pkgver)
 sha256sums=('SKIP')
 
 prepare() {

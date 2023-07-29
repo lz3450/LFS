@@ -2,7 +2,7 @@
 
 pkgname=help2man
 pkgver=1.49.3
-pkgrel=1
+pkgrel=4
 epoch=
 pkgdesc="Conversion tool to create man files"
 arch=('x86_64')
@@ -26,5 +26,5 @@ build() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

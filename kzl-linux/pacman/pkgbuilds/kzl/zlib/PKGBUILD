@@ -3,7 +3,7 @@
 pkgbase=zlib
 pkgname=(zlib minizip)
 pkgver=1.2.13
-pkgrel=2
+pkgrel=5
 epoch=
 arch=('x86_64')
 url="https://zlib.net"

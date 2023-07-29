@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/dracutdevs/dracut/tags | grep -Po '(?<=/dracut/releases/tag/)\d\d\d' | sort -V | tail -1)
+new_version=$(git ls-remote --tags https://github.com/dracutdevs/dracut.git | grep -oP '(?<=/dracut/releases/tag/)\d\d\d' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

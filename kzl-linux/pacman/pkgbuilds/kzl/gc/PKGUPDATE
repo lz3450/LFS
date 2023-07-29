@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - $url| grep -Po '(?<=gc-)\d\.\d\.\d(?=\.tar\.gz)' | sort -V | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - $url| grep -oP '(?<=gc-)\d\.\d\.\d(?=\.tar\.gz)' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/bdwgc"

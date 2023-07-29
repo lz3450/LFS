@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=groff
-pkgver=1.22.4
-pkgrel=8
+pkgver=1.23.0
+pkgrel=3
 epoch=
 pkgdesc="(GNU roff) A typesetting system"
 arch=('x86_64')
@@ -12,7 +12,7 @@ license=('KZL')
 #         git+https://git.savannah.gnu.org/git/gnulib.git)
 validpgpkeys=('2D0C08D2B0AD0D3D8626670272D23FBAC99D4E75')
 source=(https://ftp.gnu.org/gnu/groff/$pkgname-$pkgver.tar.gz{,.sig})
-sha256sums=('SKIP'
+sha256sums=('6b9757f592b7518b4902eb6af7e54570bdccba37a871fddb2d30ae3863511c13'
             'SKIP')
 
 # prepare() {

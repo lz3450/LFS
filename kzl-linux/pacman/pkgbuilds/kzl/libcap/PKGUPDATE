@@ -1,4 +1,4 @@
-new_version=$(git ls-remote --tags https://git.kernel.org/pub/scm/libs/libcap/libcap.git | grep -Po '(?<=refs/tags/v)\d\.\d\.\d{2}' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://git.kernel.org/pub/scm/libs/libcap/libcap.git | grep -oP '(?<=refs/tags/v)\d\.\d\.\d{2}' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

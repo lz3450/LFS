@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.gnu.org/software/autoconf-archive/ | grep -Po '(?<=version )\d{4}\.\d{2}\.\d{2}')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.gnu.org/software/autoconf-archive/ | grep -oP '(?<=version )\d{4}\.\d{2}\.\d{2}')
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

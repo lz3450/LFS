@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usbutils.git/ | grep -Po '(?<=/usbutils.git/tag/\?h=v)\d\d\d' | head -1)
+new_version=$(git ls-remote --tags git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usbutils.git | grep -oP '(?<=refs/tags/v)\d\d\d' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

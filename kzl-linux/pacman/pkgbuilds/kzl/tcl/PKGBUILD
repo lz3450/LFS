@@ -49,14 +49,14 @@ package() {
       -e "s#'{/usr/lib} '#'/usr/lib/$pkgname${pkgver%.*}'#" \
       -i "$pkgdir"/usr/lib/tclConfig.sh
 
-  tdbcver=`ls $srcdir/$pkgname$pkgver/pkgs | grep -Po 'tdbc\d\.\d\.\d'`
+  tdbcver=`ls $srcdir/$pkgname$pkgver/pkgs | grep -oP 'tdbc\d\.\d\.\d'`
   sed -e "s#$srcdir/$pkgname$pkgver/unix/pkgs/$tdbcver#/usr/lib/$tdbcver#" \
       -e "s#$srcdir/$pkgname$pkgver/pkgs/$tdbcver/generic#/usr/include#" \
       -e "s#$srcdir/$pkgname$pkgver/pkgs/$tdbcver/library#/usr/lib/$pkgname${pkgver%.*}#" \
       -e "s#$srcdir/$pkgname$pkgver/pkgs/$tdbcver#/usr/include#" \
       -i "$pkgdir"/usr/lib/$tdbcver/tdbcConfig.sh
 
-  itclver=`ls $srcdir/$pkgname$pkgver/pkgs | grep -Po 'itcl\d\.\d\.\d'`
+  itclver=`ls $srcdir/$pkgname$pkgver/pkgs | grep -oP 'itcl\d\.\d\.\d'`
   sed -e "s#$srcdir/$pkgname$pkgver/unix/pkgs/$itclver#/usr/lib/$itclver#" \
       -e "s#$srcdir/$pkgname$pkgver/pkgs/$itclver/generic#/usr/include#" \
       -e "s#$srcdir/$pkgname$pkgver/pkgs/$itclver#/usr/include#" \

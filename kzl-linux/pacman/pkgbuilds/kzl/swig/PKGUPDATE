@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.swig.org/ | grep -Po '(?<=SWIG-)\d\.\d\.\d' | head -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.swig.org/ | grep -oP '(?<=SWIG-)\d\.\d\.\d' | head -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

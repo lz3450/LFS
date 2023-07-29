@@ -1,1 +1,6 @@
-new_version=$(curl -L --stderr - https://carlowood.github.io/which/ | grep -Po '(?<=which-)\d\.\d{2}' | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://carlowood.github.io/which/ | grep -oP '(?<=which-)\d\.\d{2}' | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

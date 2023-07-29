@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://download.gnome.org/sources/libxslt/1.1/ | grep -Po '(?<=libxslt-)\d\.\d\.\d\d' | sort -V | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://download.gnome.org/sources/libxslt/1.1/ | grep -oP '(?<=libxslt-)\d\.\d\.\d\d' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

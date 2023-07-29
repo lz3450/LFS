@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://www.netfilter.org/index.html | grep -Po '(?<=iptables )\d\.\d\.\d(?= released)' | head -n1)
+new_version=$(curl -L -A 'Mozilla/5.0'  --stderr - https://www.netfilter.org/index.html | grep -oP '(?<=iptables )\d\.\d\.\d(?= released)' | head -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

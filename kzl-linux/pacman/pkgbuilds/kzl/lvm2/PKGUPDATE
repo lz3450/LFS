@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://sourceware.org/pub/lvm2/ | grep -Po '(?<=LVM2.)\d.\d+.\d+' | tail -n1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://sourceware.org/pub/lvm2/ | grep -oP '(?<=LVM2.)\d.\d+.\d+' | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

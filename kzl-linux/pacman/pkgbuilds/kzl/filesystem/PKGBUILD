@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=filesystem
-pkgver=20230622
+pkgver=20230728
 pkgrel=1
 epoch=
 pkgdesc="Root file system"
@@ -53,10 +53,6 @@ sha256sums=('75e6064eaa43505c8e9ed31850633279857cc678d733571b5bfe636c847b4369'
             'dd8d9d43fbe6925149c1635728e6570168ffc91fb8fabeb46fb4f6f115f389d5'
             'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
             'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
-
-pkgver() {
-  date +%Y%m%d
-}
 
 build() {
   ./shadow-convert.sh

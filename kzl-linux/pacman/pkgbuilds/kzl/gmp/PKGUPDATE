@@ -1,4 +1,4 @@
-new_version=$(curl -v -L --stderr - https://gmplib.org/ | grep -Po '(?<=GMP )\d\.\d\.\d' | sort -V | tail -1)
+new_version=$(curl -v -L --stderr - https://gmplib.org/ | grep -oP '(?<=GMP )\d\.\d\.\d' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"

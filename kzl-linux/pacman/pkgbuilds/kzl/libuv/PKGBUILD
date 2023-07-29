@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libuv
-pkgver=1.44.2
+pkgver=1.46.0
 pkgrel=2
 epoch=
 pkgdesc="A multi-platform support library with a focus on asynchronous I/O"

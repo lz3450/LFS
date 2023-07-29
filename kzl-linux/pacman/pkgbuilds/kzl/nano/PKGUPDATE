@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.nano-editor.org | grep -A 1 'Latest version:' | grep -Po '\d\.\d')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.nano-editor.org | grep -A 1 'Latest version:' | grep -oP '\d\.\d')
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

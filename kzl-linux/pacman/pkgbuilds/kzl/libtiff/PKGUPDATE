@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://www.simplesystems.org/libtiff/ | grep -A 2 "<p>Latest Stable Release</p>" | grep -Po '(?<=v)\d\.\d\.\d')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://www.simplesystems.org/libtiff/ | grep -A 2 "<p>Latest Stable Release</p>" | grep -oP '(?<=v)\d\.\d\.\d')
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

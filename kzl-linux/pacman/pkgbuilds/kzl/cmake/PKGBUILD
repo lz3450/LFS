@@ -1,14 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cmake
-pkgver=3.26.3
-pkgrel=3
+pkgver=3.27.1
+pkgrel=11
 epoch=
 pkgdesc="A cross-platform open-source make system"
 arch=('x86_64')
 url="https://www.cmake.org/"
 license=('KZL')
 depends=(curl expat jsoncpp libarchive libuv nghttp2 rhash)
+# depends=(curl cppdap expat jsoncpp libarchive libuv nghttp2 rhash)
 # makedepends=(qt6)
 # optdepends=("qt6: Qt-based GUI")
 source=(git+https://github.com/Kitware/CMake.git#tag=v$pkgver)
@@ -23,6 +24,7 @@ build() {
     --docdir=share/doc/cmake \
     --mandir=share/man \
     --system-libs \
+    --no-system-cppdap \
     --system-curl \
     --system-expat \
     --system-jsoncpp \

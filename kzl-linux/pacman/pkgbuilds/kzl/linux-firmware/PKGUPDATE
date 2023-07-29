@@ -1,5 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git | grep -Po '(?<=/firmware/linux-firmware.git/tag/\?h=)\d{8}' | sort -V | tail -1)
+new_version=$(git ls-remote --tags https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git | grep -oP '(?<=refs/tags/)\d{8}' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cp Makefile "$PKGBUILDDIR"/help.txt
 }

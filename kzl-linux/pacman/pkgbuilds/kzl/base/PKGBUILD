@@ -2,7 +2,7 @@
 
 pkgname=base
 pkgver=20230509
-pkgrel=1
+pkgrel=4
 epoch=
 pkgdesc="Minimal package set"
 arch=('any')
@@ -29,11 +29,7 @@ depends=(filesystem
          pciutils usbutils)
 optdepends=("linux: Linux kernel")
 source=(os-release)
-sha256sums=('c9bd31b149f9e44fecfa5db1153318914132f0bedf2090a35736d122cef0ceb8')
-
-pkgver() {
-  date +%Y%m%d
-}
+sha256sums=('fed64b74458bbb9435f2facc9123849631b516a1fec235f944ac3a731660938f')
 
 package() {
   install -Dm644 "$srcdir"/os-release "$pkgdir"/etc/os-release

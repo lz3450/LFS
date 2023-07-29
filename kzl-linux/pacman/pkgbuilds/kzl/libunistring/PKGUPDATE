@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.gnu.org/software/libunistring/ | grep -Po '(?<=libunistring-)\d\.\d' | head -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.gnu.org/software/libunistring/ | grep -oP '(?<=libunistring-)\d\.\d' | head -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

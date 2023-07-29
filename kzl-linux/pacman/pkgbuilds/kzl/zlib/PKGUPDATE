@@ -1,4 +1,4 @@
-new_version=$(curl -v --stderr - https://zlib.net | grep "<CENTER>" -A 6 | grep -Po '1.2.\d+')
+new_version=$(curl -v --stderr - https://zlib.net | grep "<CENTER>" -A 6 | grep -oP '1.2.\d+')
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

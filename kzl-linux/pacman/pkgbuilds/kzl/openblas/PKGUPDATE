@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.openblas.net | grep -Po '(?<=The current release is )\d\.\d\.\d\d')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.openblas.net | grep -oP '(?<=The current release is )\d\.\d\.\d\d')
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/OpenBLAS"

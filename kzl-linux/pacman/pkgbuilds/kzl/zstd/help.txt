@@ -1,7 +1,7 @@
--- The C compiler identification is GNU 12.2.0
+-- The C compiler identification is GNU 12.3.0
 -- The ASM compiler identification is GNU
 -- Found assembler: /usr/bin/cc
--- The CXX compiler identification is GNU 12.2.0
+-- The CXX compiler identification is GNU 12.3.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped

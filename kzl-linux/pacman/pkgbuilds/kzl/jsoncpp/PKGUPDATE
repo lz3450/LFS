@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/open-source-parsers/jsoncpp/tags | grep -Po '(?<=jsoncpp/releases/tag/)\d\.\d\.\d' | head -1)
+new_version=$(git ls-remote --tags https://github.com/open-source-parsers/jsoncpp.git | grep -oP '(?<=refs/tags/)\d\.\d\.\d' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    meson configure > "$PKGBUILDDIR"/help.txt
+}

@@ -2,7 +2,7 @@
 
 pkgname=texinfo
 pkgver=7.0.3
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="GNU documentation system for on-line information and printed output"
 arch=('x86_64')
@@ -26,7 +26,8 @@ build() {
   cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --disable-nls
 
   make
 }
