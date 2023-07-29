@@ -27,29 +27,35 @@ kzl_stage1_pkgs=(
     ################
     # filesystem
     ################
-    # iana-etc filesystem
+    iana-etc filesystem
 
     ################
     # glibc
     ################
-    # linux-api-headers
-    # tzdata
-    # glibc
+    linux-api-headers
+    tzdata
+    glibc
 
     ################
     # binutils
     ################
-    # jansson
-    # zlib
-    # zstd
-    # binutils
+    jansson
+    zlib
+    zstd
+    binutils
 
     ################
     # gcc
     ################
-    # gmp isl
-    # mpfr mpc
-    # gcc
+    gmp isl
+    mpfr mpc
+    gcc
+
+    ################################
+    tzdata glibc
+    jansson zlib zstd bc binutils
+    gmp isl mpfr mpc gcc
+    libtool
 )
 
 # base
@@ -61,219 +67,211 @@ kzl_stage2_pkgs=(
     ################################
     # toolchain
     ################################
-    # tzdata glibc
-    # jansson zlib zstd bc binutils
-    # gmp isl mpfr mpc gcc
-    # libtool
+    tzdata glibc
+    jansson zlib zstd bc binutils
+    gmp isl mpfr mpc gcc
+    libtool
 
     ################
     # bash
     ################
-    # ncurses readline bash bash-completion
+    ncurses readline bash bash-completion
 
     ################
     # perl
     ################
-    # libxcrypt db gdbm perl
+    libxcrypt db gdbm perl
 
     ################
     # ca-certificates & openssl
     ################
-    # libffi libtasn1 p11-kit ca-certificates
-    # openssl
+    libffi libtasn1 p11-kit ca-certificates
+    openssl
 
     ################
     # python
     ################
-    # expat
-    # e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 libtirpc libnsl
-    # tcl sqlite
-    # python
+    expat
+    e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 libtirpc libnsl
+    tcl sqlite
+    python
 
     ################
     # compression utils
     ################
-    # bzip2
-    # pcre2 less gzip
-    # xz
-    # attr acl tar
+    bzip2
+    pcre2 less gzip
+    xz
+    attr acl tar
 
     ################
     # utils
     ################
-    # grep
-    # sed
-    # libsigsegv gawk
-    # libseccomp file
-    # findutils
+    grep
+    sed
+    libsigsegv gawk
+    libseccomp file
+    findutils
 
     ################
     # gettext
     ################
-    # libunistring icu libxml2 gettext
+    libunistring icu libxml2 gettext
 
     ################
     # shadow
     ################
-    # swig libcap-ng audit
-    # pam-config pam
-    # shadow
+    swig libcap-ng audit
+    pam-config pam
+    shadow
 
     ################
     # coreutils
     ################
-    # libcap coreutils
+    libcap coreutils
 
     ################
     # curl
     ################
-    # brotli
-    # libidn2
-    # nghttp2
-    # libgpg-error libgcrypt libxslt libpsl
-    # libssh2
-    # curl
+    brotli
+    libidn2
+    nghttp2
+    libgpg-error libgcrypt libxslt libpsl
+    libssh2
+    curl
 
     ################
     # llvm
     ################
-    # llvm-project
+    llvm-project
 
     ################
     # rust
     ################
-    # rust
+    rust
 
     ################
     # util-linux
     ################
-    # thin-provisioning-tools argon2 libaio device-mapper json-c popt cryptsetup
-    # util-linux
+    thin-provisioning-tools argon2 libaio device-mapper json-c popt cryptsetup
+    util-linux
 
     ################
     # iptables
     ################
-    # libmnl libnfnetlink libnetfilter_conntrack
-    # libnftnl
-    # dbus libnl libpcap
-    # iptables
+    libmnl libnfnetlink libnetfilter_conntrack
+    libnftnl
+    dbus libnl libpcap
+    iptables
 
     ################
     # systemd
     ################
-    # elfutils
-    # kbd
-    # kmod
-    # lz4
-    # kexec-tools
-    # nettle gnutls libmicrohttpd
-    # gnu-efi
-    # gperf
-    # rpcsvc-proto quota
-    # systemd
-    # util-linux dbus systemd
+    elfutils
+    kbd
+    kmod
+    lz4
+    kexec-tools
+    nettle gnutls libmicrohttpd
+    gnu-efi
+    gperf
+    rpcsvc-proto quota
+    systemd
+    util-linux dbus systemd
 
     ################
     # wget
     ################
-    # lzip
-    # wget2
+    lzip
+    wget2
 
     ################
     # sudo
     ################
-    # sudo
+    sudo
 
     ################
     # pacman
     ################
-    # fakeroot
-    # libassuan libksba npth pinentry gnupg gpgme
-    # libarchive
-    # pacman
-    # pacman-contrib
-    # arch-install-scripts
+    fakeroot
+    libassuan libksba npth pinentry gnupg gpgme
+    libarchive
+    pacman
+    pacman-contrib
+    arch-install-scripts
 
     ################
-    # procps-ng
+    # ps utils
     ################
-    # procps-ng
+    procps-ng
+    psmisc
 
     ################
-    # psmisc
+    # ip utils
     ################
-    # psmisc
-
-    ################
-    # iputils
-    ################
-    # iputils
-
-    ################
-    # iproute2
-    ################
-    # iproute2
+    iputils
+    iproute2
 
     ################
     # pciutils
     ################
-    # hwdata
-    # pciutils
+    hwdata
+    pciutils
 
     ################
     # usbutils
     ################
-    # libusb
-    # usbutils
+    libusb
+    usbutils
 
     ################################
     # other base-development
     ################################
-    # texinfo
-    # help2man
-    # m4
-    # bison
-    # flex
-    # autoconf automake autoconf-archive
-    # which
-    # diffutils
-    # ed bc
-    # patch
+    texinfo
+    help2man
+    m4
+    bison
+    flex
+    autoconf automake autoconf-archive
+    which
+    diffutils
+    ed bc
+    patch
 
     ################
     # make
     ################
-    # gc guile
-    # make
+    gc guile
+    make
 
     ################
     # cmake
     ################
-    # jsoncpp
-    # libuv
-    # rhash
-    # cmake
+    jsoncpp
+    libuv
+    rhash
+    cmake
 
     ################
     # pkgconf
     ################
-    # pkgconf
+    pkgconf
 
     ################
     # man-db
     ################
-    # groff libpipeline
-    # man-db
+    groff libpipeline
+    man-db
 
     ################
     # linux-firmware
     ################
-    # linux-firmware
+    linux-firmware
 
     ################
     # base
     ################
-    # base
+    base
 )
 
 kzl_stage3_pkgs=(
