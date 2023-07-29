@@ -1,1 +1,1 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - $url | grep -Po '(?<=libutempter-)\d\.\d\.\d' | sort -V | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - $url | grep -Po '(?<=libutempter-)\d\.\d\.\d' | sort -V | tail -n1)
