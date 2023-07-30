@@ -4,12 +4,11 @@
 #
 
 script_name="$(basename "${0}")"
-stage=1
-build_dir=/tmp
 repo=kzl
 log_dir=~/makepkg/log
 repo_dir=/home/.repository/$repo
 build_only_updated=0
+stage=""
 single_package=""
 no_install=0
 no_clean=0
@@ -270,23 +269,23 @@ kzl_stage3_pkgs=(
     ################
     # openssh
     ################
-    # openssh
+    openssh
 
     ################
     # shells
     ################
-    # pcre zsh
-    # fish
+    pcre zsh
+    fish
 
     ################
     # nano
     ################
-    # nano
+    nano
 
     ################
     # git
     ################
-    # git
+    git
 
     ################################
     # File system utils
@@ -322,12 +321,19 @@ kzl_stage3_pkgs=(
     ################
     # texlive
     ################
-    # libpaper
-    # libpng
-    # freetype2
-    # fontconfig
-    # gd
-    # texlive
+    libpng
+    glib2 shared-mime-info
+    fontconfig freetype2 lzo pixman cairo
+    graphite
+    gobject-introspection
+    harfbuzz freetype2
+    libpaper
+    nasm libjpeg-turbo
+    libtiff lcms2 openjpeg
+    ghostscript
+    gd
+    zziplib
+    texlive
 
     ################
     # tmux
@@ -349,8 +355,6 @@ kzl_stage3_pkgs=(
     # other libraries
     ################
     # openblas
-    # nasm libjpeg-turbo
-    # libtiff lcms2 openjpeg
 
     ################
     # other utils
@@ -433,7 +437,11 @@ build() {
 
     _pkgname=$1
     _pkgbase=$(get_pkgbase $_pkgname)
-    _log="$log_dir"/$_pkgbase.stage$stage.log
+    if [ -n "$stage" ]; then
+        _log="$log_dir"/$_pkgbase.stage$stage.log
+    else
+        _log="$log_dir"/$_pkgbase.log
+    fi
 
     # remove existing log
     if [ -f $_log ]; then
@@ -505,11 +513,12 @@ build (kzl-linux)
 
 build will build packages from scratch.
 
-Usage: lfs-build [options]
+Usage: build -r <repo> -s | -p <pkg> [ -n ] [ -u ] [ --no-clean ] [ --no-check ]
 
     -h, --help                  display this help message and exit
     -r, --repo                  target repository (kzl, testing, ...)
     -s, --stage                 stage (0, 1(default), 2, 3)
+    -p, --package               build single package
     -n, --no-install            do not install the package after building
     -u, --build-only-updated    build the package only if the PKGBUILD is updated
     --no-clean                  skip cleaning up work files after build
@@ -576,26 +585,28 @@ done
 
 case $repo in
     kzl)
-        case $stage in
-        0)
-            updaterepo --clear -t $repo
-            pkgs=${kzl_stage0_pkgs[@]}
-            ;;
-        1)
-            pkgs=${kzl_stage1_pkgs[@]}
-            ;;
-        2)
-            echo -e "\033[1;33mBuilding stage 2 ($(date +%H:%M:%S))...\033[0m"
-            pkgs=${kzl_stage2_pkgs[@]}
-            ;;
-        3)
-            echo -e "\033[1;33mBuilding stage 3 ($(date +%H:%M:%S))...\033[0m"
-            pkgs=${kzl_stage3_pkgs[@]}
-            ;;
-        *)
-            error "Unknown stage \"$stage\"" 2
-            ;;
-        esac
+        if [ -n "$stage" ]; then
+            case $stage in
+            0)
+                updaterepo --clear -t $repo
+                pkgs=${kzl_stage0_pkgs[@]}
+                ;;
+            1)
+                pkgs=${kzl_stage1_pkgs[@]}
+                ;;
+            2)
+                echo -e "\033[1;33mBuilding stage 2 ($(date +%H:%M:%S))...\033[0m"
+                pkgs=${kzl_stage2_pkgs[@]}
+                ;;
+            3)
+                echo -e "\033[1;33mBuilding stage 3 ($(date +%H:%M:%S))...\033[0m"
+                pkgs=${kzl_stage3_pkgs[@]}
+                ;;
+            *)
+                error "Unknown stage \"$stage\"" 2
+                ;;
+            esac
+        fi
         ;;
     *)
         error "Unknown repo name \"$repo\"" 3

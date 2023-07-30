@@ -72,6 +72,7 @@ if [ -z $new_version ]; then
     error 'Cannot get new version.' 6
 fi
 current_version=${current_version:-$(cat PKGBUILD | grep -oP 'pkgver=\K.+$')}
+current_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
 
 # run pre_update
 if have_function 'pre_update'; then
@@ -84,6 +85,7 @@ if [ $result -eq 1 ]; then
     info "PKGBUILD updated: $current_version => $new_version"
     sed -i "/^pkgver=/s/$current_version/$new_version/" PKGBUILD
     sed -i "/^pkgrel=/s/$current_pkgrel/1/" PKGBUILD
+    pkgver=$new_version
     info "running updpkgsums..."
     updpkgsums || result=2
 elif [ $result -eq 0 ]; then
