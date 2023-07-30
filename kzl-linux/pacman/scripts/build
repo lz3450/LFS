@@ -10,6 +10,7 @@ repo=kzl
 log_dir=~/makepkg/log
 repo_dir=/home/.repository/$repo
 build_only_updated=0
+single_package=""
 no_install=0
 no_clean=0
 no_check=0
@@ -75,9 +76,38 @@ kzl_stage2_pkgs=(
     libxcrypt db gdbm perl
 
     ################
+    # texinfo
+    ################
+    help2man texinfo
+
+    ################################
+    # other base-development
+    ################################
+    m4
+    autoconf automake autoconf-archive
+    bison
+    flex
+    ed bc
+    diffutils
+    patch
+    which
+    pkgconf
+
+    ################
+    # make
+    ################
+    libffi gc guile
+    make
+
+    ################
+    # gettext
+    ################
+    libunistring icu libxml2 gettext
+
+    ################
     # ca-certificates & openssl
     ################
-    libffi libtasn1 p11-kit ca-certificates
+    libtasn1 p11-kit ca-certificates
     openssl
 
     ################
@@ -104,11 +134,6 @@ kzl_stage2_pkgs=(
     libsigsegv gawk
     libseccomp file
     findutils
-
-    ################
-    # gettext
-    ################
-    libunistring icu libxml2 gettext
 
     ################
     # shadow
@@ -216,26 +241,6 @@ kzl_stage2_pkgs=(
     libusb
     usbutils
 
-    ################################
-    # other base-development
-    ################################
-    texinfo
-    help2man
-    m4
-    bison
-    flex
-    autoconf automake autoconf-archive
-    which
-    diffutils
-    ed bc
-    patch
-
-    ################
-    # make
-    ################
-    gc guile
-    make
-
     ################
     # cmake
     ################
@@ -245,25 +250,20 @@ kzl_stage2_pkgs=(
     cmake
 
     ################
-    # pkgconf
-    ################
-    pkgconf
-
-    ################
     # man-db
     ################
     groff libpipeline
     man-db
 
     ################
-    # linux-firmware
-    ################
-    linux-firmware
-
-    ################
     # base
     ################
     base
+
+    ################
+    # linux-firmware
+    ################
+    linux-firmware
 )
 
 kzl_stage3_pkgs=(
@@ -448,23 +448,34 @@ build() {
     updatepkg >> $_log 2>&1 || _updated=$?
 
     _cleanbuild='C'
-    if [ "$_updated" -eq -1 ]; then
+    if [ "$_updated" -eq 255 ]; then
         warning "Current version is newer."
+        _updated=0
     elif [ "$_updated" -eq 0 ]; then
         info "PKGBUILD is up to date."
+    elif [ "$_updated" -eq 1 ]; then
+        info "Package \"$_pkgbase\" is updated."
+        _cleanbuild='e'
     elif [ "$_updated" -eq 2 ]; then
         warning "PKGUPDATE does not exist."
     elif [ "$_updated" -ge 3 ]; then
         error "Cannot update the PKGBUILD (error code: $_updated)." 4
-    elif [ "$_updated" -eq 1 ]; then
-        info "Package \"$_pkgbase\" is updated."
-        _cleanbuild='e'
+    else
+        error "Unknown \`updatepkg\` result." 6
     fi
 
-    if [ "$build_only_updated" -gt 0 -a "$_updated" -eq 0 ]; then
+    if [ "$build_only_updated" -gt 0 ] && [ "$_updated" -eq 0 ]; then
         info "Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)."
     else
         info "Building package..."
+
+        # if package is up to date, then update the "pkgrel"
+        if [ "$_updated" -eq 0 ]; then
+            # update "pkgrel"
+            current_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
+            new_pkgrel=$((current_pkgrel + 1))
+            sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" PKGBUILD
+        fi
 
         _no_check=''
         if [ "$no_check" -gt 0 ]; then
@@ -479,12 +490,12 @@ build() {
 
         info "Updating repo..."
         updaterepo -t $repo >> $_log 2>&1
-    fi
 
-    if [ "$no_install" -le 0 ]; then
-        info "Installing package..."
-        # (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname --config ${pacman_conf}
-        (yes yes || :) | sudo pacman -Sy $_pkgname >> $_log 2>&1
+        if [ "$no_install" -le 0 ]; then
+            info "Installing package..."
+            # (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname --config ${pacman_conf}
+            (yes yes || :) | sudo pacman -Sy $_pkgname >> $_log 2>&1
+        fi
     fi
 }
 
@@ -528,8 +539,20 @@ while [ $# -gt 0 ]; do
         repo="$1"
         ;;
     -s|--stage)
-        shift
-        stage="$1"
+        if [ -z "$single_package" ]; then
+            shift
+            stage="$1"
+        else
+            error "Cannot use -s | --stage together with -p | --package" 5
+        fi
+        ;;
+    -p|--package)
+        if [ -z "$stage" ]; then
+            shift
+            single_package="$1"
+        else
+            error "Cannot use -p | --package together with -s | --stage" 5
+        fi
         ;;
     -n|--no-install)
         no_install=1
@@ -583,14 +606,20 @@ start_time=$(date +%s)
 
 prepare
 
-for p in ${pkgs[@]}; do
-    pkg_start_time=$(date +%s)
-    echo -e "\e[1;31mBuilding $p ($(date +%H:%M:%S))...\e[0m"
-    build $p
-    pkg_end_time=$(date +%s)
-    pkg_total_time=$((pkg_end_time-pkg_start_time))
-    echo -e "\e[1;32m$p: $(date -d@$pkg_total_time -u +%H:%M:%S) ($(date +%H:%M:%S))\e[0m"
-done
+if [ ! -z "$single_package" ]; then
+    # Build a single package
+    echo -e "\\e[1;31mBuilding $single_package ($(date +%H:%M:%S))...\\e[0m"
+    build $single_package
+else
+    for p in ${pkgs[@]}; do
+        pkg_start_time=$(date +%s)
+        echo -e "\e[1;31mBuilding $p ($(date +%H:%M:%S))...\e[0m"
+        build $p
+        pkg_end_time=$(date +%s)
+        pkg_total_time=$((pkg_end_time-pkg_start_time))
+        echo -e "\e[1;32m$p: $(date -d@$pkg_total_time -u +%H:%M:%S) ($(date +%H:%M:%S))\e[0m"
+    done
+fi
 
 end_time=$(date +%s)
 total_time=$((end_time-start_time))
