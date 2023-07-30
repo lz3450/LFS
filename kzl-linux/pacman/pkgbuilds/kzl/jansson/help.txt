@@ -1,4 +1,4 @@
-`configure' configures libarchive 3.7.1 to adapt to many kinds of systems.
+`configure' configures jansson 2.14 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -47,7 +47,7 @@ Fine tuning of the installation directories:
   --infodir=DIR           info documentation [DATAROOTDIR/info]
   --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
   --mandir=DIR            man documentation [DATAROOTDIR/man]
-  --docdir=DIR            documentation root [DATAROOTDIR/doc/libarchive]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/jansson]
   --htmldir=DIR           html documentation [DOCDIR]
   --dvidir=DIR            dvi documentation [DOCDIR]
   --pdfdir=DIR            pdf documentation [DOCDIR]
@@ -68,9 +68,6 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-silent-rules   less verbose build output (undo: "make V=1")
   --disable-silent-rules  verbose build output (undo: "make V=0")
-  --disable-maintainer-mode
-                          disable make rules and dependencies not useful (and
-                          sometimes confusing) to the casual installer
   --enable-dependency-tracking
                           do not reject slow dependency extractors
   --disable-dependency-tracking
@@ -80,39 +77,15 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-bsdtar         enable build of bsdtar (default)
-	  --enable-bsdtar=static  force static build of bsdtar
-	  --enable-bsdtar=shared  force dynamic build of bsdtar
-  --disable-bsdtar        disable build of bsdtar
-  --enable-bsdcat         enable build of bsdcat (default)
-	  --enable-bsdcat=static  force static build of bsdcat
-	  --enable-bsdcat=shared  force dynamic build of bsdcat
-  --disable-bsdcat        disable build of bsdcat
-  --enable-bsdcpio        enable build of bsdcpio (default)
-	  --enable-bsdcpio=static static build of bsdcpio
-	  --enable-bsdcpio=shared dynamic build of bsdcpio
-  --disable-bsdcpio       disable build of bsdcpio
-  --enable-bsdunzip       enable build of bsdunzip (default)
-	    --enable-bsdunzip=static
-                          force static build of bsdunzip
-	    --enable-bsdunzip=shared
-                          force dynamic build of bsdunzip
-	    --disable-bsdunzip      disable build of bsdunzip
-  --disable-rpath         do not hardcode runtime library paths
-  --enable-posix-regex-lib
-                          choose what library to use for POSIX regular
-                          expression support (default: auto)
-    --enable-posix-regex-lib=libc
-                          use libc POSIX regular expression support
-    --enable-posix-regex-lib=libregex
-                          use libregex POSIX regular expression support
-    --enable-posix-regex-lib=libpcreposix
-                          use libpcreposix POSIX regular expression support
-    --disable-posix-regex-lib
-                          don't enable POSIX regular expression support
-  --disable-xattr         Disable Extended Attributes support (default: check)
-  --disable-acl           Disable ACL support (default: check)
-  --disable-largefile     omit support for large files
+  --disable-urandom       Don't use /dev/urandom to seed the hash function
+  --disable-windows-cryptoapi
+                          Don't use CryptGenRandom to seed the hash function
+  --enable-initial-hashtable-order=VAL
+                          Number of buckets new object hashtables contain is 2
+                          raised to this power. The default is 3, so empty
+                          hashtables contain 2^3 = 8 buckets.
+  --disable-Bsymbolic     Avoid linking with -Bsymbolic-function
+  --enable-ossfuzzers     Whether to generate the fuzzers for OSS-Fuzz
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -125,24 +98,6 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
-  --without-zlib          Don't build support for gzip through zlib
-  --without-bz2lib        Don't build support for bzip2 through bz2lib
-  --without-libb2         Don't build support for BLAKE2 through libb2
-  --without-iconv         Don't try to link against iconv
-  --with-gnu-ld           assume the C compiler uses GNU ld default=no
-  --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
-  --without-libiconv-prefix     don't search for libiconv in includedir and libdir
-  --without-lz4           Don't build support for lz4 through liblz4
-  --without-zstd          Don't build support for zstd through libzstd
-  --without-lzma          Don't build support for xz through lzma
-  --with-lzo2             Build with LZO support from liblzo2
-  --without-cng           Don't build support of CNG(Crypto Next Generation)
-  --with-mbedtls          Build with crypto support from mbed TLS
-  --with-nettle           Build with crypto support from Nettle
-  --without-openssl       Don't build support for mtree and xar hashes through
-                          openssl
-  --without-xml2          Don't build support for xar through libxml2
-  --without-expat         Don't build support for xar through expat
 
 Some influential environment variables:
   CC          C compiler command
@@ -152,20 +107,13 @@ Some influential environment variables:
   LIBS        libraries to pass to the linker, e.g. -l<library>
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
-  CPP         C preprocessor
+  CXX         C++ compiler command
+  CXXFLAGS    C++ compiler flags
   LT_SYS_LIBRARY_PATH
               User-defined run-time library search path.
-  PKG_CONFIG  path to pkg-config utility
-  PKG_CONFIG_PATH
-              directories to add to pkg-config's search path
-  PKG_CONFIG_LIBDIR
-              path overriding pkg-config's built-in search path
-  LIBXML2_PC_CFLAGS
-              C compiler flags for LIBXML2_PC, overriding pkg-config
-  LIBXML2_PC_LIBS
-              linker flags for LIBXML2_PC, overriding pkg-config
+  CXXCPP      C++ preprocessor
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
-Report bugs to <libarchive-discuss@googlegroups.com>.
+Report bugs to <https://github.com/akheron/jansson/issues>.

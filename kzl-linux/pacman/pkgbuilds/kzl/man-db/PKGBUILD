@@ -2,7 +2,7 @@
 
 pkgname=man-db
 pkgver=2.11.2
-pkgrel=5
+pkgrel=7
 epoch=
 pkgdesc="A utility for reading man pages"
 arch=('x86_64')

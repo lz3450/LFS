@@ -2,7 +2,7 @@
 
 pkgname=gnu-efi
 pkgver=3.0.17
-pkgrel=2
+pkgrel=4
 epoch=
 pkgdesc="Library for building UEFI Applications using GNU toolchain"
 arch=('x86_64')

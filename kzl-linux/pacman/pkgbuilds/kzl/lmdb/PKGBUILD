@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=lmdb
-pkgver=0.9.30
-pkgrel=3
+pkgver=0.9.31
+pkgrel=2
 epoch=
 pkgdesc="Symas Lightning Memory-Mapped Database"
 arch=('x86_64')

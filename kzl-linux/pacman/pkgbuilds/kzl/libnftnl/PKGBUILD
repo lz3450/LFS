@@ -2,7 +2,7 @@
 
 pkgname=libnftnl
 pkgver=1.2.6
-pkgrel=2
+pkgrel=4
 epoch=
 pkgdesc="A userspace library providing a low-level netlink programming interface (API) to the in-kernel nf_tables subsystem"
 arch=('x86_64')

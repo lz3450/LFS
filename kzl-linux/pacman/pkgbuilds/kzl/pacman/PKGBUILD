@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=6.0.2
-pkgrel=2
+pkgrel=5
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -57,9 +57,9 @@ package() {
   meson install -C build --destdir="$pkgdir"
 
   sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-kzl-linux-gnu/' \
-      -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
-      -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2"' \
-      -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS"' \
+      -e '/^#CPPFLAGS=/c\CPPFLAGS="-D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS"' \
+      -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection"' \
+      -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection"' \
       -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \
       -e '/^#RUSTFLAGS=/c\RUSTFLAGS="-C opt-level=2"' \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
@@ -73,6 +73,7 @@ package() {
       -e '/^#SRCPKGDEST=/c\SRCPKGDEST="$HOME/makepkg/srcpackages"' \
       -e '/^#LOGDEST=/c\LOGDEST="$HOME/makepkg/makepkglogs"' \
       -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
+      -e '/^OPTIONS=/s/libtool/!libtool/' \
       -i "$pkgdir"/etc/makepkg.conf
 
   cat >> "$pkgdir"/etc/pacman.conf << EOF

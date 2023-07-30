@@ -2,7 +2,7 @@
 
 pkgname=grep
 pkgver=3.11
-pkgrel=1
+pkgrel=4
 epoch=
 pkgdesc="Searches one or more input files for lines containing a match to a specified pattern"
 arch=('x86_64')

@@ -2,7 +2,7 @@
 
 pkgname=zstd
 pkgver=1.5.5
-pkgrel=11
+pkgrel=12
 epoch=
 pkgdesc="Zstandard - Fast real-time compression algorithm"
 arch=('x86_64')

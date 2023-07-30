@@ -2,7 +2,7 @@
 
 pkgname=libedit
 pkgver=20221030.3.1
-pkgrel=7
+pkgrel=9
 epoch=
 pkgdesc="Command line editor library providing generic line editing, history, and tokenization functions"
 arch=('x86_64')
@@ -29,7 +29,7 @@ check() {
 package() {
   cd $pkgname-${pkgver/./-}
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   rm "$pkgdir"/usr/share/man/man3/history.3
 }

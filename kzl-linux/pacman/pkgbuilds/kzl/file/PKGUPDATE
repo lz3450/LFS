@@ -1,4 +1,4 @@
-new_version=$(git ls-remote https://github.com/file/file.git | grep -oP 'refs/tags/FILE\K[0-9]+_[0-9]+' | sort -V | tail -n1)
+new_version=$(git ls-remote https://github.com/file/file.git | grep -oP 'refs/tags/FILE\K\d_\d+' | sort -V | tail -n1 | sed 's/_/./')
 
 post_update() {
   cd "$BUILDDIR/$pkgname/src/$pkgname"

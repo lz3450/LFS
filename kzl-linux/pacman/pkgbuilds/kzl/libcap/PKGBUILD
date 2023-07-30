@@ -2,7 +2,7 @@
 
 pkgname=libcap
 pkgver=2.68
-pkgrel=3
+pkgrel=5
 epoch=
 pkgdesc="POSIX 1003.1e capabilities"
 arch=('x86_64')
@@ -28,7 +28,7 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" lib=lib prefix=/usr KERNEL_HEADERS=/usr/include RAISE_SETFCAP=no install
+  make DESTDIR="$pkgdir" lib=lib prefix=/usr KERNEL_HEADERS=/usr/include RAISE_SETFCAP=no install
 
   install -Dm644 pam_cap/capability.conf -t "$pkgdir"/usr/share/doc/$pkgname/examples/
 }

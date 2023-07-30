@@ -2,7 +2,7 @@
 
 pkgname=gpgme
 pkgver=1.21.0
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="A C wrapper library for GnuPG"
 arch=('x86_64')

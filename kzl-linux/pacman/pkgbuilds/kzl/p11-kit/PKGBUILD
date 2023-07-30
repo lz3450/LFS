@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=p11-kit
-pkgver=0.24.1
-pkgrel=3
+pkgver=0.25.0
+pkgrel=2
 epoch=
 pkgdesc="Loads and enumerates PKCS#11 modules"
 arch=('x86_64')
@@ -34,5 +34,5 @@ check() {
 package() {
   cd $pkgname
 
-  meson install -C build --destdir="$pkgdir/"
+  meson install -C build --destdir="$pkgdir"
 }

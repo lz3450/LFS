@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=krb5
-pkgver=1.21
+pkgver=1.21.1
 pkgrel=2
 epoch=
 pkgdesc="The Kerberos network authentication protocol"

@@ -2,13 +2,14 @@
 
 pkgname=texinfo
 pkgver=7.0.3
-pkgrel=3
+pkgrel=7
 epoch=
 pkgdesc="GNU documentation system for on-line information and printed output"
 arch=('x86_64')
 url="https://www.gnu.org/software/texinfo/"
 license=('KZL')
 depends=(ncurses)
+makedepends=(help2man)
 source=(git+https://git.savannah.gnu.org/git/texinfo.git#tag=$pkgname-$pkgver
         texinfo-install.hook
         texinfo-remove.hook)

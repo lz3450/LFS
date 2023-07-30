@@ -5,7 +5,7 @@
 
 pkgname=gcc
 pkgver=12.3.0
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
@@ -66,19 +66,19 @@ build() {
     --disable-libstdcxx-pch \
     --with-default-libstdcxx-abi=new
 
-  make -O
+  make
 }
 
 check() {
   cd gcc/build
 
-  make -O -k check || warning "Check failed."
+  make check || warning "Check failed."
 }
 
 package() {
   cd gcc/build
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   ln -s gcc "$pkgdir"/usr/bin/cc
 }

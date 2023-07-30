@@ -2,7 +2,7 @@
 
 pkgname=cmake
 pkgver=3.27.1
-pkgrel=11
+pkgrel=13
 epoch=
 pkgdesc="A cross-platform open-source make system"
 arch=('x86_64')

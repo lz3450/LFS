@@ -2,7 +2,7 @@
 
 pkgname=bash
 pkgver=5.2.15
-pkgrel=9
+pkgrel=11
 epoch=
 pkgdesc="The GNU Bourne-Again SHell"
 arch=('x86_64')

@@ -2,7 +2,7 @@
 
 pkgname=coreutils
 pkgver=9.3
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="The GNU core utilities"
 arch=('x86_64')

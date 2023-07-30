@@ -1,4 +1,4 @@
-`configure' configures dbus 1.14.8 to adapt to many kinds of systems.
+`configure' configures dbus 1.15.6 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -147,8 +147,6 @@ Optional Packages:
                           PID file for systemwide daemon
   --with-system-socket=filename
                           UNIX domain socket for systemwide daemon
-  --with-console-auth-dir=dirname
-                          directory to check for console ownerhip
   --with-console-owner-file=filename
                           file whose owner determines current console owner
   --with-launchd-agent-dir=dirname

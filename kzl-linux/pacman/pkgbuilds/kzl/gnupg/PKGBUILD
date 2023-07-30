@@ -2,7 +2,7 @@
 
 pkgname=gnupg
 pkgver=2.2.41
-pkgrel=7
+pkgrel=9
 epoch=
 pkgdesc="Complete and free implementation of the OpenPGP standard"
 arch=('x86_64')

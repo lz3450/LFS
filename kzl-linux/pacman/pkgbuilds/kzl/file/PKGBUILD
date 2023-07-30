@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=file
-pkgver=5.44
-pkgrel=3
+pkgver=5.45
+pkgrel=2
 epoch=
 pkgdesc="File type identification utility"
 arch=('x86_64')

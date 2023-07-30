@@ -2,7 +2,7 @@
 
 pkgname=autoconf
 pkgver=2.71
-pkgrel=3
+pkgrel=5
 epoch=
 pkgdesc="A GNU tool for automatically configuring source code"
 arch=('any')

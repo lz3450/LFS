@@ -1,0 +1,6 @@
+new_version=$(git ls-remote --tags https://github.com/scop/bash-completion.git | grep -oP '(?<=refs/tags/\d\.\d+)' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

@@ -2,7 +2,7 @@
 
 pkgname=tcl
 pkgver=8.6.13
-pkgrel=4
+pkgrel=6
 epoch=
 pkgdesc="The Tcl scripting language"
 arch=('x86_64')

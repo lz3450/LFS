@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=sudo
-pkgver=1.9.14p2
-pkgrel=1
+pkgver=1.9.14p3
+pkgrel=2
 epoch=
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('x86_64')
@@ -52,7 +52,9 @@ package() {
   make DESTDIR="$pkgdir" install
 
   # remove /run/sudo directory, using systemd-tmpfiles
-  rmdir "$pkgdir"/run/{sudo,}
+  rmdir "$pkgdir/run/sudo"
+  rmdir "$pkgdir/run"
+
 
   install -Dm644 "$srcdir"/sudo.pam "$pkgdir"/etc/pam.d/sudo
 }

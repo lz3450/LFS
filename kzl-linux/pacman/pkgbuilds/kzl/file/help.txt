@@ -1,4 +1,4 @@
-`configure' configures file 5.44 to adapt to many kinds of systems.
+`configure' configures file 5.45 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

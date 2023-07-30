@@ -1,4 +1,4 @@
-new_version=$(git ls-remote --tags https://gitlab.freedesktop.org/dbus/dbus.git | grep -oP "(?<=dbus-)$stable_version.\d\d?" | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://gitlab.freedesktop.org/dbus/dbus.git | grep -oP "(?<=refs/tags/dbus-)\d\.\d\d\.\d+" | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

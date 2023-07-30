@@ -3,7 +3,7 @@
 pkgbase=zlib
 pkgname=(zlib minizip)
 pkgver=1.2.13
-pkgrel=5
+pkgrel=6
 epoch=
 arch=('x86_64')
 url="https://zlib.net"
@@ -50,7 +50,7 @@ package_zlib() {
 
   cd zlib
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
 
 package_minizip() {
@@ -59,7 +59,7 @@ package_minizip() {
 
 	cd zlib/contrib/minizip
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
 	# https://github.com/madler/zlib/pull/229
 	rm "$pkgdir"/usr/include/minizip/crypt.h

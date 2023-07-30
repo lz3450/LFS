@@ -1,30 +1,35 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ncurses
-pkgver=6.4
-pkgrel=4
+pkgver=6.4.20230729
+pkgrel=18
 epoch=
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('x86_64')
 url="https://invisible-island.net/ncurses/ncurses.html"
 license=('KZL')
-source=(https://ftp.gnu.org/pub/gnu/ncurses/$pkgname-$pkgver.tar.gz)
-sha256sums=('6931283d9ac87c5073f30b6290c4c75f21632bb4fc3603ac8100812bed248159')
+source=(https://invisible-mirror.net/archives/$pkgname/current/$pkgname-${pkgver%.*}-${pkgver##*.}.tgz)
+sha256sums=('a727680890e4456f4c332dd85ca672822327ad3262ca368d4f22a60079950ba3')
+
+prepare() {
+  cd $pkgname-${pkgver%.*}-${pkgver##*.}
+
+  sed -i 's/@EXTRA_PKG_LDFLAGS@ //g' misc/gen-pkgconfig.in misc/ncurses-config.in
+}
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname-${pkgver%.*}-${pkgver##*.}
 
   ./configure \
     --prefix=/usr \
     --without-ada \
     --with-cxx \
     --with-cxx-binding \
-    --with-pkg-config-libdir=/usr/lib/pkgconfig \
+    --with-pkg-config-libdir="/usr/lib/pkgconfig" \
     --enable-pc-files \
     --with-shared \
     --with-cxx-shared \
     --with-versioned-syms \
-    --disable-pkg-ldflags \
     --enable-widec \
     --with-manpage-format=normal \
     --enable-stripping \
@@ -34,37 +39,25 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname-${pkgver%.*}-${pkgver##*.}
 
   make DESTDIR="$pkgdir" install
 
   for lib in ncurses ncurses++ form menu panel; do
-    printf "INPUT(-l%sw)\n" "$lib" > "$pkgdir/usr/lib/lib$lib.so.$pkgver"
-    chmod +x "$pkgdir/usr/lib/lib$lib.so.$pkgver"
-    ln -sv lib$lib.so.$pkgver "$pkgdir/usr/lib/lib$lib.so.${pkgver:0:1}"
-    ln -sv lib$lib.so.${pkgver:0:1} "$pkgdir/usr/lib/lib$lib.so"
+    printf "INPUT(-l%sw)" "$lib" > "$pkgdir/usr/lib/lib$lib.so"
     ln -sv ${lib}w.pc "$pkgdir/usr/lib/pkgconfig/$lib.pc"
   done
 
-  printf "INPUT(-lncursesw)\n" > "$pkgdir/usr/lib/libcursesw.so.$pkgver"
-  chmod +x "$pkgdir/usr/lib/libcursesw.so.$pkgver"
-  ln -sv libcursesw.so.$pkgver "$pkgdir/usr/lib/libcursesw.so.${pkgver:0:1}"
-  ln -sv libcursesw.so.${pkgver:0:1} "$pkgdir/usr/lib/libcursesw.so"
-
-  printf "INPUT(-lncursesw)\n" > "$pkgdir/usr/lib/libcurses.so.$pkgver"
-  chmod +x "$pkgdir/usr/lib/libcurses.so.$pkgver"
-  ln -sv libcurses.so.$pkgver "$pkgdir/usr/lib/libcurses.so.${pkgver:0:1}"
-  ln -sv libcurses.so.${pkgver:0:1} "$pkgdir/usr/lib/libcurses.so"
+  printf "INPUT(-lncursesw)" > "$pkgdir/usr/lib/libcursesw.so"
+  printf "INPUT(-lncurses)" > "$pkgdir/usr/lib/libcurses.so"
 
   for lib in tic tinfo; do
-    printf "INPUT(libncursesw.so.%s)\n" "$pkgver" > "$pkgdir/usr/lib/lib$lib.so.$pkgver"
-    chmod +x "$pkgdir/usr/lib/lib$lib.so.$pkgver"
-    ln -sv lib$lib.so.$pkgver "$pkgdir/usr/lib/lib$lib.so.${pkgver:0:1}"
-    ln -sv lib$lib.so.${pkgver:0:1} "$pkgdir/usr/lib/lib$lib.so"
+    printf "INPUT(-lncursesw)" > "$pkgdir/usr/lib/lib$lib.so"
     ln -sv ncursesw.pc "$pkgdir/usr/lib/pkgconfig/$lib.pc"
   done
 
-  mkdir "$pkgdir"/usr/include/ncurses{,w}
+  install -d -m755 "$pkgdir"/usr/include/ncurses
+  install -d -m755 "$pkgdir"/usr/include/ncursesw
   for include in "$pkgdir"/usr/include/*.h; do
     ln -sv ../$(basename $include) "$pkgdir"/usr/include/ncurses
     ln -sv ../$(basename $include) "$pkgdir"/usr/include/ncursesw

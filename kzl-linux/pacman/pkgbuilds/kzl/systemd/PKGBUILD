@@ -2,7 +2,7 @@
 
 pkgname=systemd
 pkgver=253.7
-pkgrel=4
+pkgrel=8
 epoch=
 arch=('x86_64')
 url="https://github.com/systemd/systemd-stable"

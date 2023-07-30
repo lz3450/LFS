@@ -68,13 +68,13 @@ Optional Features:
   --with-rel-version=XXX  override derived release version
   --with-abi-version=XXX  override derived ABI version
   --with-system-type=XXX  test: override derived host system-type
+  --with-abi-altered=XXX  override visible ABI version, for packaging
   --without-ada           suppress check for Ada compiler, don't build demo
   --without-cxx           do not adjust ncurses bool to match C++
   --without-cxx-binding   do not build C++ binding and demo
   --disable-db-install    suppress install of terminal database
   --without-manpages      suppress install of manpages
   --without-progs         suppress build/install with programs (e.g., tic)
-  --without-tack          suppress build/install with tack program
   --without-tests         suppress build/install with test-programs
   --without-curses-h      install curses.h as ncurses.h only
   --with-config-suffix=X  suffixes ncursesXX-config file
@@ -137,6 +137,7 @@ Fine-Tuning Your Configuration:
   --disable-home-terminfo drop ~/.terminfo from terminfo search-path
   --disable-root-environ  restrict root use of ncurses environment variables
   --disable-root-access   restrict file-access when running setuid
+  --disable-setuid-environ restrict setuid use of ncurses environment variables
   --enable-symlinks       make tic use symbolic links not hard links
   --enable-broken_linker  compile with broken-linker support code
   --enable-bsdpad         recognize BSD-style prefix padding
@@ -202,6 +203,7 @@ Experimental Code:
 Testing/development Options:
   --disable-echo          do not display "compiling" commands
   --disable-stripping     do not strip (debug info) installed executables
+  --with-strip-program=XX specify program to use when stripping in install
   --enable-warnings       test: turn on gcc compiler warnings
   --enable-stdnoreturn    enable C11 _Noreturn feature for diagnostics
   --enable-string-hacks   work around bogus compiler/loader warnings

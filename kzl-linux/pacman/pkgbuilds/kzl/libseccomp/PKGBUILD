@@ -2,7 +2,7 @@
 
 pkgname=libseccomp
 pkgver=2.5.4
-pkgrel=3
+pkgrel=5
 epoch=
 pkgdesc="Enhanced seccomp library"
 arch=('x86_64')
@@ -36,5 +36,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

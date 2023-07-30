@@ -2,7 +2,7 @@
 
 pkgname=libssh2
 pkgver=1.11.0
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="A library implementing the SSH2 protocol as defined by Internet Drafts"
 arch=('x86_64')
@@ -35,5 +35,5 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

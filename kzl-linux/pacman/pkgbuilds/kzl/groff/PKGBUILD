@@ -2,7 +2,7 @@
 
 pkgname=groff
 pkgver=1.23.0
-pkgrel=3
+pkgrel=5
 epoch=
 pkgdesc="(GNU roff) A typesetting system"
 arch=('x86_64')

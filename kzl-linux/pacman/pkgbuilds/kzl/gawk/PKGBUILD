@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gawk
-pkgver=5.2.2
-pkgrel=2
+pkgver=5.2.2.18
+pkgrel=7
 epoch=
 pkgdesc="GNU version of awk"
 arch=('x86_64')
@@ -10,9 +10,15 @@ url="https://www.gnu.org/software/gawk"
 license=('KZL')
 depends=(glibc libsigsegv mpfr readline)
 provides=(awk)
-source=(git+https://git.savannah.gnu.org/git/gawk.git#branch=$pkgname-${pkgver%.*}-stable)
+source=(git+https://git.savannah.gnu.org/git/gawk.git#branch=$pkgname-${pkgver:0:3}-stable)
 # source=(git+https://git.savannah.gnu.org/git/gawk.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed -e 's/-g.*//;s/gawk-//;s/-/./'
+}
 
 build() {
   cd $pkgname
