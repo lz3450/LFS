@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://freetype.org/ | grep -Po '(?<=FreeType )\d\.\d\d\.\d' | sort -V | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://freetype.org/ | grep -oP '(?<=FreeType )\d\.\d\d\.\d' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/freetype"

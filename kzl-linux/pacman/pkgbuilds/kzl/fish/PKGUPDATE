@@ -1,1 +1,1 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://fishshell.com/ | grep -Po '\d\.\d\.\d(?=, released )' | head -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://fishshell.com/ | grep -oP '\d\.\d\.\d(?=, released )' | head -n1)

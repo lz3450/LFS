@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://libbsd.freedesktop.org/releases/ | grep -Po '(?<=libmd-)\d\.\d\.\d' | sort -V | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://libbsd.freedesktop.org/releases/ | grep -oP '(?<=libmd-)\d\.\d\.\d' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

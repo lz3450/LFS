@@ -1,1 +1,1 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://c-ares.org/ | grep -Po '(?<=/download/c-ares-)\d\.\d\d\.\d' | head -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://c-ares.org/ | grep -oP '(?<=/download/c-ares-)\d\.\d\d\.\d' | head -n1)
