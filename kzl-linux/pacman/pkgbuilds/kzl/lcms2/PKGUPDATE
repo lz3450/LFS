@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/mm2/Little-CMS/tags | grep -oP '(?<=/Little-CMS/releases/tag/lcms)\d\.\d\d(\.\d)?' | sort -V | tail -n1)
+new_version=$(git ls-remote https://github.com/mm2/Little-CMS.git | grep -oP '(?<=refs/tags/lcms)\d\.\d\d(\.\d)?' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/Little-CMS"

@@ -1,4 +1,4 @@
-`configure' configures libpaper 2.1.1 to adapt to many kinds of systems.
+`configure' configures GD 2.3.3 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -47,7 +47,7 @@ Fine tuning of the installation directories:
   --infodir=DIR           info documentation [DATAROOTDIR/info]
   --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
   --mandir=DIR            man documentation [DATAROOTDIR/man]
-  --docdir=DIR            documentation root [DATAROOTDIR/doc/libpaper]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/libgd]
   --htmldir=DIR           html documentation [DOCDIR]
   --dvidir=DIR            dvi documentation [DOCDIR]
   --pdfdir=DIR            pdf documentation [DOCDIR]
@@ -57,6 +57,10 @@ Program names:
   --program-prefix=PREFIX            prepend PREFIX to installed program names
   --program-suffix=SUFFIX            append SUFFIX to installed program names
   --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+X features:
+  --x-includes=DIR    X include files are in DIR
+  --x-libraries=DIR   X library files are in DIR
 
 System types:
   --build=BUILD     configure for building on BUILD [guessed]
@@ -77,13 +81,10 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-cross-guesses={conservative|risky}
-                          specify policy for cross-compilation guesses
-  --enable-relocatable    install a package that can be moved in the file
-                          system
-  --enable-gcc-warnings   turn on lots of GCC warnings (for developers)
-  --enable-year2038       support timestamps after 2038
-  --disable-largefile     omit support for large files
+  --disable-rpath         do not hardcode runtime library paths
+  --disable-gd-formats    Disable support for the legacy/testing gd image
+                          formats
+  --enable-werror         treat compile warnings as errors
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -96,7 +97,22 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
+  --with-x                use the X Window System
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
+  --without-libiconv-prefix     don't search for libiconv in includedir and libdir
+  --with-zlib[=DIR]       Support zlib (optionally in DIR)
+  --with-png[=DIR]        Support png (optionally in DIR)
+  --with-freetype[=DIR]   Support freetype (optionally in DIR)
+  --with-raqm[=DIR]       Support raqm (optionally in DIR)
+  --with-fontconfig[=DIR] Support fontconfig (optionally in DIR)
+  --with-jpeg[=DIR]       Support jpeg (optionally in DIR)
+  --with-liq[=DIR]        Support liq (optionally in DIR)
+  --with-xpm[=DIR]        Support xpm (optionally in DIR)
+  --with-tiff[=DIR]       Support tiff (optionally in DIR)
+  --with-webp[=DIR]       Support webp (optionally in DIR)
+  --with-heif[=DIR]       Support heif (optionally in DIR)
+  --with-avif[=DIR]       Support avif (optionally in DIR)
 
 Some influential environment variables:
   CC          C compiler command
@@ -106,12 +122,58 @@ Some influential environment variables:
   LIBS        libraries to pass to the linker, e.g. -l<library>
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
-  CPP         C preprocessor
   LT_SYS_LIBRARY_PATH
               User-defined run-time library search path.
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  XMKMF       Path to xmkmf, Makefile generator for X Window System
+  CPP         C preprocessor
+  LIBZ_CFLAGS C compiler flags for LIBZ, overriding pkg-config
+  LIBZ_LIBS   linker flags for LIBZ, overriding pkg-config
+  LIBPNG_CFLAGS
+              C compiler flags for LIBPNG, overriding pkg-config
+  LIBPNG_LIBS linker flags for LIBPNG, overriding pkg-config
+  LIBFREETYPE_CFLAGS
+              C compiler flags for LIBFREETYPE, overriding pkg-config
+  LIBFREETYPE_LIBS
+              linker flags for LIBFREETYPE, overriding pkg-config
+  LIBRAQM_CFLAGS
+              C compiler flags for LIBRAQM, overriding pkg-config
+  LIBRAQM_LIBS
+              linker flags for LIBRAQM, overriding pkg-config
+  LIBFONTCONFIG_CFLAGS
+              C compiler flags for LIBFONTCONFIG, overriding pkg-config
+  LIBFONTCONFIG_LIBS
+              linker flags for LIBFONTCONFIG, overriding pkg-config
+  LIBJPEG_CFLAGS
+              C compiler flags for LIBJPEG, overriding pkg-config
+  LIBJPEG_LIBS
+              linker flags for LIBJPEG, overriding pkg-config
+  LIBXPM_CFLAGS
+              C compiler flags for LIBXPM, overriding pkg-config
+  LIBXPM_LIBS linker flags for LIBXPM, overriding pkg-config
+  LIBTIFF_CFLAGS
+              C compiler flags for LIBTIFF, overriding pkg-config
+  LIBTIFF_LIBS
+              linker flags for LIBTIFF, overriding pkg-config
+  LIBWEBP_CFLAGS
+              C compiler flags for LIBWEBP, overriding pkg-config
+  LIBWEBP_LIBS
+              linker flags for LIBWEBP, overriding pkg-config
+  LIBHEIF_CFLAGS
+              C compiler flags for LIBHEIF, overriding pkg-config
+  LIBHEIF_LIBS
+              linker flags for LIBHEIF, overriding pkg-config
+  LIBAVIF_CFLAGS
+              C compiler flags for LIBAVIF, overriding pkg-config
+  LIBAVIF_LIBS
+              linker flags for LIBAVIF, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
-Report bugs to <rrt@sc3d.org>.
-libpaper home page: <https://github.com/rrthomas/libpaper>.
+Report bugs to <https://github.com/libgd/libgd/issues>.
+GD home page: <https://lib.gd>.

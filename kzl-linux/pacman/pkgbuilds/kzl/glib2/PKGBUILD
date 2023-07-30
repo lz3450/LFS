@@ -1,0 +1,63 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=glib2
+pkgver=2.77.1
+pkgrel=1
+epoch=
+pkgdesc="The low-level core library that forms the basis for projects such as GTK and GNOME"
+arch=('x86_64')
+url="https://gitlab.gnome.org/GNOME/glib/"
+license=('KZL')
+depends=(elfutils libffi pcre2)
+source=(git+https://gitlab.gnome.org/GNOME/glib.git#tag=$pkgver
+        git+https://gitlab.gnome.org/GNOME/gvdb.git
+        gio-querymodules.hook
+        glib-compile-schemas.hook)
+sha256sums=('SKIP'
+            'SKIP'
+            '557c88177f011ced17bdeac1af3f882b2ca33b386a866fdf900b35f927a2bbe8'
+            '64ae5597dda3cc160fc74be038dbe6267d41b525c0c35da9125fbf0de27f9b25')
+
+pkgver() {
+  cd glib
+
+  git describe --tags | sed 's/-g*//;s/-/./'
+}
+
+
+prepare() {
+  cd glib
+
+  git submodule init
+  git submodule set-url subprojects/gvdb "$srcdir/gvdb"
+  git -c protocol.file.allow=always submodule update
+}
+
+build() {
+  cd glib
+
+  meson setup \
+    --prefix /usr \
+    --optimization 2 \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D gtk_doc=false \
+    -D man=false \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd glib
+
+  meson test -C build --print-errorlogs
+}
+
+package() {
+  cd glib
+
+  meson install -C build --destdir="$pkgdir"
+
+  install -Dm644 "$srcdir"/*.hook -t "$pkgdir"/usr/share/libalpm/hooks
+}

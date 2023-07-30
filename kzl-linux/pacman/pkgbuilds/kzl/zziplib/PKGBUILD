@@ -2,14 +2,12 @@
 
 pkgname=zziplib
 pkgver=0.13.72
-pkgrel=1
-epoch=1
+pkgrel=6
+epoch=
 pkgdesc="A lightweight library that offers the ability to easily extract data from files archived in a single zip file"
 arch=('x86_64')
 url="http://zziplib.sourceforge.net"
 license=('KZL')
-makedepends=(xmlto)
-checkdepends=(unzip)
 source=(git+https://github.com/gdraheim/zziplib.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -19,12 +17,13 @@ build() {
   cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_INSTALL_LIBDIR=lib \
-    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
     -DZZIPDOCS=OFF \
+    -DZZIPTEST=OFF \
     -S . \
     -B build \
-    -G Ninja
+    -G Ninja \
+    -LAH
 
   cmake --build build
 }

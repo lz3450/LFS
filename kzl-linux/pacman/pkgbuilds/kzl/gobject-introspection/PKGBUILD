@@ -1,0 +1,47 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=gobject-introspection
+pkgver=1.76.1
+pkgrel=3
+epoch=
+pkgdesc="To describe the APIs and collect them in a uniform, machine readable format"
+arch=('x86_64')
+url="https://wiki.gnome.org/Projects/GObjectIntrospection"
+license=('KZL')
+depends=(glib2)
+source=(git+https://gitlab.gnome.org/GNOME/gobject-introspection.git#tag=$pkgver
+        git+https://gitlab.gnome.org/GNOME/glib.git)
+sha256sums=('SKIP'
+            'SKIP')
+
+prepare() {
+  cd $pkgname
+
+}
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --optimization 2 \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D glib_src_dir="$srcdir/glib" \
+    -D gtk_doc=false \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build --print-errorlogs
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir="$pkgdir"
+}

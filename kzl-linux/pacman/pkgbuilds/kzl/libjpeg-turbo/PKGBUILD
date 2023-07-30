@@ -2,7 +2,7 @@
 
 pkgname=libjpeg-turbo
 pkgver=2.1.5.1
-pkgrel=6
+pkgrel=8
 epoch=
 pkgdesc="JPEG image codec with accelerated baseline compression and decompression"
 arch=('x86_64')

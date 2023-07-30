@@ -1,27 +1,22 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ghostscript
-pkgver=9.53.3
-pkgrel=1
-epoch=1
+pkgver=10.01.2
+pkgrel=10
+epoch=
 pkgdesc="An interpreter for the PostScript language"
 arch=('x86_64')
 url="https://www.ghostscript.com/"
-depends=(fontconfig lcms2 libidn libjpeg-turbo libpaper libpng libtiff libxt openjpeg)
-# makedepends=(freeglut glu gtk3)
-# optdepends=("texlive: dvipdf"
-#             "gtk3: gsx")
-provides=(ghostxps ghostpcl)
-conflicts=(ghostxps ghostpcl)
-replaces=(ghostxps ghostpcl)
-source=(https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${pkgver//./}/ghostpdl-$pkgver.tar.gz)
-sha256sums=('96d04e4e464bddb062c1774ea895c4f1c1c94e6c4b62f5d32218ebd44dd65ba1')
+depends=(expat fontconfig freetype2 lcms2 libidn2 libjpeg-turbo libpaper libpng libtiff openjpeg)
+source=(https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${pkgver//./}/ghostpdl-$pkgver.tar.xz)
+sha256sums=('SKIP')
 
 prepare() {
   cd ghostpdl-$pkgver
 
-  # rm -rf cups/libs expat ijs jpeg lcms2mt libpng openjpeg tiff zlib
-  rm -rf expat jpeg lcms2mt libpng openjpeg tiff zlib
+  NOCONFIGURE=1 ./autogen.sh
+
+  rm -rf cups/libs expat freetype jpeg lcms2mt libpng openjpeg tiff zlib
 }
 
 build() {
@@ -29,46 +24,25 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --enable-fontconfig \
     --disable-cups \
-    --enable-openjpeg \
     --disable-gtk \
     --disable-compile-inits \
-    --enable-dynamic \
-    --with-libidn \
-    --with-libpaper \
+    --without-tesseract \
     --with-system-libtiff \
-    --with-ijs \
-    --without-luratech \
-    --with-jbig2dec \
-    --with-x \
-    --with-drivers=ALL \
-    --with-fontpath=/usr/share/fonts/gsfonts
+    --without-ijs \
+    --with-fontpath="/usr/share/fonts/gsfonts" \
+    --without-versioned-path
 
-  make so-only
+  make so
 }
 
 package() {
   cd ghostpdl-$pkgver
 
-  make DESTDIR="$pkgdir/" \
-    CUPSSERVERROOT="$pkgdir$(cups-config --serverroot)" \
-    CUPSSERVERBIN="$pkgdir$(cups-config --serverbin)" \
-    soinstall
+  make DESTDIR="$pkgdir" soinstall
+
+  rm -f "$pkgdir"/usr/bin/{lprsetup.sh,unix-lpr.sh}
+  rm -r "$pkgdir"/usr/share/doc
 
   ln -s gsc "$pkgdir"/usr/bin/gs
-
-  install -D sobin/gxpsc -t "$pkgdir"/usr/bin
-  ln -s gxpsc "$pkgdir"/usr/bin/gxps
-
-  install -D sobin/libgxps.so.${pkgver%.*} -t "$pkgdir"/usr/lib
-  ln -s libgxps.so.${pkgver%.*} "$pkgdir"/usr/lib/libgxps.so.${pkgver%%.*}
-
-  install -D sobin/gpcl6c -t "$pkgdir"/usr/bin
-  ln -sf gpcl6c "$pkgdir"/usr/bin/gpcl6
-
-  install -D sobin/libgpcl6.so.${pkgver%.*} -t "$pkgdir"/usr/lib 
-  ln -s libgpcl6.so.${pkgver%.*} "$pkgdir"/usr/lib/libgpcl6.so.${pkgver%%.*}
-
-  rm -r "$pkgdir"/usr/share/man/de
 }

@@ -1,1 +1,6 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://libgd.github.io/ | grep -oP '(?<=LibGD )\d\.\d\.\d' | head -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/libgd"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

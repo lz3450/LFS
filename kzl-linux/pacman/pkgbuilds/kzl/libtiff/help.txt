@@ -1,4 +1,4 @@
-`configure' configures LibTIFF Software 4.5.0 to adapt to many kinds of systems.
+`configure' configures LibTIFF Software 4.5.1 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

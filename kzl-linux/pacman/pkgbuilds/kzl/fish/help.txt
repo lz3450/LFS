@@ -1,0 +1,428 @@
+-- The C compiler identification is GNU 12.3.0
+-- The CXX compiler identification is GNU 12.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test HAS_NO_REDUNDANT_MOVE
+-- Performing Test HAS_NO_REDUNDANT_MOVE - Failed
+-- Performing Test HAS_REDUNDANT_MOVE
+-- Performing Test HAS_REDUNDANT_MOVE - Success
+-- Performing Test EMPTY_VALUE_INIT_ACCEPTED
+-- Performing Test EMPTY_VALUE_INIT_ACCEPTED - Success
+-- Performing Test DISABLE_STATIC_DESTRUCTORS
+-- Performing Test DISABLE_STATIC_DESTRUCTORS - Failed
+-- Found Curses: /usr/lib/libcurses.so  
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Looking for backtrace_symbols
+-- Looking for backtrace_symbols - found
+-- Looking for clock_gettime
+-- Looking for clock_gettime - found
+-- Looking for futimens
+-- Looking for futimens - found
+-- Looking for ctermid_r
+-- Looking for ctermid_r - not found
+-- Performing Test HAVE_STRUCT_DIRENT_D_TYPE
+-- Performing Test HAVE_STRUCT_DIRENT_D_TYPE - Success
+-- Looking for dirfd
+-- Looking for dirfd - found
+-- Looking for C++ include execinfo.h
+-- Looking for C++ include execinfo.h - found
+-- Looking for flock
+-- Looking for flock - found
+-- Looking for getpwent
+-- Looking for getpwent - found
+-- Looking for getrusage
+-- Looking for getrusage - found
+-- Looking for gettext
+-- Looking for gettext - found
+-- Looking for killpg
+-- Looking for killpg - found
+-- Looking for mkostemp
+-- Looking for mkostemp - found
+-- Looking for include files curses.h, term.h
+-- Looking for include files curses.h, term.h - found
+-- Looking for C++ include siginfo.h
+-- Looking for C++ include siginfo.h - not found
+-- Looking for C++ include spawn.h
+-- Looking for C++ include spawn.h - found
+-- Performing Test HAVE_STRUCT_STAT_ST_CTIME_NSEC
+-- Performing Test HAVE_STRUCT_STAT_ST_CTIME_NSEC - Failed
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIMESPEC_TV_NSEC
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIMESPEC_TV_NSEC - Failed
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC - Success
+-- Looking for C++ include sys/ioctl.h
+-- Looking for C++ include sys/ioctl.h - found
+-- Looking for C++ include sys/select.h
+-- Looking for C++ include sys/select.h - found
+-- Looking for include files sys/types.h, sys/sysctl.h
+-- Looking for include files sys/types.h, sys/sysctl.h - not found
+-- Looking for eventfd
+-- Looking for eventfd - found
+-- Looking for pipe2
+-- Looking for pipe2 - found
+-- Looking for wcscasecmp
+-- Looking for wcscasecmp - found
+-- Looking for wcsncasecmp
+-- Looking for wcsncasecmp - found
+-- Looking for include file xlocale.h
+-- Looking for include file xlocale.h - not found
+-- Looking for wcstod_l
+-- Looking for wcstod_l - found
+-- Looking for uselocale
+-- Looking for uselocale - not found
+-- Performing Test _HAVE_WINSIZE
+-- Performing Test _HAVE_WINSIZE - Success
+-- Looking for TIOCGWINSZ
+-- Looking for TIOCGWINSZ - found
+-- Looking for C++ include sys/types.h
+-- Looking for C++ include sys/types.h - found
+-- Looking for C++ include stdint.h
+-- Looking for C++ include stdint.h - found
+-- Looking for C++ include stddef.h
+-- Looking for C++ include stddef.h - found
+-- Check size of wchar_t[8]
+-- Check size of wchar_t[8] - done
+-- Performing Test TPARM_TAKES_VARARGS
+-- Performing Test TPARM_TAKES_VARARGS - Success
+-- Performing Test TPUTS_USES_INT_ARG
+-- Performing Test TPUTS_USES_INT_ARG - Success
+-- Performing Test HAVE_STD__MAKE_UNIQUE
+-- Performing Test HAVE_STD__MAKE_UNIQUE - Failed
+-- Performing Test HAVE_CX11_THREAD_LOCAL
+-- Performing Test HAVE_CX11_THREAD_LOCAL - Success
+-- Performing Test LIBATOMIC_NOT_NEEDED
+-- Performing Test LIBATOMIC_NOT_NEEDED - Success
+-- Performing Test HAVE_WAITSTATUS_SIGNAL_RET
+-- Performing Test HAVE_WAITSTATUS_SIGNAL_RET - Failed
+-- Found Gettext: /usr/bin/msgmerge (found version "0.22") 
+-- Performing Test HAVE__NL_MSG_CAT_CNTR
+-- Performing Test HAVE__NL_MSG_CAT_CNTR - Success
+-- Using system PCRE2 library /usr/include
+-- The following features have been enabled:
+
+ * gettext, translate messages with gettext
+ * Documentation, user manual and documentation
+
+-- The following OPTIONAL packages have been found:
+
+ * Curses
+ * Gettext
+
+-- The following REQUIRED packages have been found:
+
+ * Threads
+
+-- Configuring done (4.5s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/kzl/makepkg/build/fish/src/fish-shell/tmp
+-- Cache values
+// build documentation (requires Sphinx)
+BUILD_DOCS:BOOL=ON
+
+// Path to a program.
+CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
+
+// Path to a program.
+CMAKE_AR:FILEPATH=/usr/bin/ar
+
+// Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ...
+CMAKE_BUILD_TYPE:STRING=Release
+
+// Enable/Disable color output during build.
+CMAKE_COLOR_MAKEFILE:BOOL=ON
+
+// CXX compiler
+CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
+
+// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
+CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
+
+// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
+CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
+
+// Flags used by the CXX compiler during all build types.
+CMAKE_CXX_FLAGS:STRING=
+
+// Flags used by the CXX compiler during DEBUG builds.
+CMAKE_CXX_FLAGS_DEBUG:STRING=-g
+
+// Flags used by the CXX compiler during MINSIZEREL builds.
+CMAKE_CXX_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG
+
+// Flags used by the CXX compiler during RELEASE builds.
+CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
+
+// Flags used by the CXX compiler during RELWITHDEBINFO builds.
+CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
+
+// C compiler
+CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
+
+// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
+CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
+
+// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
+CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
+
+// Flags used by the C compiler during all build types.
+CMAKE_C_FLAGS:STRING=
+
+// Flags used by the C compiler during DEBUG builds.
+CMAKE_C_FLAGS_DEBUG:STRING=-g
+
+// Flags used by the C compiler during MINSIZEREL builds.
+CMAKE_C_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG
+
+// Flags used by the C compiler during RELEASE builds.
+CMAKE_C_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
+
+// Flags used by the C compiler during RELWITHDEBINFO builds.
+CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
+
+// Path to a program.
+CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
+
+// Flags used by the linker during all build types.
+CMAKE_EXE_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during DEBUG builds.
+CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during MINSIZEREL builds.
+CMAKE_EXE_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during RELEASE builds.
+CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during RELWITHDEBINFO builds.
+CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// Enable/Disable output of compile commands during generation.
+CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
+
+// User executables (bin)
+CMAKE_INSTALL_BINDIR:PATH=bin
+
+// Read-only architecture-independent data (DATAROOTDIR)
+CMAKE_INSTALL_DATADIR:PATH=
+
+// Read-only architecture-independent data root (share)
+CMAKE_INSTALL_DATAROOTDIR:PATH=share
+
+// Documentation root (DATAROOTDIR/doc/PROJECT_NAME)
+CMAKE_INSTALL_DOCDIR:PATH=
+
+// C header files (include)
+CMAKE_INSTALL_INCLUDEDIR:PATH=include
+
+// Info documentation (DATAROOTDIR/info)
+CMAKE_INSTALL_INFODIR:PATH=
+
+// Object code libraries (lib64)
+CMAKE_INSTALL_LIBDIR:PATH=lib64
+
+// Program executables (libexec)
+CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
+
+// Locale-dependent data (DATAROOTDIR/locale)
+CMAKE_INSTALL_LOCALEDIR:PATH=
+
+// Modifiable single-machine data (var)
+CMAKE_INSTALL_LOCALSTATEDIR:PATH=var
+
+// Man documentation (DATAROOTDIR/man)
+CMAKE_INSTALL_MANDIR:PATH=
+
+// C header files for non-gcc (/usr/include)
+CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
+
+// Install path prefix, prepended onto install directories.
+CMAKE_INSTALL_PREFIX:PATH=/usr/local
+
+// Run-time variable data (LOCALSTATEDIR/run)
+CMAKE_INSTALL_RUNSTATEDIR:PATH=
+
+// System admin executables (sbin)
+CMAKE_INSTALL_SBINDIR:PATH=sbin
+
+// Modifiable architecture-independent data (com)
+CMAKE_INSTALL_SHAREDSTATEDIR:PATH=com
+
+// Read-only single-machine data (etc)
+CMAKE_INSTALL_SYSCONFDIR:PATH=etc
+
+// Path to a program.
+CMAKE_LINKER:FILEPATH=/usr/bin/ld
+
+// Path to a program.
+CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
+
+// Flags used by the linker during the creation of modules during all build types.
+CMAKE_MODULE_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during the creation of modules during DEBUG builds.
+CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during the creation of modules during MINSIZEREL builds.
+CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during the creation of modules during RELEASE builds.
+CMAKE_MODULE_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during the creation of modules during RELWITHDEBINFO builds.
+CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// Path to a program.
+CMAKE_NM:FILEPATH=/usr/bin/nm
+
+// Path to a program.
+CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
+
+// Path to a program.
+CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
+
+// Minimum OS X deployment version
+CMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.10
+
+// Path to a program.
+CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
+
+// Path to a program.
+CMAKE_READELF:FILEPATH=/usr/bin/readelf
+
+// Flags used by the linker during the creation of shared libraries during all build types.
+CMAKE_SHARED_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during the creation of shared libraries during DEBUG builds.
+CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during the creation of shared libraries during MINSIZEREL builds.
+CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during the creation of shared libraries during RELEASE builds.
+CMAKE_SHARED_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during the creation of shared libraries during RELWITHDEBINFO builds.
+CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// If set, runtime paths are not added when installing shared libraries, but are added when building.
+CMAKE_SKIP_INSTALL_RPATH:BOOL=NO
+
+// If set, runtime paths are not added when using shared libraries.
+CMAKE_SKIP_RPATH:BOOL=NO
+
+// Flags used by the linker during the creation of static libraries during all build types.
+CMAKE_STATIC_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during the creation of static libraries during DEBUG builds.
+CMAKE_STATIC_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during the creation of static libraries during MINSIZEREL builds.
+CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during the creation of static libraries during RELEASE builds.
+CMAKE_STATIC_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during the creation of static libraries during RELWITHDEBINFO builds.
+CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// Path to a program.
+CMAKE_STRIP:FILEPATH=/usr/bin/strip
+
+// Path to a program.
+CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
+
+// If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.
+CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
+
+// Path to a library.
+CURSES_CURSES_LIBRARY:FILEPATH=/usr/lib/libcurses.so
+
+// Path to a library.
+CURSES_FORM_LIBRARY:FILEPATH=/usr/lib/libform.so
+
+// Path to a file.
+CURSES_INCLUDE_PATH:PATH=/usr/include
+
+// Path to a library.
+CURSES_NCURSES_LIBRARY:FILEPATH=/usr/lib/libncurses.so
+
+// Path to a library.
+CURSES_TINFO:FILEPATH=/usr/lib/libtinfo.so
+
+// Use PCRE2 from the system, instead of fetching and building it
+FISH_USE_SYSTEM_PCRE2:BOOL=ON
+
+// Path to a program.
+GETTEXT_MSGFMT_EXECUTABLE:FILEPATH=/usr/bin/msgfmt
+
+// Path to a program.
+GETTEXT_MSGMERGE_EXECUTABLE:FILEPATH=/usr/bin/msgmerge
+
+// Mac code-signing identity
+MAC_CODESIGN_ID:STRING=
+
+// Inject get-task-allow on Mac
+MAC_INJECT_GET_TASK_ALLOW:BOOL=ON
+
+// Build pcre2grep
+PCRE2_BUILD_PCRE2GREP:BOOL=OFF
+
+// Build 32bit PCRE2 library
+PCRE2_BUILD_PCRE2_32:BOOL=ON
+
+// Build 8bit PCRE2 library
+PCRE2_BUILD_PCRE2_8:BOOL=OFF
+
+// Build tests
+PCRE2_BUILD_TESTS:BOOL=OFF
+
+// Show the final configuration report
+PCRE2_SHOW_REPORT:BOOL=OFF
+
+// Arguments to supply to pkg-config
+PKG_CONFIG_ARGN:STRING=
+
+// pkg-config executable
+PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
+
+// Path to a program.
+ProcessorCount_cmd_nproc:FILEPATH=/usr/bin/nproc
+
+// Path to a program.
+ProcessorCount_cmd_sysctl:FILEPATH=/usr/sbin/sysctl
+
+// Sphinx documentation generator
+SPHINX_EXECUTABLE:FILEPATH=/usr/bin/sphinx-build
+
+// Path to a file.
+SYS_PCRE2_INCLUDE_DIR:PATH=/usr/include
+
+// Path to a library.
+SYS_PCRE2_LIB:FILEPATH=/usr/lib/libpcre2-32.so
+
+// translate messages if gettext is available
+WITH_GETTEXT:BOOL=ON
+
+// Path for extra completions
+extra_completionsdir:STRING=/usr/local/share/fish/vendor_completions.d
+
+// Path for extra configuration
+extra_confdir:STRING=/usr/local/share/fish/vendor_conf.d
+
+// Path for extra functions
+extra_functionsdir:STRING=/usr/local/share/fish/vendor_functions.d
+
+// Path to a library.
+pkgcfg_lib_NCURSES_ncursesw:FILEPATH=/usr/lib/libncursesw.so
+

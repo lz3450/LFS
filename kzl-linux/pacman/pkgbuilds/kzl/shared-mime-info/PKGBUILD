@@ -1,32 +1,32 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=shared-mime-info
-pkgver=2.0.144
-pkgrel=1
-epoch=1
-pkgdesc="Freedesktop.org Shared MIME Info"
+pkgver=2.2
+pkgrel=4
+epoch=
+pkgdesc="Shared MIME database package"
 arch=('x86_64')
 url="https://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec/"
 license=('KZL')
 depends=(glib2 libxml2)
-makedepends=(docbook itstool xmlto)
-source=(git+https://gitlab.freedesktop.org/xdg/shared-mime-info.git#commit=13695c7225c2f525a435e72739c33ac32bbfbbb9
-        git+https://gitlab.freedesktop.org/xdg/xdgmime.git#commit=92f6a09fda2b23c2ab95cede8eb0612ca96bd0f7
+install=$pkgname.install
+source=(git+https://gitlab.freedesktop.org/xdg/shared-mime-info.git#tag=$pkgver
+        $pkgname.install
         update-mime-database.hook)
 sha256sums=('SKIP'
-            'SKIP'
+            '4b9927aa23930f62ed6aec2ff8e8bee0c3ed6ff61fdf1e8304568c13d13d3a49'
             '95cd0b97a5ec35ee97c459669e8c0f9c16b0cf43a9a801ff11da2cabf5424df5')
 
 pkgver() {
   cd $pkgname
 
-  git describe --long | sed 's/-g.*//;s/-/./g'
+  git describe --tags | sed 's/-g.*//;s/-/./g'
 }
 
 prepare() {
-  cd xdgmime
+  cd $pkgname
 
-  make CC=gcc CFLAGS=""
+  git submodule update --init
 }
 
 build() {
@@ -34,15 +34,9 @@ build() {
 
   meson setup \
     --prefix /usr \
-    --libexecdir lib \
-    --sbindir bin \
-    --auto-features enabled \
-    --buildtype plain \
-    --wrap-mode nodownload \
+    --optimization 2 \
     -D b_lto=true \
     -D b_pie=true \
-    -D update-mimedb=false \
-    -D xdgmime-path="$srcdir"/xdgmime \
     build
 
   meson compile -C build
@@ -57,6 +51,6 @@ check() {
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir/" meson install -C build
+  meson install -C build --destdir="$pkgdir"
   install -Dm644 "$srcdir"/update-mime-database.hook "$pkgdir"/usr/share/libalpm/hooks/update-mime-database.hook
 }

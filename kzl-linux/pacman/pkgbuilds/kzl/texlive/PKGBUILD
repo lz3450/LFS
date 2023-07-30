@@ -1,13 +1,13 @@
 pkgname=texlive
 pkgver=66539
 _pkgyear=2023
-pkgrel=11
+pkgrel=13
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
 url="https://www.tug.org/historic/"
 license=('KZL')
-depends=(cairo fontconfig freetype2 gd gmp graphite harfbuzz icu libpaper libpng mpfr pixman zziplib)
+depends=(cairo fontconfig freetype2 gd ghostscript gmp graphite harfbuzz icu libpaper libpng mpfr pixman zziplib)
 install=$pkgname.install
 source=(git+https://github.com/TeX-Live/texlive-source.git#tag=svn$pkgver
         git+https://github.com/TeX-Live/installer.git
@@ -45,18 +45,13 @@ build() {
     --datarootdir=/opt/TeXLive \
     --disable-native-texlive-build \
     --disable-multiplatform \
-    --disable-t1utils \
-    --disable-dump-share \
-    --disable-aleph \
-    --enable-xetex \
-    --disable-bibtexu \
-    --disable-psutils \
     --enable-shared \
     --disable-static \
-    --with-clisp-runtime=default \
     --with-banner-add="/KZL $(date +%Y.%m.%d)" \
+    --with-gs="/usr/bin/gs" \
     --with-system-harfbuzz \
     --with-system-icu \
+    --without-system-teckit \
     --with-system-graphite2 \
     --with-system-zziplib \
     --with-system-mpfr \
@@ -64,10 +59,12 @@ build() {
     --with-system-cairo \
     --with-system-pixman \
     --with-system-gd \
+    --without-system-potrace \
     --with-system-freetype2 \
     --with-system-libpng \
     --with-system-libpaper \
     --with-system-zlib \
+    --without-system-ptexenc \
     --without-x
 
   make

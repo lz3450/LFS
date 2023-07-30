@@ -1,0 +1,6 @@
+new_version=$(git ls-remote --tags https://gitlab.freedesktop.org/pixman/pixman.git | grep -oP '(?<=refs/tags/pixman-)\d\.\d+\.\d+' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    meson configure > "$PKGBUILDDIR"/help.txt
+}

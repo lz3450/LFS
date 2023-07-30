@@ -2,7 +2,7 @@
 
 pkgname=openssh
 pkgver=9.3.P2
-pkgrel=3
+pkgrel=4
 epoch=
 arch=('x86_64')
 url="https://www.openssh.com/portable.html"

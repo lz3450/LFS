@@ -2,8 +2,8 @@
 
 pkgname=lzo
 pkgver=2.10
-pkgrel=1
-epoch=1
+pkgrel=4
+epoch=
 pkgdesc="Portable lossless data compression library"
 arch=('x86_64')
 url="https://www.oberhumer.com/opensource/lzo"
@@ -30,5 +30,5 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
