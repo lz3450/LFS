@@ -1,9 +1,9 @@
 post_install() {
   source etc/profile.d/texlive.sh
-  opt/TeXLive/bin/mktexlsr
-  opt/TeXLive/bin/fmtutil-sys --all
-  opt/TeXLive/bin/mtxrun --generate >/dev/null
-  opt/TeXLive/bin/updmap-sys
+  opt/TeXLive/bin/"$(opt/TeXLive/tlpkg/installer/config.guess)"/mktexlsr
+  opt/TeXLive/bin/"$(opt/TeXLive/tlpkg/installer/config.guess)"/fmtutil-sys --all
+  opt/TeXLive/bin/"$(opt/TeXLive/tlpkg/installer/config.guess)"/mtxrun --generate >/dev/null
+  opt/TeXLive/bin/"$(opt/TeXLive/tlpkg/installer/config.guess)"/updmap-sys
 }
 
 post_upgrade() {
