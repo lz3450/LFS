@@ -86,7 +86,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     "junkfood"
     # "kafeitu"
     "kardan"
-    "kennethreitz"
+    # "kennethreitz"
     "kiwi"
     # "kolo"
     # "kphoen"
