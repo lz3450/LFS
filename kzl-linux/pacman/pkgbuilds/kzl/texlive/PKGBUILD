@@ -1,7 +1,7 @@
 pkgname=texlive
-pkgver=20230802
+pkgver=20230803
 _pkgyear=2023
-pkgrel=17
+pkgrel=1
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -30,6 +30,8 @@ sha256sums=('SKIP'
 prepare() {
   cd $pkgname-source
 
+  rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng,mpfr,pixman,zlib,zziplib}
+
   mkdir build
 }
 
@@ -43,8 +45,18 @@ build() {
     --datarootdir="\${prefix}" \
     --infodir="\${prefix}/texmf-dist/doc/info" \
     --mandir="\${prefix}/texmf-dist/doc/man" \
+    --disable-all-pkgs \
     --disable-native-texlive-build \
     --enable-multiplatform \
+    --enable-web2c \
+    --enable-tex \
+    --enable-luatex \
+    --enable-luajittex \
+    --enable-pdftex \
+    --enable-pdftex-synctex \
+    --enable-synctex \
+    --enable-texlive \
+    --enable-linked-scripts \
     --enable-shared \
     --disable-static \
     --with-banner-add="/KZL" \
@@ -79,13 +91,13 @@ package() {
 
   ### enable tlmgr
   mkdir -p "$pkgdir"/opt/TeXLive/tlpkg/{backups,installer,tlpobj}
-  cp -r "$srcdir"/installer/tlpkg/{TeXLive,gpg,translations} "$pkgdir"/opt/TeXLive/tlpkg/
-  cp -r "$srcdir"/installer/tlpkg/installer/{config.guess,ctan-mirrors.pl} "$pkgdir"/opt/TeXLive/tlpkg/installer/
+  cp -r "$srcdir"/installer/tlpkg "$pkgdir"/opt/TeXLive/
   cp "$srcdir"/texlive.tlpdb "$pkgdir"/opt/TeXLive/tlpkg/
 
   ### texmf-dist
-  tar -xf "$srcdir"/texlive-20230313-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
   cp -r "$srcdir"/installer/texmf-dist "$pkgdir"/opt/TeXLive
+  tar -xf "$srcdir"/texlive-20230313-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
+  rm -rf xindy psutils
 
   # texlive fonts
   install -Dm644 "$srcdir"/09-texlive-fonts.conf -t "$pkgdir"/usr/share/fonts/conf.avail/
