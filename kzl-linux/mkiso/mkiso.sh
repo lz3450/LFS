@@ -1,58 +1,58 @@
 #!/bin/bash
 #
-# mkiso.sh
+# mkiso
 #
-
-set -e -u
-# set -x
-
-umask 0022
 
 script_name="$(basename "${0}")"
 script_path="$(readlink -f "${0}")"
 script_dir="$(dirname "${script_path}")"
 
-pkg_list=(
+rootfs_archive_list=(
+    base
+    nano
+    openssh
+    pacman-contrib
+    parted
+    rsync
+    tmux
+    usbutils
+    wget2
+    zsh
+)
+iso_pkg_list=(
     arch-install-scripts
     base
     debootstrap
     dosfstools
     dpkg
     f2fs-tools
-    gptfdisk
     linux
     linux-firmware
-    mdadm
-    mtools
     nano
-    nvme-cli
     openssh
     pacman-contrib
     parted
     rsync
-    screen
     smartmontools
-    tmux
     usbutils
-    vim
-    wget
-    wpa_supplicant
-    zsh zsh-autosuggestions zsh-syntax-highlighting
+    wget2
+    zsh
 )
-custom_repository_pkgs=(
+repository_pkgs=(
     base
 )
-work_dir="/tmp/isotmp"
+work_dir="/tmp/kzllinux-rootfstmp"
 pacstrap_dir="${work_dir}"/rootfs
+rootfs_archive_name="kzllinux_rootfs-$(date +%Y%m%d).tar.gz"
 isofs_dir="${work_dir}"/iso
 install_dir="LiveOS"
 iso_name="kzllinux"
 iso_label="KZLLINUX-$(date +%Y%m%d)"
-iso_publisher="KZL Linux <https://github.com/kongzelun/LFS>"
+iso_publisher="KZL Linux <https://github.com/lz3450/LFS>"
 iso_application="KZL Linux Live/Rescue CD"
 iso_version="$(date +%Y%m%d)"
 out_dir="${script_dir}"
-image_name="${iso_name}-${iso_version}.iso"
+iso_image_name="${iso_name}-${iso_version}.iso"
 log_dir="${work_dir}"/log
 
 # Show an INFO message
@@ -81,39 +81,37 @@ error() {
     fi
 }
 
-usage() {
-    cat <<USAGETEXT
-
-Usage: ${script_name} [options]
-    Options:
-        -h              display this help message and exit
-USAGETEXT
-    exit ${1}
-}
-
 make_iso_image() {
     info "Creating ISO image..."
     xorriso \
         -as mkisofs \
         -iso-level 3 \
-        -full-iso9660-filenames \
         -joliet \
         -joliet-long \
+        -full-iso9660-filenames \
         -rational-rock \
         -volid "${iso_label}" \
-        -appid "${iso_application}" \
         -publisher "${iso_publisher}" \
+        -appid "${iso_application}" \
         -preparer "prepared by kzl" \
         -partition_offset 16 \
         -append_partition 2 'C12A7328-F81F-11D2-BA4B-00A0C93EC93B' "${work_dir}"/efiboot.img \
         -appended_part_as_gpt \
-        -output "${out_dir}/${image_name}" \
+        -output "${out_dir}/${iso_image_name}" \
         "${isofs_dir}/" &> "${log_dir}"/xorriso.log
     info "Done!"
 }
 
 make_rootfs_squashfs() {
     local image_path="${isofs_dir}/${install_dir}/squashfs.img"
+
+    # Copy custom repository
+    # info "Copying custom repository..."
+    # cp -a -n --no-preserve=ownership,mode -- /home/.repository "${pacstrap_dir}"/home/
+    # info "Done!"
+
+    mkdir "${pacstrap_dir}"/home/.repository
+    printf "%s\t\t%s\t\t%s\t%s\t\t%s %s\n" "LABEL=REPO" "/home/.repository" "f2fs" "default" "0" "2" >> "${pacstrap_dir}"/etc/fstab
 
     # Create a squashfs image and place it in the ISO 9660 file system.
     install -dm0755 -- "${isofs_dir}/${install_dir}"
@@ -122,32 +120,41 @@ make_rootfs_squashfs() {
     info "Done!"
 }
 
+make_rootfs_archive() {
+    info "Creating rootfs archive..."
+    tar -czvf "${rootfs_archive_name}" \
+        -C "${pacstrap_dir}" \
+        . \
+        &> "${log_dir}"/tar.log
+    info "Done!"
+}
+
 # Cleanup rootfs
 cleanup_pacstrap_dir() {
     info "Cleaning up in pacstrap location..."
 
     # Delete all files in /boot
-    if [[ -d "${pacstrap_dir}/boot" ]]; then
+    if [ -d "${pacstrap_dir}/boot" ]; then
         find "${pacstrap_dir}/boot" -mindepth 1 -delete
     fi
     # Delete pacman database sync cache files (*.tar.gz)
-    if [[ -d "${pacstrap_dir}/var/lib/pacman" ]]; then
+    if [ -d "${pacstrap_dir}/var/lib/pacman" ]; then
         find "${pacstrap_dir}/var/lib/pacman" -maxdepth 1 -type f -delete
     fi
     # Delete pacman database sync cache
-    if [[ -d "${pacstrap_dir}/var/lib/pacman/sync" ]]; then
+    if [ -d "${pacstrap_dir}/var/lib/pacman/sync" ]; then
         find "${pacstrap_dir}/var/lib/pacman/sync" -delete
     fi
     # Delete pacman package cache
-    if [[ -d "${pacstrap_dir}/var/cache/pacman/pkg" ]]; then
+    if [ -d "${pacstrap_dir}/var/cache/pacman/pkg" ]; then
         find "${pacstrap_dir}/var/cache/pacman/pkg" -type f -delete
     fi
     # Delete all log files, keeps empty dirs.
-    if [[ -d "${pacstrap_dir}/var/log" ]]; then
+    if [ -d "${pacstrap_dir}/var/log" ]; then
         find "${pacstrap_dir}/var/log" -type f -delete
     fi
     # Delete all temporary files and dirs
-    if [[ -d "${pacstrap_dir}/var/tmp" ]]; then
+    if [ -d "${pacstrap_dir}/var/tmp" ]; then
         find "${pacstrap_dir}/var/tmp" -mindepth 1 -delete
     fi
     # Delete package pacman related files.
@@ -162,23 +169,23 @@ cleanup_pacstrap_dir() {
 make_efibootimg() {
     info "Setting up systemd-boot for UEFI booting..."
     # Calculate the required FAT image size in bytes
-    imgsize="$(du -bc \
+    imgsize=$(du -bc \
         "${pacstrap_dir}/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
         "${script_dir}/efiboot/loader.conf" \
         "${script_dir}/efiboot/kzl-linux.conf" \
-        "${pacstrap_dir}/boot/vmlinuz-linux" \
-        "${pacstrap_dir}/boot/initramfs-linux.img" \
-        2>/dev/null | awk 'END { print $1 }')"
+        "${pacstrap_dir}/boot/vmlinuz" \
+        "${pacstrap_dir}/boot/initramfs.img" \
+        2>/dev/null | awk 'END { print $1 }')
+    info "Required FAT image size ${imgsize} bytes"
 
     # Convert from bytes to KiB and round up to the next full MiB with an additional MiB for reserved sectors.
-    imgsize="$(awk 'function ceil(x){return int(x)+(x>int(x))}
-            function byte_to_kib(x){return x/1024}
-            function mib_to_kib(x){return x*1024}
-            END {print mib_to_kib(ceil((byte_to_kib($1)+1024)/1024))}' <<< "${imgsize}"
-    )"
+    imgsize="$(awk 'function ceil(x){return int(x)+(x>int(x))} function byte_to_kib(x){return x/1024} function mib_to_kib(x){return x*1024} END {print mib_to_kib(ceil((byte_to_kib($1)+1024)/1024))}' \
+        <<< "${imgsize}")"
+    info "Required FAT image size ${imgsize} KiB"
+
     rm -f -- "${work_dir}"/efiboot.img
     info "Creating FAT image of size: ${imgsize} KiB..."
-    mkfs.fat -F 32 -C -n ISO_EFI "${work_dir}"/efiboot.img "${imgsize}" &> /dev/null
+    mkfs.fat -F 32 -C -n ISO_EFI "${work_dir}"/efiboot.img "${imgsize}" &>/dev/null
 
     # Create the default/fallback boot path in which a boot loaders will be placed later.
     mmd -i "${work_dir}"/efiboot.img ::/EFI ::/EFI/BOOT
@@ -190,13 +197,13 @@ make_efibootimg() {
     # Copy systemd-boot configuration files
     mmd -i "${work_dir}"/efiboot.img ::/loader ::/loader/entries
     mcopy -i "${work_dir}"/efiboot.img "${script_dir}"/efiboot/loader.conf ::/loader/
-    sed "s|%ARCHISO_LABEL%|${iso_label}|g" "${script_dir}"/efiboot/kzl-linux.conf | mcopy -i "${work_dir}"/efiboot.img - ::/loader/entries/kzl-linux.conf
+    sed "s|%KZLLINUXISO_LABEL%|${iso_label}|g" "${script_dir}"/efiboot/kzl-linux.conf | mcopy -i "${work_dir}"/efiboot.img - ::/loader/entries/kzl-linux.conf
 
     # Copy kernel and initramfs to FAT image
     info "Preparing kernel and initramfs for the FAT file system..."
     mcopy -i "${work_dir}/efiboot.img" \
-        "${pacstrap_dir}"/boot/vmlinuz-linux \
-        "${pacstrap_dir}"/boot/initramfs-linux.img \
+        "${pacstrap_dir}"/boot/vmlinuz \
+        "${pacstrap_dir}"/boot/initramfs.img \
         ::/
 
     info "Done!"
@@ -204,17 +211,32 @@ make_efibootimg() {
 
 make_initramfs() {
     info "Create initramfs..."
-    dracut \
-        --nomdadmconf \
-        --nolvmconf \
-        --xz \
+    dracut --kver "`uname -r`" \
+        --force \
         --add 'livenet dmsquash-live convertfs pollcdrom qemu qemu-net' \
         --omit 'plymouth' \
-        --no-hostonly \
         --no-early-microcode \
-        --force \
+        --strip \
+        --nolvmconf \
+        --nomdadmconf \
+        --debug \
         --verbose \
-        "${pacstrap_dir}/boot/initramfs-linux.img" &> "${log_dir}"/dracut.log
+        --no-hostonly \
+        --zstd \
+        --keep \
+        "${pacstrap_dir}/boot/initramfs.img" &> "${log_dir}"/dracut.log
+    info "Done!"
+}
+
+install_pkgs() {
+    local _pkg_list=("$@")
+
+    info "Installing packages \"${_pkg_list[*]}\" to \"${pacstrap_dir}/\"..."
+    env -u TMPDIR pacstrap -c -G -M -- "${pacstrap_dir}" "${_pkg_list[@]}" &> "${log_dir}"/pacstrap.log
+    info "Done!"
+
+    info "Creating a list of installed packages on live-enviroment..."
+    pacman -Q --sysroot "${pacstrap_dir}" > "${isofs_dir}"/pkglist.txt
     info "Done!"
 }
 
@@ -226,14 +248,14 @@ make_rootfs() {
     install -dm0755 -- "${log_dir}"
 
     # Write build date to file
-    printf '%s\n' "$(date +%s)" > "${isofs_dir}/build_date"
+    printf '%s\n' "$(date +%Y%m%d)" > "${isofs_dir}/build_date"
 
     # Copy custom root file system files.
     if [[ -d "${script_dir}/rootfs" ]]; then
         info "Update rootfs..."
-        ./update_rootfs.sh &> "${log_dir}"/update_rootfs.log
+        ./update-rootfs &> "${log_dir}"/rootfs_update.log
         info "Done!"
-        info "Copying custom airootfs files..."
+        info "Copying custom rootfs files..."
         cp -af --no-preserve=ownership,mode -- "${script_dir}"/rootfs/. "${pacstrap_dir}"
         # Set ownership and mode for files and directories
         chown -fh -- 0:0 "${pacstrap_dir}"/etc/shadow
@@ -242,32 +264,24 @@ make_rootfs() {
         chmod -f -- 750 "${pacstrap_dir}"/root
         info "Done!"
     fi
-
-    info "Installing packages to '${pacstrap_dir}/'..."
-    env -u TMPDIR pacstrap -c -G -M -- "${pacstrap_dir}" "${pkg_list[@]}" &> "${log_dir}"/pacstrap.log
-    info "Done!"
-
-    # Copy custom repository
-    info "Copying custom repository..."
-    cp -af --no-preserve=ownership,mode -- /home/.repository "${pacstrap_dir}"/home/.repository
-    info "Done!"
-
-    info "Creating a list of installed packages on live-enviroment..."
-    pacman -Q --sysroot "${pacstrap_dir}" > "${isofs_dir}"/pkglist.txt
-    info "Done!"
 }
 
 build() {
-    # Set up essential directory paths
-    pacstrap_dir="${work_dir}"/rootfs
-    isofs_dir="${work_dir}"/iso
-
     # Create working directory
-    if [[ ! -d "${work_dir}" ]]; then
+    if [ -d "${work_dir}" ]; then
+        read -p "Work directory exists. Do you want to delete it? (Y/n) " answer
+        if [ -z "${answer}" ] || [ "${answer}" -eq "Y" ] || [ "${answer}" -eq "y" ]; then
+            rm -r -- "${work_dir}"
+        fi
+    else
         install -d -- "${work_dir}"
     fi
 
     make_rootfs
+    install_pkgs "${rootfs_archive_list[@]}"
+    cleanup_pacstrap_dir
+    make_rootfs_archive
+    install_pkgs "${iso_pkg_list[@]}"
     make_initramfs
     make_efibootimg
     cleanup_pacstrap_dir
@@ -281,13 +295,36 @@ cleanup() {
 }
 trap cleanup ERR
 
+usage() {
+    local _usage="
+mkiso (kzl-linux)
+
+Usage: mkiso
+
+    -h, --help                  display this help message and exit
+"
+    echo "$_usage"
+}
+
 ################################################################
 
-while getopts 'h?' arg; do
-    case "${arg}" in
-        h) usage 0 ;;
-        ?) usage 1 ;;
+set -e
+set -o pipefail
+set -u
+# set -x
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    *)
+        usage
+        error "Unknown option: \"$1\"" 1
+        ;;
     esac
+    shift
 done
 
 start_time=$(date +%s)

@@ -1,5 +1,15 @@
 #!/bin/bash
 
+set -e
+set -o pipefail
+set -u
+# set -x
+
+cp /etc/ssh/sshd_config rootfs/etc/ssh/
+sed -e '/^#PermitRootLogin/c\PermitRootLogin yes' \
+    -e '/^#PermitEmptyPasswords/c\PermitEmptyPasswords yes' \
+    -i rootfs/etc/ssh/sshd_config
+
 # grml-zsh-config
 wget -O rootfs/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
 wget -O rootfs/root/.zsh-autosuggestions.zsh https://raw.githubusercontent.com/zsh-users/zsh-autosuggestions/master/zsh-autosuggestions.zsh
