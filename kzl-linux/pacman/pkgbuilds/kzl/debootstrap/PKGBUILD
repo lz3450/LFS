@@ -1,13 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=debootstrap
-pkgver=1.0.128+nmu2
-pkgrel=5
+pkgver=1.0.128+nmu5
+pkgrel=1
 epoch=
 pkgdesc="Bootstrap a basic Debian system"
 arch=('any')
 url="https://tracker.debian.org/pkg/debootstrap"
-depends=(wget)
+depends=(wget2)
 optdepends=("gnupg: check release signatures")
 source=(git+https://salsa.debian.org/installer-team/debootstrap.git#tag=$pkgver)
 sha256sums=('SKIP')
@@ -21,7 +21,7 @@ pkgver() {
 prepare() {
   cd $pkgname
 
-  sed -e 's|export PATH|export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"|' -i debootstrap
+  sed -i 's|export PATH|export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"|' debootstrap
 }
 
 package() {

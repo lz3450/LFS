@@ -1,4 +1,4 @@
-`configure' configures libmd 1.1.0 to adapt to many kinds of systems.
+`configure' configures libburn 1.5.6 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -47,7 +47,7 @@ Fine tuning of the installation directories:
   --infodir=DIR           info documentation [DATAROOTDIR/info]
   --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
   --mandir=DIR            man documentation [DATAROOTDIR/man]
-  --docdir=DIR            documentation root [DATAROOTDIR/doc/libmd]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/libburn]
   --htmldir=DIR           html documentation [DOCDIR]
   --dvidir=DIR            dvi documentation [DOCDIR]
   --pdfdir=DIR            pdf documentation [DOCDIR]
@@ -61,6 +61,7 @@ Program names:
 System types:
   --build=BUILD     configure for building on BUILD [guessed]
   --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+  --target=TARGET   configure for building compilers for TARGET [HOST]
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -78,7 +79,16 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-sanitize       enable compiler sanitizer support
+  --enable-track-src-odirect   Banned for now: (Enable use of O_DIRECT with track input, default=no)
+  --enable-dvd-obs-64k    64 KB default size for DVD writing, default=no
+  --enable-dvd-obs-pad    pad DVD DAO sessions to 32 or 64 KB, default=no
+  --enable-pkg-check-modules      Enable pkg-config check for libcdio , default=no
+  --enable-libcdio        Enable use of libcdio as system adapter, default=no (except on MSWindows)
+  --enable-versioned-libs Enable strict symbol encapsulation , default=yes
+  --enable-ldconfig-at-install    On GNU/Linux run ldconfig, default=yes
+  --enable-debug          Disable aggressive optimizations default=yes
+  --enable-libdir-pkgconfig  Install to $libdir/pkgconfig on any OS, default=no
+  --enable-pkgconfig-path=DIR  Absolute path of directory for libisofs-*.pc
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -102,8 +112,17 @@ Some influential environment variables:
               you have headers in a nonstandard directory <include dir>
   LT_SYS_LIBRARY_PATH
               User-defined run-time library search path.
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  LIBCDIO_CFLAGS
+              C compiler flags for LIBCDIO, overriding pkg-config
+  LIBCDIO_LIBS
+              linker flags for LIBCDIO, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
-Report bugs to <libbsd@lists.freedesktop.org>.
+Report bugs to <http://libburnia-project.org>.

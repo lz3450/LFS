@@ -1,4 +1,4 @@
-`configure' configures dpkg 1.21.21 to adapt to many kinds of systems.
+`configure' configures dpkg 1.21.22 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

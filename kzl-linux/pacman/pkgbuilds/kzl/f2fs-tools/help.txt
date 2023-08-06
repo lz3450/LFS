@@ -1,4 +1,4 @@
-`configure' configures libmd 1.1.0 to adapt to many kinds of systems.
+`configure' configures F2FS tools 1.16.0 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -47,7 +47,7 @@ Fine tuning of the installation directories:
   --infodir=DIR           info documentation [DATAROOTDIR/info]
   --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
   --mandir=DIR            man documentation [DATAROOTDIR/man]
-  --docdir=DIR            documentation root [DATAROOTDIR/doc/libmd]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/f2fs-tools]
   --htmldir=DIR           html documentation [DOCDIR]
   --dvidir=DIR            dvi documentation [DOCDIR]
   --pdfdir=DIR            pdf documentation [DOCDIR]
@@ -72,17 +72,21 @@ Optional Features:
                           do not reject slow dependency extractors
   --disable-dependency-tracking
                           speeds up one-time build
-  --disable-largefile     omit support for large files
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-sanitize       enable compiler sanitizer support
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --without-selinux       Ignore presence of libselinux and disable selinux
+                          support
+  --without-blkid         Ignore presence of libblkid and disable blkid
+                          support
+  --without-lzo2          Ignore presence of liblzo2 and disable lzo2 support
+  --without-lz4           Ignore presence of liblz4 and disable lz4 support
   --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
                           both]
   --with-aix-soname=aix|svr4|both
@@ -91,6 +95,7 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
+  --with-root-libdir=DIR override location for /lib/libf2fs.so
 
 Some influential environment variables:
   CC          C compiler command
@@ -106,4 +111,4 @@ Some influential environment variables:
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
-Report bugs to <libbsd@lists.freedesktop.org>.
+Report bugs to <linux-f2fs-devel@lists.sourceforge.net>.

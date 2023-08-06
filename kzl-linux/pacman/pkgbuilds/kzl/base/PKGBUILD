@@ -2,7 +2,7 @@
 
 pkgname=base
 pkgver=20230509
-pkgrel=6
+pkgrel=8
 epoch=
 pkgdesc="Minimal package set"
 arch=('any')

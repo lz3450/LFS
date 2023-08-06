@@ -1,4 +1,4 @@
-`configure' configures GNU parted 3.6.1-8ab1 to adapt to many kinds of systems.
+`configure' configures GNU parted 3.6.4-60b3 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
