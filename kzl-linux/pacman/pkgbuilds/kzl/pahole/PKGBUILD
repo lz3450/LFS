@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=pahole
+pkgver=1.25
+pkgrel=3
+epoch=
+pkgdesc="pahole shows data structure layouts encoded in debugging information formats, DWARF and CTF being supported"
+arch=('x86_64')
+url="https://git.kernel.org/pub/scm/devel/pahole/pahole.git"
+license=('KZL')
+makedepends=(elfutils)
+source=(git://git.kernel.org/pub/scm/devel/pahole/pahole.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  cmake \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -D__LIB=lib \
+    -S . \
+    -B build \
+    -G Ninja \
+    -LAH
+
+  cmake --build build
+}
+
+check() {
+  cd $pkgname
+
+  cmake --build build --target tests
+}
+
+package() {
+  cd $pkgname
+
+  DESTDIR="$pkgdir" cmake --build build --target install
+}
