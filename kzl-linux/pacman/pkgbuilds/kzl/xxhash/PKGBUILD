@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=xxhash
-pkgver=0.8.1
-pkgrel=3
+pkgver=0.8.2
+pkgrel=1
 epoch=
 pkgdesc="An extremely fast non-cryptographic hash algorithm"
 arch=('x86_64')

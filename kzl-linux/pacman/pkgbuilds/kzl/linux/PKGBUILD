@@ -3,18 +3,18 @@
 pkgbase=linux
 pkgname=(linux linux-headers)
 pkgver=6.1.43
-pkgrel=6
+pkgrel=12
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
 url="https://www.kernel.org"
 license=('KZL')
-makedepends=(bc pahole)
+makedepends=(bc pahole rsync)
 options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            'b31eafe32907124c5b387b257f7ba2cfd5508e010f2d002b9df130c8e7b3b856')
+            'fb31d1d2dcccdbb6b17aaade6effc141cca0e99684c7a04a5e500547525bb403')
 
 export KBUILD_BUILD_HOST=kzl-linux
 export KBUILD_BUILD_USER=kzl
@@ -29,7 +29,7 @@ pkgver() {
 prepare() {
   cd $pkgbase
 
-  mkdir build
+  mkdir -p build
 
   cp "$srcdir"/config build/.config
 
@@ -65,5 +65,12 @@ package_linux-headers() {
   local kernelrelease=$(make O=build -s kernelrelease)
 
   install -d -m 0755 "$pkgdir"/usr/src/
-  cp -a "$srcdir/$pkgbase" "$pkgdir"/usr/src/linux-headers-$kernelrelease
+  rsync -a \
+    --exclude='*.o' \
+    --exclude='*.ko' \
+    --exclude='*.a' \
+    --exclude='*.o.cmd' \
+    --exclude='*.o.d' \
+    --exclude='*.so.dbg' \
+    "$srcdir/$pkgbase" "$pkgdir"/usr/src/linux-headers-$kernelrelease
 }
