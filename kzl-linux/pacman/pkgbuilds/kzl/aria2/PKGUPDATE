@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://aria2.github.io/ | grep -Po '(?<=/aria2/releases/tag/release-)\d\.\d\d\.\d' | sort -V | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://aria2.github.io/ | grep -oP '(?<=/aria2/releases/tag/release-)\d\.\d\d\.\d' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

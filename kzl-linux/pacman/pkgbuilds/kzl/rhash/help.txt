@@ -1,0 +1,36 @@
+Usage: configure [OPTIONS]...
+
+Generic Options:
+  -h, --help             display this help and exit
+  --cc=COMPILER          C compiler to build RHash [gcc]
+  --ar=AR                librarian to build RHash [ar]
+  --target=PLATFORM      target platform (i386-linux, arm-linux, etc)
+  --with-install=PATH    path to a custom install program
+
+Directory Options:
+  --prefix=DIR           prefix directory for installation [/usr/local]
+  --exec-prefix=DIR      prefix directory for binaries [PREFIX]
+  --bindir=DIR           directory for installing binaries [EXEC_PREFIX/bin]
+  --sysconfdir=DIR       directory to look for configuration file
+                         [PREFIX/etc]
+  --mandir=DIR           directory for installing man pages [PREFIX/share/man]
+  --libdir=DIR           directory for the rhash library [EXEC_PREFIX/lib]
+  --pkgconfigdir=DIR     directory for pkg-config files [LIBDIR/pkgconfig]
+  --localedir=DIR        directory for locale files [PREFIX/share/locale]
+
+Features options:
+  --disable-FEATURE      do not include FEATURE
+  --enable-gettext       enable gettext (localization) support [autodetect]
+  --enable-openssl[=runtime] enable OpenSSL (optimized hash functions) support.
+                         If runtime specified, then load OpenSSL at runtime if
+                         the library is found [autodetect]
+  --enable-debug         enable debug information [disable]
+  --enable-static[=librhash] statically link all libraries or (if =librhash)
+                         only the LibRHash library into RHash binary [disable]
+  --enable-lib-static    build and install LibRHash static library [auto]
+  --enable-lib-shared    build and install LibRHash shared library [auto]
+  --enable-symlinks[=LIST]   install symlinks to the binary [enable]
+
+Use these options if autodetection fails:
+  --extra-cflags=FLAGS        extra CFLAGS
+  --extra-ldflags=FLAGS       extra LDFLAGS

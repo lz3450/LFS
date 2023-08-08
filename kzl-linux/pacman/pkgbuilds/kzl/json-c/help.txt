@@ -1,4 +1,4 @@
--- The C compiler identification is GNU 13.1.0
+-- The C compiler identification is GNU 12.3.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
@@ -128,7 +128,7 @@
 -- Performing Test VERSION_SCRIPT_WORKS
 -- Performing Test VERSION_SCRIPT_WORKS - Success
 -- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
--- Configuring done (4.6s)
+-- Configuring done (4.3s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/json-c/src/json-c/tmp
 -- Cache values
@@ -323,6 +323,9 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 // Path to a program.
 CMAKE_STRIP:FILEPATH=/usr/bin/strip
+
+// Path to a program.
+CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 
 // If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE

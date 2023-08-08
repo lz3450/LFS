@@ -2,7 +2,7 @@
 
 pkgname=libpipeline
 pkgver=1.5.7
-pkgrel=3
+pkgrel=6
 epoch=
 pkgdesc="A C library for manipulating pipelines of subprocesses in a flexible and convenient way"
 arch=('x86_64')

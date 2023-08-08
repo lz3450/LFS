@@ -1,4 +1,5 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/TeX-Live/texlive-source/tags | grep -oP 'texlive-source/releases/tag/svn\K\d{5}' | head -n1)
+# new_version=$(git ls-remote --tags https://github.com/TeX-Live/texlive-source.git | grep -oP 'refs/tags/(build-)?svn\K\d{5}' | sort -V | tail -n1)
+new_version=$(date +%Y%m%d)
 
 post_update() {
     texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/`date +%Y`/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)

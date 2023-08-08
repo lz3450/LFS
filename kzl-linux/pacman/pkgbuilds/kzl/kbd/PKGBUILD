@@ -2,7 +2,7 @@
 
 pkgname=kbd
 pkgver=2.6.1
-pkgrel=2
+pkgrel=4
 epoch=
 pkgdesc="Keytable files and keyboard utilities"
 arch=('x86_64')

@@ -1,0 +1,6 @@
+new_version=$(git ls-remote --tags https://github.com/silnrsi/graphite.git | grep -oP '(?<=refs/tags/)\d\.\d\.\d\d' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cmake -LAH -S . -B tmp -DCMAKE_BUILD_TYPE=Release > "$PKGBUILDDIR"/help.txt
+}

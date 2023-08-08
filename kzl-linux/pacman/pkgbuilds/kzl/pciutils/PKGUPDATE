@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://mj.ucw.cz/sw/pciutils/ | grep -Po 'The latest release of pciutils is version \K\d\.\d+\.\d+')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://mj.ucw.cz/sw/pciutils/ | grep -oP 'The latest release of pciutils is version \K\d\.\d+\.\d+')
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

@@ -2,7 +2,7 @@
 
 pkgname=libnfnetlink
 pkgver=1.0.2
-pkgrel=3
+pkgrel=5
 epoch=
 pkgdesc="The low-level library for netfilter related kernel/userspace communication"
 arch=('x86_64')

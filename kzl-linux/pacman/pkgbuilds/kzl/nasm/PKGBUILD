@@ -2,14 +2,22 @@
 
 pkgname=nasm
 pkgver=2.16.01
-pkgrel=2
+pkgrel=4
 epoch=
-pkgdesc="80x86 assembler designed for portability and modularity"
+pkgdesc="An asssembler for the x86 CPU architecture"
 arch=('x86_64')
 url="https://www.nasm.us"
 license=('KZL')
+# makedepends=(xmlto)
 source=(https://www.nasm.us/pub/nasm/releasebuilds/$pkgver/$pkgname-$pkgver.tar.xz)
-sha256sums=('c77745f4802375efeee2ec5c0ad6b7f037ea9c87c92b149a9637ff099f162558')
+# source=(git+https://github.com/netwide-assembler/nasm.git#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
+
+# prepare() {
+#   cd $pkgname
+
+#   ./autogen.sh
+# }
 
 build() {
   cd $pkgname-$pkgver

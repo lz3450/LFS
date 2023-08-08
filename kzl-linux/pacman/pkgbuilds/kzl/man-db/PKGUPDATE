@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://gitlab.com/man-db/man-db/-/tags | grep -Po '(?<=/man-db/-/tags/)\d\.\d\d\.\d' | sort -V | tail -1)
+new_version=$(git ls-remote --tags https://gitlab.com/man-db/man-db.git | grep -oP '(?<=refs/tags/)\d\.\d\d\.\d' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

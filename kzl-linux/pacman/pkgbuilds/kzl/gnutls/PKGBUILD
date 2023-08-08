@@ -2,7 +2,7 @@
 
 pkgname=gnutls
 pkgver=3.8.0
-pkgrel=4
+pkgrel=6
 epoch=
 pkgdesc="A secure communications library implementing the SSL, TLS and DTLS protocols and technologies around them"
 arch=('x86_64')

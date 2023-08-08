@@ -2,7 +2,7 @@
 
 pkgname=libsigsegv
 pkgver=2.14
-pkgrel=2
+pkgrel=7
 epoch=
 arch=('x86_64')
 pkgdesc="Page fault detection library"

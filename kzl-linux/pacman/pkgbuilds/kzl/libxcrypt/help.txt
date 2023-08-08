@@ -1,4 +1,4 @@
-`configure' configures xcrypt 4.4.35 to adapt to many kinds of systems.
+`configure' configures xcrypt 4.4.36 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

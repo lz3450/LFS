@@ -2,7 +2,7 @@
 
 pkgname=fontconfig
 pkgver=2.14.2
-pkgrel=2
+pkgrel=5
 epoch=
 pkgdesc="A library for configuring and customizing font access"
 arch=('x86_64')
@@ -32,8 +32,8 @@ build() {
     --disable-docbook \
     --disable-docs \
     --disable-cache-build \
-    --with-default-fonts=/usr/share/fonts \
-    --with-add-fonts=/usr/local/share/fonts
+    --with-default-fonts="/usr/share/fonts" \
+    --with-add-fonts="/usr/local/share/fonts"
 
   make
 }

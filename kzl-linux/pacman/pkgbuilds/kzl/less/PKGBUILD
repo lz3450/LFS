@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=less
-pkgver=635
-pkgrel=1
+pkgver=643
+pkgrel=2
 epoch=
 pkgdesc="A terminal based program for viewing text files"
 arch=('x86_64')

@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://infozip.sourceforge.net/UnZip.html | grep -A 5 '<h2>Latest Release</h2>' | grep -oP '(?<=<b>UnZip )\d\.\d(?=</b>)' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/${pkgname}${pkgver/./}"
+    cp unix/Makefile "$PKGBUILDDIR"/help.txt
+}

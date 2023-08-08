@@ -1,6 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.nasm.us/ | grep -A 2 "Stable" | grep -Po '(?<=/nasm/releasebuilds/)\d\.\d\d\.\d\d')
+new_version=$(git ls-remote --tags https://github.com/netwide-assembler/nasm.git | grep -oP '(?<=refs/tags/nasm-)\d\.\d\d(\.\d\d)?(?!rc)' | sort -V | tail -n1)
 
 post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
     ./configure --help > "$PKGBUILDDIR"/help.txt
 }

@@ -2,7 +2,7 @@
 
 pkgname=readline
 pkgver=8.2
-pkgrel=5
+pkgrel=11
 epoch=
 pkgdesc="GNU readline library"
 arch=('x86_64')
@@ -23,14 +23,14 @@ build() {
     --prefix=/usr \
     --with-curses
 
-  make SHOBJ_CFLAGS='-fPIC' SHLIB_LIBS='-lncursesw'
+  make SHLIB_LIBS="-lncursesw"
 
 }
 
 package() {
   cd $pkgname
 
-  make SHOBJ_CFLAGS='-fPIC' SHLIB_LIBS='-lncursesw' DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   install -Dm644 "$srcdir"/inputrc "$pkgdir"/etc/inputrc
 }

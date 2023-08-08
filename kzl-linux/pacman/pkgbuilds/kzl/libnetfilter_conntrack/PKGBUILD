@@ -2,7 +2,7 @@
 
 pkgname=libnetfilter_conntrack
 pkgver=1.0.9
-pkgrel=3
+pkgrel=5
 epoch=
 pkgdesc="A userspace library providing a programming interface (API) to the in-kernel connection tracking state table"
 arch=('x86_64')

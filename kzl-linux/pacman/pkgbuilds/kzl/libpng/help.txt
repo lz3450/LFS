@@ -1,4 +1,4 @@
-`configure' configures libpng 1.6.39 to adapt to many kinds of systems.
+`configure' configures libpng 1.6.40 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

@@ -1,6 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/ncurses/ | grep -oP 'ncurses-\\K[0-9]+\\.[0-9]+' | sort -V | tail -n1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://invisible-mirror.net/archives/ncurses/current/ | grep -oP 'ncurses-\K\d\.\d-\d{8}' | sort -V | tail -n1 | sed 's/-/./')
 
 post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cd "$BUILDDIR/$pkgname/src/$pkgname-${pkgver%.*}-${pkgver##*.}"
     ./configure --help > "$PKGBUILDDIR"/help.txt
 }

@@ -1,1 +1,1 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://nodejs.org/en/download | grep -Po '(?<=node-v)\d\d\.\d\d\.\d(?=.tar.gz)' | head -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://nodejs.org/en/download | grep -oP '(?<=node-v)\d\d\.\d\d\.\d(?=.tar.gz)' | head -n1)

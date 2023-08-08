@@ -2,7 +2,7 @@
 
 pkgname=nettle
 pkgver=3.9.1
-pkgrel=4
+pkgrel=6
 epoch=
 pkgdesc="A low-level cryptographic library"
 arch=('x86_64')

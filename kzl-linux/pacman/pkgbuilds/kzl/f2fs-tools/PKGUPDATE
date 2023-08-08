@@ -1,1 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git | grep -Po '(?<=v)\d\.\d\d\.\d' | sort -V | tail -1)
+new_version=$(git ls-remote --tags https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git | grep -oP '(?<=v)\d\.\d\d\.\d' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

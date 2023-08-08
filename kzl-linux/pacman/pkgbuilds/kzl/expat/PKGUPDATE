@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://libexpat.github.io | grep -Po '(?<=R_)\d_\d_\d' | sort -V | tail -1 | sed 's/_/./g')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://libexpat.github.io | grep -oP '(?<=R_)\d_\d_\d' | sort -V | tail -n1 | sed 's/_/./g')
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/libexpat/expat"

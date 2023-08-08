@@ -1,5 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://mama.indstate.edu/users/ice/tree/ | grep -Po '(?<=tree-)\d\.\d\.\d' | sort -V | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://mama.indstate.edu/users/ice/tree/ | grep -oP '(?<=tree-)\d\.\d\.\d' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/unix-tree"
+    cp Makefile "$PKGBUILDDIR"/help.txt
 }

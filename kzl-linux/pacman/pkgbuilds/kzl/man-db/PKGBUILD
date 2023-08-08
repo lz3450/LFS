@@ -2,15 +2,13 @@
 
 pkgname=man-db
 pkgver=2.11.2
-pkgrel=2
+pkgrel=7
 epoch=
 pkgdesc="A utility for reading man pages"
 arch=('x86_64')
 url="https://www.nongnu.org/man-db/"
 license=('KZL')
-# depends=(groff less libpipeline libseccomp)
-depends=(less libpipeline libseccomp)
-makedepends=(po4a)
+depends=(groff less libpipeline libseccomp)
 backup=(etc/man_db.conf)
 source=(git+https://gitlab.com/man-db/man-db.git#tag=$pkgver
         git+https://git.savannah.gnu.org/git/gnulib.git)

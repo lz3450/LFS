@@ -107,6 +107,7 @@ Main project options:
   bashcompdir                                                                                      Override default location for bash completion files          
   closures                       64                                                                The number of precompiled closures, used when libffi is      
                                                                                                    unavailable                                                  
+  env_override_paths                                                                               Override module and config paths with environment variables  
   glib_prefix                                                                                      GLib installed prefix, used for gtk-doc, taken from pkg-     
                                                                                                    config if undefined                                          
   gtk_doc                        false                            [true, false]                    Build documentation using gtk-doc                            
@@ -116,7 +117,7 @@ Main project options:
   module_config                                                                                    Module configuration files shipped by packages               
   module_path                                                                                      Load modules with relative path names from here              
   nls                            true                             [true, false]                    Enable NLS support                                           
-  rpc_max                        0                                >=0, <=0                         Maximum RPC protocol version we support                      
+  rpc_max                        1                                >=0, <=1                         Maximum RPC protocol version we support                      
   rpc_min                        0                                >=0, <=0                         Minimum RPC protocol version we support                      
   strict                         false                            [true, false]                    Strict code compilation                                      
   system_config                                                                                    Change PKCS#11 system config directory                       

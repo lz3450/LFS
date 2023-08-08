@@ -1,30 +1,31 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cairo
-pkgver=1.17.6
-pkgrel=1
+pkgver=1.17.8
+pkgrel=8
 epoch=1
-pkgdesc="2D graphics library with support for multiple output devices"
+pkgdesc="A 2D graphics library with support for multiple output devices"
 arch=('x86_64')
 url="https://cairographics.org/"
 license=('KZL')
-depends=(fontconfig freetype2 glib2 libpng lzo pixman zlib)
-makedepends=(valgrind)
+depends=(fontconfig freetype2 libpng lzo pixman)
 source=(git+https://gitlab.freedesktop.org/cairo/cairo.git#tag=$pkgver)
 sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+}
 
 build() {
   cd $pkgname
 
   meson setup \
     --prefix /usr \
-    --libexecdir lib \
-    --sbindir bin \
-    --auto-features enabled \
-    --buildtype plain \
-    --wrap-mode nodownload \
+    --optimization 2 \
     -D b_lto=true \
     -D b_pie=true \
+    -D dwrite=disabled \
     -D fontconfig=enabled \
     -D freetype=enabled \
     -D glib=enabled \
@@ -32,7 +33,7 @@ build() {
     -D png=enabled \
     -D spectre=disabled \
     -D symbol-lookup=disabled \
-    -D tee=enabled \
+    -D tee=disabled \
     -D tests=disabled \
     -D xcb=disabled \
     -D xlib=disabled \
@@ -52,5 +53,5 @@ check() {
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir/" meson install -C build
+  DESTDIR="$pkgdir" meson install -C build
 }

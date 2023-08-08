@@ -2,7 +2,7 @@
 
 pkgname=isl
 pkgver=0.26
-pkgrel=5
+pkgrel=9
 epoch=
 pkgdesc="A library for manipulating sets and relations of integer points bounded by linear constraints"
 arch=('x86_64')
@@ -30,5 +30,5 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

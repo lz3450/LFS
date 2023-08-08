@@ -1,5 +1,5 @@
--- The C compiler identification is GNU 13.1.0
--- The CXX compiler identification is GNU 13.1.0
+-- The C compiler identification is GNU 12.3.0
+-- The CXX compiler identification is GNU 12.3.0
 -- The ASM compiler identification is GNU
 -- Found assembler: /usr/bin/cc
 -- Detecting C compiler ABI info
@@ -325,8 +325,8 @@
 -- Performing Test HAVE_STEADY_CLOCK
 -- Performing Test HAVE_STEADY_CLOCK
 -- Performing Test HAVE_STEADY_CLOCK -- success
--- Configuring done (16.9s)
--- Generating done (2.0s)
+-- Configuring done (15.7s)
+-- Generating done (2.5s)
 -- Build files have been written to: /home/kzl/makepkg/build/llvm-project/src/llvm-project/tmp
 -- Cache values
 // Build a 32 bit version of the library.
@@ -646,6 +646,9 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 // Path to a program.
 CMAKE_STRIP:FILEPATH=/usr/bin/strip
+
+// Path to a program.
+CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 
 // If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE

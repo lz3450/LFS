@@ -2,7 +2,7 @@
 
 pkgname=f2fs-tools
 pkgver=1.16.0
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Tools for Flash-Friendly File System (F2FS)"
 arch=('x86_64')

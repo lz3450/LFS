@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rhash
-pkgver=1.4.3
-pkgrel=1
+pkgver=1.4.4
+pkgrel=4
 epoch=
 pkgdesc="Utility for verifying hash sums of files"
 arch=('x86_64')

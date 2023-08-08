@@ -2,7 +2,7 @@
 
 pkgname=nano
 pkgver=7.2
-pkgrel=7
+pkgrel=8
 epoch=
 pkgdesc="Pico editor clone with enhancements"
 arch=('x86_64')

@@ -3,8 +3,8 @@
 # freetype2 (without harfbuzz) -> harfbuzz -> freetype2 (with harfbuzz)
 
 pkgname=freetype2
-pkgver=2.13.0
-pkgrel=3
+pkgver=2.13.1
+pkgrel=5
 epoch=
 pkgdesc="Font rasterization library"
 arch=('x86_64')
@@ -12,11 +12,8 @@ url="https://www.freetype.org/"
 license=('KZL')
 depends=(brotli harfbuzz libpng)
 backup=(etc/profile.d/freetype2.sh)
-source=(git+https://gitlab.freedesktop.org/freetype/freetype.git#tag=VER-${pkgver//./-}
-        freetype2.sh)
-sha256sums=('SKIP'
-            'f7f8e09c44f7552c883846e9a6a1efc50377c4932234e74adc4a8ff750606467')
-
+source=(git+https://gitlab.freedesktop.org/freetype/freetype.git#tag=VER-${pkgver//./-})
+sha256sums=('SKIP')
 build() {
   cd freetype
 

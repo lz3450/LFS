@@ -1,22 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=harfbuzz
-pkgver=4.2.0
-pkgrel=1
+pkgver=8.0.1
+pkgrel=9
 epoch=
-pkgdesc="OpenType text shaping engine"
+pkgdesc="A text shaping engine"
 arch=('x86_64')
-url="https://www.freedesktop.org/wiki/Software/HarfBuzz"
+url="https://github.com/harfbuzz/harfbuzz"
 license=('KZL')
-depends=(freetype2 glib2 graphite icu)
-makedepends=(cairo gobject-introspection)
-# makedepends=(chafa cairo gobject-introspection)
-optdepents=("cairo: hb-view program")
-#             "chafa: hb-view program")
-provides=(harfbuzz-icu)
-conflicts=(harfbuzz-icu)
-replaces=(harfbuzz-icu)
-source=(git+https://github.com/harfbuzz/harfbuzz#tag=$pkgver)
+depends=(cairo freetype2 graphite icu)
+source=(git+https://github.com/harfbuzz/harfbuzz.git#tag=$pkgver)
 sha256sums=('SKIP')
 
 build() {
@@ -27,13 +20,15 @@ build() {
 
   meson setup \
     --prefix /usr \
-    --auto-features enabled \
     --optimization 2 \
     -D b_lto=true \
     -D b_pie=true \
     -D cairo=enabled \
     -D chafa=disabled \
     -D docs=disabled \
+    -D freetype=enabled \
+    -D glib=enabled \
+    -D gobject=enabled \
     -D graphite=enabled \
     -D graphite2=enabled \
     -D icu=enabled \
@@ -46,7 +41,7 @@ build() {
 check() {
   cd $pkgname
 
-  mkdir -p ="$srcdir"/tmp
+  mkdir -p "$srcdir"/tmp
   TMPDIR="$srcdir/tmp" meson test -C build
 }
 

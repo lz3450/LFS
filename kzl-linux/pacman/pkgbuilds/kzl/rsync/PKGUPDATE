@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://rsync.samba.org/ | grep -Po '(?<=Rsync version )\d\.\d\.\d(?= )' | sort -V | tail -1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://rsync.samba.org/ | grep -oP '(?<=Rsync version )\d\.\d\.\d(?= )' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

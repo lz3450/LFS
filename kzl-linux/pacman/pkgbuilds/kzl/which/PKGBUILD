@@ -2,7 +2,7 @@
 
 pkgname=which
 pkgver=2.21
-pkgrel=1
+pkgrel=4
 epoch=
 pkgdesc="A utility to show the full path of commands"
 arch=('x86_64')
@@ -23,5 +23,5 @@ build() {
 package() {
   cd $pkgname-$pkgver
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

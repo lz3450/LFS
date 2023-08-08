@@ -1,4 +1,4 @@
-`configure' configures libpaper 2.1.0 to adapt to many kinds of systems.
+`configure' configures libpaper 2.1.1 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

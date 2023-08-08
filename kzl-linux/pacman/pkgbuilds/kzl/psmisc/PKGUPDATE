@@ -1,5 +1,6 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://gitlab.com/psmisc/psmisc/-/tags | grep -Po '(?<=/psmisc/psmisc/-/tags/v)\d\d\.\d' | head -1)
+new_version=$(git ls-remote --tags https://gitlab.com/psmisc/psmisc.git | grep -oP '(?<=refs/tags/v)\d\d\.\d' | sort -V | tail -n1)
 
 post_update() {
-    $BUILDDIR/$pkgname/src/$pkgname/configure --help > help.txt
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
 }

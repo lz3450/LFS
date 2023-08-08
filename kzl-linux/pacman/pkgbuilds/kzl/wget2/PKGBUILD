@@ -2,7 +2,7 @@
 
 pkgname=wget2
 pkgver=2.0.1
-pkgrel=7
+pkgrel=9
 epoch=
 pkgdesc="Network utility to retrieve files from the Web"
 arch=('x86_64')

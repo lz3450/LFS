@@ -1,4 +1,4 @@
-`configure' configures libarchive 3.7.0 to adapt to many kinds of systems.
+`configure' configures libarchive 3.7.1 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

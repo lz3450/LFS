@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=curl
-pkgver=8.2.0
-pkgrel=1
+pkgver=8.2.1
+pkgrel=2
 epoch=
 pkgdesc="An URL retrieval utility and library"
 arch=('x86_64')

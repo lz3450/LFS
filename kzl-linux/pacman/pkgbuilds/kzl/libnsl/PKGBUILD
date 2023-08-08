@@ -2,7 +2,7 @@
 
 pkgname=libnsl
 pkgver=2.0.0
-pkgrel=4
+pkgrel=6
 epoch=
 pkgdesc="Public client interface library for NIS(YP) and NIS+"
 arch=('x86_64')

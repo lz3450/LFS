@@ -1,9 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libpaper
-pkgver=2.1.0
+pkgver=2.1.1
 pkgrel=3
-epoch=1
+epoch=
 pkgdesc="Library for handling paper characteristics"
 arch=('x86_64')
 url="https://github.com/rrthomas/libpaper"

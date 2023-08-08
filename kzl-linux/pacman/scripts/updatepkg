@@ -42,6 +42,7 @@ set -o pipefail
 set -u
 # set -x
 
+# 
 if [ ! -f PKGBUILD ]; then
    error 'PKGBUILD does not exist.' 2
 fi
@@ -58,46 +59,47 @@ PKGBUILDDIR=$(pwd)
 
 result=0
 
-if [ -f PKGUPDATE ]; then
-    unset new_version current_version pre_update post_update
-    . PKGUPDATE || :
-    if [ -z $new_version ]; then
-        error 'Cannot get new version.' 6
-    fi
-    current_version=${current_version:-$(cat PKGBUILD | grep -oP 'pkgver=\K.+$')}
-    current_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
-    new_pkgrel=$((current_pkgrel + 1))
-
-    # run pre_update
-    if have_function 'pre_update'; then
-        info "running pre_update()..."
-        pre_update
-    fi
-
-    result=$(vercmp $new_version $current_version)
-    if [ $result -gt 0 ]; then
-        result=1
-        info "PKGBUILD updated: $current_version => $new_version"
-        sed -i "/^pkgver=/s/$current_version/$new_version/" PKGBUILD
-        sed -i "/^pkgrel=/s/$current_pkgrel/1/" PKGBUILD
-        info "running updpkgsums..."
-        updpkgsums || result=2
-    elif [ $result -eq 0 ] || [ $result -lt 0 ]; then
-        result=0
-        sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" PKGBUILD
-        info "PKGBUILD is up to date."
-    else
-        result=-1
-    fi
-
-    # run post_update
-    info "running post_update()..."
-    makepkg -Co || result=3
-    post_update || result=4
-else
+# 
+if [ ! -f PKGUPDATE ]; then
     warning "PKGUPDATE does not exist."
     result=2
+    exit $result
 fi
+
+unset new_version current_version pre_update post_update
+. PKGUPDATE || :
+if [ -z $new_version ]; then
+    error 'Cannot get new version.' 6
+fi
+current_version=${current_version:-$(cat PKGBUILD | grep -oP 'pkgver=\K.+$')}
+current_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
+
+# run pre_update
+if have_function 'pre_update'; then
+    info "running pre_update()..."
+    pre_update
+fi
+
+result=$(vercmp $new_version $current_version)
+if [ $result -eq 1 ]; then
+    info "PKGBUILD updated: $current_version => $new_version"
+    sed -i "/^pkgver=/s/$current_version/$new_version/" PKGBUILD
+    sed -i "/^pkgrel=/s/$current_pkgrel/1/" PKGBUILD
+    pkgver=$new_version
+    info "running updpkgsums..."
+    updpkgsums || result=2
+elif [ $result -eq 0 ]; then
+    info "PKGBUILD is up to date."
+elif [ $result -eq -1 ]; then
+    warning "Current version is newer."
+else
+    error "Unknow \`vercmp\` result." 7
+fi
+
+# run post_update
+info "running post_update()..."
+makepkg -Co || result=3
+post_update || result=4
 
 # -1: current version is newer
 # 0: no update
@@ -107,4 +109,5 @@ fi
 # 4: post_update error
 # 5: makepkg.conf not found
 # 6: cannot get new version
+# 7: unknow `vercmp` result
 exit $result

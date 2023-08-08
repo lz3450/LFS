@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=git
-pkgver=2.40.0
+pkgver=2.41.0
 pkgrel=2
 epoch=
 arch=('x86_64')
@@ -51,7 +51,7 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   # sysusers
   echo 'u git - "git daemon user" / /usr/bin/git-shell' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/git.conf

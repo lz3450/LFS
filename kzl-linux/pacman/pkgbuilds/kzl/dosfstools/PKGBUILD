@@ -2,7 +2,7 @@
 
 pkgname=dosfstools
 pkgver=4.2
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="DOS filesystem utilities"
 arch=('x86_64')

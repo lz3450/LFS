@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.ghostscript.com/ | grep -oP '(?<=The current Ghostscript release )\d\d\.\d\d\.\d')
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/ghostpdl-$pkgver"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

@@ -1,5 +1,4 @@
-stable_version=$(curl -L --stderr - https://wiki.freedesktop.org/www/Software/dbus/ | grep '<strong>stable</strong>' | grep -Po '(?<=dbus )\d\.\d\d(?=\.x)')
-new_version=$(curl -L --stderr - https://gitlab.freedesktop.org/dbus/dbus/-/tags | grep -oP "(?<=dbus-)$stable_version.\d\d?" | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://gitlab.freedesktop.org/dbus/dbus.git | grep -oP "(?<=refs/tags/dbus-)\d\.\d\d\.\d+" | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

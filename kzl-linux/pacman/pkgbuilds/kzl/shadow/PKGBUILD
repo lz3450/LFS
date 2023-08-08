@@ -2,7 +2,7 @@
 
 pkgname=shadow
 pkgver=4.13
-pkgrel=12
+pkgrel=15
 epoch=
 pkgdesc="Programs for converting UNIX password files to the shadow password format, plus programs for managing user and group accounts"
 arch=('x86_64')
@@ -61,8 +61,8 @@ package() {
   # login.defs
   sed -e '/^MOTD_FILE/c\MOTD_FILE' \
       -e '/^#ISSUE_FILE/s/#//' \
-      -e '/^ENV_SUPATH/c\ENV_SUPATH PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin' \
-      -e '/^ENV_PATH/c\ENV_PATH PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin' \
+      -e '/^ENV_SUPATH/c\ENV_SUPATH PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' \
+      -e '/^ENV_PATH/c\ENV_PATH PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' \
       -e '/^UMASK/c\UMASK 077' \
       -e '/^PASS_MIN_LEN/c\PASS_MIN_LEN    4' \
       -e '/^#ENCRYPT_METHOD/c\ENCRYPT_METHOD SHA512' \

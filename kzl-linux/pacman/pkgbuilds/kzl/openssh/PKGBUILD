@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openssh
-pkgver=9.3.P1
-pkgrel=19
+pkgver=9.3.P2
+pkgrel=4
 epoch=
 arch=('x86_64')
 url="https://www.openssh.com/portable.html"
@@ -50,8 +50,8 @@ build() {
     --with-privsep-path=/var/empty \
     --with-sandbox=seccomp_filter \
     --with-kerberos5 \
-    --with-default-path="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin" \
-    --with-superuser-path="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin" \
+    --with-default-path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+    --with-superuser-path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
     --with-pid-dir=/run
 
   make

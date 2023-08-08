@@ -2,7 +2,7 @@
 
 pkgname=elfutils
 pkgver=0.189
-pkgrel=8
+pkgrel=10
 epoch=
 pkgdesc="A collection of utilities and libraries to read, create and modify ELF binary files, find and handle DWARF debug data, symbols, thread state and stacktraces for processes and core files on GNU/Linux"
 arch=('x86_64')

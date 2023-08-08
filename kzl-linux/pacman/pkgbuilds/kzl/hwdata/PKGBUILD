@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=hwdata
-pkgver=0.369
-pkgrel=4
+pkgver=0.372
+pkgrel=3
 epoch=
 pkgdesc="Hardware identification and configuration data"
 arch=('any')

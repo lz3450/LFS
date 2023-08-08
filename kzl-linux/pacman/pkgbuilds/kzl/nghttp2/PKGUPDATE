@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://nghttp2.org/ | grep -Po '(?<=Nghttp2 v)\d\.\d\d\.\d' | head -n1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://nghttp2.org/ | grep -oP '(?<=Nghttp2 v)\d\.\d\d\.\d' | head -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

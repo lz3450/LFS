@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/dosfstools/dosfstools/tags | grep -Po '(?<=/dosfstools/releases/tag/v)\d\.\d' | sort -V | tail -1)
+new_version=$(git ls-remote --tags https://github.com/dosfstools/dosfstools.git | grep -oP '(?<=refs/tags/v)\d\.\d' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

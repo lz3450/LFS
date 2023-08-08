@@ -2,36 +2,43 @@
 
 pkgname=wpa_supplicant
 pkgver=2.10
-pkgrel=13
+pkgrel=15
 epoch=
 pkgdesc="A utility providing key negotiation for WPA wireless networks"
 arch=('x86_64')
 url="https://w1.fi/wpa_supplicant/"
 license=('KZL')
 depends=(libnl openssl)
-source=(https://w1.fi/releases/$pkgname-$pkgver.tar.gz{,.asc}
+# source=(https://w1.fi/releases/$pkgname-$pkgver.tar.gz{,.asc}
+#         defconfig)
+# validpgpkeys=('EC4AA0A991A5F2464582D52D2B6EF432EFC895FA')
+# sha256sums=('20df7ae5154b3830355f8ab4269123a87affdea59fe74fe9292a91d0d7e17b2f'
+#             'SKIP'
+#             '953da2acab3808188064a6c1a90d294c725a57db6c0d5a28a2752142b4165505')
+source=(git://w1.fi/hostap.git#tag=hostap_${pkgver//./_}
         defconfig)
-validpgpkeys=('EC4AA0A991A5F2464582D52D2B6EF432EFC895FA')
-sha256sums=('20df7ae5154b3830355f8ab4269123a87affdea59fe74fe9292a91d0d7e17b2f'
-            'SKIP'
+sha256sums=('SKIP'
             '953da2acab3808188064a6c1a90d294c725a57db6c0d5a28a2752142b4165505')
 
 prepare() {
-  cd $pkgname-$pkgver/$pkgname
+  # cd $pkgname-$pkgver/$pkgname
+  cd hostap/$pkgname
 
   # wpa_supplicant/defconfig
   cp "$srcdir"/defconfig .config
 }
 
 build() {
-  cd $pkgname-$pkgver/$pkgname
+  # cd $pkgname-$pkgver/$pkgname
+  cd hostap/$pkgname
 
   make LIBDIR="/usr/lib" INCDIR="/usr/include" BINDIR="/usr/sbin" V=1
   make LIBDIR="/usr/lib" INCDIR="/usr/include" BINDIR="/usr/sbin" V=1 eapol_test 
 }
 
 package() {
-  cd $pkgname-$pkgver/$pkgname
+  # cd $pkgname-$pkgver/$pkgname
+  cd hostap/$pkgname
 
   make LIBDIR="/usr/lib" INCDIR="/usr/include" BINDIR="/usr/sbin" DESTDIR="$pkgdir" install
 
@@ -43,16 +50,10 @@ package() {
 
   # systemd
   install -dm755 "$pkgdir"/usr/lib/systemd/system/
-  install -Dm644 systemd/*.service "$pkgdir"/usr/lib/systemd/system/
+  install -Dm644 -t "$pkgdir"/usr/lib/systemd/system/ systemd/*.service
 
   # dbus
   install -dm755 "$pkgdir"/usr/share/dbus-1/{system.d,system-services}
   install -Dm644 dbus/dbus-wpa_supplicant.conf "$pkgdir"/usr/share/dbus-1/system.d/wpa_supplicant.conf
   install -Dm644 dbus/fi.w1.wpa_supplicant1.service "$pkgdir"/usr/share/dbus-1/system-services/
-
-  # man pages
-  install -dm755 "$pkgdir"/usr/share/man/man{5,8}/
-  install -Dm644 doc/docbook/*.5 "$pkgdir"/usr/share/man/man5/
-  install -Dm644 doc/docbook/*.8 "$pkgdir"/usr/share/man/man8/
-  rm "$pkgdir"/usr/share/man/man8/wpa_{priv,gui}.8
 }

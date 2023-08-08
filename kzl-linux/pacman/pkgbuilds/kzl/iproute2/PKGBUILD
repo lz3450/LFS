@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=iproute2
-pkgver=6.2.0
+pkgver=6.4.0
 pkgrel=3
 epoch=
 pkgdesc="IP Routing Utilities"

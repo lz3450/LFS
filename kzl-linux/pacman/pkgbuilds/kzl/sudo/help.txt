@@ -1,4 +1,4 @@
-'configure' configures sudo 1.9.14p2 to adapt to many kinds of systems.
+'configure' configures sudo 1.9.14p3 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

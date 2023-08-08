@@ -1,0 +1,6 @@
+new_version="6.2.32"
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver/build_unix"
+    ../dist/configure --help > "$PKGBUILDDIR"/help.txt
+}

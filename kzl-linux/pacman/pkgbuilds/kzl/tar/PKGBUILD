@@ -2,12 +2,13 @@
 
 pkgname=tar
 pkgver=1.34
-pkgrel=13
+pkgrel=17
 epoch=
 pkgdesc="Utility to create tar archives"
 arch=('x86_64')
 url="https://www.gnu.org/software/tar/"
 depends=(acl glibc)
+makedepends=(texinfo)
 source=(git+https://git.savannah.gnu.org/git/tar.git#tag=release_${pkgver//./_}
         git+https://git.savannah.gnu.org/git/gnulib.git
         git+git://git.sv.gnu.org/paxutils.git)

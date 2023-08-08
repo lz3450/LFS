@@ -1,0 +1,56 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=shared-mime-info
+pkgver=2.2
+pkgrel=4
+epoch=
+pkgdesc="Shared MIME database package"
+arch=('x86_64')
+url="https://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec/"
+license=('KZL')
+depends=(glib2 libxml2)
+install=$pkgname.install
+source=(git+https://gitlab.freedesktop.org/xdg/shared-mime-info.git#tag=$pkgver
+        $pkgname.install
+        update-mime-database.hook)
+sha256sums=('SKIP'
+            '4b9927aa23930f62ed6aec2ff8e8bee0c3ed6ff61fdf1e8304568c13d13d3a49'
+            '95cd0b97a5ec35ee97c459669e8c0f9c16b0cf43a9a801ff11da2cabf5424df5')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-g.*//;s/-/./g'
+}
+
+prepare() {
+  cd $pkgname
+
+  git submodule update --init
+}
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --optimization 2 \
+    -D b_lto=true \
+    -D b_pie=true \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build --print-errorlogs
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir="$pkgdir"
+  install -Dm644 "$srcdir"/update-mime-database.hook "$pkgdir"/usr/share/libalpm/hooks/update-mime-database.hook
+}

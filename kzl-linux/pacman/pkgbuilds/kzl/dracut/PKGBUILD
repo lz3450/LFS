@@ -2,7 +2,7 @@
 
 pkgname=dracut
 pkgver=059
-pkgrel=4
+pkgrel=7
 epoch=
 pkgdesc="An event driven initramfs infrastructure"
 arch=('x86_64')
@@ -20,9 +20,7 @@ build() {
     --prefix=/usr \
     --libdir=/usr/lib \
     --sysconfdir=/etc \
-    --disable-documentation \
-    --systemdsystemunitdir=/usr/lib/systemd/system \
-    --bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion)
+    --disable-documentation
 
   make
 }

@@ -1,0 +1,20 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=cascadia-code
+pkgver=2111.01
+pkgrel=3
+epoch=
+pkgdesc="A fun new coding font that comes bundled with Windows Terminal, and is now the default font in Visual Studio as well"
+arch=('any')
+url="https://github.com/microsoft/cascadia-code"
+license=('KZL')
+source=(https://github.com/microsoft/$pkgname/releases/download/v$pkgver/CascadiaCode-$pkgver.zip)
+sha256sums=('51fd68176dffb87e2fbc79381aef7f5c9488b58918dee223cd7439b5aa14e712')
+
+package() {
+  install -d -m0755 "$pkgdir"/usr/share/fonts/ttf
+  for font in ttf/*.ttf
+  do
+    install -Dm644 "$font" "$pkgdir"/usr/share/fonts/ttf
+  done
+}

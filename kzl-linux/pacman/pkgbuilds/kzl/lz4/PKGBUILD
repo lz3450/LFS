@@ -2,7 +2,7 @@
 
 pkgname=lz4
 pkgver=1.9.4
-pkgrel=4
+pkgrel=6
 epoch=
 pkgdesc="Extremely fast compression algorithm"
 arch=('x86_64')

@@ -1,50 +1,40 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pixman
-pkgver=0.40.0
-pkgrel=1
-epoch=1
+pkgver=0.42.2
+pkgrel=7
+epoch=
 pkgdesc="The pixel-manipulation library for X and cairo"
 arch=('x86_64')
-url="https://cgit.freedesktop.org/pixman/"
+url="https://gitlab.freedesktop.org/pixman/pixman"
 license=('KZL')
-makedepends=(libpng)
-source=(https://xorg.freedesktop.org/releases/individual/lib/$pkgname-$pkgver.tar.xz)
-sha256sums=('da8ed9fe2d1c5ef8ce5d1207992db959226bd4e37e3f88acf908fd9a71e2704e')
+depends=(libpng)
+source=(git+https://gitlab.freedesktop.org/pixman/pixman.git#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   meson setup \
     --prefix /usr \
-    --libexecdir lib \
-    --sbindir bin \
-    --auto-features enabled \
-    --buildtype plain \
-    --wrap-mode nodownload \
+    --optimization 2 \
     -D b_lto=true \
     -D b_pie=true \
-    -D arm-simd=disabled \
     -D gtk=disabled \
-    -D iwmmxt=disabled \
     -D libpng=enabled \
-    -D loongson-mmi=disabled \
-    -D mips-dspr2=disabled \
-    -D neon=disabled \
-    -D vmx=disabled \
     build
 
   meson compile -C build
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   meson test -C build
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  DESTDIR="$pkgdir/" meson install -C build
+  meson install -C build --destdir="$pkgdir"
 }

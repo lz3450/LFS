@@ -4,12 +4,12 @@
 #
 
 script_name="$(basename "${0}")"
-stage=1
-build_dir=/tmp
 repo=kzl
 log_dir=~/makepkg/log
 repo_dir=/home/.repository/$repo
 build_only_updated=0
+stage=""
+single_package=""
 no_install=0
 no_clean=0
 no_check=0
@@ -27,29 +27,35 @@ kzl_stage1_pkgs=(
     ################
     # filesystem
     ################
-    # iana-etc filesystem
+    iana-etc filesystem
 
     ################
     # glibc
     ################
-    # linux-api-headers
-    # tzdata
-    # glibc
+    linux-api-headers
+    tzdata
+    glibc
 
     ################
     # binutils
     ################
-    # jansson
-    # zlib
-    # zstd
-    # binutils
+    jansson
+    zlib
+    zstd
+    binutils
 
     ################
     # gcc
     ################
-    # gmp isl
-    # mpfr mpc
-    # gcc
+    gmp isl
+    mpfr mpc
+    gcc
+
+    ################################
+    tzdata glibc
+    jansson zlib zstd bc binutils
+    gmp isl mpfr mpc gcc
+    libtool
 )
 
 # base
@@ -58,245 +64,228 @@ kzl_stage2_pkgs=(
     # base
     ################################
 
-    ################################
-    # toolchain
-    ################################
-    # tzdata glibc
-    # jansson zlib zstd bc binutils
-    # gmp isl mpfr mpc gcc
-    # libtool
-
     ################
     # bash
     ################
-    # ncurses readline bash bash-completion
+    ncurses readline bash bash-completion
 
     ################
     # perl
     ################
-    # libxcrypt db gdbm perl
+    libxcrypt db gdbm perl
 
     ################
-    # ca-certificates & openssl
+    # texinfo
     ################
-    # libffi libtasn1 p11-kit ca-certificates
-    # openssl
-
-    ################
-    # python
-    ################
-    # expat
-    # e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 libtirpc libnsl
-    # tcl sqlite
-    # python
-
-    ################
-    # compression utils
-    ################
-    # bzip2
-    # pcre2 less gzip
-    # xz
-    # attr acl tar
-
-    ################
-    # utils
-    ################
-    # grep
-    # sed
-    # libsigsegv gawk
-    # libseccomp file
-    # findutils
-
-    ################
-    # gettext
-    ################
-    # libunistring icu libxml2 gettext
-
-    ################
-    # shadow
-    ################
-    # swig libcap-ng audit
-    # pam-config pam
-    # shadow
-
-    ################
-    # coreutils
-    ################
-    # libcap coreutils
-
-    ################
-    # curl
-    ################
-    # brotli
-    # libidn2
-    # nghttp2
-    # libgpg-error libgcrypt libxslt libpsl
-    # libssh2
-    # curl
-
-    ################
-    # llvm
-    ################
-    # llvm-project
-
-    ################
-    # rust
-    ################
-    # rust
-
-    ################
-    # util-linux
-    ################
-    # thin-provisioning-tools argon2 libaio device-mapper json-c popt cryptsetup
-    # util-linux
-
-    ################
-    # iptables
-    ################
-    # libmnl libnfnetlink libnetfilter_conntrack
-    # libnftnl
-    # dbus libnl libpcap
-    # iptables
-
-    ################
-    # systemd
-    ################
-    # elfutils
-    # kbd
-    # kmod
-    # lz4
-    # kexec-tools
-    # nettle gnutls libmicrohttpd
-    # gnu-efi
-    # gperf
-    # rpcsvc-proto quota
-    # systemd
-    # util-linux dbus systemd
-
-    ################
-    # wget
-    ################
-    # lzip
-    # wget2
-
-    ################
-    # sudo
-    ################
-    # sudo
-
-    ################
-    # pacman
-    ################
-    # fakeroot
-    # libassuan libksba npth pinentry gnupg gpgme
-    # libarchive
-    # pacman
-    # pacman-contrib
-    # arch-install-scripts
-
-    ################
-    # procps-ng
-    ################
-    # procps-ng
-
-    ################
-    # psmisc
-    ################
-    # psmisc
-
-    ################
-    # iputils
-    ################
-    # iputils
-
-    ################
-    # iproute2
-    ################
-    # iproute2
-
-    ################
-    # pciutils
-    ################
-    # hwdata
-    # pciutils
-
-    ################
-    # usbutils
-    ################
-    # libusb
-    # usbutils
+    help2man texinfo
 
     ################################
     # other base-development
     ################################
-    # texinfo
-    # help2man
-    # m4
-    # bison
-    # flex
-    # autoconf automake autoconf-archive
-    # which
-    # diffutils
-    # ed bc
-    # patch
+    m4
+    autoconf automake autoconf-archive
+    bison
+    flex
+    ed bc
+    diffutils
+    patch
+    which
+    pkgconf
 
     ################
     # make
     ################
-    # gc guile
-    # make
+    libffi gc guile
+    make
+
+    ################
+    # gettext
+    ################
+    libunistring icu libxml2 gettext
+
+    ################
+    # ca-certificates & openssl
+    ################
+    libtasn1 p11-kit ca-certificates
+    openssl
+
+    ################
+    # python
+    ################
+    expat
+    e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 libtirpc libnsl
+    tcl sqlite
+    python
+
+    ################
+    # compression utils
+    ################
+    bzip2
+    pcre2 less gzip
+    xz
+    attr acl tar
+
+    ################
+    # utils
+    ################
+    grep
+    sed
+    libsigsegv gawk
+    libseccomp file
+    findutils
+
+    ################
+    # shadow
+    ################
+    swig libcap-ng audit
+    pam-config pam
+    shadow
+
+    ################
+    # coreutils
+    ################
+    libcap coreutils
+
+    ################
+    # curl
+    ################
+    brotli
+    libidn2
+    nghttp2
+    libgpg-error libgcrypt libxslt libpsl
+    libssh2
+    curl
+
+    ################
+    # llvm
+    ################
+    llvm-project
+
+    ################
+    # rust
+    ################
+    rust
+
+    ################
+    # util-linux
+    ################
+    thin-provisioning-tools argon2 libaio device-mapper json-c popt cryptsetup
+    util-linux
+
+    ################
+    # iptables
+    ################
+    libmnl libnfnetlink libnetfilter_conntrack
+    libnftnl
+    dbus libnl libpcap
+    iptables
+
+    ################
+    # systemd
+    ################
+    elfutils
+    kbd
+    kmod
+    lz4
+    kexec-tools
+    nettle gnutls libmicrohttpd
+    gnu-efi
+    gperf
+    rpcsvc-proto quota
+    systemd
+    util-linux dbus systemd
+
+    ################
+    # wget
+    ################
+    lzip
+    wget2
+
+    ################
+    # sudo
+    ################
+    sudo
+
+    ################
+    # pacman
+    ################
+    fakeroot
+    libassuan libksba npth pinentry gnupg gpgme
+    libarchive
+    pacman
+    pacman-contrib
+    arch-install-scripts
+
+    ################
+    # ps utils
+    ################
+    procps-ng
+    psmisc
+
+    ################
+    # ip utils
+    ################
+    iputils
+    iproute2
+
+    ################
+    # pciutils
+    ################
+    hwdata
+    pciutils
+
+    ################
+    # usbutils
+    ################
+    libusb
+    usbutils
 
     ################
     # cmake
     ################
-    # jsoncpp
-    # libuv
-    # rhash
-    # cmake
-
-    ################
-    # pkgconf
-    ################
-    # pkgconf
+    jsoncpp
+    libuv
+    rhash
+    cmake
 
     ################
     # man-db
     ################
-    # groff libpipeline
-    # man-db
-
-    ################
-    # linux-firmware
-    ################
-    # linux-firmware
+    groff libpipeline
+    man-db
 
     ################
     # base
     ################
-    # base
+    base
+
+    ################
+    # linux-firmware
+    ################
+    linux-firmware
 )
 
 kzl_stage3_pkgs=(
     ################
     # openssh
     ################
-    # openssh
+    openssh
 
     ################
     # shells
     ################
-    # pcre zsh
-    # fish
+    pcre zsh
+    fish
 
     ################
     # nano
     ################
-    # nano
+    nano
 
     ################
     # git
     ################
-    # git
+    git
 
     ################################
     # File system utils
@@ -332,12 +321,19 @@ kzl_stage3_pkgs=(
     ################
     # texlive
     ################
-    # libpaper
-    # libpng
-    # freetype2
-    # fontconfig
-    # gd
-    # texlive
+    libpng
+    glib2 shared-mime-info
+    fontconfig freetype2 lzo pixman cairo
+    graphite
+    gobject-introspection
+    harfbuzz freetype2
+    libpaper
+    nasm libjpeg-turbo
+    libtiff lcms2 openjpeg
+    ghostscript
+    gd
+    zziplib
+    texlive
 
     ################
     # tmux
@@ -359,8 +355,6 @@ kzl_stage3_pkgs=(
     # other libraries
     ################
     # openblas
-    # nasm libjpeg-turbo
-    # libtiff lcms2 openjpeg
 
     ################
     # other utils
@@ -443,7 +437,11 @@ build() {
 
     _pkgname=$1
     _pkgbase=$(get_pkgbase $_pkgname)
-    _log="$log_dir"/$_pkgbase.stage$stage.log
+    if [ -n "$stage" ]; then
+        _log="$log_dir"/$_pkgbase.stage$stage.log
+    else
+        _log="$log_dir"/$_pkgbase.log
+    fi
 
     # remove existing log
     if [ -f $_log ]; then
@@ -458,23 +456,34 @@ build() {
     updatepkg >> $_log 2>&1 || _updated=$?
 
     _cleanbuild='C'
-    if [ "$_updated" -eq -1 ]; then
+    if [ "$_updated" -eq 255 ]; then
         warning "Current version is newer."
+        _updated=0
     elif [ "$_updated" -eq 0 ]; then
         info "PKGBUILD is up to date."
+    elif [ "$_updated" -eq 1 ]; then
+        info "Package \"$_pkgbase\" is updated."
+        _cleanbuild='e'
     elif [ "$_updated" -eq 2 ]; then
         warning "PKGUPDATE does not exist."
     elif [ "$_updated" -ge 3 ]; then
         error "Cannot update the PKGBUILD (error code: $_updated)." 4
-    elif [ "$_updated" -eq 1 ]; then
-        info "Package \"$_pkgbase\" is updated."
-        _cleanbuild='e'
+    else
+        error "Unknown \`updatepkg\` result." 6
     fi
 
-    if [ "$build_only_updated" -gt 0 -a "$_updated" -eq 0 ]; then
+    if [ "$build_only_updated" -gt 0 ] && [ "$_updated" -eq 0 ]; then
         info "Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)."
     else
         info "Building package..."
+
+        # if package is up to date, then update the "pkgrel"
+        if [ "$_updated" -eq 0 ]; then
+            # update "pkgrel"
+            current_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
+            new_pkgrel=$((current_pkgrel + 1))
+            sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" PKGBUILD
+        fi
 
         _no_check=''
         if [ "$no_check" -gt 0 ]; then
@@ -489,12 +498,12 @@ build() {
 
         info "Updating repo..."
         updaterepo -t $repo >> $_log 2>&1
-    fi
 
-    if [ "$no_install" -le 0 ]; then
-        info "Installing package..."
-        # (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname --config ${pacman_conf}
-        (yes yes || :) | sudo pacman -Sy $_pkgname >> $_log 2>&1
+        if [ "$no_install" -le 0 ]; then
+            info "Installing package..."
+            # (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname --config ${pacman_conf}
+            (yes yes || :) | sudo pacman -Sy $_pkgname >> $_log 2>&1
+        fi
     fi
 }
 
@@ -504,11 +513,12 @@ build (kzl-linux)
 
 build will build packages from scratch.
 
-Usage: lfs-build [options]
+Usage: build -r <repo> -s | -p <pkg> [ -n ] [ -u ] [ --no-clean ] [ --no-check ]
 
     -h, --help                  display this help message and exit
     -r, --repo                  target repository (kzl, testing, ...)
     -s, --stage                 stage (0, 1(default), 2, 3)
+    -p, --package               build single package
     -n, --no-install            do not install the package after building
     -u, --build-only-updated    build the package only if the PKGBUILD is updated
     --no-clean                  skip cleaning up work files after build
@@ -538,8 +548,20 @@ while [ $# -gt 0 ]; do
         repo="$1"
         ;;
     -s|--stage)
-        shift
-        stage="$1"
+        if [ -z "$single_package" ]; then
+            shift
+            stage="$1"
+        else
+            error "Cannot use -s | --stage together with -p | --package" 5
+        fi
+        ;;
+    -p|--package)
+        if [ -z "$stage" ]; then
+            shift
+            single_package="$1"
+        else
+            error "Cannot use -p | --package together with -s | --stage" 5
+        fi
         ;;
     -n|--no-install)
         no_install=1
@@ -563,26 +585,28 @@ done
 
 case $repo in
     kzl)
-        case $stage in
-        0)
-            updaterepo --clear -t $repo
-            pkgs=${kzl_stage0_pkgs[@]}
-            ;;
-        1)
-            pkgs=${kzl_stage1_pkgs[@]}
-            ;;
-        2)
-            echo -e "\033[1;33mBuilding stage 2 ($(date +%H:%M:%S))...\033[0m"
-            pkgs=${kzl_stage2_pkgs[@]}
-            ;;
-        3)
-            echo -e "\033[1;33mBuilding stage 3 ($(date +%H:%M:%S))...\033[0m"
-            pkgs=${kzl_stage3_pkgs[@]}
-            ;;
-        *)
-            error "Unknown stage \"$stage\"" 2
-            ;;
-        esac
+        if [ -n "$stage" ]; then
+            case $stage in
+            0)
+                updaterepo --clear -t $repo
+                pkgs=${kzl_stage0_pkgs[@]}
+                ;;
+            1)
+                pkgs=${kzl_stage1_pkgs[@]}
+                ;;
+            2)
+                echo -e "\033[1;33mBuilding stage 2 ($(date +%H:%M:%S))...\033[0m"
+                pkgs=${kzl_stage2_pkgs[@]}
+                ;;
+            3)
+                echo -e "\033[1;33mBuilding stage 3 ($(date +%H:%M:%S))...\033[0m"
+                pkgs=${kzl_stage3_pkgs[@]}
+                ;;
+            *)
+                error "Unknown stage \"$stage\"" 2
+                ;;
+            esac
+        fi
         ;;
     *)
         error "Unknown repo name \"$repo\"" 3
@@ -593,14 +617,20 @@ start_time=$(date +%s)
 
 prepare
 
-for p in ${pkgs[@]}; do
-    pkg_start_time=$(date +%s)
-    echo -e "\e[1;31mBuilding $p ($(date +%H:%M:%S))...\e[0m"
-    build $p
-    pkg_end_time=$(date +%s)
-    pkg_total_time=$((pkg_end_time-pkg_start_time))
-    echo -e "\e[1;32m$p: $(date -d@$pkg_total_time -u +%H:%M:%S) ($(date +%H:%M:%S))\e[0m"
-done
+if [ ! -z "$single_package" ]; then
+    # Build a single package
+    echo -e "\\e[1;31mBuilding $single_package ($(date +%H:%M:%S))...\\e[0m"
+    build $single_package
+else
+    for p in ${pkgs[@]}; do
+        pkg_start_time=$(date +%s)
+        echo -e "\e[1;31mBuilding $p ($(date +%H:%M:%S))...\e[0m"
+        build $p
+        pkg_end_time=$(date +%s)
+        pkg_total_time=$((pkg_end_time-pkg_start_time))
+        echo -e "\e[1;32m$p: $(date -d@$pkg_total_time -u +%H:%M:%S) ($(date +%H:%M:%S))\e[0m"
+    done
+fi
 
 end_time=$(date +%s)
 total_time=$((end_time-start_time))
