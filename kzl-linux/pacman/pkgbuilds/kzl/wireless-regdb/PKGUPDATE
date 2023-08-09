@@ -1,0 +1,6 @@
+new_version=$(git ls-remote --tags git://git.kernel.org/pub/scm/linux/kernel/git/sforshee/wireless-regdb.git | grep -oP '(?<=refs/tags/master-)\d{4}-\d{2}-\d{2}' | sort -V | tail -n1 | sed 's/-/./g')
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    cp Makefile "$PKGBUILDDIR"/help.txt
+}

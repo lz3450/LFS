@@ -2,8 +2,8 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=6.1.43
-pkgrel=12
+pkgver=6.1.44
+pkgrel=3
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -14,7 +14,7 @@ options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            'fb31d1d2dcccdbb6b17aaade6effc141cca0e99684c7a04a5e500547525bb403')
+            '695ae0f59c72749b82ae2a6c20c4765c5b5690b4bed8f0f07146b1031bb30683')
 
 export KBUILD_BUILD_HOST=kzl-linux
 export KBUILD_BUILD_USER=kzl
@@ -32,8 +32,6 @@ prepare() {
   mkdir -p build
 
   cp "$srcdir"/config build/.config
-
-  make O=build nconfig
 }
 
 build() {
@@ -72,5 +70,12 @@ package_linux-headers() {
     --exclude='*.o.cmd' \
     --exclude='*.o.d' \
     --exclude='*.so.dbg' \
-    "$srcdir/$pkgbase" "$pkgdir"/usr/src/linux-headers-$kernelrelease
+    --exclude='.tmp_vmlinux.btf' \
+    --exclude='.git*' \
+    --exclude='.clang-format' \
+    --exclude='.cocciconfig' \
+    --exclude='.get_maintainer.ignore' \
+    --exclude='.mailmap' \
+    --exclude='.rustfmt.toml' \
+    "$srcdir/$pkgbase"/ "$pkgdir"/usr/src/linux-headers-$kernelrelease
 }

@@ -1,0 +1,24 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=wireless-regdb
+pkgver=2023.07.13
+pkgrel=3
+epoch=
+pkgdesc="Regulatory database used by Linux"
+arch=('x86_64')
+url="https://git.kernel.org/pub/scm/linux/kernel/git/sforshee/wireless-regdb.git"
+license=('KZL')
+source=(git://git.kernel.org/pub/scm/linux/kernel/git/sforshee/wireless-regdb.git)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git log -1 --format=%ad --date=format:'%Y.%m.%d'
+}
+
+package() {
+  cd $pkgname
+
+  make  DESTDIR="$pkgdir" FIRMWARE_PATH=/usr/lib/firmware install
+}
