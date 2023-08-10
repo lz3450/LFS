@@ -263,14 +263,10 @@ kzl_stage2_pkgs=(
     # linux-firmware
     ################
     linux-firmware
+    pahole
 )
 
 kzl_stage3_pkgs=(
-    ################
-    # openssh
-    ################
-    openssh
-
     ################
     # shells
     ################
@@ -278,45 +274,49 @@ kzl_stage3_pkgs=(
     fish
 
     ################
-    # nano
+    # utils
     ################
+    openssh
     nano
-
-    ################
-    # git
-    ################
     git
 
-    ################################
+    ################
     # File system utils
-    ################################
-    # dosfstools
-    # f2fs-tools
-    # parted
+    ################
+    dosfstools
+    f2fs-tools
+    parted
 
     ################
-    # dracut
+    # dpkg
     ################
-    # cpio
-    # dracut
+    libmd dpkg
+    debootstrap
 
-    ################################
+    ################
+    # iso
+    ################
+    cpio dracut
+    libburn libisofs libisoburn
+    mtools
+
+    ################
     # Wireless Network
-    ################################
-    # iw
-    # wpa_supplicant
+    ################
+    iw wpa_supplicant
+    wireless-regdb
 
     ################
     # samba
     ################
-    # liburing
-    # samba
+    liburing
+    samba
 
     ################
-    # node
+    # rsync
     ################
-    # c-ares
-    # node
+    xxhash
+    rsync
 
     ################
     # texlive
@@ -341,10 +341,10 @@ kzl_stage3_pkgs=(
     # libevent tmux
 
     ################
-    # rsync
+    # node
     ################
-    # xxhash
-    # rsync
+    # c-ares
+    # node
 
     ################
     # aria2
@@ -364,7 +364,6 @@ kzl_stage3_pkgs=(
     # tree
     # minicom
     # dfu-util
-    # mtools
     # smartmontools
 )
 
@@ -445,7 +444,7 @@ build() {
 
     # remove existing log
     if [ -f $_log ]; then
-        rm $_log
+        rm -- $_log
     fi
 
     cd $ROOTDIR/pkgbuilds/$repo/$_pkgbase

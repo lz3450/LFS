@@ -1,7 +1,8 @@
 #!/usr/bin/bash
 
 script_name="$(basename "${0}")"
-result=1
+
+cleanbuild=1
 
 ################################################################
 
@@ -35,7 +36,37 @@ have_function() {
 	declare -f "$1" >/dev/null
 }
 
+usage() {
+    local _usage="
+updatepkg (kzl-linux)
+
+Update the \`pkgver\` of PKGBUILD
+
+Usage: updatepkg
+
+    -h, --help                  display this help message and exit
+"
+    echo "$_usage"
+}
+
 ################################################################
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    -n|--no-cleanbuild)
+        cleanbuild=0
+        ;;
+    *)
+        usage
+        error "Unknown option: \"$1\"" 1
+        ;;
+    esac
+    shift
+done
 
 set -e
 set -o pipefail
@@ -57,13 +88,8 @@ fi
 . PKGBUILD
 PKGBUILDDIR=$(pwd)
 
-result=0
-
-# 
 if [ ! -f PKGUPDATE ]; then
-    warning "PKGUPDATE does not exist."
-    result=2
-    exit $result
+    error "PKGUPDATE does not exist." 2
 fi
 
 unset new_version current_version pre_update post_update
@@ -87,7 +113,9 @@ if [ $result -eq 1 ]; then
     sed -i "/^pkgrel=/s/$current_pkgrel/1/" PKGBUILD
     pkgver=$new_version
     info "running updpkgsums..."
-    updpkgsums || result=2
+    updpkgsums || error "\`updpkgsums\` error" 2
+    # force cleanbuild
+    cleanbuild=1
 elif [ $result -eq 0 ]; then
     info "PKGBUILD is up to date."
 elif [ $result -eq -1 ]; then
@@ -96,10 +124,14 @@ else
     error "Unknow \`vercmp\` result." 7
 fi
 
+if [ $cleanbuild -gt 0 ]; then
+    makepkg -Co || error "\`makepkg -Co\` error" 3
+else
+    makepkg -o || error "\`makepkg -Co\` error" 3
+fi
 # run post_update
 info "running post_update()..."
-makepkg -Co || result=3
-post_update || result=4
+post_update || error "\`post_update\` error" 4
 
 # -1: current version is newer
 # 0: no update
