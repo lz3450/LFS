@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cmake
-pkgver=3.27.1
-pkgrel=13
+pkgver=3.27.2
+pkgrel=1
 epoch=
 pkgdesc="A cross-platform open-source make system"
 arch=('x86_64')

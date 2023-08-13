@@ -2,7 +2,7 @@
 
 pkgname=gzip
 pkgver=1.12
-pkgrel=7
+pkgrel=8
 epoch=
 pkgdesc="GNU compression utility"
 arch=('x86_64')

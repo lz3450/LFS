@@ -2,7 +2,7 @@
 
 pkgname=libisofs
 pkgver=1.5.6
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="The library to pack up hard disk files and directories into a ISO 9660 disk image"
 arch=('x86_64')

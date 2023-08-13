@@ -2,7 +2,7 @@
 
 pkgname=pixman
 pkgver=0.42.2
-pkgrel=7
+pkgrel=8
 epoch=
 pkgdesc="The pixel-manipulation library for X and cairo"
 arch=('x86_64')

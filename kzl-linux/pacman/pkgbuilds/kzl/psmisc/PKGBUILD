@@ -2,7 +2,7 @@
 
 pkgname=psmisc
 pkgver=23.6
-pkgrel=8
+pkgrel=9
 epoch=
 pkgdesc="Miscellaneous procfs tools"
 arch=('x86_64')

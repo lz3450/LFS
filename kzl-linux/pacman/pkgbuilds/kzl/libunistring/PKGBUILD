@@ -2,7 +2,7 @@
 
 pkgname=libunistring
 pkgver=1.1
-pkgrel=10
+pkgrel=11
 epoch=
 pkgdesc="Library for manipulating Unicode strings and C strings"
 arch=('x86_64')

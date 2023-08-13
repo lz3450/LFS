@@ -4,7 +4,7 @@
 
 pkgname=freetype2
 pkgver=2.13.1
-pkgrel=5
+pkgrel=7
 epoch=
 pkgdesc="Font rasterization library"
 arch=('x86_64')

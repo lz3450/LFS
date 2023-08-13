@@ -2,7 +2,7 @@
 
 pkgname=procps-ng
 pkgver=4.0.3
-pkgrel=14
+pkgrel=15
 epoch=
 pkgdesc="Utilities for monitoring your system and its processes"
 arch=('x86_64')

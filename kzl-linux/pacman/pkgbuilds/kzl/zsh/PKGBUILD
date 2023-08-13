@@ -2,7 +2,7 @@
 
 pkgname=zsh
 pkgver=5.9
-pkgrel=7
+pkgrel=8
 epoch=
 arch=('x86_64')
 url="https://www.zsh.org/"

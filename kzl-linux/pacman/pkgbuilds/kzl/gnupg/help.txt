@@ -1,4 +1,4 @@
-`configure' configures gnupg 2.2.41 to adapt to many kinds of systems.
+`configure' configures gnupg 2.4.3 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -72,11 +72,12 @@ Optional Features:
                           do not reject slow dependency extractors
   --disable-dependency-tracking
                           speeds up one-time build
-  --disable-gpg           do not build the gpg program
   --disable-gpgsm         do not build the gpgsm program
   --disable-scdaemon      do not build the scdaemon program
   --enable-g13            build the g13 program
   --disable-dirmngr       do not build the dirmngr program
+  --disable-keyboxd       do not build the keyboxd program
+  --disable-tpm2d         do not build the tpm2d program
   --disable-doc           do not build the doc program
   --disable-gpgtar        do not build the gpgtar program
   --disable-wks-tools     do not build the wks-tools program
@@ -132,6 +133,7 @@ Optional Features:
   --disable-endian-check  disable the endian check and trust the OS provided
                           macros
   --disable-optimization  disable compiler optimization
+  --enable-log-clock      enable log_clock timestamps
   --enable-werror         append -Werror to CFLAGS
   --enable-all-tests      let "make check" run all tests
   --disable-tests         do not run any tests
@@ -148,7 +150,9 @@ Optional Packages:
   --with-agent-pgm=PATH  Use PATH as the default for the agent)
   --with-pinentry-pgm=PATH  Use PATH as the default for the pinentry)
   --with-scdaemon-pgm=PATH  Use PATH as the default for the scdaemon)
+  --with-tpm2daemon-pgm=PATH  Use PATH as the default for the tpm2daemon)
   --with-dirmngr-pgm=PATH  Use PATH as the default for the dirmngr)
+  --with-keyboxd-pgm=PATH  Use PATH as the default for the keyboxd)
   --with-protect-tool-pgm=PATH  Use PATH as the default for the protect-tool)
   --with-dirmngr-ldap-pgm=PATH  Use PATH as the default for the dirmngr ldap wrapper)
   --with-agent-s2k-calibration=MSEC
@@ -156,7 +160,6 @@ Optional Packages:
                           milliseconds
   --with-photo-viewer=FIXED_VIEWER  set a fixed photo ID viewer
   --with-capabilities     use linux capabilities default=no
-  --with-tar=PATH         look for a tar program in PATH
   --with-libgpg-error-prefix=PFX
                           prefix where GPG Error is installed (optional)
 
@@ -181,6 +184,8 @@ Optional Packages:
   --with-zlib=DIR         use libz in DIR
   --with-bzip2=DIR        look for bzip2 in DIR
   --with-readline=DIR     look for the readline library in DIR
+  --with-tss=TSS          use the specified TPM Software Stack (ibm, intel, or
+                          autodetect)
 
 Some influential environment variables:
   CC          C compiler command

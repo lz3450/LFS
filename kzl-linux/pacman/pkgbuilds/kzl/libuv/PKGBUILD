@@ -2,7 +2,7 @@
 
 pkgname=libuv
 pkgver=1.46.0
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="A multi-platform support library with a focus on asynchronous I/O"
 arch=('x86_64')

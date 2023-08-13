@@ -2,7 +2,7 @@
 
 pkgname=libmicrohttpd
 pkgver=0.9.77
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="A small C library that makes it easy to run an HTTP server as part of another application"
 arch=('x86_64')

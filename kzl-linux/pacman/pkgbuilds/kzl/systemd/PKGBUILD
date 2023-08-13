@@ -1,16 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=systemd
-pkgver=253.7
-pkgrel=8
+pkgver=254.1
+pkgrel=3
 epoch=
 arch=('x86_64')
 url="https://github.com/systemd/systemd-stable"
 license=('KZL')
 depends=(acl audit bzip2 cryptsetup dbus elfutils glibc iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl pam pcre2 xz zlib zstd)
-makedepends=(curl kexec-tools gnu-efi gnutls gperf libmicrohttpd libxslt p11-kit quota util-linux)
+makedepends=(curl kexec-tools gnutls gperf libmicrohttpd libxslt p11-kit quota util-linux)
 optdepends=("curl: libcurl support"
-            "gnu-efi: gnu-efi support for sd-boot"
             "gnutls: gnutls support"
             "libbpf: build BPF programs from source code in restricted C"
             "libmicrohttpd: libµhttpd support"
@@ -75,6 +74,7 @@ build() {
     -D audit=true \
     -D bashcompletiondir=/usr/share/bash-completion/completions \
     -D blkid=true \
+    -D bootloader=true \
     -D bpf-framework=false \
     -D bzip2=true \
     -D dbus=true \
@@ -84,7 +84,6 @@ build() {
     -D elfutils=true \
     -D fdisk=true \
     -D gcrypt=true \
-    -D gnu-efi=true \
     -D gnutls=true \
     -D homed=true \
     -D kexec-path=/usr/sbin/kexec \
@@ -120,7 +119,6 @@ build() {
     -D tpm2=false \
     -D ukify=true \
     -D user-path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
-    -D valgrind=false \
     -D version-tag="$pkgver-$pkgrel-kzl $(date -u '+%Y/%m/%d %T %z')" \
     -D xz=true \
     -D zlib=true \

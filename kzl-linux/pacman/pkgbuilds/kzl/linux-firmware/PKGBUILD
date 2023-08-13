@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=linux-firmware
-pkgver=20230625
-pkgrel=3
+pkgver=20230804
+pkgrel=1
 epoch=
 pkgdesc="Firmware files for Linux"
 arch=('x86_64')

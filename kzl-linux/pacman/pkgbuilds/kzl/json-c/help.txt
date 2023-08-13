@@ -1,14 +1,9 @@
--- The C compiler identification is GNU 12.3.0
+-- The C compiler identification is GNU 13.2.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
--- Looking for sys/resource.h
--- Looking for sys/resource.h - found
--- Looking for getrusage
--- Looking for getrusage - found
--- Wrote /home/kzl/makepkg/build/json-c/src/json-c/tmp/apps_config.h
 -- Looking for fcntl.h
 -- Looking for fcntl.h - found
 -- Looking for inttypes.h
@@ -27,6 +22,8 @@
 -- Looking for unistd.h - found
 -- Looking for sys/types.h
 -- Looking for sys/types.h - found
+-- Looking for sys/resource.h
+-- Looking for sys/resource.h - found
 -- Looking for dlfcn.h
 -- Looking for dlfcn.h - found
 -- Looking for endian.h
@@ -95,6 +92,8 @@
 -- Looking for vsyslog - found
 -- Looking for getrandom
 -- Looking for getrandom - found
+-- Looking for getrusage
+-- Looking for getrusage - found
 -- Looking for strtoll
 -- Looking for strtoll - found
 -- Looking for strtoull
@@ -128,10 +127,14 @@
 -- Performing Test VERSION_SCRIPT_WORKS
 -- Performing Test VERSION_SCRIPT_WORKS - Success
 -- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Wrote /home/kzl/makepkg/build/json-c/src/json-c/tmp/apps_config.h
 -- Configuring done (4.3s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/json-c/src/json-c/tmp
 -- Cache values
+// Default to building apps
+BUILD_APPS:BOOL=ON
+
 // Default to building shared libraries
 BUILD_SHARED_LIBS:BOOL=ON
 
@@ -399,7 +402,10 @@ DISABLE_BSYMBOLIC:BOOL=OFF
 // Avoid linking against extra libraries, such as libbsd.
 DISABLE_EXTRA_LIBS:BOOL=OFF
 
-// Disable JSON pointer (RFC6901) support.
+// Disable JSON patch (RFC6902) support.
+DISABLE_JSON_PATCH:BOOL=OFF
+
+// Disable JSON pointer (RFC6901) and JSON patch support.
 DISABLE_JSON_POINTER:BOOL=OFF
 
 // Disable using Thread-Local Storage (HAVE___THREAD).
@@ -427,13 +433,16 @@ GITCOMMAND:FILEPATH=/usr/bin/git
 INSTALL_PKGCONFIG_DIR:PATH=lib64/pkgconfig
 
 // Command to build the project
-MAKECOMMAND:STRING=/usr/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}" -- -i
+MAKECOMMAND:STRING=/usr/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 
 // Path to the memory checking command, used for memory error detection.
 MEMORYCHECK_COMMAND:FILEPATH=MEMORYCHECK_COMMAND-NOTFOUND
 
 // File that contains suppressions for the memory checker
 MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
+
+// Work around newlocale bugs in old FreeBSD by calling freelocale
+NEWLOCALE_NEEDS_FREELOCALE:BOOL=OFF
 
 // Override json_c_get_random_seed() with custom code.
 OVERRIDE_GET_RANDOM_SEED:BOOL=OFF

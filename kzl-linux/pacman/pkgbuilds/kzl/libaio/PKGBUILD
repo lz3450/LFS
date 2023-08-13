@@ -2,7 +2,7 @@
 
 pkgname=libaio
 pkgver=0.3.113
-pkgrel=5
+pkgrel=6
 epoch=
 pkgdesc="Linux-native asynchronous I/O access library"
 arch=('x86_64')

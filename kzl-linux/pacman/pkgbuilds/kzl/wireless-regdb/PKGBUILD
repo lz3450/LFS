@@ -2,7 +2,7 @@
 
 pkgname=wireless-regdb
 pkgver=2023.07.13
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="Regulatory database used by Linux"
 arch=('x86_64')

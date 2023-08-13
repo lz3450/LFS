@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=xz
-pkgver=5.4.3
-pkgrel=3
+pkgver=5.4.4
+pkgrel=1
 epoch=
 pkgdesc="Library and command line tools for XZ and LZMA compressed files"
 arch=('x86_64')

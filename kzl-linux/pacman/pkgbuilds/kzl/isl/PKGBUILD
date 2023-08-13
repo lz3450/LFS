@@ -2,7 +2,7 @@
 
 pkgname=isl
 pkgver=0.26
-pkgrel=9
+pkgrel=11
 epoch=
 pkgdesc="A library for manipulating sets and relations of integer points bounded by linear constraints"
 arch=('x86_64')

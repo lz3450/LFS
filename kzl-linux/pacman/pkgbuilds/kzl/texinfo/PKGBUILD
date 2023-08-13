@@ -2,7 +2,7 @@
 
 pkgname=texinfo
 pkgver=7.0.3
-pkgrel=7
+pkgrel=8
 epoch=
 pkgdesc="GNU documentation system for on-line information and printed output"
 arch=('x86_64')

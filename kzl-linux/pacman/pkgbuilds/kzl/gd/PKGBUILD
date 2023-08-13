@@ -2,7 +2,7 @@
 
 pkgname=gd
 pkgver=2.3.3
-pkgrel=6
+pkgrel=7
 epoch=
 pkgdesc="Library for the dynamic creation of images by programmer"
 arch=('x86_64')

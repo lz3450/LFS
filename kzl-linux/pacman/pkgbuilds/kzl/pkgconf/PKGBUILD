@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pkgconf
-pkgver=1.9.5
-pkgrel=5
+pkgver=2.0.1
+pkgrel=1
 epoch=
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=('x86_64')

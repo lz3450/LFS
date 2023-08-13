@@ -1,4 +1,4 @@
-`configure' configures XZ Utils 5.4.3 to adapt to many kinds of systems.
+`configure' configures XZ Utils 5.4.4 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

@@ -2,7 +2,7 @@
 
 pkgname=dracut
 pkgver=059
-pkgrel=7
+pkgrel=8
 epoch=
 pkgdesc="An event driven initramfs infrastructure"
 arch=('x86_64')

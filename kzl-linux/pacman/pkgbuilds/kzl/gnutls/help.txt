@@ -1,4 +1,4 @@
-`configure' configures GnuTLS 3.8.0 to adapt to many kinds of systems.
+`configure' configures GnuTLS 3.8.1 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -72,8 +72,6 @@ Optional Features:
                           do not reject slow dependency extractors
   --disable-dependency-tracking
                           speeds up one-time build
-  --disable-largefile     omit support for large files
-  --disable-year2038      omit support for timestamps past the year 2038
   --enable-threads={isoc|posix|isoc+posix|windows}
                           specify multithreading API
   --disable-threads       build without multithread safety
@@ -149,6 +147,8 @@ Optional Features:
   --disable-non-suiteb-curves
                           disable curves not in SuiteB
   --disable-libdane       disable the built of libdane
+  --enable-year2038       support timestamps after 2038
+  --disable-largefile     omit support for large files
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]

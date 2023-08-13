@@ -2,7 +2,7 @@
 
 pkgname=liburing
 pkgver=2.4
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="Linux-native io_uring I/O access library"
 arch=('x86_64')

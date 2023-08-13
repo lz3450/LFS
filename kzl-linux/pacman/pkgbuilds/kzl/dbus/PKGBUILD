@@ -2,7 +2,7 @@
 
 pkgname=dbus
 pkgver=1.15.6
-pkgrel=4
+pkgrel=7
 epoch=
 pkgdesc="Freedesktop.org message bus system"
 arch=('x86_64')

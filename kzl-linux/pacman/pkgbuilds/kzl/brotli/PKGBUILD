@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=brotli
-pkgver=1.0.9.108
-pkgrel=1
+pkgver=1.0.9.118
+pkgrel=2
 epoch=
 pkgdesc="Generic-purpose lossless compression algorithm"
 arch=('x86_64')

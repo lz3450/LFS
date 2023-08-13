@@ -2,7 +2,7 @@
 
 pkgname=acl
 pkgver=2.3.1
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="Access control list utilities, libraries and headers"
 arch=('x86_64')

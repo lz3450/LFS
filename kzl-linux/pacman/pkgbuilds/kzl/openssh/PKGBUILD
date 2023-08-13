@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openssh
-pkgver=9.3.P2
-pkgrel=4
+pkgver=9.4.P1
+pkgrel=1
 epoch=
 arch=('x86_64')
 url="https://www.openssh.com/portable.html"

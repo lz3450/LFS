@@ -3,5 +3,6 @@ new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.rust-lang.org/ | g
 post_update() {
     cd "$BUILDDIR/$pkgname/src/rustc-$pkgver-src"
     ./configure --help > "$PKGBUILDDIR"/help.txt
-    cat config.toml > "$PKGBUILDDIR"/config.toml
+    cp config.example.toml "$PKGBUILDDIR"/
+    cp config.toml "$PKGBUILDDIR"/
 }

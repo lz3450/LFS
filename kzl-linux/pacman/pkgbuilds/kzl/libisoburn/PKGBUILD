@@ -2,7 +2,7 @@
 
 pkgname=libisoburn
 pkgver=1.5.6
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Frontend for libraries libburn and libisofs"
 arch=('x86_64')

@@ -1,4 +1,4 @@
-`configure' configures libxml2 2.11.4 to adapt to many kinds of systems.
+`configure' configures libxml2 2.11.5 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

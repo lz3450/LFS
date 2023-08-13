@@ -2,7 +2,7 @@
 
 pkgname=dpkg
 pkgver=1.21.22
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Debian package management system"
 arch=('x86_64')

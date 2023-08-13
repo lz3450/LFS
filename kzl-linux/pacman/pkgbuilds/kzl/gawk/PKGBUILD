@@ -2,7 +2,7 @@
 
 pkgname=gawk
 pkgver=5.2.2.18
-pkgrel=7
+pkgrel=8
 epoch=
 pkgdesc="GNU version of awk"
 arch=('x86_64')

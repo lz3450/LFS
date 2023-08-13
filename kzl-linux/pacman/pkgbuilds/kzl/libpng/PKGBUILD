@@ -2,7 +2,7 @@
 
 pkgname=libpng
 pkgver=1.6.40
-pkgrel=5
+pkgrel=6
 epoch=
 pkgdesc="A collection of routines used to create PNG format graphics files"
 arch=('x86_64')

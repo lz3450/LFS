@@ -2,7 +2,7 @@
 
 pkgname=sudo
 pkgver=1.9.14p3
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('x86_64')

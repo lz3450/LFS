@@ -1,4 +1,4 @@
-`configure' configures pkgconf 1.9.5 to adapt to many kinds of systems.
+`configure' configures pkgconf 2.0.1 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

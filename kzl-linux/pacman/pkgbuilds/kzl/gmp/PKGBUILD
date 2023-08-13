@@ -1,17 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gmp
-pkgver=6.2.1
-pkgrel=9
+pkgver=6.3.0
+pkgrel=3
 epoch=
 pkgdesc="A free library for arbitrary precision arithmetic"
 arch=('x86_64')
 url="https://gmplib.org"
 license=('KZL')
-source=($url/download/gmp/$pkgname-$pkgver.tar.zst{,.sig})
-validpgpkeys=('343C2FF0FBEE5EC2EDBEF399F3599FF828C67298')
-sha256sums=('8a0c3596c09855450eb67f6e81c5fb6a10babfc4a803d012a877b54c430ea66b'
-            'SKIP')
+source=($url/download/gmp/$pkgname-$pkgver.tar.zst)
+sha256sums=('7f55d73f472c29cc14d7fa985f3654d48829415b649eaf61646b7b33f2a80e27')
 
 build() {
   cd $pkgname-$pkgver

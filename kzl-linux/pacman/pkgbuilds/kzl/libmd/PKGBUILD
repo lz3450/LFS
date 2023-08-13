@@ -2,7 +2,7 @@
 
 pkgname=libmd
 pkgver=1.1.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Message Digest functions from BSD systems"
 arch=('x86_64')

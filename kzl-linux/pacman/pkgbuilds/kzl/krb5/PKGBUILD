@@ -2,7 +2,7 @@
 
 pkgname=krb5
 pkgver=1.21.1
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="The Kerberos network authentication protocol"
 arch=('x86_64')

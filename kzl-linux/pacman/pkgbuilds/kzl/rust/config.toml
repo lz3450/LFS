@@ -52,16 +52,6 @@ host = ['x86_64-unknown-linux-gnu']
 # able to compile programs for their native target.
 target = ['x86_64-unknown-linux-gnu']
 
-# Instead of downloading the src/stage0.json version of Cargo specified, use
-# this Cargo binary instead to build all Rust code
-# If you set this, you likely want to set `rustc` as well.
-cargo = '/usr/bin/cargo'
-
-# Instead of downloading the src/stage0.json version of the compiler
-# specified, use this rustc binary instead as the stage0 snapshot compiler.
-# If you set this, you likely want to set `cargo` as well.
-rustc = '/usr/bin/rustc'
-
 # Whether to build documentation by default. If false, rustdoc and
 # friends will still be compiled but they will not be used to generate any
 # documentation.
@@ -73,9 +63,6 @@ docs = false
 # Indicate whether to build compiler documentation by default.
 # You can still build documentation when this is disabled by explicitly passing a path: `x doc compiler`.
 compiler-docs = false
-
-# Indicate whether git submodules are managed and updated automatically.
-submodules = false
 
 # Python interpreter to use for various tasks throughout the build, notably
 # rustdoc tests, the lldb python interpreter, and some dist bits and pieces.
@@ -90,21 +77,6 @@ python = '/usr/bin/python3'
 # https://forge.rust-lang.org/infra/other-installation-methods.html#source-code.
 vendor = true
 
-# Typically the build system will build the Rust compiler twice. The second
-# compiler, however, will simply use its own libraries to link against. If you
-# would rather to perform a full bootstrap, compiling the compiler three times,
-# then you can set this option to true.
-#
-# This is only useful for verifying that rustc generates reproducible builds.
-full-bootstrap = true
-
-# Enable a build of the extended Rust tool set which is not only the compiler
-# but also tools such as Cargo. This will also produce "combined installers"
-# which are used to install Rust and Cargo together. This is disabled by
-# default. The `tools` option (immediately below) specifies which tools should
-# be built if `extended = true`.
-extended = true
-
 # Set of tools to be included in the installation.
 #
 # If `extended = false`, the only one of these built by default is rustdoc.
@@ -113,7 +85,7 @@ extended = true
 # rust-demangler which additionally requires `profiler = true` to be set.
 #
 # If any enabled tool fails to build, the installation fails.
-tools = ['cargo', 'rls', 'clippy', 'rustfmt', 'analysis', 'src']
+tools = ['cargo', 'clippy', 'rustfmt', 'analysis', 'src']
 #    "cargo",
 #    "clippy",
 #    "rustdoc",
@@ -130,7 +102,7 @@ sanitizers = false
 # Arguments passed to the `./configure` script, used during distcheck. You
 # probably won't fill this in but rather it's filled in by the `./configure`
 # script. Useful for debugging.
-configure-args = ['--disable-debug', '--disable-docs', '--disable-compiler-docs', '--enable-local-rust', '--local-rust-root=/usr', '--disable-llvm-static-stdcpp', '--enable-llvm-link-shared', '--disable-rpath', '--enable-option-checking', '--enable-vendor', '--disable-sanitizers', '--prefix=/usr', '--llvm-root=/usr', '--llvm-config=/usr/bin/llvm-config', '--llvm-filecheck=/usr/bin/FileCheck', '--python=/usr/bin/python3', '--release-channel=stable', '--disable-manage-submodules', '--enable-full-bootstrap', '--enable-extended', '--tools=cargo,rls,clippy,rustfmt,analysis,src', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--set', 'target.x86_64-unknown-linux-gnu.linker=clang', '--set', 'target.x86_64-unknown-linux-gnu.cc=clang', '--set', 'target.x86_64-unknown-linux-gnu.cxx=clang++', '--set', 'target.x86_64-unknown-linux-gnu.ar=llvm-ar', '--set', 'target.x86_64-unknown-linux-gnu.ranlib=llvm-ranlib', '--release-description=KZL 2023/07/30 14:05:22 +0000']
+configure-args = ['--disable-debug', '--disable-docs', '--disable-compiler-docs', '--disable-optimize-tests', '--disable-llvm-static-stdcpp', '--enable-llvm-link-shared', '--enable-option-checking', '--enable-vendor', '--disable-sanitizers', '--prefix=/usr', '--llvm-root=/usr', '--llvm-config=/usr/bin/llvm-config', '--llvm-filecheck=/usr/bin/FileCheck', '--python=/usr/bin/python3', '--release-channel=stable', '--dist-compression-formats=gz', '--tools=cargo,clippy,rustfmt,analysis,src', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--set', 'target.x86_64-unknown-linux-gnu.linker=clang', '--set', 'target.x86_64-unknown-linux-gnu.cc=clang', '--set', 'target.x86_64-unknown-linux-gnu.cxx=clang++', '--set', 'target.x86_64-unknown-linux-gnu.ar=llvm-ar', '--set', 'target.x86_64-unknown-linux-gnu.ranlib=llvm-ranlib', '--release-description=KZL 2023/08/13 11:06:36 -0500']
 
 [install]
 
@@ -176,13 +148,10 @@ channel = 'stable'
 # upstream Rust you need to set this to "". However, note that if you are not
 # actually compatible -- for example if you've backported patches that change
 # behavior -- this may lead to miscompilations or other bugs.
-description = 'KZL 2023/07/30 14:05:22 +0000'
+description = 'KZL 2023/08/13 11:06:36 -0500'
 
-# By default the `rustc` executable is built with `-Wl,-rpath` flags on Unix
-# platforms to ensure that the compiler is usable by default from the build
-# directory (as it links to a number of dynamic libraries). This may not be
-# desired in distributions, for example.
-rpath = false
+# Flag indicating whether tests are compiled with optimizations (the -O flag).
+optimize-tests = false
 
 [target.x86_64-unknown-linux-gnu]
 
@@ -221,4 +190,10 @@ llvm-config = '/usr/bin/llvm-config'
 llvm-filecheck = '/usr/bin/FileCheck'
 
 [dist]
+
+# List of compression formats to use when generating dist tarballs. The list of
+# formats is provided to rust-installer, which must support all of them.
+#
+# This list must be non-empty.
+compression-formats = ['gz']
 

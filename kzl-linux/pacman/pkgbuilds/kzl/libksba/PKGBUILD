@@ -2,7 +2,7 @@
 
 pkgname=libksba
 pkgver=1.6.4
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="A CMS and X.509 access library"
 arch=('x86_64')

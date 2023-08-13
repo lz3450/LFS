@@ -2,7 +2,7 @@
 
 pkgname=lcms2
 pkgver=2.15
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="Small-footprint color management engine, version 2"
 arch=('x86_64')

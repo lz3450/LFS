@@ -2,7 +2,7 @@
 
 pkgname=libffi
 pkgver=3.4.4
-pkgrel=9
+pkgrel=10
 epoch=
 pkgdesc="A Portable Foreign Function Interface Library"
 arch=('x86_64')

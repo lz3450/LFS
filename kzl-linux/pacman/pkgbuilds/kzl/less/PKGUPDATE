@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://www.greenwoodsoftware.com/less/ | grep -oP 'The current beta version is less-\K[0-9]{3}')
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://www.greenwoodsoftware.com/less/ | grep -oP 'The current released version is less-\K[0-9]{3}')
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

@@ -2,7 +2,7 @@
 
 pkgname=libassuan
 pkgver=2.5.6
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="A small library implementing the so-called Assuan protocol"
 arch=('x86_64')

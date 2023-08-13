@@ -1,4 +1,4 @@
--- The C compiler identification is GNU 12.3.0
+-- The C compiler identification is GNU 13.2.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
@@ -49,7 +49,7 @@
 -- Looking for posix_memalign - found
 -- Looking for memalign
 -- Looking for memalign - found
--- Found PkgConfig: /usr/bin/pkg-config (found version "1.9.5") 
+-- Found PkgConfig: /usr/bin/pkg-config (found version "2.0.1") 
 -- Found ZLIB: /usr/lib/libz.so (found version "1.2.13")  
 -- Your system seems to have a Z lib available, we will use it to generate PNG lib
 -- Found PNG: /usr/lib/libpng.so (found version "1.6.40") 
@@ -58,7 +58,7 @@
 -- Your system seems to have a TIFF lib available, we will use it
 -- Found LCMS2: /usr/lib/liblcms2.so  
 -- Your system seems to have a LCMS2 lib available, we will use it
--- Configuring done (1.8s)
+-- Configuring done (1.6s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/openjpeg/src/openjpeg/tmp
 -- Cache values

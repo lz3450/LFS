@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rust
-pkgver=1.71.0
-pkgrel=4
+pkgver=1.71.1
+pkgrel=5
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')
@@ -13,7 +13,7 @@ makedepends=(libffi)
 optdepends=("gdb: rust-gdb script")
 source=(https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz{,.asc})
 validpgpkeys=('108F66205EAEB0AAA8DD5E1C85AB96E6FA1BE5FE')
-sha256sums=('a667e4abdc5588ebfea35c381e319d840ffbf8d2dbfb79771730573642034c96'
+sha256sums=('6fa90d50d1d529a75f6cc349784de57d7ec0ba2419b09bde7d335c25bd4e472e'
             'SKIP')
 
 prepare() {
@@ -23,15 +23,15 @@ prepare() {
     --disable-debug
     --disable-docs
     --disable-compiler-docs
+    --disable-optimize-tests
     ################
     # stage2
     ################
-    --enable-local-rust
-    --local-rust-root=/usr
+    # --enable-local-rust
+    # --local-rust-root=/usr
     ################
     --disable-llvm-static-stdcpp
     --enable-llvm-link-shared
-    --disable-rpath
     --enable-option-checking
     --enable-vendor
     --disable-sanitizers
@@ -41,10 +41,9 @@ prepare() {
     --llvm-filecheck=/usr/bin/FileCheck
     --python=/usr/bin/python3
     --release-channel=stable
-    --disable-manage-submodules
-    --enable-full-bootstrap
-    --enable-extended
-    --tools=cargo,rls,clippy,rustfmt,analysis,src
+    # --release-description="KZL $(date -u '+%Y/%m/%d %T %z')"
+    --dist-compression-formats=gz
+    --tools=cargo,clippy,rustfmt,analysis,src
     --build=x86_64-unknown-linux-gnu
     --host=x86_64-unknown-linux-gnu
     --target=x86_64-unknown-linux-gnu
@@ -59,10 +58,13 @@ prepare() {
     # --set target.x86_64-unknown-linux-gnu.ar=ar
     # --set target.x86_64-unknown-linux-gnu.ranlib=ranlib
   )
+  for element in "${_options[@]}"; do
+    echo "$element"
+  done
 
   ./configure \
     ${_options[@]} \
-    --release-description="KZL $(date -u '+%Y/%m/%d %T %z')"
+    --release-description="KZL $(date '+%Y/%m/%d %T %z')"
 
 }
 
@@ -83,10 +85,11 @@ package() {
 
   DESTDIR="$pkgdir" ./x.py -j "$(nproc)" install
 
-  rm "$pkgdir"/usr/lib/rustlib/{components,install.log,manifest-*,rust-installer-version,uninstall.sh}
+  rm -f "$pkgdir"/usr/bin/*.old
+  rm -f "$pkgdir"/usr/lib/rustlib/{components,install.log,manifest-*,rust-installer-version,uninstall.sh}
+  rm -rf "$pkgdir"/usr/share/doc
 
-  install -dm755 "$pkgdir"/usr/share/bash-completion/completions/
-  mv "$pkgdir"/usr/src/etc/bash_completion.d "$pkgdir"/usr/share/bash-completion/completions/
-  rmdir "$pkgdir"/usr/src/etc
-  rmdir "$pkgdir"/usr/src
+  install -d -m755 "$pkgdir"/usr/share/bash-completion/completions/
+  mv "$pkgdir"/etc/bash_completion.d "$pkgdir"/usr/share/bash-completion/completions/
+  rmdir "$pkgdir"/etc
 }

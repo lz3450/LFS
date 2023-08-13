@@ -2,7 +2,7 @@
 
 pkgname=argon2
 pkgver=20190702
-pkgrel=6
+pkgrel=7
 epoch=
 pkgdesc="A password-hashing function (reference C implementation)"
 arch=('x86_64')

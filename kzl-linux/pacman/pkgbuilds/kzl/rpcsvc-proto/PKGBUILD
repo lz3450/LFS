@@ -2,7 +2,7 @@
 
 pkgname=rpcsvc-proto
 pkgver=1.4.4
-pkgrel=5
+pkgrel=6
 epoch=
 pkgdesc="rpcsvc protocol definitions from glibc"
 arch=('x86_64')

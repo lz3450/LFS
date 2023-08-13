@@ -2,7 +2,7 @@
 
 pkgname=tar
 pkgver=1.34
-pkgrel=17
+pkgrel=18
 epoch=
 pkgdesc="Utility to create tar archives"
 arch=('x86_64')

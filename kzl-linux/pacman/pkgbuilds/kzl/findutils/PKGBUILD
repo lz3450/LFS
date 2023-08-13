@@ -2,7 +2,7 @@
 
 pkgname=findutils
 pkgver=4.9.0.32
-pkgrel=5
+pkgrel=6
 epoch=
 pkgdesc="GNU utilities to locate files"
 arch=('x86_64')

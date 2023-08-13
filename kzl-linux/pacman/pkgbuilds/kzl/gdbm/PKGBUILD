@@ -2,7 +2,7 @@
 
 pkgname=gdbm
 pkgver=1.23
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="A library of database functions that use extensible hashing and work similar to the standard UNIX dbm"
 arch=('x86_64')

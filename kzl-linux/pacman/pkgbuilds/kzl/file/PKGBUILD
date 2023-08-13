@@ -2,7 +2,7 @@
 
 pkgname=file
 pkgver=5.45
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="File type identification utility"
 arch=('x86_64')

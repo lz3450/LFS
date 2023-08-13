@@ -2,7 +2,7 @@
 
 pkgname=mtools
 pkgver=4.0.43
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="A collection of utilities to access MS-DOS disks"
 arch=('x86_64')

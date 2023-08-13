@@ -2,7 +2,7 @@
 
 pkgname=ghostscript
 pkgver=10.01.2
-pkgrel=10
+pkgrel=11
 epoch=
 pkgdesc="An interpreter for the PostScript language"
 arch=('x86_64')

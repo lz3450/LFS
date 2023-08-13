@@ -2,7 +2,7 @@
 
 pkgname=wpa_supplicant
 pkgver=2.10
-pkgrel=15
+pkgrel=16
 epoch=
 pkgdesc="A utility providing key negotiation for WPA wireless networks"
 arch=('x86_64')

@@ -96,8 +96,8 @@ Optional Features:
   --disable-app-machineid disable LVM system ID using app-specific machine-id
   --disable-blkid_wiping  disable libblkid detection of signatures when wiping
                           and use native code instead
-  --enable-udev_sync      enable synchronisation with udev processing
-  --enable-udev_rules     install rule files needed for udev synchronisation
+  --enable-udev_sync      enable synchronization with udev processing
+  --enable-udev_rules     install rule files needed for udev synchronization
   --enable-udev-rule-exec-detection
                           enable executable path detection in udev rules
   --enable-units-compat   enable output compatibility with old versions that

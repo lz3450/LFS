@@ -2,7 +2,7 @@
 
 pkgname=nghttp2
 pkgver=1.55.1
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="An implementation of HTTP/2 and its header compression algorithm HPACK in C"
 arch=('x86_64')

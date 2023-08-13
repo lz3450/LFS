@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://people.redhat.com/sgrubb/audit/ | grep -oP '(?<=The latest stable release is )\d\.\d')
+new_version=$(git ls-remote --tags https://github.com/linux-audit/audit-userspace.git | grep -oP '(?<=refs/tags/v)\d\.\d(\.\d)?' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/audit-userspace"

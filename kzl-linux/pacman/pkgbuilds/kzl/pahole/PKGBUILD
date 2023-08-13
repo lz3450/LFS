@@ -2,7 +2,7 @@
 
 pkgname=pahole
 pkgver=1.25
-pkgrel=3
+pkgrel=6
 epoch=
 pkgdesc="pahole shows data structure layouts encoded in debugging information formats, DWARF and CTF being supported"
 arch=('x86_64')
@@ -17,6 +17,7 @@ build() {
 
   cmake \
     -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_C_FLAGS="${CFLAGS/ -Wp,-D_FORTIFY_SOURCE=2/} $CPPFLAGS" \
     -D__LIB=lib \
     -S . \
     -B build \

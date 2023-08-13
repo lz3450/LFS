@@ -2,7 +2,7 @@
 
 pkgname=attr
 pkgver=2.5.1
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="Extended attribute support library for ACL support"
 arch=('x86_64')

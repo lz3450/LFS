@@ -2,7 +2,7 @@
 
 pkgname=gobject-introspection
 pkgver=1.76.1
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="To describe the APIs and collect them in a uniform, machine readable format"
 arch=('x86_64')

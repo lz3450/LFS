@@ -1,5 +1,5 @@
--- The C compiler identification is GNU 12.3.0
--- The CXX compiler identification is GNU 12.3.0
+-- The C compiler identification is GNU 13.2.0
+-- The CXX compiler identification is GNU 13.2.0
 -- The ASM compiler identification is GNU
 -- Found assembler: /usr/bin/cc
 -- Detecting C compiler ABI info
@@ -79,7 +79,7 @@
 -- Found ZLIB: /usr/lib/libz.so (found version "1.2.13")  
 -- Looking for compress2
 -- Looking for compress2 - found
--- Found LibXml2: /usr/lib/libxml2.so (found version "2.11.4") 
+-- Found LibXml2: /usr/lib/libxml2.so (found version "2.11.5") 
 -- Looking for xmlReadMemory
 -- Looking for xmlReadMemory - found
 -- Looking for histedit.h
@@ -259,7 +259,7 @@
 -- Performing Test HAS_WERROR_GLOBAL_CTORS - Failed
 -- Looking for __x86_64__
 -- Looking for __x86_64__ - found
--- Found Git: /usr/bin/git (found version "2.40.0") 
+-- Found Git: /usr/bin/git (found version "2.41.0") 
 -- Targeting AArch64
 -- Targeting AMDGPU
 -- Targeting ARM
@@ -325,8 +325,8 @@
 -- Performing Test HAVE_STEADY_CLOCK
 -- Performing Test HAVE_STEADY_CLOCK
 -- Performing Test HAVE_STEADY_CLOCK -- success
--- Configuring done (15.7s)
--- Generating done (2.5s)
+-- Configuring done (14.7s)
+-- Generating done (1.9s)
 -- Build files have been written to: /home/kzl/makepkg/build/llvm-project/src/llvm-project/tmp
 -- Cache values
 // Build a 32 bit version of the library.

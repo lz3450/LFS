@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=glib2
-pkgver=2.77.1
-pkgrel=1
+pkgver=2.77.2
+pkgrel=2
 epoch=
 pkgdesc="The low-level core library that forms the basis for projects such as GTK and GNOME"
 arch=('x86_64')

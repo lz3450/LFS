@@ -29,6 +29,9 @@ prepare() {
 build() {
   cd $pkgname
 
+  # for gcc-13
+  CFLAGS="$CFLAGS -Wno-error"
+
   ./configure \
     --prefix=/usr \
     --disable-nls

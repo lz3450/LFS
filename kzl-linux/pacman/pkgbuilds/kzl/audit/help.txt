@@ -1,4 +1,4 @@
-`configure' configures audit 3.1 to adapt to many kinds of systems.
+`configure' configures audit 3.1.2 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

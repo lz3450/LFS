@@ -2,7 +2,7 @@
 
 pkgname=readline
 pkgver=8.2
-pkgrel=11
+pkgrel=12
 epoch=
 pkgdesc="GNU readline library"
 arch=('x86_64')

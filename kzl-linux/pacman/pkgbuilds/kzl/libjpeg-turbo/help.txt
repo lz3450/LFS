@@ -1,11 +1,11 @@
--- The C compiler identification is GNU 12.3.0
+-- The C compiler identification is GNU 13.2.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
 -- CMAKE_BUILD_TYPE = Release
--- VERSION = 2.1.5.1, BUILD = 20230730
+-- VERSION = 2.1.5.1, BUILD = 20230813
 -- 64-bit build (x86_64)
 -- CMAKE_INSTALL_PREFIX = /opt/libjpeg-turbo
 -- CMAKE_INSTALL_BINDIR = bin (/opt/libjpeg-turbo/bin)
@@ -60,12 +60,12 @@
 -- SIMD extensions: x86_64 (WITH_SIMD = 1)
 -- FLOATTEST = sse
 -- RPM architecture = x86_64, DEB architecture = amd64
--- Configuring done (0.9s)
+-- Configuring done (0.8s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/libjpeg-turbo/src/libjpeg-turbo/tmp
 -- Cache values
-// Build string (default: 20230730)
-BUILD:STRING=20230730
+// Build string (default: 20230813)
+BUILD:STRING=20230813
 
 // Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line

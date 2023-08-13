@@ -4,7 +4,7 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=gcc
-pkgver=12.3.0
+pkgver=13.2.0
 pkgrel=3
 epoch=
 pkgdesc="The GNU Compiler Collection"
@@ -31,9 +31,9 @@ build() {
   ../configure \
     --with-pkgversion="KZL $pkgver-$pkgrel `date -u '+%Y/%m/%d %T %z'`" \
     --prefix=/usr \
-    --build=x86_64-linux-gnu \
-    --host=x86_64-linux-gnu \
-    --target=x86_64-linux-gnu \
+    --build=x86_64-pc-linux-gnu \
+    --host=x86_64-pc-linux-gnu \
+    --target=x86_64-pc-linux-gnu \
     --bindir=/usr/bin \
     --libdir=/usr/lib \
     --libexecdir=/usr/libexec \

@@ -2,7 +2,7 @@
 
 pkgname=mpfr
 pkgver=4.2.0
-pkgrel=11
+pkgrel=13
 epoch=
 pkgdesc="Multiple-precision floating-point library"
 arch=('x86_64')

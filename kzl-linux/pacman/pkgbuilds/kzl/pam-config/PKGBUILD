@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pam-config
-pkgver=2023.07.30
-pkgrel=1
+pkgver=2023.08.12
+pkgrel=2
 epoch=
 pkgdesc="PAM configuration"
 arch=('x86_64')

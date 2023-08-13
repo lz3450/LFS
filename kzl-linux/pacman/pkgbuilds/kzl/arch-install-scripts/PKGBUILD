@@ -2,7 +2,7 @@
 
 pkgname=arch-install-scripts
 pkgver=28
-pkgrel=6
+pkgrel=7
 epoch=
 pkgdesc="Scripts to aid in installing Arch Linux"
 arch=('any')

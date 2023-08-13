@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=audit
-pkgver=3.1
-pkgrel=6
+pkgver=3.1.2
+pkgrel=2
 epoch=
 pkgdesc="Userspace components of the audit framework"
 arch=('x86_64')
@@ -36,7 +36,7 @@ build() {
     --enable-gssapi-krb5=yes \
     --enable-systemd=yes \
     --with-python=no \
-    --with-python3=no \
+    --with-python3=yes \
     --with-golang=no \
     --with-arm=no \
     --with-aarch64=no \
@@ -50,7 +50,7 @@ build() {
 package() {
   cd audit-userspace
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   install -d -m0700 "$pkgdir"/var/log/audit
 

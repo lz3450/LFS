@@ -2,7 +2,7 @@
 
 pkgname=libcap-ng
 pkgver=0.8.3
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="Library making programming with POSIX capabilities easier than traditional libcap"
 arch=('x86_64')

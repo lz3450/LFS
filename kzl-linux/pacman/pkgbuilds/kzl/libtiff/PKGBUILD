@@ -2,7 +2,7 @@
 
 pkgname=libtiff
 pkgver=4.5.1
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Library for manipulation of TIFF images"
 arch=('x86_64')

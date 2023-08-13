@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=harfbuzz
-pkgver=8.0.1
-pkgrel=9
+pkgver=8.1.1
+pkgrel=1
 epoch=
 pkgdesc="A text shaping engine"
 arch=('x86_64')

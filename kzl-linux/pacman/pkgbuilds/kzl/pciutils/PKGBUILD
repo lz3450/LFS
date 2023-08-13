@@ -2,7 +2,7 @@
 
 pkgname=pciutils
 pkgver=3.10.0
-pkgrel=8
+pkgrel=9
 epoch=
 pkgdesc="PCI bus configuration space access library and tools"
 arch=('x86_64')

@@ -1,4 +1,4 @@
-`configure' configures GNU MP 6.2.1 to adapt to many kinds of systems.
+`configure' configures GNU MP 6.3.0 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -132,6 +132,6 @@ Some influential environment variables:
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
-Report bugs to <gmp-bugs@gmplib.org, see https://gmplib.org/manual/Reporting-Bugs.html>.
+Report bugs to <gmp-bugs@gmplib.org (see https://gmplib.org/manual/Reporting-Bugs.html)>.
 GNU MP home page: <http://www.gnu.org/software/gmp/>.
 General help using GNU software: <http://www.gnu.org/gethelp/>.

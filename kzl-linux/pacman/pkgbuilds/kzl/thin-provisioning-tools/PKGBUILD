@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=thin-provisioning-tools
-pkgver=1.0.5
-pkgrel=2
+pkgver=1.0.6
+pkgrel=1
 epoch=
 pkgdesc="A suite of tools for manipulating the metadata of the dm-thin, dm-cache and dm-era device-mapper targets"
 arch=('x86_64')

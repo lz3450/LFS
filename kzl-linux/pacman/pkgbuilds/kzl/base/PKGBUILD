@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=base
-pkgver=20230509
-pkgrel=8
+pkgver=2023.05.09
+pkgrel=9
 epoch=
 pkgdesc="Minimal package set"
 arch=('any')

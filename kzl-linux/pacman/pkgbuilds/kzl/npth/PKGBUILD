@@ -2,7 +2,7 @@
 
 pkgname=npth
 pkgver=1.6
-pkgrel=5
+pkgrel=6
 epoch=
 pkgdesc="New portable threads library"
 arch=('x86_64')

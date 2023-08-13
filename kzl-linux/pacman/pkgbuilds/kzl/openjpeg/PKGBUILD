@@ -2,7 +2,7 @@
 
 pkgname=openjpeg
 pkgver=2.5.0
-pkgrel=6
+pkgrel=7
 epoch=
 pkgdesc="An open-source JPEG 2000 codec written in C language"
 arch=('x86_64')

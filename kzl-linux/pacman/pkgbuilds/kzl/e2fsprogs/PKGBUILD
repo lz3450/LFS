@@ -2,7 +2,7 @@
 
 pkgname=e2fsprogs
 pkgver=1.47.0
-pkgrel=7
+pkgrel=8
 epoch=
 pkgdesc="Ext2/3/4 Filesystem Utilities"
 arch=('x86_64')

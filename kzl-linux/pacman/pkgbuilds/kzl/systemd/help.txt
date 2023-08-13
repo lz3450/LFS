@@ -114,8 +114,8 @@ Main project options:
   bashcompletiondir                                                                                directory for bash completion scripts ["no" disables]        
   binfmt                         true                             [true, false]                    support for custom binary formats                            
   blkid                          auto                             [auto, true, false]              libblkid support                                             
-  bpf-compiler                   clang                            [clang, gcc]                     compiler used to build BPF programs, note: gcc is            
-                                                                                                   experimental                                                 
+  bootloader                     auto                             [auto, true, false]              sd-boot/stub and userspace tools                             
+  bpf-compiler                   clang                            [clang, gcc]                     compiler used to build BPF programs                          
   bpf-framework                  auto                             [auto, true, false]              build BPF programs from source code in restricted C          
   bump-proc-sys-fs-file-max      true                             [true, false]                    bump /proc/sys/fs/file-max to LONG_MAX                       
   bump-proc-sys-fs-nr-open       true                             [true, false]                    bump /proc/sys/fs/nr_open to INT_MAX                         
@@ -143,6 +143,7 @@ Main project options:
   default-dns-over-tls           no                               [yes, opportunistic, no]         default DNS-over-TLS mode                                    
   default-dnssec                 allow-downgrade                  [yes, allow-downgrade, no]       default DNSSEC mode                                          
   default-hierarchy              unified                          [legacy, hybrid, unified]        default cgroup hierarchy                                     
+  default-keymap                 us                                                                default keymap used when populating /etc/vconsole.conf       
   default-kill-user-processes    true                             [true, false]                    the default value for KillUserProcesses= setting             
   default-llmnr                  yes                              [yes, resolve, no]               default LLMNR mode                                           
   default-locale                 C.UTF-8                                                           default locale used when /etc/locale.conf does not exist     
@@ -169,16 +170,12 @@ Main project options:
   docdir                                                                                           documentation directory                                      
   dynamic-uid-max                65519                                                             maximum dynamic UID                                          
   dynamic-uid-min                61184                                                             minimum dynamic UID                                          
-  efi                            true                             [true, false]                    enable systemd-boot and bootctl                              
-  efi-cflags                     []                               []                               additional flags for EFI compiler                            
+  efi                            true                             [true, false]                    enable EFI support                                           
   efi-color-edit                 black,lightgray                                                   boot loader color for option line edit                       
   efi-color-entry                lightgray,black                                                   boot loader color for entries                                
   efi-color-highlight            black,lightgray                                                   boot loader color for selected entries                       
   efi-color-normal               lightgray,black                                                   general boot loader color in "foreground,background" form,   
                                                                                                    see constants from eficon.h                                  
-  efi-includedir                 /usr/include/efi                                                  path to the EFI header directory                             
-  efi-ld                         auto                             [auto, bfd, gold]                the linker to use for EFI modules                            
-  efi-libdir                                                                                       path to the EFI lib directory                                
   elfutils                       auto                             [auto, true, false]              elfutils support                                             
   environment-d                  true                             [true, false]                    support for environment.d                                    
   extra-net-naming-schemes                                                                         comma-separated list of extra net.naming-scheme= definitions 
@@ -191,7 +188,6 @@ Main project options:
   fuzz-tests                     false                            [true, false]                    run the fuzzer regression tests by default (with sanitizers) 
   gcrypt                         auto                             [auto, true, false]              gcrypt support                                               
   glib                           auto                             [auto, true, false]              libglib support (for tests only)                             
-  gnu-efi                        auto                             [auto, true, false]              gnu-efi support for sd-boot                                  
   gnutls                         auto                             [auto, true, false]              gnutls support                                               
   group-render-mode              0666                                                              Access mode for devices owned by render group (e.g.          
                                                                                                    /dev/dri/renderD*, /dev/kfd).                                
@@ -227,6 +223,8 @@ Main project options:
                                                                                                    shared.so                                                    
   link-journalctl-shared         true                             [true, false]                    link journalctl against libsystemd-shared.so                 
   link-networkd-shared           true                             [true, false]                    link systemd-networkd and its helpers to libsystemd-shared.so
+  link-portabled-shared          true                             [true, false]                    link systemd-portabled and its helpers to libsystemd-        
+                                                                                                   shared.so                                                    
   link-systemctl-shared          true                             [true, false]                    link systemctl against libsystemd-shared.so                  
   link-timesyncd-shared          true                             [true, false]                    link systemd-timesyncd and its helpers to libsystemd-        
                                                                                                    shared.so                                                    
@@ -277,6 +275,7 @@ Main project options:
   pam                            auto                             [auto, true, false]              PAM support                                                  
   pamconfdir                                                                                       directory for PAM configuration ["no" disables]              
   pamlibdir                                                                                        directory for PAM modules                                    
+  passwdqc                       auto                             [auto, true, false]              libpasswdqc support                                          
   pcre2                          auto                             [auto, true, false]              regexp matching support using pcre2                          
   pkgconfigdatadir                                                                                 directory for arch-independent pkg-config files              
   pkgconfiglibdir                                                                                  directory for standard pkg-config files                      
@@ -361,7 +360,6 @@ Main project options:
   users-gid                      0                                                                 soft-static allocation for the "users" group                 
   utmp                           true                             [true, false]                    support for utmp/wtmp log handling                           
   utmp-gid                       0                                                                 soft-static allocation for the "utmp" group                  
-  valgrind                       false                            [true, false]                    do extra operations to avoid valgrind warnings               
   vconsole                       true                             [true, false]                    support for vconsole configuration                           
   version-tag                                                                                      override the git version string                              
   video-gid                      0                                                                 soft-static allocation for the "video" group                 

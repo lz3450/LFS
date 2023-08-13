@@ -4,15 +4,16 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=glibc
-pkgver=2.37
-pkgrel=6
+pkgver=2.38.3
+pkgrel=4
 epoch=
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
 license=('KZL')
 depends=(filesystem linux-api-headers tzdata)
-options=(staticlibs !lto)
-source=(git+https://sourceware.org/git/glibc.git#tag=$pkgname-$pkgver
+options=(staticlibs)
+source=(git+https://sourceware.org/git/glibc.git#branch=release/${pkgver%.*}/master
+        # git+https://sourceware.org/git/glibc.git#tag=$pkgname-$pkgver
         ld.so.conf
         locale-gen
         locale.gen)
@@ -25,6 +26,12 @@ sha256sums=('SKIP'
             'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
             '436293c91051efcf712a71ee27e758387ddc82996ad23079d5ab30c0947963b9'
             '949d9660b9ecef93776aebde70ffff161fa58c245636c21d80f3beaa919391ca')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/glibc-//;s/-g.*//;s/-/./'
+}
 
 prepare() {
   cd $pkgname
@@ -48,21 +55,18 @@ sysconfdir = /etc' > build/configparms
 build() {
   cd $pkgname/build
 
-  CFLAGS="${CFLAGS/-Wp,-D_FORTIFY_SOURCE=2/}"
-
   ../configure \
     --prefix=/usr \
     --libdir=/usr/lib \
     --with-headers=/usr/include \
-    --enable-kernel=5.15 \
-    --with-nonshared-cflags="-Wp,-D_FORTIFY_SOURCE=2" \
+    --enable-kernel=6.1 \
     --enable-cet \
     --disable-profile \
     --disable-timezone-tools \
     --enable-stack-protector=strong \
     --enable-bind-now \
     --disable-werror \
-    --disable-crypt \
+    --enable-fortify-source \
     --with-pkgversion="KZL $pkgver-$pkgrel"
 
   make

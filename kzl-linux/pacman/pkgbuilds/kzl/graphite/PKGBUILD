@@ -2,7 +2,7 @@
 
 pkgname=graphite
 pkgver=1.3.14.96
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="A system that can be used to create “smart fonts” capable of displaying writing systems with various complex behaviors"
 arch=('x86_64')

@@ -2,7 +2,7 @@
 
 pkgname=fontconfig
 pkgver=2.14.2
-pkgrel=5
+pkgrel=6
 epoch=
 pkgdesc="A library for configuring and customizing font access"
 arch=('x86_64')

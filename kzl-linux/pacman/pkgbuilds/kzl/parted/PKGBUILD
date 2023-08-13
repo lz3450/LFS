@@ -2,7 +2,7 @@
 
 pkgname=parted
 pkgver=3.6
-pkgrel=5
+pkgrel=7
 epoch=
 pkgdesc="A program for creating, destroying, resizing, checking and copying partitions"
 arch=('x86_64')

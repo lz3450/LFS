@@ -2,8 +2,8 @@
 
 pkgbase=lvm2
 pkgname=(lvm2 device-mapper)
-pkgver=2.03.21
-pkgrel=5
+pkgver=2.03.22
+pkgrel=1
 epoch=
 arch=('x86_64')
 url="https://sourceware.org/lvm2/"

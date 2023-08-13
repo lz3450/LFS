@@ -1,4 +1,4 @@
--- The C compiler identification is GNU 12.3.0
+-- The C compiler identification is GNU 13.2.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
