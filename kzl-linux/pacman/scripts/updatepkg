@@ -127,7 +127,7 @@ fi
 if [ $cleanbuild -gt 0 ]; then
     makepkg -Co || error "\`makepkg -Co\` error" 3
 else
-    makepkg -o || error "\`makepkg -Co\` error" 3
+    makepkg -o || error "\`makepkg -o\` error" 3
 fi
 # run post_update
 info "running post_update()..."

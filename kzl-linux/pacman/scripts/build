@@ -189,7 +189,6 @@ kzl_stage2_pkgs=(
     lz4
     kexec-tools
     nettle gnutls libmicrohttpd
-    gnu-efi
     gperf
     rpcsvc-proto quota
     systemd
@@ -319,6 +318,11 @@ kzl_stage3_pkgs=(
     rsync
 
     ################
+    # tmux
+    ################
+    libevent tmux
+
+    ################
     # texlive
     ################
     libpng
@@ -334,11 +338,6 @@ kzl_stage3_pkgs=(
     gd
     zziplib
     texlive
-
-    ################
-    # tmux
-    ################
-    # libevent tmux
 
     ################
     # node
@@ -359,8 +358,6 @@ kzl_stage3_pkgs=(
     ################
     # other utils
     ################
-    # libmd dpkg
-    # debootstrap
     # tree
     # minicom
     # dfu-util
