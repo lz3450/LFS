@@ -1,8 +1,1 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.kernel.org | grep -A 1 "<td>longterm:</td>" | grep -Po '6\.1\.\d+')
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    cp build/.config "$PKGBUILDDIR"/config
-    cd "$PKGBUILDDIR"
-    updpkgsums
-}
+../../../../../kzl-linux/pacman/pkgbuilds/kzl/linux/PKGUPDATE

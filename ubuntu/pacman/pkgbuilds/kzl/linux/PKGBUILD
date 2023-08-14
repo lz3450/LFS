@@ -2,7 +2,7 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=6.1.40
+pkgver=6.1.45
 pkgrel=1
 epoch=
 pkgdesc="LTS Linux Kernel"
@@ -13,20 +13,24 @@ options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            'f4293a35c2b2bb9ab8609712d65f1211e59a2bf8daf01f131fd28a7bf2fd5da4')
+            '217ba55a2ee6493e266fec6084b89a7382bf4d9a758248c557403a6e6e6d32b1')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
 export KBUILD_BUILD_TIMESTAMP="$(date -u '+%Y/%m/%d %T %z')"
 
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed -e 's/^v//'
+}
+
 prepare() {
   cd $pkgbase
 
-  mkdir build
+  mkdir -p build
 
   cp "$srcdir"/config build/.config
-
-  make O=build nconfig
 }
 
 build() {
@@ -42,11 +46,12 @@ package_linux() {
   local image_name=$(make O=build -s image_name)
   local modulesdir="/usr/lib/modules/$kernelrelease"
 
-  make INSTALL_MOD_PATH="$pkgdir/usr" O=build modules_install
+  make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 O=build modules_install
 
   install -d -m 755 $pkgdir/boot/efi/
-  make INSTALL_PATH="$pkgdir/boot" O=build install
-  cp "$pkgdir"/boot/vmlinuz-$kernelrelease "$pkgdir"/boot/efi/vmlinuz-KZL
+  install -Dm755 build/$image_name "$pkgdir/$modulesdir"/vmlinuz-KZL
+  install -Dm755 build/$image_name "$pkgdir"/boot/vmlinuz-KZL
+  install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-KZL
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
   ln -sf /usr/src/linux-headers-$kernelrelease "$pkgdir"/usr/lib/modules/$kernelrelease/source
@@ -59,5 +64,19 @@ package_linux-headers() {
   local kernelrelease=$(make O=build -s kernelrelease)
 
   install -d -m 0755 "$pkgdir"/usr/src/
-  cp -a "$srcdir/$pkgbase" "$pkgdir"/usr/src/linux-headers-$kernelrelease
+  rsync -a \
+    --exclude='*.o' \
+    --exclude='*.ko' \
+    --exclude='*.a' \
+    --exclude='*.o.cmd' \
+    --exclude='*.o.d' \
+    --exclude='*.so.dbg' \
+    --exclude='.tmp_vmlinux.btf' \
+    --exclude='.git*' \
+    --exclude='.clang-format' \
+    --exclude='.cocciconfig' \
+    --exclude='.get_maintainer.ignore' \
+    --exclude='.mailmap' \
+    --exclude='.rustfmt.toml' \
+    "$srcdir/$pkgbase"/ "$pkgdir"/usr/src/linux-headers-$kernelrelease
 }
