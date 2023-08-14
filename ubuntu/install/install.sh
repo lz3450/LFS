@@ -67,4 +67,4 @@ else
 fi
 nano /mnt/etc/fstab
 
-LANG=C.UTF-8 PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin chroot /mnt /bin/bash
+LANG=C.UTF-8 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin chroot /mnt /bin/bash

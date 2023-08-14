@@ -19,7 +19,7 @@ tmpdir=""
 img_file="/tmp/tegra.img"
 package_list_file="${script_dir}/package_list.txt"
 initialize_script_file="${script_dir}/initialize.sh"
-chroot_path="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 usage() {
     if [ -n "${1}" ]; then
