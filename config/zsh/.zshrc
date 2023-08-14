@@ -150,7 +150,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     "tonotdo"
     "trapd00r"
     "wedisagree"
-    "wezm+"
+    # "wezm+"
     "wezm"
     "wuffers"
     # "xiong-chiamiov-plus"
