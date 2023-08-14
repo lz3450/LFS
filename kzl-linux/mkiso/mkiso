@@ -47,7 +47,7 @@ rootfs_archive_name="kzllinux_rootfs-$(date +%Y%m%d).tar.gz"
 isofs_dir="${work_dir}"/iso
 install_dir="LiveOS"
 iso_name="kzllinux"
-iso_label="KZLLINUX-$(date +%Y%m%d)"
+iso_label="LIVEOS"
 iso_publisher="KZL Linux <https://github.com/lz3450/LFS>"
 iso_application="KZL Linux Live/Rescue CD"
 iso_version="$(date +%Y%m%d)"
@@ -83,6 +83,10 @@ error() {
 
 make_iso_image() {
     info "Creating ISO image..."
+    mkdir -p "${isofs_dir}"/EFI/BOOT
+    cp "${pacstrap_dir}"/usr/lib/systemd/boot/efi/systemd-bootx64.efi "${isofs_dir}"/EFI/BOOT/BOOTx64.EFI
+    mcopy -i "${work_dir}/efiboot.img" ::/vmlinuz "${isofs_dir}"
+    mcopy -i "${work_dir}/efiboot.img" ::/initramfs.img "${isofs_dir}"
     xorriso \
         -as mkisofs \
         -iso-level 3 \
@@ -99,6 +103,7 @@ make_iso_image() {
         -appended_part_as_gpt \
         -output "${out_dir}/${iso_image_name}" \
         "${isofs_dir}/" &> "${log_dir}"/xorriso.log
+    chown $SUDO_UID:$SUDO_GID "${out_dir}/${iso_image_name}"
     info "Done!"
 }
 
@@ -111,21 +116,22 @@ make_rootfs_squashfs() {
     # info "Done!"
 
     mkdir "${pacstrap_dir}"/home/.repository
-    printf "%s\t\t%s\t\t%s\t%s\t\t%s %s\n" "LABEL=REPO" "/home/.repository" "f2fs" "default" "0" "2" >> "${pacstrap_dir}"/etc/fstab
+    printf "#%s\t\t%s\t\t%s\t%s\t\t%s %s\n" "LABEL=REPO" "/home/.repository" "f2fs" "default" "0" "2" >> "${pacstrap_dir}"/etc/fstab
 
     # Create a squashfs image and place it in the ISO 9660 file system.
     install -dm0755 -- "${isofs_dir}/${install_dir}"
     info "Creating SquashFS image, this may take some time..."
-    mksquashfs "${pacstrap_dir}" "${image_path}" -noappend -comp xz -b 1M -Xbcj x86 -Xdict-size 1M &> "${log_dir}"/mksquashfs.log
+    mksquashfs "${pacstrap_dir}" "${image_path}" -noappend -comp xz -b 1M -Xbcj x86 -Xdict-size 1M
     info "Done!"
 }
 
 make_rootfs_archive() {
     info "Creating rootfs archive..."
-    tar -czvf "${rootfs_archive_name}" \
+    tar -czvf "${out_dir}/${rootfs_archive_name}" \
         -C "${pacstrap_dir}" \
         . \
         &> "${log_dir}"/tar.log
+    chown $SUDO_UID:$SUDO_GID "${out_dir}/${rootfs_archive_name}"
     info "Done!"
 }
 
@@ -168,24 +174,26 @@ cleanup_pacstrap_dir() {
 
 make_efibootimg() {
     info "Setting up systemd-boot for UEFI booting..."
-    # Calculate the required FAT image size in bytes
-    imgsize=$(du -bc \
-        "${pacstrap_dir}/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
-        "${script_dir}/efiboot/loader.conf" \
-        "${script_dir}/efiboot/kzl-linux.conf" \
-        "${pacstrap_dir}/boot/vmlinuz" \
-        "${pacstrap_dir}/boot/initramfs.img" \
-        2>/dev/null | awk 'END { print $1 }')
-    info "Required FAT image size ${imgsize} bytes"
 
+    # Calculate the required FAT image size in bytes
+    # local imgsize=$(du -bc \
+    #     "${pacstrap_dir}/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
+    #     "${script_dir}/efiboot/loader.conf" \
+    #     "${script_dir}/efiboot/kzl-linux.conf" \
+    #     "${pacstrap_dir}/boot/vmlinuz" \
+    #     "${pacstrap_dir}/boot/initramfs.img" \
+    #     2>/dev/null | awk 'END { print $1 }')
+    # info "Required FAT image size ${imgsize} bytes"
     # Convert from bytes to KiB and round up to the next full MiB with an additional MiB for reserved sectors.
-    imgsize="$(awk 'function ceil(x){return int(x)+(x>int(x))} function byte_to_kib(x){return x/1024} function mib_to_kib(x){return x*1024} END {print mib_to_kib(ceil((byte_to_kib($1)+1024)/1024))}' \
-        <<< "${imgsize}")"
-    info "Required FAT image size ${imgsize} KiB"
+    # local imgsize="$(awk 'function ceil(x){return int(x)+(x>int(x))} function byte_to_kib(x){return x/1024} function mib_to_kib(x){return x*1024} END {print mib_to_kib(ceil((byte_to_kib($1)+1024)/1024))}' \
+    #     <<< "${imgsize}")"
+    # info "Required FAT image size ${imgsize} KiB"
+
+    local imgsize=65536
 
     rm -f -- "${work_dir}"/efiboot.img
     info "Creating FAT image of size: ${imgsize} KiB..."
-    mkfs.fat -F 32 -C -n ISO_EFI "${work_dir}"/efiboot.img "${imgsize}" &>/dev/null
+    mkfs.fat -C -F 32 -n "ISO_EFI" "${work_dir}"/efiboot.img "${imgsize}" &>/dev/null
 
     # Create the default/fallback boot path in which a boot loaders will be placed later.
     mmd -i "${work_dir}"/efiboot.img ::/EFI ::/EFI/BOOT
@@ -223,7 +231,6 @@ make_initramfs() {
         --verbose \
         --no-hostonly \
         --zstd \
-        --keep \
         "${pacstrap_dir}/boot/initramfs.img" &> "${log_dir}"/dracut.log
     info "Done!"
 }
@@ -231,8 +238,13 @@ make_initramfs() {
 install_pkgs() {
     local _pkg_list=("$@")
 
+    local _log="${log_dir}"/pacstrap-archive.log
+    if [ -f "${_log}" ]; then
+        _log="${log_dir}"/pacstrap-iso.log
+    fi
+
     info "Installing packages \"${_pkg_list[*]}\" to \"${pacstrap_dir}/\"..."
-    env -u TMPDIR pacstrap -c -G -M -- "${pacstrap_dir}" "${_pkg_list[@]}" &> "${log_dir}"/pacstrap.log
+    env -u TMPDIR pacstrap -c -G -M -- "${pacstrap_dir}" "${_pkg_list[@]}" &> "${_log}"
     info "Done!"
 
     info "Creating a list of installed packages on live-enviroment..."
@@ -251,9 +263,9 @@ make_rootfs() {
     printf '%s\n' "$(date +%Y%m%d)" > "${isofs_dir}/build_date"
 
     # Copy custom root file system files.
-    if [[ -d "${script_dir}/rootfs" ]]; then
+    if [ -d "${script_dir}/rootfs" ]; then
         info "Update rootfs..."
-        ./update-rootfs &> "${log_dir}"/rootfs_update.log
+        sudo -u $SUDO_USER ./update-rootfs &> "${log_dir}"/rootfs_update.log
         info "Done!"
         info "Copying custom rootfs files..."
         cp -af --no-preserve=ownership,mode -- "${script_dir}"/rootfs/. "${pacstrap_dir}"
