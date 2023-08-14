@@ -11,7 +11,7 @@ bsp_number=""
 bsp_name=""
 bsp_version="32.7.1"
 l4t_dir="${ROOTDIR}/${bsp_name}/Linux_for_Tegra"
-chroot_path="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 usage() {
     errno=0

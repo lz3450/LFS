@@ -2,7 +2,7 @@
 
 pkgname=gnupg
 pkgver=2.4.3
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Complete and free implementation of the OpenPGP standard"
 arch=('x86_64')
@@ -13,7 +13,6 @@ depends=(gnutls libassuan libgcrypt libgpg-error libksba npth openldap pinentry 
 # optdepends=("libusb-compat: scdaemon"
 #             "pcsclite: scdaemon")
 checkdepends=(openssh)
-install=$pkgname.install
 source=(git://git.gnupg.org/gnupg.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 

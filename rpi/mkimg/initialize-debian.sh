@@ -59,7 +59,7 @@ echo -e '3450\n3450' | passwd kzl
 # environment variables
 tee /home/kzl/.zshenv << EOF 
 typeset -U PATH path
-path=("\$HOME/.local/bin" "\$path[@]" "/usr/local/sbin" "/usr/sbin" "/sbin")
+path=("\$HOME/.local/bin" "\$path[@]")
 export PATH
 EOF
 chown kzl:kzl /home/kzl/.zshenv

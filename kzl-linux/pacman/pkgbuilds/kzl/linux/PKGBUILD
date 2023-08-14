@@ -14,7 +14,7 @@ options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            '68d6e4612c31d98bd5b3b4909fa51f33c0da789c0bd7c81fe4e3dd2ce55d52e3')
+            'c99886352a30d5498ce0b0c99f35d16b8c56e18961c0d43bd9190ecf386f7cbb')
 
 export KBUILD_BUILD_HOST=kzl-linux
 export KBUILD_BUILD_USER=kzl
