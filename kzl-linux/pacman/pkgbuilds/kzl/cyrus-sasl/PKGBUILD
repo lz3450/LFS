@@ -2,13 +2,15 @@
 
 pkgname=cyrus-sasl
 pkgver=2.1.28
-pkgrel=7
+pkgrel=8
 epoch=
 pkgdesc="An implementation of Cyrus Simple Authentication Service Layer (SASL)"
 arch=('x86_64')
 url="http://www.cyrusimap.org/sasl/"
 license=('KZL')
-depends=(gdbm krb5 libxcrypt pam)
+depends=(gdbm libxcrypt)
+makedepends=(krb5 pam)
+# makedepends=(krb5 openldap pam)
 source=(git+https://github.com/cyrusimap/cyrus-sasl.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 

@@ -28,6 +28,7 @@ tar:
   - acl:
       - attr
   - glibc
+  - texinfo (make)
 gcc:
   - binutils:
       - jansson
@@ -72,7 +73,8 @@ findutils:
 gettext:
   - acl
   - glibc
-  - libunistring
+  - libunistring:
+      - texinfo (make)
   - libxml2:
       - icu
 openssl:
@@ -90,11 +92,7 @@ pam:
           - libedit
           - lmdb
           - openldap:
-              - cyrus-sasl:
-                  - gdbm
-                  - krb5
-                  - libxcrypt
-                  - pam
+              - cyrus-sasl (make)
       - libcap-ng:
           - swig (make)
       - swig (make)
@@ -146,6 +144,7 @@ util-linux:
   - cryptsetup:
       - argon2
       - device-mapper:
+          - libaio
           - libedit
           - device-mapper
           - thin-provisioning-tools
@@ -197,7 +196,6 @@ systemd:
   - zstd
   - curl (make)
   - kexec-tools (make)
-  - gnu-efi (make)
   - gnutls (make)
   - gperf (make)
   - libmicrohttpd (make)
