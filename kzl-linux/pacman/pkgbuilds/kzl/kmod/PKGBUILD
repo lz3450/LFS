@@ -1,27 +1,29 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=kmod
-pkgver=30
-pkgrel=15
+pkgver=30.32
+pkgrel=1
 epoch=
 pkgdesc="Linux kernel module management tools and library"
 arch=('x86_64')
 url="https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git"
 license=('KZL')
-source=(git+$url#tag=v$pkgver
-        depmod.script
-        depmod.hook
+source=(git+$url
         depmod-search.conf)
 sha256sums=('SKIP'
-            '31699f1b8b33f1bd61111328375c10d75c587e49c4fee9b7778e664a9354e4b0'
-            '98b99f05eb6898690da96a52d82f53235baaafeeeb97d2fa5fbbc0b86eaa927e'
             '1a92bfeae870f61ce814577e69d2a147a9c0caf6aed1131243e4179241fcc4a8')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/^v//;s/-g.*//;s/-/./g'
+}
 
 prepare() {
   cd $pkgname
 
+  # autogen.sh
   touch libkmod/docs/gtk-doc.make
-
   autoreconf --force --install --symlink
 }
 
@@ -45,12 +47,11 @@ package() {
 
   make DESTDIR="$pkgdir" install
 
-  install -dm755 "$pkgdir"/{etc,usr/lib}/{depmod,modprobe}.d
-  for tool in lsmod rmmod insmod modinfo modprobe depmod; do
-    ln -s kmod "$pkgdir"/usr/bin/$tool
+  install -d -m 755 "$pkgdir"/usr/sbin
+  for tool in modprobe modinfo insmod rmmod depmod lsmod; do
+    ln -s ../bin/kmod "$pkgdir"/usr/sbin/$tool
   done
-  install -Dm644 "$srcdir"/depmod-search.conf "$pkgdir"/usr/lib/depmod.d/search.conf
 
-  install -Dm644 "$srcdir"/depmod.hook "$pkgdir"/usr/share/libalpm/hooks/60-depmod.hook
-  install -Dm755 "$srcdir"/depmod.script "$pkgdir"/usr/share/libalpm/scripts/depmod
+  install -d -m 755 "$pkgdir"/{etc,usr/lib}/{depmod,modprobe}.d
+  install -Dm644 "$srcdir"/depmod-search.conf "$pkgdir"/usr/lib/depmod.d/search.conf
 }
