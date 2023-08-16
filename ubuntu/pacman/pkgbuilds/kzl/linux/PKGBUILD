@@ -13,7 +13,7 @@ options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            '217ba55a2ee6493e266fec6084b89a7382bf4d9a758248c557403a6e6e6d32b1')
+            '066fec768bc75030041bf26d09e65491a6b018f0fb838fb4579f84ff92bdac75')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
