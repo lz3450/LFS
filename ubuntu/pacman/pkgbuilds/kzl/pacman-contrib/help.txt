@@ -1,4 +1,4 @@
-`configure' configures pacman-contrib 1.9.0 to adapt to many kinds of systems.
+`configure' configures pacman-contrib 1.9.1 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
