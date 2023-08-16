@@ -2,7 +2,7 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=6.1.45
+pkgver=6.1.46
 pkgrel=1
 epoch=
 pkgdesc="LTS Linux Kernel"
@@ -14,7 +14,7 @@ options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            '68a07ca9395f30c8aff524733ffd1ec0109d8da41537ec1dbb33ed19bb8ff19b')
+            '3df325f8b328c02ccc1b1032de9be4d15e95e3548e6bab5731306c3714b65b60')
 
 export KBUILD_BUILD_HOST=kzl-linux
 export KBUILD_BUILD_USER=kzl
@@ -69,7 +69,7 @@ package_linux-headers() {
   install -d -m 0755 "$pkgdir"/usr/src/
   rsync -a \
     --exclude='*.o' \
-    --exclude='*.ko' \
+    --exclude='*.ko*' \
     --exclude='*.a' \
     --exclude='*.o.cmd' \
     --exclude='*.o.d' \
