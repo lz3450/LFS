@@ -58,9 +58,10 @@ ninja -C build
 meson test -C build || :
 sudo meson install -C build
 
-sudo sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-linux-gnu/' \
+sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-pc-linux-gnu/' \
+    -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
     -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2"' \
-    -e '/^#CXXFLAGS=/c\CXXFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS"' \
+    -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"' \
     -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \
     -e '/^#RUSTFLAGS=/c\RUSTFLAGS="-C opt-level=2"' \
     -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
@@ -74,7 +75,8 @@ sudo sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-linux-gnu/' \
     -e '/^#SRCPKGDEST=/c\SRCPKGDEST="$HOME/makepkg/srcpackages"' \
     -e '/^#LOGDEST=/c\LOGDEST="$HOME/makepkg/makepkglogs"' \
     -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
-    -i /usr/local/etc/makepkg.conf
+    -e '/^OPTIONS=/s/libtool/!libtool/' \
+    -i "$pkgdir"/usr/local/etc/makepkg.conf
 
 sudo tee -a /usr/local/etc/pacman.conf << EOF
 
@@ -82,5 +84,3 @@ sudo tee -a /usr/local/etc/pacman.conf << EOF
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
 EOF
-
-sudo ldconfig
