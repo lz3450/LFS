@@ -93,7 +93,7 @@ Usage: update_repo [ -c | -R ] [ -t repo ]
 set -e
 set -u
 set -o pipefail
-set -x
+# set -x
 
 umask 0022
 
