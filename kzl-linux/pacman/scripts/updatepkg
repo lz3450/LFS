@@ -1,4 +1,7 @@
 #!/usr/bin/bash
+#
+# updatepkg
+#
 
 script_name="$(basename "${0}")"
 

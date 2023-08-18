@@ -3,16 +3,15 @@
 # updaterepo
 #
 
-VERSION=1.1
 REPODIR=/home/.repository
 PACKAGEDIR=~/makepkg/packages
 ARCHIVEDIR=~/makepkg/archive
 EXTENSION="zst"
 
 # options
-REPLACE=0
-CLEAR=0
-TARGET=
+replace=0
+clear=0
+target=""
 
 # functions
 update() {
@@ -25,18 +24,31 @@ update() {
         mkdir $ARCHIVEDIR
     fi
 
-    #           pkgname-  epoch:      pkgver                 -pkgrel-   arch                 .pkg.tar.zst
+    #           pkgname-  epoch:      pkgver                    -pkgrel-  arch                  .pkg.tar.zst
     pkgname_regex="$pkg-\([0-9]+:\)?\([0-9a-zA-Z]+\(\.\|\+\)?\)+-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.$EXTENSION"
 
-    pkgname=$(find "$HOME/makepkg/packages" -type f -regex "$HOME/makepkg/packages/$pkgname_regex" -printf "%T@ %f\n" | sort -n | cut -d ' ' -f 2- | tail -n 1)
-    if [ -f $PACKAGEDIR/$pkgname ]; then
-        sudo rm -f $REPODIR/$repo/$pkgname
-        sudo cp $PACKAGEDIR/$pkgname $REPODIR/$repo
-        sudo mv $PACKAGEDIR/$pkgname $ARCHIVEDIR
-        sudo repo-add -R $REPODIR/$repo/$repo.db.tar.$EXTENSION $REPODIR/$repo/$pkgname
+    # `-t` option removes the trailing newline from each line read.
+    readarray -t pkgnames < <(find "$HOME/makepkg/packages" -type f -regex "$HOME/makepkg/packages/$pkgname_regex" -printf "%T@ %f\n" | sort -n | cut -d ' ' -f 2-)
+
+    if [ ${#pkgnames[@]} -gt 1 ]; then
+        printf "Multiple packages with the same name \"%s\" are found.\n" "$pkg"
+        exit 3
+    elif [ ${#pkgnames[@]} -le 0 ]; then
+        return 0
+    else
+        pkgname=${pkgname[0]}
     fi
 
-    if [ $REPLACE -gt 0 ] ; then
+    # remove existing package in the repo with the same name and version
+    if [ -f $REPODIR/$repo/$pkgname ]; then
+        sudo rm -f $REPODIR/$repo/$pkgname
+    fi
+
+    sudo cp $PACKAGEDIR/$pkgname $REPODIR/$repo
+    mv $PACKAGEDIR/$pkgname $ARCHIVEDIR
+    sudo repo-add -R $REPODIR/$repo/$repo.db.tar.$EXTENSION $REPODIR/$repo/$pkgname
+
+    if [ $replace -gt 0 ] ; then
         pkgname=$(find $REPODIR/$repo -type f -regex "$REPODIR/$repo/$pkgname_regex" -printf "%f\n")
         if [ -f $REPODIR/$repo/$pkgname ]; then
             sudo repo-add -R $REPODIR/$repo/$repo.db.tar.$EXTENSION $REPODIR/$repo/$pkgname
@@ -51,36 +63,38 @@ update_repo (kzl-linux) %s
 
 Usage: update_repo [ -c | -R ] [ -t repo ]
 
-    -c, --clear     clear the specified repository
     -h, --help      display this help message and exit
-    -R, --replace   replace old repo
     -t, --target    build target (kzl, rpi, tegra, ubuntu)
+    -R, --replace   replace the specified old repository
+    -c, --clear     clear the specified repository
 "
     echo "${_usage}"
 }
 
 ################################################################
 
-set -e -u -o pipefail
+set -e
+set -u
+set -o pipefail
 # set -x
 
 umask 0022
 
 while [ $# -gt 0 ]; do
     case "$1" in
-        -c|--clear)
-            CLEAR=1
-            ;; 
         -h|--help)
             usage
             exit 0
             ;;
-        -R|--replace)
-            REPLACE=1
-            ;;
         -t|--target)
             shift
-            TARGET="$1"
+            target="$1"
+            ;;
+        -R|--replace)
+            replace=1
+            ;;
+        -c|--clear)
+            clear=1
             ;;
         *)
             printf "Unknown option \"$1\"\n";
@@ -90,25 +104,26 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-case $TARGET in
+case $target in
     kzl)
-        pkgs=$(ls $ROOTDIR/pkgbuilds/$TARGET)
+        readarray -t pkgs < <(find $ROOTDIR/pkgbuilds/$target -maxdepth 1 -type d)
         EXTENSION="zst"
         ;;
     # unknown repo
     *)
-        printf "Unknown target repo \"%s\".\n" "$TARGET"
+        printf "Unknown target repo \"%s\".\n" "$target"
         exit 2
         ;;
 esac
 
-if [ $CLEAR -gt 0 ]; then
+# clear
+if [ $clear -gt 0 ]; then
     while true; do
-        read -p "Do you wish to clear the repository \"$TARGET\"? " yn
+        read -p "Do you want to clear the repository \"$target\"? " yn
         case $yn in
             [Yy]*)
-                sudo rm -vrf $REPODIR/$TARGET
-                echo "Repository \"$TARGET\" has been removed."
+                sudo rm -vrf $REPODIR/$target
+                echo "Repository \"$target\" has been removed."
                 exit 0
                 ;;
             [Nn]*)
@@ -121,33 +136,36 @@ if [ $CLEAR -gt 0 ]; then
     done
 fi
 
-if [ ! -d $REPODIR/$TARGET ]; then
-    sudo mkdir -p $REPODIR/$TARGET
+if [ ! -d "$REPODIR/$target" ]; then
+    sudo mkdir -p "$REPODIR/$target"
 fi
 
-if [ ! -f $REPODIR/$TARGET ]; then
-    sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION
+if [ ! -f "$REPODIR/$target/$target.db.tar.$EXTENSION" ]; then
+    sudo repo-add "$REPODIR/$target/$target.db.tar.$EXTENSION"
 fi
 
-if [ $REPLACE -gt 0 ]; then
-    sudo find $REPODIR/$TARGET -name "$TARGET.*" -delete
+if [ $replace -gt 0 ]; then
+    sudo find "$REPODIR/$target" -name "$target.db.tar.$EXTENSION" -delete
 fi
 
-if [ ! -f $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION ]; then
-    sudo repo-add $REPODIR/$TARGET/$TARGET.db.tar.$EXTENSION
+if [ ! -f "$REPODIR/$target/$target.db.tar.$EXTENSION" ]; then
+    sudo repo-add "$REPODIR/$target/$target.db.tar.$EXTENSION"
 fi
 
 ### special cases
 for pkgbase in ${pkgs[@]}; do
-    update $TARGET $pkgbase
+    update $target $pkgbase
     case $pkgbase in
-        zlib)       update $TARGET minizip ;;
-        audit)      update $TARGET python-audit ;;
-        lvm2)       update $TARGET device-mapper ;;
-        linux)      update $TARGET linux-headers ;;
-        lapack)     update $TARGET blas
-                    update $TARGET cblas
-                    update $TARGET lapacke ;;
-        libc++)     update $TARGET "libc\+\+" ;;
+        zlib)       update $target minizip ;;
+        audit)      update $target python-audit ;;
+        lvm2)       update $target device-mapper ;;
+        linux)      update $target linux-headers ;;
+        lapack)     update $target blas
+                    update $target cblas
+                    update $target lapacke ;;
+        libc++)     update $target "libc\+\+" ;;
     esac
 done
+
+# 1: Unknown option
+# 2: Unknown target repo
