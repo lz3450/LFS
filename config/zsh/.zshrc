@@ -96,7 +96,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "macovsky-ruby"
     # "macovsky"
     "maran"
-    "mgutz"
+    # "mgutz"
     # "mh"
     "michelebologna"
     "mikeh"
