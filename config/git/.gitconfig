@@ -3,7 +3,5 @@
 	name = KZL
 [credential]
 	helper = cache --timeout=86400
-[pull]
-	rebase = false
 [init]
 	defaultBranch = main
