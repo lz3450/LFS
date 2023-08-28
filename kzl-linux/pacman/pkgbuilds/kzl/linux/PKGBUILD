@@ -2,7 +2,7 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=6.1.46
+pkgver=6.1.49
 pkgrel=1
 epoch=
 pkgdesc="LTS Linux Kernel"
