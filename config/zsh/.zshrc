@@ -122,7 +122,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     "re5et"
     # "refined"
     "rgm"
-    "risto"
+    # "risto"
     # "rixius"
     # "rkj-repos"
     # "rkj"
