@@ -6,6 +6,7 @@
 script_name="$(basename "${0}")"
 
 cleanbuild=1
+increase=0
 
 ################################################################
 
@@ -62,6 +63,9 @@ while [ $# -gt 0 ]; do
         ;;
     -n|--no-cleanbuild)
         cleanbuild=0
+        ;;
+    -i|--increase-pkgrel)
+        increase=1
         ;;
     *)
         usage
@@ -121,6 +125,11 @@ if [ $result -eq 1 ]; then
     cleanbuild=1
 elif [ $result -eq 0 ]; then
     info "PKGBUILD is up to date."
+    if [ $increase -gt 0 ]; then
+        info "increase pkgrel..."
+        new_pkgrel=$((current_pkgrel + 1))
+        sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" PKGBUILD
+    fi
 elif [ $result -eq -1 ]; then
     warning "Current version is newer."
 else
