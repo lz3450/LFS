@@ -2,7 +2,7 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=5.15.128
+pkgver=5.15.130
 pkgrel=1
 epoch=
 pkgdesc="LTS Linux Kernel"
