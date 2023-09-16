@@ -144,7 +144,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "suvash"
     "takashiyoshida"
     # "terminalparty"
-    "theunraveler"
+    # "theunraveler"
     "tjkirch_mod"
     "tjkirch"
     "tonotdo"
