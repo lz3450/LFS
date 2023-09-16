@@ -2,7 +2,7 @@
 
 pkgname=sudo
 pkgver=1.9.14p3
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('x86_64')
@@ -23,6 +23,7 @@ build() {
     --prefix=/usr \
     --libexecdir=/usr/libexec/sudo \
     --enable-tmpfiles.d \
+    --disable-sasl \
     --enable-openssl \
     --with-linux-audit \
     --with-sssd \

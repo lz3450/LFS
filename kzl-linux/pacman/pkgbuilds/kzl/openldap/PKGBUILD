@@ -2,13 +2,13 @@
 
 pkgname=openldap
 pkgver=2.6.6
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries"
 arch=('x86_64')
 url="https://www.openldap.org"
 license=('KZL')
-makedepends=(cyrus-sasl)
+depends=(cyrus-sasl)
 source=(git+https://git.openldap.org/openldap/openldap.git#tag=OPENLDAP_REL_ENG_${pkgver//./_})
 sha256sums=('SKIP')
 
