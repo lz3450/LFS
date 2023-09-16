@@ -12,13 +12,11 @@ Main commands (example: ./waf build -j4)
   install     : installs the targets on the system
   list        : lists the targets to execute
   pep8        : run pep8 validator
-  pydoctor    : build python apidocs
   reconfigure : reconfigure if config scripts have changed
   step        : executes tasks in a step-by-step fashion, for debugging
   test        : Run the test suite (see test options below)
   testonly    : run tests without doing a build first
   uninstall   : removes the targets installed
-  wafdocs     : build wafsamba apidocs
   wildcard_cmd: called on a unknown command
 
 Options:
@@ -141,9 +139,6 @@ Options:
             Disable lttng integration
   --with-gpfs=GPFS_HEADERS_DIR
             Directory under which gpfs headers are installed
-  --accel-aes=ACCEL_AES
-            Should we use accelerated AES crypto functions. Options are
-            intelaesni|none.
   --enable-infiniband
             Turn on infiniband support (default=no)
   --enable-pmda
@@ -186,6 +181,11 @@ Options:
             compiler)
   --without-relro
             Disable RELRO builds
+  --with-kernel-keyring
+            Enable kernely keyring support for credential storage (default if
+            keyutils libraries are available)
+  --without-kernel-keyring
+            Disable kernely keyring support for credential storage
   --with-json
             Build with JSON support (default=True). This requires the jansson
             development headers.
@@ -335,7 +335,7 @@ Options:
     --disable-rpath-private-install
             Disable use of rpath for private library path in installed files
     --nonshared-binary=NONSHARED_BINARIES
-            Disable use of shared libaries internal to samba for the listed binaries.
+            Disable use of shared libraries internal to samba for the listed binaries.
             
             The resulting binaries are 'statically linked' with regard to components provided by
             samba, but remain dynamically linked to (eg) libc.so and libgnutls.so
@@ -368,6 +368,8 @@ Options:
             Enable address sanitizer compile and linker flags
     --undefined-sanitizer
             Enable undefined behaviour sanitizer compile and linker flags
+    --memory-sanitizer
+            Enable memory behaviour sanitizer compile and linker flags
     --enable-libfuzzer
             Build fuzzing binaries (use ADDITIONAL_CFLAGS to specify compiler
             options for libFuzzer or use CC=honggfuzz/hfuzz-cc)
