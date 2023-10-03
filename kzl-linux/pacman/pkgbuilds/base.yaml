@@ -92,7 +92,11 @@ pam:
           - libedit
           - lmdb
           - openldap:
-              - cyrus-sasl (make)
+              - cyrus-sasl:
+                  - gdbm
+                  - libxcrypt
+                  - krb5 (make)
+                  - pam (make)
       - libcap-ng:
           - swig (make)
       - swig (make)
