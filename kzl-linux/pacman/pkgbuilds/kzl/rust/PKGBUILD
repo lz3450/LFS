@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rust
-pkgver=1.71.1
-pkgrel=5
+pkgver=1.73.0
+pkgrel=1
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')
@@ -13,7 +13,7 @@ makedepends=(libffi)
 optdepends=("gdb: rust-gdb script")
 source=(https://static.rust-lang.org/dist/rustc-$pkgver-src.tar.gz{,.asc})
 validpgpkeys=('108F66205EAEB0AAA8DD5E1C85AB96E6FA1BE5FE')
-sha256sums=('6fa90d50d1d529a75f6cc349784de57d7ec0ba2419b09bde7d335c25bd4e472e'
+sha256sums=('96d62e6d1f2d21df7ac8acb3b9882411f9e7c7036173f7f2ede9e1f1f6b1bb3a'
             'SKIP')
 
 prepare() {

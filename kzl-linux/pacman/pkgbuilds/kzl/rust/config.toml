@@ -2,7 +2,7 @@
 #
 # See `src/bootstrap/defaults` for more information.
 # Note that this has no default value (x.py uses the defaults in `config.example.toml`).
-profile = 'user'
+profile = 'dist'
 
 # Keeps track of the last version of `x.py` used.
 # If `changelog-seen` does not match the version that is currently running,
@@ -102,7 +102,7 @@ sanitizers = false
 # Arguments passed to the `./configure` script, used during distcheck. You
 # probably won't fill this in but rather it's filled in by the `./configure`
 # script. Useful for debugging.
-configure-args = ['--disable-debug', '--disable-docs', '--disable-compiler-docs', '--disable-optimize-tests', '--disable-llvm-static-stdcpp', '--enable-llvm-link-shared', '--enable-option-checking', '--enable-vendor', '--disable-sanitizers', '--prefix=/usr', '--llvm-root=/usr', '--llvm-config=/usr/bin/llvm-config', '--llvm-filecheck=/usr/bin/FileCheck', '--python=/usr/bin/python3', '--release-channel=stable', '--dist-compression-formats=gz', '--tools=cargo,clippy,rustfmt,analysis,src', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--set', 'target.x86_64-unknown-linux-gnu.linker=clang', '--set', 'target.x86_64-unknown-linux-gnu.cc=clang', '--set', 'target.x86_64-unknown-linux-gnu.cxx=clang++', '--set', 'target.x86_64-unknown-linux-gnu.ar=llvm-ar', '--set', 'target.x86_64-unknown-linux-gnu.ranlib=llvm-ranlib', '--release-description=KZL 2023/08/13 11:06:36 -0500']
+configure-args = ['--disable-debug', '--disable-docs', '--disable-compiler-docs', '--disable-optimize-tests', '--disable-llvm-static-stdcpp', '--enable-llvm-link-shared', '--enable-option-checking', '--enable-vendor', '--disable-sanitizers', '--prefix=/usr', '--llvm-root=/usr', '--llvm-config=/usr/bin/llvm-config', '--llvm-filecheck=/usr/bin/FileCheck', '--python=/usr/bin/python3', '--release-channel=stable', '--dist-compression-formats=gz', '--tools=cargo,clippy,rustfmt,analysis,src', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--set', 'target.x86_64-unknown-linux-gnu.linker=clang', '--set', 'target.x86_64-unknown-linux-gnu.cc=clang', '--set', 'target.x86_64-unknown-linux-gnu.cxx=clang++', '--set', 'target.x86_64-unknown-linux-gnu.ar=llvm-ar', '--set', 'target.x86_64-unknown-linux-gnu.ranlib=llvm-ranlib', '--release-description=KZL 2023/10/12 12:07:02 -0500']
 
 [install]
 
@@ -148,7 +148,7 @@ channel = 'stable'
 # upstream Rust you need to set this to "". However, note that if you are not
 # actually compatible -- for example if you've backported patches that change
 # behavior -- this may lead to miscompilations or other bugs.
-description = 'KZL 2023/08/13 11:06:36 -0500'
+description = 'KZL 2023/10/12 12:07:02 -0500'
 
 # Flag indicating whether tests are compiled with optimizations (the -O flag).
 optimize-tests = false

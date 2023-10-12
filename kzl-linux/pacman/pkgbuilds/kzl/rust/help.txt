@@ -15,7 +15,6 @@ Options
 	--enable-llvm-link-shared      prefer shared linking to LLVM (llvm-config --link-shared)
 	--enable-rpath                 build rpaths into rustc itself
 	--enable-codegen-tests         run the tests/codegen tests
-	--enable-option-checking       complain about unrecognized options in this configure script
 	--enable-ninja                 build LLVM using the Ninja generator (for MSVC, requires building in the correct environment)
 	--enable-locked-deps           force Cargo.lock to be up to date
 	--enable-vendor                enable usage of vendored Rust crates
@@ -92,6 +91,8 @@ Options
 	--build=VAL                    GNUs ./configure syntax LLVM build triple
 	--host=VAL                     List of GNUs ./configure syntax LLVM host triples
 	--target=VAL                   List of GNUs ./configure syntax LLVM target triples
+	--enable-option-checking       complain about unrecognized options in this configure script
+	--enable-verbose-configure     don't truncate options when printing them in this configure script
 	--set=VAL                      set arbitrary key/value pairs in TOML configuration
 
 This configure script is a thin configuration shim over the true
