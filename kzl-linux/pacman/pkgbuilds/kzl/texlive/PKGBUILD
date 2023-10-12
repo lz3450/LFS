@@ -40,7 +40,7 @@ build() {
 
   # https://tug.org/texlive/doc/tlbuild.html
 
-  ../configure \
+  ./../configure \
     --prefix="/opt/TeXLive" \
     --datarootdir="\${prefix}" \
     --infodir="\${prefix}/texmf-dist/doc/info" \
@@ -55,6 +55,7 @@ build() {
     --enable-pdftex \
     --enable-pdftex-synctex \
     --enable-synctex \
+    --enable-dvipng \
     --enable-texlive \
     --enable-linked-scripts \
     --enable-shared \
