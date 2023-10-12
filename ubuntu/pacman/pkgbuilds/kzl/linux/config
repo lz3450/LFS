@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86 5.15.130 Kernel Configuration
+# Linux/x86 5.15.133 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0"
 CONFIG_CC_IS_GCC=y
@@ -1186,8 +1186,6 @@ CONFIG_NET_CLS=y
 # CONFIG_NET_CLS_ROUTE4 is not set
 # CONFIG_NET_CLS_FW is not set
 # CONFIG_NET_CLS_U32 is not set
-# CONFIG_NET_CLS_RSVP is not set
-# CONFIG_NET_CLS_RSVP6 is not set
 # CONFIG_NET_CLS_FLOW is not set
 CONFIG_NET_CLS_CGROUP=y
 # CONFIG_NET_CLS_BPF is not set
@@ -4238,7 +4236,14 @@ CONFIG_JBD2=y
 CONFIG_FS_MBCACHE=y
 # CONFIG_REISERFS_FS is not set
 # CONFIG_JFS_FS is not set
-# CONFIG_XFS_FS is not set
+CONFIG_XFS_FS=y
+CONFIG_XFS_SUPPORT_V4=y
+CONFIG_XFS_QUOTA=y
+CONFIG_XFS_POSIX_ACL=y
+# CONFIG_XFS_RT is not set
+# CONFIG_XFS_ONLINE_SCRUB is not set
+# CONFIG_XFS_WARN is not set
+# CONFIG_XFS_DEBUG is not set
 # CONFIG_GFS2_FS is not set
 # CONFIG_BTRFS_FS is not set
 # CONFIG_NILFS2_FS is not set
@@ -4784,7 +4789,7 @@ CONFIG_CRC32_SLICEBY8=y
 # CONFIG_CRC64 is not set
 # CONFIG_CRC4 is not set
 # CONFIG_CRC7 is not set
-CONFIG_LIBCRC32C=m
+CONFIG_LIBCRC32C=y
 # CONFIG_CRC8 is not set
 CONFIG_XXHASH=y
 # CONFIG_RANDOM32_SELFTEST is not set
