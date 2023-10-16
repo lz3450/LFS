@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.11.5
-pkgrel=1
+pkgver=3.12.0
+pkgrel=2
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
 url="https://www.python.org/"
 license=('KZL')
-depends=(expat gdbm glibc libffi libnsl libxcrypt)
+depends=(expat gdbm glibc libedit libffi libnsl libxcrypt)
 makedepends=(sqlite)
 # makedepends=(sqlite tk)
 source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
@@ -35,6 +35,7 @@ build() {
     --with-system-libmpdec=no \
     --with-decimal-contextvar=yes \
     --with-dbmliborder=gdbm:ndbm \
+    --with-readline=editline \
     --with-ensurepip=no \
 
   make

@@ -1,4 +1,4 @@
-`configure' configures python 3.11 to adapt to many kinds of systems.
+`configure' configures python 3.12 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -82,6 +82,8 @@ Optional Features:
   --enable-pystats        enable internal statistics gathering (default is no)
   --enable-optimizations  enable expensive, stable optimizations (PGO, etc.)
                           (default is no)
+  --enable-bolt           enable usage of the llvm-bolt post-link optimizer
+                          (default is no)
   --enable-loadable-sqlite-extensions
                           support loadable extensions in the sqlite3 module,
                           see Doc/library/sqlite3.rst (default is no)
@@ -95,9 +97,9 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-build-python=python3.11
+  --with-build-python=python3.12
                           path to build python binary for cross compiling
-                          (default: _bootstrap_python or python3.11)
+                          (default: _bootstrap_python or python3.12)
   --with-pkg-config=[yes|no|check]
                           use pkg-config to detect build options (default is
                           check)
@@ -112,9 +114,6 @@ Optional Packages:
                           specify the name for the python framework on macOS
                           only valid when --enable-framework is set. see
                           Mac/README.rst (default is 'Python')
-  --with-cxx-main[=COMPILER]
-                          compile main() and link Python executable with C++
-                          compiler specified in COMPILER (default is $CXX)
   --with-emscripten-target=[browser|node]
                           Emscripten platform
   --with-suffix=SUFFIX    set executable suffix to SUFFIX (default is empty,
@@ -129,6 +128,10 @@ Optional Packages:
   --with-lto=[full|thin|no|yes]
                           enable Link-Time-Optimization in any build (default
                           is no)
+  --with-strict-overflow  if 'yes', add -fstrict-overflow to CFLAGS, else add
+                          -fno-strict-overflow (default is no)
+  --with-dsymutil         link debug information into final executable with
+                          dsymutil in macOS (default is no)
   --with-address-sanitizer
                           enable AddressSanitizer memory error detector,
                           'asan' (default is no)
@@ -141,14 +144,11 @@ Optional Packages:
                           select hash algorithm for use in Python/pyhash.c
                           (default is SipHash13)
   --with-tzpath=<list of absolute paths separated by pathsep>
-                           Select the default time zone search path for zoneinfo.TZPATH
-
+                          Select the default time zone search path for
+                          zoneinfo.TZPATH
   --with-libs='lib1 ...'  link against additional libs (default is no)
   --with-system-expat     build pyexpat module using an installed expat
                           library, see Doc/library/pyexpat.rst (default is no)
-  --with-system-ffi       build _ctypes module using an installed ffi library,
-                          see Doc/library/ctypes.rst (default is
-                          system-dependent)
   --with-system-libmpdec  build _decimal module using an installed libmpdec
                           library, see Doc/library/decimal.rst (default is no)
   --with-decimal-contextvar
@@ -175,8 +175,8 @@ Optional Packages:
   --with-wheel-pkg-dir=PATH
                           Directory of wheel packages used by ensurepip
                           (default: none)
-  --with(out)-readline[=editline]
-                          use Editline for backend or disable readline module
+  --with(out)-readline[=editline|readline|no]
+                          use libedit for backend or disable readline module
   --with-computed-gotos   enable computed gotos in evaluation loop (enabled by
                           default on supported compilers)
   --with-ensurepip[=install|upgrade|no]
@@ -194,9 +194,9 @@ Optional Packages:
                           leave OpenSSL's defaults untouched, STRING: use a
                           custom string, python and STRING also set TLS 1.2 as
                           minimum TLS version
-  --with-builtin-hashlib-hashes=md5,sha1,sha256,sha512,sha3,blake2
-                          builtin hash modules, md5, sha1, sha256, sha512,
-                          sha3 (with shake), blake2
+  --with-builtin-hashlib-hashes=md5,sha1,sha2,sha3,blake2
+                          builtin hash modules, md5, sha1, sha2, sha3 (with
+                          shake), blake2
 
 Some influential environment variables:
   PKG_CONFIG  path to pkg-config utility
@@ -216,10 +216,17 @@ Some influential environment variables:
   HOSTRUNNER  Program to run CPython for the host platform
   PROFILE_TASK
               Python args for PGO generation task
+  BOLT_INSTRUMENT_FLAGS
+              Arguments to llvm-bolt when instrumenting binaries
+  BOLT_APPLY_FLAGS
+              Arguments to llvm-bolt when creating a BOLT optimized binary
   LIBUUID_CFLAGS
               C compiler flags for LIBUUID, overriding pkg-config
   LIBUUID_LIBS
               linker flags for LIBUUID, overriding pkg-config
+  LIBFFI_CFLAGS
+              C compiler flags for LIBFFI, overriding pkg-config
+  LIBFFI_LIBS linker flags for LIBFFI, overriding pkg-config
   LIBNSL_CFLAGS
               C compiler flags for LIBNSL, overriding pkg-config
   LIBNSL_LIBS linker flags for LIBNSL, overriding pkg-config
@@ -247,6 +254,20 @@ Some influential environment variables:
               C compiler flags for LIBCRYPT, overriding pkg-config
   LIBCRYPT_LIBS
               linker flags for LIBCRYPT, overriding pkg-config
+  LIBREADLINE_CFLAGS
+              C compiler flags for LIBREADLINE, overriding pkg-config
+  LIBREADLINE_LIBS
+              linker flags for LIBREADLINE, overriding pkg-config
+  LIBEDIT_CFLAGS
+              C compiler flags for LIBEDIT, overriding pkg-config
+  LIBEDIT_LIBS
+              linker flags for LIBEDIT, overriding pkg-config
+  CURSES_CFLAGS
+              C compiler flags for CURSES, overriding pkg-config
+  CURSES_LIBS linker flags for CURSES, overriding pkg-config
+  PANEL_CFLAGS
+              C compiler flags for PANEL, overriding pkg-config
+  PANEL_LIBS  linker flags for PANEL, overriding pkg-config
   LIBB2_CFLAGS
               C compiler flags for LIBB2, overriding pkg-config
   LIBB2_LIBS  linker flags for LIBB2, overriding pkg-config
