@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ca-certificates
-pkgver=2023.08.12
-pkgrel=1
+pkgver=2023.10.27
+pkgrel=2
 epoch=
 pkgdesc="CA certificates"
 arch=('any')
@@ -14,8 +14,8 @@ source=(https://hg.mozilla.org/releases/mozilla-release/raw-file/default/securit
         https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/certdata2pem.py
         update-ca-trust
         update-ca-trust.hook)
-sha256sums=('c47475103fb05bb562bbadff0d1e72346b03236154e1448a6ca191b740f83507'
-            '1e621fb1cc5a45e317f5dd280c6f682b4c38a37a2bf197d4e26b923684c4ca14'
+sha256sums=('0ff137babc6a5561a9cfbe9f29558972e5b528202681b7d3803d03a3e82922bd'
+            'd749ca179791fc3cb5db7515184d221fd59b125e7797b80f938ea287e1c12226'
             'd2a1579dae05fd16175fac27ef08b54731ecefdf414085c610179afcf62b096c'
             '92deb387e3f4d9dd4301db72c27797235997f775072687029d322808da94cd75'
             '55b230878d71847c629494d3b1d0b43482568027c3272ffa477c1d77e4594bf6')
