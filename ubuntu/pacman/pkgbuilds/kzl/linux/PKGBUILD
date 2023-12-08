@@ -17,7 +17,7 @@ sha256sums=('SKIP'
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
-export KBUILD_BUILD_TIMESTAMP="$(date -u '+%Y/%m/%d %T %z')"
+export KBUILD_BUILD_TIMESTAMP="$(date '+%Y/%m/%d %T %z')"
 
 pkgver() {
   cd $pkgname
