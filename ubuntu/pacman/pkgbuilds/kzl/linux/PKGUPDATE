@@ -3,7 +3,7 @@ new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.kernel.org | grep 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     make O=build nconfig
-    cp build/.config "$PKGBUILDDIR"/config
+    cp -v build/.config "$PKGBUILDDIR"/config
     cd "$PKGBUILDDIR"
     updpkgsums
 }
