@@ -6,8 +6,8 @@
 set -e -u
 # set -x
 
-script_name="$(basename "${0}")"
-script_path="$(readlink -f "${0}")"
+script_name="$(basename "$0")"
+script_path="$(readlink -f "$0")"
 script_dir="$(dirname "${script_path}")"
 img="/tmp/raspi.img"
 mountpoint="/tmp/raspi"
@@ -20,14 +20,14 @@ base_img=""
 # Show an INFO message
 # $1: message string
 info() {
-    local _msg="${1}"
+    local _msg="$1"
     printf '[%s] INFO: %s\n' "${script_name}" "${_msg}"
 }
 
 # Show a WARNING message
 # $1: message string
 warning() {
-    local _msg="${1}"
+    local _msg="$1"
     printf '[%s] WARNING: %s\n' "${script_name}" "${_msg}" >&2
 }
 
@@ -35,8 +35,8 @@ warning() {
 # $1: message string
 # $2: exit code number (with 0 does not exit)
 error() {
-    local _msg="${1}"
-    local _error="${2}"
+    local _msg="$1"
+    local _error="$2"
     printf '[%s] ERROR: %s\n' "${script_name}" "${_msg}" >&2
     if [ "${_error}" -gt 0 ]; then
         exit "${_error}"
@@ -65,7 +65,6 @@ create_img() {
         unit s \
         mkpart primary fat32 1s 524287s \
         mkpart primary ext4 524288s 100% \
-        set 2 lba off \
         print
 }
 
@@ -210,31 +209,31 @@ trap cleanup EXIT
 ################################################################################
 
 while [ $# -gt 0 ]; do
-    case "${1}" in
+    case "$1" in
     -h|--help)
         usage
         exit 0
         ;;
     -t|--target)
         shift
-        target="${1}"
+        target="$1"
         ;;
     -b|--base-only)
         base_only=1
         ;;
     -u|--use-base)
         shift
-        base_img="$(readlink -f "${1}")"
+        base_img="$(readlink -f "$1")"
         ;;
     *)
         usage
-        error "Unknown option: ${1}" 1
+        error "Unknown option: $1" 1
         ;;
     esac
     shift
 done
 
-if [ -z "${target}" ] || ([ ${target} != "debian" ] && [ ${target} != "ubuntu" ]); then
+if [ -z "${target}" ] || ([ "${target}" != "debian" ] && [ "${target}" != "ubuntu" ]); then
     usage
     error "Incurrect or no <target> provided." 1
 fi
@@ -245,9 +244,9 @@ fi
 
 start_time=$(date +%s)
 
-echo "****************************************************************"
-echo "                Create Raspberry Pi image                "
-echo "****************************************************************"
+echo    "****************************************************************"
+echo    "               Create Raspberry Pi image                "
+echo    "****************************************************************"
 
 if [ ! -f "${base_img}" ]; then
     create_img
@@ -276,8 +275,8 @@ fi
 end_time=$(date +%s)
 total_time=$((end_time-start_time))
 
-echo "****************************************************************"
-echo "                Execution time Information                "
-echo "****************************************************************"
+echo    "****************************************************************"
+echo    "               Execution time Information                "
+echo    "****************************************************************"
 echo "${script_name} : End time - $(date)"
 echo "${script_name} : Total time - $(date -d@${total_time} -u +%H:%M:%S)"
