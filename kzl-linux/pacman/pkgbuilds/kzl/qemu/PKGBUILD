@@ -1,0 +1,74 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=qemu
+pkgver=8.2.0
+pkgrel=5
+epoch=
+pkgdesc="A generic and open source machine emulator and virtualizer"
+arch=('x86_64')
+url="https://www.qemu.org/"
+license=('KZL')
+depends=()
+makedepends=()
+checkdepends=()
+backup=()
+# install=$pkgname.install
+source=(git+https://gitlab.com/qemu-project/qemu.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-/+/g;s/v//;'
+}
+
+prepare() {
+  cd $pkgname
+
+  git submodule init
+  git submodule update --recursive
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --target-list="aarch64-linux-user loongarch64-linux-user x86_64-linux-user aarch64-softmmu loongarch64-softmmu x86_64-softmmu" \
+    --enable-strip \
+    --prefix=/usr \
+    --libexecdir=/usr/libexec/qemu \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --disable-docs
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}
+
+# build() {
+#   cd $pkgname
+
+#   meson setup \
+#     --prefix /usr \
+#     --auto-features enabled \
+#     --optimization 2 \
+#     -D b_lto=true \
+#     -D b_pie=true \
+#     -D docs=disabled \
+#     -D kvm=enabled \
+#     -D zstd=enabled \
+#     build
+
+#   meson compile -C build
+# }
+
+# package() {
+#   cd $pkgname
+
+#   meson install -C build --destdir="$pkgdir"
+# }
