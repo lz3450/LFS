@@ -1,4 +1,4 @@
-`configure' configures kmod 30 to adapt to many kinds of systems.
+`configure' configures kmod 31 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -105,7 +105,12 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
+  --with-distconfdir=DIR  directory to search for distribution configuration
+                          files
   --with-rootlibdir=DIR   rootfs directory to install shared libraries
+  --with-module-directory=DIR
+                          directory in which to look for kernel modules -
+                          typically '/lib/modules' or '${prefix}/lib/modules'
   --with-zstd             handle Zstandard-compressed modules
                           [default=disabled]
   --with-xz               handle Xz-compressed modules [default=disabled]

@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=kmod
-pkgver=30.32
+pkgver=31.8
 pkgrel=1
 epoch=
 pkgdesc="Linux kernel module management tools and library"
