@@ -7,7 +7,7 @@ script_name="$(basename "${0}")"
 script_path="$(readlink -f "${0}")"
 script_dir="$(dirname "${script_path}")"
 
-rootfs_archive_list=(
+rootfs_archive_pkg_list=(
     base
     nano
     openssh
@@ -21,22 +21,13 @@ rootfs_archive_list=(
 )
 iso_pkg_list=(
     arch-install-scripts
-    base
     debootstrap
     dosfstools
     dpkg
     f2fs-tools
     linux
     linux-firmware
-    nano
-    openssh
-    pacman-contrib
-    parted
-    rsync
     smartmontools
-    usbutils
-    wget2
-    zsh
 )
 repository_pkgs=(
     base
@@ -290,7 +281,7 @@ build() {
     fi
 
     make_rootfs
-    install_pkgs "${rootfs_archive_list[@]}"
+    install_pkgs "${rootfs_archive_pkg_list[@]}"
     cleanup_pacstrap_dir
     make_rootfs_archive
     install_pkgs "${iso_pkg_list[@]}"
