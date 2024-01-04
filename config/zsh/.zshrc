@@ -137,7 +137,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "sorin"
     "sporty_256"
     "steeef"
-    "strug"
+    # "strug"
     "sunaku"
     # "sunrise"
     # ""
