@@ -4,7 +4,7 @@ set -e -u
 
 # EFI: /boot/efi
 
-debootstrap jammy /mnt http://us.archive.ubuntu.com/ubuntu
+debootstrap --arch="amd64" jammy /mnt http://us.archive.ubuntu.com/ubuntu
 
 for fs in dev sys proc run; do
     mount --rbind /$fs /mnt/$fs
@@ -47,11 +47,11 @@ nano /mnt/boot/efi/loader/entries/ubuntu.conf
 
 # zsh
 wget -O /mnt/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
-echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /root/.zshrc
-echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /root/.zshrc
+echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' | tee -a /mnt/root/.zshrc
+echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' | tee -a /mnt/root/.zshrc
 
 # environment variables
-cat > /mnt/root/.zshenv << EOF 
+cat > /mnt/root/.zshenv << EOF
 typeset -U PATH path
 path=("\$HOME/.local/bin" "\$path[@]")
 export PATH
