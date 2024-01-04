@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=aria2
-pkgver=1.36.0.35
-pkgrel=5
+pkgver=1.37.0.2
+pkgrel=2
 epoch=
 pkgdesc="A lightweight multi-protocol & multi-source command-line download utility"
 arch=('x86_64')
@@ -22,7 +22,6 @@ pkgver() {
 prepare() {
   cd $pkgname
 
-  autoreconf -vfi || :
   autoreconf -vfi
 }
 

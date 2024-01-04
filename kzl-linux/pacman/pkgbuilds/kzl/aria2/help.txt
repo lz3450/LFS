@@ -1,4 +1,4 @@
-`configure' configures aria2 1.36.0 to adapt to many kinds of systems.
+`configure' configures aria2 1.37.0 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
