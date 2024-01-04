@@ -456,9 +456,9 @@ build() {
         warning "Current version is newer."
         _updated=0
     elif [ "$_updated" -eq 0 ]; then
-        info "PKGBUILD is up to date."
+        info "PKGBUILD is already up to date."
     elif [ "$_updated" -eq 1 ]; then
-        info "Package \"$_pkgbase\" is updated."
+        info "Package \"$_pkgbase\" is updated to new version."
         _cleanbuild='e'
     elif [ "$_updated" -eq 2 ]; then
         warning "PKGUPDATE does not exist."
