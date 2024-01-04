@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=wget2
-pkgver=2.0.1
-pkgrel=10
+pkgver=2.1.0
+pkgrel=3
 epoch=
 pkgdesc="Network utility to retrieve files from the Web"
 arch=('x86_64')
@@ -54,4 +54,6 @@ package() {
   cd $pkgname
 
   make DESTDIR="$pkgdir" install
+
+  ln -s "$pkgdir"/usr/bin/wget2 "$pkgdir"/usr/bin/wget
 }

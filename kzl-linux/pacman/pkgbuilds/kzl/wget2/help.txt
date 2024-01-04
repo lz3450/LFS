@@ -1,4 +1,4 @@
-`configure' configures wget2 2.0.1 to adapt to many kinds of systems.
+`configure' configures wget2 2.1.0 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -73,7 +73,6 @@ Optional Features:
   --disable-dependency-tracking
                           speeds up one-time build
   --disable-largefile     omit support for large files
-  --disable-year2038      omit support for timestamps past the year 2038
   --enable-threads={isoc|posix|isoc+posix|windows}
                           specify multithreading API
   --disable-threads       build without multithread safety
@@ -108,6 +107,7 @@ Optional Features:
   --disable-doc           don t generate any documentation
   --enable-valgrind-tests enable using Valgrind for tests (mutually exclusive
                           with Address/Memory/Thread sanitizer)
+  --enable-year2038       support timestamps after 2038
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -149,6 +149,7 @@ Optional Packages:
   --without-libintl-prefix     don't search for libintl in includedir and libdir
   --with-ssl              Use SSL/TLS with specified library. Options:
                           'gnutls' (default), 'openssl', 'wolfssl' or 'none'
+  --without-libdane       enable support for DANE certificate checking
   --without-libpsl        disable support for libpsl cookie checking
   --without-libhsts       disable support for libhsts checking
   --without-libnghttp2    disable support for libnghttp2
@@ -198,6 +199,10 @@ Some influential environment variables:
   NETTLE_CFLAGS
               C compiler flags for NETTLE, overriding pkg-config
   NETTLE_LIBS linker flags for NETTLE, overriding pkg-config
+  LIBDANE_CFLAGS
+              C compiler flags for LIBDANE, overriding pkg-config
+  LIBDANE_LIBS
+              linker flags for LIBDANE, overriding pkg-config
   LIBPSL_CFLAGS
               C compiler flags for LIBPSL, overriding pkg-config
   LIBPSL_LIBS linker flags for LIBPSL, overriding pkg-config
