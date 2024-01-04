@@ -2,8 +2,8 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=5.15.142
-pkgrel=5
+pkgver=5.15.145
+pkgrel=1
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -13,7 +13,7 @@ options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            '138f9dafd14a464e82ec5199fab0b6ccb35730e0269e9152c502aed27ed5c6c7')
+            '9f9dfd5ab88b67f83c5d309b2747496c57a999aeb937b8db67319ff8bb923d75')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
