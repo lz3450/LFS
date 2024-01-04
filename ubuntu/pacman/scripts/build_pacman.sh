@@ -58,7 +58,7 @@ ninja -C build
 meson test -C build || :
 sudo meson install -C build
 
-sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-pc-linux-gnu/' \
+sudo sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-pc-linux-gnu/' \
     -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
     -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2"' \
     -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"' \
@@ -76,7 +76,7 @@ sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-pc-linux-gnu/' \
     -e '/^#LOGDEST=/c\LOGDEST="$HOME/makepkg/makepkglogs"' \
     -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
     -e '/^OPTIONS=/s/libtool/!libtool/' \
-    -i "$pkgdir"/usr/local/etc/makepkg.conf
+    -i /usr/local/etc/makepkg.conf
 
 sudo tee -a /usr/local/etc/pacman.conf << EOF
 
