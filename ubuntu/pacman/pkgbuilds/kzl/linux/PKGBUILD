@@ -2,8 +2,8 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=5.15.145
-pkgrel=1
+pkgver=5.15.146
+pkgrel=2
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -13,7 +13,7 @@ options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            '9f9dfd5ab88b67f83c5d309b2747496c57a999aeb937b8db67319ff8bb923d75')
+            'd104e85eadc69e5b40081db6eb14165eb37fe5cf67a0ec98edb4430961765814')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
@@ -49,8 +49,8 @@ package_linux() {
   make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 O=build modules_install
 
   install -d -m 755 $pkgdir/boot/efi/
-  install -Dm755 build/$image_name "$pkgdir/$modulesdir"/vmlinuz-KZL
-  install -Dm755 build/$image_name "$pkgdir"/boot/vmlinuz-KZL
+  install -Dm755 build/$image_name "$pkgdir/$modulesdir/vmlinuz-$pkgver-KZL"
+  install -Dm755 build/$image_name "$pkgdir/boot/vmlinuz-$pkgver-KZL"
   install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-KZL
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
