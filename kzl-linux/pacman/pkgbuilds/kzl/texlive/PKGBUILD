@@ -1,7 +1,7 @@
 pkgname=texlive
-pkgver=20231012
+pkgver=20240113
 _pkgyear=2023
-pkgrel=1
+pkgrel=6
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -30,9 +30,9 @@ sha256sums=('SKIP'
 prepare() {
   cd $pkgname-source
 
-  rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng,mpfr,pixman,zlib,zziplib}
+  rm -rf libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng,mpfr,pixman,zlib,zziplib}
 
-  mkdir build
+  mkdir -p build
 }
 
 build() {
@@ -55,6 +55,7 @@ build() {
     --enable-pdftex \
     --enable-pdftex-synctex \
     --enable-synctex \
+    --enable-chktex \
     --enable-dvipng \
     --enable-texlive \
     --enable-linked-scripts \
