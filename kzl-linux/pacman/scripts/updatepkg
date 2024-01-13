@@ -80,7 +80,7 @@ set -o pipefail
 set -u
 # set -x
 
-# 
+#
 if [ ! -f PKGBUILD ]; then
    error 'PKGBUILD does not exist.' 2
 fi
@@ -92,7 +92,7 @@ elif [ -f "/usr/local/etc/makepkg.conf" ]; then
 else
     error 'makepkg.conf NOT found.' 5
 fi
-. PKGBUILD
+source PKGBUILD
 PKGBUILDDIR=$(pwd)
 
 if [ ! -f PKGUPDATE ]; then
@@ -100,8 +100,8 @@ if [ ! -f PKGUPDATE ]; then
 fi
 
 unset new_version current_version pre_update post_update
-. PKGUPDATE || :
-if [ -z $new_version ]; then
+source PKGUPDATE || :
+if [ -z "$new_version" ]; then
     error 'Cannot get new version.' 6
 fi
 current_version=${current_version:-$(cat PKGBUILD | grep -oP 'pkgver=\K.+$')}
