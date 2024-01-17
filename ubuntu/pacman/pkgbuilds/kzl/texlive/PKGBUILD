@@ -105,7 +105,7 @@ package() {
 
   # cleanup
   rm -rf "$pkgdir"/opt/TeXLive/texmf-dist/scripts/context/stubs/mswin
-  rm -rf "$pkgdir"/opt/TeXLive/tlpkg/scripts/installer
+  rm -rf "$pkgdir"/opt/TeXLive/tlpkg/installer
 
   ### PATH
   echo "export PATH=\$PATH:/opt/TeXLive/bin/$("$srcdir"/texlive-source/build-aux/config.guess)" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/texlive.sh
