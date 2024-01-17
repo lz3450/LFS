@@ -1,0 +1,111 @@
+pkgname=texlive
+pkgver=20240117
+_pkgyear=2023
+pkgrel=2
+epoch=
+pkgdesc="TeX Live"
+arch=('x86_64')
+url="https://tug.org/texlive/"
+license=('KZL')
+install=$pkgname.install
+source=(git+https://github.com/TeX-Live/texlive-source.git
+        git+https://github.com/TeX-Live/installer.git
+        http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
+        ################################################################################
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$pkgver-source.tar.xz
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/install-tl-unx.tar.gz
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-20230311-tlpdb-full.tar.gz
+        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-20230313-texmf.tar.xz
+        09-texlive-fonts.conf
+        $pkgname.install)
+noextract=(texlive-20230313-texmf.tar.xz)
+sha256sums=('SKIP'
+            'SKIP'
+            '110da56d1fe378be7264cb24b48ee2c2d1fa9ea3efedef804897bf0cbc0259d6'
+            '4c4dc77a025acaad90fb6140db2802cdb7ca7a9a2332b5e3d66aa77c43a81253'
+            'fe01050544263a517c9a682942edc1cbb150986c34eab3b6755143f072838e93'
+            'db846976a6df3a8640122e4a63fb5057234c55bf8a56351125939634bdaa048f')
+
+prepare() {
+  cd $pkgname-source
+
+  rm -rf libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng,mpfr,pixman,zlib,zziplib}
+
+  mkdir -p build
+}
+
+build() {
+  cd $pkgname-source/build
+
+  # https://tug.org/texlive/doc/tlbuild.html
+
+  ./../configure \
+    --prefix="/opt/TeXLive" \
+    --datarootdir="\${prefix}" \
+    --infodir="\${prefix}/texmf-dist/doc/info" \
+    --mandir="\${prefix}/texmf-dist/doc/man" \
+    --disable-all-pkgs \
+    --disable-native-texlive-build \
+    --enable-multiplatform \
+    --enable-web2c \
+    --enable-tex \
+    --enable-luatex \
+    --enable-luajittex \
+    --enable-pdftex \
+    --enable-pdftex-synctex \
+    --enable-synctex \
+    --enable-chktex \
+    --enable-dvipng \
+    --enable-texlive \
+    --enable-linked-scripts \
+    --enable-shared \
+    --disable-static \
+    --with-banner-add="/KZL" \
+    --with-gs="/usr/bin/gs" \
+    --with-system-harfbuzz \
+    --with-system-icu \
+    --without-system-teckit \
+    --with-system-graphite2 \
+    --with-system-zziplib \
+    --with-system-mpfr \
+    --with-system-gmp \
+    --with-system-cairo \
+    --with-system-pixman \
+    --with-system-gd \
+    --without-system-potrace \
+    --with-system-freetype2 \
+    --with-system-libpng \
+    --with-system-libpaper \
+    --with-system-zlib \
+    --without-system-ptexenc \
+    --without-x \
+    -C
+
+  make
+}
+
+package() {
+  cd $pkgname-source/build
+
+  make DESTDIR="$pkgdir" install-strip
+  make DESTDIR="$pkgdir" texlinks
+
+  ### enable tlmgr
+  mkdir -p "$pkgdir"/opt/TeXLive/tlpkg/{backups,installer,tlpobj}
+  cp -r "$srcdir"/installer/tlpkg "$pkgdir"/opt/TeXLive/
+  cp "$srcdir"/texlive.tlpdb "$pkgdir"/opt/TeXLive/tlpkg/
+
+  ### texmf-dist
+  cp -r "$srcdir"/installer/texmf-dist "$pkgdir"/opt/TeXLive
+  tar -xf "$srcdir"/texlive-20230313-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
+  rm -rf xindy psutils
+
+  # texlive fonts
+  install -Dm644 "$srcdir"/09-texlive-fonts.conf -t "$pkgdir"/usr/share/fonts/conf.avail/
+
+  # cleanup
+  rm -rf "$pkgdir"/opt/TeXLive/texmf-dist/scripts/context/stubs/mswin
+
+  ### PATH
+  echo "export PATH=\$PATH:/opt/TeXLive/bin/$("$srcdir"/texlive-source/build-aux/config.guess)" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/texlive.sh
+}
