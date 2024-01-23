@@ -105,7 +105,11 @@ package() {
 
   # cleanup
   rm -rf "$pkgdir"/opt/TeXLive/texmf-dist/scripts/context/stubs/mswin
-  rm -rf "$pkgdir"/opt/TeXLive/tlpkg/installer
+  rm -rf "$pkgdir"/opt/TeXLive/tlpkg/installer/{curl,wget,xz}
+  rm -f "$pkgdir"/opt/TeXLive/tlpkg/installer/{tar,wtestopenfiles}.exe
+  rm -f "$pkgdir"/opt/TeXLive/tlpkg/installer/tl-cmd.bat
+  rm -f "$pkgdir"/opt/TeXLive/tlpkg/installer/install-tl-gui.tcl
+  rm -f "$pkgdir"/opt/TeXLive/tlpkg/installer/COPYING.MinGW-runtime.txt
 
   ### PATH
   echo "export PATH=\$PATH:/opt/TeXLive/bin/$("$srcdir"/texlive-source/build-aux/config.guess)" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/texlive.sh
