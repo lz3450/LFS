@@ -27,17 +27,6 @@ disable_overscan=1
 # Enable the serial pins
 enable_uart=1
 
-[cm4]
-# Enable the USB2 outputs on the IO board (assuming your CM4 is plugged into
-# such a board)
-dtoverlay=dwc2,dr_mode=host
-
-[all]
-
-# Enable the KMS ("full" KMS) graphics overlay, leaving GPU memory as the
-# default (the kernel is in control of graphics memory with full KMS)
-dtoverlay=vc4-kms-v3d
-
 # Autoload overlays for any recognized cameras or displays that are attached
 # to the CSI/DSI ports. Please note this is for libcamera support, *not* for
 # the legacy camera stack
@@ -47,3 +36,10 @@ display_auto_detect=1
 # Config settings specific to arm64
 arm_64bit=1
 dtoverlay=dwc2
+
+[cm4]
+# Enable the USB2 outputs on the IO board (assuming your CM4 is plugged into
+# such a board)
+dtoverlay=dwc2,dr_mode=host
+
+[all]

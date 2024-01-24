@@ -17,7 +17,7 @@ deb http://ports.ubuntu.com/ubuntu-ports/ jammy-updates universe
 # deb-src http://ports.ubuntu.com/ubuntu-ports/ jammy-updates universe
 
 ## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
-## team, and may not be under a free license. Please satisfy yourself as to
+## team, and may not be under a free licence. Please satisfy yourself as to
 ## your rights to use the software. Also, please note that software in
 ## multiverse WILL NOT receive any review or updates from the Ubuntu
 ## security team.
