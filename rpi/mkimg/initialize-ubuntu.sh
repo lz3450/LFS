@@ -4,6 +4,7 @@ set -e
 # set -x
 
 # package
+apt clean
 apt update
 apt install -y \
     sudo \
@@ -12,19 +13,17 @@ apt install -y \
     wpasupplicant \
     gnupg \
     wget curl \
-    dialog \
-    locales \
+    bash-completion \
+    nano \
     openssh-server \
     zsh \
     zsh-syntax-highlighting \
     zsh-autosuggestions \
-    rpi-eeprom \
-    # linux-image-raspi \
-    # linux-headers-raspi \
-    # linux-firmware-raspi
+    linux-firmware-raspi \
+    ubuntu-raspi-settings \
+    # rpi-eeprom \
+    # linux-raspi
 apt upgrade -y
-
-# rm -rf /etc/kernel/postinst.d/xx-update-initrd-links
 
 dpkg-reconfigure locales
 dpkg-reconfigure tzdata
@@ -32,6 +31,9 @@ dpkg-reconfigure tzdata
 ###############################################################################
 
 set +e
+
+# hostname
+echo "RPi" > "$mountpoint"/etc/hostname
 
 # grml-zsh-config
 wget -O /root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
@@ -76,8 +78,8 @@ network={
 	psk=a8ba39d6dc7bc6e4984dcc45a386719fe42b5876dc4fd56c516a521615ee981c
 }
 network={
-        ssid="S3Lab"
-        psk=9dfacd4f5b26c7bfde13a184acb4b202eba5b2870cb2d6dccd10ac53012d0706
+	ssid="S3Lab"
+	psk=9dfacd4f5b26c7bfde13a184acb4b202eba5b2870cb2d6dccd10ac53012d0706
 }
 EOF
 

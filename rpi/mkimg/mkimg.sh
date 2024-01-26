@@ -3,12 +3,9 @@
 # mkimg.sh
 #
 
-set -e -u
-# set -x
-
 script_name="$(basename "$0")"
 script_path="$(readlink -f "$0")"
-script_dir="$(dirname "${script_path}")"
+script_dir="$(dirname "$script_path")"
 img="/tmp/raspi.img"
 mountpoint="/tmp/raspi"
 loop=""
@@ -21,14 +18,14 @@ base_img=""
 # $1: message string
 info() {
     local _msg="$1"
-    printf '[%s] INFO: %s\n' "${script_name}" "${_msg}"
+    printf '\033[0;32m[%s] INFO: %s\033[0m\n' "$script_name" "$_msg"
 }
 
 # Show a WARNING message
 # $1: message string
 warning() {
     local _msg="$1"
-    printf '[%s] WARNING: %s\n' "${script_name}" "${_msg}" >&2
+    printf '\033[0;33m[%s] WARNING: %s\033[0m\n' "$script_name" "$_msg" >&2
 }
 
 # Show an ERROR message then exit with status
@@ -37,28 +34,32 @@ warning() {
 error() {
     local _msg="$1"
     local _error="$2"
-    printf '[%s] ERROR: %s\n' "${script_name}" "${_msg}" >&2
-    if [ "${_error}" -gt 0 ]; then
-        exit "${_error}"
+    printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$script_name" "$_msg" >&2
+    if [ "$_error" -gt 0 ]; then
+        exit "$_error"
     fi
 }
 
 usage() {
     local _usage="
-    Usage: ${script_name} [ -h | --help ] -t|--target <target> [ -b|--base-onle | -u|--use-base <basee_image> ]
+    Usage: $script_name [ -h | --help ] -t|--target <target> [ -b|--base-onle | -u|--use-base <basee_image> ]
 
     -h, --help                      display this help message and exit
     -t, --target                    specify the target image (debian, ubuntu)
     -b, --base-onle                 only create base image
     -u, --use-base <base_image>     use existing base image
 "
-    echo "${_usage}"
+    echo "$_usage"
 }
 
 create_img() {
     info "Creating image..."
 
-    fallocate -l 3G "$img"
+    if [ -f "$img" ]; then
+        rm -f "$img"
+    fi
+
+    fallocate -l 1280MiB "$img"
 
     parted -s "$img" \
         mktable msdos \
@@ -72,30 +73,25 @@ setup_loop() {
     info "Setup loop device..."
 
     loop=$(losetup -f)
-    info "Loop device is \"${loop}\""
+    info "Loop device is \"$loop\""
 
-    losetup -P "${loop}" "$img"
+    sudo losetup -P "$loop" "$img"
 }
 
 format_img() {
     info "Formating image..."
 
-    mkfs.fat -F32 "${loop}p1"
-    mkfs.f2fs "${loop}p2"
+    sudo mkfs.fat -F32 "${loop}p1"
+    sudo mkfs.f2fs "${loop}p2"
 }
 
 mount_img() {
     info "Mounting image..."
 
     mkdir -p "$mountpoint"
-    mount "${loop}p2" "$mountpoint"
-    if [ "$target" == "debian" ]; then
-        mkdir -p "$mountpoint"/boot
-        mount "${loop}p1" "$mountpoint"/boot
-    elif [ "$target" == "ubuntu" ]; then
-        mkdir -p "$mountpoint"/boot/firmware
-        mount "${loop}p1" "$mountpoint"/boot/firmware
-    fi
+    sudo mount "${loop}p2" "$mountpoint"
+    sudo mkdir -p "$mountpoint"/boot/firmware
+    sudo mount "${loop}p1" "$mountpoint"/boot/firmware
 }
 
 bootstrap_img () {
@@ -103,39 +99,12 @@ bootstrap_img () {
 
     # debootstrap
     if [ "$target" == "debian" ]; then
-        debootstrap --arch=arm64 --foreign testing "$mountpoint" http://ftp.debian.org/debian
-        # debootstrap --arch=arm64 --foreign stable "$mountpoint" http://ftp.debian.org/debian
+        sudo debootstrap --arch=arm64 --foreign bookworm "$mountpoint" http://deb.debian.org/debian
     elif [ "$target" == "ubuntu" ]; then
-        debootstrap --arch=arm64 --foreign jammy "$mountpoint" http://ports.ubuntu.com/ubuntu-ports
+        sudo debootstrap --arch=arm64 --foreign jammy "$mountpoint" http://ports.ubuntu.com/ubuntu-ports
     fi
 
-    LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /debootstrap/debootstrap --second-stage
-
-    echo "RPi" > "$mountpoint"/etc/hostname
-
-    cp -f "cmdline-$target.txt" "$mountpoint"/boot/firmware/cmdline.txt
-    cp -f "config-$target.txt" "$mountpoint"/boot/firmware/config.txt
-
-    cp -f fstab "$mountpoint"/etc/fstab
-    cp -f "sources-$target.list" "$mountpoint"/etc/apt/sources.list
-
-    if [ "$target" == "debian" ]; then
-        cp -f raspi.list "$mountpoint"/etc/apt/sources.list.d/
-        wget -qO "$mountpoint"/etc/apt/trusted.gpg.d/raspberrypi http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
-        gpg --dearmor "$mountpoint"/etc/apt/trusted.gpg.d/raspberrypi
-        rm -f "$mountpoint"/etc/apt/trusted.gpg.d/raspberrypi
-    fi
-
-    # Partation UUID
-    bootpartuuid=$(blkid -s PARTUUID | grep ${loop}p1 | sed -e 's#.*=\"\(.*\)\"#\1#')
-    rootpartuuid=$(blkid -s PARTUUID | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
-    sed -e "s|%BOOTPARTUUID%|${bootpartuuid}|" -i $mountpoint/etc/fstab
-    sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i $mountpoint/etc/fstab
-    if [ "$target" == "debian" ]; then
-        sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i $mountpoint/boot/cmdline.txt
-    elif [ "$target" == "ubuntu" ]; then
-        sed -e "s|%ROOTPARTUUID%|${rootpartuuid}|" -i $mountpoint/boot/firmware/cmdline.txt
-    fi
+    sudo LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /debootstrap/debootstrap --second-stage
 
     sync
 }
@@ -143,29 +112,57 @@ bootstrap_img () {
 configure_img() {
     info "Configuring image..."
 
-    cp "initialize-$target.sh" "$mountpoint"/root/initialize.sh
+    # source.list
+    sudo cp -f "sources-$target.list" "$mountpoint"/etc/apt/sources.list
+    if [ "$target" == "debian" ]; then
+        sudo cp -f raspi.list "$mountpoint"/etc/apt/sources.list.d/
+        wget -qO - http://archive.raspberrypi.org/debian/raspberrypi.gpg.key | gpg --dearmor | sudo tee "$mountpoint"/etc/apt/trusted.gpg.d/raspberrypi >/dev/null
+    fi
+
+    # initialization script
+    sudo cp "initialize-$target.sh" "$mountpoint"/initialize.sh
 
     for fs in dev sys proc run; do
-        mount --rbind /"$fs" "$mountpoint/$fs"
-        mount --make-rslave "$mountpoint/$fs"
+        sudo mount --rbind /"$fs" "$mountpoint/$fs"
+        sudo mount --make-rslave "$mountpoint/$fs"
     done
 
     info "Running initialize.sh..."
-    LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /bin/bash -c "/root/initialize.sh"
-    LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" sync
+    sudo LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /bin/bash -c "/initialize.sh"
 
-    rm "$mountpoint"/root/initialize.sh
+    sudo rm "$mountpoint"/initialize.sh
 
     for fs in dev sys proc run; do
-        umount -R "$mountpoint"/$fs
+        sudo umount -R "$mountpoint"/$fs
     done
 
-    rm -rf var/lib/apt/lists/*
-    rm -rf dev/*
-    rm -rf var/log/*
-    rm -rf var/cache/apt/archives/*.deb
-    rm -rf var/tmp/*
-    rm -rf tmp/*
+    info "Clean mountpoint..."
+    sudo rm -rf "$mountpoint"/var/lib/apt/lists/*
+    sudo rm -rf "$mountpoint"/dev/*
+    sudo rm -rf "$mountpoint"/var/log/*
+    sudo rm -rf "$mountpoint"/var/cache/apt/archives/*.deb
+    sudo rm -rf "$mountpoint"/var/tmp/*
+    sudo rm -rf "$mountpoint"/tmp/*
+
+    sudo cp -f "config.txt" "$mountpoint"/boot/firmware/config.txt
+    sudo cp -f "cmdline-$target.txt" "$mountpoint"/boot/firmware/cmdline.txt
+    sudo cp -f fstab "$mountpoint"/etc/fstab
+
+    # PARTUUID
+    bootpartuuid=$(blkid -s PARTUUID | grep ${loop}p1 | sed -e 's#.*=\"\(.*\)\"#\1#')
+    test -z "$bootpartuuid" && error "cannot find boot partuuid!" 1
+    info "BOOT PARTUUID: $bootpartuuid"
+    rootpartuuid=$(blkid -s PARTUUID | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
+    test -z "$rootpartuuid" && error "cannot find root partuuid!" 1
+    info "ROOT PARTUUID: $rootpartuuid"
+    sudo sed -i "s|%BOOTPARTUUID%|$bootpartuuid|" "$mountpoint"/etc/fstab
+    sudo sed -i "s|%ROOTPARTUUID%|$rootpartuuid|" "$mountpoint"/etc/fstab
+    sudo sed -i "s|%ROOTPARTUUID%|$rootpartuuid|" $mountpoint/boot/firmware/cmdline.txt
+
+    # RPi firmware
+    sudo cp -dr "$script_dir"/firmware/boot/* "$mountpoint"/boot/firmware/
+    sudo cp -dr "$script_dir"/firmware/modules "$mountpoint"/usr/lib/
+    sudo cp -dr "$script_dir"/firmware/opt/vc "$mountpoint"/opt/
 
     sync
 }
@@ -177,9 +174,9 @@ cleanup() {
     if [ -n "$mountpoint" ]; then
         for attempt in $(seq 10); do
             for fs in dev/pts dev sys proc run; do
-                mount | grep -q "$mountpoint/${fs}" && umount -R "$mountpoint/${fs}" 2> /dev/null
+                mount | grep -q "$mountpoint/$fs" && sudo umount -R "$mountpoint/$fs" 2> /dev/null
             done
-            mount | grep -q "$mountpoint" && umount -R "$mountpoint" 2> /dev/null
+            mount | grep -q "$mountpoint" && sudo umount -R "$mountpoint" 2> /dev/null
             if [ $? -ne 0 ]; then
                 break
             fi
@@ -187,18 +184,19 @@ cleanup() {
         done
     fi
 
-    losetup -D
+    if [ -n "$loop" ]; then
+        sudo losetup -d "$loop"
+    fi
     if [ -d "$mountpoint" ]; then
         rmdir "$mountpoint"
-    fi
-
-    if [ -f "$img" ]; then
-        rm -f "$img"
     fi
 }
 trap cleanup EXIT
 
 ################################################################################
+
+set -e -u
+# set -x
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -240,7 +238,7 @@ echo    "****************************************************************"
 echo    "               Create Raspberry Pi image                "
 echo    "****************************************************************"
 
-# base image not exists
+# does not use a base image
 if [ ! -f "$base_img" ]; then
     create_img
     setup_loop
@@ -248,29 +246,31 @@ if [ ! -f "$base_img" ]; then
     mount_img
     bootstrap_img
     info "Copy base image..."
-    cp -f "$img" "$script_dir/raspi_${target}_base_$(date +%Y%m%d%H%M%S).img"
+    cp "$img" "$script_dir/raspi_${target}_base_$(date +%Y%m%d%H%M%S).img"
     if [ "$base_only" -eq 0 ]; then
         configure_img
         info "Copy full image..."
-        cp -f "$img" "$script_dir/raspi_${target}_$(date +%Y%m%d%H%M%S).img"
+        cp "$img" "$script_dir/raspi_${target}_$(date +%Y%m%d%H%M%S).img"
     fi
-# base image exists
+# use a base image
 elif [ "$base_only" -eq 0 ]; then
     cp "$base_img" "$img"
     setup_loop
     mount_img
     configure_img
     info "Copy full image..."
-    cp -f "$img" "$script_dir/raspi_${target}_$(date +%Y%m%d%H%M%S).img"
+    cp "$img" "$script_dir/raspi_${target}_$(date +%Y%m%d%H%M%S).img"
 else
-    error "Nothing to do." 0
+    info "Nothing to do."
 fi
 
 end_time=$(date +%s)
 total_time=$((end_time-start_time))
 
-echo    "****************************************************************"
-echo    "               Execution time Information                "
-echo    "****************************************************************"
-echo "$script_name : End time - $(date)"
-echo "$script_name : Total time - $(date -d@$total_time -u +%H:%M:%S)"
+echo -e "\e[1;30m"
+echo -e "****************************************************************"
+echo -e "                Execution time Information                "
+echo -e "****************************************************************"
+echo -e "[$script_name]: End time - $(date)"
+echo -e "[$script_name]: Total time - $(date -d@$total_time -u +%H:%M:%S)"
+echo -e "\e[0m"

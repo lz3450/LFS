@@ -4,6 +4,7 @@ set -e
 # set -x
 
 # package
+apt clean
 apt update
 apt install -y \
     sudo \
@@ -24,6 +25,7 @@ apt upgrade -y
 wget -qO /etc/apt/trusted.gpg.d/raspberrypi.gpg.key http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
 apt update
 apt install -y \
+    raspberrypi-sys-mods \
     raspberrypi-archive-keyring \
     raspberrypi-bootloader \
     raspberrypi-kernel \
@@ -57,7 +59,7 @@ useradd -m -U -G sudo -s /bin/zsh kzl
 echo -e '3450\n3450' | passwd kzl
 
 # environment variables
-tee /home/kzl/.zshenv << EOF 
+tee /home/kzl/.zshenv << EOF
 typeset -U PATH path
 path=("\$HOME/.local/bin" "\$path[@]")
 export PATH
