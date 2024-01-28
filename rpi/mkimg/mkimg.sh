@@ -120,6 +120,7 @@ configure_img() {
     fi
 
     # initialization script
+    info "Running initialize.sh..."
     sudo cp "initialize-$target.sh" "$mountpoint"/initialize.sh
 
     for fs in dev sys proc run; do
@@ -127,7 +128,6 @@ configure_img() {
         sudo mount --make-rslave "$mountpoint/$fs"
     done
 
-    info "Running initialize.sh..."
     sudo LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /bin/bash -c "/initialize.sh"
 
     sudo rm "$mountpoint"/initialize.sh
@@ -160,9 +160,11 @@ configure_img() {
     sudo sed -i "s|%ROOTPARTUUID%|$rootpartuuid|" $mountpoint/boot/firmware/cmdline.txt
 
     # RPi firmware
-    sudo cp -dr "$script_dir"/firmware/boot/* "$mountpoint"/boot/firmware/
-    sudo cp -dr "$script_dir"/firmware/modules "$mountpoint"/usr/lib/
-    sudo cp -dr "$script_dir"/firmware/opt/vc "$mountpoint"/opt/
+    if [ "$target" == "ubuntu" ]; then
+        sudo cp -dr "$script_dir"/firmware/boot/* "$mountpoint"/boot/firmware/
+        sudo cp -dr "$script_dir"/firmware/modules "$mountpoint"/usr/lib/
+        sudo cp -dr "$script_dir"/firmware/opt/vc "$mountpoint"/opt/
+    fi
 
     sync
 }

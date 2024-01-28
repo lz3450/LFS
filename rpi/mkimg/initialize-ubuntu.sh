@@ -21,8 +21,9 @@ apt install -y \
     zsh-autosuggestions \
     linux-firmware-raspi \
     ubuntu-raspi-settings \
-    # rpi-eeprom \
-    # linux-raspi
+    # linux-raspi \
+    # flash-kernel \
+    # rpi-eeprom
 apt upgrade -y
 
 dpkg-reconfigure locales
