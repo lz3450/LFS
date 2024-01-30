@@ -15,26 +15,26 @@ input=
 # Show an INFO message
 # $1: message string
 info() {
-    local _msg="${1}"
-    printf '[%s] INFO: %s\n' "${script_name}" "${_msg}"
+    local _msg="$1"
+    printf '\033[0;32m[%s] INFO: %s\033[0m\n' "$script_name" "$_msg"
 }
 
 # Show a WARNING message
 # $1: message string
 warning() {
-    local _msg="${1}"
-    printf '[%s] WARNING: %s\n' "${script_name}" "${_msg}" >&2
+    local _msg="$1"
+    printf '\033[0;33m[%s] WARNING: %s\033[0m\n' "$script_name" "$_msg" >&2
 }
 
 # Show an ERROR message then exit with status
 # $1: message string
 # $2: exit code number (with 0 does not exit)
 error() {
-    local _msg="${1}"
-    local _error=${2}
-    printf '[%s] ERROR: %s\n' "${script_name}" "${_msg}" >&2
-    if (( _error > 0 )); then
-        exit "${_error}"
+    local _msg="$1"
+    local _error="$2"
+    printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$script_name" "$_msg" >&2
+    if [ "$_error" -gt 0 ]; then
+        exit "$_error"
     fi
 }
 
