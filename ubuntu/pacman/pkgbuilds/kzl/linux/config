@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86 5.15.146 Kernel Configuration
+# Linux/x86 5.15.148 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0"
 CONFIG_CC_IS_GCC=y
@@ -2396,7 +2396,6 @@ CONFIG_SPI_MASTER=y
 # CONFIG_SPI_MXIC is not set
 # CONFIG_SPI_XCOMM is not set
 # CONFIG_SPI_XILINX is not set
-# CONFIG_SPI_ZYNQMP_GQSPI is not set
 # CONFIG_SPI_AMD is not set
 
 #

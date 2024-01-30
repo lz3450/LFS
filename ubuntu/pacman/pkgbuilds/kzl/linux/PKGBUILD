@@ -2,8 +2,8 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=5.15.146
-pkgrel=2
+pkgver=5.15.148
+pkgrel=1
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -13,7 +13,7 @@ options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
         config)
 sha256sums=('SKIP'
-            'd104e85eadc69e5b40081db6eb14165eb37fe5cf67a0ec98edb4430961765814')
+            '53b67b15495d7c4dd90268e1e0e1a04f393c64d45b67c962eb7f51935d29fe14')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
@@ -56,6 +56,16 @@ package_linux() {
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
   ln -sf /usr/src/linux-headers-$kernelrelease "$pkgdir"/usr/lib/modules/$kernelrelease/source
   ln -sf /usr/src/linux-headers-$kernelrelease/build "$pkgdir"/usr/lib/modules/$kernelrelease/build
+
+  install -Dm755 /dev/stdin "$pkgdir"/boot/update-kernel.sh << EOF
+set -e
+
+sudo update-initramfs -k all -c
+
+sudo cp -v initrd.img efi/
+sudo cp -v vmlinuz efi/
+sudo cp -v initrd.img-$pkgver-KZL efi/initrd-KZL.img
+EOF
 }
 
 package_linux-headers() {
