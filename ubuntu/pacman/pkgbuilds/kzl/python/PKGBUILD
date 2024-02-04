@@ -1,0 +1,48 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=python
+pkgver=3.12.1
+pkgrel=1
+epoch=
+pkgdesc="Next generation of the python high-level scripting language"
+arch=('x86_64')
+url="https://www.python.org/"
+license=('KZL')
+source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd cpython
+
+  CFLAGS="${CFLAGS/-O2/-O3} -fno-semantic-interposition"
+  LDFLAGS+=" -fno-semantic-interposition"
+
+  ./configure \
+    --prefix=/usr/local \
+    --enable-shared=yes \
+    --enable-optimizations=yes \
+    --enable-loadable-sqlite-extensions=yes \
+    --enable-ipv6=yes \
+    --enable-big-digits=30 \
+    --with-pkg-config=yes \
+    --with-lto=no \
+    --with-tzpath=/usr/share/zoneinfo \
+    --with-system-expat=yes \
+    --with-system-libmpdec=yes \
+    --with-decimal-contextvar=yes \
+    --with-dbmliborder=gdbm:ndbm \
+    --with-readline=editline \
+    --with-ensurepip=no \
+
+  make
+}
+
+package() {
+  cd cpython
+
+  make DESTDIR="$pkgdir" install
+
+  rm "$pkgdir"/usr/local/lib/python3.12/config-3.12-x86_64-linux-gnu/{python.o,Makefile}
+  rm "$pkgdir"/usr/local/lib/python3.12/_sysconfigdata__linux_x86_64-linux-gnu.py
+  rm -r "$pkgdir"/usr/local/lib/python3.12/__pycache__
+}
