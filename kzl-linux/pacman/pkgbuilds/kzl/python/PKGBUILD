@@ -31,7 +31,6 @@ build() {
     --with-lto=no \
     --with-tzpath=/usr/share/zoneinfo \
     --with-system-expat=yes \
-    --with-system-ffi=yes \
     --with-system-libmpdec=no \
     --with-decimal-contextvar=yes \
     --with-dbmliborder=gdbm:ndbm \
