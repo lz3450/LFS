@@ -2,7 +2,7 @@
 
 pkgname=python
 pkgver=3.12.1
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
@@ -42,7 +42,5 @@ package() {
 
   make DESTDIR="$pkgdir" install
 
-  rm "$pkgdir"/usr/local/lib/python3.12/config-3.12-x86_64-linux-gnu/{python.o,Makefile}
-  rm "$pkgdir"/usr/local/lib/python3.12/_sysconfigdata__linux_x86_64-linux-gnu.py
   rm -r "$pkgdir"/usr/local/lib/python3.12/__pycache__
 }
