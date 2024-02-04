@@ -59,7 +59,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "fox"
     "frisk"
     # "frontcube"
-    "funky"
+    # "funky"
     # "fwalch"
     # "gallifrey"
     "gallois"
