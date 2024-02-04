@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.12.0
+pkgver=3.12.1
 pkgrel=2
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
@@ -44,6 +44,8 @@ package() {
   cd cpython
 
   make DESTDIR="$pkgdir" install
+
+  rm -r "$pkgdir"/usr/local/lib/python3.12/__pycache__
 
   ln -s python${pkgver:0:4} "$pkgdir"/usr/bin/python
 }
