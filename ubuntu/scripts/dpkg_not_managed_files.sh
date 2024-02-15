@@ -58,9 +58,14 @@ SCRIPT='
 '
 
 find -L /lib \
+    -type d \( \
+        -path /lib/x86_64-linux-gnu/perl/5.34/CORE \
+    \) -prune -o \
     -type f \
     ! \( \
+        -wholename '/lib/systemd/system/system-systemd\x2dcryptsetup.slice' -o \
         -wholename /lib/systemd/system-sleep/nvidia -o \
+        -wholename /lib/systemd/system/nvidia-*.service -o \
         -wholename /lib/udev/hwdb.bin -o \
         -wholename /lib/x86_64-linux-gnu/gio/modules/giomodule.cache \
     \) \
