@@ -1,6 +1,6 @@
 workdir=/tmp/cuda
-pkgver="11.8.0"
-pkgname="cuda_${pkgver}_520.61.05_linux.run"
+pkgver="12.1.0"
+pkgname="cuda_${pkgver}_530.30.02_linux.run"
 source=https://developer.download.nvidia.com/compute/cuda/$pkgver/$pkgname
 
 set -e
