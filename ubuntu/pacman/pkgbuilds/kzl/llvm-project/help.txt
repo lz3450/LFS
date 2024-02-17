@@ -12,7 +12,7 @@
 -- Check for working CXX compiler: /usr/bin/c++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Found Python3: /usr/local/bin/python3 (found suitable version "3.12.1", minimum required is "3.6") found components: Interpreter 
+-- Found Python3: /usr/bin/python3.10 (found suitable version "3.10.12", minimum required is "3.6") found components: Interpreter 
 -- Looking for dlfcn.h
 -- Looking for dlfcn.h - found
 -- Looking for errno.h
@@ -287,7 +287,7 @@
 -- Targeting XCore
 -- Registering ExampleIRTransforms as a pass plugin (static build: OFF)
 -- Registering Bye as a pass plugin (static build: OFF)
--- Failed to find LLVM FileCheck
+-- LLVM FileCheck Found: /usr/local/bin/FileCheck
 -- git version: v0.0.0 normalized to 0.0.0
 -- Version: 1.6.0
 -- Looking for shm_open in rt
@@ -345,7 +345,7 @@ BENCHMARK_CXX_FLAGS_COVERAGE:STRING=-g
 BENCHMARK_DOWNLOAD_DEPENDENCIES:BOOL=OFF
 
 // Enable building and running the assembly tests
-BENCHMARK_ENABLE_ASSEMBLY_TESTS:BOOL=OFF
+BENCHMARK_ENABLE_ASSEMBLY_TESTS:BOOL=ON
 
 // Build documentation with Doxygen.
 BENCHMARK_ENABLE_DOXYGEN:BOOL=OFF
@@ -1008,8 +1008,8 @@ LLVM_EXTERNAL_PROJECT_BUILD_TOOL_ARGS:STRING=
 // Path to pstl source directory
 LLVM_EXTERNAL_PSTL_SOURCE_DIR:PATH=
 
-// Path to a program.
-LLVM_FILECHECK_EXE:FILEPATH=LLVM_FILECHECK_EXE-NOTFOUND
+// llvm filecheck
+LLVM_FILECHECK_EXE:PATH=/usr/local/bin/FileCheck
 
 // Enable statistics collection for builds that wouldn't normally enable it
 LLVM_FORCE_ENABLE_STATS:BOOL=OFF
