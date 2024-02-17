@@ -149,10 +149,10 @@ configure_img() {
     sudo cp -f fstab "$mountpoint"/etc/fstab
 
     # PARTUUID
-    bootpartuuid=$(blkid -s PARTUUID | grep ${loop}p1 | sed -e 's#.*=\"\(.*\)\"#\1#')
+    bootpartuuid=$(sudo blkid -s PARTUUID | grep ${loop}p1 | sed -e 's#.*=\"\(.*\)\"#\1#')
     test -z "$bootpartuuid" && error "cannot find boot partuuid!" 1
     info "BOOT PARTUUID: $bootpartuuid"
-    rootpartuuid=$(blkid -s PARTUUID | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
+    rootpartuuid=$(sudo blkid -s PARTUUID | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
     test -z "$rootpartuuid" && error "cannot find root partuuid!" 1
     info "ROOT PARTUUID: $rootpartuuid"
     sudo sed -i "s|%BOOTPARTUUID%|$bootpartuuid|" "$mountpoint"/etc/fstab
