@@ -11,6 +11,7 @@ mountpoint="/tmp/raspi"
 loop=""
 chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 target=""
+fs="f2fs"
 base_only=0
 base_img=""
 
@@ -65,7 +66,7 @@ create_img() {
         mktable msdos \
         unit s \
         mkpart primary fat32 1s 524287s \
-        mkpart primary f2fs 524288s 100% \
+        mkpart primary "$fs" 524288s 100% \
         print
 }
 
@@ -82,7 +83,7 @@ format_img() {
     info "Formating image..."
 
     sudo mkfs.fat -F32 "${loop}p1"
-    sudo mkfs.f2fs "${loop}p2"
+    sudo mkfs."$fs" "${loop}p2"
 }
 
 mount_img() {
@@ -210,6 +211,10 @@ while [ $# -gt 0 ]; do
         shift
         target="$1"
         ;;
+    -f|--filesystem)
+        shift
+        fs="$1"
+        ;;
     -b|--base-only)
         base_only=1
         ;;
@@ -230,6 +235,11 @@ if [ -z "$target" ] || ([ "$target" != "debian" ] && [ "$target" != "ubuntu" ]);
     error "Incurrect or no <target> provided." 1
 fi
 
+if [ "$fs" != "f2fs" ] && [ "$fs" != "ext4" ]; then
+    usage
+    error "Unsupported filesystem type \"$fs\"." 2
+fi
+
 if [ -d "$mountpoint" ]; then
     error "$mountpoint exists, please remove before restart!" 3
 fi
@@ -248,11 +258,11 @@ if [ ! -f "$base_img" ]; then
     mount_img
     bootstrap_img
     info "Copy base image..."
-    cp "$img" "$script_dir/raspi_${target}_base_$(date +%Y%m%d%H%M%S).img"
+    cp "$img" "$script_dir/raspi_${target}_${fs}_base_$(date +%Y%m%d%H%M%S).img"
     if [ "$base_only" -eq 0 ]; then
         configure_img
         info "Copy full image..."
-        cp "$img" "$script_dir/raspi_${target}_$(date +%Y%m%d%H%M%S).img"
+        cp "$img" "$script_dir/raspi_${target}_${fs}_$(date +%Y%m%d%H%M%S).img"
     fi
 # use a base image
 elif [ "$base_only" -eq 0 ]; then
@@ -261,7 +271,7 @@ elif [ "$base_only" -eq 0 ]; then
     mount_img
     configure_img
     info "Copy full image..."
-    cp "$img" "$script_dir/raspi_${target}_$(date +%Y%m%d%H%M%S).img"
+    cp "$img" "$script_dir/raspi_${target}_${fs}_$(date +%Y%m%d%H%M%S).img"
 else
     info "Nothing to do."
 fi
