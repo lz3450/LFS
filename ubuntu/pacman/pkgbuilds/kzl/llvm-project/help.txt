@@ -12,7 +12,21 @@
 -- Check for working CXX compiler: /usr/bin/c++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Found Python3: /usr/bin/python3.10 (found suitable version "3.10.12", minimum required is "3.6") found components: Interpreter 
+-- bolt project is disabled
+-- clang project is enabled
+-- clang-tools-extra project is enabled
+-- compiler-rt project is disabled
+-- cross-project-tests project is disabled
+-- libc project is disabled
+-- libclc project is disabled
+-- lld project is enabled
+-- lldb project is enabled
+-- mlir project is disabled
+-- openmp project is disabled
+-- polly project is disabled
+-- pstl project is disabled
+-- flang project is disabled
+-- Found Python3: /usr/local/bin/python3.12 (found suitable version "3.12.2", minimum required is "3.0") found components: Interpreter 
 -- Looking for dlfcn.h
 -- Looking for dlfcn.h - found
 -- Looking for errno.h
@@ -162,6 +176,9 @@
 -- Looking for dlopen - found
 -- Looking for dladdr
 -- Looking for dladdr - found
+-- Performing Test HAVE_FFI_CALL
+-- Performing Test HAVE_FFI_CALL - Success
+-- Found FFI: /usr/lib/x86_64-linux-gnu/libffi.so  
 -- Looking for proc_pid_rusage
 -- Looking for proc_pid_rusage - not found
 -- Performing Test HAVE_CXX_ATOMICS_WITHOUT_LIB
@@ -179,7 +196,6 @@
 -- Native target architecture is X86
 -- Threads enabled.
 -- Doxygen disabled.
--- Could NOT find OCaml (missing: OCAMLFIND OCAML_VERSION OCAML_STDLIB_PATH) 
 -- Could NOT find OCaml (missing: OCAMLFIND OCAML_VERSION OCAML_STDLIB_PATH) 
 -- OCaml bindings disabled.
 -- Found Python module pygments
@@ -266,131 +282,86 @@
 -- Looking for __x86_64__
 -- Looking for __x86_64__ - found
 -- Found Git: /usr/bin/git (found version "2.34.1") 
--- Targeting AArch64
--- Targeting AMDGPU
--- Targeting ARM
--- Targeting AVR
--- Targeting BPF
--- Targeting Hexagon
--- Targeting Lanai
--- Targeting LoongArch
--- Targeting Mips
--- Targeting MSP430
--- Targeting NVPTX
--- Targeting PowerPC
--- Targeting RISCV
--- Targeting Sparc
--- Targeting SystemZ
--- Targeting VE
--- Targeting WebAssembly
 -- Targeting X86
--- Targeting XCore
+-- Looking for sys/resource.h
+-- Looking for sys/resource.h - found
+-- Clang version: 17.0.6
+-- Performing Test CXX_SUPPORTS_NO_NESTED_ANON_TYPES_FLAG
+-- Performing Test CXX_SUPPORTS_NO_NESTED_ANON_TYPES_FLAG - Failed
+-- Looking for include file sys/inotify.h
+-- Looking for include file sys/inotify.h - found
+-- LLD version: 17.0.6
+-- Found SWIG: /usr/bin/swig4.0 (found suitable version "4.0.2", minimum required is "3")  
+-- Enable SWIG to generate LLDB bindings: TRUE
+-- Enable editline support in LLDB: TRUE
+-- Found CursesAndPanel: /usr/include  
+-- Enable curses support in LLDB: TRUE
+-- Looking for lzma_auto_decoder in /usr/lib/x86_64-linux-gnu/liblzma.so
+-- Looking for lzma_auto_decoder in /usr/lib/x86_64-linux-gnu/liblzma.so - found
+-- Looking for lzma_easy_encoder in /usr/lib/x86_64-linux-gnu/liblzma.so
+-- Looking for lzma_easy_encoder in /usr/lib/x86_64-linux-gnu/liblzma.so - found
+-- Looking for lzma_lzma_preset in /usr/lib/x86_64-linux-gnu/liblzma.so
+-- Looking for lzma_lzma_preset in /usr/lib/x86_64-linux-gnu/liblzma.so - found
+-- Found LibLZMA: /usr/lib/x86_64-linux-gnu/liblzma.so (found version "5.2.5") 
+-- Enable LZMA compression support in LLDB: TRUE
+-- Could NOT find Lua (missing: LUA_LIBRARIES LUA_INCLUDE_DIR) (Required is exact version "5.3")
+-- Could NOT find LuaAndSwig (missing: LUA_LIBRARIES LUA_INCLUDE_DIR) 
+-- Enable Lua scripting support in LLDB: FALSE
+-- Found Python3: /usr/local/bin/python3.12 (found version "3.12.2") found components: Interpreter Development Development.Module Development.Embed 
+-- Found PythonAndSwig: /usr/local/lib/libpython3.12.so  
+-- Enable Python scripting support in LLDB: TRUE
+-- Found LibXml2: /usr/lib/x86_64-linux-gnu/libxml2.so (found suitable version "2.9.13", minimum required is "2.8") 
+-- Enable Libxml 2 support in LLDB: TRUE
+-- Enable libfbsdvmcore support in LLDB: 0
+-- Looking for el_winsertstr
+-- Looking for el_winsertstr - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of el_rfunc_t
+-- Check size of el_rfunc_t - done
+-- Performing Test CXX_SUPPORTS_DEPRECATED_DECLARATIONS
+-- Performing Test CXX_SUPPORTS_DEPRECATED_DECLARATIONS - Success
+-- Performing Test CXX_SUPPORTS_UNKNOWN_PRAGMAS
+-- Performing Test CXX_SUPPORTS_UNKNOWN_PRAGMAS - Success
+-- Performing Test CXX_SUPPORTS_STRICT_ALIASING
+-- Performing Test CXX_SUPPORTS_STRICT_ALIASING - Success
+-- Performing Test CXX_SUPPORTS_STRINGOP_TRUNCATION
+-- Performing Test CXX_SUPPORTS_STRINGOP_TRUNCATION - Success
+-- Performing Test CXX_SUPPORTS_DEPRECATED_REGISTER
+-- Performing Test CXX_SUPPORTS_DEPRECATED_REGISTER - Failed
+-- Performing Test CXX_SUPPORTS_VLA_EXTENSION
+-- Performing Test CXX_SUPPORTS_VLA_EXTENSION - Failed
+-- LLDB version: 17.0.6
+-- Looking for ppoll
+-- Looking for ppoll - found
+-- Looking for ptsname_r
+-- Looking for ptsname_r - found
+-- Looking for accept4
+-- Looking for accept4 - found
+-- Looking for include files sys/types.h, sys/event.h
+-- Looking for include files sys/types.h, sys/event.h - not found
+-- Looking for process_vm_readv
+-- Looking for process_vm_readv - found
+-- Looking for __NR_process_vm_readv
+-- Looking for __NR_process_vm_readv - found
+-- Looking for compression_encode_buffer in compression
+-- Looking for compression_encode_buffer in compression - not found
+-- SWIG version 4.0.2 uses `-py3` flag.
+-- Skipping FreeBSDKernel plugin due to missing libfbsdvmcore
+-- Found Doxygen: /usr/bin/doxygen (found version "1.9.1") found components: doxygen dot 
 -- Registering ExampleIRTransforms as a pass plugin (static build: OFF)
 -- Registering Bye as a pass plugin (static build: OFF)
--- LLVM FileCheck Found: /usr/local/bin/FileCheck
--- git version: v0.0.0 normalized to 0.0.0
--- Version: 1.6.0
--- Looking for shm_open in rt
--- Looking for shm_open in rt - found
--- Performing Test HAVE_CXX_FLAG_STD_CXX11
--- Performing Test HAVE_CXX_FLAG_STD_CXX11 - Success
--- Performing Test HAVE_CXX_FLAG_WALL
--- Performing Test HAVE_CXX_FLAG_WALL - Success
--- Performing Test HAVE_CXX_FLAG_WEXTRA
--- Performing Test HAVE_CXX_FLAG_WEXTRA - Success
--- Performing Test HAVE_CXX_FLAG_WSHADOW
--- Performing Test HAVE_CXX_FLAG_WSHADOW - Success
--- Performing Test HAVE_CXX_FLAG_WSUGGEST_OVERRIDE
--- Performing Test HAVE_CXX_FLAG_WSUGGEST_OVERRIDE - Success
--- Performing Test HAVE_CXX_FLAG_PEDANTIC
--- Performing Test HAVE_CXX_FLAG_PEDANTIC - Success
--- Performing Test HAVE_CXX_FLAG_PEDANTIC_ERRORS
--- Performing Test HAVE_CXX_FLAG_PEDANTIC_ERRORS - Success
--- Performing Test HAVE_CXX_FLAG_WSHORTEN_64_TO_32
--- Performing Test HAVE_CXX_FLAG_WSHORTEN_64_TO_32 - Failed
--- Performing Test HAVE_CXX_FLAG_FSTRICT_ALIASING
--- Performing Test HAVE_CXX_FLAG_FSTRICT_ALIASING - Success
--- Performing Test HAVE_CXX_FLAG_WNO_DEPRECATED_DECLARATIONS
--- Performing Test HAVE_CXX_FLAG_WNO_DEPRECATED_DECLARATIONS - Success
--- Performing Test HAVE_CXX_FLAG_FNO_EXCEPTIONS
--- Performing Test HAVE_CXX_FLAG_FNO_EXCEPTIONS - Success
--- Performing Test HAVE_CXX_FLAG_WSTRICT_ALIASING
--- Performing Test HAVE_CXX_FLAG_WSTRICT_ALIASING - Success
--- Performing Test HAVE_CXX_FLAG_WD654
--- Performing Test HAVE_CXX_FLAG_WD654 - Failed
--- Performing Test HAVE_CXX_FLAG_WTHREAD_SAFETY
--- Performing Test HAVE_CXX_FLAG_WTHREAD_SAFETY - Failed
--- Performing Test HAVE_CXX_FLAG_COVERAGE
--- Performing Test HAVE_CXX_FLAG_COVERAGE - Success
--- Performing Test HAVE_GNU_POSIX_REGEX
--- Performing Test HAVE_GNU_POSIX_REGEX
--- Performing Test HAVE_GNU_POSIX_REGEX -- failed to compile
--- Performing Test HAVE_POSIX_REGEX
--- Performing Test HAVE_POSIX_REGEX
--- Performing Test HAVE_POSIX_REGEX -- success
--- Performing Test HAVE_STEADY_CLOCK
--- Performing Test HAVE_STEADY_CLOCK
--- Performing Test HAVE_STEADY_CLOCK -- success
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/kzl/makepkg/build/llvm-project/src/llvm-project/tmp
 -- Cache values
-// Build a 32 bit version of the library.
-BENCHMARK_BUILD_32_BITS:BOOL=OFF
-
-// Flags used by the C++ compiler during coverage builds.
-BENCHMARK_CXX_FLAGS_COVERAGE:STRING=-g
-
-// Allow the downloading and in-tree building of unmet dependencies
-BENCHMARK_DOWNLOAD_DEPENDENCIES:BOOL=OFF
-
-// Enable building and running the assembly tests
-BENCHMARK_ENABLE_ASSEMBLY_TESTS:BOOL=ON
-
-// Build documentation with Doxygen.
-BENCHMARK_ENABLE_DOXYGEN:BOOL=OFF
-
-// Enable the use of exceptions in the benchmark library.
-BENCHMARK_ENABLE_EXCEPTIONS:BOOL=OFF
-
-// Enable building the unit tests which depend on gtest
-BENCHMARK_ENABLE_GTEST_TESTS:BOOL=OFF
-
-// Enable installation of benchmark. (Projects embedding benchmark may want to turn this OFF.)
-BENCHMARK_ENABLE_INSTALL:BOOL=OFF
-
-// Enable performance counters provided by libpfm
-BENCHMARK_ENABLE_LIBPFM:BOOL=OFF
-
-// Enable link time optimisation of the benchmark library.
-BENCHMARK_ENABLE_LTO:BOOL=OFF
-
-// Enable testing of the benchmark library.
-BENCHMARK_ENABLE_TESTING:BOOL=OFF
-
-// Build Release candidates with -Werror.
-BENCHMARK_ENABLE_WERROR:BOOL=OFF
-
-// Flags used for linking binaries during coverage builds.
-BENCHMARK_EXE_LINKER_FLAGS_COVERAGE:STRING=
-
-// Build Release candidates with -Werror regardless of compiler issues.
-BENCHMARK_FORCE_WERROR:BOOL=OFF
-
-// Enable installation of documentation.
-BENCHMARK_INSTALL_DOCS:BOOL=ON
-
-// Flags used by the shared libraries linker during coverage builds.
-BENCHMARK_SHARED_LINKER_FLAGS_COVERAGE:STRING=
-
-// Use bundled GoogleTest. If disabled, the find_package(GTest) will be used.
-BENCHMARK_USE_BUNDLED_GTEST:BOOL=ON
-
-// Build and test using libc++ as the standard library.
-BENCHMARK_USE_LIBCXX:BOOL=OFF
-
 // Default URL where bug reports are to be submitted.
 BUG_REPORT_URL:STRING=https://github.com/llvm/llvm-project/issues/
+
+// Build clang-format VS plugin
+BUILD_CLANG_FORMAT_VS_PLUGIN:BOOL=OFF
 
 // Build all libraries as shared libraries instead of static
 BUILD_SHARED_LIBS:BOOL=OFF
@@ -403,6 +374,222 @@ Backtrace_INCLUDE_DIR:PATH=/usr/include
 
 // Library providing backtrace(3), empty for default set of libraries
 Backtrace_LIBRARY:FILEPATH=
+
+// Build XPC Support For Clangd.
+CLANGD_BUILD_XPC:BOOL=0
+
+// Enable decision forest model for ranking code completion items
+CLANGD_DECISION_FOREST:BOOL=ON
+
+// Call malloc_trim(3) periodically in Clangd. (only takes effect when using glibc)
+CLANGD_MALLOC_TRIM:BOOL=ON
+
+// Link all clang-tidy checks into clangd
+CLANGD_TIDY_CHECKS:BOOL=ON
+
+// Build CLANG example programs by default.
+CLANG_BUILD_EXAMPLES:BOOL=OFF
+
+// Build the Clang tools. If OFF, just generate build targets.
+CLANG_BUILD_TOOLS:BOOL=ON
+
+// Default C++ stdlib to use ("libstdc++" or "libc++", empty for platform default
+CLANG_DEFAULT_CXX_STDLIB:STRING=
+
+// Default linker to use (linker name or absolute path, empty for platform default)
+CLANG_DEFAULT_LINKER:STRING=lld
+
+// Default objcopy executable to use.
+CLANG_DEFAULT_OBJCOPY:STRING=objcopy
+
+// Default OpenMP runtime used by -fopenmp.
+CLANG_DEFAULT_OPENMP_RUNTIME:STRING=libomp
+
+// Default to -fPIE and -pie on linux-gnu
+CLANG_DEFAULT_PIE_ON_LINUX:BOOL=ON
+
+// Default runtime library to use ("libgcc" or "compiler-rt", empty for platform default)
+CLANG_DEFAULT_RTLIB:STRING=libgcc
+
+// 
+CLANG_DEFAULT_UNWINDLIB:STRING=libgcc
+
+// Build ARCMT.
+CLANG_ENABLE_ARCMT:BOOL=ON
+
+// Build clangd language server
+CLANG_ENABLE_CLANGD:BOOL=ON
+
+// Include HLSL build products
+CLANG_ENABLE_HLSL:BOOL=OFF
+
+// Whether libclang may depend on libxml2
+CLANG_ENABLE_LIBXML2:BOOL=ON
+
+// Build Clang protobuf fuzzer.
+CLANG_ENABLE_PROTO_FUZZER:BOOL=OFF
+
+// Include static analyzer in clang binary.
+CLANG_ENABLE_STATIC_ANALYZER:BOOL=ON
+
+// Major version number that will be appended to the clang executable name
+CLANG_EXECUTABLE_VERSION:STRING=17
+
+// Force the SOVERSION of libclang to be equal to CLANG_MAJOR
+CLANG_FORCE_MATCHING_LIBCLANG_SOVERSION:BOOL=ON
+
+// Generate build targets for the Clang docs.
+CLANG_INCLUDE_DOCS:BOOL=OFF
+
+// Generate build targets for the Clang unit tests.
+CLANG_INCLUDE_TESTS:BOOL=OFF
+
+// Path for CMake subdirectory for Clang (defaults to 'lib/cmake/clang')
+CLANG_INSTALL_PACKAGE_DIR:STRING=lib/cmake/clang
+
+// Install the scan-build tool
+CLANG_INSTALL_SCANBUILD:BOOL=ON
+
+// Install the scan-view tool
+CLANG_INSTALL_SCANVIEW:BOOL=ON
+
+// Link tools against libclang-cpp.so
+CLANG_LINK_CLANG_DYLIB:BOOL=ON
+
+// Build clang with plugin support
+CLANG_PLUGIN_SUPPORT:BOOL=ON
+
+// Host clang-pseudo-gen executable. Saves building if cross-compiling.
+CLANG_PSEUDO_GEN:STRING=
+
+// Python versions to install libclang python bindings for
+CLANG_PYTHON_BINDINGS_VERSIONS:STRING=
+
+// Vendor-specific text for showing the repository the source is taken from.
+CLANG_REPOSITORY_STRING:STRING=
+
+// Relative directory from the Clang binary to its resource files.
+CLANG_RESOURCE_DIR:STRING=
+
+// Whether clang should use a new process for the CC1 invocation
+CLANG_SPAWN_CC1:BOOL=OFF
+
+// SystemZ Default Arch
+CLANG_SYSTEMZ_DEFAULT_ARCH:STRING=z10
+
+// Native TableGen executable. Saves building one when cross-compiling.
+CLANG_TABLEGEN:STRING=clang-tblgen
+
+// Host clang-tidy-confusable-chars-gen executable. Saves building if cross-compiling.
+CLANG_TIDY_CONFUSABLE_CHARS_GEN:STRING=
+
+// Include static analyzer checks in clang-tidy
+CLANG_TIDY_ENABLE_STATIC_ANALYZER:BOOL=ON
+
+// Enable AST introspection
+CLANG_TOOLING_BUILD_AST_INTROSPECTION:BOOL=ON
+
+// Generate build targets for the Clang Extra Tools docs.
+CLANG_TOOLS_EXTRA_INCLUDE_DOCS:BOOL=OFF
+
+// Path for binary subdirectory (defaults to 'bin')
+CLANG_TOOLS_INSTALL_DIR:PATH=bin
+
+// Whether to build amdgpu-arch as part of CLANG
+CLANG_TOOL_AMDGPU_ARCH_BUILD:BOOL=ON
+
+// Whether to build apinotes-test as part of CLANG
+CLANG_TOOL_APINOTES_TEST_BUILD:BOOL=ON
+
+// Whether to build arcmt-test as part of CLANG
+CLANG_TOOL_ARCMT_TEST_BUILD:BOOL=ON
+
+// Whether to build clang-check as part of CLANG
+CLANG_TOOL_CLANG_CHECK_BUILD:BOOL=ON
+
+// Whether to build clang-diff as part of CLANG
+CLANG_TOOL_CLANG_DIFF_BUILD:BOOL=ON
+
+// Whether to build clang-extdef-mapping as part of CLANG
+CLANG_TOOL_CLANG_EXTDEF_MAPPING_BUILD:BOOL=ON
+
+// Whether to build clang-format as part of CLANG
+CLANG_TOOL_CLANG_FORMAT_BUILD:BOOL=ON
+
+// Whether to build clang-format-vs as part of CLANG
+CLANG_TOOL_CLANG_FORMAT_VS_BUILD:BOOL=ON
+
+// Whether to build clang-fuzzer as part of CLANG
+CLANG_TOOL_CLANG_FUZZER_BUILD:BOOL=ON
+
+// Whether to build clang-import-test as part of CLANG
+CLANG_TOOL_CLANG_IMPORT_TEST_BUILD:BOOL=ON
+
+// Whether to build clang-linker-wrapper as part of CLANG
+CLANG_TOOL_CLANG_LINKER_WRAPPER_BUILD:BOOL=ON
+
+// Whether to build clang-offload-bundler as part of CLANG
+CLANG_TOOL_CLANG_OFFLOAD_BUNDLER_BUILD:BOOL=ON
+
+// Whether to build clang-offload-packager as part of CLANG
+CLANG_TOOL_CLANG_OFFLOAD_PACKAGER_BUILD:BOOL=ON
+
+// Whether to build clang-refactor as part of CLANG
+CLANG_TOOL_CLANG_REFACTOR_BUILD:BOOL=ON
+
+// Whether to build clang-rename as part of CLANG
+CLANG_TOOL_CLANG_RENAME_BUILD:BOOL=ON
+
+// Whether to build clang-repl as part of CLANG
+CLANG_TOOL_CLANG_REPL_BUILD:BOOL=ON
+
+// Whether to build clang-scan-deps as part of CLANG
+CLANG_TOOL_CLANG_SCAN_DEPS_BUILD:BOOL=ON
+
+// Whether to build clang-shlib as part of CLANG
+CLANG_TOOL_CLANG_SHLIB_BUILD:BOOL=ON
+
+// Whether to build c-arcmt-test as part of CLANG
+CLANG_TOOL_C_ARCMT_TEST_BUILD:BOOL=ON
+
+// Whether to build c-index-test as part of CLANG
+CLANG_TOOL_C_INDEX_TEST_BUILD:BOOL=ON
+
+// Whether to build diagtool as part of CLANG
+CLANG_TOOL_DIAGTOOL_BUILD:BOOL=ON
+
+// Whether to build dictionary as part of CLANG
+CLANG_TOOL_DICTIONARY_BUILD:BOOL=ON
+
+// Whether to build driver as part of CLANG
+CLANG_TOOL_DRIVER_BUILD:BOOL=ON
+
+// Whether to build handle-cxx as part of CLANG
+CLANG_TOOL_HANDLE_CXX_BUILD:BOOL=ON
+
+// Whether to build handle-llvm as part of CLANG
+CLANG_TOOL_HANDLE_LLVM_BUILD:BOOL=ON
+
+// Whether to build libclang as part of CLANG
+CLANG_TOOL_LIBCLANG_BUILD:BOOL=ON
+
+// Whether to build nvptx-arch as part of CLANG
+CLANG_TOOL_NVPTX_ARCH_BUILD:BOOL=ON
+
+// Whether to build scan-build as part of CLANG
+CLANG_TOOL_SCAN_BUILD_BUILD:BOOL=ON
+
+// Whether to build scan-build-py as part of CLANG
+CLANG_TOOL_SCAN_BUILD_PY_BUILD:BOOL=ON
+
+// Whether to build scan-view as part of CLANG
+CLANG_TOOL_SCAN_VIEW_BUILD:BOOL=ON
+
+// Vendor-specific text for showing with version information.
+CLANG_VENDOR:STRING=
+
+// Vendor-specific uti.
+CLANG_VENDOR_UTI:STRING=org.llvm.clang
 
 // Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
@@ -456,7 +643,7 @@ CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-11
 CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-11
 
 // Flags used by the CXX compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=
+CMAKE_CXX_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS
 
 // Flags used by the CXX compiler during DEBUG builds.
 CMAKE_CXX_FLAGS_DEBUG:STRING=-g
@@ -489,7 +676,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-11
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-11
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=
+CMAKE_C_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -704,11 +891,53 @@ CPACK_SOURCE_TZ:BOOL=ON
 // Enable to build ZIP source packages
 CPACK_SOURCE_ZIP:BOOL=OFF
 
+// Path to a library.
+CURSES_CURSES_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libcurses.so
+
+// Path to a library.
+CURSES_FORM_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libform.so
+
+// Path to a file.
+CURSES_INCLUDE_PATH:PATH=/usr/include
+
+// Path to a library.
+CURSES_NCURSES_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libncurses.so
+
+// Colon separated list of directories clang will search for headers.
+C_INCLUDE_DIRS:STRING=
+
+// Default <path> to all compiler invocations for --sysroot=<path>.
+DEFAULT_SYSROOT:STRING=
+
+// Dot tool for use with Doxygen
+DOXYGEN_DOT_EXECUTABLE:FILEPATH=/usr/bin/dot
+
+// Doxygen documentation generation tool (http://www.doxygen.org)
+DOXYGEN_EXECUTABLE:FILEPATH=/usr/bin/doxygen
+
+// pass --build-id to ld
+ENABLE_LINKER_BUILD_ID:BOOL=OFF
+
+// enable x86 relax relocations by default
+ENABLE_X86_RELAX_RELOCATIONS:BOOL=ON
+
+// The directory containing a CMake configuration file for FBSDVMCore.
+FBSDVMCore_DIR:PATH=FBSDVMCore_DIR-NOTFOUND
+
 // Additional directory, where CMake should search for ffi.h or ffi/ffi.h
 FFI_INCLUDE_DIR:PATH=
 
+// Path to a file.
+FFI_INCLUDE_DIRS:PATH=/usr/include/x86_64-linux-gnu
+
+// Path to a library.
+FFI_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libffi.so
+
 // Additional directory, where CMake should search for libffi.so
 FFI_LIBRARY_DIR:PATH=
+
+// Directory where gcc is installed.
+GCC_INSTALL_PREFIX:PATH=
 
 // Git command line client
 GIT_EXECUTABLE:FILEPATH=/usr/bin/git
@@ -716,8 +945,23 @@ GIT_EXECUTABLE:FILEPATH=/usr/bin/git
 // The gold linker
 GOLD_EXECUTABLE:FILEPATH=/usr/bin/ld.gold
 
-// OK
-HAVE_STD_REGEX:BOOL=ON
+// Path to gRPC library manual installation.
+GRPC_INSTALL_PATH:PATH=
+
+// Build libclang as a static library (in addition to a shared one)
+LIBCLANG_BUILD_STATIC:BOOL=OFF
+
+// Major version number that will be appended to the libclang library
+LIBCLANG_LIBRARY_VERSION:STRING=17
+
+// Path to a file.
+LIBLZMA_INCLUDE_DIR:PATH=/usr/include
+
+// Path to a library.
+LIBLZMA_LIBRARY_DEBUG:FILEPATH=LIBLZMA_LIBRARY_DEBUG-NOTFOUND
+
+// Path to a library.
+LIBLZMA_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/liblzma.so
 
 // Path to a file.
 LIBXML2_INCLUDE_DIR:PATH=/usr/include/libxml2
@@ -728,6 +972,106 @@ LIBXML2_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libxml2.so
 // Path to a program.
 LIBXML2_XMLLINT_EXECUTABLE:FILEPATH=/usr/bin/xmllint
 
+// Build LLDB.framework (Darwin only)
+LLDB_BUILD_FRAMEWORK:BOOL=OFF
+
+// Enable Building of Intel(R) Memory Protection Extensions
+LLDB_BUILD_INTEL_MPX:BOOL=ON
+
+// Enable Building of Intel(R) Processor Trace Tool
+LLDB_BUILD_INTEL_PT:BOOL=OFF
+
+// Embed PYTHONHOME in the binary. If set to OFF, PYTHONHOME environment variable will be used to to locate Python.
+LLDB_EMBED_PYTHON_HOME:BOOL=OFF
+
+// Enable curses support in LLDB On, Off or Auto (default)
+LLDB_ENABLE_CURSES:STRING=Auto
+
+// Enable libfbsdvmcore support in LLDB On, Off or Auto (default)
+LLDB_ENABLE_FBSDVMCORE:STRING=Auto
+
+// Enable editline support in LLDB On, Off or Auto (default)
+LLDB_ENABLE_LIBEDIT:STRING=Auto
+
+// Enable Libxml 2 support in LLDB On, Off or Auto (default)
+LLDB_ENABLE_LIBXML2:STRING=Auto
+
+// Enable Lua scripting support in LLDB On, Off or Auto (default)
+LLDB_ENABLE_LUA:STRING=Auto
+
+// Enable LZMA compression support in LLDB On, Off or Auto (default)
+LLDB_ENABLE_LZMA:STRING=Auto
+
+// Enable Python scripting support in LLDB On, Off or Auto (default)
+LLDB_ENABLE_PYTHON:STRING=Auto
+
+// Enable SWIG to generate LLDB bindings On, Off or Auto (default)
+LLDB_ENABLE_SWIG:STRING=Auto
+
+// Fail to configure if certain requirements are not met for testing.
+LLDB_ENFORCE_STRICT_TEST_REQUIREMENTS:BOOL=OFF
+
+// Causes lldb to export all symbols when building liblldb.
+LLDB_EXPORT_ALL_SYMBOLS:BOOL=0
+
+// Path to the global lldbinit directory. Relative paths are resolved relative to the
+  directory containing the LLDB library.
+LLDB_GLOBAL_INIT_DIRECTORY:STRING=
+
+// Generate build targets for the LLDB unit tests.
+LLDB_INCLUDE_TESTS:BOOL=OFF
+
+// Disable default RPATH settings in binaries
+LLDB_NO_INSTALL_DEFAULT_RPATH:BOOL=OFF
+
+// Path to python interpreter exectuable, relative to python's install prefix
+LLDB_PYTHON_EXE_RELATIVE_PATH:STRING=bin/python3.12
+
+// Filename extension for native code python modules
+LLDB_PYTHON_EXT_SUFFIX:STRING=.cpython-312-x86_64-linux-gnu.so
+
+// Path where Python modules are installed, relative to LLDB's install prefix
+LLDB_PYTHON_RELATIVE_PATH:STRING=lib/python3.12/site-packages
+
+// Whether to skip generating a dSYM when installing lldb.
+LLDB_SKIP_DSYM:BOOL=OFF
+
+// Whether to skip stripping of binaries when installing lldb.
+LLDB_SKIP_STRIP:BOOL=OFF
+
+// Whether to build lldb-instr as part of LLDB
+LLDB_TOOL_LLDB_INSTR_BUILD:BOOL=ON
+
+// Whether to build lldb-server as part of LLDB
+LLDB_TOOL_LLDB_SERVER_BUILD:BOOL=ON
+
+// Whether to build lldb-vscode as part of LLDB
+LLDB_TOOL_LLDB_VSCODE_BUILD:BOOL=ON
+
+// When codesigning, use entitlements if available
+LLDB_USE_ENTITLEMENTS:BOOL=ON
+
+// Use the system's debugserver for testing (Darwin only).
+LLDB_USE_SYSTEM_DEBUGSERVER:BOOL=OFF
+
+// Build the lld tools. If OFF, just generate build targets.
+LLD_BUILD_TOOLS:BOOL=ON
+
+// Use MinGW as the default backend for ld.lld. If OFF, ELF will be used.
+LLD_DEFAULT_LD_LLD_IS_MINGW:BOOL=OFF
+
+// Path for CMake subdirectory for LLD (defaults to 'lib/cmake/lld')
+LLD_INSTALL_PACKAGE_DIR:STRING=lib/cmake/lld
+
+// Path for binary subdirectory (defaults to 'bin')
+LLD_TOOLS_INSTALL_DIR:PATH=bin
+
+// Enable VTune user task tracking.
+LLD_USE_VTUNE:BOOL=OFF
+
+// Vendor-specific text for showing with version information.
+LLD_VENDOR:STRING=
+
 // Enable abi-breaking checks.  Can be WITH_ASSERTS, FORCE_ON or FORCE_OFF.
 LLVM_ABI_BREAKING_CHECKS:STRING=WITH_ASSERTS
 
@@ -735,7 +1079,7 @@ LLVM_ABI_BREAKING_CHECKS:STRING=WITH_ASSERTS
 LLVM_ALLOW_PROBLEMATIC_CONFIGURATIONS:BOOL=OFF
 
 // Embed the version control system revision in LLVM
-LLVM_APPEND_VC_REV:BOOL=ON
+LLVM_APPEND_VC_REV:BOOL=OFF
 
 // PATH to binutils/include containing plugin-api.h for gold plugin.
 LLVM_BINUTILS_INCDIR:PATH=
@@ -766,7 +1110,7 @@ LLVM_BUILD_INSTRUMENTED_COVERAGE:BOOL=OFF
 LLVM_BUILD_LLVM_C_DYLIB:BOOL=OFF
 
 // Build libllvm dynamic library
-LLVM_BUILD_LLVM_DYLIB:BOOL=OFF
+LLVM_BUILD_LLVM_DYLIB:BOOL=ON
 
 // Build the LLVM runtime libraries.
 LLVM_BUILD_RUNTIME:BOOL=ON
@@ -808,7 +1152,7 @@ LLVM_ENABLE_ASSERTIONS:BOOL=OFF
 LLVM_ENABLE_BACKTRACES:BOOL=ON
 
 // Build bindings.
-LLVM_ENABLE_BINDINGS:BOOL=ON
+LLVM_ENABLE_BINDINGS:BOOL=OFF
 
 // Turn on memory dumps on crashes. Currently only implemented on Windows.
 LLVM_ENABLE_CRASH_DUMPS:BOOL=OFF
@@ -835,7 +1179,7 @@ LLVM_ENABLE_EH:BOOL=OFF
 LLVM_ENABLE_EXPENSIVE_CHECKS:BOOL=OFF
 
 // Use libffi to call external functions from the interpreter
-LLVM_ENABLE_FFI:BOOL=OFF
+LLVM_ENABLE_FFI:BOOL=ON
 
 // Enable collection of GlobalISel rule coverage
 LLVM_ENABLE_GISEL_COV:BOOL=OFF
@@ -898,16 +1242,16 @@ LLVM_ENABLE_PIC:BOOL=ON
 LLVM_ENABLE_PLUGINS:BOOL=ON
 
 // Semicolon-separated list of projects to build (bolt;clang;clang-tools-extra;compiler-rt;cross-project-tests;libc;libclc;lld;lldb;mlir;openmp;polly;pstl;flang), or "all".
-LLVM_ENABLE_PROJECTS:STRING=
+LLVM_ENABLE_PROJECTS:STRING=clang;clang-tools-extra;lld;lldb
 
 // 
-LLVM_ENABLE_PROJECTS_USED:BOOL=OFF
+LLVM_ENABLE_PROJECTS_USED:BOOL=ON
 
 // Enable run time type information
-LLVM_ENABLE_RTTI:BOOL=OFF
+LLVM_ENABLE_RTTI:BOOL=ON
 
 // Semicolon-separated list of runtimes to build, or "all" (libcxx;libcxxabi;libunwind). Supported runtimes are libc;libunwind;libcxxabi;pstl;libcxx;compiler-rt;openmp;llvm-libgcc.
-LLVM_ENABLE_RUNTIMES:STRING=
+LLVM_ENABLE_RUNTIMES:STRING=compiler-rt
 
 // Use Sphinx to generate llvm documentation.
 LLVM_ENABLE_SPHINX:BOOL=OFF
@@ -957,14 +1301,14 @@ LLVM_EXTERNALIZE_DEBUGINFO:BOOL=OFF
 // Path to bolt source directory
 LLVM_EXTERNAL_BOLT_SOURCE_DIR:PATH=
 
-// Path to clang source directory
-LLVM_EXTERNAL_CLANG_SOURCE_DIR:PATH=
+// 
+LLVM_EXTERNAL_CLANG_SOURCE_DIR:PATH=/home/kzl/makepkg/build/llvm-project/src/llvm-project/llvm/../clang
+
+// 
+LLVM_EXTERNAL_CLANG_TOOLS_EXTRA_SOURCE_DIR:PATH=/home/kzl/makepkg/build/llvm-project/src/llvm-project/llvm/../clang-tools-extra
 
 // Path to compiler-rt source directory
 LLVM_EXTERNAL_COMPILER_RT_SOURCE_DIR:PATH=
-
-// Path to cross-project-tests source directory
-LLVM_EXTERNAL_CROSS_PROJECT_TESTS_SOURCE_DIR:PATH=
 
 // Path to dragonegg source directory
 LLVM_EXTERNAL_DRAGONEGG_SOURCE_DIR:PATH=
@@ -984,14 +1328,11 @@ LLVM_EXTERNAL_LIBC_SOURCE_DIR:PATH=
 // Path to libunwind source directory
 LLVM_EXTERNAL_LIBUNWIND_SOURCE_DIR:PATH=
 
-// Command used to spawn lit
-LLVM_EXTERNAL_LIT:STRING=
+// 
+LLVM_EXTERNAL_LLDB_SOURCE_DIR:PATH=/home/kzl/makepkg/build/llvm-project/src/llvm-project/llvm/../lldb
 
-// Path to lldb source directory
-LLVM_EXTERNAL_LLDB_SOURCE_DIR:PATH=
-
-// Path to lld source directory
-LLVM_EXTERNAL_LLD_SOURCE_DIR:PATH=
+// 
+LLVM_EXTERNAL_LLD_SOURCE_DIR:PATH=/home/kzl/makepkg/build/llvm-project/src/llvm-project/llvm/../lld
 
 // Path to mlir source directory
 LLVM_EXTERNAL_MLIR_SOURCE_DIR:PATH=
@@ -1008,9 +1349,6 @@ LLVM_EXTERNAL_PROJECT_BUILD_TOOL_ARGS:STRING=
 // Path to pstl source directory
 LLVM_EXTERNAL_PSTL_SOURCE_DIR:PATH=
 
-// llvm filecheck
-LLVM_FILECHECK_EXE:PATH=/usr/local/bin/FileCheck
-
 // Enable statistics collection for builds that wouldn't normally enable it
 LLVM_FORCE_ENABLE_STATS:BOOL=OFF
 
@@ -1024,10 +1362,10 @@ LLVM_HAVE_TFLITE:BOOL=
 LLVM_HOST_TRIPLE:STRING=x86_64-unknown-linux-gnu
 
 // Generate benchmark targets. If OFF, benchmarks can't be built.
-LLVM_INCLUDE_BENCHMARKS:BOOL=ON
+LLVM_INCLUDE_BENCHMARKS:BOOL=OFF
 
 // Generate build targets for llvm documentation.
-LLVM_INCLUDE_DOCS:BOOL=ON
+LLVM_INCLUDE_DOCS:BOOL=OFF
 
 // Include DXIL tests
 LLVM_INCLUDE_DXIL_TESTS:BOOL=OFF
@@ -1039,7 +1377,7 @@ LLVM_INCLUDE_EXAMPLES:BOOL=ON
 LLVM_INCLUDE_RUNTIMES:BOOL=ON
 
 // Generate build targets for the LLVM unit tests.
-LLVM_INCLUDE_TESTS:BOOL=ON
+LLVM_INCLUDE_TESTS:BOOL=OFF
 
 // Generate build targets for the LLVM tools.
 LLVM_INCLUDE_TOOLS:BOOL=ON
@@ -1073,7 +1411,7 @@ LLVM_INSTALL_PACKAGE_DIR:STRING=lib/cmake/llvm
 LLVM_INSTALL_TOOLCHAIN_ONLY:BOOL=OFF
 
 // Include utility binaries in the 'install' target.
-LLVM_INSTALL_UTILS:BOOL=OFF
+LLVM_INSTALL_UTILS:BOOL=ON
 
 // Replace the Windows CRT allocator with any of {rpmalloc|mimalloc|snmalloc}. Only works with CMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded.
 LLVM_INTEGRATED_CRT_ALLOC:PATH=
@@ -1085,7 +1423,7 @@ LLVM_LIBDIR_SUFFIX:STRING=
 LLVM_LIB_FUZZING_ENGINE:PATH=
 
 // Link tools against the libllvm dynamic library
-LLVM_LINK_LLVM_DYLIB:BOOL=OFF
+LLVM_LINK_LLVM_DYLIB:BOOL=ON
 
 // Default options for lit
 LLVM_LIT_ARGS:STRING=-sv
@@ -1109,10 +1447,10 @@ LLVM_OPTIMIZED_TABLEGEN:BOOL=OFF
 LLVM_OPTIMIZE_SANITIZED_BUILDS:BOOL=ON
 
 // Define the maximum number of concurrent compilation jobs (Ninja only).
-LLVM_PARALLEL_COMPILE_JOBS:STRING=
+LLVM_PARALLEL_COMPILE_JOBS:STRING=16
 
 // Define the maximum number of concurrent link jobs (Ninja only).
-LLVM_PARALLEL_LINK_JOBS:STRING=
+LLVM_PARALLEL_LINK_JOBS:STRING=16
 
 // Profiling data file to use when compiling in order to improve runtime performance.
 LLVM_PROFDATA_FILE:FILEPATH=
@@ -1133,7 +1471,7 @@ LLVM_STATIC_LINK_CXX_STDLIB:BOOL=OFF
 LLVM_TABLEGEN:STRING=llvm-tblgen
 
 // Semicolon-separated list of targets to build, or "all".
-LLVM_TARGETS_TO_BUILD:STRING=all
+LLVM_TARGETS_TO_BUILD:STRING=X86
 
 // Set target to use for LLVM JIT or use "host" for automatic detection.
 LLVM_TARGET_ARCH:STRING=host
@@ -1154,7 +1492,7 @@ LLVM_THIRD_PARTY_DIR:STRING=/home/kzl/makepkg/build/llvm-project/src/llvm-projec
 LLVM_TOOLS_INSTALL_DIR:STRING=bin
 
 // Whether to build bolt as part of LLVM
-LLVM_TOOL_BOLT_BUILD:BOOL=OFF
+LLVM_TOOL_BOLT_BUILD:BOOL=FALSE
 
 // Whether to build bugpoint as part of LLVM
 LLVM_TOOL_BUGPOINT_BUILD:BOOL=ON
@@ -1163,13 +1501,16 @@ LLVM_TOOL_BUGPOINT_BUILD:BOOL=ON
 LLVM_TOOL_BUGPOINT_PASSES_BUILD:BOOL=ON
 
 // Whether to build clang as part of LLVM
-LLVM_TOOL_CLANG_BUILD:BOOL=OFF
+LLVM_TOOL_CLANG_BUILD:BOOL=TRUE
+
+// Whether to build clang-tools-extra as part of LLVM
+LLVM_TOOL_CLANG_TOOLS_EXTRA_BUILD:BOOL=TRUE
 
 // Whether to build compiler-rt as part of LLVM
-LLVM_TOOL_COMPILER_RT_BUILD:BOOL=OFF
+LLVM_TOOL_COMPILER_RT_BUILD:BOOL=FALSE
 
-// Whether to build cross-project-tests as part of LLVM
-LLVM_TOOL_CROSS_PROJECT_TESTS_BUILD:BOOL=OFF
+// Whether to build CROSS_PROJECT_TESTS as part of LLVM
+LLVM_TOOL_CROSS_PROJECT_TESTS_BUILD:BOOL=FALSE
 
 // Whether to build dragonegg as part of LLVM
 LLVM_TOOL_DRAGONEGG_BUILD:BOOL=OFF
@@ -1181,10 +1522,13 @@ LLVM_TOOL_DSYMUTIL_BUILD:BOOL=ON
 LLVM_TOOL_DXIL_DIS_BUILD:BOOL=ON
 
 // Whether to build flang as part of LLVM
-LLVM_TOOL_FLANG_BUILD:BOOL=OFF
+LLVM_TOOL_FLANG_BUILD:BOOL=FALSE
 
 // Whether to build gold as part of LLVM
 LLVM_TOOL_GOLD_BUILD:BOOL=ON
+
+// Whether to build LIBCLC as part of LLVM
+LLVM_TOOL_LIBCLC_BUILD:BOOL=FALSE
 
 // Whether to build libcxxabi as part of LLVM
 LLVM_TOOL_LIBCXXABI_BUILD:BOOL=OFF
@@ -1193,7 +1537,7 @@ LLVM_TOOL_LIBCXXABI_BUILD:BOOL=OFF
 LLVM_TOOL_LIBCXX_BUILD:BOOL=OFF
 
 // Whether to build libc as part of LLVM
-LLVM_TOOL_LIBC_BUILD:BOOL=OFF
+LLVM_TOOL_LIBC_BUILD:BOOL=FALSE
 
 // Whether to build libunwind as part of LLVM
 LLVM_TOOL_LIBUNWIND_BUILD:BOOL=OFF
@@ -1202,10 +1546,10 @@ LLVM_TOOL_LIBUNWIND_BUILD:BOOL=OFF
 LLVM_TOOL_LLC_BUILD:BOOL=ON
 
 // Whether to build lldb as part of LLVM
-LLVM_TOOL_LLDB_BUILD:BOOL=OFF
+LLVM_TOOL_LLDB_BUILD:BOOL=TRUE
 
 // Whether to build lld as part of LLVM
-LLVM_TOOL_LLD_BUILD:BOOL=OFF
+LLVM_TOOL_LLD_BUILD:BOOL=TRUE
 
 // Whether to build lli as part of LLVM
 LLVM_TOOL_LLI_BUILD:BOOL=ON
@@ -1390,7 +1734,7 @@ LLVM_TOOL_LLVM_RTDYLD_BUILD:BOOL=ON
 // Whether to build llvm-rust-demangle-fuzzer as part of LLVM
 LLVM_TOOL_LLVM_RUST_DEMANGLE_FUZZER_BUILD:BOOL=ON
 
-// Whether to build LLVM_SHLIB as part of LLVM
+// Whether to build llvm-shlib as part of LLVM
 LLVM_TOOL_LLVM_SHLIB_BUILD:BOOL=ON
 
 // Whether to build llvm-sim as part of LLVM
@@ -1436,13 +1780,13 @@ LLVM_TOOL_LLVM_YAML_PARSER_FUZZER_BUILD:BOOL=ON
 LLVM_TOOL_LTO_BUILD:BOOL=ON
 
 // Whether to build mlir as part of LLVM
-LLVM_TOOL_MLIR_BUILD:BOOL=OFF
+LLVM_TOOL_MLIR_BUILD:BOOL=FALSE
 
 // Whether to build obj2yaml as part of LLVM
 LLVM_TOOL_OBJ2YAML_BUILD:BOOL=ON
 
 // Whether to build openmp as part of LLVM
-LLVM_TOOL_OPENMP_BUILD:BOOL=OFF
+LLVM_TOOL_OPENMP_BUILD:BOOL=FALSE
 
 // Whether to build opt as part of LLVM
 LLVM_TOOL_OPT_BUILD:BOOL=ON
@@ -1451,10 +1795,10 @@ LLVM_TOOL_OPT_BUILD:BOOL=ON
 LLVM_TOOL_OPT_VIEWER_BUILD:BOOL=ON
 
 // Whether to build polly as part of LLVM
-LLVM_TOOL_POLLY_BUILD:BOOL=OFF
+LLVM_TOOL_POLLY_BUILD:BOOL=FALSE
 
 // Whether to build pstl as part of LLVM
-LLVM_TOOL_PSTL_BUILD:BOOL=OFF
+LLVM_TOOL_PSTL_BUILD:BOOL=FALSE
 
 // Whether to build remarks-shlib as part of LLVM
 LLVM_TOOL_REMARKS_SHLIB_BUILD:BOOL=ON
@@ -1532,6 +1876,12 @@ LLVM_WINDOWS_PREFER_FORWARD_SLASH:BOOL=OFF
 LLVM_Z3_INSTALL_DIR:STRING=
 
 // Path to a file.
+LUA_INCLUDE_DIR:PATH=LUA_INCLUDE_DIR-NOTFOUND
+
+// Path to a library.
+LUA_LIBRARY:FILEPATH=LUA_LIBRARY-NOTFOUND
+
+// Path to a file.
 LibEdit_INCLUDE_DIRS:PATH=/usr/include
 
 // Path to a library.
@@ -1540,11 +1890,17 @@ LibEdit_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libedit.so
 // Path to a program.
 OCAMLFIND:FILEPATH=OCAMLFIND-NOTFOUND
 
+// The curses panel library
+PANEL_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libpanel.so
+
 // Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=
 
 // pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
+
+// Enable IEEE binary128 as default long double format on PowerPC Linux.
+PPC_LINUX_DEFAULT_IEEELONGDOUBLE:BOOL=OFF
 
 // Found python module 'pygments'
 PY_PYGMENTS_FOUND:BOOL=ON
@@ -1555,8 +1911,20 @@ PY_PYGMENTS_LEXERS_C_CPP_FOUND:BOOL=ON
 // Found python module 'yaml'
 PY_YAML_FOUND:BOOL=ON
 
+// Path to a file.
+SWIG_DIR:PATH=/usr/share/swig4.0
+
+// Path to a program.
+SWIG_EXECUTABLE:FILEPATH=/usr/bin/swig4.0
+
+// Swig version
+SWIG_VERSION:STRING=4.0.2
+
 // Path to TensorFlow pip install dir
 TENSORFLOW_AOT_PATH:PATH=
+
+// Plist name
+TOOL_INFO_PLIST:STRING=Info.plist
 
 // Path to a library.
 Terminfo_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libtinfo.so
@@ -1571,6 +1939,12 @@ ZLIB_LIBRARY_DEBUG:FILEPATH=ZLIB_LIBRARY_DEBUG-NOTFOUND
 ZLIB_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libz.so
 
 // 
+clang_tidy_confusable_chars_gen:STRING=$<TARGET_FILE:clang-tidy-confusable-chars-gen>
+
+// 
+clang_tidy_confusable_chars_gen_target:STRING=clang-tidy-confusable-chars-gen
+
+// 
 llvm_nm_exe:STRING=$<TARGET_FILE:llvm-nm>
 
 // 
@@ -1583,10 +1957,22 @@ llvm_readobj_exe:STRING=$<TARGET_FILE:llvm-readobj>
 llvm_readobj_target:STRING=llvm-readobj
 
 // Path to a library.
+pkgcfg_lib_NCURSES_ncurses:FILEPATH=/usr/lib/x86_64-linux-gnu/libncurses.so
+
+// Path to a library.
+pkgcfg_lib_NCURSES_tinfo:FILEPATH=/usr/lib/x86_64-linux-gnu/libtinfo.so
+
+// Path to a library.
 pkgcfg_lib_PC_LIBEDIT_edit:FILEPATH=/usr/lib/x86_64-linux-gnu/libedit.so
 
 // Path to a library.
 pkgcfg_lib_PC_LIBXML_xml2:FILEPATH=/usr/lib/x86_64-linux-gnu/libxml2.so
+
+// 
+pseudo_gen:STRING=$<TARGET_FILE:clang-pseudo-gen>
+
+// 
+pseudo_gen_target:STRING=clang-pseudo-gen
 
 // Path to a file.
 zstd_INCLUDE_DIR:PATH=/usr/include

@@ -2,5 +2,9 @@ new_version=$(curl -L --stderr - https://llvm.org/ | grep -oP '(?<=: LLVM )\d+\.
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    cmake -LAH -S llvm -B tmp -DCMAKE_BUILD_TYPE=Release > "$PKGBUILDDIR"/help.txt
+    cmake \
+        "${_cmake_options[@]}" \
+        "${_llvm_options[@]}" \
+        "${_clang_options[@]}" \
+        -S llvm -B tmp -LAH > "$PKGBUILDDIR"/help.txt
 }

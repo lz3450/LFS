@@ -24,6 +24,7 @@ _cmake_options=(
   -DCMAKE_BUILD_TYPE=Release
   -DCMAKE_INSTALL_PREFIX=/usr
   -DCMAKE_INSTALL_LIBDIR=lib
+  # -DPython3_EXECUTABLE=/usr/bin/python3.12
   ################
   # stage 2
   ################
@@ -46,47 +47,44 @@ _llvm_options=(
   -DLLVM_BUILD_DOCS=OFF
   -DLLVM_INCLUDE_TESTS=OFF
   -DLLVM_BUILD_TESTS=OFF
+  -DLLVM_INCLUDE_BENCHMARKS=OFF
+  -DLLVM_BUILD_BENCHMARKS=OFF
   -DLLVM_ENABLE_BINDINGS=OFF
   -DLLVM_ENABLE_FFI=ON
   -DLLVM_ENABLE_RTTI=ON
   -DLLVM_INSTALL_UTILS=ON
-  ################
-  # libc
-  ################
+  ################################################################
+  # libc/libc++
+  ################################################################
   -DLLVM_ENABLE_LLVM_LIBC=OFF
-  ################
-  ################
-  # libc++
-  ################
-  # -DLLVM_ENABLE_LIBCXX=ON
-  ################
-  ################
+  -DLLVM_ENABLE_LIBCXX=OFF
+  ################################################################
   # stage 2
-  ################
+  ################################################################
   -DLLVM_USE_LINKER=lld
   -DLLVM_ENABLE_LTO=Thin
-  ################
+  ################################################################
   -DLLVM_APPEND_VC_REV=OFF
 )
 
 _clang_options=(
   -DCLANG_ENABLE_BOOTSTRAP=OFF
   -DCLANG_DEFAULT_LINKER=lld
-  ################
+  ################################################################
   # rtlib
-  ################
+  ################################################################
   # -DCLANG_DEFAULT_RTLIB=compiler-rt
   -DCLANG_DEFAULT_RTLIB=libgcc
-  ################
+  ################################################################
   -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
-  ################
+  ################################################################
   # libc++
-  ################
+  ################################################################
   # -DCLANG_DEFAULT_CXX_STDLIB=libc++
   # -DLIBCXX_USE_COMPILER_RT=ON
   # -DLIBCXXABI_USE_COMPILER_RT=ON
   # -DLIBCXXABI_USE_LLVM_UNWINDER=ON
-  ################
+  ################################################################
 )
 
 ################################################################################
