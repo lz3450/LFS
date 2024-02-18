@@ -11,7 +11,7 @@ mountpoint="/tmp/raspi"
 loop=""
 chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 target=""
-fs="f2fs"
+fs_type=""
 base_only=0
 base_img=""
 
@@ -46,7 +46,8 @@ usage() {
     Usage: $script_name [ -h | --help ] -t|--target <target> [ -b|--base-onle | -u|--use-base <basee_image> ]
 
     -h, --help                      display this help message and exit
-    -t, --target                    specify the target image (debian, ubuntu)
+    -t, --target <distro>           specify the image distribution (debian, ubuntu)
+    -f, --fs-type <filesystem>      specify the image filesystem type (ext4, f2fs)
     -b, --base-onle                 only create base image
     -u, --use-base <base_image>     use existing base image
 "
@@ -66,7 +67,7 @@ create_img() {
         mktable msdos \
         unit s \
         mkpart primary fat32 1s 524287s \
-        mkpart primary "$fs" 524288s 100% \
+        mkpart primary "$fs_type" 524288s 100% \
         print
 }
 
@@ -83,7 +84,7 @@ format_img() {
     info "Formating image..."
 
     sudo mkfs.fat -F32 "${loop}p1"
-    sudo mkfs."$fs" "${loop}p2"
+    sudo mkfs."$fs_type" "${loop}p2"
 }
 
 mount_img() {
@@ -158,7 +159,9 @@ configure_img() {
     info "ROOT PARTUUID: $rootpartuuid"
     sudo sed -i "s|%BOOTPARTUUID%|$bootpartuuid|" "$mountpoint"/etc/fstab
     sudo sed -i "s|%ROOTPARTUUID%|$rootpartuuid|" "$mountpoint"/etc/fstab
-    sudo sed -i "s|%ROOTPARTUUID%|$rootpartuuid|" $mountpoint/boot/firmware/cmdline.txt
+    sudo sed -i "s|%ROOTPARTUUID%|$rootpartuuid|" "$mountpoint"/boot/firmware/cmdline.txt
+    sudo sed -i "s|%FS_TYPE%|$fs_type|" "$mountpoint"/etc/fstab
+    sudo sed -i "s|%FS_TYPE%|$fs_type|" "$mountpoint"/boot/firmware/cmdline.txt
 
     # RPi firmware
     if [ "$target" == "ubuntu" ]; then
@@ -211,9 +214,9 @@ while [ $# -gt 0 ]; do
         shift
         target="$1"
         ;;
-    -f|--filesystem)
+    -f|--fs-type)
         shift
-        fs="$1"
+        fs_type="$1"
         ;;
     -b|--base-only)
         base_only=1
@@ -230,18 +233,24 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-if [ -z "$target" ] || ([ "$target" != "debian" ] && [ "$target" != "ubuntu" ]); then
+if [ "$target" != "debian" ] && [ "$target" != "ubuntu" ]; then
     usage
-    error "Incurrect or no <target> provided." 1
+    error "Unsupported target distribution \"$target\"." 1
 fi
 
-if [ "$fs" != "f2fs" ] && [ "$fs" != "ext4" ]; then
+if [ ! -f "$base_img" ] && [ "$fs_type" != "f2fs" ] && [ "$fs_type" != "ext4" ]; then
     usage
-    error "Unsupported filesystem type \"$fs\"." 2
+    error "Unsupported filesystem type \"$fs_type\"." 2
 fi
 
 if [ -d "$mountpoint" ]; then
     error "$mountpoint exists, please remove before restart!" 3
+fi
+
+# base-only and use-base are mutually exclusive
+if [ -f "$base_img" ] && [ $base_only -ne 0 ]; then
+    info "Nothing to do."
+    exit 0
 fi
 
 start_time=$(date +%s)
@@ -250,30 +259,25 @@ echo    "****************************************************************"
 echo    "               Create Raspberry Pi image                "
 echo    "****************************************************************"
 
-# does not use a base image
-if [ ! -f "$base_img" ]; then
+if [ -f "$base_img" ]; then
+    cp "$base_img" "$img"
+    setup_loop
+    mount_img
+    fs_type=$(sudo blkid -s TYPE | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
+else
     create_img
     setup_loop
     format_img
     mount_img
     bootstrap_img
     info "Copy base image..."
-    cp "$img" "$script_dir/raspi_${target}_${fs}_base_$(date +%Y%m%d%H%M%S).img"
-    if [ "$base_only" -eq 0 ]; then
-        configure_img
-        info "Copy full image..."
-        cp "$img" "$script_dir/raspi_${target}_${fs}_$(date +%Y%m%d%H%M%S).img"
-    fi
-# use a base image
-elif [ "$base_only" -eq 0 ]; then
-    cp "$base_img" "$img"
-    setup_loop
-    mount_img
+    cp -v "$img" "$script_dir/${target}-${fs_type}-raspi-base-$(date +%Y%m%d_%H%M%S).img"
+fi
+
+if [ $base_only -eq 0 ]; then
     configure_img
     info "Copy full image..."
-    cp "$img" "$script_dir/raspi_${target}_${fs}_$(date +%Y%m%d%H%M%S).img"
-else
-    info "Nothing to do."
+    cp -v "$img" "$script_dir/${target}-${fs_type}-raspi-$(date +%Y%m%d_%H%M%S).img"
 fi
 
 end_time=$(date +%s)

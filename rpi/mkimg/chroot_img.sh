@@ -6,10 +6,11 @@
 script_name="$(basename "$0")"
 script_path="$(readlink -f "$0")"
 script_dir="$(dirname "$script_path")"
-mountpoint=/tmp/raspi_img
+mountpoint=raspi_rootfs
 target=""
-base=0
-img=""
+# base=0
+file_name="$1"
+is_device=0
 loop=""
 chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
@@ -39,23 +40,35 @@ error() {
     fi
 }
 
-usage() {
-    local _usage="
-    Usage: $script_name [ -h | --help ] -t|--target <target> [ -b|--base-onle | -u|--use-base <basee_image> ]
+# usage() {
+#     local _usage="
+#     Usage: $script_name [ -h | --help ] -t|--target <target> [ -b|--base-onle | -u|--use-base <basee_image> ]
 
-    -h, --help                      display this help message and exit
-    -t, --target                    specify the target image (debian, ubuntu)
-"
-    echo "$_usage"
-}
+#     -h, --help                      display this help message and exit
+#     -t, --target                    specify the target image (debian, ubuntu)
+# "
+#     echo "$_usage"
+# }
+
+# find_image_file() {
+#     if [ $base -eq 0 ]; then
+#         img=`find . -name "*.img" | grep -Po "raspi_${target}_\d+\.img" | sort | tail -n1`
+#     else
+#         img=`find . -name "*.img" | grep -Po "raspi_${target}_base_\d+\.img" | sort | tail -n1`
+#     fi
+#     info "Image file is \"$file_name\""
+# }
 
 find_image_file() {
-    if [ $base -eq 0 ]; then
-        img=`find . -name "*.img" | grep -Po "raspi_${target}_\d+\.img" | sort | tail -n1`
+    if [ -f "$file_name" ]; then
+        is_device=0
+        info "Image file is \"$file_name\""
+    elif [ -b "$file_name" ]; then
+        is_device=1
+        info "Device is \"$file_name\""
     else
-        img=`find . -name "*.img" | grep -Po "raspi_${target}_base_\d+\.img" | sort | tail -n1`
+        error "Cannot find image file or device \"$file_name\"." 1
     fi
-    info "Image file is \"$img\""
 }
 
 setup_loop() {
@@ -64,24 +77,33 @@ setup_loop() {
     loop=$(losetup -f)
     info "Loop device is \"$loop\""
 
-    sudo losetup -P "$loop" "$img"
+    sudo losetup -P "$loop" "$file_name"
 }
 
-mount_img() {
+mount_device() {
+    if [ $is_device -eq 0 ]; then
+        setup_loop
+        device_name="${loop}p"
+    else
+        device_name="$file_name"
+        mount | grep -q "${device_name}1" && sudo umount "${device_name}1"
+        mount | grep -q "${device_name}2" && sudo umount "${device_name}2"
+    fi
+
     info "Mointing the image..."
 
     mkdir -p "$mountpoint"
-    sudo mount ${loop}p2 "$mountpoint"
+    sudo mount "${device_name}2" "$mountpoint"
 
     # Check if the mount was successful
     if mountpoint -q "$mountpoint"; then
-        echo "Successfully mounted ${loop}p2 to $mountpoint"
+        info "Successfully mounted ${device_name}2 to $mountpoint"
     else
-        error "Failed to mount ${loop}p2 to \"$mountpoint\"" 1
+        error "Failed to mount ${device_name}2 to \"$mountpoint\"" 1
     fi
 
     sudo mkdir -p "$mountpoint"/boot/firmware
-    sudo mount "${loop}p1" "$mountpoint"/boot/firmware
+    sudo mount "${device_name}1" "$mountpoint"/boot/firmware
 
     for fs in dev sys proc run; do
         sudo mount --rbind /"$fs" "$mountpoint/$fs"
@@ -120,34 +142,33 @@ trap cleanup EXIT SIGINT
 set -e
 # set -x
 
-while [ $# -gt 0 ]; do
-    case "$1" in
-    -h|--help)
-        usage
-        exit 0
-        ;;
-    -t|--target)
-        shift
-        target="$1"
-        ;;
-    -b|--base)
-        shift
-        base=1
-        ;;
-    *)
-        usage
-        error "Unknown option: $1" 1
-        ;;
-    esac
-    shift
-done
+# while [ $# -gt 0 ]; do
+#     case "$1" in
+#     -h|--help)
+#         usage
+#         exit 0
+#         ;;
+#     -t|--target)
+#         shift
+#         target="$1"
+#         ;;
+#     -b|--base)
+#         shift
+#         base=1
+#         ;;
+#     *)
+#         usage
+#         error "Unknown option: $1" 1
+#         ;;
+#     esac
+#     shift
+# done
 
-if [ -z "$target" ] || ([ "$target" != "debian" ] && [ "$target" != "ubuntu" ]); then
-    usage
-    error "Incurrect or no <target> provided." 1
-fi
+# if [ -z "$target" ] || ([ "$target" != "debian" ] && [ "$target" != "ubuntu" ]); then
+#     usage
+#     error "Incurrect or no <target> provided." 1
+# fi
 
 find_image_file
-setup_loop
-mount_img
-sudo PATH="$chroot_path" chroot "$mountpoint"/
+mount_device
+sudo PATH="$chroot_path" chroot "$mountpoint"
