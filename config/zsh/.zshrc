@@ -15,7 +15,7 @@ ZSH_THEME=random
 # a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 ZSH_THEME_RANDOM_CANDIDATES=(
-    "3den"
+    # "3den"
     # "adben"
     # "af-magic"
     # "afowler"
@@ -63,7 +63,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "fwalch"
     # "gallifrey"
     "gallois"
-    "garyblessington"
+    # "garyblessington"
     "gentoo"
     "geoffgarside"
     "gianu"
@@ -108,7 +108,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "mrtazz"
     # "murilasso"
     # "muse"
-    "nanotech"
+    # "nanotech"
     # "nebirhos"
     # "nicoulaj"
     # "norm"
