@@ -1,15 +1,13 @@
 #!/bin/bash
 #
-# chroot_img.sh
+# chroot-img.sh
 #
 
 script_name="$(basename "$0")"
 script_path="$(readlink -f "$0")"
 script_dir="$(dirname "$script_path")"
 mountpoint=raspi_rootfs
-target=""
-# base=0
-file_name="$1"
+file_name=""
 is_device=0
 loop=""
 chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
@@ -35,7 +33,7 @@ error() {
     local _msg="$1"
     local _error="$2"
     printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$script_name" "$_msg" >&2
-    if [ "$_error" -gt 0 ]; then
+    if [[ "$_error" -gt 0 ]]; then
         exit "$_error"
     fi
 }
@@ -60,10 +58,10 @@ error() {
 # }
 
 find_image_file() {
-    if [ -f "$file_name" ]; then
+    if [[ -f "$file_name" ]]; then
         is_device=0
         info "Image file is \"$file_name\""
-    elif [ -b "$file_name" ]; then
+    elif [[ -b "$file_name" ]]; then
         is_device=1
         info "Device is \"$file_name\""
     else
@@ -81,7 +79,7 @@ setup_loop() {
 }
 
 mount_device() {
-    if [ $is_device -eq 0 ]; then
+    if [[ $is_device -eq 0 ]]; then
         setup_loop
         device_name="${loop}p"
     else
@@ -115,23 +113,23 @@ cleanup() {
     info "Cleaning..."
     set +e
 
-    if [ -n "$mountpoint" ]; then
-        for attempt in $(seq 10); do
+    if [[ -n "$mountpoint" ]]; then
+        for attempt in {1..10}; do
             for fs in dev/pts dev sys proc run; do
                 mountpoint -q "$mountpoint/$fs" && sudo umount -R "$mountpoint/$fs" 2> /dev/null
             done
             mountpoint -q "$mountpoint" && sudo umount -R "$mountpoint" 2> /dev/null
-            if [ $? -ne 0 ]; then
+            if [[ $? -ne 0 ]]; then
                 break
             fi
             sleep 1
         done
     fi
 
-    if [ -n "$loop" ]; then
+    if [[ -n "$loop" ]]; then
         sudo losetup -d "$loop"
     fi
-    if [ -d "$mountpoint" ]; then
+    if [[ -d "$mountpoint" ]]; then
         rmdir "$mountpoint"
     fi
 }
@@ -142,33 +140,31 @@ trap cleanup EXIT SIGINT SIGTERM SIGKILL
 set -e
 # set -x
 
-# while [ $# -gt 0 ]; do
-#     case "$1" in
-#     -h|--help)
-#         usage
-#         exit 0
-#         ;;
-#     -t|--target)
-#         shift
-#         target="$1"
-#         ;;
-#     -b|--base)
-#         shift
-#         base=1
-#         ;;
-#     *)
-#         usage
-#         error "Unknown option: $1" 1
-#         ;;
-#     esac
-#     shift
-# done
+if (($# > 1)); then
+    error "Too many arguments" 1
+fi
+file_name="$1"
 
-# if [ -z "$target" ] || ([ "$target" != "debian" ] && [ "$target" != "ubuntu" ]); then
-#     usage
-#     error "Incurrect or no <target> provided." 1
-# fi
+echo -e "\e[1;30m"
+echo -e "****************************************************************"
+echo -e "               Create Raspberry Pi image                "
+echo -e "****************************************************************"
+echo -e "[$script_name]: Start time - $(date)"
+echo -e "\e[0m"
+
+start_time=$(date +%s)
 
 find_image_file
 mount_device
 sudo PATH="$chroot_path" chroot "$mountpoint"
+
+end_time=$(date +%s)
+total_time=$((end_time - start_time))
+
+echo -e "\e[1;30m"
+echo -e "****************************************************************"
+echo -e "                Execution time Information                "
+echo -e "****************************************************************"
+echo -e "[$script_name]: End time - $(date)"
+echo -e "[$script_name]: Total time - $(date -d@$total_time -u +%H:%M:%S)"
+echo -e "\e[0m"
