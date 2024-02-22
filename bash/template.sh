@@ -3,12 +3,10 @@
 # template.sh
 #
 
-set -e
-# set -x
-
-script_name="$(basename "${0}")"
-script_path="$(readlink -f "${0}")"
-script_dir="$(dirname "${script_path}")"
+script_name="$(basename "$0")"
+script_path="$(readlink -f "$0")"
+script_dir="$(dirname "$script_path")"
+version="1.0"
 verbose=false
 input=
 
@@ -39,67 +37,77 @@ error() {
 }
 
 usage() {
-    errno=0
-    if [ -n "${1}" ]; then
-        echo "${1}"
-        errno=1
-    fi
+    local _usage="
+    Usage: $script_name [ -h | --help ] -t|--target <target> [ -b|--base-onle | -u|--use-base <basee_image> ]
 
-    echo "Usage: ${script_name} [ -h | --help ] -i | --input <input> [ -V | --verbose ]"
-    echo
-    echo "    -h, --help        display this help message and exit"
-    echo "    -i, --input       option taking input example"
-    echo "    -V, --verbose     display more info"
-    echo
-    exit ${errno}
+    -V, --version                   print the script version number and exit
+    -h, --help                      print this help message and exit
+    -i, --input <arg>               argument
+    -v, --verbose                   verbose
+"
+    echo "$_usage"
 }
 
 example_function() {
     info "example_function"
 
-    echo ${input}
+    echo $input
 }
 
 cleanup() {
-    echo "cleanup"
+    info "cleanup"
 }
-trap cleanup EXIT
+trap cleanup EXIT SIGINT SIGTERM SIGKILL
+# trap "trap - SIGTERM && kill -- -$$" EXIT SIGINT SIGTERM SIGKILL
 
-################################################################
+################################################################################
 
-while [ -n "${1}" ]; do
-    case "${1}" in
-    -h|--help)
+set -e
+# set -x
+
+while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
+    case "$1" in
+    -V | --version )
+        echo "$version"
+        exit
+        ;;
+    -h | --help)
         usage
         ;;
-    -i|--input)
-        input="${2}"
-        shift 2
+    -i | --input)
+        shift; input="$1"
         ;;
-    -V|--verbose)
-        verbose=true
-        shift 1
+    -v | --verbose)
+        shift; verbose=true
         ;;
     *)
-        usage "Unknown option: ${1}"
+        usage
+        error "Unknown option: $1"
         ;;
     esac
+    shift
 done
+# if [[ "$1" == '--' ]]; then shift; fi
+
+echo -e "\e[1;30m"
+echo -e "****************************************************************"
+echo -e "               Create Raspberry Pi image                "
+echo -e "****************************************************************"
+echo -e "[$script_name]: Start time - $(date)"
+echo -e "\e[0m"
 
 start_time=$(date +%s)
-
-echo "****************************************************************"
-echo "                bash script template                "
-echo "****************************************************************"
 
 example_function
 cleanup
 
 end_time=$(date +%s)
-total_time=$((end_time-start_time))
+total_time=$((end_time - start_time))
 
-echo "****************************************************************"
-echo "                Execution time Information                "
-echo "****************************************************************"
-echo "${script_name} : End time - $(date)"
-echo "${script_name} : Total time - $(date -d@${total_time} -u +%H:%M:%S)"
+echo -e "\e[1;30m"
+echo -e "****************************************************************"
+echo -e "                Execution time Information                "
+echo -e "****************************************************************"
+echo -e "[$script_name]: End time - $(date)"
+echo -e "[$script_name]: Total time - $(date -d@$total_time -u +%H:%M:%S)"
+echo -e "\e[0m"
