@@ -31,14 +31,16 @@ error() {
     local _msg="$1"
     local _error="$2"
     printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$script_name" "$_msg" >&2
-    if [ "$_error" -gt 0 ]; then
+    if [[ "$_error" -gt 0 ]]; then
         exit "$_error"
     fi
 }
 
 usage() {
     local _usage="
-    Usage: $script_name [ -h | --help ] -t|--target <target> [ -b|--base-onle | -u|--use-base <basee_image> ]
+    Usage: $script_name -V | --version
+    Usage: $script_name -h | --help
+    Usage: $script_name [-v | --verbose ] -i | --input <arg>
 
     -V, --version                   print the script version number and exit
     -h, --help                      print this help message and exit
@@ -65,7 +67,31 @@ trap cleanup EXIT SIGINT SIGTERM SIGKILL
 set -e
 # set -x
 
-while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
+# while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
+#     case "$1" in
+#     -V | --version )
+#         echo "$version"
+#         exit
+#         ;;
+#     -h | --help)
+#         usage
+#         ;;
+#     -i | --input)
+#         shift; input="$1"
+#         ;;
+#     -v | --verbose)
+#         shift; verbose=true
+#         ;;
+#     *)
+#         usage
+#         error "Unknown option: $1"
+#         ;;
+#     esac
+#     shift
+# done
+# if [[ "$1" == '--' ]]; then shift; fi
+
+while (($# > 0)); do
     case "$1" in
     -V | --version )
         echo "$version"
@@ -87,7 +113,6 @@ while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
     esac
     shift
 done
-# if [[ "$1" == '--' ]]; then shift; fi
 
 echo -e "\e[1;30m"
 echo -e "****************************************************************"
