@@ -253,11 +253,15 @@ if [ -f "$base_img" ] && [ $base_only -ne 0 ]; then
     exit 0
 fi
 
-start_time=$(date +%s)
 
-echo    "****************************************************************"
-echo    "               Create Raspberry Pi image                "
-echo    "****************************************************************"
+echo -e "\e[1;30m"
+echo -e "****************************************************************"
+echo -e "               Create Raspberry Pi image                "
+echo -e "****************************************************************"
+echo -e "[$script_name]: Start time - $(date)"
+echo -e "\e[0m"
+
+start_time=$(date +%s)
 
 if [ -f "$base_img" ]; then
     cp "$base_img" "$img"
@@ -281,7 +285,7 @@ if [ $base_only -eq 0 ]; then
 fi
 
 end_time=$(date +%s)
-total_time=$((end_time-start_time))
+total_time=$((end_time - start_time))
 
 echo -e "\e[1;30m"
 echo -e "****************************************************************"

@@ -135,7 +135,7 @@ cleanup() {
         rmdir "$mountpoint"
     fi
 }
-trap cleanup EXIT SIGINT
+trap cleanup EXIT SIGINT SIGTERM SIGKILL
 
 ################################################################################
 
