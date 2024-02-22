@@ -68,7 +68,7 @@ DHCP=yes
 EOF
 tee /etc/systemd/network/wlan0.network << EOF
 [Match]
-Name=wlan0
+Name=wlan*
 
 [Network]
 DHCP=yes
@@ -88,4 +88,3 @@ systemctl enable systemd-networkd
 systemctl enable systemd-resolved
 systemctl enable wpa_supplicant@wlan0
 systemctl enable ssh
-ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf

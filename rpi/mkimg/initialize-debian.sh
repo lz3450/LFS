@@ -55,7 +55,7 @@ echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> /root/.z
 
 # user
 echo -e '3450\n3450' | passwd
-useradd -m -U -G sudo -s /bin/zsh kzl
+useradd -m -U -G sudo,adm -s /bin/zsh kzl
 echo -e '3450\n3450' | passwd kzl
 
 # environment variables
@@ -96,4 +96,3 @@ systemctl enable systemd-networkd
 systemctl enable systemd-resolved
 systemctl enable wpa_supplicant@wlan0
 systemctl enable ssh
-ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
