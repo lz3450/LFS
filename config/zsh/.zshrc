@@ -32,7 +32,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "bureau"
     "candy-kingdom"
     "candy"
-    "clean"
+    # "clean"
     # "cloud"
     "crcandy"
     # "crunch"
