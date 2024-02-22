@@ -8,11 +8,11 @@ tee /etc/apt/sources.list << EOF
 deb http://us.archive.ubuntu.com/ubuntu jammy main restricted universe
 deb-src http://us.archive.ubuntu.com/ubuntu jammy main restricted universe
 
-deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted
-deb-src http://security.ubuntu.com/ubuntu/ jammy-security main restricted
-
 deb http://us.archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe
 deb-src http://us.archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe
+
+deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe
+deb-src http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe
 EOF
 
 apt update
