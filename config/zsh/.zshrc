@@ -113,6 +113,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "nicoulaj"
     # "norm"
     # "obraun"
+    "oldgallois"
     # "peepcode"
     "philips"
     # "pmcgee"
@@ -140,7 +141,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "strug"
     "sunaku"
     # "sunrise"
-    # ""
+    # "superjarin"
     # "suvash"
     "takashiyoshida"
     # "terminalparty"
@@ -156,7 +157,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "xiong-chiamiov-plus"
     # "xiong-chiamiov"
     "ys"
-    "zhann"
+    # "zhann"
 )
 
 # Uncomment the following line to use case-sensitive completion.
