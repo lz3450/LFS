@@ -36,7 +36,7 @@ error() {
     local _msg="$1"
     local _error="$2"
     printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$script_name" "$_msg" >&2
-    if [ "$_error" -gt 0 ]; then
+    if [[ "$_error" -gt 0 ]]; then
         exit "$_error"
     fi
 }
@@ -57,7 +57,7 @@ usage() {
 create_img() {
     info "Creating image..."
 
-    if [ -f "$img" ]; then
+    if [[ -f "$img" ]]; then
         rm -f "$img"
     fi
 
@@ -100,9 +100,9 @@ bootstrap_img () {
     info "Bootstrap image..."
 
     # debootstrap
-    if [ "$target" == "debian" ]; then
+    if [[ "$target" == "debian" ]]; then
         sudo debootstrap --arch=arm64 --foreign bookworm "$mountpoint" http://deb.debian.org/debian
-    elif [ "$target" == "ubuntu" ]; then
+    elif [[ "$target" == "ubuntu" ]]; then
         sudo debootstrap --arch=arm64 --foreign jammy "$mountpoint" http://ports.ubuntu.com/ubuntu-ports
     fi
 
@@ -116,7 +116,7 @@ configure_img() {
 
     # source.list
     sudo cp -f "sources-$target.list" "$mountpoint"/etc/apt/sources.list
-    if [ "$target" == "debian" ]; then
+    if [[ "$target" == "debian" ]]; then
         sudo cp -f raspi.list "$mountpoint"/etc/apt/sources.list.d/
         wget -qO - http://archive.raspberrypi.org/debian/raspberrypi.gpg.key | gpg --dearmor | sudo tee "$mountpoint"/etc/apt/trusted.gpg.d/raspberrypi >/dev/null
     fi
@@ -164,7 +164,7 @@ configure_img() {
     sudo sed -i "s|%FS_TYPE%|$fs_type|" "$mountpoint"/boot/firmware/cmdline.txt
 
     # RPi firmware
-    if [ "$target" == "ubuntu" ]; then
+    if [[ "$target" == "ubuntu" ]]; then
         sudo cp -dr "$script_dir"/firmware/boot/* "$mountpoint"/boot/firmware/
         sudo cp -dr "$script_dir"/firmware/modules "$mountpoint"/usr/lib/
         sudo cp -dr "$script_dir"/firmware/opt/vc "$mountpoint"/opt/
@@ -177,23 +177,23 @@ cleanup() {
     info "Cleaning..."
     set +e
 
-    if [ -n "$mountpoint" ]; then
-        for attempt in $(seq 10); do
+    if [[ -n "$mountpoint" ]]; then
+        for attempt in {1..10}; do
             for fs in dev/pts dev sys proc run; do
                 mount | grep -q "$mountpoint/$fs" && sudo umount -R "$mountpoint/$fs" 2> /dev/null
             done
             mount | grep -q "$mountpoint" && sudo umount -R "$mountpoint" 2> /dev/null
-            if [ $? -ne 0 ]; then
+            if [[ $? -ne 0 ]]; then
                 break
             fi
             sleep 1
         done
     fi
 
-    if [ -n "$loop" ]; then
+    if [[ -n "$loop" ]]; then
         sudo losetup -d "$loop"
     fi
-    if [ -d "$mountpoint" ]; then
+    if [[ -d "$mountpoint" ]]; then
         rmdir "$mountpoint"
     fi
 }
@@ -204,7 +204,7 @@ trap cleanup EXIT
 set -e -u
 # set -x
 
-while [ $# -gt 0 ]; do
+while (($# > 0 )); do
     case "$1" in
     -h|--help)
         usage
@@ -233,22 +233,22 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-if [ "$target" != "debian" ] && [ "$target" != "ubuntu" ]; then
+if [[ "$target" != "debian" ]] && [[ "$target" != "ubuntu" ]]; then
     usage
     error "Unsupported target distribution \"$target\"." 1
 fi
 
-if [ ! -f "$base_img" ] && [ "$fs_type" != "f2fs" ] && [ "$fs_type" != "ext4" ]; then
+if [[ ! -f "$base_img" ]] && [[ "$fs_type" != "f2fs" ]] && [[ "$fs_type" != "ext4" ]]; then
     usage
     error "Unsupported filesystem type \"$fs_type\"." 2
 fi
 
-if [ -d "$mountpoint" ]; then
+if [[ -d "$mountpoint" ]]; then
     error "$mountpoint exists, please remove before restart!" 3
 fi
 
 # base-only and use-base are mutually exclusive
-if [ -f "$base_img" ] && [ $base_only -ne 0 ]; then
+if [[ -f "$base_img" ]] && [[ $base_only -ne 0 ]]; then
     info "Nothing to do."
     exit 0
 fi
@@ -263,7 +263,7 @@ echo -e "\e[0m"
 
 start_time=$(date +%s)
 
-if [ -f "$base_img" ]; then
+if [[ -f "$base_img" ]]; then
     cp "$base_img" "$img"
     setup_loop
     mount_img
@@ -278,7 +278,7 @@ else
     cp -v "$img" "$script_dir/${target}-${fs_type}-raspi-base-$(date +%Y%m%d_%H%M%S).img"
 fi
 
-if [ $base_only -eq 0 ]; then
+if [[ $base_only -eq 0 ]]; then
     configure_img
     info "Copy full image..."
     cp -v "$img" "$script_dir/${target}-${fs_type}-raspi-$(date +%Y%m%d_%H%M%S).img"

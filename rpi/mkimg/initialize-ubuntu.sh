@@ -6,16 +6,17 @@ set -e
 # package
 apt clean
 apt update
+apt upgrade -y
 apt install -y \
     sudo \
     f2fs-tools \
-    systemd-timesyncd \
     wpasupplicant \
-    gnupg \
+    systemd-timesyncd \
     wget curl \
-    bash-completion \
     nano \
     openssh-server \
+    gnupg \
+    bash-completion \
     zsh \
     zsh-syntax-highlighting \
     zsh-autosuggestions \
@@ -24,7 +25,9 @@ apt install -y \
     # linux-raspi \
     # flash-kernel \
     # rpi-eeprom
-apt upgrade -y
+
+apt purge -y \
+    ubuntu-advantage-tools
 
 dpkg-reconfigure locales
 dpkg-reconfigure tzdata
