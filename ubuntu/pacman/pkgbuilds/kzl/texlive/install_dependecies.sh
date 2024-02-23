@@ -1,17 +1,18 @@
 #!/bin/bash
 
 sudo apt install \
-    libcairo2-dev \
-    fontconfig \
-    libfreetype-dev \
-    libgd-dev \
-    ghostscript \
-    libgmp-dev \
-    libgraphite2-dev \
-    libharfbuzz-dev \
-    libicu-dev \
-    libpaper-dev \
     libpng-dev \
-    libmpfr-dev \
+    libfreetype-dev \
     libpixman-1-dev \
-    libzzip-dev
+    libcairo2-dev \
+    libzzip-dev \
+    libgraphite2-dev \
+    libicu-dev \
+    libharfbuzz-dev \
+    libgd-dev \
+    libgmp-dev \
+    libmpfi-dev \
+    libmpfr-dev \
+    texinfo \
+    fontconfig \
+    ghostscript

@@ -8,18 +8,9 @@ pacmanver=$(curl -L -A 'Mozilla/5.0' --stderr - https://gitlab.archlinux.org/pac
 
 sudo apt update
 sudo apt install -y \
-    cmake meson ninja-build autoconf m4 pkg-config\
-    curl libssl-dev libcurl4-openssl-dev libassuan-dev libarchive-tools libarchive-dev libgpgme-dev fakeroot fakechroot zstd \
-    zlib1g-dev \
-    valgrind \
-    liblzma-dev \
-    swig \
-    libedit-dev \
-    rsync \
-    libelf-dev \
-    libffi-dev \
-    flex bison \
-    python3-setuptools
+    meson cmake ninja-build \
+    libarchive-dev libcurl4-openssl-dev libgpgme-dev libssl-dev \
+    fakechroot libarchive-tools
 
 cd $BUILDDIR
 if [ ! -f pacman-$pacmanver.tar.gz ]; then

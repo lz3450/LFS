@@ -248,6 +248,10 @@ Optional Packages:
                           (requires pkg-config)
   --with-system-zziplib   use installed zziplib headers and library (requires
                           pkg-config)
+  --with-system-mpfi      use installed mpfi headers and library
+  --with-mpfi-includes=DIR
+                          mpfi headers installed in DIR
+  --with-mpfi-libdir=DIR  mpfi library installed in DIR
   --with-system-mpfr      use installed mpfr headers and library
   --with-mpfr-includes=DIR
                           mpfr headers installed in DIR

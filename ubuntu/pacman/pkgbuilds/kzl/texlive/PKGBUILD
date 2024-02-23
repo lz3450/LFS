@@ -1,7 +1,7 @@
 pkgname=texlive
-pkgver=20240117
+pkgver=20240222
 _pkgyear=2023
-pkgrel=3
+pkgrel=1
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -68,6 +68,7 @@ build() {
     --with-system-graphite2 \
     --with-system-zziplib \
     --with-system-mpfr \
+    --without-system-mpfi \
     --with-system-gmp \
     --with-system-cairo \
     --with-system-pixman \

@@ -2,13 +2,13 @@
 
 sudo apt install \
     libexpat1-dev \
-    libgdbm-dev \
-    libgdbm-compat-dev \
-    libdb5.3 \
-    libedit-dev \
     libffi-dev \
-    libnsl-dev \
-    libsqlite3-dev \
+    libmpdec-dev \
+    libbz2-dev \
+    libncurses-dev \
+    libgdbm-compat-dev \
+    libgdbm-dev \
     tcl-dev \
     tk-dev \
-    libmpdec-dev
+    libsqlite3-dev \
+    libedit-dev
