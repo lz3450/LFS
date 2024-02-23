@@ -14,3 +14,6 @@ echo "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main" | 
 echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
 # sudo apt-add-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
 # sudo apt-add-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+
+sudo apt update
+sudo apt install -y microsoft-edge-stable code
