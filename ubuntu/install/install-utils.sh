@@ -11,5 +11,4 @@ sudo apt upgrade -y
 sudo apt install -y \
     build-essential \
     tmux \
-    samba \
     landscape-client

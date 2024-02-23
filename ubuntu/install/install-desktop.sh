@@ -17,12 +17,13 @@ sudo apt purge -y \
     ubuntu-release-upgrader-core \
     ubuntu-report \
     sssd \
-    avahi-daemon \
-    "memtest86+"
+    avahi-daemon
 
 sudo rm -vrf /var/lib/update-manager
 sudo rm -vrf /var/lib/update-notifier
 sudo rm -vrf /var/lib/ubuntu-release-upgrader
+
+sudo apt purge -y memtest86 || :
 
 if mountpoint -q /var/snap/firefox/common/host-hunspell; then
     sudo umount /var/snap/firefox/common/host-hunspell
