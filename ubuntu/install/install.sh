@@ -1,6 +1,9 @@
 #!/bin/bash
+#
+# install.sh
+#
 
-set -e -u
+set -e
 
 debootstrap --arch="amd64" jammy /mnt http://us.archive.ubuntu.com/ubuntu
 

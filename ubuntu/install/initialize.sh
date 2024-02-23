@@ -1,4 +1,7 @@
-#! /bin/sh
+#!/bin/bash
+#
+# initialize.sh
+#
 
 set -e
 # set -x
