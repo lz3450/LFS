@@ -1,6 +1,6 @@
 #!/bin/bash
 
 sudo apt install \
-    libedit-dev \
     libffi-dev \
+    libedit-dev \
     libxml2-dev
