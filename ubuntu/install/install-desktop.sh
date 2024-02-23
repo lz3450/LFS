@@ -18,7 +18,7 @@ sudo apt purge -y \
     ubuntu-report \
     sssd \
     avahi-daemon \
-    memtest86+
+    "memtest86+"
 
 sudo rm -vrf /var/lib/update-manager
 sudo rm -vrf /var/lib/update-notifier
