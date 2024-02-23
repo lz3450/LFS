@@ -31,7 +31,7 @@ error() {
     local _msg="$1"
     local _error="$2"
     printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$script_name" "$_msg" >&2
-    if [ "$_error" -gt 0 ]; then
+    if [[ "$_error" -gt 0 ]]; then
         exit "$_error"
     fi
 }
@@ -46,7 +46,7 @@ updatepkg (kzl-linux)
 
 Update the \`pkgver\` of PKGBUILD
 
-Usage: updatepkg
+Usage: updatepkg [ -n ] [ -i ]
 
     -h, --help                  Display this help message and exit
     -n, --no-cleanbuild         Do not remove "\$srcdir/" dir before updating PKGBUILD
@@ -57,7 +57,7 @@ Usage: updatepkg
 
 ################################################################
 
-while [ $# -gt 0 ]; do
+while (($# > 0 )); do
     case "$1" in
     -h|--help)
         usage
@@ -83,13 +83,13 @@ set -u
 # set -x
 
 #
-if [ ! -f PKGBUILD ]; then
+if [[ ! -f PKGBUILD ]]; then
    error 'PKGBUILD does not exist.' 2
 fi
 
-if [ -f "/etc/makepkg.conf" ]; then
+if [[ -f "/etc/makepkg.conf" ]]; then
     . /etc/makepkg.conf
-elif [ -f "/usr/local/etc/makepkg.conf" ]; then
+elif [[ -f "/usr/local/etc/makepkg.conf" ]]; then
     . /usr/local/etc/makepkg.conf
 else
     error 'makepkg.conf NOT found.' 5
@@ -97,13 +97,13 @@ fi
 source PKGBUILD
 PKGBUILDDIR=$(pwd)
 
-if [ ! -f PKGUPDATE ]; then
+if [[ ! -f PKGUPDATE ]]; then
     error "PKGUPDATE does not exist." 2
 fi
 
 unset new_version current_version pre_update post_update
 source PKGUPDATE || :
-if [ -z "$new_version" ]; then
+if [[ -z "$new_version" ]]; then
     error 'Cannot get new version.' 6
 fi
 current_version=${current_version:-$(cat PKGBUILD | grep -oP 'pkgver=\K.+$')}
@@ -116,7 +116,7 @@ if have_function 'pre_update'; then
 fi
 
 result=$(vercmp $new_version $current_version)
-if [ $result -eq 1 ]; then
+if [[ $result -eq 1 ]]; then
     info "PKGBUILD updated: $current_version => $new_version"
     sed -i "/^pkgver=/s/$current_version/$new_version/" PKGBUILD
     sed -i "/^pkgrel=/s/$current_pkgrel/1/" PKGBUILD
@@ -125,20 +125,20 @@ if [ $result -eq 1 ]; then
     updpkgsums || error "\`updpkgsums\` error" 2
     # force cleanbuild
     cleanbuild=1
-elif [ $result -eq 0 ]; then
+elif [[ $result -eq 0 ]]; then
     info "PKGBUILD is up to date."
-    if [ $increase -gt 0 ]; then
+    if [[ $increase -gt 0 ]]; then
         info "increase pkgrel..."
         new_pkgrel=$((current_pkgrel + 1))
         sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" PKGBUILD
     fi
-elif [ $result -eq -1 ]; then
+elif [[ $result -eq -1 ]]; then
     warning "Current version is newer."
 else
     error "Unknow \`vercmp\` result." 7
 fi
 
-if [ $cleanbuild -gt 0 ]; then
+if [[ $cleanbuild -gt 0 ]]; then
     makepkg -Co || error "\`makepkg -Co\` error" 3
 else
     makepkg -o || error "\`makepkg -o\` error" 3
