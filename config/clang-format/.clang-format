@@ -20,5 +20,6 @@ AlignConsecutiveMacros: Consecutive
 AlignEscapedNewlines: Left
 AlignOperands: AlignAfterOperator
 AlignTrailingComments: true
+PackConstructorInitializers: Never
 # other
 AllowShortBlocksOnASingleLine: Always
