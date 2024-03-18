@@ -106,8 +106,11 @@ source PKGUPDATE || :
 if [[ -z "$new_version" ]]; then
     error 'Cannot get new version.' 6
 fi
+info "New pkgver is $new_version"
 current_version=${current_version:-$(cat PKGBUILD | grep -oP 'pkgver=\K.+$')}
+info "Current pkgver is $current_version"
 current_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
+info "Current pkgrel is $current_pkgrel"
 
 # run pre_update
 if have_function 'pre_update'; then
