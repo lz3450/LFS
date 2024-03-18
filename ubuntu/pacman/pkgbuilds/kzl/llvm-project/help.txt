@@ -69,8 +69,6 @@
 -- Looking for FE_ALL_EXCEPT - found
 -- Looking for FE_INEXACT
 -- Looking for FE_INEXACT - found
--- Performing Test HAVE_BUILTIN_THREAD_POINTER
--- Performing Test HAVE_BUILTIN_THREAD_POINTER - Success
 -- Looking for mach/mach.h
 -- Looking for mach/mach.h - not found
 -- Looking for CrashReporterClient.h
@@ -89,17 +87,13 @@
 -- Looking for clock_gettime in rt - found
 -- Looking for pfm_initialize in pfm
 -- Looking for pfm_initialize in pfm - not found
--- Looking for pthread.h
--- Looking for pthread.h - found
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE  
--- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.2.11") 
+-- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.2.11")  
 -- Looking for compress2
 -- Looking for compress2 - found
--- Found LibXml2: /usr/lib/x86_64-linux-gnu/libxml2.so (found version "2.9.13") 
--- Looking for xmlReadMemory
--- Looking for xmlReadMemory - found
+-- Could NOT find LibXml2 (missing: LIBXML2_LIBRARY LIBXML2_INCLUDE_DIR) 
 -- Looking for histedit.h
 -- Looking for histedit.h - found
 -- Found LibEdit: /usr/include (found version "2.11") 
@@ -156,6 +150,8 @@
 -- Looking for pread - found
 -- Looking for sbrk
 -- Looking for sbrk - found
+-- Looking for strerror
+-- Looking for strerror - found
 -- Looking for strerror_r
 -- Looking for strerror_r - found
 -- Looking for strerror_s
@@ -220,10 +216,6 @@
 -- Performing Test CXX_SUPPORTS_WERROR_DATE_TIME - Success
 -- Performing Test CXX_SUPPORTS_WERROR_UNGUARDED_AVAILABILITY_NEW
 -- Performing Test CXX_SUPPORTS_WERROR_UNGUARDED_AVAILABILITY_NEW - Failed
--- Performing Test C_SUPPORTS_CMAKE_CXX_FLAGS
--- Performing Test C_SUPPORTS_CMAKE_CXX_FLAGS - Success
--- Performing Test CXX_SUPPORTS_CMAKE_CXX_FLAGS
--- Performing Test CXX_SUPPORTS_CMAKE_CXX_FLAGS - Success
 -- Performing Test CXX_SUPPORTS_MISSING_FIELD_INITIALIZERS_FLAG
 -- Performing Test CXX_SUPPORTS_MISSING_FIELD_INITIALIZERS_FLAG - Success
 -- Performing Test C_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG
@@ -285,14 +277,14 @@
 -- Targeting X86
 -- Looking for sys/resource.h
 -- Looking for sys/resource.h - found
--- Clang version: 17.0.6
+-- Clang version: 16.0.6
 -- Performing Test CXX_SUPPORTS_NO_NESTED_ANON_TYPES_FLAG
 -- Performing Test CXX_SUPPORTS_NO_NESTED_ANON_TYPES_FLAG - Failed
 -- Looking for include file sys/inotify.h
 -- Looking for include file sys/inotify.h - found
--- LLD version: 17.0.6
--- Found SWIG: /usr/bin/swig4.0 (found suitable version "4.0.2", minimum required is "3")  
--- Enable SWIG to generate LLDB bindings: TRUE
+-- LLD version: 16.0.6
+-- Could NOT find SWIG (missing: SWIG_EXECUTABLE SWIG_DIR) (Required is at least version "3")
+-- Enable SWIG to generate LLDB bindings: FALSE
 -- Enable editline support in LLDB: TRUE
 -- Found CursesAndPanel: /usr/include  
 -- Enable curses support in LLDB: TRUE
@@ -304,14 +296,14 @@
 -- Looking for lzma_lzma_preset in /usr/lib/x86_64-linux-gnu/liblzma.so - found
 -- Found LibLZMA: /usr/lib/x86_64-linux-gnu/liblzma.so (found version "5.2.5") 
 -- Enable LZMA compression support in LLDB: TRUE
--- Could NOT find Lua (missing: LUA_LIBRARIES LUA_INCLUDE_DIR) (Required is exact version "5.3")
--- Could NOT find LuaAndSwig (missing: LUA_LIBRARIES LUA_INCLUDE_DIR) 
+-- SWIG 3 or later is required for Lua support in LLDB but could not be found
+-- Could NOT find LuaAndSwig (missing: LUA_LIBRARIES LUA_INCLUDE_DIR LLDB_ENABLE_SWIG) 
 -- Enable Lua scripting support in LLDB: FALSE
--- Found Python3: /usr/local/bin/python3.12 (found version "3.12.2") found components: Interpreter Development Development.Module Development.Embed 
--- Found PythonAndSwig: /usr/local/lib/libpython3.12.so  
--- Enable Python scripting support in LLDB: TRUE
--- Found LibXml2: /usr/lib/x86_64-linux-gnu/libxml2.so (found suitable version "2.9.13", minimum required is "2.8") 
--- Enable Libxml 2 support in LLDB: TRUE
+-- SWIG 3 or later is required for Python support in LLDB but could not be found
+-- Could NOT find PythonAndSwig (missing: Python3_LIBRARIES Python3_INCLUDE_DIRS LLDB_ENABLE_SWIG) 
+-- Enable Python scripting support in LLDB: FALSE
+-- Could NOT find LibXml2 (missing: LIBXML2_LIBRARY LIBXML2_INCLUDE_DIR) (Required is at least version "2.8")
+-- Enable Libxml 2 support in LLDB: FALSE
 -- Enable libfbsdvmcore support in LLDB: 0
 -- Looking for el_winsertstr
 -- Looking for el_winsertstr - found
@@ -333,7 +325,7 @@
 -- Performing Test CXX_SUPPORTS_DEPRECATED_REGISTER - Failed
 -- Performing Test CXX_SUPPORTS_VLA_EXTENSION
 -- Performing Test CXX_SUPPORTS_VLA_EXTENSION - Failed
--- LLDB version: 17.0.6
+-- LLDB version: 16.0.6
 -- Looking for ppoll
 -- Looking for ppoll - found
 -- Looking for ptsname_r
@@ -348,13 +340,12 @@
 -- Looking for __NR_process_vm_readv - found
 -- Looking for compression_encode_buffer in compression
 -- Looking for compression_encode_buffer in compression - not found
--- SWIG version 4.0.2 uses `-py3` flag.
 -- Skipping FreeBSDKernel plugin due to missing libfbsdvmcore
--- Found Doxygen: /usr/bin/doxygen (found version "1.9.1") found components: doxygen dot 
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
 -- Registering ExampleIRTransforms as a pass plugin (static build: OFF)
 -- Registering Bye as a pass plugin (static build: OFF)
--- Configuring done
--- Generating done
+-- Configuring done (7.5s)
+-- Generating done (1.5s)
 -- Build files have been written to: /home/kzl/makepkg/build/llvm-project/src/llvm-project/tmp
 -- Cache values
 // Default URL where bug reports are to be submitted.
@@ -424,7 +415,7 @@ CLANG_ENABLE_CLANGD:BOOL=ON
 CLANG_ENABLE_HLSL:BOOL=OFF
 
 // Whether libclang may depend on libxml2
-CLANG_ENABLE_LIBXML2:BOOL=ON
+CLANG_ENABLE_LIBXML2:BOOL=OFF
 
 // Build Clang protobuf fuzzer.
 CLANG_ENABLE_PROTO_FUZZER:BOOL=OFF
@@ -433,7 +424,7 @@ CLANG_ENABLE_PROTO_FUZZER:BOOL=OFF
 CLANG_ENABLE_STATIC_ANALYZER:BOOL=ON
 
 // Major version number that will be appended to the clang executable name
-CLANG_EXECUTABLE_VERSION:STRING=17
+CLANG_EXECUTABLE_VERSION:STRING=16
 
 // Force the SOVERSION of libclang to be equal to CLANG_MAJOR
 CLANG_FORCE_MATCHING_LIBCLANG_SOVERSION:BOOL=ON
@@ -460,7 +451,7 @@ CLANG_LINK_CLANG_DYLIB:BOOL=ON
 CLANG_PLUGIN_SUPPORT:BOOL=ON
 
 // Host clang-pseudo-gen executable. Saves building if cross-compiling.
-CLANG_PSEUDO_GEN:STRING=
+CLANG_PSEUDO_GEN:STRING=clang-pseudo-gen
 
 // Python versions to install libclang python bindings for
 CLANG_PYTHON_BINDINGS_VERSIONS:STRING=
@@ -481,7 +472,7 @@ CLANG_SYSTEMZ_DEFAULT_ARCH:STRING=z10
 CLANG_TABLEGEN:STRING=clang-tblgen
 
 // Host clang-tidy-confusable-chars-gen executable. Saves building if cross-compiling.
-CLANG_TIDY_CONFUSABLE_CHARS_GEN:STRING=
+CLANG_TIDY_CONFUSABLE_CHARS_GEN:STRING=clang-tidy-confusable-chars-gen
 
 // Include static analyzer checks in clang-tidy
 CLANG_TIDY_ENABLE_STATIC_ANALYZER:BOOL=ON
@@ -751,7 +742,7 @@ CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
 CMAKE_INSTALL_PACKAGEDIR:PATH=lib/cmake
 
 // Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=/usr/local
+CMAKE_INSTALL_PREFIX:PATH=/opt/llvm-project
 
 // Run-time variable data (LOCALSTATEDIR/run)
 CMAKE_INSTALL_RUNSTATEDIR:PATH=
@@ -840,6 +831,9 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 // Path to a program.
 CMAKE_STRIP:FILEPATH=/usr/bin/strip
 
+// Path to a program.
+CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
+
 // If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
@@ -891,6 +885,141 @@ CPACK_SOURCE_TZ:BOOL=ON
 // Enable to build ZIP source packages
 CPACK_SOURCE_ZIP:BOOL=OFF
 
+// Compile device code in 64 bit mode
+CUDA_64_BIT_DEVICE_CODE:BOOL=ON
+
+// Attach the build rule to the CUDA source file.  Enable only when the CUDA source file is added to at most one target.
+CUDA_ATTACH_VS_BUILD_RULE_TO_CUDA_FILE:BOOL=ON
+
+// Generate and parse .cubin files in Device mode.
+CUDA_BUILD_CUBIN:BOOL=OFF
+
+// Build in Emulation mode
+CUDA_BUILD_EMULATION:BOOL=OFF
+
+// "cudart" library
+CUDA_CUDART_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcudart.so
+
+// "cuda" library (older versions only).
+CUDA_CUDA_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libcuda.so
+
+// Directory to put all the output files.  If blank it will default to the CMAKE_CURRENT_BINARY_DIR
+CUDA_GENERATED_OUTPUT_DIR:PATH=
+
+// Generated file extension
+CUDA_HOST_COMPILATION_CPP:BOOL=ON
+
+// Host side compiler used by NVCC
+CUDA_HOST_COMPILER:FILEPATH=/usr/bin/cc
+
+// Path to a program.
+CUDA_NVCC_EXECUTABLE:FILEPATH=/usr/local/cuda/bin/nvcc
+
+// Semi-colon delimit multiple arguments. during all build types.
+CUDA_NVCC_FLAGS:STRING=
+
+// Semi-colon delimit multiple arguments. during DEBUG builds.
+CUDA_NVCC_FLAGS_DEBUG:STRING=
+
+// Semi-colon delimit multiple arguments. during MINSIZEREL builds.
+CUDA_NVCC_FLAGS_MINSIZEREL:STRING=
+
+// Semi-colon delimit multiple arguments. during RELEASE builds.
+CUDA_NVCC_FLAGS_RELEASE:STRING=
+
+// Semi-colon delimit multiple arguments. during RELWITHDEBINFO builds.
+CUDA_NVCC_FLAGS_RELWITHDEBINFO:STRING=
+
+// "OpenCL" library
+CUDA_OpenCL_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libOpenCL.so
+
+// Propagate C/CXX_FLAGS and friends to the host compiler via -Xcompile
+CUDA_PROPAGATE_HOST_FLAGS:BOOL=ON
+
+// Path to a file.
+CUDA_SDK_ROOT_DIR:PATH=CUDA_SDK_ROOT_DIR-NOTFOUND
+
+// Compile CUDA objects with separable compilation enabled.  Requires CUDA 5.0+
+CUDA_SEPARABLE_COMPILATION:BOOL=OFF
+
+// Path to a file.
+CUDA_TOOLKIT_INCLUDE:PATH=/usr/local/cuda/include
+
+// Toolkit location.
+CUDA_TOOLKIT_ROOT_DIR:PATH=/usr/local/cuda
+
+// Use the static version of the CUDA runtime library if available
+CUDA_USE_STATIC_CUDA_RUNTIME:BOOL=ON
+
+// Print out the commands run while compiling the CUDA source file.  With the Makefile generator this defaults to VERBOSE variable specified on the command line, but can be forced on with this option.
+CUDA_VERBOSE_BUILD:BOOL=OFF
+
+// Version of CUDA as computed from nvcc.
+CUDA_VERSION:STRING=12.1
+
+// "cublas" library
+CUDA_cublas_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcublas.so
+
+// "cudadevrt" library
+CUDA_cudadevrt_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcudadevrt.a
+
+// static CUDA runtime library
+CUDA_cudart_static_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcudart_static.a
+
+// "cufft" library
+CUDA_cufft_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcufft.so
+
+// "cupti" library
+CUDA_cupti_LIBRARY:FILEPATH=/usr/local/cuda/extras/CUPTI/lib64/libcupti.so
+
+// "curand" library
+CUDA_curand_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcurand.so
+
+// "cusolver" library
+CUDA_cusolver_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcusolver.so
+
+// "cusparse" library
+CUDA_cusparse_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcusparse.so
+
+// "nppc" library
+CUDA_nppc_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnppc.so
+
+// "nppial" library
+CUDA_nppial_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnppial.so
+
+// "nppicc" library
+CUDA_nppicc_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnppicc.so
+
+// "nppidei" library
+CUDA_nppidei_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnppidei.so
+
+// "nppif" library
+CUDA_nppif_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnppif.so
+
+// "nppig" library
+CUDA_nppig_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnppig.so
+
+// "nppim" library
+CUDA_nppim_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnppim.so
+
+// "nppist" library
+CUDA_nppist_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnppist.so
+
+// "nppisu" library
+CUDA_nppisu_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnppisu.so
+
+// "nppitc" library
+CUDA_nppitc_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnppitc.so
+
+// "npps" library
+CUDA_npps_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnpps.so
+
+// "nvToolsExt" library
+CUDA_nvToolsExt_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnvToolsExt.so
+
+// Path to a library.
+CUDA_rt_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/librt.a
+
 // Path to a library.
 CURSES_CURSES_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libcurses.so
 
@@ -912,8 +1041,8 @@ DEFAULT_SYSROOT:STRING=
 // Dot tool for use with Doxygen
 DOXYGEN_DOT_EXECUTABLE:FILEPATH=/usr/bin/dot
 
-// Doxygen documentation generation tool (http://www.doxygen.org)
-DOXYGEN_EXECUTABLE:FILEPATH=/usr/bin/doxygen
+// Doxygen documentation generation tool (https://www.doxygen.nl)
+DOXYGEN_EXECUTABLE:FILEPATH=DOXYGEN_EXECUTABLE-NOTFOUND
 
 // pass --build-id to ld
 ENABLE_LINKER_BUILD_ID:BOOL=OFF
@@ -952,7 +1081,7 @@ GRPC_INSTALL_PATH:PATH=
 LIBCLANG_BUILD_STATIC:BOOL=OFF
 
 // Major version number that will be appended to the libclang library
-LIBCLANG_LIBRARY_VERSION:STRING=17
+LIBCLANG_LIBRARY_VERSION:STRING=16
 
 // Path to a file.
 LIBLZMA_INCLUDE_DIR:PATH=/usr/include
@@ -964,13 +1093,13 @@ LIBLZMA_LIBRARY_DEBUG:FILEPATH=LIBLZMA_LIBRARY_DEBUG-NOTFOUND
 LIBLZMA_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/liblzma.so
 
 // Path to a file.
-LIBXML2_INCLUDE_DIR:PATH=/usr/include/libxml2
+LIBXML2_INCLUDE_DIR:PATH=LIBXML2_INCLUDE_DIR-NOTFOUND
 
 // Path to a library.
-LIBXML2_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libxml2.so
+LIBXML2_LIBRARY:FILEPATH=LIBXML2_LIBRARY-NOTFOUND
 
 // Path to a program.
-LIBXML2_XMLLINT_EXECUTABLE:FILEPATH=/usr/bin/xmllint
+LIBXML2_XMLLINT_EXECUTABLE:FILEPATH=LIBXML2_XMLLINT_EXECUTABLE-NOTFOUND
 
 // Build LLDB.framework (Darwin only)
 LLDB_BUILD_FRAMEWORK:BOOL=OFF
@@ -980,9 +1109,6 @@ LLDB_BUILD_INTEL_MPX:BOOL=ON
 
 // Enable Building of Intel(R) Processor Trace Tool
 LLDB_BUILD_INTEL_PT:BOOL=OFF
-
-// Embed PYTHONHOME in the binary. If set to OFF, PYTHONHOME environment variable will be used to to locate Python.
-LLDB_EMBED_PYTHON_HOME:BOOL=OFF
 
 // Enable curses support in LLDB On, Off or Auto (default)
 LLDB_ENABLE_CURSES:STRING=Auto
@@ -1008,9 +1134,6 @@ LLDB_ENABLE_PYTHON:STRING=Auto
 // Enable SWIG to generate LLDB bindings On, Off or Auto (default)
 LLDB_ENABLE_SWIG:STRING=Auto
 
-// Fail to configure if certain requirements are not met for testing.
-LLDB_ENFORCE_STRICT_TEST_REQUIREMENTS:BOOL=OFF
-
 // Causes lldb to export all symbols when building liblldb.
 LLDB_EXPORT_ALL_SYMBOLS:BOOL=0
 
@@ -1024,20 +1147,14 @@ LLDB_INCLUDE_TESTS:BOOL=OFF
 // Disable default RPATH settings in binaries
 LLDB_NO_INSTALL_DEFAULT_RPATH:BOOL=OFF
 
-// Path to python interpreter exectuable, relative to python's install prefix
-LLDB_PYTHON_EXE_RELATIVE_PATH:STRING=bin/python3.12
-
-// Filename extension for native code python modules
-LLDB_PYTHON_EXT_SUFFIX:STRING=.cpython-312-x86_64-linux-gnu.so
-
-// Path where Python modules are installed, relative to LLDB's install prefix
-LLDB_PYTHON_RELATIVE_PATH:STRING=lib/python3.12/site-packages
-
 // Whether to skip generating a dSYM when installing lldb.
 LLDB_SKIP_DSYM:BOOL=OFF
 
 // Whether to skip stripping of binaries when installing lldb.
 LLDB_SKIP_STRIP:BOOL=OFF
+
+// Native TableGen executable. Saves building one when cross-compiling.
+LLDB_TABLEGEN:STRING=lldb-tblgen
 
 // Whether to build lldb-instr as part of LLDB
 LLDB_TOOL_LLDB_INSTR_BUILD:BOOL=ON
@@ -1208,9 +1325,6 @@ LLVM_ENABLE_LIBXML2:STRING=ON
 // Use lld as C and C++ linker.
 LLVM_ENABLE_LLD:BOOL=OFF
 
-// Set to on to link all LLVM executables against LLVM libc, assuming it is accessible by the host compiler.
-LLVM_ENABLE_LLVM_LIBC:BOOL=OFF
-
 // Compile with -fmodules-local-submodule-visibility.
 LLVM_ENABLE_LOCAL_SUBMODULE_VISIBILITY:BOOL=ON
 
@@ -1289,7 +1403,7 @@ LLVM_EXAMPLEIRTRANSFORMS_LINK_INTO_TOOLS:BOOL=OFF
 // Path for examples subdirectory (enabled by LLVM_BUILD_EXAMPLES=ON) (defaults to 'examples')
 LLVM_EXAMPLES_INSTALL_DIR:STRING=examples
 
-// Semicolon-separated list of experimental targets to build, or "all".
+// Semicolon-separated list of experimental targets to build.
 LLVM_EXPERIMENTAL_TARGETS_TO_BUILD:STRING=
 
 // Export symbols from LLVM tools so that plugins can import them
@@ -1349,6 +1463,11 @@ LLVM_EXTERNAL_PROJECT_BUILD_TOOL_ARGS:STRING=
 // Path to pstl source directory
 LLVM_EXTERNAL_PSTL_SOURCE_DIR:PATH=
 
+// Additional options to pass to llvm/utils/extract_symbols.py.
+  These cannot override the options set by cmake, but can add extra options
+  such as --tools.
+LLVM_EXTRACT_SYMBOLS_FLAGS:STRING=
+
 // Enable statistics collection for builds that wouldn't normally enable it
 LLVM_FORCE_ENABLE_STATS:BOOL=OFF
 
@@ -1394,10 +1513,6 @@ LLVM_INSTALL_CCTOOLS_SYMLINKS:BOOL=OFF
 // Doxygen-generated HTML documentation install directory
 LLVM_INSTALL_DOXYGEN_HTML_DIR:STRING=share/doc/LLVM/llvm/doxygen-html
 
-// Install the llvm gtest library.  This should be on if you want to do
-   stand-alone builds of the other projects and run their unit tests.
-LLVM_INSTALL_GTEST:BOOL=OFF
-
 // Install the modulemap files in the 'install' target.
 LLVM_INSTALL_MODULEMAPS:BOOL=OFF
 
@@ -1413,7 +1528,7 @@ LLVM_INSTALL_TOOLCHAIN_ONLY:BOOL=OFF
 // Include utility binaries in the 'install' target.
 LLVM_INSTALL_UTILS:BOOL=ON
 
-// Replace the Windows CRT allocator with any of {rpmalloc|mimalloc|snmalloc}. Only works with CMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded.
+// Replace the Windows CRT allocator with any of {rpmalloc|mimalloc|snmalloc}. Only works with /MT enabled.
 LLVM_INTEGRATED_CRT_ALLOC:PATH=
 
 // Define suffix of library directory name (32/64)
@@ -1434,9 +1549,6 @@ LLVM_LOCAL_RPATH:FILEPATH=
 // Path to a directory containing prebuilt matching native tools (such as llvm-tblgen)
 LLVM_NATIVE_TOOL_DIR:PATH=
 
-// Host llvm-nm executable. Saves building if cross-compiling.
-LLVM_NM:STRING=
-
 // Do not add comments to DAG ISel
 LLVM_OMIT_DAGISEL_COMMENTS:BOOL=ON
 
@@ -1454,9 +1566,6 @@ LLVM_PARALLEL_LINK_JOBS:STRING=16
 
 // Profiling data file to use when compiling in order to improve runtime performance.
 LLVM_PROFDATA_FILE:FILEPATH=
-
-// Host llvm-readobj executable. Saves building if cross-compiling.
-LLVM_READOBJ:STRING=
 
 // Use prefix for sources
 LLVM_SOURCE_PREFIX:STRING=
@@ -1824,9 +1933,6 @@ LLVM_TOOL_YAML2OBJ_BUILD:BOOL=ON
 // Compile flags set to enable UBSan. Only used if LLVM_USE_SANITIZER contains 'Undefined'.
 LLVM_UBSAN_FLAGS:STRING=-fsanitize=undefined -fno-sanitize=vptr,function -fno-sanitize-recover=all
 
-// Additional linker flags for unit tests
-LLVM_UNITTEST_LINK_FLAGS:STRING=
-
 // Optimize llvm_unreachable() as undefined behavior (default), guaranteed trap when OFF
 LLVM_UNREACHABLE_OPTIMIZE:BOOL=ON
 
@@ -1876,12 +1982,6 @@ LLVM_WINDOWS_PREFER_FORWARD_SLASH:BOOL=OFF
 LLVM_Z3_INSTALL_DIR:STRING=
 
 // Path to a file.
-LUA_INCLUDE_DIR:PATH=LUA_INCLUDE_DIR-NOTFOUND
-
-// Path to a library.
-LUA_LIBRARY:FILEPATH=LUA_LIBRARY-NOTFOUND
-
-// Path to a file.
 LibEdit_INCLUDE_DIRS:PATH=/usr/include
 
 // Path to a library.
@@ -1911,14 +2011,8 @@ PY_PYGMENTS_LEXERS_C_CPP_FOUND:BOOL=ON
 // Found python module 'yaml'
 PY_YAML_FOUND:BOOL=ON
 
-// Path to a file.
-SWIG_DIR:PATH=/usr/share/swig4.0
-
 // Path to a program.
-SWIG_EXECUTABLE:FILEPATH=/usr/bin/swig4.0
-
-// Swig version
-SWIG_VERSION:STRING=4.0.2
+SWIG_EXECUTABLE:FILEPATH=SWIG_EXECUTABLE-NOTFOUND
 
 // Path to TensorFlow pip install dir
 TENSORFLOW_AOT_PATH:PATH=
@@ -1944,17 +2038,11 @@ clang_tidy_confusable_chars_gen:STRING=$<TARGET_FILE:clang-tidy-confusable-chars
 // 
 clang_tidy_confusable_chars_gen_target:STRING=clang-tidy-confusable-chars-gen
 
-// 
-llvm_nm_exe:STRING=$<TARGET_FILE:llvm-nm>
+// Path to a library.
+cuda-library:FILEPATH=/usr/lib/x86_64-linux-gnu/libcuda.so
 
-// 
-llvm_nm_target:STRING=llvm-nm
-
-// 
-llvm_readobj_exe:STRING=$<TARGET_FILE:llvm-readobj>
-
-// 
-llvm_readobj_target:STRING=llvm-readobj
+// The directory containing a CMake configuration file for hsa-runtime64.
+hsa-runtime64_DIR:PATH=hsa-runtime64_DIR-NOTFOUND
 
 // Path to a library.
 pkgcfg_lib_NCURSES_ncurses:FILEPATH=/usr/lib/x86_64-linux-gnu/libncurses.so
@@ -1964,9 +2052,6 @@ pkgcfg_lib_NCURSES_tinfo:FILEPATH=/usr/lib/x86_64-linux-gnu/libtinfo.so
 
 // Path to a library.
 pkgcfg_lib_PC_LIBEDIT_edit:FILEPATH=/usr/lib/x86_64-linux-gnu/libedit.so
-
-// Path to a library.
-pkgcfg_lib_PC_LIBXML_xml2:FILEPATH=/usr/lib/x86_64-linux-gnu/libxml2.so
 
 // 
 pseudo_gen:STRING=$<TARGET_FILE:clang-pseudo-gen>

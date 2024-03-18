@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=llvm-project
-pkgver=17.0.6
-pkgrel=10
+pkgver=16.0.6
+pkgrel=1
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
@@ -27,8 +27,8 @@ _cmake_options=(
   ################
   # stage 2
   ################
-  -DCMAKE_C_COMPILER=/usr/local/bin/clang-${pkgver%%.*}
-  -DCMAKE_CXX_COMPILER=/usr/local/bin/clang++-${pkgver%%.*}
+  # -DCMAKE_C_COMPILER=/usr/local/bin/clang-${pkgver%%.*}
+  # -DCMAKE_CXX_COMPILER=/usr/local/bin/clang++-${pkgver%%.*}
   ################
   -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
   -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
@@ -55,13 +55,14 @@ _llvm_options=(
   ################################################################
   # libc/libc++
   ################################################################
-  -DLLVM_ENABLE_LLVM_LIBC=OFF
+  # For llvm17+
+  # -DLLVM_ENABLE_LLVM_LIBC=OFF
   -DLLVM_ENABLE_LIBCXX=OFF
   ################################################################
   # stage 2
   ################################################################
-  -DLLVM_USE_LINKER=lld
-  -DLLVM_ENABLE_LTO=Thin
+  # -DLLVM_USE_LINKER=lld
+  # -DLLVM_ENABLE_LTO=Thin
   ################################################################
   -DLLVM_APPEND_VC_REV=OFF
 )
