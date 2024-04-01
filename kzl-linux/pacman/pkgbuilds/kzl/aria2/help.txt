@@ -124,7 +124,7 @@ Optional Packages:
                           Directory to install bash_completion file
   --with-libgcrypt-prefix=PFX
                           prefix where LIBGCRYPT is installed (optional)
-  --with-gnu-ld           assume the C compiler uses GNU ld default=no
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
   --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
