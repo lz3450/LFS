@@ -115,6 +115,7 @@ kzl_stage2_pkgs=(
     expat
     e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 libtirpc libnsl
     tcl sqlite
+    elfutils gdb valgrind
     python
 
     ################
@@ -183,7 +184,6 @@ kzl_stage2_pkgs=(
     ################
     # systemd
     ################
-    elfutils
     kbd
     kmod
     lz4
@@ -346,15 +346,10 @@ kzl_stage3_pkgs=(
     # node
 
     ################
-    # aria2
-    ################
-    # aria2
-
-    ################
     # other libraries
     ################
-    # openblas
-
+    openblas
+    libpciaccess hwloc openmpi boost
     ################
     # other utils
     ################
@@ -362,6 +357,8 @@ kzl_stage3_pkgs=(
     # minicom
     # dfu-util
     # smartmontools
+    aria2
+    # libtorrent-rasterbar qbittorrent
 )
 
 # functions
