@@ -1,62 +1,59 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gdb
-pkgver=11.2
-pkgrel=1
-epoch=1
-pkgdesc="The GNU Debugger"
+pkgver=14.2.31
+pkgrel=2
+epoch=
+pkgdesc="The GNU Project debugger"
 arch=('x86_64')
 url="https://www.gnu.org/software/gdb"
 license=('KZL')
-depends=(expat guile libelf mpfr)
-# depends=(expat guile libelf mpfr source-highlight)
-provides=(gdb-common)
-conflicts=(gdb-common)
-replaces=(gdb-common)
+depends=(elfutils expat guile mpfr)
+# depends=(elfutils expat guile mpfr source-highlight)
 backup=(etc/gdb/gdbinit)
-source=(https://ftp.gnu.org/gnu/gdb/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('1497c36a71881b8671a9a84a0ee40faab788ca30d7ba19d8463c3cc787152e32'
-            'SKIP')
-validpgpkeys=('F40ADB902B24264AA42E50BF92EDB04BFF325CF3')
+source=(git+https://sourceware.org/git/binutils-gdb.git#branch=gdb-14-branch)
+sha256sums=('SKIP')
 
 # TODO: source-highlight
 
+pkgver() {
+  cd binutils-gdb
+
+  git describe --tags | sed 's/^gdb.//;s/release.//;s/-g.*//;s/-/./g'
+}
+
 prepare() {
-  cd $pkgname-$pkgver
+  cd binutils-gdb
 
-  mkdir build
-
-  sed -e "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" -i libiberty/configure
+  mkdir -p build
 }
 
 build() {
-  cd $pkgname-$pkgver/build
+  cd binutils-gdb/build
 
-  ../configure \
+  "../configure" \
     --prefix=/usr \
     --enable-lto \
     --enable-tui \
     --disable-source-highlight \
+    --enable-threading \
     --with-system-zlib \
+    --with-zstd \
     --with-system-readline \
     --with-expat \
     --with-python=/usr/bin/python3 \
-    --with-guile=guile-2.2 \
+    --with-guile=yes \
     --with-system-gdbinit=/etc/gdb/gdbinit
 
   make
 }
 
 package() {
-  cd $pkgname-$pkgver/build
+  cd binutils-gdb/build
 
-  make DESTDIR="$pkgdir/" install
+  make -C gdb DESTDIR="$pkgdir" install
+  make -C gdbserver DESTDIR="$pkgdir" install
 
   install -dm755 "$pkgdir"/etc/gdb
   touch "$pkgdir"/etc/gdb/gdbinit
-
-  # conflicts with binutils
-  rm "$pkgdir"/usr/include/{ansidecl,bfd,bfdlink,ctf-api,ctf,diagnostics,dis-asm,plugin-api,symcat}.h
-  rm "$pkgdir"/usr/lib/{libbfd,libctf-nobfd,libctf,libopcodes}.{a,la}
-  rm -rf "$pkgdir"/usr/share/{locale,info,gdb}
 }

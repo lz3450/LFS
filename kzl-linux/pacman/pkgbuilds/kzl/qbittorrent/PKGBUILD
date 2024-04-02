@@ -1,36 +1,33 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=qbittorrent
-pkgver=4.6.0beta1+172+gf3b688217
+pkgver=5.0.0.21
 pkgrel=1
 epoch=
 pkgdesc="qBittorrent is a bittorrent client programmed in C++ / Qt that uses libtorrent"
 arch=('x86_64')
 url="https://github.com/qbittorrent/qBittorrent"
 license=('KZL')
-depends=()
+depends=(libtorrent-rasterbar openssl)
 source=(git+$url.git)
 sha256sums=('SKIP')
 
 pkgver() {
   cd qBittorrent
 
-  git describe --tags | sed 's/release-//;s/-/+/g'
-}
-
-
-prepare() {
-  cd qBittorrent
+  git describe --tags | sed 's/release-//;s/beta[0-9]\+//;s/-g.*//;s/-/./g'
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd qBittorrent
 
   cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -DGUI=OFF \
+    -DSYSTEMD=ON \
     -S . \
     -B build \
     -LAH
@@ -39,7 +36,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd qBittorrent
 
   DESTDIR="$pkgdir" cmake --build build --target install
 }

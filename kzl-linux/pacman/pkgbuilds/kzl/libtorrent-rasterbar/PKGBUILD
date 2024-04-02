@@ -1,0 +1,35 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libtorrent-rasterbar
+pkgver=2.0.10
+pkgrel=3
+epoch=
+pkgdesc="An open source C++ library implementing the BitTorrent protocol"
+arch=('x86_64')
+url="https://github.com/arvidn/libtorrent"
+license=('KZL')
+depends=(boost openssl)
+source=(https://github.com/arvidn/libtorrent/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname-$pkgver
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -S . \
+    -B build \
+    -LAH
+
+  cmake --build build
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  DESTDIR="$pkgdir" cmake --build build --target install
+}

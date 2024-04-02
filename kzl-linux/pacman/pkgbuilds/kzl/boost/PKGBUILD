@@ -1,33 +1,20 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=boost
-pkgver=1.78.0
-pkgrel=1
-epoch=1
+pkgver=1.84.0
+pkgrel=4
+epoch=
 pkgdesc="Free peer-reviewed portable C++ source libraries"
 arch=('x86_64')
 url="https://www.boost.org/"
 license=('KZL')
 depends=(icu)
-makedepends=(openmpi)
-optdepends=("openmpi: for mpi support")
-provides=(boost-libs)
-conflicts=(boost-libs)
-replaces=(boost-libs)
-source=(https://boostorg.jfrog.io/artifactory/main/release/$pkgver/source/${pkgname}_${pkgver//./_}.tar.gz
-        $pkgname-ublas-c++20-iterator.patch::https://github.com/boostorg/ublas/commit/a31e5cffa85f.patch)
-sha256sums=('94ced8b72956591c4775ae2207a9763d3600b30d9d7446562c552f0a14a63be7'
-            'aa38addb40d5f44b4a8472029b475e7e6aef1c460509eb7d8edf03491dc1b5ee')
+# source=(git+https://github.com/boostorg/boost.git#tag=$pkgname-$pkgver)
+source=(https://github.com/boostorg/boost/releases/download/$pkgname-$pkgver/$pkgname-$pkgver.tar.xz)
+sha256sums=('2e64e5d79a738d0fa6fb546c6e5c2bd28f88d268a2a080546f74e5ff98f29d0e')
 
 prepare() {
-  cd ${pkgname}_${pkgver//./_}
-
-  # https://github.com/boostorg/ublas/pull/97
-  patch -Np2 -i "$srcdir"/$pkgname-ublas-c++20-iterator.patch
-}
-
-build() {
-  cd ${pkgname}_${pkgver//./_}
+  cd $pkgname-$pkgver
 
   ./bootstrap.sh \
     --with-toolset=gcc \
@@ -35,9 +22,15 @@ build() {
     --with-python=/usr/bin/python3 \
     --prefix=/usr
 
-  echo "using mpi ;" >> project-config.jam
+    echo "using mpi ;" >> project-config.jam
+}
+
+
+build() {
+  cd $pkgname-$pkgver
 
   ./b2 \
+    --prefix="$pkgdir/usr/" \
     --build-dir=build \
     --layout=system \
     toolset=gcc \
@@ -45,29 +38,26 @@ build() {
     link=shared,static \
     threading=multi \
     runtime-link=shared \
-    cflags="$CPPFLAGS $CFLAGS -fPIC -O3" \
-    cxxflags="$CPPFLAGS $CXXFLAGS -std=c++14 -fPIC -O3" \
-    linkflags="$LDFLAGS" \
-    -d+2 \
     -j$(nproc) \
+    -q \
+    -d+2 \
     stage
 }
 
 package() {
-  cd ${pkgname}_${pkgver//./_}
+  cd $pkgname-$pkgver
 
   ./b2 \
     --prefix="$pkgdir/usr/" \
     --build-dir=build \
+    --layout=system \
     toolset=gcc \
     variant=release \
     link=shared,static \
     threading=multi \
     runtime-link=shared \
-    cflags="$CPPFLAGS $CFLAGS -fPIC -O3" \
-    cxxflags="$CPPFLAGS $CXXFLAGS -std=c++14 -fPIC -O3" \
-    linkflags="$LDFLAGS" \
-    -d+2 \
     -j$(nproc) \
+    -q \
+    -d+2 \
     install
 }

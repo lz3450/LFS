@@ -1,0 +1,43 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=hwloc
+pkgver=2.10.0
+pkgrel=6
+epoch=
+pkgdesc="A portable abstraction (across OS, versions, architectures, ...) of the hierarchical topology of modern architectures"
+arch=('x86_64')
+url="https://www.open-mpi.org/projects/hwloc/"
+license=('KZL')
+depends=(libpciaccess)
+makedepends=(cairo libxml2 pciutils)
+optdepends=(cairo libxml2 pciutils)
+source=(git+https://github.com/open-mpi/hwloc.git#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make check
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}

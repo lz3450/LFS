@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=binutils
-pkgver=2.41
-pkgrel=4
+pkgver=2.42.82
+pkgrel=1
 epoch=
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64')
@@ -68,6 +68,12 @@ _gdb_options=(
   --disable-sim
 )
 
+pkgver() {
+  cd binutils-gdb
+
+  git describe --tags | sed 's/^binutils-//;s/-branch//;s/-g.*//;s/-/./g;s/_/./g'
+}
+
 prepare() {
   cd binutils-gdb
 
@@ -79,7 +85,7 @@ prepare() {
 build() {
   cd binutils-gdb/build
 
-  ../configure \
+  "../configure" \
     "${_common_options[@]}" \
     "${_binutils_options[@]}" \
     "${_ld_options[@]}" \

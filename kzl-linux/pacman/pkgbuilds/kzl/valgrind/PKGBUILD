@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=valgrind
-pkgver=3.18.1
-pkgrel=1
+pkgver=3.22.0
+pkgrel=6
 epoch=
 pkgdesc="Tool to help find memory-management problems in programs"
 arch=('x86_64')
@@ -10,19 +10,17 @@ url="http://valgrind.org/"
 license=('KZL')
 makedepends=(gdb)
 checkdepends=(procps-ng)
-source=(https://sourceware.org/pub/$pkgname/$pkgname-$pkgver.tar.bz2{,.asc})
-sha256sums=('00859aa13a772eddf7822225f4b46ee0d39afbe071d32778da4d99984081f7f5'
-            'SKIP')
-validpgpkeys=('EC3CFE88F6CA0788774F5C1D1AA44BE649DE760A')
+source=(git+https://sourceware.org/git/valgrind.git#tag=VALGRIND_${pkgver//./_})
+sha256sums=('SKIP')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./autogen.sh
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
   CFLAGS=${CFLAGS/-fno-plt/}
@@ -30,19 +28,15 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --libexecdir=/usr/lib \
     --sysconfdir=/etc \
-    --localstatedir=/var \
-    --mandir=/usr/share/man \
     --enable-only64bit \
-    --enable-lto \
-    --without-mpicc
+    --enable-lto
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./vg-in-place --error-exitcode=1 /bin/true
 
@@ -50,7 +44,7 @@ check() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }

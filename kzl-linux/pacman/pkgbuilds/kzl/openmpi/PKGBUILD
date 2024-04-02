@@ -1,9 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openmpi
-pkgver=4.1.2
-pkgrel=1
-epoch=1
+pkgver=5.0.2
+pkgrel=7
+epoch=
 pkgdesc="High performance message passing library (MPI)"
 arch=('x86_64')
 url="https://www.open-mpi.org"
@@ -11,8 +11,8 @@ license=('KZL')
 depends=(hwloc libnl openssh)
 makedepends=(valgrind)
 options=(staticlibs)
-source=(https://www.open-mpi.org/software/ompi/v${pkgver%.*}/downloads/$pkgname-$pkgver.tar.bz2)
-sha256sums=('9b78c7cf7fc32131c5cf43dd2ab9740149d9d87cadb2e2189f02685749a6b527')
+source=(https://download.open-mpi.org/release/open-mpi/v5.0/$pkgname-$pkgver.tar.bz2)
+sha256sums=('SKIP')
 
 build() {
   cd $pkgname-$pkgver
@@ -22,15 +22,13 @@ build() {
     --sysconfdir=/etc/$pkgname \
     --libdir=/usr/lib/$pkgname \
     --enable-pretty-print-stacktrace \
-    --enable-mpi-fortran \
-    --enable-mpi-cxx \
     --enable-builtin-atomics \
+    --disable-sphinx \
+    --with-hwloc \
     --enable-memchecker \
-    --with-libltdl=/usr \
-    --with-hwloc=/usr \
-    --with-valgrind \
     --without-slurm \
-    LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"
+    --with-valgrind
+    # LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"
 
   make
 }
@@ -46,11 +44,11 @@ package() {
 
   make DESTDIR="$pkgdir" install
 
-  install -dm755 "$pkgdir"/usr/lib/pkgconfig
-  for pc in ompi-c.pc ompi-cxx.pc ompi-f77.pc ompi-f90.pc ompi.pc; do
-    ln -sf /usr/lib/openmpi/pkgconfig/$pc "$pkgdir"/usr/lib/pkgconfig/
-  done
+  # install -dm755 "$pkgdir"/usr/lib/pkgconfig
+  # for pc in ompi-c.pc ompi-cxx.pc ompi-f77.pc ompi-f90.pc ompi.pc; do
+  #   ln -sf /usr/lib/openmpi/pkgconfig/$pc "$pkgdir"/usr/lib/pkgconfig/
+  # done
 
-  install -dm755 "$pkgdir"/etc/ld.so.conf.d
-  echo "/usr/lib/$pkgname" > "$pkgdir"/etc/ld.so.conf.d/$pkgname.conf
+  # install -dm755 "$pkgdir"/etc/ld.so.conf.d
+  # echo "/usr/lib/$pkgname" > "$pkgdir"/etc/ld.so.conf.d/$pkgname.conf
 }

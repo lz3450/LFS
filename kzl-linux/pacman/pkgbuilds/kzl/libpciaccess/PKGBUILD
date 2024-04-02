@@ -1,0 +1,39 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libpciaccess
+pkgver=0.18.1
+pkgrel=3
+epoch=
+pkgdesc="Generic PCI access library"
+arch=('x86_64')
+url="https://gitlab.freedesktop.org/xorg/lib/libpciaccess"
+depends=(hwdata)
+source=(git+$url.git#tag=$pkgname-$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  meson setup \
+    --prefix /usr \
+    --sysconfdir /etc \
+    --auto-features enabled \
+    --optimization 2 \
+    -D b_lto=true \
+    -D b_pie=true \
+    build
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir="$pkgdir"
+}

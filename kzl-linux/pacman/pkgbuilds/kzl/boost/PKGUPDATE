@@ -1,0 +1,8 @@
+new_version=$(git ls-remote --tags https://github.com/boostorg/boost.git | grep -oP '(?<=refs/tags/boost-)\d\.\d+\.\d$' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
+    ./bootstrap.sh --help > "$PKGBUILDDIR"/help.bootstrap.txt
+    ./b2 --help > "$PKGBUILDDIR"/help.b2.txt
+    ./b2 --help-options > "$PKGBUILDDIR"/help.b2-options.txt
+}
