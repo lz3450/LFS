@@ -19,6 +19,8 @@ sudo ./nvidia-installer \
     --no-install-compat32-libs \
     --log-file-name=$HOME/nvidia-driver-install.log \
     --run-nvidia-xconfig \
+    --no-distro-scripts \
+    --no-wine-files \
     --no-dkms \
     --no-check-for-alternate-installs \
     -j $(nproc)
