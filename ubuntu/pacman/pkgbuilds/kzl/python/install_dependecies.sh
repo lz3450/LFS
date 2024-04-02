@@ -11,4 +11,5 @@ sudo apt install \
     tcl-dev \
     tk-dev \
     libsqlite3-dev \
-    libedit-dev
+    libedit-dev \
+    valgrind

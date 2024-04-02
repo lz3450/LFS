@@ -31,8 +31,9 @@ build() {
     --with-system-libmpdec=yes \
     --with-decimal-contextvar=yes \
     --with-dbmliborder=gdbm:ndbm \
+    --with-valgrind \
     --with-readline=editline \
-    --with-ensurepip=no \
+    --with-ensurepip=no
 
   make
 }
