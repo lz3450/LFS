@@ -361,7 +361,6 @@ hicolor-icon-theme
 hostname
 hplip
 hplip-data
-htop
 humanity-icon-theme
 hunspell-en-us
 ibus
@@ -1005,8 +1004,6 @@ libwmflite-0.2-7
 libwnck-3-0
 libwnck-3-common
 libwoff1
-libwpe-1.0-1
-libwpebackend-fdo-1.0-1
 libwrap0
 libx11-6
 libx11-data
@@ -1071,14 +1068,9 @@ libyelp0
 libzstd1
 linux-base
 linux-firmware
-linux-headers-5.15.0-97
-linux-headers-5.15.0-97-generic
-linux-headers-generic
 linux-libc-dev
 linux-sound-base
-lm-sensors
 locales
-locate
 login
 logrotate
 logsave
@@ -1151,6 +1143,7 @@ pipewire
 pipewire-bin
 pipewire-media-session
 pkexec
+pkg-config
 plymouth
 plymouth-label
 plymouth-theme-spinner
@@ -1296,7 +1289,6 @@ session-migration
 sgml-base
 sgml-data
 shared-mime-info
-smartmontools
 sound-icons
 sound-theme-freedesktop
 speech-dispatcher
@@ -1326,7 +1318,6 @@ tpm-udev
 tracker
 tracker-extract
 tracker-miner-fs
-tree
 tzdata
 ubuntu-keyring
 ubuntu-mono
