@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.12.2
-pkgrel=2
+pkgver=3.12.3
+pkgrel=1
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
