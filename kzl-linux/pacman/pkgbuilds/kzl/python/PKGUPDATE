@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.python.org/downloads/source/ | grep -oP 'Latest Python 3 Release - Python \K\d\.\d\d\.\d(\d)?')
+new_version=$(git ls-remote --tags https://github.com/python/cpython.git | grep -oP '(?<=refs/tags/v)3\.\d+\.\d+$' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/cpython"
