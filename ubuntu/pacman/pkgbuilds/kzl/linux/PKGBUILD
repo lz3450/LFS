@@ -2,8 +2,8 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=5.15.148
-pkgrel=2
+pkgver=5.15.159
+pkgrel=1
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -11,9 +11,11 @@ url="https://www.kernel.org"
 license=('KZL')
 options=(!strip)
 source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
-        config)
+        config
+        update-kernel.sh)
 sha256sums=('SKIP'
-            '46284fc5f188c01975667d7b7c7d0e1d5c955627fdb41723d845f9a87bb0fe88')
+            'c84263876fdfd64f05012213031b4357dc07f2a2f69977ad5f3223a29da9da9d'
+            '42a737e5d42b435d2b5f91daa6aefebbba41bfbcb87d5a79f1d7df3649cc08aa')
 
 export KBUILD_BUILD_HOST=Ubuntu
 export KBUILD_BUILD_USER=kzl
@@ -52,20 +54,14 @@ package_linux() {
   install -Dm755 build/$image_name "$pkgdir/$modulesdir/vmlinuz-$pkgver-KZL"
   install -Dm755 build/$image_name "$pkgdir/boot/vmlinuz-$pkgver-KZL"
   install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-KZL
+  install -Dm755 "$srcdir"/config "$pkgdir"/boot/config-$pkgver-KZL    libedit-dev \
+
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
   ln -sf /usr/src/linux-headers-$kernelrelease "$pkgdir"/usr/lib/modules/$kernelrelease/source
   ln -sf /usr/src/linux-headers-$kernelrelease/build "$pkgdir"/usr/lib/modules/$kernelrelease/build
 
-  install -Dm755 /dev/stdin "$pkgdir"/boot/update-kernel.sh << EOF
-set -e
-
-sudo update-initramfs -k all -c
-
-sudo cp -v initrd.img efi/
-sudo cp -v vmlinuz efi/
-sudo cp -v initrd.img-$pkgver-KZL efi/initrd-KZL.img
-EOF
+  install -Dm755 "$srcdir"/update-kernel.sh -t "$pkgdir"/boot/
 }
 
 package_linux-headers() {
