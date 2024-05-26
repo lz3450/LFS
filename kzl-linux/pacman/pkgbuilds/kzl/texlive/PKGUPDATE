@@ -2,17 +2,22 @@
 new_version=$(date +%Y%m%d)
 
 pre_update() {
-    latex_year=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive | grep -oP '\d{4}(?=-\d{2}-\d{2})' | tail -1)
-    test -n "$latex_year" || exit 127
-    texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
-    tlpdb_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-tlpdb-full.tar)' | head -n1)
+    latex_year=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive | grep -oP '\d{4}(?=-\d{2}-\d{2})' | tail -n1)
+    test -n "$latex_year" || return 1
+    echo "Latest TeX Live year: $latex_year"
+    sed -e "s|^_pkgyear=.*$|_pkgyear=$latex_year|" -i PKGBUILD
 
-    if [ -n "$texmf_version" ] && [ -n "$tlpdb_version" ]; then
-        sed -e "s/texlive-[0-9]\{8\}-tlpdb-full.tar.gz/texlive-$tlpdb_version-tlpdb-full.tar.gz/" \
-            -e "s/texlive-[0-9]\{8\}-texmf.tar.xz/texlive-$texmf_version-texmf.tar.xz/" \
-            -e "s|^_pkgyear=.*$|_pkgyear=$latex_year|" \
-            -i PKGBUILD
+    texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
+    echo "texmf version: $texmf_version"
+    if [ -n "$texmf_version" ]; then
+        sed -e "s/texlive-[0-9]\{8\}-texmf.tar.xz/texlive-$texmf_version-texmf.tar.xz/" -i PKGBUILD
     fi
+
+    # tlpdb_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-tlpdb-full.tar)' | head -n1)
+    # echo "tlpdb version: $tlpdb_version"
+    # if [ -n "$texmf_version" ] && [ -n "$tlpdb_version" ]; then
+    #     sed -e "s/texlive-[0-9]\{8\}-tlpdb-full.tar.gz/texlive-$tlpdb_version-tlpdb-full.tar.gz/" -i PKGBUILD
+    # fi
 }
 
 post_update() {
