@@ -1,4 +1,4 @@
-'configure' configures TeX Live 2023-03-09 to adapt to many kinds of systems.
+'configure' configures TeX Live 2024-03-10 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -107,8 +107,6 @@ Optional Features:
   --disable-etex-synctex      build e-TeX without SyncTeX support
   --enable-ptex             compile and install pTeX
   --disable-ptex-synctex      build pTeX without SyncTeX support
-  --enable-eptex            compile and install e-pTeX
-  --disable-eptex-synctex     build e-pTeX without SyncTeX support
   --enable-uptex            compile and install upTeX
   --disable-uptex-synctex     build upTeX without SyncTeX support
   --disable-euptex          do not compile and install e-upTeX
