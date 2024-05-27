@@ -57,7 +57,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "flazz"
     # "fletcherm"
     # "fox"
-    "frisk"
+    # "frisk"
     # "frontcube"
     # "funky"
     # "fwalch"
