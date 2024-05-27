@@ -106,7 +106,6 @@ Main project options:
   file-seccomp                   auto                             [enabled, disabled, auto]        determine whether file is seccomp-enabled
   gpgme                          auto                             [enabled, disabled, auto]        use GPGME for PGP signature verification
   i18n                           true                             [true, false]                    enable localization of pacman, libalpm and scripts
-  keyringdir                     pacman/keyrings                                                   Where to look for keyring files under datarootdir
   ldconfig                       /sbin/ldconfig                                                    set the full path to ldconfig
   makepkg-template-dir           /usr/share/makepkg-template                                       template dir used by makepkg-template
   pkg-ext                        .pkg.tar.gz                                                       set the file extension used by packages
