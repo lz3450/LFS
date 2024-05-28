@@ -74,7 +74,7 @@ EOF
 tee /etc/wpa_supplicant/wpa_supplicant-wlo1.conf << EOF
 network={
 	ssid="LuckySKZLJ"
-	psk=a8ba39d6dc7bc6e4984dcc45a386719fe42b5876dc4fd56c516a521615ee981c
+	psk=51d8558a663cf1d191b42cd88d542e3847ce4da204196fa016c30728bc67f6e3
 }
 network={
 	ssid="S3Lab"
