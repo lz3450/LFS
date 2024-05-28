@@ -3,9 +3,22 @@
 # mkiso
 #
 
-script_name="$(basename "${0}")"
-script_path="$(readlink -f "${0}")"
-script_dir="$(dirname "${script_path}")"
+script_name="$(basename "$0")"
+script_path="$(readlink -f "$0")"
+script_dir="$(dirname "$script_path")"
+work_dir="/tmp/kzllinux-rootfstmp"
+pacstrap_dir="${work_dir}"/rootfs
+rootfs_archive_name="kzllinux_rootfs-$(date +%Y%m%d).tar.gz"
+isofs_dir="${work_dir}"/iso
+install_dir="LiveOS"
+iso_name="kzllinux"
+iso_label="LIVEOS (KZL Linux)"
+iso_publisher="KZL Linux <https://github.com/lz3450/LFS>"
+iso_application="KZL Linux Live/Rescue CD"
+iso_version="$(date +%Y%m%d)"
+out_dir="${script_dir}"
+iso_image_name="${iso_name}-${iso_version}.iso"
+log_dir="${work_dir}"/log
 
 rootfs_archive_pkg_list=(
     base
@@ -32,19 +45,6 @@ iso_pkg_list=(
 repository_pkgs=(
     base
 )
-work_dir="/tmp/kzllinux-rootfstmp"
-pacstrap_dir="${work_dir}"/rootfs
-rootfs_archive_name="kzllinux_rootfs-$(date +%Y%m%d).tar.gz"
-isofs_dir="${work_dir}"/iso
-install_dir="LiveOS"
-iso_name="kzllinux"
-iso_label="LIVEOS"
-iso_publisher="KZL Linux <https://github.com/lz3450/LFS>"
-iso_application="KZL Linux Live/Rescue CD"
-iso_version="$(date +%Y%m%d)"
-out_dir="${script_dir}"
-iso_image_name="${iso_name}-${iso_version}.iso"
-log_dir="${work_dir}"/log
 
 # Show an INFO message
 # $1: message string
@@ -70,6 +70,15 @@ error() {
     if (( _error > 0 )); then
         exit "${_error}"
     fi
+}
+
+usage() {
+    local _usage="
+    Usage: $script_name [ -h | --help ]
+
+    -h, --help                      display this help message and exit
+"
+    echo "$_usage"
 }
 
 make_iso_image() {
@@ -298,18 +307,7 @@ cleanup() {
 }
 trap cleanup ERR
 
-usage() {
-    local _usage="
-mkiso (kzl-linux)
-
-Usage: mkiso
-
-    -h, --help                  display this help message and exit
-"
-    echo "$_usage"
-}
-
-################################################################
+########################################################################################################################
 
 set -e
 set -o pipefail
@@ -330,19 +328,25 @@ while [ $# -gt 0 ]; do
     shift
 done
 
+
 start_time=$(date +%s)
 
-echo "****************************************************************"
-echo "                mkiso                "
-echo "****************************************************************"
+echo -e "\e[1;30m"
+echo -e "****************************************************************"
+echo -e "               Create KZL-Linux Live/Rescue CD ISO              "
+echo -e "****************************************************************"
+echo -e "[$script_name]: Start time - $(date)"
+echo -e "\e[0m"
 
 build
 
 end_time=$(date +%s)
-total_time=$((end_time-start_time))
+total_time=$((end_time - start_time))
 
-echo "****************************************************************"
-echo "                Execution time Information                "
-echo "****************************************************************"
-echo "${script_name} : End time - $(date)"
-echo "${script_name} : Total time - $(date -d@${total_time} -u +%H:%M:%S)"
+echo -e "\e[1;30m"
+echo -e "****************************************************************"
+echo -e "                Execution time Information                "
+echo -e "****************************************************************"
+echo -e "[$script_name]: End time - $(date)"
+echo -e "[$script_name]: Total time - $(date -d@$total_time -u +%H:%M:%S)"
+echo -e "\e[0m"
