@@ -82,4 +82,6 @@ package() {
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
 EOF
+
+  rm -rf "$pkgdir"/usr/share
 }
