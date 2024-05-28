@@ -1,6 +1,8 @@
-new_version=$(git ls-remote --tags https://gitlab.archlinux.org/pacman/pacman.git | grep -oP '(?<=refs/tags/v)\d\.\d\.\d' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://gitlab.archlinux.org/pacman/pacman.git | grep -oP '(?<=refs/tags/v)6\.0\.\d+' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     meson configure > "$PKGBUILDDIR"/help.txt
+    cp etc/pacman.conf.in "$PKGBUILDDIR"/pacman.conf
+    cp etc/makepkg.conf.in "$PKGBUILDDIR"/makepkg.conf
 }
