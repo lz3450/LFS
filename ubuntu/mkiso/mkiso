@@ -8,10 +8,12 @@ script_path="$(readlink -f "$0")"
 script_dir="$(dirname "$script_path")"
 
 chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+debootstrap_suite="jammy"
+# debootstrap_suite="noble"
 
 work_dir="/tmp/ubuntu-rootfstmp"
 debootstrap_dir="$work_dir"/rootfs
-rootfs_archive_name="ubuntu_rootfs-$(date +%Y%m%d).tar.zstd"
+rootfs_archive_name="ubuntu_rootfs-$(date +%Y%m%d)-$debootstrap_suite.tar.zstd"
 isofs_dir="$work_dir"/iso
 install_dir="LiveOS"
 iso_name="Ubuntu-KZL"
@@ -20,12 +22,11 @@ iso_publisher="Ubuntu-KZL <https://github.com/lz3450/LFS>"
 iso_application="Ubuntu-KZL Live/Rescue CD"
 iso_version="$(date +%Y%m%d)"
 out_dir="$script_dir"
-iso_image_name="${iso_name}-${iso_version}.iso"
+iso_image_name="$iso_name-$iso_version-$debootstrap_suite.iso"
 log_dir="$work_dir"/log
 
 deb_pkgs=(
     sudo
-    debootstrap
     dosfstools
     f2fs-tools
     wpasupplicant
@@ -36,11 +37,17 @@ deb_pkgs=(
     bash-completion
     zsh
     linux-image-generic
+    libarchive-tools
+    libgpgme-dev
+    ### noble
+    # systemd-boot
+    # systemd-resolved
 )
 pacman_pkgs=(
     pacman
     pacman-contrib
     linux
+    debootstrap
 )
 
 # Options
@@ -132,36 +139,27 @@ bootstrap_rootfs() {
     debootstrap \
         --include="$(IFS=','; echo "${_pkg_list[*]}")" \
         --components=main,restricted,universe \
-        jammy \
+        --merged-usr \
+        "$debootstrap_suite" \
         "$debootstrap_dir" \
         http://us.archive.ubuntu.com/ubuntu/ \
         &> "$log_dir"/debootstrap.log || error "Failed to bootstrap rootfs" 2
+    ### noble
+    # rmdir "$debootstrap_dir"/bin.usr-is-merged
+    # rmdir "$debootstrap_dir"/sbin.usr-is-merged
+    # rmdir "$debootstrap_dir"/lib.usr-is-merged
     info "Done!"
     info "Creating a list of installed deb packages..."
     debootstrap \
         --include="$(IFS=','; echo "${_pkg_list[*]}")" \
         --components=main,restricted,universe \
+        --merged-usr \
         --print-debs \
-        jammy \
+        "$debootstrap_suite" \
         "$debootstrap_dir"/tmp \
         http://us.archive.ubuntu.com/ubuntu/ \
         > "$isofs_dir"/deb_pkglist.txt 2> /dev/null || error "Failed to bootstrap rootfs" 2
     info "Done!"
-}
-
-configure_rootfs() {
-    info "Configuring rootfs..."
-
-    for fs in dev sys proc run; do
-        sudo mount --rbind /"$fs" "$debootstrap_dir/$fs"
-        sudo mount --make-rslave "$debootstrap_dir/$fs"
-    done
-
-    sudo LC_ALL=C PATH="$chroot_path" chroot "$debootstrap_dir" /bin/bash -c "systemctl enable systemd-networkd.service" &> "$log_dir"/systemd-networkd.log || error "Failed to enable systemd-networkd" 3
-
-    for fs in dev sys proc run; do
-        sudo umount -R "$debootstrap_dir"/$fs
-    done
 }
 
 install_pacman_pkgs() {
@@ -170,11 +168,37 @@ install_pacman_pkgs() {
     # pacstrap
     info "Installing pacman packages \"${_pkg_list[*]}\" to \"$debootstrap_dir/\"..."
     mkdir -m 0755 -p "$debootstrap_dir"/var/{cache/pacman/pkg,lib/pacman}
-    pacman -Sy -r "$debootstrap_dir" --noconfirm "${_pkg_list[@]}" &> "$log_dir"/pacman.log || error "Failed to install pacman packages" 4
+    mkdir -p "$debootstrap_dir"/home/.repository/kzl
+    pacman -Sy -r "$debootstrap_dir" --noconfirm --cachedir "$debootstrap_dir"/home/.repository/kzl "${_pkg_list[@]}" &> "$log_dir"/pacman.log || error "Failed to install pacman packages" 4
     info "Done!"
 
     info "Creating a list of installed pacman packages..."
     pacman -Q --sysroot "$debootstrap_dir" > "$isofs_dir"/pkglist.txt
+    info "Done!"
+
+    info "Copying pacman repository to the ISO file system..."
+    for pkg in $(ls "$debootstrap_dir"/home/.repository/kzl); do
+        repo-add "$debootstrap_dir"/home/.repository/kzl/kzl.db.tar.zst "$debootstrap_dir"/home/.repository/kzl/"$pkg" &> "$log_dir"/pacman-repo-add.log
+    done
+    info "Done!"
+}
+
+_chroot_run() {
+    LC_ALL=C PATH="$chroot_path" chroot "$debootstrap_dir" /bin/bash -c "$1"
+}
+
+configure_rootfs() {
+    info "Configuring rootfs..."
+
+    for fs in dev sys proc run; do
+        mount --rbind /"$fs" "$debootstrap_dir/$fs"
+        mount --make-rslave "$debootstrap_dir/$fs"
+    done
+    _chroot_run "systemctl enable systemd-networkd.service" &> "$log_dir"/systemd-networkd.log || error "Failed to enable systemd-networkd" 3
+    _chroot_run "ldconfig"
+    for fs in dev sys proc run; do
+        umount -R "$debootstrap_dir"/$fs
+    done
     info "Done!"
 }
 
@@ -210,17 +234,17 @@ make_efibootimg() {
     #     "$debootstrap_dir/boot/vmlinuz" \
     #     "$debootstrap_dir/boot/initramfs.img" \
     #     2>/dev/null | awk 'END { print $1 }')
-    # info "Required FAT image size ${imgsize} bytes"
+    # info "Required FAT image size $imgsize bytes"
     # Convert from bytes to KiB and round up to the next full MiB with an additional MiB for reserved sectors.
     # local imgsize="$(awk 'function ceil(x){return int(x)+(x>int(x))} function byte_to_kib(x){return x/1024} function mib_to_kib(x){return x*1024} END {print mib_to_kib(ceil((byte_to_kib($1)+1024)/1024))}' \
-    #     <<< "${imgsize}")"
-    # info "Required FAT image size ${imgsize} KiB"
+    #     <<< "$imgsize")"
+    # info "Required FAT image size $imgsize KiB"
 
     local imgsize=131072
 
     rm -f -- "$work_dir"/efiboot.img
-    info "Creating FAT image of size: ${imgsize} KiB..."
-    mkfs.fat -C -F 32 -n "ISO_EFI" "$work_dir"/efiboot.img "${imgsize}" &>/dev/null
+    info "Creating FAT image of size: $imgsize KiB..."
+    mkfs.fat -C -F 32 -n "ISO_EFI" "$work_dir"/efiboot.img "$imgsize" &>/dev/null
 
     # Create the default/fallback boot path in which a boot loaders will be placed later.
     mmd -i "$work_dir"/efiboot.img ::/EFI ::/EFI/BOOT
@@ -246,7 +270,7 @@ make_efibootimg() {
     done
 }
 
-cleanup_pacstrap_dir() {
+cleanup_rootfs() {
     info "Cleaning up rootfs..."
     # system
     rm -rf -- "$debootstrap_dir"/boot/*
@@ -286,15 +310,6 @@ make_rootfs_archive() {
         &> "$log_dir"/tar.log
     chown $SUDO_UID:$SUDO_GID "$out_dir/$rootfs_archive_name"
     info "Done!"
-}
-
-init_pacman_repo() {
-    # info "Copying pacman repository to the ISO file system..."
-    # cp -a -n --no-preserve=ownership,mode -- /home/.repository "$debootstrap_dir"/home/
-    # info "Done!"
-
-    mkdir -p "$debootstrap_dir"/home/.repository
-    printf "#%s\t\t%s\t\t%s\t%s\t\t%s %s\n" "LABEL=REPO" "/home/.repository" "f2fs" "default" "0" "2" >> "$debootstrap_dir"/etc/fstab
 }
 
 make_rootfs_squashfs() {
@@ -348,13 +363,12 @@ build() {
     create_work_dir
     make_rootfs
     bootstrap_rootfs "${deb_pkgs[@]}"
-    configure_rootfs
     install_pacman_pkgs "${pacman_pkgs[@]}"
+    configure_rootfs
     make_initramfs
     make_efibootimg
-    cleanup_pacstrap_dir
+    cleanup_rootfs
     make_rootfs_archive
-    init_pacman_repo
     make_rootfs_squashfs
     make_iso_image
 }
