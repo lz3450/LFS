@@ -71,7 +71,7 @@ Name=eth*
 [Network]
 DHCP=yes
 EOF
-tee /etc/wpa_supplicant/wpa_supplicant-wlo1.conf << EOF
+tee /etc/wpa_supplicant/wpa_supplicant-wlan.conf << EOF
 network={
 	ssid="LuckySKZLJ"
 	psk=51d8558a663cf1d191b42cd88d542e3847ce4da204196fa016c30728bc67f6e3
