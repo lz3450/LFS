@@ -56,7 +56,7 @@ echo "kzl password:"
 passwd kzl
 
 # network
-tee /etc/systemd/network/wireless.network << EOF
+tee /etc/systemd/network/wlan.network << EOF
 [Match]
 Name=wl*
 
