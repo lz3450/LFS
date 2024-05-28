@@ -1,3 +1,4 @@
-*.zsh*
-*.iso
-*.tar.*
+/rootfs/root/*
+
+/*.iso
+/*.tar.*

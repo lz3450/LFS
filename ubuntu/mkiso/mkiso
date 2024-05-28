@@ -7,6 +7,8 @@ script_name="$(basename "$0")"
 script_path="$(readlink -f "$0")"
 script_dir="$(dirname "$script_path")"
 
+chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 work_dir="/tmp/ubuntu-rootfstmp"
 debootstrap_dir="$work_dir"/rootfs
 rootfs_archive_name="ubuntu_rootfs-$(date +%Y%m%d).tar.zstd"
@@ -23,6 +25,7 @@ log_dir="$work_dir"/log
 
 deb_pkgs=(
     sudo
+    debootstrap
     dosfstools
     f2fs-tools
     wpasupplicant
@@ -99,7 +102,7 @@ make_rootfs() {
     install -dm0755 -- "$log_dir"
 
     # Write build date to file
-    printf '%s\n' "$(date +%Y/%m/%d %H:%M:%S)" > "$isofs_dir/build_time.txt"
+    printf '%s\n' "$(date '+%Y/%m/%d %H:%M:%S')" > "$isofs_dir/build_time.txt"
 
     # Copy custom root file system files.
     if [ -d "$script_dir/rootfs" ]; then
@@ -109,7 +112,9 @@ make_rootfs() {
             info "Done!"
         fi
         info "Copying custom rootfs files..."
-        cp -af --no-preserve=ownership,mode -- "$script_dir"/rootfs/. "$debootstrap_dir"
+        cp -af --no-preserve=ownership,mode -- "$script_dir"/rootfs/. "$debootstrap_dir"/
+        unlink "$debootstrap_dir"/root/install
+        cp -rLf --no-preserve=ownership,mode -- "$script_dir"/rootfs/root/install "$debootstrap_dir"/root/
         # Set ownership and mode for files and directories
         chown -fh -- 0:0 "$debootstrap_dir"/etc/shadow
         chmod -f -- 400 "$debootstrap_dir"/etc/shadow
@@ -144,13 +149,28 @@ bootstrap_rootfs() {
     info "Done!"
 }
 
+configure_rootfs() {
+    info "Configuring rootfs..."
+
+    for fs in dev sys proc run; do
+        sudo mount --rbind /"$fs" "$debootstrap_dir/$fs"
+        sudo mount --make-rslave "$debootstrap_dir/$fs"
+    done
+
+    sudo LC_ALL=C PATH="$chroot_path" chroot "$debootstrap_dir" /bin/bash -c "systemctl enable systemd-networkd.service" &> "$log_dir"/systemd-networkd.log || error "Failed to enable systemd-networkd" 3
+
+    for fs in dev sys proc run; do
+        sudo umount -R "$debootstrap_dir"/$fs
+    done
+}
+
 install_pacman_pkgs() {
     local _pkg_list=("$@")
 
     # pacstrap
     info "Installing pacman packages \"${_pkg_list[*]}\" to \"$debootstrap_dir/\"..."
     mkdir -m 0755 -p "$debootstrap_dir"/var/{cache/pacman/pkg,lib/pacman}
-    pacman -Sy -r "$debootstrap_dir" --noconfirm "${_pkg_list[@]}" &> "$log_dir"/pacman.log || error "Failed to install pacman packages" 3
+    pacman -Sy -r "$debootstrap_dir" --noconfirm "${_pkg_list[@]}" &> "$log_dir"/pacman.log || error "Failed to install pacman packages" 4
     info "Done!"
 
     info "Creating a list of installed pacman packages..."
@@ -319,7 +339,7 @@ make_iso_image() {
         -append_partition 2 'C12A7328-F81F-11D2-BA4B-00A0C93EC93B' "$work_dir"/efiboot.img \
         -appended_part_as_gpt \
         -output "$out_dir/$iso_image_name" \
-        "$isofs_dir/" &> "$log_dir"/xorriso.log || error "Failed to create ISO image" 4
+        "$isofs_dir/" &> "$log_dir"/xorriso.log || error "Failed to create ISO image" 5
     chown $SUDO_UID:$SUDO_GID "$out_dir/$iso_image_name"
     info "Done!"
 }
@@ -328,6 +348,7 @@ build() {
     create_work_dir
     make_rootfs
     bootstrap_rootfs "${deb_pkgs[@]}"
+    configure_rootfs
     install_pacman_pkgs "${pacman_pkgs[@]}"
     make_initramfs
     make_efibootimg
@@ -341,8 +362,21 @@ build() {
 clean() {
     info "Cleaning..."
     set +e
+
+    if [[ -n "$debootstrap_dir" ]]; then
+        for attempt in {1..10}; do
+            for fs in dev/pts dev sys proc run; do
+                mount | grep -q "$debootstrap_dir/$fs" && umount -R "$debootstrap_dir/$fs" 2> /dev/null
+            done
+            mount | grep -q "$debootstrap_dir" && umount -R "$debootstrap_dir" 2> /dev/null
+            if [[ $? -ne 0 ]]; then
+                break
+            fi
+            sleep 1
+        done
+    fi
 }
-trap clean EXIT
+trap clean INT EXIT
 
 ########################################################################################################################
 
@@ -363,7 +397,7 @@ while (($# > 0 )); do
         ;;
     *)
         usage
-        error "Unknown option: \"$1\"" 1
+        error "Unknown option: \"$1\"" 127
         ;;
     esac
     shift
