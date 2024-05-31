@@ -209,6 +209,48 @@ configure_rootfs() {
     info "Done!"
 }
 
+cleanup_rootfs() {
+    info "Cleaning up rootfs..."
+    # system
+    rm -rf -- "$debootstrap_dir"/boot/*
+    rm -rf -- "$debootstrap_dir"/dev/*
+    rm -rf -- "$debootstrap_dir"/var/tmp/*
+    rm -rf -- "$debootstrap_dir"/tmp/*
+    rm -rf -- "$debootstrap_dir"/var/log/*
+
+    # debootstrap
+    rm -rf -- "$debootstrap_dir"/var/lib/apt/lists/*
+    rm -rf -- "$debootstrap_dir"/var/cache/apt/archives/*.deb
+
+    # pacman
+    if [ -d "$debootstrap_dir/var/lib/pacman" ]; then
+        find "$debootstrap_dir/var/lib/pacman" -maxdepth 1 -type f -delete
+    fi
+    if [ -d "$debootstrap_dir/var/lib/pacman/sync" ]; then
+        find "$debootstrap_dir/var/lib/pacman/sync" -delete
+    fi
+    if [ -d "$debootstrap_dir/var/cache/pacman/pkg" ]; then
+        find "$debootstrap_dir/var/cache/pacman/pkg" -type f -delete
+    fi
+    find "$work_dir" \( -name '*.pacnew' -o -name '*.pacsave' -o -name '*.pacorig' \) -delete
+
+    # create an empty /etc/machine-id
+    rm -f -- "$debootstrap_dir/etc/machine-id"
+    printf '' > "$debootstrap_dir/etc/machine-id"
+
+    info "Done!"
+}
+
+make_rootfs_archive() {
+    info "Creating rootfs archive..."
+    tar -cvf "$out_dir/$rootfs_archive_name" \
+        --zstd -C "$debootstrap_dir" \
+        . \
+        &> "$log_dir"/tar.log
+    chown $SUDO_UID:$SUDO_GID "$out_dir/$rootfs_archive_name"
+    info "Done!"
+}
+
 make_initramfs() {
     for kernel_version in $(ls "$debootstrap_dir"/usr/lib/modules); do
         info "Create initramfs for kernel version: $kernel_version"
@@ -280,48 +322,6 @@ make_efibootimg() {
     done
 }
 
-cleanup_rootfs() {
-    info "Cleaning up rootfs..."
-    # system
-    rm -rf -- "$debootstrap_dir"/boot/*
-    rm -rf -- "$debootstrap_dir"/dev/*
-    rm -rf -- "$debootstrap_dir"/var/tmp/*
-    rm -rf -- "$debootstrap_dir"/tmp/*
-    rm -rf -- "$debootstrap_dir"/var/log/*
-
-    # debootstrap
-    rm -rf -- "$debootstrap_dir"/var/lib/apt/lists/*
-    rm -rf -- "$debootstrap_dir"/var/cache/apt/archives/*.deb
-
-    # pacman
-    if [ -d "$debootstrap_dir/var/lib/pacman" ]; then
-        find "$debootstrap_dir/var/lib/pacman" -maxdepth 1 -type f -delete
-    fi
-    if [ -d "$debootstrap_dir/var/lib/pacman/sync" ]; then
-        find "$debootstrap_dir/var/lib/pacman/sync" -delete
-    fi
-    if [ -d "$debootstrap_dir/var/cache/pacman/pkg" ]; then
-        find "$debootstrap_dir/var/cache/pacman/pkg" -type f -delete
-    fi
-    find "$work_dir" \( -name '*.pacnew' -o -name '*.pacsave' -o -name '*.pacorig' \) -delete
-
-    # create an empty /etc/machine-id
-    rm -f -- "$debootstrap_dir/etc/machine-id"
-    printf '' > "$debootstrap_dir/etc/machine-id"
-
-    info "Done!"
-}
-
-make_rootfs_archive() {
-    info "Creating rootfs archive..."
-    tar -cvf "$out_dir/$rootfs_archive_name" \
-        --zstd -C "$debootstrap_dir" \
-        . \
-        &> "$log_dir"/tar.log
-    chown $SUDO_UID:$SUDO_GID "$out_dir/$rootfs_archive_name"
-    info "Done!"
-}
-
 make_rootfs_squashfs() {
     local image_path="$isofs_dir/$install_dir/squashfs.img"
 
@@ -378,10 +378,10 @@ build() {
     bootstrap_rootfs "${deb_pkgs[@]}"
     install_pacman_pkgs "${pacman_pkgs[@]}"
     configure_rootfs
-    make_initramfs
-    make_efibootimg
     cleanup_rootfs
     make_rootfs_archive
+    make_initramfs
+    make_efibootimg
     make_rootfs_squashfs
     make_iso_image
 }
