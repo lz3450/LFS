@@ -27,11 +27,13 @@ log_dir="$work_dir"/log
 
 deb_pkgs=(
     sudo
+    nano
+    parted fdisk
     dosfstools
     f2fs-tools
+    smartmontools
     wpasupplicant
     wget curl
-    nano
     openssh-server
     git
     bash-completion
