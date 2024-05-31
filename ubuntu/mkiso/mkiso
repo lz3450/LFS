@@ -190,10 +190,15 @@ _chroot_run() {
 configure_rootfs() {
     info "Configuring rootfs..."
 
+    mkdir -p -- "$debootstrap_dir"/tmp
+    chown -fh -- 0:0 "$debootstrap_dir"/tmp
+    chmod -f -- 777 "$debootstrap_dir"/tmp
+
     for fs in dev sys proc run; do
         mount --rbind /"$fs" "$debootstrap_dir/$fs"
         mount --make-rslave "$debootstrap_dir/$fs"
     done
+    _chroot_run "apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y" &> "$log_dir"/upgrade.log || error "Failed to upgrade deb packages" 3
     _chroot_run "systemctl enable systemd-networkd.service" &> "$log_dir"/systemd-networkd.log || error "Failed to enable systemd-networkd" 3
     _chroot_run "ldconfig"
     for fs in dev sys proc run; do
@@ -261,11 +266,14 @@ make_efibootimg() {
 
     # Copy kernel and initramfs to FAT image
     for kernel_version in $(ls "$debootstrap_dir"/usr/lib/modules); do
+        case "-${kernel_version##*-}" in
+            -generic) kernel_suffix="" ;;
+            -KZL) kernel_suffix="-KZL" ;;
+            *) kernel_suffix=""; warning "Unknown kernel version suffix: $kernel_version" ;;
+        esac
         info "Copying kernel ($kernel_version) and initramfs to the FAT file system..."
-        mcopy -i "$work_dir/efiboot.img" \
-            "$debootstrap_dir"/boot/vmlinuz-$kernel_version \
-            "$debootstrap_dir"/boot/initramfs-$kernel_version.img \
-            ::/
+        mcopy -i "$work_dir/efiboot.img" "$debootstrap_dir"/boot/vmlinuz-$kernel_version ::/vmlinuz$kernel_suffix
+        mcopy -i "$work_dir/efiboot.img" "$debootstrap_dir"/boot/initramfs-$kernel_version.img ::/initramfs$kernel_suffix.img
         info "Done!"
     done
 }
@@ -336,8 +344,11 @@ make_iso_image() {
             -KZL) kernel_suffix="-KZL" ;;
             *) kernel_suffix=""; warning "Unknown kernel version suffix: $kernel_version" ;;
         esac
-        mcopy -i "$work_dir/efiboot.img" ::/vmlinuz-$kernel_version "$isofs_dir"/vmlinuz$kernel_suffix
-        mcopy -i "$work_dir/efiboot.img" ::/initramfs-$kernel_version.img "$isofs_dir"/initramfs$kernel_suffix.img
+        info "Copying kernel ($kernel_version) and initramfs to the ISO file system..."
+        mcopy -i "$work_dir/efiboot.img" \
+            ::/vmlinuz$kernel_suffix \
+            ::/initramfs$kernel_suffix.img \
+            "$isofs_dir"/
     done
     xorriso \
         -as mkisofs \
@@ -389,6 +400,8 @@ clean() {
             sleep 1
         done
     fi
+
+    exit 0
 }
 trap clean INT EXIT
 
