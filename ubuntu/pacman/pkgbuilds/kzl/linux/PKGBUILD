@@ -2,8 +2,8 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=5.15.159
-pkgrel=1
+pkgver=5.15.160
+pkgrel=2
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -14,7 +14,7 @@ source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#bra
         config
         update-kernel.sh)
 sha256sums=('SKIP'
-            'c84263876fdfd64f05012213031b4357dc07f2a2f69977ad5f3223a29da9da9d'
+            '5433440b702f23036508aa78b839e674e5ccbf33b60ed0624ccdde9fc94a79ca'
             '42a737e5d42b435d2b5f91daa6aefebbba41bfbcb87d5a79f1d7df3649cc08aa')
 
 export KBUILD_BUILD_HOST=Ubuntu
@@ -54,8 +54,7 @@ package_linux() {
   install -Dm755 build/$image_name "$pkgdir/$modulesdir/vmlinuz-$pkgver-KZL"
   install -Dm755 build/$image_name "$pkgdir/boot/vmlinuz-$pkgver-KZL"
   install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-KZL
-  install -Dm755 "$srcdir"/config "$pkgdir"/boot/config-$pkgver-KZL    libedit-dev \
-
+  install -Dm755 "$srcdir"/config "$pkgdir"/boot/config-$pkgver-KZL
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
   ln -sf /usr/src/linux-headers-$kernelrelease "$pkgdir"/usr/lib/modules/$kernelrelease/source
