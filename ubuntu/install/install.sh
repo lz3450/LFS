@@ -20,6 +20,8 @@ common_deb_pkgs=(
     bash-completion
     zsh
     linux-image-generic
+    initramfs-tools
+    ### pacman
     libarchive-tools
     libgpgme-dev
 )
