@@ -3,36 +3,165 @@
 # install.sh
 #
 
-debootstrap_suite="jammy"
-
 set -e
 
-debootstrap --arch="amd64" "$debootstrap_suite" /mnt http://us.archive.ubuntu.com/ubuntu
+mountpoint="/mnt"
+debootstrap_suite="jammy"
+common_deb_pkgs=(
+    sudo
+    nano
+    parted fdisk
+    dosfstools
+    f2fs-tools
+    wpasupplicant
+    wget curl
+    openssh-server
+    git
+    bash-completion
+    zsh
+    linux-image-generic
+    libarchive-tools
+    libgpgme-dev
+)
+noble_deb_pkgs=(
+    systemd-boot
+    systemd-resolved
+)
+declare -a deb_pkgs
 
-fallocate -l 16G /mnt/swapfile
-chmod 600 /mnt/swapfile
-mkswap /mnt/swapfile
 
-cp initialize.sh /mnt/root
+if (($# != 1)); then
+    echo "Usage: $0 <suite>"
+    exit 1
+fi
+
+case "$1" in
+    jammy)      debootstrap_suite="jammy" ;;
+    noble)      debootstrap_suite="noble" ;;
+    *)          echo "Unknown suite \"$1\"" && exit 1
+esac
+
+# debootstrap
+if [[ "$debootstrap_suite" == "jammy" ]]; then
+    deb_pkgs=("${common_deb_pkgs[@]}")
+elif [[ "$debootstrap_suite" == "noble" ]]; then
+    deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
+fi
+debootstrap \
+    --arch="amd64" \
+    --include="$(IFS=','; echo "${deb_pkgs[*]}")" \
+    --components=main,restricted,universe \
+    --merged-usr \
+    "$debootstrap_suite" \
+    "$mountpoint" \
+    http://us.archive.ubuntu.com/ubuntu
+
+# sources.list
+tee "$mountpoint"/etc/apt/sources.list << EOF
+deb http://us.archive.ubuntu.com/ubuntu $debootstrap_suite main restricted universe
+deb-src http://us.archive.ubuntu.com/ubuntu $debootstrap_suite main restricted universe
+
+deb http://us.archive.ubuntu.com/ubuntu/ $debootstrap_suite-updates main restricted universe
+deb-src http://us.archive.ubuntu.com/ubuntu/ $debootstrap_suite-updates main restricted universe
+
+deb http://security.ubuntu.com/ubuntu/ $debootstrap_suite-security main restricted universe
+deb-src http://security.ubuntu.com/ubuntu/ $debootstrap_suite-security main restricted universe
+EOF
+
+# pacman
+if [ -f "/usr/local/bin/pacman" ]; then
+    mkdir -m 0755 -p "$mountpoint"/var/{cache/pacman/pkg,lib/pacman}
+    mkdir -p "$mountpoint"/home/.repository/kzl
+    pacman -Sy -r "$mountpoint" --noconfirm --cachedir "$mountpoint"/home/.repository/kzl pacman pacman-contrib linux
+fi
+
+# swap
+fallocate -l 16G "$mountpoint"/swapfile
+chmod 600 "$mountpoint"/swapfile
+mkswap "$mountpoint"/swapfile
+
+# hostname
+read -p 'hostname: ' HOSTNAME
+echo $HOSTNAME > "$mountpoint"/etc/hostname
+
+# network
+tee "$mountpoint"/etc/systemd/network/wlan.network << EOF
+[Match]
+Name=wl*
+
+[Network]
+DHCP=yes
+EOF
+tee "$mountpoint"/etc/systemd/network/ethernet.network << EOF
+[Match]
+Name=en*
+Name=eth*
+
+[Network]
+DHCP=yes
+EOF
+tee "$mountpoint"/etc/wpa_supplicant/wpa_supplicant-wlan.conf << EOF
+network={
+	ssid="LuckySKZLJ"
+	psk=51d8558a663cf1d191b42cd88d542e3847ce4da204196fa016c30728bc67f6e3
+}
+network={
+	ssid="S3Lab"
+	psk=9dfacd4f5b26c7bfde13a184acb4b202eba5b2870cb2d6dccd10ac53012d0706
+}
+EOF
+
+cat > "$mountpoint"/etc/netplan/network.yaml << EOF
+network:
+  version: 2
+  renderer: NetworkManager
+EOF
+
+# grml-zsh-config
+wget -O "$mountpoint"/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$mountpoint"/root/.zshrc
+echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$mountpoint"/root/.zshrc
+
+cp initialize.sh "$mountpoint"/root
 
 for fs in dev sys proc run; do
-    mount --rbind /$fs /mnt/$fs
-    mount --make-rslave /mnt/$fs
+    mount --rbind /$fs "$mountpoint"/$fs
+    mount --make-rslave "$mountpoint"/$fs
 done
-LANG=C.UTF-8 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin chroot /mnt /bin/bash
+LANG=C.UTF-8 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin chroot "$mountpoint" /bin/bash
 for fs in dev sys proc run; do
     umount -R "$debootstrap_dir"/$fs
 done
 
 # boot
+mkdir -p "$mountpoint"/boot/efi/loader/entries
+tee "$mountpoint"/boot/efi/loader/loader.conf << EOF
+timeout 3
+console-mode max
+default ubuntu.conf
+EOF
+tee "$mountpoint"/boot/efi/loader/entries/ubuntu.conf << EOF
+title   Ubuntu
+linux   /vmlinuz
+initrd  /initrd.img
+options root=PARTUUID="" rw rootwait
+EOF
+tee "$mountpoint"/boot/efi/loader/entries/kzl.conf << EOF
+title   Ubuntu-KZL
+linux   /vmlinuz-KZL
+initrd  /initrd-KZL.img
+options root=PARTUUID="" rw rootwait
+EOF
 # EFI: /boot/efi
-blkid >> /mnt/boot/efi/loader/entries/ubuntu.conf
-nano /mnt/boot/efi/loader/entries/ubuntu.conf
+blkid >> "$mountpoint"/boot/efi/loader/entries/ubuntu.conf
+nano "$mountpoint"/boot/efi/loader/entries/ubuntu.conf
+blkid >> "$mountpoint"/boot/efi/loader/entries/kzl.conf
+nano "$mountpoint"/boot/efi/loader/entries/kzl.conf
 
 # fstab
 if [ -f "/usr/bin/genfstab" ]; then
-    genfstab -t PARTUUID /mnt > /mnt/etc/fstab
+    genfstab -t PARTUUID "$mountpoint" > "$mountpoint"/etc/fstab
 else
-    blkid > /mnt/etc/fstab
+    blkid > "$mountpoint"/etc/fstab
 fi
-nano /mnt/etc/fstab
+nano "$mountpoint"/etc/fstab
