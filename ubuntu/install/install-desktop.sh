@@ -36,3 +36,9 @@ sudo apt-get autoremove --purge
 sudo rm -vrf /var/log/unattended-upgrades
 
 sudo systemctl set-default multi-user.target
+
+grdctl rdp enable
+grdctl rdp disable-view-only
+read -r -s -p "Enter rdp password: " password
+grdctl rdp set-credentials kzl "$password"
+grdctl status --show-credentials
