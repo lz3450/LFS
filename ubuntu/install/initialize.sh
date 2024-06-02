@@ -25,5 +25,8 @@ useradd -m -U -G sudo -s /bin/zsh kzl
 echo "kzl password:"
 passwd kzl
 
+# network
+systemctl enable systemd-networkd.service
+
 # boot
 bootctl install --esp-path=/boot/efi
