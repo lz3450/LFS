@@ -6,9 +6,9 @@
 set -e
 # set -x
 
-apt update
-apt upgrade -y
-apt dist-upgrade -y
+apt-get update
+apt-get upgrade -y
+apt-get dist-upgrade -y
 
 dpkg-reconfigure locales
 dpkg-reconfigure tzdata

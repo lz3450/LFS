@@ -5,8 +5,8 @@
 
 set -e
 
-sudo apt update
-sudo apt upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 
 ### microsoft
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo install -o root -g root -m 644 /dev/stdin /etc/apt/trusted.gpg.d/microsoft.gpg
@@ -15,5 +15,5 @@ echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" 
 # sudo apt-add-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
 # sudo apt-add-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
 
-sudo apt update
-sudo apt install -y microsoft-edge-stable code
+sudo apt-get update
+sudo apt-get install -y microsoft-edge-stable code
