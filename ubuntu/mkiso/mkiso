@@ -7,9 +7,10 @@ script_name="$(basename "$0")"
 script_path="$(readlink -f "$0")"
 script_dir="$(dirname "$script_path")"
 
-chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 debootstrap_suite="jammy"
 # debootstrap_suite="noble"
+chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+mutable_image_type="f2fs"
 
 work_dir="/tmp/ubuntu-rootfstmp"
 debootstrap_dir="$work_dir"/rootfs
@@ -48,6 +49,7 @@ deb_pkgs=(
 pacman_pkgs=(
     pacman
     pacman-contrib
+    arch-install-scripts
     linux
     debootstrap
 )
@@ -122,13 +124,13 @@ make_rootfs() {
         fi
         info "Copying custom rootfs files..."
         cp -af --no-preserve=ownership,mode -- "$script_dir"/rootfs/. "$debootstrap_dir"/
-        unlink "$debootstrap_dir"/root/install
-        cp -rLf --no-preserve=ownership,mode -- "$script_dir"/rootfs/root/install "$debootstrap_dir"/root/
+        mkdir -p "$debootstrap_dir"/root/mutable
         # Set ownership and mode for files and directories
         chown -fh -- 0:0 "$debootstrap_dir"/etc/shadow
         chmod -f -- 400 "$debootstrap_dir"/etc/shadow
-        chown -fh -- 0:0 "$debootstrap_dir"/root
-        chmod -f -- 750 "$debootstrap_dir"/root
+        chown -fhR -- 0:0 "$debootstrap_dir"/root
+        chmod -fR -- 750 "$debootstrap_dir"/root
+        #
         info "Done!"
     fi
 }
@@ -209,48 +211,6 @@ configure_rootfs() {
     info "Done!"
 }
 
-cleanup_rootfs() {
-    info "Cleaning up rootfs..."
-    # system
-    rm -rf -- "$debootstrap_dir"/boot/*
-    rm -rf -- "$debootstrap_dir"/dev/*
-    rm -rf -- "$debootstrap_dir"/var/tmp/*
-    rm -rf -- "$debootstrap_dir"/tmp/*
-    rm -rf -- "$debootstrap_dir"/var/log/*
-
-    # debootstrap
-    rm -rf -- "$debootstrap_dir"/var/lib/apt/lists/*
-    rm -rf -- "$debootstrap_dir"/var/cache/apt/archives/*.deb
-
-    # pacman
-    if [ -d "$debootstrap_dir/var/lib/pacman" ]; then
-        find "$debootstrap_dir/var/lib/pacman" -maxdepth 1 -type f -delete
-    fi
-    if [ -d "$debootstrap_dir/var/lib/pacman/sync" ]; then
-        find "$debootstrap_dir/var/lib/pacman/sync" -delete
-    fi
-    if [ -d "$debootstrap_dir/var/cache/pacman/pkg" ]; then
-        find "$debootstrap_dir/var/cache/pacman/pkg" -type f -delete
-    fi
-    find "$work_dir" \( -name '*.pacnew' -o -name '*.pacsave' -o -name '*.pacorig' \) -delete
-
-    # create an empty /etc/machine-id
-    rm -f -- "$debootstrap_dir/etc/machine-id"
-    printf '' > "$debootstrap_dir/etc/machine-id"
-
-    info "Done!"
-}
-
-make_rootfs_archive() {
-    info "Creating rootfs archive..."
-    tar -cvf "$out_dir/$rootfs_archive_name" \
-        --zstd -C "$debootstrap_dir" \
-        . \
-        &> "$log_dir"/tar.log
-    chown $SUDO_UID:$SUDO_GID "$out_dir/$rootfs_archive_name"
-    info "Done!"
-}
-
 make_initramfs() {
     for kernel_version in $(ls "$debootstrap_dir"/usr/lib/modules); do
         info "Create initramfs for kernel version: $kernel_version"
@@ -322,13 +282,67 @@ make_efibootimg() {
     done
 }
 
+make_mutable_img() {
+    info "Creating mutable image..."
+
+    rm -f -- "$work_dir"/mutable.img
+    fallocate -l 64M "$work_dir"/mutable.img
+    mkfs.$mutable_image_type -f -l MUTABLE "$work_dir"/mutable.img &> "$log_dir"/mkfs.f2fs.log
+    info "Done!"
+}
+
+cleanup_rootfs() {
+    info "Cleaning up rootfs..."
+    # system
+    rm -rf -- "$debootstrap_dir"/boot/*
+    rm -rf -- "$debootstrap_dir"/dev/*
+    rm -rf -- "$debootstrap_dir"/var/tmp/*
+    rm -rf -- "$debootstrap_dir"/tmp/*
+    rm -rf -- "$debootstrap_dir"/var/log/*
+
+    # debootstrap
+    rm -rf -- "$debootstrap_dir"/var/lib/apt/lists/*
+    rm -rf -- "$debootstrap_dir"/var/cache/apt/archives/*.deb
+
+    # pacman
+    if [ -d "$debootstrap_dir/var/lib/pacman" ]; then
+        find "$debootstrap_dir/var/lib/pacman" -maxdepth 1 -type f -delete
+    fi
+    if [ -d "$debootstrap_dir/var/lib/pacman/sync" ]; then
+        find "$debootstrap_dir/var/lib/pacman/sync" -delete
+    fi
+    if [ -d "$debootstrap_dir/var/cache/pacman/pkg" ]; then
+        find "$debootstrap_dir/var/cache/pacman/pkg" -type f -delete
+    fi
+    find "$work_dir" \( -name '*.pacnew' -o -name '*.pacsave' -o -name '*.pacorig' \) -delete
+
+    # create an empty /etc/machine-id
+    rm -f -- "$debootstrap_dir/etc/machine-id"
+    printf '' > "$debootstrap_dir/etc/machine-id"
+
+    info "Done!"
+}
+
+make_rootfs_archive() {
+    info "Creating rootfs archive..."
+    tar -cvf "$out_dir/$rootfs_archive_name" \
+        --zstd -C "$debootstrap_dir" \
+        . \
+        &> "$log_dir"/tar.log
+    chown $SUDO_UID:$SUDO_GID "$out_dir/$rootfs_archive_name"
+    info "Done!"
+}
+
 make_rootfs_squashfs() {
     local image_path="$isofs_dir/$install_dir/squashfs.img"
+
+    printf "%s\t\t%s\t\t%s\t%s\t\t%s %s\n" "LABEL=ISO_EFI"  "/boot"         "vfat"  "defaults"  "0" "2" >> "$debootstrap_dir"/etc/fstab
+    printf "%s\t\t%s\t\t%s\t%s\t\t%s %s\n" "LABEL=MUTABLE"  "/root/mutable" "f2fs"  "defaults"  "0" "2" >> "$debootstrap_dir"/etc/fstab
 
     # Create a squashfs image and place it in the ISO 9660 file system.
     install -dm0755 -- "$isofs_dir/$install_dir"
     info "Creating SquashFS image, this may take some time..."
-    mksquashfs "$debootstrap_dir" "$image_path" -noappend -comp xz -b 1M -Xbcj x86 -Xdict-size 1M
+    mksquashfs "$debootstrap_dir" "$image_path" -comp zstd -b 1M -noappend
     info "Done!"
 }
 
@@ -365,25 +379,13 @@ make_iso_image() {
         -preparer "prepared by kzl" \
         -partition_offset 16 \
         -append_partition 2 'C12A7328-F81F-11D2-BA4B-00A0C93EC93B' "$work_dir"/efiboot.img \
+        -append_partition 3 '0FC63DAF-8483-4772-8E79-3D69D8477DE4' "$work_dir"/mutable.img \
         -appended_part_as_gpt \
+        -no-pad \
         -output "$out_dir/$iso_image_name" \
         "$isofs_dir/" &> "$log_dir"/xorriso.log || error "Failed to create ISO image" 5
     chown $SUDO_UID:$SUDO_GID "$out_dir/$iso_image_name"
     info "Done!"
-}
-
-build() {
-    create_work_dir
-    make_rootfs
-    bootstrap_rootfs "${deb_pkgs[@]}"
-    install_pacman_pkgs "${pacman_pkgs[@]}"
-    configure_rootfs
-    cleanup_rootfs
-    make_rootfs_archive
-    make_initramfs
-    make_efibootimg
-    make_rootfs_squashfs
-    make_iso_image
 }
 
 clean() {
@@ -415,7 +417,7 @@ set -u
 # set -x
 
 
-while (($# > 0 )); do
+while (($# > 0)); do
     case "$1" in
     -h|--help)
         usage
@@ -441,7 +443,18 @@ echo -e "****************************************************************"
 echo -e "[$script_name]: Start time - $(date)"
 echo -e "\e[0m"
 
-build
+create_work_dir
+make_rootfs
+bootstrap_rootfs "${deb_pkgs[@]}"
+install_pacman_pkgs "${pacman_pkgs[@]}"
+configure_rootfs
+make_initramfs
+make_efibootimg
+make_mutable_img
+cleanup_rootfs
+make_rootfs_archive
+make_rootfs_squashfs
+make_iso_image
 
 end_time=$(date +%s)
 total_time=$((end_time - start_time))
