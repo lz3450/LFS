@@ -13,17 +13,27 @@ sed -e '/^#PermitRootLogin/c\PermitRootLogin yes' \
 # grml-zsh-config
 wget -O rootfs/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
 
+rm -rf rootfs/root/.zsh
 mkdir -p rootfs/root/.zsh
 
-sudo rm -rf rootfs/root/.zsh/zsh-syntax-highlighting
-git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git rootfs/root/.zsh/zsh-syntax-highlighting
-rm -rf rootfs/root/.zsh/zsh-syntax-highlighting/{.git,.github,docs,images,tests,.editorconfig,.gitattributes,.gitignore,*.md,Makefile}
-find rootfs/root/.zsh/zsh-syntax-highlighting -name '*.md' -delete
-find rootfs/root/.zsh/zsh-syntax-highlighting -name 'test-data' -exec rm -rf {} +
+rm -rf rootfs/root/zsh-syntax-highlighting
+git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git rootfs/root/zsh-syntax-highlighting
+pushd rootfs/root/zsh-syntax-highlighting
+make
+make PREFIX=../.zsh/ SHARE_DIR=../.zsh/ DOC_DIR=../.zsh/doc install
+popd
+rm -rf rootfs/root/zsh-syntax-highlighting
 
-sudo rm -rf rootfs/root/.zsh/zsh-autosuggestions
-git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git rootfs/root/.zsh/zsh-autosuggestions
-rm -rf rootfs/root/.zsh/zsh-autosuggestions/{.circleci,.git,.github,spec,.editorconfig,.rspec,.rubocop.yml,.ruby-version,DESCRIPTION,Dockerfile,Gemfile*,install_test_zsh.sh,LICENSE,URL,VERSION,ZSH_VERSIONS,*.md,Makefile}
 
-echo 'source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> rootfs/root/.zshrc
-echo 'source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh' >> rootfs/root/.zshrc
+rm -rf rootfs/root/zsh-autosuggestions
+git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git rootfs/root/zsh-autosuggestions
+pushd rootfs/root/zsh-autosuggestions
+make
+install -Dm644 zsh-autosuggestions{,.plugin}.zsh -t ../.zsh/
+popd
+rm -rf rootfs/root/zsh-autosuggestions
+
+rm -rf rootfs/root/.zsh/doc
+
+echo 'source ~/.zsh/zsh-syntax-highlighting.zsh' >> rootfs/root/.zshrc
+echo 'source ~/.zsh/zsh-autosuggestions.zsh' >> rootfs/root/.zshrc
