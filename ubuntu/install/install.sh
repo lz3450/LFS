@@ -130,7 +130,7 @@ for fs in dev sys proc run; do
 done
 LANG=C.UTF-8 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin chroot "$mountpoint" /bin/bash
 for fs in dev sys proc run; do
-    umount -R "$debootstrap_dir"/$fs
+    umount -R "$mountpoint"/$fs
 done
 
 # boot
