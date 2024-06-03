@@ -4,6 +4,6 @@
 [credential]
 	helper = cache --timeout=86400
 [pull]
-	rebase = false
+	rebase = true
 [init]
 	defaultBranch = main
