@@ -13,11 +13,14 @@ sudo apt-get purge -y \
     ubuntu-docs \
     ubuntu-release-upgrader-* \
     ubuntu-report \
+    ubuntu-pro-* \
     apport \
     sssd \
     avahi-daemon \
     memtest86+ \
-    snapd
+    snapd \
+    xserver-xorg \
+    printer-driver-*
 sudo apt-get autoremove --purge
 
 sudo rm -vrf /var/lib/update-manager
@@ -26,6 +29,7 @@ sudo rm -vrf /var/lib/update-notifier
 sudo rm -vrf /var/lib/ubuntu-release-upgrader
 sudo rm -vrf /etc/systemd/system/snapd.mounts.target.wants
 sudo rm -vf "/etc/systemd/system/var-snap-firefox-common-host\\x2dhunspell.mount"
+sudo rm -vrf /usr/share/hplip
 
 # sudo systemctl set-default multi-user.target
 # sudo systemctl set-default graphics.target
