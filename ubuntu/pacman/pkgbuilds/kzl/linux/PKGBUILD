@@ -3,7 +3,7 @@
 pkgbase=linux
 pkgname=(linux linux-headers)
 pkgver=5.15.160
-pkgrel=2
+pkgrel=8
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -14,7 +14,7 @@ source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#bra
         config
         update-kernel.sh)
 sha256sums=('SKIP'
-            '5433440b702f23036508aa78b839e674e5ccbf33b60ed0624ccdde9fc94a79ca'
+            'e38ac07df7b2f03f8b45aba99664ebebf146847538b9040d04fb66a86296bd40'
             '42a737e5d42b435d2b5f91daa6aefebbba41bfbcb87d5a79f1d7df3649cc08aa')
 
 export KBUILD_BUILD_HOST=Ubuntu
@@ -60,7 +60,7 @@ package_linux() {
   ln -sf /usr/src/linux-headers-$kernelrelease "$pkgdir"/usr/lib/modules/$kernelrelease/source
   ln -sf /usr/src/linux-headers-$kernelrelease/build "$pkgdir"/usr/lib/modules/$kernelrelease/build
 
-  install -Dm755 "$srcdir"/update-kernel.sh -t "$pkgdir"/boot/
+  sed "s/@pkgver@/$pkgver/" "$srcdir"/update-kernel.sh | install -Dm755 /dev/stdin "$pkgdir"/boot/update-kernel.sh
 }
 
 package_linux-headers() {

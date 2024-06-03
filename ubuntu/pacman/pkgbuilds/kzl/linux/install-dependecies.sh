@@ -1,5 +1,9 @@
 #!/bin/bash
 
 sudo apt install \
+    bison \
+    flex \
     libelf-dev \
-    libssl-dev
+    libncurses-dev \
+    libssl-dev \
+    rsync
