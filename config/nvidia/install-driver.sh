@@ -1,6 +1,6 @@
 workdir=/tmp/nvidia
 pkgname=nvidia
-pkgver=530.30.02
+pkgver=550.78
 source=https://us.download.nvidia.com/XFree86/Linux-x86_64/$pkgver/NVIDIA-Linux-x86_64-$pkgver.run
 
 set -e
