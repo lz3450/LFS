@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+loginctl list-sessions
+read -p "Session: " session
+loginctl unlock-session "$session"
+
 # pkill -f -u kzl gnome-keyring-daemon
 read -r -s -p "Enter password: " password
 echo
