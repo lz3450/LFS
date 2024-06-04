@@ -36,4 +36,5 @@ rm -rf "$tmpdir"
 rm -rf "$plugin_rootdir"/zsh-syntax-highlighting/doc
 
 cp ~/.zshrc .zshrc.orig
-cp .zshrc ~/.zshrc
+ln -srf .zshrc ~
+ln -srf .zshenv ~

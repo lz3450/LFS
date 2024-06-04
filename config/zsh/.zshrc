@@ -49,7 +49,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "eastwood"
     # "edvardm"
     # "emotty"
-    "essembeh"
+    # "essembeh"
     # "evan"
     # "fino-time"
     # "fino"
