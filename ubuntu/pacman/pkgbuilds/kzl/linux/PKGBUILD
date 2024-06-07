@@ -54,7 +54,7 @@ package_linux() {
   install -Dm755 build/$image_name "$pkgdir/$modulesdir/vmlinuz-$pkgver-KZL"
   install -Dm755 build/$image_name "$pkgdir/boot/vmlinuz-$pkgver-KZL"
   install -Dm755 build/$image_name "$pkgdir"/boot/efi/vmlinuz-KZL
-  install -Dm755 "$srcdir"/config "$pkgdir"/boot/config-$pkgver-KZL
+  install -Dm644 "$srcdir"/config "$pkgdir"/boot/config-$pkgver-KZL
 
   rm "$pkgdir"/usr/lib/modules/$kernelrelease/{build,source}
   ln -sf /usr/src/linux-headers-$kernelrelease "$pkgdir"/usr/lib/modules/$kernelrelease/source
