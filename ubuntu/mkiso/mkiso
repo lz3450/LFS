@@ -436,7 +436,6 @@ while (($# > 0)); do
     shift
 done
 
-start_time=$(date +%s)
 
 echo -e "\e[1;30m"
 echo -e "****************************************************************"
@@ -444,6 +443,7 @@ echo -e "               Create Ubuntu-KZL Live/Rescue CD ISO             "
 echo -e "****************************************************************"
 echo -e "[$script_name]: Start time - $(date)"
 echo -e "\e[0m"
+start_time=$(date +%s)
 
 create_work_dir
 make_rootfs
@@ -460,7 +460,6 @@ make_iso_image
 
 end_time=$(date +%s)
 total_time=$((end_time - start_time))
-
 echo -e "\e[1;30m"
 echo -e "****************************************************************"
 echo -e "                Execution time Information                "
