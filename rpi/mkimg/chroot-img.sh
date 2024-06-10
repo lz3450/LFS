@@ -6,7 +6,7 @@
 script_name="$(basename "$0")"
 script_path="$(readlink -f "$0")"
 script_dir="$(dirname "$script_path")"
-mountpoint=raspi_rootfs
+mountpoint="$(mktemp -d)"
 file_name=""
 is_device=0
 loop=""
@@ -89,9 +89,9 @@ mount_device() {
     fi
 
     info "Mointing the image..."
-
     mkdir -p "$mountpoint"
     sudo mount "${device_name}2" "$mountpoint"
+    info "Mountpoint is \"$mountpoint\""
 
     # Check if the mount was successful
     if mountpoint -q "$mountpoint"; then

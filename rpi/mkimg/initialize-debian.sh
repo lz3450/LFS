@@ -4,27 +4,13 @@ set -e
 # set -x
 
 # package
-apt clean
-apt update
-apt install -y \
-    sudo \
-    f2fs-tools \
-    systemd-resolved \
-    systemd-timesyncd \
-    wpasupplicant \
-    gnupg \
-    wget curl \
-    dialog \
-    locales \
-    openssh-server \
-    zsh \
-    zsh-syntax-highlighting \
-    zsh-autosuggestions
-apt upgrade -y
+apt-get clean
+apt-get update
+apt-get upgrade -y
 
 wget -qO /etc/apt/trusted.gpg.d/raspberrypi.gpg.key http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
-apt update
-apt install -y \
+apt-get update
+apt-get install -y \
     raspberrypi-sys-mods \
     raspberrypi-archive-keyring \
     raspberrypi-bootloader \
@@ -88,7 +74,7 @@ EOF
 tee /etc/wpa_supplicant/wpa_supplicant-wlan0.conf << EOF
 network={
         ssid="LuckySKZLJ"
-        psk=a8ba39d6dc7bc6e4984dcc45a386719fe42b5876dc4fd56c516a521615ee981c
+        psk=51d8558a663cf1d191b42cd88d542e3847ce4da204196fa016c30728bc67f6e3
 }
 EOF
 

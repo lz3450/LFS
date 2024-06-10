@@ -4,29 +4,13 @@ set -e
 # set -x
 
 # package
-apt clean
-apt update
-apt upgrade -y
-apt install -y \
-    sudo \
-    f2fs-tools \
-    wpasupplicant \
-    systemd-timesyncd \
-    wget curl \
-    nano \
-    openssh-server \
-    gnupg \
-    bash-completion \
-    zsh \
-    zsh-syntax-highlighting \
-    zsh-autosuggestions \
-    linux-firmware-raspi \
-    ubuntu-raspi-settings \
-    # linux-raspi \
-    # flash-kernel \
-    # rpi-eeprom
+apt-get clean
+apt-get update
+apt-get upgrade -y
+apt-get install -y \
+    ubuntu-raspi-settings
 
-apt purge -y \
+apt-get purge -y \
     ubuntu-advantage-tools
 
 dpkg-reconfigure locales
@@ -79,7 +63,7 @@ EOF
 tee /etc/wpa_supplicant/wpa_supplicant-wlan0.conf << EOF
 network={
 	ssid="LuckySKZLJ"
-	psk=a8ba39d6dc7bc6e4984dcc45a386719fe42b5876dc4fd56c516a521615ee981c
+	psk=51d8558a663cf1d191b42cd88d542e3847ce4da204196fa016c30728bc67f6e3
 }
 network={
 	ssid="S3Lab"

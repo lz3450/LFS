@@ -15,6 +15,28 @@ fs_type=""
 base_only=0
 base_img=""
 
+common_deb_pkgs=(
+    initramfs-tools
+    sudo
+    nano
+    wpasupplicant
+    wget curl
+    openssh-server
+    git
+    bash-completion
+    zsh
+    zsh-syntax-highlighting
+    zsh-autosuggestions
+)
+debian_deb_pkgs=(
+    systemd-resolved
+    systemd-timesyncd
+)
+ubuntu_deb_pkgs=(
+    linux-firmware-raspi
+    # ubuntu-raspi-settings
+)
+
 # Show an INFO message
 # $1: message string
 info() {
@@ -99,12 +121,32 @@ mount_img() {
 bootstrap_img () {
     info "Bootstrap image..."
 
+    local -a _pkg_list
+    local _suite
+    local _mirror
+
     # debootstrap
     if [[ "$target" == "debian" ]]; then
-        sudo debootstrap --arch=arm64 --foreign bookworm "$mountpoint" http://deb.debian.org/debian
+        _pkg_list=("${common_deb_pkgs[@]}" "${debian_deb_pkgs[@]}")
+        _suite="bookworm"
+        _mirror="http://deb.debian.org/debian"
     elif [[ "$target" == "ubuntu" ]]; then
-        sudo debootstrap --arch=arm64 --foreign jammy "$mountpoint" http://ports.ubuntu.com/ubuntu-ports
+        _pkg_list=("${common_deb_pkgs[@]}" "${ubuntu_deb_pkgs[@]}")
+        _suite="jammy"
+        _mirror="http://ports.ubuntu.com"
+    else
+        error "Unsupported target distribution \"$target\"." 1
     fi
+
+    sudo debootstrap \
+        --arch=arm64 \
+        --foreign \
+        --include="$(IFS=','; echo "${_pkg_list[*]}")" \
+        --components=main,restricted,universe \
+        --merged-usr \
+        "$_suite" \
+        "$mountpoint" \
+        "$_mirror"
 
     sudo LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /debootstrap/debootstrap --second-stage
 
@@ -164,11 +206,30 @@ configure_img() {
     sudo sed -i "s|%FS_TYPE%|$fs_type|" "$mountpoint"/boot/firmware/cmdline.txt
 
     # RPi firmware
+    info "BOOT PARTUUID: $bootpartuuid"
     if [[ "$target" == "ubuntu" ]]; then
         sudo cp -dr "$script_dir"/firmware/boot/* "$mountpoint"/boot/firmware/
         sudo cp -dr "$script_dir"/firmware/modules "$mountpoint"/usr/lib/
-        sudo cp -dr "$script_dir"/firmware/opt/vc "$mountpoint"/opt/
     fi
+    for kernel_version in $(ls "$script_dir"/firmware/modules); do
+        kv=$(echo "$kernel_version" | sed -e 's#.*[0-9]\.[0-9]\.[0-9]\+\(-v\)\?\(.*\)+#\2#')
+        case "$kv" in
+            8-16k)
+                kv="_2712"
+                ;;
+        esac
+        sudo cp -dr "$script_dir"/firmware/boot/kernel$kv.img "$mountpoint"/boot/vmlinuz-$kernel_version
+    done
+    sudo LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /bin/bash -c "update-initramfs -c -k all"
+    for kernel_version in $(ls "$script_dir"/firmware/modules); do
+        kv=$(echo "$kernel_version" | sed -e 's#.*[0-9]\.[0-9]\.[0-9]\+\(-v\)\?\(.*\)+#\2#')
+        case "$kv" in
+            8-16k)
+                kv="_2712"
+                ;;
+        esac
+        sudo cp -dr "$mountpoint"/boot/initrd.img-$kernel_version "$mountpoint"/boot/firmware/initramfs$kv
+    done
 
     sync
 }
