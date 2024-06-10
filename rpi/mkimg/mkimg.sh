@@ -76,7 +76,7 @@ usage() {
     echo "$_usage"
 }
 
-create_img() {
+create_img_file() {
     info "Creating image..."
 
     if [[ -f "$img" ]]; then
@@ -99,23 +99,23 @@ setup_loop() {
     loop=$(losetup -f)
     info "Loop device is \"$loop\""
 
-    sudo losetup -P "$loop" "$img"
+    losetup -P "$loop" "$img"
 }
 
 format_img() {
     info "Formating image..."
 
-    sudo mkfs.fat -F32 "${loop}p1"
-    sudo mkfs."$fs_type" "${loop}p2"
+    mkfs.fat -F32 "${loop}p1"
+    mkfs."$fs_type" "${loop}p2"
 }
 
 mount_img() {
     info "Mounting image..."
 
     mkdir -p "$mountpoint"
-    sudo mount "${loop}p2" "$mountpoint"
-    sudo mkdir -p "$mountpoint"/boot/firmware
-    sudo mount "${loop}p1" "$mountpoint"/boot/firmware
+    mount "${loop}p2" "$mountpoint"
+    mkdir -p "$mountpoint"/boot/firmware
+    mount "${loop}p1" "$mountpoint"/boot/firmware
 }
 
 bootstrap_img () {
@@ -138,7 +138,7 @@ bootstrap_img () {
         error "Unsupported target distribution \"$target\"." 1
     fi
 
-    sudo debootstrap \
+    debootstrap \
         --arch=arm64 \
         --foreign \
         --include="$(IFS=','; echo "${_pkg_list[*]}")" \
@@ -148,88 +148,80 @@ bootstrap_img () {
         "$mountpoint" \
         "$_mirror"
 
-    sudo LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /debootstrap/debootstrap --second-stage
+    LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /debootstrap/debootstrap --second-stage
 
     sync
 }
 
 configure_img() {
-    info "Configuring image..."
-
-    # source.list
-    sudo cp -f "sources-$target.list" "$mountpoint"/etc/apt/sources.list
+    info "Copying sources.list..."
+    cp -f "sources-$target.list" "$mountpoint"/etc/apt/sources.list
     if [[ "$target" == "debian" ]]; then
-        sudo cp -f raspi.list "$mountpoint"/etc/apt/sources.list.d/
-        wget -qO - http://archive.raspberrypi.org/debian/raspberrypi.gpg.key | gpg --dearmor | sudo tee "$mountpoint"/etc/apt/trusted.gpg.d/raspberrypi >/dev/null
+        cp -f raspi.list "$mountpoint"/etc/apt/sources.list.d/
+        wget -qO - http://archive.raspberrypi.org/debian/raspberrypi.gpg.key | gpg --dearmor | tee "$mountpoint"/etc/apt/trusted.gpg.d/raspberrypi >/dev/null
     fi
 
-    # initialization script
-    info "Running initialize.sh..."
-    sudo cp "initialize-$target.sh" "$mountpoint"/initialize.sh
-
-    for fs in dev sys proc run; do
-        sudo mount --rbind /"$fs" "$mountpoint/$fs"
-        sudo mount --make-rslave "$mountpoint/$fs"
+    info "Copying RPi firmware..."
+    cp -dr firmware/boot/* "$mountpoint"/boot/firmware/
+    cp -dr firmware/modules "$mountpoint"/usr/lib/
+    for kernel_version in $(ls firmware/modules); do
+        kv=$(echo "$kernel_version" | sed -e 's#.*[0-9]\.[0-9]\.[0-9]\+\(-v\)\?\(.*\)+#\2#')
+        case "$kv" in
+            8-16k)
+                kv="_2712"
+                ;;
+        esac
+        cp -dr firmware/boot/kernel$kv.img "$mountpoint"/boot/vmlinuz-$kernel_version
+        initrd_imgs+=("initrd.img-$kernel_version:$kv")
     done
 
-    sudo LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /bin/bash -c "/initialize.sh"
-
-    sudo rm "$mountpoint"/initialize.sh
-
+    info "Mounting system filesystems..."
     for fs in dev sys proc run; do
-        sudo umount -R "$mountpoint"/$fs
+        mount --rbind /"$fs" "$mountpoint/$fs"
+        mount --make-rslave "$mountpoint/$fs"
+    done
+
+    info "Running initialize.sh..."
+    cp "initialize-$target.sh" "$mountpoint"/initialize.sh
+    LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /bin/bash -c "/initialize.sh"
+    rm "$mountpoint"/initialize.sh
+
+    info "Unmounting system filesystems..."
+    for fs in dev sys proc run; do
+        umount -R "$mountpoint"/$fs
+    done
+
+    info "Copying initramfs..."
+    for initrd_img in "${initrd_imgs[@]}"; do
+        kv=${initrd_file##*:}
+        cp -dr "$mountpoint"/boot/initrd.img-$initrd_img "$mountpoint"/boot/firmware/initramfs$kv
     done
 
     info "Clean mountpoint..."
-    sudo rm -rf "$mountpoint"/var/lib/apt/lists/*
-    sudo rm -rf "$mountpoint"/dev/*
-    sudo rm -rf "$mountpoint"/var/log/*
-    sudo rm -rf "$mountpoint"/var/cache/apt/archives/*.deb
-    sudo rm -rf "$mountpoint"/var/tmp/*
-    sudo rm -rf "$mountpoint"/tmp/*
+    rm -rf "$mountpoint"/var/lib/apt/lists/*
+    rm -rf "$mountpoint"/dev/*
+    rm -rf "$mountpoint"/var/log/*
+    rm -rf "$mountpoint"/var/cache/apt/archives/*.deb
+    rm -rf "$mountpoint"/var/tmp/*
+    rm -rf "$mountpoint"/tmp/*
 
-    sudo cp -f "config.txt" "$mountpoint"/boot/firmware/config.txt
-    sudo cp -f "cmdline-$target.txt" "$mountpoint"/boot/firmware/cmdline.txt
-    sudo cp -f fstab "$mountpoint"/etc/fstab
+    info "Copying configuration files..."
+    cp -f "config.txt" "$mountpoint"/boot/firmware/config.txt
+    cp -f "cmdline-$target.txt" "$mountpoint"/boot/firmware/cmdline.txt
+    cp -f fstab "$mountpoint"/etc/fstab
 
-    # PARTUUID
-    bootpartuuid=$(sudo blkid -s PARTUUID | grep ${loop}p1 | sed -e 's#.*=\"\(.*\)\"#\1#')
+    info "Setting PARTUUID..."
+    bootpartuuid=$(blkid -s PARTUUID | grep ${loop}p1 | sed -e 's#.*=\"\(.*\)\"#\1#')
     test -z "$bootpartuuid" && error "cannot find boot partuuid!" 1
     info "BOOT PARTUUID: $bootpartuuid"
-    rootpartuuid=$(sudo blkid -s PARTUUID | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
+    rootpartuuid=$(blkid -s PARTUUID | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
     test -z "$rootpartuuid" && error "cannot find root partuuid!" 1
     info "ROOT PARTUUID: $rootpartuuid"
-    sudo sed -i "s|%BOOTPARTUUID%|$bootpartuuid|" "$mountpoint"/etc/fstab
-    sudo sed -i "s|%ROOTPARTUUID%|$rootpartuuid|" "$mountpoint"/etc/fstab
-    sudo sed -i "s|%ROOTPARTUUID%|$rootpartuuid|" "$mountpoint"/boot/firmware/cmdline.txt
-    sudo sed -i "s|%FS_TYPE%|$fs_type|" "$mountpoint"/etc/fstab
-    sudo sed -i "s|%FS_TYPE%|$fs_type|" "$mountpoint"/boot/firmware/cmdline.txt
-
-    # RPi firmware
-    info "BOOT PARTUUID: $bootpartuuid"
-    if [[ "$target" == "ubuntu" ]]; then
-        sudo cp -dr "$script_dir"/firmware/boot/* "$mountpoint"/boot/firmware/
-        sudo cp -dr "$script_dir"/firmware/modules "$mountpoint"/usr/lib/
-    fi
-    for kernel_version in $(ls "$script_dir"/firmware/modules); do
-        kv=$(echo "$kernel_version" | sed -e 's#.*[0-9]\.[0-9]\.[0-9]\+\(-v\)\?\(.*\)+#\2#')
-        case "$kv" in
-            8-16k)
-                kv="_2712"
-                ;;
-        esac
-        sudo cp -dr "$script_dir"/firmware/boot/kernel$kv.img "$mountpoint"/boot/vmlinuz-$kernel_version
-    done
-    sudo LC_ALL=C PATH="$chroot_path" chroot "$mountpoint" /bin/bash -c "update-initramfs -c -k all"
-    for kernel_version in $(ls "$script_dir"/firmware/modules); do
-        kv=$(echo "$kernel_version" | sed -e 's#.*[0-9]\.[0-9]\.[0-9]\+\(-v\)\?\(.*\)+#\2#')
-        case "$kv" in
-            8-16k)
-                kv="_2712"
-                ;;
-        esac
-        sudo cp -dr "$mountpoint"/boot/initrd.img-$kernel_version "$mountpoint"/boot/firmware/initramfs$kv
-    done
+    sed -i "s|%BOOTPARTUUID%|$bootpartuuid|" "$mountpoint"/etc/fstab
+    sed -i "s|%ROOTPARTUUID%|$rootpartuuid|" "$mountpoint"/etc/fstab
+    sed -i "s|%ROOTPARTUUID%|$rootpartuuid|" "$mountpoint"/boot/firmware/cmdline.txt
+    sed -i "s|%FS_TYPE%|$fs_type|" "$mountpoint"/etc/fstab
+    sed -i "s|%FS_TYPE%|$fs_type|" "$mountpoint"/boot/firmware/cmdline.txt
 
     sync
 }
@@ -241,9 +233,9 @@ cleanup() {
     if [[ -n "$mountpoint" ]]; then
         for attempt in {1..10}; do
             for fs in dev/pts dev sys proc run; do
-                mount | grep -q "$mountpoint/$fs" && sudo umount -R "$mountpoint/$fs" 2> /dev/null
+                mount | grep -q "$mountpoint/$fs" && umount -R "$mountpoint/$fs" 2> /dev/null
             done
-            mount | grep -q "$mountpoint" && sudo umount -R "$mountpoint" 2> /dev/null
+            mount | grep -q "$mountpoint" && umount -R "$mountpoint" 2> /dev/null
             if [[ $? -ne 0 ]]; then
                 break
             fi
@@ -252,7 +244,7 @@ cleanup() {
     fi
 
     if [[ -n "$loop" ]]; then
-        sudo losetup -d "$loop"
+        losetup -d "$loop"
     fi
     if [[ -d "$mountpoint" ]]; then
         rmdir "$mountpoint"
@@ -321,33 +313,33 @@ echo -e "               Create Raspberry Pi image                "
 echo -e "****************************************************************"
 echo -e "[$script_name]: Start time - $(date)"
 echo -e "\e[0m"
-
 start_time=$(date +%s)
 
 if [[ -f "$base_img" ]]; then
     cp "$base_img" "$img"
     setup_loop
     mount_img
-    fs_type=$(sudo blkid -s TYPE | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
+    fs_type=$(blkid -s TYPE | grep ${loop}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
 else
-    create_img
+    create_img_file
     setup_loop
     format_img
     mount_img
     bootstrap_img
     info "Copy base image..."
     cp -v "$img" "$script_dir/${target}-${fs_type}-raspi-base-$(date +%Y%m%d_%H%M%S).img"
+    chown $SUDO_UID:$SUDO_GID "$script_dir/${target}-${fs_type}-raspi-base-$(date +%Y%m%d_%H%M%S).img"
 fi
 
 if [[ $base_only -eq 0 ]]; then
     configure_img
     info "Copy full image..."
     cp -v "$img" "$script_dir/${target}-${fs_type}-raspi-$(date +%Y%m%d_%H%M%S).img"
+    chown $SUDO_UID:$SUDO_GID "$script_dir/${target}-${fs_type}-raspi-$(date +%Y%m%d_%H%M%S).img"
 fi
 
 end_time=$(date +%s)
 total_time=$((end_time - start_time))
-
 echo -e "\e[1;30m"
 echo -e "****************************************************************"
 echo -e "                Execution time Information                "

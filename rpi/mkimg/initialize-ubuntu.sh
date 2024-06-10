@@ -20,29 +20,15 @@ dpkg-reconfigure tzdata
 
 set +e
 
+update-initramfs -c -k all
+
 # hostname
 echo "RPi" > "$mountpoint"/etc/hostname
-
-# grml-zsh-config
-wget -O /root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
-echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> /root/.zshrc
-echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> /root/.zshrc
 
 # user
 echo -e '3450\n3450' | passwd
 useradd -m -U -G sudo,adm -s /bin/zsh kzl
 echo -e '3450\n3450' | passwd kzl
-
-# environment variables
-tee /home/kzl/.zshenv << EOF
-typeset -U PATH path
-path=("\$HOME/.local/bin" "\$path[@]")
-export PATH
-EOF
-chown kzl:kzl /home/kzl/.zshenv
-
-# time
-# timedatectl set-ntp 1
 
 # network
 tee /etc/systemd/network/eth0.network << EOF
@@ -75,3 +61,8 @@ systemctl enable systemd-networkd
 systemctl enable systemd-resolved
 systemctl enable wpa_supplicant@wlan0
 systemctl enable ssh
+
+# grml-zsh-config
+wget -O /root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> /root/.zshrc
+echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> /root/.zshrc
