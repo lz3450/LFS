@@ -3,7 +3,12 @@
 set -e
 set -u
 
+ohmyzsh_dir="$HOME/.oh-my-zsh"
 plugin_rootdir="$HOME/.oh-my-zsh/custom/plugins"
+
+if [ -f "$ohmyzsh_dir" ]; then
+    rm -rf "$ohmyzsh_dir"
+fi
 
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
