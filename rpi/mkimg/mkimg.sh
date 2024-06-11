@@ -83,7 +83,7 @@ create_img_file() {
         rm -f "$img"
     fi
 
-    fallocate -l 1280MiB "$img"
+    fallocate -l 1536MiB "$img"
 
     parted -s "$img" \
         mktable msdos \
@@ -172,7 +172,7 @@ configure_img() {
                 ;;
         esac
         cp -dr firmware/boot/kernel$kv.img "$mountpoint"/boot/vmlinuz-$kernel_version
-        initrd_imgs+=("initrd.img-$kernel_version:$kv")
+        kernel_version_kvs+=("$kernel_version:$kv")
     done
 
     info "Mounting system filesystems..."
@@ -192,9 +192,10 @@ configure_img() {
     done
 
     info "Copying initramfs..."
-    for initrd_img in "${initrd_imgs[@]}"; do
-        kv=${initrd_file##*:}
-        cp -dr "$mountpoint"/boot/initrd.img-$initrd_img "$mountpoint"/boot/firmware/initramfs$kv
+    for kernel_version_kv in "${kernel_version_kvs[@]}"; do
+        kernel_version=${kernel_version_kv%%:*}
+        kv=${kernel_version_kv##*:}
+        cp -dr "$mountpoint/boot/initrd.img-$kernel_version" "$mountpoint/boot/firmware/initramfs$kv"
     done
 
     info "Clean mountpoint..."
