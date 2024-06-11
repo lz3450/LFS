@@ -17,7 +17,7 @@ sudo apt-get purge -y \
     apport \
     sssd \
     avahi-daemon \
-    memtest86+ \
+    memtest86+* \
     snapd \
     xserver-xorg \
     printer-driver-*
