@@ -6,7 +6,7 @@ set -u
 ohmyzsh_dir="$HOME/.oh-my-zsh"
 plugin_rootdir="$HOME/.oh-my-zsh/custom/plugins"
 
-if [ -f "$ohmyzsh_dir" ]; then
+if [ -d "$ohmyzsh_dir" ]; then
     rm -rf "$ohmyzsh_dir"
 fi
 
