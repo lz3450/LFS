@@ -27,6 +27,7 @@ common_deb_pkgs=(
     zsh
     zsh-syntax-highlighting
     zsh-autosuggestions
+    build-essential
 )
 debian_deb_pkgs=(
     systemd-resolved
@@ -144,7 +145,6 @@ bootstrap_img () {
         --include="$(IFS=','; echo "${_pkg_list[*]}")" \
         --components=main,restricted,universe \
         --merged-usr \
-        --variant=buildd \
         "$_suite" \
         "$mountpoint" \
         "$_mirror"
