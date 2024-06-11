@@ -114,10 +114,18 @@ network={
 }
 EOF
 
-cat > "$mountpoint"/etc/netplan/network.yaml << EOF
-network:
-  version: 2
-  renderer: NetworkManager
+if [ -f "$mountpoint"/etc/NetworkManager/NetworkManager.conf ]; then
+    mv "$mountpoint"/etc/NetworkManager/NetworkManager.conf "$mountpoint"/etc/NetworkManager/NetworkManager.conf.backup
+fi
+cat > "$mountpoint"/etc/NetworkManager/NetworkManager.conf << EOF
+[main]
+plugins=keyfile,ifupdown
+
+[keyfile]
+unmanaged-devices=none
+
+[ifupdown]
+managed=true
 EOF
 
 # grml-zsh-config
