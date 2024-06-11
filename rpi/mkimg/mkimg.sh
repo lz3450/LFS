@@ -144,6 +144,7 @@ bootstrap_img () {
         --include="$(IFS=','; echo "${_pkg_list[*]}")" \
         --components=main,restricted,universe \
         --merged-usr \
+        --variant=buildd \
         "$_suite" \
         "$mountpoint" \
         "$_mirror"
