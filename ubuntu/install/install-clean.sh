@@ -14,7 +14,6 @@ sudo apt-get purge -y \
     ubuntu-release-upgrader-* \
     ubuntu-report \
     ubuntu-pro-* \
-    *netplan* \
     apport \
     sssd \
     avahi-daemon \

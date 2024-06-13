@@ -114,19 +114,19 @@ network={
 }
 EOF
 
-if [ -f "$mountpoint"/etc/NetworkManager/NetworkManager.conf ]; then
-    mv "$mountpoint"/etc/NetworkManager/NetworkManager.conf "$mountpoint"/etc/NetworkManager/NetworkManager.conf.backup
-fi
-cat > "$mountpoint"/etc/NetworkManager/NetworkManager.conf << EOF
-[main]
-plugins=keyfile,ifupdown
+# if [ -f "$mountpoint"/etc/NetworkManager/NetworkManager.conf ]; then
+#     mv "$mountpoint"/etc/NetworkManager/NetworkManager.conf "$mountpoint"/etc/NetworkManager/NetworkManager.conf.backup
+# fi
+# cat > "$mountpoint"/etc/NetworkManager/NetworkManager.conf << EOF
+# [main]
+# plugins=keyfile,ifupdown
 
-[keyfile]
-unmanaged-devices=none
+# [keyfile]
+# unmanaged-devices=none
 
-[ifupdown]
-managed=true
-EOF
+# [ifupdown]
+# managed=true
+# EOF
 
 # grml-zsh-config
 wget -O "$mountpoint"/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
