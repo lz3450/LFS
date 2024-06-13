@@ -2,8 +2,13 @@
 
 set -e
 
-sudo update-initramfs -k all -c
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root."
+    exit 1
+fi
 
-sudo cp -v initrd.img efi/
-sudo cp -v vmlinuz efi/
-sudo cp -v initrd.img-@pkgver@-KZL efi/initrd-KZL.img
+update-initramfs -k all -c
+
+cp -v initrd.img efi/
+cp -v vmlinuz efi/
+cp -v initrd.img-@pkgver@-KZL efi/initrd-KZL.img
