@@ -128,7 +128,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "rkj-repos"
     # "rkj"
     # "robbyrussell"
-    "sammy"
+    # "sammy"
     "simonoff"
     # "simple"
     # "skaro"
