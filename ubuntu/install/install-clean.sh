@@ -21,7 +21,7 @@ apt-get purge -y \
     snapd \
     xserver-xorg \
     printer-driver-*
-apt-get autoremove --purge
+apt-get autoremove --purge -y
 
 rm -vrf /var/lib/update-manager
 rm -vrf /var/lib/ubuntu-drivers-common

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# enable_rdp.sh
+# enable-rdp.sh
 #
 
 set -e

@@ -10,6 +10,7 @@ apt-get upgrade -y
 
 apt-get install -y ubuntu-desktop-minimal
 
+mkdir -p /etc/netplan
 tee /etc/netplan/00-default.yaml << EOF
 network:
   version: 2
