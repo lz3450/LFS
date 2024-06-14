@@ -71,7 +71,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "gozilla"
     # "half-life"
     # "humza"
-    "imajes"
+    # "imajes"
     # "intheloop"
     # "itchy"
     # "jaischeema"
