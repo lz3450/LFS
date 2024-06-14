@@ -5,16 +5,16 @@
 
 set -e
 
-sudo apt-get update
-sudo apt-get upgrade -y
+apt-get update
+apt-get upgrade -y
 
-sudo apt-get install -y ubuntu-desktop-minimal
+apt-get install -y ubuntu-desktop-minimal
 
-sudo tee /etc/netplan/00-default.yaml << EOF
+tee /etc/netplan/00-default.yaml << EOF
 network:
   version: 2
   renderer: NetworkManager
 EOF
 
-sudo systemctl disable systemd-networkd
-sudo systemctl enable NetworkManager
+systemctl disable systemd-networkd
+systemctl enable NetworkManager
