@@ -10,6 +10,7 @@ if [ -d "$ohmyzsh_dir" ]; then
     rm -rf "$ohmyzsh_dir"
 fi
 
+export RUNZSH="no"
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 tmpdir=/tmp/zsh-syntax-highlighting
