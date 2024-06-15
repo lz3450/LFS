@@ -1,12 +1,34 @@
 #!/bin/bash
 #
-# install-clean.sh
+# install-desktop.sh
 #
+
+set -e
+
+apt-get update
+apt-get upgrade -y
+
+pkgs=(
+  ubuntu-desktop-minimal
+  tmux
+  landscape-client
+)
+
+apt-get install -s "${pkgs[@]}" | grep "^Inst" | awk '{print $2}' | sort > configuration-pkgs.txt
+apt-get install -y "${pkgs[@]}"
+
+mkdir -p /etc/netplan
+tee /etc/netplan/00-default.yaml << EOF
+network:
+  version: 2
+  renderer: NetworkManager
+EOF
 
 if mountpoint -q /var/snap/firefox/common/host-hunspell; then
     umount /var/snap/firefox/common/host-hunspell
 fi
 
+# cleanup
 apt-get purge -y \
     ubuntu-advantage-* \
     ubuntu-drivers-* \
@@ -36,5 +58,7 @@ rm -vrf /usr/lib/xorg/modules/extensions
 rm -vrf /usr/lib/xorg/modules/drivers
 rmdir -v /usr/lib/xorg/modules
 
+systemctl disable systemd-networkd
+systemctl enable NetworkManager
 # systemctl set-default multi-user.target
 # systemctl set-default graphics.target

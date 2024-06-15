@@ -22,6 +22,7 @@ common_deb_pkgs=(
     linux-image-generic
     initramfs-tools
     zstd
+    build-essential
     ### pacman
     libarchive-tools
     libgpgme-dev
