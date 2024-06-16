@@ -62,7 +62,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "funky"
     # "fwalch"
     # "gallifrey"
-    "gallois"
+    # "gallois"
     # "garyblessington"
     "gentoo"
     # "geoffgarside"
