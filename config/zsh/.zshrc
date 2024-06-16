@@ -148,7 +148,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "theunraveler"
     # "tjkirch_mod"
     "tjkirch"
-    "tonotdo"
+    # "tonotdo"
     "trapd00r"
     # "wedisagree"
     # "wezm+"
