@@ -8,7 +8,7 @@ script_path="$(readlink -f "$0")"
 script_dir="$(dirname "$script_path")"
 mountpoint="$(mktemp -d)"
 file_name=""
-is_device=0
+declare -i is_device=0
 loop=""
 chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 

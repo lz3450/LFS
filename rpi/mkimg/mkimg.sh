@@ -12,7 +12,7 @@ loop=""
 chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 target=""
 fs_type=""
-base_only=0
+declare -i base_only=0
 base_img=""
 
 common_deb_pkgs=(
@@ -256,10 +256,11 @@ trap cleanup EXIT
 
 ################################################################################
 
-set -e -u
+set -e
+set -u
 # set -x
 
-while (($# > 0 )); do
+while (($# > 0)); do
     case "$1" in
     -h|--help)
         usage
