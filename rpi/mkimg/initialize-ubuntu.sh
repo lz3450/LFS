@@ -46,7 +46,7 @@ Name=wlan*
 [Network]
 DHCP=yes
 EOF
-tee /etc/wpa_supplicant/wpa_supplicant-wlan0.conf << EOF
+tee /etc/wpa_supplicant/wpa_supplicant.conf << EOF
 network={
 	ssid="LuckySKZLJ"
 	psk=51d8558a663cf1d191b42cd88d542e3847ce4da204196fa016c30728bc67f6e3
@@ -56,6 +56,7 @@ network={
 	psk=9dfacd4f5b26c7bfde13a184acb4b202eba5b2870cb2d6dccd10ac53012d0706
 }
 EOF
+cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
 
 systemctl enable systemd-networkd
 systemctl enable systemd-resolved
