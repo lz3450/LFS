@@ -82,7 +82,7 @@ minimalize_ext4() {
     e2fsck -f -y "$source" || :
 
     info "Resize partition..."
-    # parted -s "$source" resizepart 1 (($new_size + 7))
+    # parted -s "$source" resizepart 1 (($new_size * 8 + $start + 7))
 }
 
 ################################################################################
