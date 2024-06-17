@@ -19,7 +19,7 @@ common_deb_pkgs=(
     initramfs-tools
     sudo
     nano
-    wpasupplicant
+    wpasupplicant iw
     wget curl
     openssh-server
     git
