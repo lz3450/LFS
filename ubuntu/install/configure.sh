@@ -23,6 +23,7 @@ network:
   version: 2
   renderer: NetworkManager
 EOF
+chmod 600 /etc/netplan/00-default.yaml
 
 if mountpoint -q /var/snap/firefox/common/host-hunspell; then
     umount /var/snap/firefox/common/host-hunspell
