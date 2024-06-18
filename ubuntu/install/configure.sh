@@ -63,6 +63,7 @@ network:
 EOF
 chmod 600 /etc/netplan/00-default.yaml
 systemctl disable systemd-networkd
+systemctl disable wpa_supplicant@
 systemctl enable NetworkManager
 
 # configure default target
