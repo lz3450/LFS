@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root."
+    exit 1
+fi
+
 update-initramfs -c -k all
 
 for kernel_version in $(ls /usr/lib/modules); do
