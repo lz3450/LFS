@@ -25,6 +25,8 @@ git checkout "${source#*\#commit=}"
 popd
 
 cd "$BUILDDIR"
+prepare
+cd "$BUILDDIR"
 build
 cd "$BUILDDIR"
 check || :
