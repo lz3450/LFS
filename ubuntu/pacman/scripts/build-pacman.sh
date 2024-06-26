@@ -4,17 +4,15 @@ set -e
 set -u
 # set -x
 
-export BUILDDIR="/tmp"
+BUILDDIR="/tmp"
 PKGBUILDDIR="../pkgbuilds/kzl/pacman"
+pkgdir=""
 
-# sudo apt-get update
-# sudo apt-get upgrade -y
-# "$PKGBUILDDIR"/install-dependencies.sh
+sudo apt-get update
+sudo apt-get upgrade -y
+"$PKGBUILDDIR"/install-dependencies.sh
 
 . "$PKGBUILDDIR"/PKGBUILD
-export pkgdir=""
-export pkgname
-export -f package
 
 rm -rf "$BUILDDIR"/pacman
 mkdir -p "$BUILDDIR"/pacman
@@ -29,4 +27,5 @@ cd "$BUILDDIR"
 build
 # cd "$BUILDDIR"
 # check || :
-sudo bash -c "$(declare -f package); cd "$BUILDDIR/$pkgname"; pwd; package"
+package=$(declare -f package)
+sudo bash -xc "$package; package"
