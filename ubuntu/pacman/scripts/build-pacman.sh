@@ -34,3 +34,5 @@ cd "$BUILDDIR"
 package
 # sudo -E bash -xc "$(declare -f package); package"
 sudo cp -ru "$pkgdir"/* /
+
+sudo ldconfig
