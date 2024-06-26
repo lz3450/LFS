@@ -10,7 +10,7 @@ license=('KZL')
 backup=(usr/local/etc/pacman.conf
         usr/local/etc/makepkg.conf)
 # source=(git+https://gitlab.archlinux.org/pacman/pacman.git#tag=v$pkgver)
-source=(git+https://gitlab.archlinux.org/pacman/pacman.git#commit=f137dc7bbdb35241b2db4b9a3359f12196aeee42)
+source=(git+https://gitlab.archlinux.org/pacman/pacman.git#commit=3f1943c84d94ab5135f89d01227f2f29f06fa410)
 sha256sums=('030e14bfce0825031b253579ace3c12c7faca185b01ee130f53365a4423f3e94')
 
 pkgver() {
