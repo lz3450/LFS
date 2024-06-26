@@ -19,6 +19,14 @@ pkgver() {
   git describe --tags | sed 's/^v//;s/-g.*//;s/-/./'
 }
 
+prepare() {
+  cd $pkgname
+
+  sed -i \
+      -e 's/---mirror/--mirror/' \
+      scripts/libmakepkg/source/git.sh.in
+}
+
 build() {
   cd $pkgname
 
