@@ -6,7 +6,8 @@ set -u
 
 BUILDDIR="/tmp"
 PKGBUILDDIR="../pkgbuilds/kzl/pacman"
-pkgdir=""
+pkgdir="/"
+export pkgname
 
 sudo apt-get update
 sudo apt-get upgrade -y
