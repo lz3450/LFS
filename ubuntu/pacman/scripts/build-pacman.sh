@@ -6,7 +6,7 @@ set -u
 
 export BUILDDIR="/tmp"
 export PKGBUILDDIR="../pkgbuilds/kzl/pacman"
-export pkgdir="/"
+export pkgdir="/tmp/pacman/install"
 
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -31,4 +31,6 @@ build
 cd "$BUILDDIR"
 check || :
 cd "$BUILDDIR"
-sudo -E bash -xc "$(declare -f package); package"
+package
+# sudo -E bash -xc "$(declare -f package); package"
+sudo cp -ru "$pkgdir"/* /
