@@ -51,8 +51,7 @@ rm -vrf /usr/share/fonts/X11/Type1
 rm -vrf /usr/share/X11/xorg.conf.d
 rm -vrf /usr/lib/xorg/modules/extensions
 rm -vrf /usr/lib/xorg/modules/drivers
-rmdir -v /usr/lib/xorg/modules
-
+rm -vrf /usr/lib/xorg/modules
 
 # configure network
 mkdir -p /etc/netplan
