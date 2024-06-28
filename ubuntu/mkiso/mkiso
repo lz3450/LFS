@@ -20,7 +20,6 @@ iso_publisher="Ubuntu-KZL <https://github.com/lz3450/LFS>"
 iso_application="Ubuntu-KZL Live/Rescue CD"
 iso_version="$(date +%Y%m%d)"
 out_dir="$script_dir"
-iso_image_name="$iso_name-$iso_version-$debootstrap_suite.iso"
 log_dir="$work_dir"/log
 
 ### Package lists
@@ -363,6 +362,8 @@ make_rootfs_squashfs() {
 }
 
 make_iso_image() {
+    local _iso_image_name="$iso_name-$iso_version-$debootstrap_suite.iso"
+
     info "Creating ISO image..."
 
     mkdir -p "$isofs_dir"/EFI/BOOT
@@ -400,9 +401,9 @@ make_iso_image() {
         -append_partition 3 '0FC63DAF-8483-4772-8E79-3D69D8477DE4' "$work_dir"/mutable.img \
         -appended_part_as_gpt \
         -no-pad \
-        -output "$out_dir/$iso_image_name" \
+        -output "$out_dir/$_iso_image_name" \
         "$isofs_dir/" &> "$log_dir"/xorriso.log || error "Failed to create ISO image" 5
-    chown $SUDO_UID:$SUDO_GID "$out_dir/$iso_image_name"
+    chown $SUDO_UID:$SUDO_GID "$out_dir/$_iso_image_name"
 
     info "Done!"
 }
