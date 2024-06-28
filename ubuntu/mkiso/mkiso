@@ -6,9 +6,6 @@
 script_name="$(basename "$0")"
 script_path="$(readlink -f "$0")"
 script_dir="$(dirname "$script_path")"
-
-debootstrap_suite="jammy"
-# debootstrap_suite="noble"
 chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 mutable_image_type="f2fs"
 
@@ -26,7 +23,8 @@ out_dir="$script_dir"
 iso_image_name="$iso_name-$iso_version-$debootstrap_suite.iso"
 log_dir="$work_dir"/log
 
-deb_pkgs=(
+### Package lists
+common_deb_pkgs=(
     sudo
     nano
     parted fdisk
@@ -41,12 +39,13 @@ deb_pkgs=(
     zsh
     linux-image-generic
     initramfs-tools
-    ### pacman
+    ### pacman dependencies
     libarchive-tools
     libgpgme-dev
-    ### noble
-    # systemd-boot
-    # systemd-resolved
+)
+noble_deb_pkgs=(
+    systemd-boot
+    systemd-resolved
 )
 pacman_pkgs=(
     pacman
@@ -55,9 +54,11 @@ pacman_pkgs=(
     linux
     debootstrap
 )
+declare -a deb_pkgs
 
 # Options
-no_update_rootfs=0
+debootstrap_suite=""
+declare -i no_update_rootfs=0
 
 
 # Show an INFO message
@@ -88,10 +89,11 @@ error() {
 
 usage() {
     local _usage="
-    Usage: $script_name [ -h | --help ] [ -n | --no-update-rootfs ]
+    Usage: $script_name [ -h | --help ] [ -n | --no-update-rootfs ] -s | --suite <suite>
 
     -h, --help                      display this help message and exit
     -n, --no-update-rootfs          do not update rootfs
+    -s, --suite <suite>             debootstrap suite (jammy, noble)
 "
     echo "$_usage"
 }
@@ -150,11 +152,13 @@ bootstrap_rootfs() {
         "$debootstrap_dir" \
         http://us.archive.ubuntu.com/ubuntu/ \
         &> "$log_dir"/debootstrap.log || error "Failed to bootstrap rootfs" 2
-    ### noble
-    # rmdir "$debootstrap_dir"/bin.usr-is-merged
-    # rmdir "$debootstrap_dir"/sbin.usr-is-merged
-    # rmdir "$debootstrap_dir"/lib.usr-is-merged
+    if [[ "$debootstrap_suite" == "noble" ]]; then
+        rmdir -v "$debootstrap_dir"/bin.usr-is-merged
+        rmdir -v "$debootstrap_dir"/sbin.usr-is-merged
+        rmdir -v "$debootstrap_dir"/lib.usr-is-merged
+    fi
     info "Done!"
+
     info "Creating a list of installed deb packages..."
     debootstrap \
         --include="$(IFS=','; echo "${_pkg_list[*]}")" \
@@ -210,6 +214,7 @@ configure_rootfs() {
     for fs in dev sys proc run; do
         umount -R "$debootstrap_dir"/$fs
     done
+
     info "Done!"
 }
 
@@ -238,24 +243,25 @@ make_efibootimg() {
     info "Setting up systemd-boot for UEFI booting..."
 
     # Calculate the required FAT image size in bytes
-    # local imgsize=$(du -bc \
+    # local _imgsize=$(du -bc \
     #     "$debootstrap_dir/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
     #     "$script_dir/efiboot/loader.conf" \
     #     "$script_dir/efiboot/ubuntu-kzl.conf" \
     #     "$debootstrap_dir/boot/vmlinuz" \
     #     "$debootstrap_dir/boot/initramfs.img" \
     #     2>/dev/null | awk 'END { print $1 }')
-    # info "Required FAT image size $imgsize bytes"
+    # info "Required FAT image size $_imgsize bytes"
     # Convert from bytes to KiB and round up to the next full MiB with an additional MiB for reserved sectors.
-    # local imgsize="$(awk 'function ceil(x){return int(x)+(x>int(x))} function byte_to_kib(x){return x/1024} function mib_to_kib(x){return x*1024} END {print mib_to_kib(ceil((byte_to_kib($1)+1024)/1024))}' \
-    #     <<< "$imgsize")"
-    # info "Required FAT image size $imgsize KiB"
+    # local _imgsize="$(awk 'function ceil(x){return int(x)+(x>int(x))} function byte_to_kib(x){return x/1024} function mib_to_kib(x){return x*1024} END {print mib_to_kib(ceil((byte_to_kib($1)+1024)/1024))}' \
+    #     <<< "$_imgsize")"
+    # info "Required FAT image size $_imgsize KiB"
 
-    local imgsize=131072
+    local _imgsize=131072
 
     rm -f -- "$work_dir"/efiboot.img
-    info "Creating FAT image of size: $imgsize KiB..."
-    mkfs.fat -C -F 32 -n "ISO_EFI" "$work_dir"/efiboot.img "$imgsize" &>/dev/null
+    info "  Creating FAT image of size: $_imgsize KiB..."
+    mkfs.fat -C -F 32 -n "ISO_EFI" "$work_dir"/efiboot.img "$_imgsize" &>/dev/null
+    info "  Done!"
 
     # Create the default/fallback boot path in which a boot loaders will be placed later.
     mmd -i "$work_dir"/efiboot.img ::/EFI ::/EFI/BOOT
@@ -277,11 +283,13 @@ make_efibootimg() {
             -KZL) kernel_suffix="-KZL" ;;
             *) kernel_suffix=""; warning "Unknown kernel version suffix: $kernel_version" ;;
         esac
-        info "Copying kernel ($kernel_version) and initramfs to the FAT file system..."
+        info "  Copying kernel ($kernel_version) and initramfs to the FAT file system..."
         mcopy -i "$work_dir/efiboot.img" "$debootstrap_dir"/boot/vmlinuz-$kernel_version ::/vmlinuz$kernel_suffix
         mcopy -i "$work_dir/efiboot.img" "$debootstrap_dir"/boot/initramfs-$kernel_version.img ::/initramfs$kernel_suffix.img
-        info "Done!"
+        info "  Done!"
     done
+
+    info "Done!"
 }
 
 make_mutable_img() {
@@ -290,11 +298,13 @@ make_mutable_img() {
     rm -f -- "$work_dir"/mutable.img
     fallocate -l 64M "$work_dir"/mutable.img
     mkfs.$mutable_image_type -f -l MUTABLE "$work_dir"/mutable.img &> "$log_dir"/mkfs.f2fs.log
+
     info "Done!"
 }
 
 cleanup_rootfs() {
     info "Cleaning up rootfs..."
+
     # system
     rm -rf -- "$debootstrap_dir"/boot/*
     rm -rf -- "$debootstrap_dir"/dev/*
@@ -327,29 +337,34 @@ cleanup_rootfs() {
 
 make_rootfs_archive() {
     info "Creating rootfs archive..."
+
     tar -cvf "$out_dir/$rootfs_archive_name" \
         --zstd -C "$debootstrap_dir" \
         . \
         &> "$log_dir"/tar.log
     chown $SUDO_UID:$SUDO_GID "$out_dir/$rootfs_archive_name"
+
     info "Done!"
 }
 
 make_rootfs_squashfs() {
-    local image_path="$isofs_dir/$install_dir/squashfs.img"
+    local _image_path="$isofs_dir/$install_dir/squashfs.img"
 
+    info "Creating rootfs SquashFS image, this may take some time..."
+
+    # Create fstab
     printf "%s\t\t%s\t\t%s\t%s\t\t%s %s\n" "LABEL=ISO_EFI"  "/boot"         "vfat"  "defaults"  "0" "2" >> "$debootstrap_dir"/etc/fstab
     printf "%s\t\t%s\t\t%s\t%s\t\t%s %s\n" "LABEL=MUTABLE"  "/root/mutable" "f2fs"  "defaults"  "0" "2" >> "$debootstrap_dir"/etc/fstab
-
     # Create a squashfs image and place it in the ISO 9660 file system.
     install -dm0755 -- "$isofs_dir/$install_dir"
-    info "Creating SquashFS image, this may take some time..."
-    mksquashfs "$debootstrap_dir" "$image_path" -comp zstd -b 1M -noappend
+    mksquashfs "$debootstrap_dir" "$_image_path" -comp zstd -b 1M -noappend
+
     info "Done!"
 }
 
 make_iso_image() {
     info "Creating ISO image..."
+
     mkdir -p "$isofs_dir"/EFI/BOOT
     mkdir -p "$isofs_dir"/loader/entries
     mcopy -i "$work_dir/efiboot.img" ::/EFI/BOOT/BOOTx64.EFI "$isofs_dir"/EFI/BOOT/BOOTx64.EFI
@@ -362,11 +377,12 @@ make_iso_image() {
             -KZL) kernel_suffix="-KZL" ;;
             *) kernel_suffix=""; warning "Unknown kernel version suffix: $kernel_version" ;;
         esac
-        info "Copying kernel ($kernel_version) and initramfs to the ISO file system..."
+        info "  Copying kernel ($kernel_version) and initramfs to the ISO file system..."
         mcopy -i "$work_dir/efiboot.img" \
             ::/vmlinuz$kernel_suffix \
             ::/initramfs$kernel_suffix.img \
             "$isofs_dir"/
+        info "  Done"
     done
     xorriso \
         -as mkisofs \
@@ -387,6 +403,7 @@ make_iso_image() {
         -output "$out_dir/$iso_image_name" \
         "$isofs_dir/" &> "$log_dir"/xorriso.log || error "Failed to create ISO image" 5
     chown $SUDO_UID:$SUDO_GID "$out_dir/$iso_image_name"
+
     info "Done!"
 }
 
@@ -407,6 +424,7 @@ clean() {
         done
     fi
 
+    info "Done!"
     exit 0
 }
 trap clean INT EXIT
@@ -428,6 +446,10 @@ while (($# > 0)); do
     -n|--no-update-rootfs)
         no_update_rootfs=1
         ;;
+    -s|--suite)
+        shift
+        debootstrap_suite="$1"
+        ;;
     *)
         usage
         error "Unknown option: \"$1\"" 127
@@ -435,6 +457,14 @@ while (($# > 0)); do
     esac
     shift
 done
+
+if [[ "$debootstrap_suite" == "jammy" ]]; then
+    deb_pkgs=("${common_deb_pkgs[@]}")
+elif [[ "$debootstrap_suite" == "noble" ]]; then
+    deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
+else
+    error "Unknown debootstrap suite: $debootstrap_suite" 127
+fi
 
 
 echo -e "\e[1;30m"
