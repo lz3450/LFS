@@ -1,4 +1,4 @@
-new_version=$(git ls-remote --tags https://gitlab.archlinux.org/pacman/pacman.git | grep -oP '(?<=refs/tags/v)6\.0\.\d+' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://gitlab.archlinux.org/pacman/pacman.git | grep -oP '(?<=refs/tags/v)6\.\d\.\d+' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
