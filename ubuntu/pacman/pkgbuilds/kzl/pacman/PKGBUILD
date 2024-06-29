@@ -25,6 +25,33 @@ prepare() {
   sed -i \
       -e 's/---mirror/--mirror/' \
       scripts/libmakepkg/source/git.sh.in
+
+  sed -i \
+      -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
+      -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection"' \
+      -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"' \
+      -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \
+      -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
+      -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g -fvar-tracking-assignments"' \
+      -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"' \
+      -e '/^#DEBUG_RUSTFLAGS=/c\DEBUG_RUSTFLAGS="-C debuginfo=2"' \
+      -e '/^#BUILDDIR=/c\BUILDDIR="$HOME/makepkg/build"' \
+      -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
+      -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
+      -e '/^#SRCDEST=/c\SRCDEST="$HOME/makepkg/sources"' \
+      -e '/^#SRCPKGDEST=/c\SRCPKGDEST="$HOME/makepkg/srcpackages"' \
+      -e '/^#LOGDEST=/c\LOGDEST="$HOME/makepkg/makepkglogs"' \
+      -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
+      -e '/^OPTIONS=/s/libtool/!libtool/' \
+      -e '/^OPTIONS=/s/!autodeps/autodeps/' \
+      "$srcdir"/pacman/etc/makepkg.conf.in
+
+  cat >> "$srcdir"/pacman/etc/pacman.conf.in << EOF
+
+[kzl]
+SigLevel = Optional TrustAll
+Server = file:///home/.repository/\$repo
+EOF
 }
 
 build() {
@@ -63,33 +90,6 @@ package() {
   cd $pkgname
 
   meson install -C build --destdir="$pkgdir"
-
-  sed -e '/^CHOST=/s/x86_64-pc-linux-gnu/x86_64-pc-linux-gnu/' \
-      -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
-      -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection"' \
-      -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"' \
-      -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \
-      -e '/^#RUSTFLAGS=/c\RUSTFLAGS="-C opt-level=2"' \
-      -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
-      -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g -fvar-tracking-assignments"' \
-      -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"' \
-      -e '/^#DEBUG_RUSTFLAGS=/c\DEBUG_RUSTFLAGS="-C debuginfo=2"' \
-      -e '/^#BUILDDIR=/c\BUILDDIR="$HOME/makepkg/build"' \
-      -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
-      -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
-      -e '/^#SRCDEST=/c\SRCDEST="$HOME/makepkg/sources"' \
-      -e '/^#SRCPKGDEST=/c\SRCPKGDEST="$HOME/makepkg/srcpackages"' \
-      -e '/^#LOGDEST=/c\LOGDEST="$HOME/makepkg/makepkglogs"' \
-      -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
-      -e '/^OPTIONS=/s/libtool/!libtool/' \
-      -i "$pkgdir"/usr/local/etc/makepkg.conf
-
-  cat >> "$pkgdir"/usr/local/etc/pacman.conf << EOF
-
-[kzl]
-SigLevel = Optional TrustAll
-Server = file:///home/.repository/\$repo
-EOF
 
   rm -rf "$pkgdir"/usr/share
 }
