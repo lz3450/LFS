@@ -29,8 +29,8 @@ _cmake_options=(
   ################
   # stage 2
   ################
-  -DCMAKE_C_COMPILER=/opt/llvm-14/bin/clang
-  -DCMAKE_CXX_COMPILER=/opt/llvm-14/bin/clang++
+  -DCMAKE_C_COMPILER="$PREFIX"/bin/clang
+  -DCMAKE_CXX_COMPILER="$PREFIX"/bin/clang++
   ################
   -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
   -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
