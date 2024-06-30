@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# install-microsoft.sh
+# install-app.sh
 #
 
 set -e
