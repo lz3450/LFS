@@ -14,7 +14,7 @@ set -e
 # install packages
 apt-get update
 apt-get upgrade -y
-apt-get install -s "${pkgs[@]}" | grep "^Inst" | awk '{print $2}' | sort -n > configuration-pkgs.txt
+apt-get install -s "${pkgs[@]}" | grep "^Inst" | awk '{print $2}' | sort -n > desktop-installed-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
 apt-get install -y "${pkgs[@]}"
 
 # disable automount
