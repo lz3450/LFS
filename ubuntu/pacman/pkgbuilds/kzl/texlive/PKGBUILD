@@ -1,5 +1,5 @@
 pkgname=texlive
-pkgver=20240703
+pkgver=70897
 _pkgyear=2024
 _texmfver=20240312
 pkgrel=1
@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://tug.org/texlive/"
 license=('KZL')
 install=$pkgname.install
-source=(git+https://github.com/TeX-Live/texlive-source.git
+source=(git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_pkgyear
         git+https://github.com/TeX-Live/installer.git
         http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
         ################################################################################
@@ -25,6 +25,12 @@ sha256sums=('SKIP'
             'c8eae2deaaf51e86d93baa6bbcc4e94c12aa06a0d92893df474cc7d2a012c7a7'
             'fe01050544263a517c9a682942edc1cbb150986c34eab3b6755143f072838e93'
             'db846976a6df3a8640122e4a63fb5057234c55bf8a56351125939634bdaa048f')
+
+pkgver() {
+  cd $pkgname-source
+
+  git describe --tags | sed 's/^svn//'
+}
 
 prepare() {
   cd $pkgname-source
@@ -65,7 +71,7 @@ build() {
     --with-gs="/usr/bin/gs" \
     --with-system-harfbuzz \
     --with-system-icu \
-    --without-system-teckit \
+    --with-system-teckit \
     --with-system-graphite2 \
     --with-system-zziplib \
     --with-system-mpfr \
@@ -74,7 +80,7 @@ build() {
     --with-system-cairo \
     --with-system-pixman \
     --with-system-gd \
-    --without-system-potrace \
+    --with-system-potrace \
     --with-system-freetype2 \
     --with-system-libpng \
     --with-system-libpaper \
