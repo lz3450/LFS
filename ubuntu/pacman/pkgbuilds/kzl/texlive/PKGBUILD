@@ -40,6 +40,7 @@ build() {
   # https://tug.org/texlive/doc/tlbuild.html
 
   ./../configure \
+    -C \
     --prefix="/opt/TeXLive" \
     --datarootdir="\${prefix}" \
     --infodir="\${prefix}/texmf-dist/doc/info" \
@@ -79,8 +80,7 @@ build() {
     --with-system-libpaper \
     --with-system-zlib \
     --without-system-ptexenc \
-    --without-x \
-    -C
+    --without-x
 
   make
 }
