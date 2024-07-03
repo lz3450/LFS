@@ -5,13 +5,12 @@ pre_update() {
     latex_year=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive | grep -oP '\d{4}(?=-\d{2}-\d{2})' | tail -n1)
     test -n "$latex_year" || return 1
     echo "Latest TeX Live year: $latex_year"
-    sed -e "s|^_pkgyear=.*$|_pkgyear=$latex_year|" -i PKGBUILD
+    sed -e "s|^_pkgyear=[0-9]\{4\}$|_pkgyear=$latex_year|" -i PKGBUILD
 
     texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
+    test -n "$texmf_version" || return 1
     echo "texmf version: $texmf_version"
-    if [ -n "$texmf_version" ]; then
-        sed -e "s/texlive-[0-9]\{8\}-texmf.tar.xz/texlive-$texmf_version-texmf.tar.xz/" -i PKGBUILD
-    fi
+    sed -e "s|^_texmfver=[0-9]\{8\}$|_texmfver=$texmf_version|" -i PKGBUILD
 
     # tlpdb_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-tlpdb-full.tar)' | head -n1)
     # echo "tlpdb version: $tlpdb_version"
