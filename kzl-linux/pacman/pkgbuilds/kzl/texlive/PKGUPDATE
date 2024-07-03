@@ -1,5 +1,4 @@
-# new_version=$(git ls-remote --tags https://github.com/TeX-Live/texlive-source.git | grep -oP 'refs/tags/(build-)?svn\K\d{5}' | sort -V | tail -n1)
-new_version=$(date +%Y%m%d)
+new_version=$(git ls-remote --tags https://github.com/TeX-Live/texlive-source.git | grep -oP 'refs/tags/(build-)?svn\K\d+' | sort -V | tail -n1)
 
 pre_update() {
     latex_year=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive | grep -oP '\d{4}(?=-\d{2}-\d{2})' | tail -n1)
