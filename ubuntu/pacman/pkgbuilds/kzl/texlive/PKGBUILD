@@ -1,6 +1,7 @@
 pkgname=texlive
-pkgver=20240524
+pkgver=20240703
 _pkgyear=2024
+_texmfver=20240312
 pkgrel=1
 epoch=
 pkgdesc="TeX Live"
@@ -14,10 +15,10 @@ source=(git+https://github.com/TeX-Live/texlive-source.git
         ################################################################################
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$pkgver-source.tar.xz
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/install-tl-unx.tar.gz
-        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-20240312-texmf.tar.xz
+        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$_texmfver-texmf.tar.xz
         09-texlive-fonts.conf
         $pkgname.install)
-noextract=(texlive-20240312-texmf.tar.xz)
+noextract=(texlive-$_texmfver-texmf.tar.xz)
 sha256sums=('SKIP'
             'SKIP'
             '110da56d1fe378be7264cb24b48ee2c2d1fa9ea3efedef804897bf0cbc0259d6'
@@ -97,7 +98,7 @@ package() {
 
   ### texmf-dist
   cp -r "$srcdir"/installer/texmf-dist "$pkgdir"/opt/TeXLive
-  tar -xf "$srcdir"/texlive-20240312-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
+  tar -xf "$srcdir"/texlive-$_texmfver-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
   rm -rf xindy psutils
 
   # texlive fonts
