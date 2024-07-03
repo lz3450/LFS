@@ -2,7 +2,7 @@ new_version=$(git ls-remote --tags https://gitlab.archlinux.org/pacman/pacman.gi
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    meson configure > "$PKGBUILDDIR"/help.txt
+    meson configure build > "$PKGBUILDDIR"/help.txt
     cp etc/pacman.conf.in "$PKGBUILDDIR"/pacman.conf
     cp etc/makepkg.conf.in "$PKGBUILDDIR"/makepkg.conf
 }

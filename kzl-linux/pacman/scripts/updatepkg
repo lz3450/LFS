@@ -107,7 +107,7 @@ if [[ -z "$new_version" ]]; then
     error 'Cannot get new version.' 6
 fi
 info "New pkgver is $new_version"
-current_version=${current_version:-$(cat PKGBUILD | grep -oP 'pkgver=\K.+$')}
+current_version=${current_version:-$(grep -oP 'pkgver=\K.+$' PKGBUILD | sed 's/.g.*//')}
 info "Current pkgver is $current_version"
 current_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
 info "Current pkgrel is $current_pkgrel"
