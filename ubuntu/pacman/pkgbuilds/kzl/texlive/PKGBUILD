@@ -2,12 +2,13 @@ pkgname=texlive
 pkgver=70897
 _pkgyear=2024
 _texmfver=20240312
-pkgrel=1
+pkgrel=5
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
 url="https://tug.org/texlive/"
 license=('KZL')
+options=(!strip)
 install=$pkgname.install
 source=(git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_pkgyear
         git+https://github.com/TeX-Live/installer.git
@@ -15,16 +16,19 @@ source=(git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_pkgyea
         ################################################################################
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$pkgver-source.tar.xz
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/install-tl-unx.tar.gz
-        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$_texmfver-texmf.tar.xz
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$_texmfver-texmf.tar.xz
         09-texlive-fonts.conf
         $pkgname.install)
 noextract=(texlive-$_texmfver-texmf.tar.xz)
 sha256sums=('SKIP'
             'SKIP'
             '110da56d1fe378be7264cb24b48ee2c2d1fa9ea3efedef804897bf0cbc0259d6'
-            'c8eae2deaaf51e86d93baa6bbcc4e94c12aa06a0d92893df474cc7d2a012c7a7'
             'fe01050544263a517c9a682942edc1cbb150986c34eab3b6755143f072838e93'
-            'db846976a6df3a8640122e4a63fb5057234c55bf8a56351125939634bdaa048f')
+            '48aed339c4405573b115c2bbb6aaf8c6a6c38c8e81c99e3664b481692623e203')
+
+
+platform="$(uname -i)-$(uname -s | tr '[:upper:]' '[:lower:]')"
+prefix="/opt/TeXLive"
 
 pkgver() {
   cd $pkgname-source
@@ -35,8 +39,9 @@ pkgver() {
 prepare() {
   cd $pkgname-source
 
-  rm -rf libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng,mpfr,pixman,zlib,zziplib}
+  rm -rf libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng,mpfr,pixman,potrace,teckit,zlib,zziplib}
 
+  rm -rf build
   mkdir -p build
 }
 
@@ -45,12 +50,11 @@ build() {
 
   # https://tug.org/texlive/doc/tlbuild.html
 
-  ./../configure \
-    -C \
-    --prefix="/opt/TeXLive" \
-    --datarootdir="\${prefix}" \
-    --infodir="\${prefix}/texmf-dist/doc/info" \
-    --mandir="\${prefix}/texmf-dist/doc/man" \
+  ./../configure -C \
+    --prefix="$prefix" \
+    --datarootdir='${prefix}' \
+    --infodir='${prefix}/texmf-dist/doc/info' \
+    --mandir='${prefix}/texmf-dist/doc/man' \
     --disable-all-pkgs \
     --disable-native-texlive-build \
     --enable-multiplatform \
@@ -86,6 +90,7 @@ build() {
     --with-system-libpaper \
     --with-system-zlib \
     --without-system-ptexenc \
+    --without-system-kpathsea \
     --without-x
 
   make
@@ -94,30 +99,116 @@ build() {
 package() {
   cd $pkgname-source/build
 
+  local _bindir="$prefix/bin/$("$srcdir"/texlive-source/build-aux/config.guess)"
+
   make DESTDIR="$pkgdir" install-strip
   make DESTDIR="$pkgdir" texlinks
 
-  ### enable tlmgr
-  mkdir -p "$pkgdir"/opt/TeXLive/tlpkg/{backups,installer,tlpobj}
-  cp -r "$srcdir"/installer/tlpkg "$pkgdir"/opt/TeXLive/
-  cp "$srcdir"/texlive.tlpdb "$pkgdir"/opt/TeXLive/tlpkg/
+  ln -sv "$("$srcdir"/texlive-source/build-aux/config.guess)" "$pkgdir/$prefix/bin/$platform"
 
   ### texmf-dist
-  cp -r "$srcdir"/installer/texmf-dist "$pkgdir"/opt/TeXLive
-  tar -xf "$srcdir"/texlive-$_texmfver-texmf.tar.xz -C "$pkgdir"/opt/TeXLive --skip-old-files --strip-components=1
-  rm -rf xindy psutils
+  cp -rv "$srcdir"/installer/texmf-dist "$pkgdir/$prefix"
+
+  ### tlpkg
+  cp -rv "$srcdir"/installer/tlpkg "$pkgdir/$prefix"/
+  mkdir -pv "$pkgdir/$prefix"/tlpkg/{backups,tlpobj}
+  cp -v "$srcdir"/texlive.tlpdb "$pkgdir/$prefix"/tlpkg/
+
+  ### tlmgr
+  "$pkgdir/$_bindir"/mktexlsr
+  "$pkgdir/$_bindir"/updmap-sys --force --syncwithtrees
+  "$pkgdir/$_bindir"/tlmgr option repository https://mirror.ctan.org/systems/texlive/tlnet
+  "$pkgdir/$_bindir"/tlmgr remove 00texlive.installer
+  "$pkgdir/$_bindir"/tlmgr platform remove \
+    aarch64-linux \
+    amd64-freebsd \
+    amd64-netbsd \
+    armhf-linux \
+    i386-freebsd \
+    i386-linux \
+    i386-netbsd \
+    i386-solaris \
+    universal-darwin \
+    windows \
+    x86_64-cygwin \
+    x86_64-darwinlegacy \
+    x86_64-linuxmusl \
+    x86_64-solaris || :
+  "$pkgdir/$_bindir"/tlmgr update --self
+  "$pkgdir/$_bindir"/tlmgr remove \
+    scheme-bookpub \
+    scheme-context \
+    scheme-full \
+    scheme-gust \
+    scheme-infraonly \
+    scheme-medium \
+    scheme-minimal \
+    scheme-small \
+    scheme-tetex
+  "$pkgdir/$_bindir"/tlmgr remove \
+    collection-basic \
+    collection-bibtexextra \
+    collection-binextra \
+    collection-context \
+    collection-fontsextra \
+    collection-fontsrecommended \
+    collection-fontutils \
+    collection-formatsextra \
+    collection-games \
+    collection-humanities \
+    collection-langarabic \
+    collection-langchinese \
+    collection-langcjk \
+    collection-langcyrillic \
+    collection-langczechslovak \
+    collection-langenglish \
+    collection-langeuropean \
+    collection-langfrench \
+    collection-langgerman \
+    collection-langgreek \
+    collection-langitalian \
+    collection-langjapanese \
+    collection-langkorean \
+    collection-langother \
+    collection-langpolish \
+    collection-langportuguese \
+    collection-langspanish \
+    collection-latex \
+    collection-latexextra \
+    collection-latexrecommended \
+    collection-luatex \
+    collection-mathscience \
+    collection-metapost \
+    collection-music \
+    collection-pictures \
+    collection-plaingeneric \
+    collection-pstricks \
+    collection-publishers \
+    collection-texworks \
+    collection-wintools \
+    collection-xetex
 
   # texlive fonts
   install -Dm644 "$srcdir"/09-texlive-fonts.conf -t "$pkgdir"/usr/share/fonts/conf.avail/
 
-  # cleanup
-  rm -rf "$pkgdir"/opt/TeXLive/texmf-dist/scripts/context/stubs/mswin
-  rm -rf "$pkgdir"/opt/TeXLive/tlpkg/installer/{curl,wget,xz}
-  rm -f "$pkgdir"/opt/TeXLive/tlpkg/installer/{tar,wtestopenfiles}.exe
-  rm -f "$pkgdir"/opt/TeXLive/tlpkg/installer/tl-cmd.bat
-  rm -f "$pkgdir"/opt/TeXLive/tlpkg/installer/install-tl-gui.tcl
-  rm -f "$pkgdir"/opt/TeXLive/tlpkg/installer/COPYING.MinGW-runtime.txt
-
   ### PATH
-  echo "export PATH=\$PATH:/opt/TeXLive/bin/$("$srcdir"/texlive-source/build-aux/config.guess)" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/texlive.sh
+  echo "export PATH=\$PATH:$_bindir" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/texlive.sh
+
+  ### clean
+  rm -rfv "$pkgdir/$prefix"/{readme-html.dir,readme-txt.dir}
+  rm -fv "$pkgdir/$prefix"/{index.html,LICENSE.*,README*,release-texlive.txt}
+  rm -rfv "$pkgdir/$prefix"/texmf-dist/{dvips,psutils,xdvi,xindy}
+  rm -rfv "$pkgdir/$prefix"/texmf-dist/scripts/context/stubs/mswin
+  find "$pkgdir/$prefix"/texmf-dist/doc -mindepth 1 -maxdepth 1 -type d ! \( -name man -o -name info \) -exec rm -rfv {} +
+  rm -fv "$pkgdir/$prefix"/tlpkg/texlive.tlpdb.*
+  rm -fv "$pkgdir/$prefix"/tlpkg/backups/*
+  rm -fv "$pkgdir/$prefix"/tlpkg/tlpobj/*.tlpobj
+  rm -rfv "$pkgdir/$prefix"/tlpkg/installer/{curl,wget,xz}
+  rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.txt
+  rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.exe
+  rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.bat
+  rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.ini
+  rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.gif
+  rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.pl
+  rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.tcl
 }
