@@ -147,7 +147,7 @@ package() {
     x86_64-darwinlegacy \
     x86_64-linuxmusl \
     x86_64-solaris || :
-  "$pkgdir/$_bindir"/tlmgr update --self
+  "$pkgdir/$_bindir"/tlmgr update --self || :
   # "$pkgdir/$_bindir"/tlmgr install texlive.infra texlive-scripts
 
   ### PATH
