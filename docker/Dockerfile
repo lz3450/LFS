@@ -28,7 +28,7 @@ RUN mkdir -p /home/kzl/Projects
 # Set up zsh configuration
 WORKDIR /home/kzl/LFS/config
 RUN ./update-config.sh
-WORKDIR /
+WORKDIR /home/kzl
 
 # Expose SSH port
 EXPOSE 22
@@ -39,3 +39,4 @@ CMD ["/usr/sbin/sshd", "-D"]
 # docker build --no-cache -t ubuntu:noble .
 # docker run -d --rm -u root -p 2222:22 --name noble -h NOBLE ubuntu:noble
 # docker run -i -t --rm -u root -p 2223:22 --name noble -h NOBLE ubuntu:LFS /bin/bash
+# --mount type=bind,source=/home/kzl/LFS,target=/home/kzl/LFS
