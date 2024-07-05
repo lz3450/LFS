@@ -1,15 +1,16 @@
 #!/bin/bash
 
 sudo apt-get install \
-    cmake \
-    meson ninja-build \
-    pkg-config \
     bash-completion \
+    cmake \
+    fakechroot \
+    fakeroot \
+    file \
     libarchive-dev \
     libarchive-tools \
     libcurl4-openssl-dev \
     libgpgme-dev \
     libssl-dev \
-    zstd \
-    fakeroot \
-    fakechroot
+    meson ninja-build \
+    pkg-config \
+    zstd
