@@ -2,13 +2,12 @@ pkgname=texlive
 pkgver=70897
 _pkgyear=2024
 _texmfver=20240312
-pkgrel=5
+pkgrel=21
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
 url="https://tug.org/texlive/"
 license=('KZL')
-options=(!strip)
 install=$pkgname.install
 source=(git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_pkgyear
         git+https://github.com/TeX-Live/installer.git
@@ -17,18 +16,23 @@ source=(git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_pkgyea
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$pkgver-source.tar.xz
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/install-tl-unx.tar.gz
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$_texmfver-texmf.tar.xz
-        09-texlive-fonts.conf
         $pkgname.install)
-noextract=(texlive-$_texmfver-texmf.tar.xz)
+# noextract=(texlive-$_texmfver-texmf.tar.xz)
 sha256sums=('SKIP'
             'SKIP'
-            '70d393cea978d0498163f36599048e90bec69292c61ae95cb6f591aa78fd9ddd'
-            'fe01050544263a517c9a682942edc1cbb150986c34eab3b6755143f072838e93'
-            '48aed339c4405573b115c2bbb6aaf8c6a6c38c8e81c99e3664b481692623e203')
+            '18d0140c0e1d991dd668d0ab5dcdbc414d1c24b22c7cb0a697d69a5fb1a5ca9c'
+            '949d59ddf600c6d3a28aafd8759a908f7f6061c82a55b6a903d1b33d71581df2')
 
 
 platform="$(uname -i)-$(uname -s | tr '[:upper:]' '[:lower:]')"
 prefix="/opt/TeXLive"
+
+# use `tlmgr check files` to file missing pkgs
+installed_pkgs=(
+  00texlive.installation
+  texlive.infra
+  texlive-scripts
+)
 
 pkgver() {
   cd $pkgname-source
@@ -41,7 +45,6 @@ prepare() {
 
   rm -rf libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng,mpfr,pixman,potrace,teckit,zlib,zziplib}
 
-  rm -rf build
   mkdir -p build
 }
 
@@ -113,21 +116,21 @@ package() {
 
   ### texmf-dist
   cp -rv "$srcdir"/installer/texmf-dist "$pkgdir/$prefix"
+  cp ../texk/texlive/linked_scripts/texlive/mktexlsr.pl "$pkgdir/$prefix"/texmf-dist/scripts/texlive/mktexlsr.pl
 
   ### tlpkg
   cp -rv "$srcdir"/installer/tlpkg "$pkgdir/$prefix"/
   mkdir -pv "$pkgdir/$prefix"/tlpkg/{backups,tlpobj}
-  sed -n \
-      -e '/^name 00texlive.installation$/,/^$/p' \
-      -e '/^name texlive.infra$/,/^$/p' \
-      -e "/^name texlive.infra.$platform\$/,/^$/p" \
-      -e "/^name texlive-scripts\$/,/^$/p" \
-      -e "/^name texlive-scripts.$platform\$/,/^$/p" \
-      "$srcdir"/texlive.tlpdb > "$pkgdir/$prefix"/tlpkg/texlive.tlpdb
+  rm -fv "$pkgdir/$prefix"/tlpkg/texlive.tlpdb
+  for pkg in "${installed_pkgs[@]}"; do
+      sed -n \
+          -e "/^name $pkg$/,/^$/p" \
+          -e "/^name $pkg.$platform$/,/^$/p" \
+          "$srcdir"/texlive.tlpdb >> "$pkgdir/$prefix"/tlpkg/texlive.tlpdb
+  done
 
   ### tlmgr
   "$pkgdir/$_bindir"/mktexlsr
-  yes | "$pkgdir/$_bindir"/updmap-sys --syncwithtrees
   "$pkgdir/$_bindir"/tlmgr option repository https://mirror.ctan.org/systems/texlive/tlnet
   "$pkgdir/$_bindir"/tlmgr platform remove \
     aarch64-linux \
@@ -144,10 +147,8 @@ package() {
     x86_64-darwinlegacy \
     x86_64-linuxmusl \
     x86_64-solaris || :
-  "$pkgdir/$_bindir"/tlmgr update --self --all
-
-  # texlive fonts
-  install -Dm644 "$srcdir"/09-texlive-fonts.conf -t "$pkgdir"/usr/share/fonts/conf.avail/
+  "$pkgdir/$_bindir"/tlmgr update --self
+  # "$pkgdir/$_bindir"/tlmgr install texlive.infra texlive-scripts
 
   ### PATH
   echo "export PATH=\$PATH:$_bindir" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/texlive.sh
@@ -169,4 +170,5 @@ package() {
   rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.gif
   rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.pl
   rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.tcl
+  rm -rfv "$pkgdir/$prefix"/tlpkg/tlperl
 }

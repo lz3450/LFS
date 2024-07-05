@@ -3,9 +3,9 @@ post_install() {
 
   source etc/profile.d/texlive.sh
   opt/TeXLive/bin/"$_platform"/mktexlsr
-  opt/TeXLive/bin/"$_platform"/fmtutil-sys --all
-  opt/TeXLive/bin/"$_platform"/mtxrun --generate >/dev/null
-  opt/TeXLive/bin/"$_platform"/updmap-sys
+  # opt/TeXLive/bin/"$_platform"/fmtutil-sys --all
+  # opt/TeXLive/bin/"$_platform"/mtxrun --generate
+  # opt/TeXLive/bin/"$_platform"/updmap-sys
 }
 
 post_upgrade() {
