@@ -1,21 +1,40 @@
 new_version=$(git ls-remote --tags https://github.com/TeX-Live/texlive-source.git | grep -oP 'refs/tags/(build-)?svn\K\d+' | sort -V | tail -n1)
 
+installed_pkgs=(
+    00texlive.installation
+    texlive.infra
+    texlive-scripts
+)
+
 pre_update() {
     latex_year=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive | grep -oP '\d{4}(?=-\d{2}-\d{2})' | tail -n1)
     test -n "$latex_year" || return 1
     echo "Latest TeX Live year: $latex_year"
     sed -e "s|^_pkgyear=[0-9]\{4\}$|_pkgyear=$latex_year|" -i PKGBUILD
 
-    texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
-    test -n "$texmf_version" || return 1
-    echo "texmf version: $texmf_version"
-    sed -e "s|^_texmfver=[0-9]\{8\}$|_texmfver=$texmf_version|" -i PKGBUILD
+    # texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
+    # test -n "$texmf_version" || return 1
+    # echo "texmf version: $texmf_version"
+    # sed -e "s|^_texmfver=[0-9]\{8\}$|_texmfver=$texmf_version|" -i PKGBUILD
 
-    # tlpdb_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-tlpdb-full.tar)' | head -n1)
-    # echo "tlpdb version: $tlpdb_version"
-    # if [ -n "$texmf_version" ] && [ -n "$tlpdb_version" ]; then
-    #     sed -e "s/texlive-[0-9]\{8\}-tlpdb-full.tar.gz/texlive-$tlpdb_version-tlpdb-full.tar.gz/" -i PKGBUILD
-    # fi
+    # curl -L -A 'Mozilla/5.0' -o "$SRCDEST"/texlive.tlpdb http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
+    # rm -fv "$PKGBUILDDIR"/texlive.tlpdb
+    # for pkg in "${installed_pkgs[@]}"; do
+    #     sed -n \
+    #         -e "/^name $pkg$/,/^$/p" \
+    #         -e "/^name $pkg.$platform$/,/^$/p" \
+    #         "$SRCDEST"/texlive.tlpdb >> "$PKGBUILDDIR"/texlive.tlpdb
+    # done
+    # sed -i 's/RELOC/texmf-dist/g' "$PKGBUILDDIR"/texlive.tlpdb
+    rm -fv "$SRCDEST"/texlive.tlpdb
+
+    # curl -L -A 'Mozilla/5.0' http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb | \
+    # sed -n \
+    #     $(for pkg in "${installed_pkgs[@]}"; do
+    #         echo -e "-e /^name $pkg\$/,/^\$/p"
+    #     done)
+    # > "$PKGBUILDDIR"/texlive.tlpdb
+    updpkgsums
 }
 
 post_update() {
