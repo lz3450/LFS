@@ -1,11 +1,18 @@
 #!/bin/bash
 
 set -e
-set -u
 # set -x
 
+if [ -n "$BASH_VERSION" ]; then
+  export script_dir="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1; pwd -P)"
+elif [ -n "$ZSH_VERSION" ]; then
+  export script_dir="$(cd -- "$(dirname "${(%):-%x}")" >/dev/null 2>&1; pwd -P)"
+else
+  echo "Unsupported shell"
+fi
+
 export BUILDDIR="/tmp"
-export PKGBUILDDIR="../pkgbuilds/kzl/pacman"
+export PKGBUILDDIR="$script_dir/../pkgbuilds/kzl/pacman"
 export pkgdir="/tmp/pacman/install"
 
 sudo apt-get update
@@ -20,9 +27,11 @@ mkdir -p "$BUILDDIR"/pacman
 cd "$BUILDDIR"
 git clone https://gitlab.archlinux.org/pacman/pacman.git
 
-pushd pacman
-git checkout "${source#*\#commit=}"
-popd
+if [ -n "$_ref" ]; then
+  pushd pacman
+  git checkout "$_ref"
+  popd
+fi
 
 cd "$BUILDDIR"
 prepare
@@ -36,3 +45,5 @@ package
 sudo cp -ru "$pkgdir"/* /
 
 sudo ldconfig
+
+echo "pacman has been installed successfully"
