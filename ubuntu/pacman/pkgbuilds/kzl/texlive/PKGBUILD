@@ -22,7 +22,7 @@ source=(git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_pkgyea
 noextract=(texlive-$_texmfver-texmf.tar.xz)
 sha256sums=('SKIP'
             'SKIP'
-            '110da56d1fe378be7264cb24b48ee2c2d1fa9ea3efedef804897bf0cbc0259d6'
+            '70d393cea978d0498163f36599048e90bec69292c61ae95cb6f591aa78fd9ddd'
             'fe01050544263a517c9a682942edc1cbb150986c34eab3b6755143f072838e93'
             '48aed339c4405573b115c2bbb6aaf8c6a6c38c8e81c99e3664b481692623e203')
 
@@ -52,12 +52,14 @@ build() {
 
   ./../configure -C \
     --prefix="$prefix" \
+    --bindir="$prefix/bin/$platform" \
+    --libdir="$prefix/lib/$platform" \
     --datarootdir='${prefix}' \
     --infodir='${prefix}/texmf-dist/doc/info' \
     --mandir='${prefix}/texmf-dist/doc/man' \
     --disable-all-pkgs \
     --disable-native-texlive-build \
-    --enable-multiplatform \
+    --disable-multiplatform \
     --enable-web2c \
     --enable-tex \
     --enable-luatex \
@@ -99,12 +101,15 @@ build() {
 package() {
   cd $pkgname-source/build
 
-  local _bindir="$prefix/bin/$("$srcdir"/texlive-source/build-aux/config.guess)"
+  local _bindir="$prefix/bin/$platform"
+  local _libdir="$prefix/lib/$platform"
+
+  export PATH="$pkgdir/$_bindir:$PATH"
+  export LD_LIBRARY_PATH="$pkgdir/$_libdir"
+  unset LD_PRELOAD
 
   make DESTDIR="$pkgdir" install-strip
   make DESTDIR="$pkgdir" texlinks
-
-  ln -sv "$("$srcdir"/texlive-source/build-aux/config.guess)" "$pkgdir/$prefix/bin/$platform"
 
   ### texmf-dist
   cp -rv "$srcdir"/installer/texmf-dist "$pkgdir/$prefix"
@@ -112,13 +117,18 @@ package() {
   ### tlpkg
   cp -rv "$srcdir"/installer/tlpkg "$pkgdir/$prefix"/
   mkdir -pv "$pkgdir/$prefix"/tlpkg/{backups,tlpobj}
-  cp -v "$srcdir"/texlive.tlpdb "$pkgdir/$prefix"/tlpkg/
+  sed -n \
+      -e '/^name 00texlive.installation$/,/^$/p' \
+      -e '/^name texlive.infra$/,/^$/p' \
+      -e "/^name texlive.infra.$platform\$/,/^$/p" \
+      -e "/^name texlive-scripts\$/,/^$/p" \
+      -e "/^name texlive-scripts.$platform\$/,/^$/p" \
+      "$srcdir"/texlive.tlpdb > "$pkgdir/$prefix"/tlpkg/texlive.tlpdb
 
   ### tlmgr
   "$pkgdir/$_bindir"/mktexlsr
-  "$pkgdir/$_bindir"/updmap-sys --force --syncwithtrees
+  yes | "$pkgdir/$_bindir"/updmap-sys --syncwithtrees
   "$pkgdir/$_bindir"/tlmgr option repository https://mirror.ctan.org/systems/texlive/tlnet
-  "$pkgdir/$_bindir"/tlmgr remove 00texlive.installer
   "$pkgdir/$_bindir"/tlmgr platform remove \
     aarch64-linux \
     amd64-freebsd \
@@ -134,59 +144,7 @@ package() {
     x86_64-darwinlegacy \
     x86_64-linuxmusl \
     x86_64-solaris || :
-  "$pkgdir/$_bindir"/tlmgr update --self
-  "$pkgdir/$_bindir"/tlmgr remove \
-    scheme-bookpub \
-    scheme-context \
-    scheme-full \
-    scheme-gust \
-    scheme-infraonly \
-    scheme-medium \
-    scheme-minimal \
-    scheme-small \
-    scheme-tetex
-  "$pkgdir/$_bindir"/tlmgr remove \
-    collection-basic \
-    collection-bibtexextra \
-    collection-binextra \
-    collection-context \
-    collection-fontsextra \
-    collection-fontsrecommended \
-    collection-fontutils \
-    collection-formatsextra \
-    collection-games \
-    collection-humanities \
-    collection-langarabic \
-    collection-langchinese \
-    collection-langcjk \
-    collection-langcyrillic \
-    collection-langczechslovak \
-    collection-langenglish \
-    collection-langeuropean \
-    collection-langfrench \
-    collection-langgerman \
-    collection-langgreek \
-    collection-langitalian \
-    collection-langjapanese \
-    collection-langkorean \
-    collection-langother \
-    collection-langpolish \
-    collection-langportuguese \
-    collection-langspanish \
-    collection-latex \
-    collection-latexextra \
-    collection-latexrecommended \
-    collection-luatex \
-    collection-mathscience \
-    collection-metapost \
-    collection-music \
-    collection-pictures \
-    collection-plaingeneric \
-    collection-pstricks \
-    collection-publishers \
-    collection-texworks \
-    collection-wintools \
-    collection-xetex
+  "$pkgdir/$_bindir"/tlmgr update --self --all
 
   # texlive fonts
   install -Dm644 "$srcdir"/09-texlive-fonts.conf -t "$pkgdir"/usr/share/fonts/conf.avail/

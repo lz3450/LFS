@@ -20,7 +20,6 @@ pkgs=(
     libteckit-dev
     libzzip-dev
     texinfo
-
 )
 
 sudo apt-get install "${pkgs[@]}"
