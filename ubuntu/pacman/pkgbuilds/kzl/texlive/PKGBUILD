@@ -42,11 +42,12 @@ stage2_pkgs=(
   collection-latexrecommended
   collection-latexextra
   collection-fontsrecommended
-  acmart
   chktex
   latexindent
   latexmk
   pdfcrop
+  acmart
+  algorithm2e
 )
 
 pkgver() {
