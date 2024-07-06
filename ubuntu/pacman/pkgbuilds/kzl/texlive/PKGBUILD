@@ -2,7 +2,7 @@ pkgname=texlive
 pkgver=70897
 _pkgyear=2024
 _texmfver=20240312
-pkgrel=23
+pkgrel=24
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -20,8 +20,8 @@ source=(git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_pkgyea
 # noextract=(texlive-$_texmfver-texmf.tar.xz)
 sha256sums=('SKIP'
             'SKIP'
-            '18d0140c0e1d991dd668d0ab5dcdbc414d1c24b22c7cb0a697d69a5fb1a5ca9c'
-            'd597f623d661838f013fdd5670f72262a857ae877b79faa95eba3c046d50aea1')
+            '750e1d1016f4bcd9bbb3c35182e5d564c6765ec29807917d1402fc79dcd6cffe'
+            '6d5065733c26ade2392e0eb995f63fedfbcd8f1de6dcde32b4fd3bd45e708eae')
 
 
 platform="$(uname -i)-$(uname -s | tr '[:upper:]' '[:lower:]')"
