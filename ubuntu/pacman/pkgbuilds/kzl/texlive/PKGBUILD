@@ -27,7 +27,6 @@ sha256sums=('SKIP'
 platform="$(uname -i)-$(uname -s | tr '[:upper:]' '[:lower:]')"
 prefix="opt/TeXLive"
 
-# use `tlmgr check files` to file missing pkgs
 stage0_pkgs=(
   00texlive.installation
   texlive.infra
