@@ -1,6 +1,7 @@
 #!/bin/bash
 
 pkgs=(
+    bison
     fontconfig
     ghostscript
     libcairo2-dev

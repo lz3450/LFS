@@ -2,7 +2,7 @@ pkgname=texlive
 pkgver=70897
 _pkgyear=2024
 _texmfver=20240312
-pkgrel=21
+pkgrel=22
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -21,7 +21,7 @@ source=(git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_pkgyea
 sha256sums=('SKIP'
             'SKIP'
             '18d0140c0e1d991dd668d0ab5dcdbc414d1c24b22c7cb0a697d69a5fb1a5ca9c'
-            '949d59ddf600c6d3a28aafd8759a908f7f6061c82a55b6a903d1b33d71581df2')
+            'd597f623d661838f013fdd5670f72262a857ae877b79faa95eba3c046d50aea1')
 
 
 platform="$(uname -i)-$(uname -s | tr '[:upper:]' '[:lower:]')"
@@ -55,14 +55,12 @@ build() {
 
   ./../configure -C \
     --prefix="$prefix" \
-    --bindir="$prefix/bin/$platform" \
-    --libdir="$prefix/lib/$platform" \
     --datarootdir='${prefix}' \
-    --infodir='${prefix}/texmf-dist/doc/info' \
-    --mandir='${prefix}/texmf-dist/doc/man' \
+    --infodir='${prefix}/share/info' \
+    --mandir='${prefix}/share/man' \
     --disable-all-pkgs \
     --disable-native-texlive-build \
-    --disable-multiplatform \
+    --enable-multiplatform \
     --enable-web2c \
     --enable-tex \
     --enable-luatex \
@@ -104,12 +102,12 @@ build() {
 package() {
   cd $pkgname-source/build
 
-  local _bindir="$prefix/bin/$platform"
-  local _libdir="$prefix/lib/$platform"
+  local _platform="$("$srcdir"/texlive-source/build-aux/config.guess)"
+  local _bindir="$prefix/bin/$_platform"
+  local _libdir="$prefix/lib/$_platform"
 
   export PATH="$pkgdir/$_bindir:$PATH"
-  export LD_LIBRARY_PATH="$pkgdir/$_libdir"
-  unset LD_PRELOAD
+  export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$pkgdir/$_libdir"
 
   make DESTDIR="$pkgdir" install-strip
   make DESTDIR="$pkgdir" texlinks
@@ -128,11 +126,15 @@ package() {
           -e "/^name $pkg.$platform$/,/^$/p" \
           "$srcdir"/texlive.tlpdb >> "$pkgdir/$prefix"/tlpkg/texlive.tlpdb
   done
+  sed -i \
+      -e '/^name texlive-scripts$/,/^revision [0-9]\+/{' \
+      -e '/^revision [0-9]\+/c\revision '"$pkgver" \
+      -e '}' \
+      "$pkgdir/$prefix"/tlpkg/texlive.tlpdb
 
   ### tlmgr
-  "$pkgdir/$_bindir"/mktexlsr
-  "$pkgdir/$_bindir"/tlmgr option repository https://mirror.ctan.org/systems/texlive/tlnet
-  "$pkgdir/$_bindir"/tlmgr platform remove \
+  tlmgr option repository https://mirror.ctan.org/systems/texlive/tlnet
+  tlmgr platform remove \
     aarch64-linux \
     amd64-freebsd \
     amd64-netbsd \
@@ -147,18 +149,15 @@ package() {
     x86_64-darwinlegacy \
     x86_64-linuxmusl \
     x86_64-solaris || :
-  "$pkgdir/$_bindir"/tlmgr update --self || :
-  # "$pkgdir/$_bindir"/tlmgr install texlive.infra texlive-scripts
+  tlmgr update --self || :
+  # tlmgr install --reinstall --no-depends-at-all texlive-scripts
 
   ### PATH
   echo "export PATH=\$PATH:$_bindir" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/texlive.sh
 
   ### clean
-  rm -rfv "$pkgdir/$prefix"/{readme-html.dir,readme-txt.dir}
-  rm -fv "$pkgdir/$prefix"/{index.html,LICENSE.*,README*,release-texlive.txt}
-  rm -rfv "$pkgdir/$prefix"/texmf-dist/{dvips,psutils,xdvi,xindy}
-  rm -rfv "$pkgdir/$prefix"/texmf-dist/scripts/context/stubs/mswin
-  find "$pkgdir/$prefix"/texmf-dist/doc -mindepth 1 -maxdepth 1 -type d ! \( -name man -o -name info \) -exec rm -rfv {} +
+  # find "$pkgdir/$prefix"/texmf-dist/doc -mindepth 1 -maxdepth 1 -type d ! \( -name man -o -name info \) -exec rm -rfv {} +
+  rm -rfv "$pkgdir/$prefix"/texmf-dist/doc
   rm -fv "$pkgdir/$prefix"/tlpkg/texlive.tlpdb.*
   rm -fv "$pkgdir/$prefix"/tlpkg/backups/*
   rm -fv "$pkgdir/$prefix"/tlpkg/tlpobj/*.tlpobj

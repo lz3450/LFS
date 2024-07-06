@@ -1,7 +1,8 @@
 post_install() {
-  local _platform="$(uname -i)-$(uname -s | tr '[:upper:]' '[:lower:]')"
+  local _platform="$(opt/TeXLive/tlpkg/installer/config.guess)"
 
-  source etc/profile.d/texlive.sh
+  . etc/profile.d/texlive.sh
+
   opt/TeXLive/bin/"$_platform"/mktexlsr
   # opt/TeXLive/bin/"$_platform"/fmtutil-sys --all
   # opt/TeXLive/bin/"$_platform"/mtxrun --generate
