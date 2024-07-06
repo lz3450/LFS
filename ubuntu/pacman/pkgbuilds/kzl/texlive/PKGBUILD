@@ -132,6 +132,9 @@ package() {
       -e '}' \
       "$pkgdir/$prefix"/tlpkg/texlive.tlpdb
 
+  ### texmf-var
+  mkdir -pv "$pkgdir/$prefix"/texmf-var/tex/generic/config/
+
   ### tlmgr
   tlmgr option repository https://mirror.ctan.org/systems/texlive/tlnet
   tlmgr platform remove \
