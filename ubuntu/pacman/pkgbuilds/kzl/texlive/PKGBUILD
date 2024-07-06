@@ -2,7 +2,7 @@ pkgname=texlive
 pkgver=70897
 _pkgyear=2024
 _texmfver=20240312
-pkgrel=22
+pkgrel=23
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -25,13 +25,29 @@ sha256sums=('SKIP'
 
 
 platform="$(uname -i)-$(uname -s | tr '[:upper:]' '[:lower:]')"
-prefix="/opt/TeXLive"
+prefix="opt/TeXLive"
 
 # use `tlmgr check files` to file missing pkgs
-installed_pkgs=(
+stage0_pkgs=(
   00texlive.installation
   texlive.infra
   texlive-scripts
+)
+stage1_pkgs=(
+  scheme-infraonly
+  scheme-minimal
+  dehyph-exptl
+)
+stage2_pkgs=(
+  scheme-basic
+  collection-latexrecommended
+  collection-latexextra
+  collection-fontsrecommended
+  acmart
+  chktex
+  latexindent
+  latexmk
+  pdfcrop
 )
 
 pkgver() {
@@ -54,7 +70,7 @@ build() {
   # https://tug.org/texlive/doc/tlbuild.html
 
   ./../configure -C \
-    --prefix="$prefix" \
+    --prefix="/$prefix" \
     --datarootdir='${prefix}' \
     --infodir='${prefix}/share/info' \
     --mandir='${prefix}/share/man' \
@@ -120,7 +136,7 @@ package() {
   cp -rv "$srcdir"/installer/tlpkg "$pkgdir/$prefix"/
   mkdir -pv "$pkgdir/$prefix"/tlpkg/{backups,tlpobj}
   rm -fv "$pkgdir/$prefix"/tlpkg/texlive.tlpdb
-  for pkg in "${installed_pkgs[@]}"; do
+  for pkg in "${stage0_pkgs[@]}"; do
       sed -n \
           -e "/^name $pkg$/,/^$/p" \
           -e "/^name $pkg.$platform$/,/^$/p" \
@@ -153,13 +169,25 @@ package() {
     x86_64-linuxmusl \
     x86_64-solaris || :
   tlmgr update --self || :
-  # tlmgr install --reinstall --no-depends-at-all texlive-scripts
+  tlmgr install --reinstall "${stage1_pkgs[@]}"
+  sed -i \
+      -e '/^name texlive-scripts$/,/^revision [0-9]\+/{' \
+      -e '/^revision [0-9]\+/c\revision '"$pkgver" \
+      -e '}' \
+      "$pkgdir/$prefix"/tlpkg/texlive.tlpdb
+  tlmgr install "${stage2_pkgs[@]}"
 
   ### PATH
   echo "export PATH=\$PATH:$_bindir" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/texlive.sh
 
   ### clean
-  # find "$pkgdir/$prefix"/texmf-dist/doc -mindepth 1 -maxdepth 1 -type d ! \( -name man -o -name info \) -exec rm -rfv {} +
+  rm -rfv "$pkgdir/$prefix/bin/$(uname -i)-$(uname -s | tr '[:upper:]' '[:lower:]')"
+  rm -rfv "$pkgdir/$prefix"/{readme-html.dir,readme-txt.dir}
+  rm -fv "$pkgdir/$prefix"/install-tl
+  rm -fv "$pkgdir/$prefix"/LICENSE.*
+  rm -fv "$pkgdir/$prefix"/README*
+  rm -fv "$pkgdir/$prefix"/*.html
+  rm -fv "$pkgdir/$prefix"/*.txt
   rm -rfv "$pkgdir/$prefix"/texmf-dist/doc
   rm -fv "$pkgdir/$prefix"/tlpkg/texlive.tlpdb.*
   rm -fv "$pkgdir/$prefix"/tlpkg/backups/*
@@ -173,4 +201,14 @@ package() {
   rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.pl
   rm -fv "$pkgdir/$prefix"/tlpkg/installer/*.tcl
   rm -rfv "$pkgdir/$prefix"/tlpkg/tlperl
+
+  local -a _path=(
+    texmf-dist/web2c
+    texmf-var/fonts/map
+    texmf-var/tex/generic/config
+    texmf-var/web2c
+  )
+  for p in ${_path[@]}; do
+    grep -rl "$pkgdir" "$pkgdir/$prefix/$p" | xargs sed -i -e "s|$pkgdir||g"
+  done
 }
