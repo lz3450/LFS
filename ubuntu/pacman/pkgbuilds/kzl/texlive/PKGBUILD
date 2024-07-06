@@ -50,6 +50,8 @@ stage2_pkgs=(
   latexmk
   pdfcrop
   ###
+  cascadia-code
+  fontawesome
   inconsolata
   newtx
   ###
