@@ -1,7 +1,8 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.rust-lang.org/ | grep -oP '(?<=Version )\d\.\d\d\.\d')
+# new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.rust-lang.org/ | grep -oP '(?<=Version )\d\.\d\d\.\d')
+new_version=$(git ls-remote --tags https://github.com/rust-lang/rust.git | grep -oP '(?<=refs/tags/)1\.\d+\.\d+$' | sort -V | tail -n1)
 
 post_update() {
-    cd "$BUILDDIR/$pkgname/src/rustc-$pkgver-src"
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
     ./configure --help > "$PKGBUILDDIR"/help.txt
     cp config.example.toml "$PKGBUILDDIR"/
     cp config.toml "$PKGBUILDDIR"/

@@ -17,46 +17,48 @@ sha256sums=('96d62e6d1f2d21df7ac8acb3b9882411f9e7c7036173f7f2ede9e1f1f6b1bb3a'
             'SKIP')
 
 prepare() {
-  cd rustc-$pkgver-src
+  cd $pkgname
 
-  _options=(
-    --disable-debug
-    --disable-docs
-    --disable-compiler-docs
-    --disable-optimize-tests
+  sed -i '/# frame-pointers/s/ //' config.example.toml
+
+  local -a _options=(
     ################
     # stage2
     ################
     # --enable-local-rust
     # --local-rust-root=/usr
     ################
-    --disable-llvm-static-stdcpp
     --enable-llvm-link-shared
+    --enable-sanitizers
+    --enable-profiler
+    "--prefix=/usr"
+    "--llvm-root=/usr"
+    "--llvm-config=/usr/bin/llvm-config"
+    "--llvm-filecheck=/usr/bin/FileCheck"
+    "--python=/usr/bin/python3"
+    "--release-channel=stable"
+    # "--release-description=KZL $(date '+%Y/%m/%d %T %z')"
+    "--tools=cargo,clippy,rustfmt,analysis,src"
+    "--build=x86_64-unknown-linux-gnu"
+    "--host=x86_64-unknown-linux-gnu"
+    "--target=x86_64-unknown-linux-gnu"
     --enable-option-checking
-    --enable-vendor
-    --disable-sanitizers
-    --prefix=/usr
-    --llvm-root=/usr
-    --llvm-config=/usr/bin/llvm-config
-    --llvm-filecheck=/usr/bin/FileCheck
-    --python=/usr/bin/python3
-    --release-channel=stable
-    # --release-description="KZL $(date -u '+%Y/%m/%d %T %z')"
-    --dist-compression-formats=gz
-    --tools=cargo,clippy,rustfmt,analysis,src
-    --build=x86_64-unknown-linux-gnu
-    --host=x86_64-unknown-linux-gnu
-    --target=x86_64-unknown-linux-gnu
-    --set target.x86_64-unknown-linux-gnu.linker=clang
-    --set target.x86_64-unknown-linux-gnu.cc=clang
-    --set target.x86_64-unknown-linux-gnu.cxx=clang++
-    --set target.x86_64-unknown-linux-gnu.ar=llvm-ar
-    --set target.x86_64-unknown-linux-gnu.ranlib=llvm-ranlib
-    # --set target.x86_64-unknown-linux-gnu.linker=gcc
-    # --set target.x86_64-unknown-linux-gnu.cc=gcc
-    # --set target.x86_64-unknown-linux-gnu.cxx=g++
-    # --set target.x86_64-unknown-linux-gnu.ar=ar
-    # --set target.x86_64-unknown-linux-gnu.ranlib=ranlib
+    --enable-verbose-configure
+    "--set change-id=123711"
+    "--set rust.frame-pointers=true"
+    "--set rust.backtrace-on-ice=true"
+    "--set rust.remap-debuginfo=true"
+    "--set rust.jemalloc=true"
+    "--set target.x86_64-unknown-linux-gnu.cc=clang"
+    "--set target.x86_64-unknown-linux-gnu.cxx=clang++"
+    "--set target.x86_64-unknown-linux-gnu.ar=llvm-ar"
+    "--set target.x86_64-unknown-linux-gnu.ranlib=llvm-ranlib"
+    "--set target.x86_64-unknown-linux-gnu.linker=clang"
+    # "--set target.x86_64-unknown-linux-gnu.cc=gcc"
+    # "--set target.x86_64-unknown-linux-gnu.cxx=g++"
+    # "--set target.x86_64-unknown-linux-gnu.ar=ar"
+    # "--set target.x86_64-unknown-linux-gnu.ranlib=ranlib"
+    # "--set target.x86_64-unknown-linux-gnu.linker=gcc"
   )
   for element in "${_options[@]}"; do
     echo "$element"

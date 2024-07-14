@@ -28,7 +28,7 @@ sha256sums=()
 pkgver() {
   cd $pkgname
 
-  git describe --tags | sed 's/-/+/g'
+  git describe --tags | sed 's/-g.*//;s/-/.g/'
 }
 
 ###############################################################################
