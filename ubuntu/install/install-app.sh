@@ -16,5 +16,5 @@ echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" 
 # sudo apt-add-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
 
 apt-get update
-apt-get install -s microsoft-edge-stable code | grep "^Inst" | awk '{print $2}' | sort > microsoft-pkgs.txt
+apt-get install -s microsoft-edge-stable code | grep "^Inst" | awk '{print $2}' | sort -n > microsoft-pkgs.txt
 apt-get install -y microsoft-edge-stable code
