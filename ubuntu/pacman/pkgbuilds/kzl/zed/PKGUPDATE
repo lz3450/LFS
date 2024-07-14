@@ -1,0 +1,5 @@
+new_version=$(git ls-remote --tags https://github.com/zed-industries/zed.git | grep -oP '(?<=refs/tags/v)\d+\.1\d+\.\d+$' | sort -V | tail -n1)
+
+post_update() {
+  cd "$BUILDDIR/$pkgname/src/$pkgname"
+}

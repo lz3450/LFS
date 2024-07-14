@@ -1,0 +1,174 @@
+# Use different pre-set defaults than the global defaults.
+#
+# See `src/bootstrap/defaults` for more information.
+# Note that this has no default value (x.py uses the defaults in `config.example.toml`).
+profile = 'dist'
+
+# Keeps track of major changes made to this configuration.
+#
+# This value also represents ID of the PR that caused major changes. Meaning,
+# you can visit github.com/rust-lang/rust/pull/{change-id} to check for more details.
+#
+# A 'major change' includes any of the following
+#  - A new option
+#  - A change in the default values
+#
+# If `change-id` does not match the version that is currently running,
+# `x.py` will inform you about the changes made on bootstrap.
+change-id = 123711
+
+[llvm]
+
+# Whether to build LLVM as a dynamically linked library (as opposed to statically linked).
+# Under the hood, this passes `--shared` to llvm-config.
+# NOTE: To avoid performing LTO multiple times, we suggest setting this to `true` when `thin-lto` is enabled.
+link-shared = true
+
+[build]
+
+# Build triple for the pre-compiled snapshot compiler. If `rustc` is set, this must match its host
+# triple (see `rustc --version --verbose`; cross-compiling the rust build system itself is NOT
+# supported). If `rustc` is unset, this must be a platform with pre-compiled host tools
+# (https://doc.rust-lang.org/nightly/rustc/platform-support.html). The current platform must be
+# able to run binaries of this build triple.
+#
+# If `rustc` is present in path, this defaults to the host it was compiled for.
+# Otherwise, `x.py` will try to infer it from the output of `uname`.
+# If `uname` is not found in PATH, we assume this is `x86_64-pc-windows-msvc`.
+# This may be changed in the future.
+build = 'x86_64-unknown-linux-gnu'
+
+# Which triples to produce a compiler toolchain for. Each of these triples will be bootstrapped from
+# the build triple themselves. In other words, this is the list of triples for which to build a
+# compiler that can RUN on that triple.
+#
+# Defaults to just the `build` triple.
+host = ['x86_64-unknown-linux-gnu']
+
+# Which triples to build libraries (core/alloc/std/test/proc_macro) for. Each of these triples will
+# be bootstrapped from the build triple themselves. In other words, this is the list of triples for
+# which to build a library that can CROSS-COMPILE to that triple.
+#
+# Defaults to `host`. If you set this explicitly, you likely want to add all
+# host triples to this list as well in order for those host toolchains to be
+# able to compile programs for their native target.
+target = ['x86_64-unknown-linux-gnu']
+
+# Python interpreter to use for various tasks throughout the build, notably
+# rustdoc tests, the lldb python interpreter, and some dist bits and pieces.
+#
+# Defaults to the Python interpreter used to execute x.py.
+python = '/usr/local/bin/python3.12'
+
+# Set of tools to be included in the installation.
+#
+# If `extended = false`, the only one of these built by default is rustdoc.
+#
+# If `extended = true`, they're all included, with the exception of
+# rust-demangler which additionally requires `profiler = true` to be set.
+#
+# If any enabled tool fails to build, the installation fails.
+tools = ['cargo', 'clippy', 'rustfmt', 'analysis', 'src']
+#    "cargo",
+#    "clippy",
+#    "rustdoc",
+#    "rustfmt",
+#    "rust-analyzer",
+#    "rust-analyzer-proc-macro-srv",
+#    "analysis",
+#    "src",
+#    "rust-demangler",  # if profiler = true
+#]
+
+# Build the sanitizer runtimes
+sanitizers = true
+
+# Build the profiler runtime (required when compiling with options that depend
+# on this runtime, such as `-C profile-generate` or `-C instrument-coverage`).
+profiler = true
+
+# Arguments passed to the `./configure` script, used during distcheck. You
+# probably won't fill this in but rather it's filled in by the `./configure`
+# script. Useful for debugging.
+configure-args = ['--enable-llvm-link-shared', '--enable-sanitizers', '--enable-profiler', '--prefix=/usr/local', '--sysconfdir=etc', '--llvm-root=/opt/llvm-project-18', '--llvm-config=/opt/llvm-project-18/bin/llvm-config', '--llvm-filecheck=/opt/llvm-project-18/bin/FileCheck', '--python=/usr/local/bin/python3.12', '--release-channel=stable', '--tools=cargo,clippy,rustfmt,analysis,src', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set', 'change-id=123711', '--set', 'rust.frame-pointers=true', '--set', 'rust.backtrace-on-ice=true', '--set', 'rust.remap-debuginfo=true', '--set', 'rust.jemalloc=true', '--set', 'target.x86_64-unknown-linux-gnu.cc=/opt/llvm-project-18/bin/clang', '--set', 'target.x86_64-unknown-linux-gnu.cxx=/opt/llvm-project-18/bin/clang++', '--set', 'target.x86_64-unknown-linux-gnu.ar=/opt/llvm-project-18/bin/llvm-ar', '--set', 'target.x86_64-unknown-linux-gnu.ranlib=/opt/llvm-project-18/bin/llvm-ranlib', '--set', 'target.x86_64-unknown-linux-gnu.linker=/opt/llvm-project-18/bin/clang', '--release-description=KZL 2024/07/13 19:03:52 -0500']
+
+[install]
+
+# Where to install the generated toolchain. Must be an absolute path.
+prefix = '/usr/local'
+
+# Where to install system configuration files.
+# If this is a relative path, it will get installed in `prefix` above
+sysconfdir = 'etc'
+
+[rust]
+
+# The "channel" for the Rust build to produce. The stable/beta channels only
+# allow using stable features, whereas the nightly and dev channels allow using
+# nightly features
+channel = 'stable'
+
+# A descriptive string to be appended to `rustc --version` output, which is
+# also used in places like debuginfo `DW_AT_producer`. This may be useful for
+# supplementary build information, like distro-specific package versions.
+#
+# The Rust compiler will differentiate between versions of itself, including
+# based on this string, which means that if you wish to be compatible with
+# upstream Rust you need to set this to "". However, note that if you are not
+# actually compatible -- for example if you've backported patches that change
+# behavior -- this may lead to miscompilations or other bugs.
+description = 'KZL 2024/07/13 19:03:52 -0500'
+
+# Forces frame pointers to be used with `-Cforce-frame-pointers`.
+# This can be helpful for profiling at a small performance cost.
+frame-pointers = true
+
+# Print backtrace on internal compiler errors during bootstrap
+backtrace-on-ice = true
+
+# Map debuginfo paths to `/rust/$sha/...`.
+# Useful for reproducible builds. Generally only set for releases
+remap-debuginfo = true
+
+# Link the compiler and LLVM against `jemalloc` instead of the default libc allocator.
+# This option is only tested on Linux and OSX.
+jemalloc = true
+
+[target.x86_64-unknown-linux-gnu]
+
+# C compiler to be used to compile C code. Note that the
+# default value is platform specific, and if not specified it may also depend on
+# what platform is crossing to what platform.
+# See `src/bootstrap/cc_detect.rs` for details.
+cc = '/opt/llvm-project-18/bin/clang'
+
+# C++ compiler to be used to compile C++ code (e.g. LLVM and our LLVM shims).
+# This is only used for host targets.
+# See `src/bootstrap/cc_detect.rs` for details.
+cxx = '/opt/llvm-project-18/bin/clang++'
+
+# Archiver to be used to assemble static libraries compiled from C/C++ code.
+# Note: an absolute path should be used, otherwise LLVM build will break.
+ar = '/opt/llvm-project-18/bin/llvm-ar'
+
+# Ranlib to be used to assemble static libraries compiled from C/C++ code.
+# Note: an absolute path should be used, otherwise LLVM build will break.
+ranlib = '/opt/llvm-project-18/bin/llvm-ranlib'
+
+# Linker to be used to bootstrap Rust code. Note that the
+# default value is platform specific, and if not specified it may also depend on
+# what platform is crossing to what platform.
+# Setting this will override the `use-lld` option for Rust code when targeting MSVC.
+linker = '/opt/llvm-project-18/bin/clang'
+
+# Path to the `llvm-config` binary of the installation of a custom LLVM to link
+# against. Note that if this is specified we don't compile LLVM at all for this
+# target.
+llvm-config = '/opt/llvm-project-18/bin/llvm-config'
+
+# Normally the build system can find LLVM's FileCheck utility, but if
+# not, you can specify an explicit file name for it.
+llvm-filecheck = '/opt/llvm-project-18/bin/FileCheck'
+
+[dist]
+

@@ -1,0 +1,6 @@
+new_version=$(git ls-remote --tags https://github.com/llvm/llvm-project.git | grep -oP '(?<=refs/tags/llvmorg-)14\.\d+\.\d+$' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname"/src/llvm-project
+    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
+}

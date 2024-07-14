@@ -1,28 +1,28 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=helix
-pkgver=24.03
+pkgver=24.03.g261
 pkgrel=1
 epoch=
 pkgdesc="A post-modern text editor"
 arch=('x86_64')
 url="https://helix-editor.com"
 license=('KZL')
-source=(git+https://github.com/helix-editor/helix.git#tag=$pkgver)
+source=(git+https://github.com/helix-editor/helix.git)
 sha256sums=('SKIP')
 
 prefix="usr/local"
 
-# pkgver() {
-#   cd $pkgname
+pkgver() {
+  cd $pkgname
 
-#   git describe --tags | sed 's/-/+/g'
-# }
+  git describe --tags | sed 's/-g.*//;s/-/.g/'
+}
 
 prepare() {
   cd $pkgname
 
-  cargo fetch --target "$(rustc -vV | sed -n 's/host: //p')" --locked
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
 }
 
 build() {

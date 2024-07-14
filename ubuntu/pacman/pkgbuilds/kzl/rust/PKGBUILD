@@ -1,0 +1,93 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=rust
+pkgver=1.79.0
+pkgrel=2
+epoch=
+pkgdesc="Systems programming language focused on safety, speed and concurrency"
+arch=('x86_64')
+url="https://www.rust-lang.org/"
+license=('KZL')
+source=(git+https://github.com/rust-lang/rust.git#branch=stable)
+sha256sums=('SKIP')
+
+prefix="usr/local"
+llvm_root="/opt/llvm-project-18"
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-g.*//;s/-/.g/'
+}
+
+prepare() {
+  cd $pkgname
+
+  sed -i '/# frame-pointers/s/ //' config.example.toml
+
+  local -a _options=(
+    ################
+    # stage2
+    ################
+    # --enable-local-rust
+    # --local-rust-root=/"$prefix"
+    ################
+    --enable-llvm-link-shared
+    --enable-sanitizers
+    --enable-profiler
+    "--prefix=/$prefix"
+    "--sysconfdir=etc"
+    "--llvm-root=$llvm_root"
+    "--llvm-config=$llvm_root/bin/llvm-config"
+    "--llvm-filecheck=$llvm_root/bin/FileCheck"
+    "--python=/usr/local/bin/python3.12"
+    "--release-channel=stable"
+    # "--release-description=KZL $(date '+%Y/%m/%d %T %z')"
+    "--tools=cargo,clippy,rustfmt,analysis,src"
+    "--build=x86_64-unknown-linux-gnu"
+    "--host=x86_64-unknown-linux-gnu"
+    "--target=x86_64-unknown-linux-gnu"
+    --enable-option-checking
+    --enable-verbose-configure
+    "--set change-id=123711"
+    "--set rust.frame-pointers=true"
+    "--set rust.backtrace-on-ice=true"
+    "--set rust.remap-debuginfo=true"
+    "--set rust.jemalloc=true"
+    "--set target.x86_64-unknown-linux-gnu.cc=$llvm_root/bin/clang"
+    "--set target.x86_64-unknown-linux-gnu.cxx=$llvm_root/bin/clang++"
+    "--set target.x86_64-unknown-linux-gnu.ar=$llvm_root/bin/llvm-ar"
+    "--set target.x86_64-unknown-linux-gnu.ranlib=$llvm_root/bin/llvm-ranlib"
+    "--set target.x86_64-unknown-linux-gnu.linker=$llvm_root/bin/clang"
+    # "--set target.x86_64-unknown-linux-gnu.cc=gcc"
+    # "--set target.x86_64-unknown-linux-gnu.cxx=g++"
+    # "--set target.x86_64-unknown-linux-gnu.ar=ar"
+    # "--set target.x86_64-unknown-linux-gnu.ranlib=ranlib"
+    # "--set target.x86_64-unknown-linux-gnu.linker=gcc"
+  )
+
+  ./configure \
+    ${_options[@]} \
+    --release-description="KZL $(date '+%Y/%m/%d %T %z')"
+}
+
+build() {
+  cd $pkgname
+
+  RUST_BACKTRACE=full ./x.py -j "$(nproc)" build
+}
+
+check() {
+  cd $pkgname
+
+  # ./x.py test
+}
+
+package() {
+  cd $pkgname
+
+  DESTDIR="$pkgdir" ./x.py -j "$(nproc)" install
+
+  rm -f "$pkgdir"/$prefix/lib/rustlib/{components,install.log,manifest-*,rust-installer-version,uninstall.sh}
+  rm -rf "$pkgdir"/$prefix/share/doc
+}

@@ -1,0 +1,60 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=zed
+pkgver=0.143.7
+pkgrel=1
+epoch=
+pkgdesc="A high-performance, multiplayer code editor from the creators of Atom and Tree-sitter"
+arch=('x86_64')
+url="https://zed.dev"
+license=('KZL')
+source=(git+https://github.com/zed-industries/zed.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prefix="usr/local"
+appid="dev.zed.Zed"
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/^v//;s/-g.*//;s/-/.g/'
+}
+
+prepare() {
+  cd $pkgname
+
+  sed -i '/target.x86_64-unknown-linux-gnu/,+2d' .cargo/config.toml
+
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+
+  export DO_STARTUP_NOTIFY="true"
+  export APP_ICON="zed"
+  export APP_NAME="Zed"
+  export APP_CLI="zed"
+  export APP_ID="$appid"
+  envsubst < "crates/zed/resources/zed.desktop.in" > $appid.desktop
+}
+
+build() {
+  cd $pkgname
+
+  CFLAGS+=' -ffat-lto-objects'
+  CXXFLAGS+=' -ffat-lto-objects'
+
+  cargo build --frozen --release --package zed --package cli
+}
+
+check() {
+  cd $pkgname
+
+  cargo test --frozen
+}
+
+package() {
+  cd $pkgname
+
+	install -Dm 755 target/release/cli "$pkgdir/$prefix"/bin/zed
+	install -Dm 755 target/release/zed "$pkgdir/$prefix"/libexec/zed-editor
+	install -Dm 644 "$appid.desktop" -t "$pkgdir/$prefix"/share/applications/
+	install -Dm 644 crates/zed/resources/app-icon.png "$pkgdir/$prefix"/share/icons/$pkgname.png
+}
