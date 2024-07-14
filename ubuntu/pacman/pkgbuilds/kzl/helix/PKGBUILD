@@ -42,7 +42,7 @@ package() {
 
   local _runtime_dir="$pkgdir/$prefix/lib/$pkgname/runtime"
 
-  install -Dm755 target/release/hx "$pkgdir"/usr/local/bin/hx
+  install -Dm755 target/release/hx "$pkgdir/$prefix"/bin/hx
 
   install -dm644 "$_runtime_dir"/grammars/
   install -Dm755 runtime/grammars/*.so -t "$_runtime_dir/grammars"
