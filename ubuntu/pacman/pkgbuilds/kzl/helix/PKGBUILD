@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=helix
-pkgver=24.03.g261
+pkgver=24.07.g53
 pkgrel=1
 epoch=
 pkgdesc="A post-modern text editor"
@@ -42,7 +42,9 @@ package() {
 
   local _runtime_dir="$pkgdir/$prefix/lib/$pkgname/runtime"
 
-  install -Dm755 target/release/hx "$pkgdir/$prefix"/bin/hx
+  install -Dm 755 target/release/hx "$pkgdir/$prefix"/lib/$pkgname/hx
+  install -dm 755 "$pkgdir/$prefix"/bin
+  ln -rsv "$pkgdir/$prefix"/lib/$pkgname/hx "$pkgdir/$prefix"/bin/hx
 
   install -dm644 "$_runtime_dir"/grammars/
   install -Dm755 runtime/grammars/*.so -t "$_runtime_dir/grammars"
