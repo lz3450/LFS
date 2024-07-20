@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman-contrib
-pkgver=1.10.6
-pkgrel=5
+pkgver=1.10.6.g2
+pkgrel=1
 epoch=
 pkgdesc="Contributed scripts and tools for pacman systems"
 arch=('x86_64')
@@ -10,6 +10,12 @@ url="https://git.archlinux.org/pacman-contrib.git/about/"
 license=('KZL')
 source=(git+https://gitlab.archlinux.org/pacman/$pkgname.git)
 sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/^v//;s/-g.*//;s/-/.g/'
+}
 
 prepare() {
   cd $pkgname
