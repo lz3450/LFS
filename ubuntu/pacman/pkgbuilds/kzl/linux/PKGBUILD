@@ -42,6 +42,8 @@ build() {
 }
 
 package_linux() {
+  install=$pkgname.install
+
   cd $pkgbase
 
   local kernelrelease=$(make O=build -s kernelrelease)
