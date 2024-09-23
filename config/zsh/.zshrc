@@ -149,7 +149,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "tjkirch_mod"
     "tjkirch"
     # "tonotdo"
-    "trapd00r"
+    # "trapd00r"``
     # "wedisagree"
     # "wezm+"
     # "wezm"
