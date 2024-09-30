@@ -15,5 +15,5 @@ sha256sums=('SKIP')
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir" FIRMWAREDIR="/lib/firmware/updates/" install
+  make DESTDIR="$pkgdir" FIRMWAREDIR="/usr/lib/firmware/updates/" install
 }
