@@ -3,7 +3,7 @@
 pkgbase=linux
 pkgname=(linux linux-headers)
 pkgver=6.6.53
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -14,7 +14,7 @@ source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#bra
         config
         update-kernel.sh)
 sha256sums=('SKIP'
-            '7d0900dfef557d9e47424b32f0154ef05ebcd7b67d7590db103a11987b836476'
+            'f0d44ace6f5803db3c307c71cf3745d78a4b40a649533e440b557c42cfc8c825'
             'd9479c4966b3b5a9c6b6d685d9c4255a7c5616b42b12a68ba6383d63215a89ef')
 
 export KBUILD_BUILD_HOST=Ubuntu
