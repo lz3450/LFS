@@ -33,7 +33,6 @@ prepare() {
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g -fvar-tracking-assignments"' \
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"' \
-      -e '/^#DEBUG_RUSTFLAGS=/c\DEBUG_RUSTFLAGS="-C debuginfo=2"' \
       -e '/^#BUILDDIR=/c\BUILDDIR="$HOME/makepkg/build"' \
       -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
       -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
@@ -44,6 +43,11 @@ prepare() {
       -e '/^OPTIONS=/s/libtool/!libtool/' \
       -e '/^OPTIONS=/s/!autodeps/autodeps/' \
       etc/makepkg.conf.in
+
+  sed -i \
+      -e '/^#RUSTFLAGS=/s/#//' \
+      -e '/^#DEBUG_RUSTFLAGS=/s/#//' \
+      etc/makepkg.conf.d/rust.conf.in
 
   cat >> etc/pacman.conf.in << EOF
 

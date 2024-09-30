@@ -52,16 +52,8 @@ Main project options:
   
   Compiler options               Current Value                    Possible Values                  Description
   ----------------               -------------                    ---------------                  -----------
-  c_args                         [-march=native, -O2, -pipe,                                       Extra arguments passed to the c compiler
-                                 -fno-plt, -fexceptions, -fstack-                                  
-                                 clash-protection, -fcf-                                           
-                                 protection]                                                       
-  c_link_args                    [-Wl,-O1,--sort-common,--as-                                      Extra arguments passed to the c linker
-                                 needed,-z,relro,-z,now,                                           
-                                 -march=native, -O2, -pipe, -fno-                                  
-                                 plt, -fexceptions, -fstack-                                       
-                                 clash-protection, -fcf-                                           
-                                 protection]                                                       
+  c_args                         []                                                                Extra arguments passed to the c compiler
+  c_link_args                    []                                                                Extra arguments passed to the c linker
   c_std                          gnu99                            [none, c89, c99, c11, c17, c18,  C language standard to use
                                                                   c2x, gnu89, gnu99, gnu11,        
                                                                    gnu17, gnu18, gnu2x]            
@@ -112,7 +104,7 @@ Main project options:
   root-dir                       /                                                                 set the location of the root operating directory
   scriptlet-shell                /usr/bin/bash                                                     The full path of the shell used to run install scriptlets
   src-ext                        .src.tar.zst                                                      set the file extension used by source packages
-  use-git-version                true                             [true, false]                    take version information from git
+  use-git-version                false                            [true, false]                    take version information from git
 
 The following option(s) have a different value than the build type default
 
