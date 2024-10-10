@@ -44,4 +44,4 @@ CMD ["/usr/sbin/sshd", "-D"]
 
 # Run the container in detached mode
 # docker run -d --rm -u root -p 2222:22 --name noble -h NOBLE <REPOSITORY:TAG>
-# docker run -d --rm -u root -p 2222:22 --name noble -h NOBLE --mount type=bind,source=/home/kzl/LFS,target=/home/kzl/LFS --mount type=bind,source=/home/kzl/Projects,target=/home/kzl/Projects <REPOSITORY:TAG>
+# docker run -d --rm -u root -p 2222:22 --name noble -h NOBLE --mount type=bind,source=/home/kzl/LFS,target=/home/kzl/LFS --mount type=bind,source=/home/kzl/Projects,target=/home/kzl/Projects --mount type=bind,source=/home/kzl/makepkg/sources,target=/home/kzl/makepkg/sources <REPOSITORY:TAG>
