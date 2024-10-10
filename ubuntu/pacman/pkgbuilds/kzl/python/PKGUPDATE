@@ -1,1 +1,6 @@
-../../../../../kzl-linux/pacman/pkgbuilds/kzl/python/PKGUPDATE
+new_version=$(git ls-remote --tags https://github.com/python/cpython.git | grep -oP '(?<=refs/tags/v)3\.12\.\d+$' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/cpython"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

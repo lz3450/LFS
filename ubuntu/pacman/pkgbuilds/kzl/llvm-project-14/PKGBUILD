@@ -11,13 +11,7 @@ license=('KZL')
 source=(git+https://github.com/llvm/llvm-project.git#tag=llvmorg-$pkgver)
 sha256sums=('SKIP')
 
-# https://llvm.org/docs/CMake.html
-
-### full list of projects (find in CMake output)
-# bolt;clang;clang-tools-extra;compiler-rt;cross-project-tests;libc;libclc;lld;lldb;mlir;openmp;polly;pstl;flang
-
-### full list of runtimes (find in CMake output)
-# libc;libunwind;libcxxabi;pstl;libcxx;compiler-rt;openmp;llvm-libgcc
+# https://releases.llvm.org/14.0.0/docs/CMake.html
 
 prefix="opt/$pkgname"
 
@@ -26,18 +20,14 @@ _cmake_options=(
   -DCMAKE_INSTALL_PREFIX=/"$prefix"
   -DCMAKE_INSTALL_LIBDIR=lib
   -DPython3_EXECUTABLE=$(which python3.12)
-  ################
-  # stage 2
-  ################
-  -DCMAKE_C_COMPILER=/"$prefix"/bin/clang
-  -DCMAKE_CXX_COMPILER=/"$prefix"/bin/clang++
-  ################
   -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
   -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
 )
 
 _llvm_options=(
+  ### bolt;clang;clang-tools-extra;compiler-rt;cross-project-tests;libc;libclc;libcxx;libcxxabi;libunwind;lld;lldb;mlir;openmp;polly;pstl;flang
   -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb"
+  ### compiler-rt;libc;libcxx;libcxxabi;libunwind;openmp
   -DLLVM_ENABLE_RUNTIMES="compiler-rt"
   -DLLVM_TARGETS_TO_BUILD="X86"
   -DLLVM_PARALLEL_COMPILE_JOBS="$(nproc)"
@@ -46,6 +36,8 @@ _llvm_options=(
   -DLLVM_LINK_LLVM_DYLIB=ON
   -DLLVM_INCLUDE_DOCS=OFF
   -DLLVM_BUILD_DOCS=OFF
+  -DLLVM_INCLUDE_EXAMPLES=OFF
+  -DLLVM_BUILD_EXAMPLES=OFF
   -DLLVM_INCLUDE_TESTS=OFF
   -DLLVM_BUILD_TESTS=OFF
   -DLLVM_INCLUDE_BENCHMARKS=OFF
@@ -55,16 +47,9 @@ _llvm_options=(
   -DLLVM_ENABLE_RTTI=ON
   -DLLVM_INSTALL_UTILS=ON
   ################################################################
-  # libc/libc++
+  ### libc/libc++
   ################################################################
-  # For llvm17+
-  # -DLLVM_ENABLE_LLVM_LIBC=OFF
   -DLLVM_ENABLE_LIBCXX=OFF
-  ################################################################
-  # stage 2
-  ################################################################
-  -DLLVM_USE_LINKER=lld
-  -DLLVM_ENABLE_LTO=Thin
   ################################################################
   -DLLVM_APPEND_VC_REV=OFF
 )
@@ -73,14 +58,13 @@ _clang_options=(
   -DCLANG_ENABLE_BOOTSTRAP=OFF
   -DCLANG_DEFAULT_LINKER=lld
   ################################################################
-  # rtlib
+  ### rtlib
   ################################################################
-  # -DCLANG_DEFAULT_RTLIB=compiler-rt
+  ### "libgcc" or "compiler-rt", empty for platform default
   -DCLANG_DEFAULT_RTLIB=libgcc
-  ################################################################
   -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
   ################################################################
-  # libc++
+  ### libc++
   ################################################################
   # -DCLANG_DEFAULT_CXX_STDLIB=libc++
   # -DLIBCXX_USE_COMPILER_RT=ON
@@ -89,13 +73,26 @@ _clang_options=(
   ################################################################
 )
 
+_stage2_options=(
+  -DCMAKE_C_COMPILER=/"$prefix"/bin/clang
+  -DCMAKE_CXX_COMPILER=/"$prefix"/bin/clang++
+  ### LLVM_ENABLE_LLD and LLVM_USE_LINKER can't be set at the same time
+  # -DLLVM_USE_LINKER=lld
+  -DLLVM_ENABLE_LLD=ON
+  -DLLVM_ENABLE_LTO=Thin
+)
+
 prepare() {
   cd llvm-project
 
+  local -a _options=("${_cmake_options[@]}"  "${_llvm_options[@]}" "${_clang_options[@]}")
+
+  if [ -d "/$prefix" ]; then
+    _options+=("${_stage2_options[@]}")
+  fi
+
   cmake \
-    "${_cmake_options[@]}" \
-    "${_llvm_options[@]}" \
-    "${_clang_options[@]}" \
+    "${_options[@]}" \
     -S llvm \
     -B build \
     -G Ninja \
