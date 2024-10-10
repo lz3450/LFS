@@ -98,7 +98,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     "maran"
     # "mgutz"
     # "mh"
-    "michelebologna"
+    # "michelebologna"
     "mikeh"
     # "miloshadzic"
     # "minimal"
