@@ -113,7 +113,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "nicoulaj"
     # "norm"
     # "obraun"
-    "oldgallois"
+    # "oldgallois"
     # "peepcode"
     # "philips"
     # "pmcgee"
