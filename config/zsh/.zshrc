@@ -120,7 +120,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "pygmalion-virtualenv"
     # "pygmalion"
     "random"
-    "re5et"
+    # "re5et"
     # "refined"
     "rgm"
     # "risto"
