@@ -252,9 +252,6 @@ CMAKE_ASM_COMPILER:FILEPATH=/opt/llvm-project-14/bin/clang
 //LLVM archiver
 CMAKE_ASM_COMPILER_AR:FILEPATH=/opt/llvm-project-14/bin/llvm-ar
 
-//`clang-scan-deps` dependency scanner
-CMAKE_ASM_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/opt/llvm-project-14/bin/clang-scan-deps
-
 //Generate index for LLVM archive
 CMAKE_ASM_COMPILER_RANLIB:FILEPATH=/opt/llvm-project-14/bin/llvm-ranlib
 
@@ -289,9 +286,6 @@ CMAKE_CXX_COMPILER:STRING=/opt/llvm-project-14/bin/clang++
 //LLVM archiver
 CMAKE_CXX_COMPILER_AR:FILEPATH=/opt/llvm-project-14/bin/llvm-ar
 
-//`clang-scan-deps` dependency scanner
-CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/opt/llvm-project-14/bin/clang-scan-deps
-
 //Generate index for LLVM archive
 CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/opt/llvm-project-14/bin/llvm-ranlib
 
@@ -324,9 +318,6 @@ CMAKE_C_COMPILER:STRING=/opt/llvm-project-14/bin/clang
 
 //LLVM archiver
 CMAKE_C_COMPILER_AR:FILEPATH=/opt/llvm-project-14/bin/llvm-ar
-
-//`clang-scan-deps` dependency scanner
-CMAKE_C_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/opt/llvm-project-14/bin/clang-scan-deps
 
 //Generate index for LLVM archive
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/opt/llvm-project-14/bin/llvm-ranlib
@@ -366,9 +357,6 @@ CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 //Enable/Disable output of compile commands during generation.
 CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
-
-//Value Computed by CMake.
-CMAKE_FIND_PACKAGE_REDIRECTS_DIR:STATIC=/home/kzl/makepkg/build/llvm-project-14/src/llvm-project/build/CMakeFiles/pkgRedirects
 
 //User executables (bin)
 CMAKE_INSTALL_BINDIR:PATH=bin
@@ -536,9 +524,6 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 //Path to a program.
 CMAKE_STRIP:FILEPATH=/opt/llvm-project-14/bin/llvm-strip
 
-//Path to a program.
-CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
-
 //If this value is on, makefiles will be generated without the
 // .SILENT directive, and all commands will be echoed to the console
 // during the make.  This is useful for debugging only. With Visual
@@ -696,7 +681,7 @@ DEFAULT_SYSROOT:STRING=
 //Dot tool for use with Doxygen
 DOXYGEN_DOT_EXECUTABLE:FILEPATH=DOXYGEN_DOT_EXECUTABLE-NOTFOUND
 
-//Doxygen documentation generation tool (https://www.doxygen.nl)
+//Doxygen documentation generation tool (http://www.doxygen.org)
 DOXYGEN_EXECUTABLE:FILEPATH=DOXYGEN_EXECUTABLE-NOTFOUND
 
 //pass --build-id to ld
@@ -1620,7 +1605,7 @@ LibEdit_INCLUDE_DIRS:PATH=/usr/include
 LibEdit_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libedit.so
 
 //Ninja version number
-NINJA_VERSION:STRING=1.11.1
+NINJA_VERSION:STRING=1.10.1
 
 //Path to a program.
 OCAMLFIND:FILEPATH=OCAMLFIND-NOTFOUND
@@ -1766,8 +1751,6 @@ CMAKE_AR-ADVANCED:INTERNAL=1
 CMAKE_ASM_COMPILER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ASM_COMPILER_AR
 CMAKE_ASM_COMPILER_AR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_ASM_COMPILER_CLANG_SCAN_DEPS
-CMAKE_ASM_COMPILER_CLANG_SCAN_DEPS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ASM_COMPILER_RANLIB
 CMAKE_ASM_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 CMAKE_ASM_COMPILER_WORKS:INTERNAL=1
@@ -1786,9 +1769,9 @@ CMAKE_CACHEFILE_DIR:INTERNAL=/home/kzl/makepkg/build/llvm-project-14/src/llvm-pr
 //Major version of cmake used to create the current loaded cache
 CMAKE_CACHE_MAJOR_VERSION:INTERNAL=3
 //Minor version of cmake used to create the current loaded cache
-CMAKE_CACHE_MINOR_VERSION:INTERNAL=28
+CMAKE_CACHE_MINOR_VERSION:INTERNAL=22
 //Patch version of cmake used to create the current loaded cache
-CMAKE_CACHE_PATCH_VERSION:INTERNAL=3
+CMAKE_CACHE_PATCH_VERSION:INTERNAL=1
 //Path to CMake executable.
 CMAKE_COMMAND:INTERNAL=/usr/bin/cmake
 //Path to cpack program executable.
@@ -1799,8 +1782,6 @@ CMAKE_CTEST_COMMAND:INTERNAL=/usr/bin/ctest
 CMAKE_CXX_COMPILER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_COMPILER_AR
 CMAKE_CXX_COMPILER_AR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS
-CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_COMPILER_RANLIB
 CMAKE_CXX_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_FLAGS
@@ -1817,8 +1798,6 @@ CMAKE_CXX_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 CMAKE_C_COMPILER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_COMPILER_AR
 CMAKE_C_COMPILER_AR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_C_COMPILER_CLANG_SCAN_DEPS
-CMAKE_C_COMPILER_CLANG_SCAN_DEPS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_COMPILER_RANLIB
 CMAKE_C_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_FLAGS
@@ -1859,6 +1838,8 @@ CMAKE_GENERATOR_PLATFORM:INTERNAL=
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
 //Test CMAKE_HAVE_LIBC_PTHREAD
 CMAKE_HAVE_LIBC_PTHREAD:INTERNAL=1
+//Have include pthread.h
+CMAKE_HAVE_PTHREAD_H:INTERNAL=1
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=/home/kzl/makepkg/build/llvm-project-14/src/llvm-project/llvm
@@ -1925,7 +1906,7 @@ CMAKE_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_READELF
 CMAKE_READELF-ADVANCED:INTERNAL=1
 //Path to CMake installation.
-CMAKE_ROOT:INTERNAL=/usr/share/cmake-3.28
+CMAKE_ROOT:INTERNAL=/usr/share/cmake-3.22
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS
 CMAKE_SHARED_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_DEBUG
@@ -1952,8 +1933,6 @@ CMAKE_STATIC_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_STRIP
 CMAKE_STRIP-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_TAPI
-CMAKE_TAPI-ADVANCED:INTERNAL=1
 //uname command
 CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
@@ -2045,11 +2024,11 @@ CUDA_cufft_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CUDA_cufftemu_LIBRARY
 CUDA_cufftemu_LIBRARY-ADVANCED:INTERNAL=1
 //Location of make2cmake.cmake
-CUDA_make2cmake:INTERNAL=/usr/share/cmake-3.28/Modules/FindCUDA/make2cmake.cmake
+CUDA_make2cmake:INTERNAL=/usr/share/cmake-3.22/Modules/FindCUDA/make2cmake.cmake
 //Location of parse_cubin.cmake
-CUDA_parse_cubin:INTERNAL=/usr/share/cmake-3.28/Modules/FindCUDA/parse_cubin.cmake
+CUDA_parse_cubin:INTERNAL=/usr/share/cmake-3.22/Modules/FindCUDA/parse_cubin.cmake
 //Location of run_nvcc.cmake
-CUDA_run_nvcc:INTERNAL=/usr/share/cmake-3.28/Modules/FindCUDA/run_nvcc.cmake
+CUDA_run_nvcc:INTERNAL=/usr/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
 //ADVANCED property for variable: CURSES_CURSES_LIBRARY
 CURSES_CURSES_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CURSES_FORM_LIBRARY
@@ -2150,13 +2129,13 @@ FIND_PACKAGE_MESSAGE_DETAILS_CursesAndPanel:INTERNAL=[/usr/include][/usr/lib/x86
 //Details about finding FFI
 FIND_PACKAGE_MESSAGE_DETAILS_FFI:INTERNAL=[/usr/lib/x86_64-linux-gnu/libffi.so][/usr/include/x86_64-linux-gnu][1][v()]
 //Details about finding Git
-FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[/usr/bin/git][v2.43.0()]
+FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[/usr/bin/git][v2.34.1()]
 //Details about finding LibEdit
 FIND_PACKAGE_MESSAGE_DETAILS_LibEdit:INTERNAL=[/usr/include][/usr/lib/x86_64-linux-gnu/libedit.so][v.()]
 //Details about finding LibLZMA
-FIND_PACKAGE_MESSAGE_DETAILS_LibLZMA:INTERNAL=[/usr/lib/x86_64-linux-gnu/liblzma.so][/usr/include][1][1][1][v5.4.5()]
+FIND_PACKAGE_MESSAGE_DETAILS_LibLZMA:INTERNAL=[/usr/lib/x86_64-linux-gnu/liblzma.so][/usr/include][1][1][1][v5.2.5()]
 //Details about finding LibXml2
-FIND_PACKAGE_MESSAGE_DETAILS_LibXml2:INTERNAL=[/usr/lib/x86_64-linux-gnu/libxml2.so][/usr/include/libxml2][v2.9.14(2.8)]
+FIND_PACKAGE_MESSAGE_DETAILS_LibXml2:INTERNAL=[/usr/lib/x86_64-linux-gnu/libxml2.so][/usr/include/libxml2][v2.9.13(2.8)]
 //Details about finding Python3
 FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/usr/local/bin/python3.12][cfound components: Interpreter ][v3.12.7(3.0)]
 //Details about finding Terminfo
@@ -2164,7 +2143,7 @@ FIND_PACKAGE_MESSAGE_DETAILS_Terminfo:INTERNAL=[/usr/lib/x86_64-linux-gnu/libtin
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Details about finding ZLIB
-FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[/usr/lib/x86_64-linux-gnu/libz.so][/usr/include][c ][v1.3()]
+FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[/usr/lib/x86_64-linux-gnu/libz.so][/usr/include][v1.2.11()]
 //ADVANCED property for variable: GIT_EXECUTABLE
 GIT_EXECUTABLE-ADVANCED:INTERNAL=1
 //Test HAS_WERROR_GLOBAL_CTORS
@@ -2178,7 +2157,7 @@ HAVE_CXX_ATOMICS64_WITHOUT_LIB:INTERNAL=1
 //Test HAVE_CXX_ATOMICS_WITHOUT_LIB
 HAVE_CXX_ATOMICS_WITHOUT_LIB:INTERNAL=1
 //Have symbol arc4random
-HAVE_DECL_ARC4RANDOM:INTERNAL=1
+HAVE_DECL_ARC4RANDOM:INTERNAL=
 //Have symbol FE_ALL_EXCEPT
 HAVE_DECL_FE_ALL_EXCEPT:INTERNAL=1
 //Have symbol FE_INEXACT
@@ -2609,7 +2588,7 @@ NCURSES_STATIC_LIBS:INTERNAL=
 NCURSES_STATIC_LIBS_L:INTERNAL=
 NCURSES_STATIC_LIBS_OTHER:INTERNAL=
 NCURSES_STATIC_LIBS_PATHS:INTERNAL=
-NCURSES_VERSION:INTERNAL=6.4.20240113
+NCURSES_VERSION:INTERNAL=6.3.20211021
 NCURSES_ncurses_INCLUDEDIR:INTERNAL=
 NCURSES_ncurses_LIBDIR:INTERNAL=
 NCURSES_ncurses_PREFIX:INTERNAL=
@@ -2618,12 +2597,12 @@ NCURSES_ncurses_VERSION:INTERNAL=
 OCAMLFIND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PANEL_LIBRARIES
 PANEL_LIBRARIES-ADVANCED:INTERNAL=1
-PC_LIBEDIT_CFLAGS:INTERNAL=-I/usr/include;-I/usr/include/editline
+PC_LIBEDIT_CFLAGS:INTERNAL=-I/usr/include/editline
 PC_LIBEDIT_CFLAGS_I:INTERNAL=
 PC_LIBEDIT_CFLAGS_OTHER:INTERNAL=
 PC_LIBEDIT_FOUND:INTERNAL=1
 PC_LIBEDIT_INCLUDEDIR:INTERNAL=/usr/include
-PC_LIBEDIT_INCLUDE_DIRS:INTERNAL=/usr/include;/usr/include/editline
+PC_LIBEDIT_INCLUDE_DIRS:INTERNAL=/usr/include/editline
 PC_LIBEDIT_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-ledit
 PC_LIBEDIT_LDFLAGS_OTHER:INTERNAL=
 PC_LIBEDIT_LIBDIR:INTERNAL=/usr/lib/x86_64-linux-gnu
@@ -2635,10 +2614,10 @@ PC_LIBEDIT_LIBS_OTHER:INTERNAL=
 PC_LIBEDIT_LIBS_PATHS:INTERNAL=
 PC_LIBEDIT_MODULE_NAME:INTERNAL=libedit
 PC_LIBEDIT_PREFIX:INTERNAL=/usr
-PC_LIBEDIT_STATIC_CFLAGS:INTERNAL=-I/usr/include;-I/usr/include/editline
+PC_LIBEDIT_STATIC_CFLAGS:INTERNAL=-I/usr/include/editline
 PC_LIBEDIT_STATIC_CFLAGS_I:INTERNAL=
 PC_LIBEDIT_STATIC_CFLAGS_OTHER:INTERNAL=
-PC_LIBEDIT_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include;/usr/include/editline
+PC_LIBEDIT_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include/editline
 PC_LIBEDIT_STATIC_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-ledit;-ltermcap;-lbsd
 PC_LIBEDIT_STATIC_LDFLAGS_OTHER:INTERNAL=
 PC_LIBEDIT_STATIC_LIBDIR:INTERNAL=
@@ -2683,7 +2662,7 @@ PC_LIBXML_STATIC_LIBS:INTERNAL=
 PC_LIBXML_STATIC_LIBS_L:INTERNAL=
 PC_LIBXML_STATIC_LIBS_OTHER:INTERNAL=
 PC_LIBXML_STATIC_LIBS_PATHS:INTERNAL=
-PC_LIBXML_VERSION:INTERNAL=2.9.14
+PC_LIBXML_VERSION:INTERNAL=2.9.13
 PC_LIBXML_libxml-2.0_INCLUDEDIR:INTERNAL=
 PC_LIBXML_libxml-2.0_LIBDIR:INTERNAL=
 PC_LIBXML_libxml-2.0_PREFIX:INTERNAL=
@@ -2714,20 +2693,12 @@ ZLIB_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 ZLIB_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //Have symbol backtrace
 _Backtrace_SYM_FOUND:INTERNAL=1
-//linker supports push/pop state
-_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/opt/llvm-project-14
-//Compiler reason failure
-_Python3_Compiler_REASON_FAILURE:INTERNAL=
-//Development reason failure
-_Python3_Development_REASON_FAILURE:INTERNAL=
 _Python3_EXECUTABLE:INTERNAL=/usr/local/bin/python3.12
 //Python3 Properties
-_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;12;7;64;32;;cpython-312-x86_64-linux-gnu;abi3;/usr/local/lib/python3.12;/usr/local/lib/python3.12;/usr/local/lib/python3.12/site-packages;/usr/local/lib/python3.12/site-packages
-_Python3_INTERPRETER_SIGNATURE:INTERNAL=9c6ef9554eb34f2cd35afa918e42a4c0
-//NumPy reason failure
-_Python3_NumPy_REASON_FAILURE:INTERNAL=
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;12;7;64;;cpython-312-x86_64-linux-gnu;/usr/local/lib/python3.12;/usr/local/lib/python3.12;/usr/local/lib/python3.12/site-packages;/usr/local/lib/python3.12/site-packages
+_Python3_INTERPRETER_SIGNATURE:INTERNAL=97b9ecf0d89d3e1e05fecc3753ae1e80
 __pkg_config_arguments_NCURSES:INTERNAL=QUIET;ncurses
 __pkg_config_arguments_PC_LIBEDIT:INTERNAL=QUIET;libedit
 __pkg_config_arguments_PC_LIBXML:INTERNAL=QUIET;libxml-2.0
