@@ -11,24 +11,28 @@ license=('KZL')
 source=(git+https://github.com/llvm/llvm-project.git#tag=llvmorg-$pkgver)
 sha256sums=('820630585357aa7f5b4bba91b8c4590be3608e303c09b5bec024318ad8f60701')
 
-# https://releases.llvm.org/14.0.0/docs/CMake.html
+# https://releases.llvm.org/19.0.0/docs/CMake.html
 
-prefix="opt/$pkgname"
+prefix="usr/local"
 
 _cmake_options=(
   -DCMAKE_BUILD_TYPE=Release
   -DCMAKE_INSTALL_PREFIX=/"$prefix"
-  -DCMAKE_INSTALL_LIBDIR=lib
+  -DCMAKE_INSTALL_LIBDIR="lib/llvm-${pkgver%%.*}"
+  -DCMAKE_INSTALL_LIBEXECDIR="libexec/llvm-${pkgver%%.*}"
   -DPython3_EXECUTABLE=$(which python3.12)
-  -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
-  -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
+  -DCMAKE_C_FLAGS="--target=$CHOST ${CFLAGS/-O2/-O3} $CPPFLAGS"
+  -DCMAKE_CXX_FLAGS="--target=$CHOST ${CXXFLAGS/-O2/-O3} $CPPFLAGS"
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 )
 
 _llvm_options=(
+  -DLLVM_HOST_TRIPLE="$CHOST"
+  -DLLVM_DEFAULT_TARGET_TRIPLE="$CHOST"
   ### bolt;clang;clang-tools-extra;compiler-rt;cross-project-tests;libc;libclc;lld;lldb;mlir;openmp;polly;pstl;flang
-  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb"
+  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;flang"
   ### libc;libunwind;libcxxabi;pstl;libcxx;compiler-rt;openmp;llvm-libgcc;offload
-  -DLLVM_ENABLE_RUNTIMES="llvm-libgcc"
+  -DLLVM_ENABLE_RUNTIMES="libc;libunwind;libcxxabi;pstl;libcxx;compiler-rt;openmp"
   -DLLVM_TARGETS_TO_BUILD="X86"
   -DLLVM_PARALLEL_COMPILE_JOBS="$(nproc)"
   -DLLVM_PARALLEL_LINK_JOBS="$(nproc)"
@@ -50,8 +54,8 @@ _llvm_options=(
   ################################################################
   ### libc/libc++
   ################################################################
-  -DLLVM_ENABLE_LLVM_LIBC=OFF
-  -DLLVM_ENABLE_LIBCXX=OFF
+  -DLLVM_ENABLE_LLVM_LIBC=ON
+  -DLLVM_ENABLE_LIBCXX=ON
   ################################################################
   -DLLVM_APPEND_VC_REV=OFF
 )
@@ -59,19 +63,13 @@ _llvm_options=(
 _clang_options=(
   -DCLANG_ENABLE_BOOTSTRAP=OFF
   -DCLANG_DEFAULT_LINKER=lld
+)
+
+_stage1_options=(
   ################################################################
   ### rtlib
   ################################################################
-  ### "libgcc" or "compiler-rt", empty for platform default
   -DCLANG_DEFAULT_RTLIB=libgcc
-  -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
-  ################################################################
-  ### libc++
-  ################################################################
-  # -DCLANG_DEFAULT_CXX_STDLIB=libc++
-  # -DLIBCXX_USE_COMPILER_RT=ON
-  # -DLIBCXXABI_USE_COMPILER_RT=ON
-  # -DLIBCXXABI_USE_LLVM_UNWINDER=ON
   ################################################################
 )
 
@@ -82,6 +80,20 @@ _stage2_options=(
   # -DLLVM_USE_LINKER=lld
   -DLLVM_ENABLE_LLD=ON
   -DLLVM_ENABLE_LTO=Thin
+  ################################################################
+  ### rtlib
+  ################################################################
+  -DCLANG_DEFAULT_RTLIB=compiler-rt
+  -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
+  ################################################################
+  ### libc/libc++
+  ################################################################
+  -DCLANG_DEFAULT_CXX_STDLIB=libc++
+  -DLIBC_ENABLE_USE_BY_CLANG=ON
+  -DLIBCXX_USE_COMPILER_RT=ON
+  -DLIBCXXABI_USE_COMPILER_RT=ON
+  -DLIBCXXABI_USE_LLVM_UNWINDER=ON
+  ################################################################
 )
 
 prepare() {
@@ -89,16 +101,17 @@ prepare() {
 
   local -a _options=("${_cmake_options[@]}"  "${_llvm_options[@]}" "${_clang_options[@]}")
 
-  if [ -d "/$prefix" ]; then
+  if [ -f "/$prefix/bin/llvm-config" ]; then
     _options+=("${_stage2_options[@]}")
+  else
+    _options+=("${_stage1_options[@]}")
   fi
 
   cmake \
     "${_options[@]}" \
     -S llvm \
     -B build \
-    -G Ninja \
-    -LAH
+    -G Ninja
 }
 
 build() {
@@ -111,8 +124,4 @@ package() {
   cd llvm-project
 
   DESTDIR="$pkgdir" ninja -C build install
-
-  echo "/$prefix/lib" | install -Dm644 /dev/stdin "$pkgdir"/etc/ld.so.conf.d/$pkgname.conf
-
-  ln -sfv "$pkgname" "$pkgdir"/opt/llvm-project
 }
