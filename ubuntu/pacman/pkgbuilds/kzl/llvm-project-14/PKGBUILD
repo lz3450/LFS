@@ -2,7 +2,7 @@
 
 pkgname=llvm-project-14
 pkgver=14.0.6
-pkgrel=1
+pkgrel=4
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
@@ -17,18 +17,19 @@ prefix="opt/$pkgname"
 
 _cmake_options=(
   -DCMAKE_BUILD_TYPE=Release
-  -DCMAKE_INSTALL_PREFIX=/"$prefix"
-  -DCMAKE_INSTALL_LIBDIR=lib
+  -DCMAKE_INSTALL_PREFIX="/$prefix"
+  -DCMAKE_INSTALL_LIBEXECDIR=libexec
   -DPython3_EXECUTABLE=$(which python3.12)
   -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
   -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 )
 
 _llvm_options=(
   -DLLVM_HOST_TRIPLE="$CHOST"
-  -DLLVM_DEFAULT_TARGET_TRIPLE="$CHOST"
+  -DLLVM_DEFAULT_TARGET_TRIPLE="x86_64-pc-linux-gnu"
   ### bolt;clang;clang-tools-extra;compiler-rt;cross-project-tests;libc;libclc;libcxx;libcxxabi;libunwind;lld;lldb;mlir;openmp;polly;pstl;flang
-  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb"
+  -DLLVM_ENABLE_PROJECTS="clang;lld"
   ### compiler-rt;libc;libcxx;libcxxabi;libunwind;openmp
   -DLLVM_ENABLE_RUNTIMES=""
   -DLLVM_TARGETS_TO_BUILD="X86"
@@ -36,6 +37,9 @@ _llvm_options=(
   -DLLVM_PARALLEL_LINK_JOBS="$(nproc)"
   -DLLVM_BUILD_LLVM_DYLIB=ON
   -DLLVM_LINK_LLVM_DYLIB=ON
+  ################################################################
+  -DLLVM_INCLUDE_TOOLS=ON
+  -DLLVM_BUILD_TOOLS=ON
   -DLLVM_INCLUDE_DOCS=OFF
   -DLLVM_BUILD_DOCS=OFF
   -DLLVM_INCLUDE_EXAMPLES=OFF
@@ -44,10 +48,10 @@ _llvm_options=(
   -DLLVM_BUILD_TESTS=OFF
   -DLLVM_INCLUDE_BENCHMARKS=OFF
   -DLLVM_BUILD_BENCHMARKS=OFF
-  -DLLVM_ENABLE_BINDINGS=OFF
+  ################################################################
   -DLLVM_ENABLE_FFI=ON
   -DLLVM_ENABLE_RTTI=ON
-  -DLLVM_ENABLE_LIBCXX=OFF
+  -DLLVM_ENABLE_BINDINGS=OFF
   -DLLVM_INSTALL_UTILS=ON
   -DLLVM_APPEND_VC_REV=OFF
 )
@@ -64,12 +68,14 @@ _clang_options=(
 )
 
 _stage2_options=(
-  -DCMAKE_C_COMPILER=/"$prefix"/bin/clang
-  -DCMAKE_CXX_COMPILER=/"$prefix"/bin/clang++
+  -DCMAKE_C_COMPILER="/$prefix/bin/clang"
+  -DCMAKE_CXX_COMPILER="/$prefix/bin/clang++"
   ### LLVM_ENABLE_LLD and LLVM_USE_LINKER can't be set at the same time
   # -DLLVM_USE_LINKER=lld
   -DLLVM_ENABLE_LLD=ON
-  -DLLVM_ENABLE_LTO=Thin
+  -DLLVM_ENABLE_LTO=ON
+  -DLLVM_ENABLE_FATLTO=ON
+  -DLLVM_ENABLE_Z3_SOLVER=ON
 )
 
 prepare() {
@@ -101,6 +107,4 @@ package() {
   DESTDIR="$pkgdir" ninja -C build install
 
   echo "/$prefix/lib" | install -Dm644 /dev/stdin "$pkgdir"/etc/ld.so.conf.d/$pkgname.conf
-
-  ln -vsf "$pkgname" "$pkgdir"/opt/llvm-project
 }

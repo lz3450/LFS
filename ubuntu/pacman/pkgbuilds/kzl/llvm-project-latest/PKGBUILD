@@ -1,34 +1,35 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=llvm-project-latest
-pkgver=19.1.1
+pkgver=19.1.2
 pkgrel=1
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
 url="https://llvm.org/"
 license=('KZL')
-source=(git+https://github.com/llvm/llvm-project.git#tag=llvmorg-$pkgver)
-sha256sums=('820630585357aa7f5b4bba91b8c4590be3608e303c09b5bec024318ad8f60701')
+source=(git+https://github.com/llvm/llvm-project.git#tag=llvmorg-$pkgver
+        x86_64-pc-linux-gnu.conf)
+sha256sums=('e72e0233438eac97dac87b730213fd686cffaf52bee39b7540c4830285ad492a'
+            'bf731f4bd8da16a61aa5be125b4b1b4b0ddab1deaa25b2a87a012f281467bedb')
 
-# https://releases.llvm.org/19.0.0/docs/CMake.html
+# https://releases.llvm.org/19.1.0/docs/CMake.html
 
 prefix="usr/local"
 
 _cmake_options=(
   -DCMAKE_BUILD_TYPE=Release
-  -DCMAKE_INSTALL_PREFIX=/"$prefix"
-  -DCMAKE_INSTALL_LIBDIR="lib/llvm-${pkgver%%.*}"
+  -DCMAKE_INSTALL_PREFIX="/$prefix"
   -DCMAKE_INSTALL_LIBEXECDIR="libexec/llvm-${pkgver%%.*}"
   -DPython3_EXECUTABLE=$(which python3.12)
-  -DCMAKE_C_FLAGS="--target=$CHOST ${CFLAGS/-O2/-O3} $CPPFLAGS"
-  -DCMAKE_CXX_FLAGS="--target=$CHOST ${CXXFLAGS/-O2/-O3} $CPPFLAGS"
+  -DCMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS"
+  -DCMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS"
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 )
 
 _llvm_options=(
   -DLLVM_HOST_TRIPLE="$CHOST"
-  -DLLVM_DEFAULT_TARGET_TRIPLE="$CHOST"
+  -DLLVM_DEFAULT_TARGET_TRIPLE="x86_64-pc-linux-gnu"
   ### bolt;clang;clang-tools-extra;compiler-rt;cross-project-tests;libc;libclc;lld;lldb;mlir;openmp;polly;pstl;flang
   -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;flang"
   ### libc;libunwind;libcxxabi;pstl;libcxx;compiler-rt;openmp;llvm-libgcc;offload
@@ -38,6 +39,9 @@ _llvm_options=(
   -DLLVM_PARALLEL_LINK_JOBS="$(nproc)"
   -DLLVM_BUILD_LLVM_DYLIB=ON
   -DLLVM_LINK_LLVM_DYLIB=ON
+  ################################################################
+  -DLLVM_INCLUDE_TOOLS=ON
+  -DLLVM_BUILD_TOOLS=ON
   -DLLVM_INCLUDE_DOCS=OFF
   -DLLVM_BUILD_DOCS=OFF
   -DLLVM_INCLUDE_EXAMPLES=OFF
@@ -46,17 +50,11 @@ _llvm_options=(
   -DLLVM_BUILD_TESTS=OFF
   -DLLVM_INCLUDE_BENCHMARKS=OFF
   -DLLVM_BUILD_BENCHMARKS=OFF
-  -DLLVM_ENABLE_FATLTO=ON
-  -DLLVM_ENABLE_BINDINGS=OFF
+  ################################################################
   -DLLVM_ENABLE_FFI=ON
   -DLLVM_ENABLE_RTTI=ON
+  -DLLVM_ENABLE_BINDINGS=OFF
   -DLLVM_INSTALL_UTILS=ON
-  ################################################################
-  ### libc/libc++
-  ################################################################
-  -DLLVM_ENABLE_LLVM_LIBC=ON
-  -DLLVM_ENABLE_LIBCXX=ON
-  ################################################################
   -DLLVM_APPEND_VC_REV=OFF
 )
 
@@ -74,12 +72,14 @@ _stage1_options=(
 )
 
 _stage2_options=(
-  -DCMAKE_C_COMPILER=/"$prefix"/bin/clang
-  -DCMAKE_CXX_COMPILER=/"$prefix"/bin/clang++
+  -DCMAKE_C_COMPILER="/$prefix/bin/clang"
+  -DCMAKE_CXX_COMPILER="/$prefix/bin/clang++"
   ### LLVM_ENABLE_LLD and LLVM_USE_LINKER can't be set at the same time
   # -DLLVM_USE_LINKER=lld
   -DLLVM_ENABLE_LLD=ON
-  -DLLVM_ENABLE_LTO=Thin
+  -DLLVM_ENABLE_LTO=ON
+  -DLLVM_ENABLE_FATLTO=ON
+  -DLLVM_ENABLE_Z3_SOLVER=ON
   ################################################################
   ### rtlib
   ################################################################
@@ -88,6 +88,8 @@ _stage2_options=(
   ################################################################
   ### libc/libc++
   ################################################################
+  -DLLVM_ENABLE_LLVM_LIBC=ON
+  -DLLVM_ENABLE_LIBCXX=ON
   -DCLANG_DEFAULT_CXX_STDLIB=libc++
   -DLIBC_ENABLE_USE_BY_CLANG=ON
   -DLIBCXX_USE_COMPILER_RT=ON
@@ -111,7 +113,8 @@ prepare() {
     "${_options[@]}" \
     -S llvm \
     -B build \
-    -G Ninja
+    -G Ninja \
+    -LAH
 }
 
 build() {
@@ -124,4 +127,6 @@ package() {
   cd llvm-project
 
   DESTDIR="$pkgdir" ninja -C build install
+
+  install -Dm644 -t "$pkgdir"/etc/ld.so.conf.d/ "$srcdir"/x86_64-pc-linux-gnu.conf
 }

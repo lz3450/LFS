@@ -322,7 +322,7 @@ CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/usr/local/bin/clang-scan-deps
 CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/local/bin/llvm-ranlib
 
 //Flags used by the CXX compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=--target=x86_64-linux-gnu -march=native -O3 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_GLIBCXX_ASSERTIONS
+CMAKE_CXX_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_GLIBCXX_ASSERTIONS
 
 //Flags used by the CXX compiler during DEBUG builds.
 CMAKE_CXX_FLAGS_DEBUG:STRING=-g
@@ -358,7 +358,7 @@ CMAKE_C_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/usr/local/bin/clang-scan-deps
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/local/bin/llvm-ranlib
 
 //Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=--target=x86_64-linux-gnu -march=native -O3 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection
+CMAKE_C_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection
 
 //Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -415,7 +415,7 @@ CMAKE_INSTALL_INCLUDEDIR:PATH=include
 CMAKE_INSTALL_INFODIR:PATH=
 
 //Object code libraries (lib)
-CMAKE_INSTALL_LIBDIR:PATH=lib/llvm-19
+CMAKE_INSTALL_LIBDIR:PATH=lib
 
 //Program executables (libexec)
 CMAKE_INSTALL_LIBEXECDIR:PATH=libexec/llvm-19
@@ -747,7 +747,7 @@ GCC_INSTALL_PREFIX:PATH=
 GIT_EXECUTABLE:FILEPATH=/usr/bin/git
 
 //The gold linker
-GOLD_EXECUTABLE:FILEPATH=/usr/bin/x86_64-linux-gnu-ld.gold
+GOLD_EXECUTABLE:FILEPATH=/usr/bin/ld.gold
 
 //Path to gRPC library manual installation.
 GRPC_INSTALL_PATH:PATH=
@@ -984,7 +984,7 @@ LLVM_CCACHE_BUILD:BOOL=OFF
 LLVM_CODESIGNING_IDENTITY:STRING=
 
 //Default target for which LLVM will generate code.
-LLVM_DEFAULT_TARGET_TRIPLE:STRING=x86_64-linux-gnu
+LLVM_DEFAULT_TARGET_TRIPLE:STRING=x86_64-pc-linux-gnu
 
 //Dependency debugging mode to verify correctly expressed library
 // dependencies (Darwin only)
@@ -1076,7 +1076,7 @@ LLVM_ENABLE_LOCAL_SUBMODULE_VISIBILITY:BOOL=ON
 
 //Build LLVM with LTO. May be specified as Thin or Full to use
 // a particular kind of LTO
-LLVM_ENABLE_LTO:STRING=Thin
+LLVM_ENABLE_LTO:STRING=ON
 
 //Compile with C++ modules enabled.
 LLVM_ENABLE_MODULES:BOOL=OFF
@@ -1138,7 +1138,7 @@ LLVM_ENABLE_WARNINGS:BOOL=ON
 LLVM_ENABLE_WERROR:BOOL=OFF
 
 //Enable Support for the Z3 constraint solver in LLVM.
-LLVM_ENABLE_Z3_SOLVER:BOOL=OFF
+LLVM_ENABLE_Z3_SOLVER:BOOL=ON
 
 //Use zlib for compression/decompression if available. Can be ON,
 // OFF, or FORCE_ON
@@ -1911,6 +1911,12 @@ TOOL_INFO_PLIST:STRING=Info.plist
 USE_DEPRECATED_GCC_INSTALL_PREFIX:BOOL=OFF
 
 //Path to a file.
+Z3_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+Z3_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libz3.so
+
+//Path to a file.
 ZLIB_INCLUDE_DIR:PATH=/usr/include
 
 //Path to a library.
@@ -2363,6 +2369,8 @@ FIND_PACKAGE_MESSAGE_DETAILS_LibXml2:INTERNAL=[/usr/lib/x86_64-linux-gnu/libxml2
 FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/usr/local/bin/python3.12][cfound components: Interpreter ][v3.12.7(3.0)]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+//Details about finding Z3
+FIND_PACKAGE_MESSAGE_DETAILS_Z3:INTERNAL=[/usr/lib/x86_64-linux-gnu/libz3.so][/usr/include][v4.8.12(4.8.9)]
 //Details about finding ZLIB
 FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[/usr/lib/x86_64-linux-gnu/libz.so][/usr/include][c ][v1.3()]
 //ADVANCED property for variable: FLANG_EXECUTABLE_VERSION
@@ -2936,6 +2944,14 @@ PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG:INTERNAL=1
 //ADVANCED property for variable: SWIG_EXECUTABLE
 SWIG_EXECUTABLE-ADVANCED:INTERNAL=1
+//Result of TRY_COMPILE
+Z3_COMPILED:INTERNAL=TRUE
+//ADVANCED property for variable: Z3_INCLUDE_DIR
+Z3_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Z3_LIBRARIES
+Z3_LIBRARIES-ADVANCED:INTERNAL=1
+//Result of try_run()
+Z3_RETURNCODE:INTERNAL=0
 //ADVANCED property for variable: ZLIB_INCLUDE_DIR
 ZLIB_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ZLIB_LIBRARY_DEBUG

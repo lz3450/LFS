@@ -32,16 +32,6 @@ Backtrace_INCLUDE_DIR:PATH=/usr/include
 //Library providing backtrace(3), empty for default set of libraries
 Backtrace_LIBRARY:FILEPATH=
 
-//Build XPC Support For Clangd.
-CLANGD_BUILD_XPC:BOOL=0
-
-//Call malloc_trim(3) periodically in Clangd. (only takes effect
-// when using glibc)
-CLANGD_MALLOC_TRIM:BOOL=ON
-
-//Link all clang-tidy checks into clangd
-CLANGD_TIDY_CHECKS:BOOL=ON
-
 //Build CLANG example programs by default.
 CLANG_BUILD_EXAMPLES:BOOL=OFF
 
@@ -84,9 +74,6 @@ CLANG_ENABLE_ARCMT:BOOL=ON
 
 //No help, variable specified on the command line.
 CLANG_ENABLE_BOOTSTRAP:UNINITIALIZED=OFF
-
-//Build clangd language server
-CLANG_ENABLE_CLANGD:BOOL=ON
 
 //Build Clang protobuf fuzzer.
 CLANG_ENABLE_PROTO_FUZZER:BOOL=OFF
@@ -138,14 +125,8 @@ CLANG_SYSTEMZ_DEFAULT_ARCH:STRING=z10
 //Native TableGen executable. Saves building one when cross-compiling.
 CLANG_TABLEGEN:STRING=clang-tblgen
 
-//Include static analyzer checks in clang-tidy
-CLANG_TIDY_ENABLE_STATIC_ANALYZER:BOOL=ON
-
 //Enable AST introspection
 CLANG_TOOLING_BUILD_AST_INTROSPECTION:BOOL=ON
-
-//Generate build targets for the Clang Extra Tools docs.
-CLANG_TOOLS_EXTRA_INCLUDE_DOCS:BOOL=OFF
 
 //Whether to build amdgpu-arch as part of CLANG
 CLANG_TOOL_AMDGPU_ARCH_BUILD:BOOL=ON
@@ -252,6 +233,9 @@ CMAKE_ASM_COMPILER:FILEPATH=/opt/llvm-project-14/bin/clang
 //LLVM archiver
 CMAKE_ASM_COMPILER_AR:FILEPATH=/opt/llvm-project-14/bin/llvm-ar
 
+//`clang-scan-deps` dependency scanner
+CMAKE_ASM_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/opt/llvm-project-14/bin/clang-scan-deps
+
 //Generate index for LLVM archive
 CMAKE_ASM_COMPILER_RANLIB:FILEPATH=/opt/llvm-project-14/bin/llvm-ranlib
 
@@ -286,6 +270,9 @@ CMAKE_CXX_COMPILER:STRING=/opt/llvm-project-14/bin/clang++
 //LLVM archiver
 CMAKE_CXX_COMPILER_AR:FILEPATH=/opt/llvm-project-14/bin/llvm-ar
 
+//`clang-scan-deps` dependency scanner
+CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/opt/llvm-project-14/bin/clang-scan-deps
+
 //Generate index for LLVM archive
 CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/opt/llvm-project-14/bin/llvm-ranlib
 
@@ -318,6 +305,9 @@ CMAKE_C_COMPILER:STRING=/opt/llvm-project-14/bin/clang
 
 //LLVM archiver
 CMAKE_C_COMPILER_AR:FILEPATH=/opt/llvm-project-14/bin/llvm-ar
+
+//`clang-scan-deps` dependency scanner
+CMAKE_C_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/opt/llvm-project-14/bin/clang-scan-deps
 
 //Generate index for LLVM archive
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/opt/llvm-project-14/bin/llvm-ranlib
@@ -355,8 +345,11 @@ CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
 //Flags used by the linker during RELWITHDEBINFO builds.
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
-//Enable/Disable output of compile commands during generation.
-CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
+//No help, variable specified on the command line.
+CMAKE_EXPORT_COMPILE_COMMANDS:UNINITIALIZED=ON
+
+//Value Computed by CMake.
+CMAKE_FIND_PACKAGE_REDIRECTS_DIR:STATIC=/home/kzl/makepkg/build/llvm-project-14/src/llvm-project/build/CMakeFiles/pkgRedirects
 
 //User executables (bin)
 CMAKE_INSTALL_BINDIR:PATH=bin
@@ -524,14 +517,14 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 //Path to a program.
 CMAKE_STRIP:FILEPATH=/opt/llvm-project-14/bin/llvm-strip
 
+//Path to a program.
+CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
+
 //If this value is on, makefiles will be generated without the
 // .SILENT directive, and all commands will be echoed to the console
 // during the make.  This is useful for debugging only. With Visual
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
-
-//No help, variable specified on the command line.
-COMPILER_RT_DEFAULT_TARGET_ONLY:UNINITIALIZED=ON
 
 //Enable to build Debian packages
 CPACK_BINARY_DEB:BOOL=OFF
@@ -660,38 +653,17 @@ CUDA_cufft_LIBRARY:FILEPATH=CUDA_cufft_LIBRARY-NOTFOUND
 //"cufftemu" library
 CUDA_cufftemu_LIBRARY:FILEPATH=CUDA_cufftemu_LIBRARY-NOTFOUND
 
-//Path to a library.
-CURSES_CURSES_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libcurses.so
-
-//Path to a library.
-CURSES_FORM_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libform.so
-
-//Path to a file.
-CURSES_INCLUDE_PATH:PATH=/usr/include
-
-//Path to a library.
-CURSES_NCURSES_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libncurses.so
-
 //Colon separated list of directories clang will search for headers.
 C_INCLUDE_DIRS:STRING=
 
 //Default <path> to all compiler invocations for --sysroot=<path>.
 DEFAULT_SYSROOT:STRING=
 
-//Dot tool for use with Doxygen
-DOXYGEN_DOT_EXECUTABLE:FILEPATH=DOXYGEN_DOT_EXECUTABLE-NOTFOUND
-
-//Doxygen documentation generation tool (http://www.doxygen.org)
-DOXYGEN_EXECUTABLE:FILEPATH=DOXYGEN_EXECUTABLE-NOTFOUND
-
 //pass --build-id to ld
 ENABLE_LINKER_BUILD_ID:BOOL=OFF
 
 //enable x86 relax relocations by default
 ENABLE_X86_RELAX_RELOCATIONS:BOOL=ON
-
-//The directory containing a CMake configuration file for FBSDVMCore.
-FBSDVMCore_DIR:PATH=FBSDVMCore_DIR-NOTFOUND
 
 //Additional directory, where CMake should search for ffi.h or
 // ffi/ffi.h
@@ -718,23 +690,11 @@ GOLD_EXECUTABLE:FILEPATH=/usr/bin/ld.gold
 //go executable
 GO_EXECUTABLE:FILEPATH=GO_EXECUTABLE-NOTFOUND
 
-//Path to gRPC library manual installation.
-GRPC_INSTALL_PATH:PATH=
-
 //Build libclang as a static library (in addition to a shared one)
 LIBCLANG_BUILD_STATIC:BOOL=OFF
 
 //Major version number that will be appended to the libclang library
 LIBCLANG_LIBRARY_VERSION:STRING=14
-
-//Path to a file.
-LIBLZMA_INCLUDE_DIR:PATH=/usr/include
-
-//Path to a library.
-LIBLZMA_LIBRARY_DEBUG:FILEPATH=LIBLZMA_LIBRARY_DEBUG-NOTFOUND
-
-//Path to a library.
-LIBLZMA_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/liblzma.so
 
 //Path to a file.
 LIBXML2_INCLUDE_DIR:PATH=/usr/include/libxml2
@@ -744,72 +704,6 @@ LIBXML2_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libxml2.so
 
 //Path to a program.
 LIBXML2_XMLLINT_EXECUTABLE:FILEPATH=LIBXML2_XMLLINT_EXECUTABLE-NOTFOUND
-
-//Build LLDB.framework (Darwin only)
-LLDB_BUILD_FRAMEWORK:BOOL=OFF
-
-//Enable Building of Intel(R) Memory Protection Extensions
-LLDB_BUILD_INTEL_MPX:BOOL=ON
-
-//Enable Building of Intel(R) Processor Trace Tool
-LLDB_BUILD_INTEL_PT:BOOL=OFF
-
-//Enable curses support in LLDB On, Off or Auto (default)
-LLDB_ENABLE_CURSES:STRING=Auto
-
-//Enable libfbsdvmcore support in LLDB On, Off or Auto (default)
-LLDB_ENABLE_FBSDVMCORE:STRING=Auto
-
-//Enable editline support in LLDB On, Off or Auto (default)
-LLDB_ENABLE_LIBEDIT:STRING=Auto
-
-//Enable Libxml 2 support in LLDB On, Off or Auto (default)
-LLDB_ENABLE_LIBXML2:STRING=Auto
-
-//Enable Lua scripting support in LLDB On, Off or Auto (default)
-LLDB_ENABLE_LUA:STRING=Auto
-
-//Enable LZMA compression support in LLDB On, Off or Auto (default)
-LLDB_ENABLE_LZMA:STRING=Auto
-
-//Enable Python scripting support in LLDB On, Off or Auto (default)
-LLDB_ENABLE_PYTHON:STRING=Auto
-
-//Causes lldb to export all symbols when building liblldb.
-LLDB_EXPORT_ALL_SYMBOLS:BOOL=0
-
-//Generate build targets for the LLDB unit tests.
-LLDB_INCLUDE_TESTS:BOOL=OFF
-
-//Disable default RPATH settings in binaries
-LLDB_NO_INSTALL_DEFAULT_RPATH:BOOL=OFF
-
-//Whether to skip generating a dSYM when installing lldb.
-LLDB_SKIP_DSYM:BOOL=OFF
-
-//Whether to skip stripping of binaries when installing lldb.
-LLDB_SKIP_STRIP:BOOL=OFF
-
-//Native TableGen executable. Saves building one when cross-compiling.
-LLDB_TABLEGEN:STRING=lldb-tblgen
-
-//Whether to build lldb-instr as part of LLDB
-LLDB_TOOL_LLDB_INSTR_BUILD:BOOL=ON
-
-//Whether to build lldb-server as part of LLDB
-LLDB_TOOL_LLDB_SERVER_BUILD:BOOL=ON
-
-//Whether to build lldb-vscode as part of LLDB
-LLDB_TOOL_LLDB_VSCODE_BUILD:BOOL=ON
-
-//When codesigning, use entitlements if available
-LLDB_USE_ENTITLEMENTS:BOOL=ON
-
-//Use the system's debugserver for testing (Darwin only).
-LLDB_USE_SYSTEM_DEBUGSERVER:BOOL=OFF
-
-//Use six.py shipped with system and do not install a copy of it
-LLDB_USE_SYSTEM_SIX:BOOL=OFF
 
 //Build the lld tools. If OFF, just generate build targets.
 LLD_BUILD_TOOLS:BOOL=ON
@@ -891,7 +785,7 @@ LLVM_CCACHE_BUILD:BOOL=OFF
 LLVM_CODESIGNING_IDENTITY:STRING=
 
 //Default target for which LLVM will generate code.
-LLVM_DEFAULT_TARGET_TRIPLE:STRING=x86_64-unknown-linux-gnu
+LLVM_DEFAULT_TARGET_TRIPLE:STRING=x86_64-pc-linux-gnu
 
 //Dependency debugging mode to verify correctly expressed library
 // dependencies (Darwin only)
@@ -936,6 +830,9 @@ LLVM_ENABLE_EH:BOOL=OFF
 //Enable expensive checks
 LLVM_ENABLE_EXPENSIVE_CHECKS:BOOL=OFF
 
+//No help, variable specified on the command line.
+LLVM_ENABLE_FATLTO:UNINITIALIZED=ON
+
 //Use libffi to call external functions from the interpreter
 LLVM_ENABLE_FFI:BOOL=ON
 
@@ -969,7 +866,7 @@ LLVM_ENABLE_LOCAL_SUBMODULE_VISIBILITY:BOOL=ON
 
 //Build LLVM with LTO. May be specified as Thin or Full to use
 // a particular kind of LTO
-LLVM_ENABLE_LTO:STRING=Thin
+LLVM_ENABLE_LTO:STRING=ON
 
 //Compile with C++ modules enabled.
 LLVM_ENABLE_MODULES:BOOL=OFF
@@ -997,7 +894,7 @@ LLVM_ENABLE_PLUGINS:BOOL=ON
 
 //Semicolon-separated list of projects to build (bolt;clang;clang-tools-extra;compiler-rt;cross-project-tests;libc;libclc;libcxx;libcxxabi;libunwind;lld;lldb;mlir;openmp;polly;pstl;flang),
 // or "all".
-LLVM_ENABLE_PROJECTS:STRING=clang;clang-tools-extra;lld;lldb
+LLVM_ENABLE_PROJECTS:STRING=clang;lld
 
 LLVM_ENABLE_PROJECTS_USED:BOOL=ON
 
@@ -1006,7 +903,7 @@ LLVM_ENABLE_RTTI:BOOL=ON
 
 //Semicolon-separated list of runtimes to build (compiler-rt;libc;libcxx;libcxxabi;libunwind;openmp),
 // or "all".
-LLVM_ENABLE_RUNTIMES:STRING=compiler-rt
+LLVM_ENABLE_RUNTIMES:STRING=
 
 //Use Sphinx to generate llvm documentation.
 LLVM_ENABLE_SPHINX:BOOL=OFF
@@ -1031,7 +928,7 @@ LLVM_ENABLE_WARNINGS:BOOL=ON
 LLVM_ENABLE_WERROR:BOOL=OFF
 
 //Enable Support for the Z3 constraint solver in LLVM.
-LLVM_ENABLE_Z3_SOLVER:BOOL=OFF
+LLVM_ENABLE_Z3_SOLVER:BOOL=ON
 
 //Use zlib for compression/decompression if available. Can be ON,
 // OFF, or FORCE_ON
@@ -1056,7 +953,8 @@ LLVM_EXTERNAL_BOLT_SOURCE_DIR:PATH=
 
 LLVM_EXTERNAL_CLANG_SOURCE_DIR:PATH=/home/kzl/makepkg/build/llvm-project-14/src/llvm-project/llvm/../clang
 
-LLVM_EXTERNAL_CLANG_TOOLS_EXTRA_SOURCE_DIR:PATH=/home/kzl/makepkg/build/llvm-project-14/src/llvm-project/llvm/../clang-tools-extra
+//Path to clang-tools-extra source directory
+LLVM_EXTERNAL_CLANG_TOOLS_EXTRA_SOURCE_DIR:PATH=
 
 //Path to compiler-rt source directory
 LLVM_EXTERNAL_COMPILER_RT_SOURCE_DIR:PATH=
@@ -1079,7 +977,8 @@ LLVM_EXTERNAL_LIBC_SOURCE_DIR:PATH=
 //Path to libunwind source directory
 LLVM_EXTERNAL_LIBUNWIND_SOURCE_DIR:PATH=
 
-LLVM_EXTERNAL_LLDB_SOURCE_DIR:PATH=/home/kzl/makepkg/build/llvm-project-14/src/llvm-project/llvm/../lldb
+//Path to lldb source directory
+LLVM_EXTERNAL_LLDB_SOURCE_DIR:PATH=
 
 LLVM_EXTERNAL_LLD_SOURCE_DIR:PATH=/home/kzl/makepkg/build/llvm-project-14/src/llvm-project/llvm/../lld
 
@@ -1113,7 +1012,7 @@ LLVM_FORCE_ENABLE_STATS:BOOL=OFF
 LLVM_FORCE_USE_OLD_TOOLCHAIN:BOOL=OFF
 
 //Host on which LLVM binaries will run
-LLVM_HOST_TRIPLE:STRING=x86_64-unknown-linux-gnu
+LLVM_HOST_TRIPLE:STRING=x86_64-linux-gnu
 
 //Generate benchmark targets. If OFF, benchmarks can't be built.
 LLVM_INCLUDE_BENCHMARKS:BOOL=OFF
@@ -1250,7 +1149,7 @@ LLVM_TOOL_BUGPOINT_PASSES_BUILD:BOOL=ON
 LLVM_TOOL_CLANG_BUILD:BOOL=TRUE
 
 //Whether to build clang-tools-extra as part of LLVM
-LLVM_TOOL_CLANG_TOOLS_EXTRA_BUILD:BOOL=TRUE
+LLVM_TOOL_CLANG_TOOLS_EXTRA_BUILD:BOOL=FALSE
 
 //Whether to build compiler-rt as part of LLVM
 LLVM_TOOL_COMPILER_RT_BUILD:BOOL=FALSE
@@ -1289,7 +1188,7 @@ LLVM_TOOL_LIBUNWIND_BUILD:BOOL=FALSE
 LLVM_TOOL_LLC_BUILD:BOOL=ON
 
 //Whether to build lldb as part of LLVM
-LLVM_TOOL_LLDB_BUILD:BOOL=TRUE
+LLVM_TOOL_LLDB_BUILD:BOOL=FALSE
 
 //Whether to build lld as part of LLVM
 LLVM_TOOL_LLD_BUILD:BOOL=TRUE
@@ -1598,20 +1497,11 @@ LLVM_WINDOWS_PREFER_FORWARD_SLASH:BOOL=OFF
 //Install directory of the Z3 solver.
 LLVM_Z3_INSTALL_DIR:STRING=
 
-//Path to a file.
-LibEdit_INCLUDE_DIRS:PATH=/usr/include
-
-//Path to a library.
-LibEdit_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libedit.so
-
 //Ninja version number
-NINJA_VERSION:STRING=1.10.1
+NINJA_VERSION:STRING=1.11.1
 
 //Path to a program.
 OCAMLFIND:FILEPATH=OCAMLFIND-NOTFOUND
-
-//The curses panel library
-PANEL_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libpanel.so
 
 //Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=
@@ -1635,9 +1525,6 @@ PY_YAML_FOUND:BOOL=OFF
 //No help, variable specified on the command line.
 Python3_EXECUTABLE:UNINITIALIZED=/usr/local/bin/python3.12
 
-//Path to a program.
-SWIG_EXECUTABLE:FILEPATH=SWIG_EXECUTABLE-NOTFOUND
-
 //Path to TensorFlow pip install dir
 TENSORFLOW_AOT_PATH:PATH=
 
@@ -1651,6 +1538,12 @@ TOOL_INFO_PLIST:STRING=Info.plist
 Terminfo_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libtinfo.so
 
 //Path to a file.
+Z3_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+Z3_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libz3.so
+
+//Path to a file.
 ZLIB_INCLUDE_DIR:PATH=/usr/include
 
 //Path to a library.
@@ -1661,15 +1554,6 @@ ZLIB_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libz.so
 
 //The directory containing a CMake configuration file for hsa-runtime64.
 hsa-runtime64_DIR:PATH=hsa-runtime64_DIR-NOTFOUND
-
-//Path to a library.
-pkgcfg_lib_NCURSES_ncurses:FILEPATH=/usr/lib/x86_64-linux-gnu/libncurses.so
-
-//Path to a library.
-pkgcfg_lib_NCURSES_tinfo:FILEPATH=/usr/lib/x86_64-linux-gnu/libtinfo.so
-
-//Path to a library.
-pkgcfg_lib_PC_LIBEDIT_edit:FILEPATH=/usr/lib/x86_64-linux-gnu/libedit.so
 
 //Path to a library.
 pkgcfg_lib_PC_LIBXML_xml2:FILEPATH=/usr/lib/x86_64-linux-gnu/libxml2.so
@@ -1751,6 +1635,8 @@ CMAKE_AR-ADVANCED:INTERNAL=1
 CMAKE_ASM_COMPILER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ASM_COMPILER_AR
 CMAKE_ASM_COMPILER_AR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_ASM_COMPILER_CLANG_SCAN_DEPS
+CMAKE_ASM_COMPILER_CLANG_SCAN_DEPS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ASM_COMPILER_RANLIB
 CMAKE_ASM_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 CMAKE_ASM_COMPILER_WORKS:INTERNAL=1
@@ -1769,9 +1655,9 @@ CMAKE_CACHEFILE_DIR:INTERNAL=/home/kzl/makepkg/build/llvm-project-14/src/llvm-pr
 //Major version of cmake used to create the current loaded cache
 CMAKE_CACHE_MAJOR_VERSION:INTERNAL=3
 //Minor version of cmake used to create the current loaded cache
-CMAKE_CACHE_MINOR_VERSION:INTERNAL=22
+CMAKE_CACHE_MINOR_VERSION:INTERNAL=28
 //Patch version of cmake used to create the current loaded cache
-CMAKE_CACHE_PATCH_VERSION:INTERNAL=1
+CMAKE_CACHE_PATCH_VERSION:INTERNAL=3
 //Path to CMake executable.
 CMAKE_COMMAND:INTERNAL=/usr/bin/cmake
 //Path to cpack program executable.
@@ -1782,6 +1668,8 @@ CMAKE_CTEST_COMMAND:INTERNAL=/usr/bin/ctest
 CMAKE_CXX_COMPILER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_COMPILER_AR
 CMAKE_CXX_COMPILER_AR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS
+CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_COMPILER_RANLIB
 CMAKE_CXX_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_FLAGS
@@ -1798,6 +1686,8 @@ CMAKE_CXX_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 CMAKE_C_COMPILER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_COMPILER_AR
 CMAKE_C_COMPILER_AR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_C_COMPILER_CLANG_SCAN_DEPS
+CMAKE_C_COMPILER_CLANG_SCAN_DEPS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_COMPILER_RANLIB
 CMAKE_C_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_FLAGS
@@ -1824,8 +1714,6 @@ CMAKE_EXE_LINKER_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
 CMAKE_EXE_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_EXPORT_COMPILE_COMMANDS
-CMAKE_EXPORT_COMPILE_COMMANDS-ADVANCED:INTERNAL=1
 //Name of external makefile project generator.
 CMAKE_EXTRA_GENERATOR:INTERNAL=
 //Name of generator.
@@ -1838,8 +1726,6 @@ CMAKE_GENERATOR_PLATFORM:INTERNAL=
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
 //Test CMAKE_HAVE_LIBC_PTHREAD
 CMAKE_HAVE_LIBC_PTHREAD:INTERNAL=1
-//Have include pthread.h
-CMAKE_HAVE_PTHREAD_H:INTERNAL=1
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=/home/kzl/makepkg/build/llvm-project-14/src/llvm-project/llvm
@@ -1894,7 +1780,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=493
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=301
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -1906,7 +1792,7 @@ CMAKE_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_READELF
 CMAKE_READELF-ADVANCED:INTERNAL=1
 //Path to CMake installation.
-CMAKE_ROOT:INTERNAL=/usr/share/cmake-3.22
+CMAKE_ROOT:INTERNAL=/usr/share/cmake-3.28
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS
 CMAKE_SHARED_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_DEBUG
@@ -1933,6 +1819,8 @@ CMAKE_STATIC_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_STRIP
 CMAKE_STRIP-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_TAPI
+CMAKE_TAPI-ADVANCED:INTERNAL=1
 //uname command
 CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
@@ -2024,19 +1912,11 @@ CUDA_cufft_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CUDA_cufftemu_LIBRARY
 CUDA_cufftemu_LIBRARY-ADVANCED:INTERNAL=1
 //Location of make2cmake.cmake
-CUDA_make2cmake:INTERNAL=/usr/share/cmake-3.22/Modules/FindCUDA/make2cmake.cmake
+CUDA_make2cmake:INTERNAL=/usr/share/cmake-3.28/Modules/FindCUDA/make2cmake.cmake
 //Location of parse_cubin.cmake
-CUDA_parse_cubin:INTERNAL=/usr/share/cmake-3.22/Modules/FindCUDA/parse_cubin.cmake
+CUDA_parse_cubin:INTERNAL=/usr/share/cmake-3.28/Modules/FindCUDA/parse_cubin.cmake
 //Location of run_nvcc.cmake
-CUDA_run_nvcc:INTERNAL=/usr/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-//ADVANCED property for variable: CURSES_CURSES_LIBRARY
-CURSES_CURSES_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CURSES_FORM_LIBRARY
-CURSES_FORM_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CURSES_INCLUDE_PATH
-CURSES_INCLUDE_PATH-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CURSES_NCURSES_LIBRARY
-CURSES_NCURSES_LIBRARY-ADVANCED:INTERNAL=1
+CUDA_run_nvcc:INTERNAL=/usr/share/cmake-3.28/Modules/FindCUDA/run_nvcc.cmake
 //Test CXX_SUPPORTS_CLASS_MEMACCESS_FLAG
 CXX_SUPPORTS_CLASS_MEMACCESS_FLAG:INTERNAL=
 //Test CXX_SUPPORTS_COVERED_SWITCH_DEFAULT_FLAG
@@ -2061,18 +1941,8 @@ CXX_SUPPORTS_MISLEADING_INDENTATION_FLAG:INTERNAL=1
 CXX_SUPPORTS_MISSING_FIELD_INITIALIZERS_FLAG:INTERNAL=1
 //Test CXX_SUPPORTS_NOEXCEPT_TYPE_FLAG
 CXX_SUPPORTS_NOEXCEPT_TYPE_FLAG:INTERNAL=1
-//Test CXX_SUPPORTS_NO_DEPRECATED_DECLARATIONS
-CXX_SUPPORTS_NO_DEPRECATED_DECLARATIONS:INTERNAL=1
-//Test CXX_SUPPORTS_NO_DEPRECATED_REGISTER
-CXX_SUPPORTS_NO_DEPRECATED_REGISTER:INTERNAL=1
 //Test CXX_SUPPORTS_NO_NESTED_ANON_TYPES_FLAG
 CXX_SUPPORTS_NO_NESTED_ANON_TYPES_FLAG:INTERNAL=1
-//Test CXX_SUPPORTS_NO_STRICT_ALIASING
-CXX_SUPPORTS_NO_STRICT_ALIASING:INTERNAL=1
-//Test CXX_SUPPORTS_NO_UNKNOWN_PRAGMAS
-CXX_SUPPORTS_NO_UNKNOWN_PRAGMAS:INTERNAL=1
-//Test CXX_SUPPORTS_NO_VLA_EXTENSION
-CXX_SUPPORTS_NO_VLA_EXTENSION:INTERNAL=1
 //Test CXX_SUPPORTS_STRING_CONVERSION_FLAG
 CXX_SUPPORTS_STRING_CONVERSION_FLAG:INTERNAL=1
 //Test CXX_SUPPORTS_SUGGEST_OVERRIDE_FLAG
@@ -2111,10 +1981,6 @@ C_SUPPORTS_WERROR_DATE_TIME:INTERNAL=1
 C_SUPPORTS_WERROR_UNGUARDED_AVAILABILITY_NEW:INTERNAL=1
 //Test C_WCOMMENT_ALLOWS_LINE_WRAP
 C_WCOMMENT_ALLOWS_LINE_WRAP:INTERNAL=1
-//ADVANCED property for variable: DOXYGEN_DOT_EXECUTABLE
-DOXYGEN_DOT_EXECUTABLE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: DOXYGEN_EXECUTABLE
-DOXYGEN_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: FFI_HEADER
 FFI_HEADER-ADVANCED:INTERNAL=1
 FFI_HEADER:INTERNAL=ffi.h
@@ -2124,32 +1990,26 @@ FFI_INCLUDE_DIRS-ADVANCED:INTERNAL=1
 FFI_LIBRARIES-ADVANCED:INTERNAL=1
 //Details about finding Backtrace
 FIND_PACKAGE_MESSAGE_DETAILS_Backtrace:INTERNAL=[/usr/include][v()]
-//Details about finding CursesAndPanel
-FIND_PACKAGE_MESSAGE_DETAILS_CursesAndPanel:INTERNAL=[/usr/include][/usr/lib/x86_64-linux-gnu/libcurses.so;/usr/lib/x86_64-linux-gnu/libform.so][/usr/lib/x86_64-linux-gnu/libpanel.so][v()]
 //Details about finding FFI
 FIND_PACKAGE_MESSAGE_DETAILS_FFI:INTERNAL=[/usr/lib/x86_64-linux-gnu/libffi.so][/usr/include/x86_64-linux-gnu][1][v()]
 //Details about finding Git
-FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[/usr/bin/git][v2.34.1()]
-//Details about finding LibEdit
-FIND_PACKAGE_MESSAGE_DETAILS_LibEdit:INTERNAL=[/usr/include][/usr/lib/x86_64-linux-gnu/libedit.so][v.()]
-//Details about finding LibLZMA
-FIND_PACKAGE_MESSAGE_DETAILS_LibLZMA:INTERNAL=[/usr/lib/x86_64-linux-gnu/liblzma.so][/usr/include][1][1][1][v5.2.5()]
+FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[/usr/bin/git][v2.43.0()]
 //Details about finding LibXml2
-FIND_PACKAGE_MESSAGE_DETAILS_LibXml2:INTERNAL=[/usr/lib/x86_64-linux-gnu/libxml2.so][/usr/include/libxml2][v2.9.13(2.8)]
+FIND_PACKAGE_MESSAGE_DETAILS_LibXml2:INTERNAL=[/usr/lib/x86_64-linux-gnu/libxml2.so][/usr/include/libxml2][v2.9.14()]
 //Details about finding Python3
 FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/usr/local/bin/python3.12][cfound components: Interpreter ][v3.12.7(3.0)]
 //Details about finding Terminfo
 FIND_PACKAGE_MESSAGE_DETAILS_Terminfo:INTERNAL=[/usr/lib/x86_64-linux-gnu/libtinfo.so][1][v()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+//Details about finding Z3
+FIND_PACKAGE_MESSAGE_DETAILS_Z3:INTERNAL=[/usr/lib/x86_64-linux-gnu/libz3.so][/usr/include][v4.8.12(4.7.1)]
 //Details about finding ZLIB
-FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[/usr/lib/x86_64-linux-gnu/libz.so][/usr/include][v1.2.11()]
+FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[/usr/lib/x86_64-linux-gnu/libz.so][/usr/include][c ][v1.3()]
 //ADVANCED property for variable: GIT_EXECUTABLE
 GIT_EXECUTABLE-ADVANCED:INTERNAL=1
 //Test HAS_WERROR_GLOBAL_CTORS
 HAS_WERROR_GLOBAL_CTORS:INTERNAL=1
-//Have symbol accept4
-HAVE_ACCEPT4:INTERNAL=1
 //Have include CrashReporterClient.h
 HAVE_CRASHREPORTERCLIENT_H:INTERNAL=
 //Test HAVE_CXX_ATOMICS64_WITHOUT_LIB
@@ -2157,7 +2017,7 @@ HAVE_CXX_ATOMICS64_WITHOUT_LIB:INTERNAL=1
 //Test HAVE_CXX_ATOMICS_WITHOUT_LIB
 HAVE_CXX_ATOMICS_WITHOUT_LIB:INTERNAL=1
 //Have symbol arc4random
-HAVE_DECL_ARC4RANDOM:INTERNAL=
+HAVE_DECL_ARC4RANDOM:INTERNAL=1
 //Have symbol FE_ALL_EXCEPT
 HAVE_DECL_FE_ALL_EXCEPT:INTERNAL=1
 //Have symbol FE_INEXACT
@@ -2201,8 +2061,6 @@ HAVE_HISTEDIT_H:INTERNAL=1
 HAVE_INOTIFY:INTERNAL=1
 //Have symbol isatty
 HAVE_ISATTY:INTERNAL=1
-//Have library compression
-HAVE_LIBCOMPRESSION:INTERNAL=
 //Have library dl
 HAVE_LIBDL:INTERNAL=1
 //Have library edit
@@ -2219,8 +2077,6 @@ HAVE_LIBXML2:INTERNAL=1
 HAVE_LINK_H:INTERNAL=1
 //Have include linux/magic.h
 HAVE_LINUX_MAGIC_H:INTERNAL=1
-//Result of TRY_COMPILE
-HAVE_LLDB_EL_RFUNC_T_SIZE:INTERNAL=TRUE
 //Have symbol lseek64
 HAVE_LSEEK64:INTERNAL=1
 //Have include mach/mach.h
@@ -2235,16 +2091,10 @@ HAVE_MALLINFO2:INTERNAL=1
 HAVE_MALLOC_MALLOC_H:INTERNAL=
 //Have symbol malloc_zone_statistics
 HAVE_MALLOC_ZONE_STATISTICS:INTERNAL=
-//Have symbol __NR_process_vm_readv
-HAVE_NR_PROCESS_VM_READV:INTERNAL=1
 //Have symbol posix_spawn
 HAVE_POSIX_SPAWN:INTERNAL=1
-//Have symbol ppoll
-HAVE_PPOLL:INTERNAL=1
 //Have symbol pread
 HAVE_PREAD:INTERNAL=1
-//Have symbol process_vm_readv
-HAVE_PROCESS_VM_READV:INTERNAL=1
 //Have symbol proc_pid_rusage
 HAVE_PROC_PID_RUSAGE:INTERNAL=
 //Have symbol pthread_getname_np
@@ -2259,8 +2109,6 @@ HAVE_PTHREAD_MUTEX_LOCK:INTERNAL=1
 HAVE_PTHREAD_RWLOCK_INIT:INTERNAL=1
 //Have symbol pthread_setname_np
 HAVE_PTHREAD_SETNAME_NP:INTERNAL=1
-//Have symbol ptsname_r
-HAVE_PTSNAME_R:INTERNAL=1
 //Have symbol __register_frame
 HAVE_REGISTER_FRAME:INTERNAL=1
 //Have symbol sbrk
@@ -2273,10 +2121,6 @@ HAVE_SETRLIMIT:INTERNAL=1
 HAVE_SIGALTSTACK:INTERNAL=1
 //Have include signal.h
 HAVE_SIGNAL_H:INTERNAL=1
-//Have include stddef.h
-HAVE_STDDEF_H:INTERNAL=1
-//Have include stdint.h
-HAVE_STDINT_H:INTERNAL=1
 //Test HAVE_STD_IS_TRIVIALLY_COPYABLE
 HAVE_STD_IS_TRIVIALLY_COPYABLE:INTERNAL=1
 //Have symbol strerror
@@ -2291,8 +2135,6 @@ HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC:INTERNAL=1
 HAVE_SYSCONF:INTERNAL=1
 //Have include sysexits.h
 HAVE_SYSEXITS_H:INTERNAL=1
-//Have includes sys/types.h;sys/event.h
-HAVE_SYS_EVENT_H:INTERNAL=
 //Have include sys/ioctl.h
 HAVE_SYS_IOCTL_H:INTERNAL=1
 //Have include sys/mman.h
@@ -2321,18 +2163,6 @@ HAVE_ZLIB:INTERNAL=1
 HAVE__UNWIND_BACKTRACE:INTERNAL=1
 //ADVANCED property for variable: LIBCLANG_LIBRARY_VERSION
 LIBCLANG_LIBRARY_VERSION-ADVANCED:INTERNAL=1
-//Have library /usr/lib/x86_64-linux-gnu/liblzma.so
-LIBLZMA_HAS_AUTO_DECODER:INTERNAL=1
-//Have library /usr/lib/x86_64-linux-gnu/liblzma.so
-LIBLZMA_HAS_EASY_ENCODER:INTERNAL=1
-//Have library /usr/lib/x86_64-linux-gnu/liblzma.so
-LIBLZMA_HAS_LZMA_PRESET:INTERNAL=1
-//ADVANCED property for variable: LIBLZMA_INCLUDE_DIR
-LIBLZMA_INCLUDE_DIR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: LIBLZMA_LIBRARY_DEBUG
-LIBLZMA_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: LIBLZMA_LIBRARY_RELEASE
-LIBLZMA_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: LIBXML2_INCLUDE_DIR
 LIBXML2_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: LIBXML2_LIBRARY
@@ -2341,10 +2171,6 @@ LIBXML2_LIBRARY-ADVANCED:INTERNAL=1
 LIBXML2_XMLLINT_EXECUTABLE-ADVANCED:INTERNAL=1
 //Test LINKER_SUPPORTS_COLOR_DIAGNOSTICS
 LINKER_SUPPORTS_COLOR_DIAGNOSTICS:INTERNAL=1
-//Have symbol el_winsertstr
-LLDB_EDITLINE_USE_WCHAR:INTERNAL=1
-//CHECK_TYPE_SIZE: sizeof(el_rfunc_t)
-LLDB_EL_RFUNC_T_SIZE:INTERNAL=8
 //ADVANCED property for variable: LLVM_BUILD_INSTRUMENTED
 LLVM_BUILD_INSTRUMENTED-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: LLVM_BUILD_INSTRUMENTED_COVERAGE
@@ -2554,84 +2380,8 @@ LLVM_USING_GLIBC:INTERNAL=1
 LLVM_UTILS_INSTALL_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: LLVM_VP_COUNTERS_PER_SITE
 LLVM_VP_COUNTERS_PER_SITE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: LibEdit_INCLUDE_DIRS
-LibEdit_INCLUDE_DIRS-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: LibEdit_LIBRARIES
-LibEdit_LIBRARIES-ADVANCED:INTERNAL=1
-NCURSES_CFLAGS:INTERNAL=-D_DEFAULT_SOURCE;-D_XOPEN_SOURCE=600
-NCURSES_CFLAGS_I:INTERNAL=
-NCURSES_CFLAGS_OTHER:INTERNAL=-D_DEFAULT_SOURCE;-D_XOPEN_SOURCE=600
-NCURSES_FOUND:INTERNAL=1
-NCURSES_INCLUDEDIR:INTERNAL=/usr/include
-NCURSES_INCLUDE_DIRS:INTERNAL=
-NCURSES_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-lncurses;-ltinfo
-NCURSES_LDFLAGS_OTHER:INTERNAL=
-NCURSES_LIBDIR:INTERNAL=/usr/lib/x86_64-linux-gnu
-NCURSES_LIBRARIES:INTERNAL=ncurses;tinfo
-NCURSES_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu
-NCURSES_LIBS:INTERNAL=
-NCURSES_LIBS_L:INTERNAL=
-NCURSES_LIBS_OTHER:INTERNAL=
-NCURSES_LIBS_PATHS:INTERNAL=
-NCURSES_MODULE_NAME:INTERNAL=ncurses
-NCURSES_PREFIX:INTERNAL=/usr
-NCURSES_STATIC_CFLAGS:INTERNAL=-D_DEFAULT_SOURCE;-D_XOPEN_SOURCE=600
-NCURSES_STATIC_CFLAGS_I:INTERNAL=
-NCURSES_STATIC_CFLAGS_OTHER:INTERNAL=-D_DEFAULT_SOURCE;-D_XOPEN_SOURCE=600
-NCURSES_STATIC_INCLUDE_DIRS:INTERNAL=
-NCURSES_STATIC_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-lncurses;-ltinfo;-ldl
-NCURSES_STATIC_LDFLAGS_OTHER:INTERNAL=
-NCURSES_STATIC_LIBDIR:INTERNAL=
-NCURSES_STATIC_LIBRARIES:INTERNAL=ncurses;tinfo;dl
-NCURSES_STATIC_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu
-NCURSES_STATIC_LIBS:INTERNAL=
-NCURSES_STATIC_LIBS_L:INTERNAL=
-NCURSES_STATIC_LIBS_OTHER:INTERNAL=
-NCURSES_STATIC_LIBS_PATHS:INTERNAL=
-NCURSES_VERSION:INTERNAL=6.3.20211021
-NCURSES_ncurses_INCLUDEDIR:INTERNAL=
-NCURSES_ncurses_LIBDIR:INTERNAL=
-NCURSES_ncurses_PREFIX:INTERNAL=
-NCURSES_ncurses_VERSION:INTERNAL=
 //ADVANCED property for variable: OCAMLFIND
 OCAMLFIND-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: PANEL_LIBRARIES
-PANEL_LIBRARIES-ADVANCED:INTERNAL=1
-PC_LIBEDIT_CFLAGS:INTERNAL=-I/usr/include/editline
-PC_LIBEDIT_CFLAGS_I:INTERNAL=
-PC_LIBEDIT_CFLAGS_OTHER:INTERNAL=
-PC_LIBEDIT_FOUND:INTERNAL=1
-PC_LIBEDIT_INCLUDEDIR:INTERNAL=/usr/include
-PC_LIBEDIT_INCLUDE_DIRS:INTERNAL=/usr/include/editline
-PC_LIBEDIT_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-ledit
-PC_LIBEDIT_LDFLAGS_OTHER:INTERNAL=
-PC_LIBEDIT_LIBDIR:INTERNAL=/usr/lib/x86_64-linux-gnu
-PC_LIBEDIT_LIBRARIES:INTERNAL=edit
-PC_LIBEDIT_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu
-PC_LIBEDIT_LIBS:INTERNAL=
-PC_LIBEDIT_LIBS_L:INTERNAL=
-PC_LIBEDIT_LIBS_OTHER:INTERNAL=
-PC_LIBEDIT_LIBS_PATHS:INTERNAL=
-PC_LIBEDIT_MODULE_NAME:INTERNAL=libedit
-PC_LIBEDIT_PREFIX:INTERNAL=/usr
-PC_LIBEDIT_STATIC_CFLAGS:INTERNAL=-I/usr/include/editline
-PC_LIBEDIT_STATIC_CFLAGS_I:INTERNAL=
-PC_LIBEDIT_STATIC_CFLAGS_OTHER:INTERNAL=
-PC_LIBEDIT_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include/editline
-PC_LIBEDIT_STATIC_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-ledit;-ltermcap;-lbsd
-PC_LIBEDIT_STATIC_LDFLAGS_OTHER:INTERNAL=
-PC_LIBEDIT_STATIC_LIBDIR:INTERNAL=
-PC_LIBEDIT_STATIC_LIBRARIES:INTERNAL=edit;termcap;bsd
-PC_LIBEDIT_STATIC_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu
-PC_LIBEDIT_STATIC_LIBS:INTERNAL=
-PC_LIBEDIT_STATIC_LIBS_L:INTERNAL=
-PC_LIBEDIT_STATIC_LIBS_OTHER:INTERNAL=
-PC_LIBEDIT_STATIC_LIBS_PATHS:INTERNAL=
-PC_LIBEDIT_VERSION:INTERNAL=3.1
-PC_LIBEDIT_libedit_INCLUDEDIR:INTERNAL=
-PC_LIBEDIT_libedit_LIBDIR:INTERNAL=
-PC_LIBEDIT_libedit_PREFIX:INTERNAL=
-PC_LIBEDIT_libedit_VERSION:INTERNAL=
 PC_LIBXML_CFLAGS:INTERNAL=-I/usr/include/libxml2
 PC_LIBXML_CFLAGS_I:INTERNAL=
 PC_LIBXML_CFLAGS_OTHER:INTERNAL=
@@ -2662,7 +2412,7 @@ PC_LIBXML_STATIC_LIBS:INTERNAL=
 PC_LIBXML_STATIC_LIBS_L:INTERNAL=
 PC_LIBXML_STATIC_LIBS_OTHER:INTERNAL=
 PC_LIBXML_STATIC_LIBS_PATHS:INTERNAL=
-PC_LIBXML_VERSION:INTERNAL=2.9.13
+PC_LIBXML_VERSION:INTERNAL=2.9.14
 PC_LIBXML_libxml-2.0_INCLUDEDIR:INTERNAL=
 PC_LIBXML_libxml-2.0_LIBDIR:INTERNAL=
 PC_LIBXML_libxml-2.0_PREFIX:INTERNAL=
@@ -2677,14 +2427,20 @@ SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG:INTERNAL=1
 SUPPORTS_GNU_ZERO_VARIADIC_MACRO_ARGUMENTS_FLAG:INTERNAL=1
 //Test SUPPORTS_VARIADIC_MACROS_FLAG
 SUPPORTS_VARIADIC_MACROS_FLAG:INTERNAL=1
-//ADVANCED property for variable: SWIG_EXECUTABLE
-SWIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Terminfo_LIBRARIES
 Terminfo_LIBRARIES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Terminfo_LINKABLE
 Terminfo_LINKABLE-ADVANCED:INTERNAL=1
 //Test Terminfo_LINKABLE
 Terminfo_LINKABLE:INTERNAL=1
+//Result of TRY_COMPILE
+Z3_COMPILED:INTERNAL=TRUE
+//ADVANCED property for variable: Z3_INCLUDE_DIR
+Z3_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Z3_LIBRARIES
+Z3_LIBRARIES-ADVANCED:INTERNAL=1
+//Result of try_run()
+Z3_RETURNCODE:INTERNAL=0
 //ADVANCED property for variable: ZLIB_INCLUDE_DIR
 ZLIB_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ZLIB_LIBRARY_DEBUG
@@ -2693,26 +2449,24 @@ ZLIB_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 ZLIB_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //Have symbol backtrace
 _Backtrace_SYM_FOUND:INTERNAL=1
+//linker supports push/pop state
+_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/opt/llvm-project-14
+//Compiler reason failure
+_Python3_Compiler_REASON_FAILURE:INTERNAL=
+//Development reason failure
+_Python3_Development_REASON_FAILURE:INTERNAL=
 _Python3_EXECUTABLE:INTERNAL=/usr/local/bin/python3.12
 //Python3 Properties
-_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;12;7;64;;cpython-312-x86_64-linux-gnu;/usr/local/lib/python3.12;/usr/local/lib/python3.12;/usr/local/lib/python3.12/site-packages;/usr/local/lib/python3.12/site-packages
-_Python3_INTERPRETER_SIGNATURE:INTERNAL=97b9ecf0d89d3e1e05fecc3753ae1e80
-__pkg_config_arguments_NCURSES:INTERNAL=QUIET;ncurses
-__pkg_config_arguments_PC_LIBEDIT:INTERNAL=QUIET;libedit
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;12;7;64;32;;cpython-312-x86_64-linux-gnu;abi3;/usr/local/lib/python3.12;/usr/local/lib/python3.12;/usr/local/lib/python3.12/site-packages;/usr/local/lib/python3.12/site-packages
+_Python3_INTERPRETER_SIGNATURE:INTERNAL=9c6ef9554eb34f2cd35afa918e42a4c0
+//NumPy reason failure
+_Python3_NumPy_REASON_FAILURE:INTERNAL=
 __pkg_config_arguments_PC_LIBXML:INTERNAL=QUIET;libxml-2.0
-__pkg_config_checked_NCURSES:INTERNAL=1
-__pkg_config_checked_PC_LIBEDIT:INTERNAL=1
 __pkg_config_checked_PC_LIBXML:INTERNAL=1
 //Have symbol os_signpost_interval_begin
 macos_signposts_available:INTERNAL=
-//ADVANCED property for variable: pkgcfg_lib_NCURSES_ncurses
-pkgcfg_lib_NCURSES_ncurses-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: pkgcfg_lib_NCURSES_tinfo
-pkgcfg_lib_NCURSES_tinfo-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: pkgcfg_lib_PC_LIBEDIT_edit
-pkgcfg_lib_PC_LIBEDIT_edit-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_PC_LIBXML_xml2
 pkgcfg_lib_PC_LIBXML_xml2-ADVANCED:INTERNAL=1
 prefix_result:INTERNAL=/usr/lib/x86_64-linux-gnu
