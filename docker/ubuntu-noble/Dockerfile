@@ -18,8 +18,12 @@ RUN rmdir /bin.usr-is-merged
 RUN rmdir /lib.usr-is-merged
 
 # Switch to user kzl
-# USER kzl
-# WORKDIR /home/kzl
+USER kzl
+WORKDIR /home/kzl
+RUN mkdir -p /home/kzl/LFS
+RUN mkdir -p /home/kzl/Projects
+RUN mkdir -p /home/kzl/makepkg/sources
+RUN mkdir -p /home/kzl/wheels
 
 # Set up projects directory and clone repository
 # RUN git clone --depth 1 https://github.com/lz3450/LFS.git
@@ -45,3 +49,4 @@ CMD ["/usr/sbin/sshd", "-D"]
 # Run the container in detached mode
 # docker run -d --rm -u root -p 2222:22 --name noble -h NOBLE <REPOSITORY:TAG>
 # docker run -d --rm -u root -p 2222:22 --name noble -h NOBLE --mount type=bind,source=/home/kzl/LFS,target=/home/kzl/LFS --mount type=bind,source=/home/kzl/Projects,target=/home/kzl/Projects --mount type=bind,source=/home/kzl/makepkg/sources,target=/home/kzl/makepkg/sources <REPOSITORY:TAG>
+# docker run -d --rm -u root -p 2222:22 --name noble -h NOBLE --mount type=bind,source=/home/kzl/LFS,target=/home/kzl/LFS --mount type=bind,source=/home/kzl/Projects,target=/home/kzl/Projects --mount type=bind,source=/home/kzl/makepkg/sources,target=/home/kzl/makepkg/sources --mount type=bind,source=/home/kzl/wheels-noble,target=/home/kzl/wheels <REPOSITORY:TAG>
