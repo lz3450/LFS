@@ -26,8 +26,8 @@ _cmake_options=(
 )
 
 _llvm_options=(
-  -DLLVM_HOST_TRIPLE="$CHOST"
-  -DLLVM_DEFAULT_TARGET_TRIPLE="x86_64-pc-linux-gnu"
+  # -DLLVM_HOST_TRIPLE="$CHOST"
+  # -DLLVM_DEFAULT_TARGET_TRIPLE="x86_64-unknown-linux-gnu"
   ### bolt;clang;clang-tools-extra;compiler-rt;cross-project-tests;libc;libclc;libcxx;libcxxabi;libunwind;lld;lldb;mlir;openmp;polly;pstl;flang
   -DLLVM_ENABLE_PROJECTS="clang;lld"
   ### compiler-rt;libc;libcxx;libcxxabi;libunwind;openmp
