@@ -15,7 +15,7 @@ profile = 'dist'
 #
 # If `change-id` does not match the version that is currently running,
 # `x.py` will inform you about the changes made on bootstrap.
-change-id = 123711
+change-id = 129295
 
 [llvm]
 
@@ -54,6 +54,10 @@ host = ['x86_64-unknown-linux-gnu']
 # able to compile programs for their native target.
 target = ['x86_64-unknown-linux-gnu']
 
+# The path to (or name of) the LLDB executable to use. This is only used for
+# executing the debuginfo test suite.
+lldb = '/usr/local/bin/lldb'
+
 # Python interpreter to use for various tasks throughout the build, notably
 # rustdoc tests, the lldb python interpreter, and some dist bits and pieces.
 #
@@ -64,11 +68,10 @@ python = '/usr/local/bin/python3.12'
 #
 # If `extended = false`, the only one of these built by default is rustdoc.
 #
-# If `extended = true`, they're all included, with the exception of
-# rust-demangler which additionally requires `profiler = true` to be set.
+# If `extended = true`, they are all included.
 #
 # If any enabled tool fails to build, the installation fails.
-tools = ['cargo', 'clippy', 'rustfmt', 'analysis', 'src']
+tools = ['cargo', 'clippy', 'rustdoc', 'rustfmt', 'rust-analyzer', 'rust-analyzer-proc-macro-srv', 'analysis', 'src', 'wasm-component-ld']
 #    "cargo",
 #    "clippy",
 #    "rustdoc",
@@ -77,7 +80,8 @@ tools = ['cargo', 'clippy', 'rustfmt', 'analysis', 'src']
 #    "rust-analyzer-proc-macro-srv",
 #    "analysis",
 #    "src",
-#    "rust-demangler",  # if profiler = true
+#    "wasm-component-ld",
+#    "miri", "cargo-miri" # for dev/nightly channels
 #]
 
 # Build the sanitizer runtimes
@@ -90,7 +94,7 @@ profiler = true
 # Arguments passed to the `./configure` script, used during distcheck. You
 # probably won't fill this in but rather it's filled in by the `./configure`
 # script. Useful for debugging.
-configure-args = ['--enable-llvm-link-shared', '--enable-sanitizers', '--enable-profiler', '--prefix=/usr/local', '--sysconfdir=etc', '--llvm-root=/opt/llvm-project-18', '--llvm-config=/opt/llvm-project-18/bin/llvm-config', '--llvm-filecheck=/opt/llvm-project-18/bin/FileCheck', '--python=/usr/local/bin/python3.12', '--release-channel=stable', '--tools=cargo,clippy,rustfmt,analysis,src', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set', 'change-id=123711', '--set', 'rust.frame-pointers=true', '--set', 'rust.backtrace-on-ice=true', '--set', 'rust.remap-debuginfo=true', '--set', 'rust.jemalloc=true', '--set', 'target.x86_64-unknown-linux-gnu.cc=/opt/llvm-project-18/bin/clang', '--set', 'target.x86_64-unknown-linux-gnu.cxx=/opt/llvm-project-18/bin/clang++', '--set', 'target.x86_64-unknown-linux-gnu.ar=/opt/llvm-project-18/bin/llvm-ar', '--set', 'target.x86_64-unknown-linux-gnu.ranlib=/opt/llvm-project-18/bin/llvm-ranlib', '--set', 'target.x86_64-unknown-linux-gnu.linker=/opt/llvm-project-18/bin/clang', '--release-description=KZL 2024/07/13 19:03:52 -0500']
+configure-args = ['--enable-llvm-link-shared', '--enable-sanitizers', '--enable-profiler', '--prefix=/usr/local', '--sysconfdir=etc', '--llvm-root=/usr/local', '--llvm-config=/usr/local/bin/llvm-config', '--llvm-filecheck=/usr/local/bin/FileCheck', '--python=/usr/local/bin/python3.12', '--release-channel=stable', '--tools=cargo,clippy,rustdoc,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src,wasm-component-ld', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set', 'change-id=129295', '--set', 'rust.frame-pointers=true', '--set', 'rust.backtrace-on-ice=true', '--set', 'rust.remap-debuginfo=true', '--set', 'rust.jemalloc=true', '--set', 'target.x86_64-unknown-linux-gnu.cc=/usr/local/bin/clang', '--set', 'target.x86_64-unknown-linux-gnu.cxx=/usr/local/bin/clang++', '--set', 'target.x86_64-unknown-linux-gnu.ar=/usr/local/bin/llvm-ar', '--set', 'target.x86_64-unknown-linux-gnu.ranlib=/usr/local/bin/llvm-ranlib', '--set', 'target.x86_64-unknown-linux-gnu.linker=/usr/local/bin/clang', '--set', 'build.lldb=/usr/local/bin/lldb', '--set', 'rust.lld=true', '--set', 'rust.use-lld=true', '--release-description=KZL 2024/10/20 13:13:03 -0500']
 
 [install]
 
@@ -106,6 +110,9 @@ sysconfdir = 'etc'
 # The "channel" for the Rust build to produce. The stable/beta channels only
 # allow using stable features, whereas the nightly and dev channels allow using
 # nightly features
+#
+# If using tarball sources, default value for `channel` is taken from the `src/ci/channel` file;
+# otherwise, it's "dev".
 channel = 'stable'
 
 # A descriptive string to be appended to `rustc --version` output, which is
@@ -117,11 +124,29 @@ channel = 'stable'
 # upstream Rust you need to set this to "". However, note that if you are not
 # actually compatible -- for example if you've backported patches that change
 # behavior -- this may lead to miscompilations or other bugs.
-description = 'KZL 2024/07/13 19:03:52 -0500'
+description = 'KZL 2024/10/20 13:13:03 -0500'
 
 # Forces frame pointers to be used with `-Cforce-frame-pointers`.
 # This can be helpful for profiling at a small performance cost.
 frame-pointers = true
+
+# Indicates whether LLD will be compiled and made available in the sysroot for rustc to execute, and
+# whether to set it as rustc's default linker on `x86_64-unknown-linux-gnu`. This will also only be
+# when *not* building an external LLVM (so only when using `download-ci-llvm` or building LLVM from
+# the in-tree source): setting `llvm-config` in the `[target.x86_64-unknown-linux-gnu]` section will
+# make this default to false.
+lld = true
+
+# Indicates whether LLD will be used to link Rust crates during bootstrap on
+# supported platforms.
+# If set to `true` or `"external"`, a global `lld` binary that has to be in $PATH
+# will be used.
+# If set to `"self-contained"`, rust-lld from the snapshot compiler will be used.
+#
+# On MSVC, LLD will not be used if we're cross linking.
+#
+# Explicitly setting the linker for a target will override this option when targeting MSVC.
+use-lld = true
 
 # Print backtrace on internal compiler errors during bootstrap
 backtrace-on-ice = true
@@ -140,35 +165,35 @@ jemalloc = true
 # default value is platform specific, and if not specified it may also depend on
 # what platform is crossing to what platform.
 # See `src/bootstrap/cc_detect.rs` for details.
-cc = '/opt/llvm-project-18/bin/clang'
+cc = '/usr/local/bin/clang'
 
 # C++ compiler to be used to compile C++ code (e.g. LLVM and our LLVM shims).
 # This is only used for host targets.
 # See `src/bootstrap/cc_detect.rs` for details.
-cxx = '/opt/llvm-project-18/bin/clang++'
+cxx = '/usr/local/bin/clang++'
 
 # Archiver to be used to assemble static libraries compiled from C/C++ code.
 # Note: an absolute path should be used, otherwise LLVM build will break.
-ar = '/opt/llvm-project-18/bin/llvm-ar'
+ar = '/usr/local/bin/llvm-ar'
 
 # Ranlib to be used to assemble static libraries compiled from C/C++ code.
 # Note: an absolute path should be used, otherwise LLVM build will break.
-ranlib = '/opt/llvm-project-18/bin/llvm-ranlib'
+ranlib = '/usr/local/bin/llvm-ranlib'
 
 # Linker to be used to bootstrap Rust code. Note that the
 # default value is platform specific, and if not specified it may also depend on
 # what platform is crossing to what platform.
 # Setting this will override the `use-lld` option for Rust code when targeting MSVC.
-linker = '/opt/llvm-project-18/bin/clang'
+linker = '/usr/local/bin/clang'
 
 # Path to the `llvm-config` binary of the installation of a custom LLVM to link
 # against. Note that if this is specified we don't compile LLVM at all for this
 # target.
-llvm-config = '/opt/llvm-project-18/bin/llvm-config'
+llvm-config = '/usr/local/bin/llvm-config'
 
 # Normally the build system can find LLVM's FileCheck utility, but if
 # not, you can specify an explicit file name for it.
-llvm-filecheck = '/opt/llvm-project-18/bin/FileCheck'
+llvm-filecheck = '/usr/local/bin/FileCheck'
 
 [dist]
 
