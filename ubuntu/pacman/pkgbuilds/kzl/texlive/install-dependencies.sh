@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 pkgs=(
     bison
@@ -23,4 +23,4 @@ pkgs=(
     texinfo
 )
 
-sudo apt-get install "${pkgs[@]}"
+sudo apt-get update && sudo apt-get install "${pkgs[@]}"

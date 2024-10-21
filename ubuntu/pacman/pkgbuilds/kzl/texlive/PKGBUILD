@@ -2,25 +2,26 @@ pkgname=texlive
 pkgver=70897
 _pkgyear=2024
 _texmfver=20240312
-pkgrel=25
+pkgrel=1
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
 url="https://tug.org/texlive/"
 license=('KZL')
 install=$pkgname.install
-source=(git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_pkgyear
+source=(http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
         git+https://github.com/TeX-Live/installer.git
-        http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
+        # git+https://github.com/TeX-Live/texlive-source.git
+        git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_pkgyear
         ################################################################################
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$pkgver-source.tar.xz
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/install-tl-unx.tar.gz
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$_texmfver-texmf.tar.xz
         $pkgname.install)
 # noextract=(texlive-$_texmfver-texmf.tar.xz)
-sha256sums=('SKIP'
+sha256sums=('f243378c7f5cf393a4d6278b70f8f4e84fc67d7e1ace29535116c06202db148f'
             'SKIP'
-            '750e1d1016f4bcd9bbb3c35182e5d564c6765ec29807917d1402fc79dcd6cffe'
+            'SKIP'
             'c31b6deaa47009e3dbccacccdcd77f9f536e0a811da45aa7117e9d57e9049814')
 
 
@@ -64,7 +65,7 @@ stage2_pkgs=(
 pkgver() {
   cd $pkgname-source
 
-  git describe --tags | sed 's/^svn//'
+  git describe --tags | sed 's/svn//;s/^v//;s/-g.*//;s/-/.g/'
 }
 
 prepare() {
