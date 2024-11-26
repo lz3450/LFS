@@ -49,9 +49,9 @@ install_zsh-autosuggestions() {
 
 ################################################################################
 mkdir -p "$log_dir"
-install_ohmyzsh &> "$log_dir/oh-my-zsh.log"
-install_zsh-syntax-highlighting &> "$log_dir/zsh-syntax-highlighting.log"
-install_zsh-autosuggestions &> "$log_dir/zsh-autosuggestions.log"
+install_ohmyzsh 2>&1 | tee "$log_dir/oh-my-zsh.log"
+install_zsh-syntax-highlighting 2>&1 | tee "$log_dir/zsh-syntax-highlighting.log"
+install_zsh-autosuggestions 2>&1 | tee "$log_dir/zsh-autosuggestions.log"
 
 cp ~/.zshrc .zshrc.orig
 ln -srfv .zshrc ~
