@@ -5,9 +5,9 @@
 
 script_name="$(basename "${0}")"
 
-REPODIR=/home/.repository
-PACKAGEDIR=$HOME/makepkg/packages
-ARCHIVEDIR=$HOME/makepkg/archive
+REPODIR="/home/.repository"
+PACKAGEDIR="$HOME/makepkg/packages"
+ARCHIVEDIR="$HOME/makepkg/archive"
 EXTENSION="zst"
 
 ### options
@@ -121,7 +121,7 @@ while [ $# -gt 0 ]; do
 done
 
 case $target in
-    kzl)
+    kzl|ubuntu)
         readarray -t pkgs < <(find $ROOTDIR/pkgbuilds/$target/ -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
         EXTENSION="zst"
         ;;
