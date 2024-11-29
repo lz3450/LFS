@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g10
-pkgrel=1
+pkgver=7.0.0.g13
+pkgrel=2
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -52,7 +52,7 @@ prepare() {
 
   cat >> etc/pacman.conf.in << EOF
 
-[kzl]
+[ubuntu]
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
 EOF
