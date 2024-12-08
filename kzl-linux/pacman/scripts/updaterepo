@@ -121,8 +121,8 @@ while [ $# -gt 0 ]; do
 done
 
 case $target in
-    kzl|ubuntu)
-        readarray -t pkgs < <(find $ROOTDIR/pkgbuilds/$target/ -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+    core|extra|ubuntu)
+        readarray -t pkgs < <(find $ROOTDIR/pkgbuilds/$target/ -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
         EXTENSION="zst"
         ;;
     # unknown repo
