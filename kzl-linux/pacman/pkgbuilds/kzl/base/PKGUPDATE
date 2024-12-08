@@ -1,5 +1,0 @@
-new_version=$(date +%Y.%m.%d)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src"
-}
