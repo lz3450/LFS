@@ -1,0 +1,49 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=git
+pkgver=2.47.1
+pkgrel=2
+epoch=
+arch=('x86_64')
+url="https://git-scm.com/"
+license=('KZL')
+install=$pkgname.install
+source=(git+https://github.com/git/git.git#tag=v$pkgver
+        $pkgname.install)
+sha256sums=('SKIP'
+            'e5676ce50dccf08536f0e89ef4d29f886f07137d186f9b878112f0d055bcfb68')
+
+prepare() {
+  cd $pkgname
+
+  make configure
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr/local \
+    --with-openssl \
+    --with-libpcre2 \
+    --with-curl \
+    --with-expat \
+    --with-editor=/usr/bin/nano \
+    --without-tcltk
+
+  make all
+
+  make -C contrib/diff-highlight
+}
+
+check() {
+  cd $pkgname
+
+  make test
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}
