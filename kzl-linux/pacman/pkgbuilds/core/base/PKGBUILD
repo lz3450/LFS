@@ -1,0 +1,38 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=base
+pkgver=2024.12.08
+pkgrel=1
+epoch=
+pkgdesc="Minimal package set"
+arch=('any')
+license=('KZL')
+depends=(
+  filesystem
+  glibc
+  zlib gzip bzip2 xz lz4 zstd tar
+  gcc
+  bash perl
+  grep sed gawk file findutils
+  gettext
+  openssl ca-certificates
+  pam shadow
+  curl
+  python
+  coreutils util-linux
+  iptables
+  systemd
+  wget2
+  sudo
+  pacman
+  procps-ng psmisc
+  iputils iproute2
+  pciutils usbutils
+)
+optdepends=("linux: Linux kernel")
+source=(os-release)
+sha256sums=('9e90e6f40165b03a494e476f0db0e5a94a0801f6fc9584757d2a388e12cf4376')
+
+package() {
+  install -Dm644 "$srcdir"/os-release "$pkgdir"/etc/os-release
+}

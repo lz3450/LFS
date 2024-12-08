@@ -1,0 +1,6 @@
+# https://www.freedesktop.org/software/systemd/man/latest/os-release.html
+NAME="KZL-Linux"
+ID=kzl
+ID_LIKE=arch
+PRETTY_NAME="KZL Linux"
+BUILD_ID=rolling
