@@ -3,7 +3,7 @@
 <?xml-model href="protocol-numbers.rng" schematypens="http://relaxng.org/ns/structure/1.0" ?>
 <registry xmlns="http://www.iana.org/assignments" id="protocol-numbers">
   <title>Protocol Numbers</title>
-  <updated>2023-06-06</updated>
+  <updated>2024-12-06</updated>
   <registry id="protocol-numbers-1">
     <title>Assigned Internet Protocol Numbers</title>
     <xref type="rfc" data="rfc5237"/><xref type="rfc" data="rfc7045"/>
@@ -386,10 +386,11 @@ Livermore, California, June 1977.</xref>
       <description>NBMA Address Resolution Protocol</description>
       <xref type="rfc" data="rfc1735"/>
     </record>
-    <record date="1994-10">
+    <record date="1994-10" updated="2023-10-19">
       <value>55</value>
-      <name>MOBILE</name>
-      <description>IP Mobility</description>
+      <name>Min-IPv4</name>
+      <description>Minimal IPv4 Encapsulation</description>
+      <xref type="rfc" data="rfc2004"/>
       <xref type="person" data="Charlie_Perkins"/>
     </record>
     <record date="1994-10">
@@ -741,11 +742,11 @@ University of California at Berkeley, June 1986.</xref>
       <description>IPX in IP</description>
       <xref type="person" data="CJ_Lee"/>
     </record>
-    <record>
+    <record updated="2024-01-08">
       <value>112</value>
       <name>VRRP</name>
       <description>Virtual Router Redundancy Protocol</description>
-      <xref type="rfc" data="rfc5798"/>
+      <xref type="rfc" data="rfc9568"/>
     </record>
     <record date="1998-01">
       <value>113</value>
@@ -806,7 +807,7 @@ University of California at Berkeley, June 1986.</xref>
       <name>SM (deprecated)</name>
       <description>Simple Multicast Protocol</description>
       <xref type="person" data="Jon_Crowcroft"/>
-      <xref type="draft" data="draft-perlman-simple-multicast"/>
+      <xref type="draft" data="draft-perlman-simple-multicast-03"/>
     </record>
     <record date="1999-08">
       <value>123</value>
@@ -941,10 +942,18 @@ University of California at Berkeley, June 1986.</xref>
       <name>NSH</name>
       <description>Network Service Header</description>
       <ipv6>N</ipv6>
-      <xref type="draft" data="RFC-ietf-spring-nsh-sr-14"/>
+      <xref type="rfc" data="rfc9491"/>
+    </record>
+    <record date="2024-10-24">
+        <value>146</value>
+        <name>Homa</name>
+        <description>Homa</description>
+        <ipv6>N</ipv6>
+        <xref type="uri" data="https://github.com/PlatformLab/HomaModule">HomaModule</xref>
+        <xref type="person" data="John_Ousterhout"/>
     </record>
     <record date="1995-06">
-      <value>146-252</value>
+      <value>147-252</value>
       <description>Unassigned</description>
       <xref type="person" data="Internet_Assigned_Numbers_Authority"/>
     </record>
@@ -1119,6 +1128,11 @@ University of California at Berkeley, June 1986.</xref>
       <name>John Murphy</name>
       <uri>mailto:john.m.murphy&amp;mci.com</uri>
       <updated>1998-10</updated>
+    </person>
+    <person id="John_Ousterhout">
+        <name>John Ousterhout</name>
+        <uri>mailto:john.ousterhout&amp;gmail.com</uri>
+        <updated>2024-10-24</updated>
     </person>
     <person id="John_Worley">
       <name>John Worley</name>
