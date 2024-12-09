@@ -138,11 +138,11 @@ elif [[ $result -eq 0 ]]; then
 elif [[ $result -eq -1 ]]; then
     warning "Current version is newer."
 else
-    error "Unknow \`vercmp\` result." 7
+    error "Unknown \`vercmp\` result." 7
 fi
 
 if [[ $cleanbuild -gt 0 ]]; then
-    makepkg -Cdo || error "\`makepkg -Co\` error" 3
+    makepkg -Cdo || error "\`makepkg -o\` error" 3
 else
     makepkg -do || error "\`makepkg -o\` error" 3
 fi
@@ -154,9 +154,9 @@ post_update || error "\`post_update\` error" 4
 # 0: no update
 # 1: updated
 # 2: PKGUPDATE does not exist
-# 3: makepkg -Co error
+# 3: makepkg -o error
 # 4: pre_update or post_update error
 # 5: makepkg.conf not found
 # 6: cannot get new version
-# 7: unknow `vercmp` result
+# 7: unknown `vercmp` result
 exit $result
