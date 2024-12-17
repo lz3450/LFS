@@ -12,15 +12,17 @@ url="https://www.gnu.org/software/libc"
 license=('KZL')
 depends=(filesystem linux-api-headers tzdata)
 options=(staticlibs)
-source=(git+https://sourceware.org/git/glibc.git#branch=release/${pkgver%.*}/master
-        # git+https://sourceware.org/git/glibc.git#tag=$pkgname-$pkgver
-        ld.so.conf
-        locale-gen
-        locale.gen)
-backup=(etc/locale.gen
-        etc/ld.so.conf
-        etc/gai.conf
-        etc/nscd.conf)
+source=(
+  git+https://sourceware.org/git/glibc.git#branch=release/${pkgver%.*}/master
+  # git+https://sourceware.org/git/glibc.git#tag=$pkgname-$pkgver
+  ld.so.conf
+)
+backup=(
+  etc/locale.gen
+  etc/ld.so.conf
+  etc/gai.conf
+  etc/nscd.conf
+)
 install=$pkgname.install
 sha256sums=('SKIP'
             'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
@@ -85,25 +87,17 @@ package() {
 
   rm -f "$pkgdir"/etc/ld.so.cache
 
-  # locale
-  install -m755 -d "$pkgdir"/usr/lib/locale
-  install -Dm755 "$srcdir"/locale-gen "$pkgdir"/usr/sbin/locale-gen
-  install -Dm644 "$srcdir"/locale.gen "$pkgdir"/etc/locale.gen
-  sed -e '1,3d' -e 's|/| |g' -e 's| \\||g' "$srcdir"/$pkgname/localedata/SUPPORTED > "$pkgdir"/usr/share/i18n/SUPPORTED
-  sed -e 's|^|#|g' "$pkgdir"/usr/share/i18n/SUPPORTED >> "$pkgdir"/etc/locale.gen
-  sed -i -e '/^#en_US\.UTF-8/s/^#//' -e '/^#zh_CN\.UTF-8/s/^#//' "$pkgdir"/etc/locale.gen
-
   # ldconfig
   install -D -m 644 "$srcdir"/ld.so.conf etc/ld.so.conf
   install -D -m 644 "$srcdir"/ld.so.conf usr/share/factory/etc/ld.so.conf
 
   # name service cache daemon
-  install -m755 -d "$pkgdir"/usr/lib/{systemd/system,tmpfiles.d}
-  install -m755 -d "$pkgdir"/var/db/nscd
-  install -Dm644 "$srcdir"/$pkgname/nscd/nscd.conf "$pkgdir"/etc/nscd.conf
-  install -Dm644 "$srcdir"/$pkgname/nscd/nscd.service "$pkgdir"/usr/lib/systemd/system/nscd.service
-  install -Dm644 "$srcdir"/$pkgname/nscd/nscd.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/nscd.conf
+  install -d -m 755 "$pkgdir"/usr/lib/{systemd/system,tmpfiles.d}
+  install -d -m 755 "$pkgdir"/var/db/nscd
+  install -D -m 644 "$srcdir"/$pkgname/nscd/nscd.conf "$pkgdir"/etc/nscd.conf
+  install -D -m 644 "$srcdir"/$pkgname/nscd/nscd.service "$pkgdir"/usr/lib/systemd/system/nscd.service
+  install -D -m 644 "$srcdir"/$pkgname/nscd/nscd.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/nscd.conf
 
   # getaddrinfo(3) configuration file
-  install -Dm644 "$srcdir"/$pkgname/posix/gai.conf "$pkgdir"/etc/gai.conf
+  install -D -m 644 "$srcdir"/$pkgname/posix/gai.conf "$pkgdir"/etc/gai.conf
 }
