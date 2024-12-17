@@ -24,14 +24,13 @@ build() {
 }
 
 package() {
-  # install tzcode stuff
   make DESTDIR="$pkgdir" install
 
   # install tzdata stuff
   ./zic -d "$pkgdir"/usr/share/zoneinfo ${_timezones[@]}
   ./zic -d "$pkgdir"/usr/share/zoneinfo/posix ${_timezones[@]}
   ./zic -d "$pkgdir"/usr/share/zoneinfo/right -L leapseconds ${_timezones[@]}
-  ./zic -b fat -d "$pkgdir"/usr/share/zoneinfo -p US/Central
+  ./zic -d "$pkgdir"/usr/share/zoneinfo -p US/Central
 
   # cleanup
   rm "$pkgdir"/etc/localtime
