@@ -40,6 +40,7 @@ prepare() {
 
   mkdir -p build
 
+  # Overwrite special-purpose configuration parameters in `Makeconfig`
   echo 'prefix = /usr
 build-programs = yes
 exec_prefix = $(prefix)
