@@ -1,4 +1,4 @@
-`configure' configures fakeroot 1.31 to adapt to many kinds of systems.
+`configure' configures fakeroot 1.36 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
