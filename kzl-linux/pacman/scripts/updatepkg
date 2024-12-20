@@ -116,6 +116,7 @@ info "Current pkgrel is $current_pkgrel"
 if have_function 'pre_update'; then
     info "running pre_update()..."
     pre_update || error "\`pre_update\` error" 4
+    cd "$PKGBUILDDIR"
 fi
 
 result=$(vercmp $new_version $current_version)
