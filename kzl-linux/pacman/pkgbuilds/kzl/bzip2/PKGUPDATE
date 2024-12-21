@@ -1,6 +1,0 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://sourceware.org/bzip2/index.html | grep -oP '(?<=The current stable version is bzip2 )\d\.\d\.\d' | head -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    cat Makefile > "$PKGBUILDDIR"/help.txt
-}

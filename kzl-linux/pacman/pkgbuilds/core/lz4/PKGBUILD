@@ -1,0 +1,26 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=lz4
+pkgver=1.9.4
+pkgrel=1
+epoch=
+pkgdesc="Extremely fast compression algorithm"
+arch=('x86_64')
+url="http://www.lz4.org"
+license=('KZL')
+depends=(glibc)
+source=(git+https://github.com/lz4/lz4.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  make PREFIX="/usr" -C lib
+  make PREFIX="/usr" -C programs lz4 lz4c
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" PREFIX="/usr" install
+}

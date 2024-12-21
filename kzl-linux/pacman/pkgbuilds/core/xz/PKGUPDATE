@@ -1,0 +1,7 @@
+new_version=$(git ls-remote https://github.com/tukaani-project/xz.git | grep -oP '(?<=refs/tags/v)\d\.\d\.\d$' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    # ./configure --help > "$PKGBUILDDIR"/help.txt
+    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
+}

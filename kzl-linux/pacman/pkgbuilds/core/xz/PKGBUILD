@@ -1,0 +1,55 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=xz
+pkgver=5.6.3
+pkgrel=1
+epoch=
+pkgdesc="Library and command line tools for XZ and LZMA compressed files"
+arch=('x86_64')
+url="https://tukaani.org/xz/"
+license=('KZL')
+source=(git+https://github.com/tukaani-project/xz.git#tag=v$pkgver)
+sha256sums=('5a4495e85ddec6979a7c34fec7355304588e37830d663ffb5e57069636f47900')
+
+prepare() {
+  cd $pkgname
+
+  # ./autogen.sh --no-po4a --no-doxygen
+
+  cmake \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib \
+    -D CMAKE_C_FLAGS="$CPPFLAGS $CFLAGS" \
+    -D BUILD_SHARED_LIBS=ON \
+    -S . \
+    -B build \
+    -LAH
+}
+
+build() {
+  cd $pkgname
+
+  # ./configure \
+  #   --prefix=/usr
+
+  # make
+
+  cmake --build build
+}
+
+check() {
+  cd $pkgname
+
+  # make check
+
+  cmake --build build --target test
+}
+
+package() {
+  cd $pkgname
+
+  # make DESTDIR="$pkgdir" install
+
+  DESTDIR="$pkgdir" cmake --build build --target install
+}

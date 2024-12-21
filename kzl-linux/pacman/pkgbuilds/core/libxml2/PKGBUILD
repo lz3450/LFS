@@ -1,0 +1,36 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libxml2
+pkgver=2.13.5
+pkgrel=1
+epoch=
+pkgdesc="the XML C parser and toolkit"
+arch=('x86_64')
+url="http://xmlsoft.org"
+license=('KZL')
+depends=(icu)
+source=(git+https://gitlab.gnome.org/GNOME/libxml2.git#tag=v$pkgver)
+sha256sums=('2266ea903ccad6558501b5e9ce6f9b47c4606c3b679b0f016bcbe0e33228684a')
+
+prepare() {
+  cd $pkgname
+
+  NOCONFIGURE=1 ./autogen.sh
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --with-threads \
+    --with-icu
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}

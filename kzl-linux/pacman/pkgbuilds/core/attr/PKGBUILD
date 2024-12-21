@@ -1,0 +1,33 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=attr
+pkgver=2.5.2
+pkgrel=1
+epoch=
+pkgdesc="Extended attribute support library for ACL support"
+arch=('x86_64')
+url="https://savannah.nongnu.org/projects/attr"
+license=('KZL')
+source=(git+https://git.savannah.nongnu.org/git/attr.git#tag=v$pkgver)
+sha256sums=('406ba69eb08ef5a246b0c2f3b247f880ed56136a140343f668285129e699fa7b')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}

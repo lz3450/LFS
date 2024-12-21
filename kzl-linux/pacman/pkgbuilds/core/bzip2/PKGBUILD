@@ -1,0 +1,44 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=bzip2
+pkgver=1.0.8
+pkgrel=1
+epoch=
+pkgdesc="A high-quality data compression program"
+arch=('x86_64')
+url="https://sourceware.org/bzip2/index.html"
+license=('KZL')
+depends=(glibc)
+source=(git+git://sourceware.org/git/bzip2.git#tag=$pkgname-$pkgver
+        $pkgname.pc)
+sha256sums=('a720711f84adceed2729cd23142537613fac924bf70ca58ef8bd7d28df6b7079'
+            'eca9d8cd6376df1fb5442667c603032023fb21d8d183684550da0b96ade39654')
+
+prepare() {
+  cd $pkgname
+
+  sed -i 's/$(PREFIX)\/man/$(PREFIX)\/share\/man/g' Makefile
+
+  cp "$srcdir"/bzip2.pc bzip2.pc
+  sed "s|@VERSION@|$pkgver|" -i bzip2.pc
+}
+
+build() {
+  cd $pkgname
+
+  make -f Makefile-libbz2_so
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make PREFIX="$pkgdir/usr" install
+
+  cp -f libbz2.so.$pkgver "$pkgdir"/usr/lib
+  ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so.${pkgver%.*}
+  ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so.${pkgver%%.*}
+  ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so
+
+  install -Dm644 bzip2.pc -t "$pkgdir"/usr/lib/pkgconfig
+}

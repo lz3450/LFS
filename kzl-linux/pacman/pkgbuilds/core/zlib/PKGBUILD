@@ -1,0 +1,67 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgbase=zlib
+pkgname=(zlib minizip)
+pkgver=1.3.1
+pkgrel=1
+epoch=
+arch=('x86_64')
+url="https://zlib.net"
+license=('KZL')
+source=(git+https://github.com/madler/zlib.git#tag=v$pkgver)
+sha256sums=('9ecb706a98a769e847162f1a5c3b79eebcde90b3673b8c277db14356b886c15f')
+
+prepare() {
+  cd zlib/contrib/minizip
+
+	cp Makefile Makefile.orig
+  cp ../README.contrib readme.txt
+
+	autoreconf -vfi
+}
+
+build() {
+  cd zlib
+
+  ./configure \
+    --prefix=/usr
+
+  make
+
+	cd contrib/minizip
+
+	./configure \
+    --prefix=/usr
+
+	make
+}
+
+check() {
+  cd zlib
+
+	make test
+
+  cd contrib/minizip
+
+	make -f Makefile.orig test
+}
+
+package_zlib() {
+  pkgdesc="A Massively Spiffy Yet Delicately Unobtrusive Compression Library"
+
+  cd zlib
+
+  make DESTDIR="$pkgdir" install
+}
+
+package_minizip() {
+	pkgdesc="Zip and UnZip additional library"
+  depends=(zlib)
+
+	cd zlib/contrib/minizip
+
+  make DESTDIR="$pkgdir" install
+
+	# https://github.com/madler/zlib/pull/229
+	rm "$pkgdir"/usr/include/minizip/crypt.h
+}

@@ -10,7 +10,7 @@ license=('KZL')
 depends=(
   filesystem
   glibc
-  zlib gzip bzip2 xz lz4 zstd tar
+  gzip tar
   gcc
   bash perl
   grep sed gawk file findutils

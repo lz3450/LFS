@@ -1,6 +1,0 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://tukaani.org/xz/ | grep -oP '\d\.\d\.\d' | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
-}

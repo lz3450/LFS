@@ -1,6 +1,0 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://icu.unicode.org/home | grep -oP '(?<=ICU )\d\d(\.\d)?(?= is now available.)' | head -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname/icu4c/source"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
-}

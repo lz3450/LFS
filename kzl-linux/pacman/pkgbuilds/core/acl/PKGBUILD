@@ -1,0 +1,33 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=acl
+pkgver=2.3.2
+pkgrel=1
+epoch=
+pkgdesc="Access control list utilities, libraries and headers"
+arch=('x86_64')
+url="https://savannah.nongnu.org/projects/acl/"
+depends=(attr)
+source=(git+https://git.savannah.nongnu.org/git/acl.git#tag=v$pkgver)
+sha256sums=('1b4ad9a0d4a04275f5710184dd7a6fa7ffccadc33a3a4b4af43a8b7f9771a7da')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}
