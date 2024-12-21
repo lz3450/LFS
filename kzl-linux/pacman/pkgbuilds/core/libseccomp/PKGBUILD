@@ -1,15 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libseccomp
-pkgver=2.5.4
-pkgrel=6
+pkgver=2.5.5
+pkgrel=1
 epoch=
 pkgdesc="Enhanced seccomp library"
 arch=('x86_64')
 url="https://github.com/seccomp/libseccomp"
 license=('KZL')
 source=(git+https://github.com/seccomp/$pkgname#tag=v$pkgver)
-sha256sums=('SKIP')
+sha256sums=('ee4cda82a968dfdccde8f8d489591110ee042fdab16f55beb80cffd1c08d3b67')
 
 prepare() {
   cd $pkgname
@@ -21,8 +21,7 @@ build() {
   cd $pkgname
 
   ./configure \
-    --prefix=/usr \
-    --disable-python
+    --prefix=/usr
 
   make
 }

@@ -1,4 +1,4 @@
-`configure' configures libseccomp 2.5.4 to adapt to many kinds of systems.
+`configure' configures libseccomp 2.5.5 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
