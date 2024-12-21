@@ -1,23 +1,21 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openssl
-pkgver=3.1.0
-pkgrel=6
+pkgver=3.4.0
+pkgrel=1
 epoch=
 pkgdesc="A Open Source Toolkit for the Transport Layer Security (TLS) protocol formerly known as the Secure Sockets Layer (SSL) protocol"
 arch=('x86_64')
 url="https://www.openssl.org"
 license=('KZL')
-depends=(glibc)
 backup=(etc/ssl/openssl.cnf)
 source=(git+https://github.com/openssl/openssl.git#tag=$pkgname-$pkgver)
-sha256sums=('SKIP')
+sha256sums=('cb272891185e7b40f5d27a5a5cac9836ed9dbf556bf907ce1f9171601dfc5e16')
 
 prepare() {
   cd $pkgname
 
-  sed -e "s|./demoCA|/etc/ssl|g" \
-      -i apps/openssl.cnf apps/CA.pl.in
+  sed -i "s|./demoCA|/etc/ssl|g" apps/openssl.cnf apps/CA.pl.in
 }
 
 build() {
@@ -26,15 +24,12 @@ build() {
   # https://github.com/openssl/openssl/blob/master/INSTALL.md#configuration-options
 
   ./Configure \
-    linux-x86_64 \
+    --release \
     --libdir=lib \
     --openssldir=/etc/ssl \
     --prefix=/usr \
     enable-ktls \
     enable-ec_nistp_64_gcc_128 \
-    CFLAGS="$CFLAGS" \
-    CPPFLAGS="$CPPFLAGS" \
-    LDFLAGS="$LDFLAGS"
 
   make depend
   make

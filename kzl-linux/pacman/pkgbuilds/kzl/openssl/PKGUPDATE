@@ -1,6 +1,0 @@
-new_version=$(git ls-remote --tags https://github.com/openssl/openssl.git | grep -oP "refs/tags/OpenSSL_\K[0-9]+_[0-9]+_[0-9]+" | tr '_' '.' | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./config --help > "$PKGBUILDDIR"/help.txt
-}
