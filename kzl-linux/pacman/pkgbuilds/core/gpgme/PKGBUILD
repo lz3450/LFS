@@ -8,10 +8,14 @@ pkgdesc="A C wrapper library for GnuPG"
 arch=('x86_64')
 url="https://www.gnupg.org/software/gpgme/index.html"
 license=('KZL')
-depends=(gnupg libassuan libgpg-error)
+depends=(
+  gnupg
+  libassuan
+  libgpg-error
+)
 # makedepends=(pandoc python swig)
 makedepends=(swig)
-source=(git://git.gnupg.org/gpgme.git#tag=$pkgname-$pkgver)
+source=(git+git://git.gnupg.org/gpgme.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 
 prepare() {

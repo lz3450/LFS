@@ -2,7 +2,7 @@
 
 pkgname=libxcrypt
 pkgver=4.4.36
-pkgrel=3
+pkgrel=1
 epoch=
 pkgdesc="Modern library for one-way hashing of passwords"
 arch=('x86_64')
@@ -23,9 +23,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --disable-werror \
-    --disable-static \
-    --disable-failure-tokens \
-    --disable-obsolete-api \
+    --enable-obsolete-api=no \
     --enable-hashes=strong,glibc
 
   make

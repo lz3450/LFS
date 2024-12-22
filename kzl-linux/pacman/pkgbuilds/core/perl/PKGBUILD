@@ -1,0 +1,74 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=perl
+pkgver=5.41.7
+pkgrel=1
+epoch=
+pkgdesc="A highly capable, feature-rich programming language"
+arch=('x86_64')
+url="https://www.perl.org"
+license=('KZL')
+depends=(
+  gdbm
+  glibc
+  libxcrypt
+)
+options=(!purge)
+# source=(https://www.cpan.org/src/5.0/$pkgname-$pkgver.tar.xz)
+source=(git+https://github.com/Perl/perl5.git#tag=v$pkgver)
+sha256sums=('3bf30dfd9f03ddb8737a252058f13329cdd15d63257e2c85e8869033e0a6737e')
+
+_script_dirname="perl_core"
+_site_dirname="perl_site"
+_vendor_dirname="perl_vendor"
+
+build() {
+  cd perl5
+
+  # https://metacpan.org/dist/perl/view/INSTALL
+
+  ./Configure -des \
+    -D cc=gcc \
+    -D optimize="$CFLAGS -fPIC" \
+    -D ldflags="$LDFLAGS" \
+    -D prefix=/usr \
+    -D usethreads \
+    -D useshrplib \
+    -D scriptdir="/usr/bin/$_script_dirname" \
+    -D privlib="/usr/lib/perl5/$_script_dirname/$pkgver" \
+    -D archlib="/usr/lib/perl5/$_script_dirname/$pkgver" \
+    -D man1dir=/usr/share/man/man1 \
+    -D man3dir=/usr/share/man/man3 \
+    -D siteprefix=/usr \
+    -D sitescript="/usr/bin/$_site_dirname" \
+    -D sitelib="/usr/lib/perl5/$_site_dirname/$pkgver" \
+    -D sitearch="/usr/lib/perl5/$_site_dirname/$pkgver" \
+    -D siteman1dir=/usr/share/man/man1 \
+    -D siteman3dir=/usr/share/man/man3 \
+    -D vendorprefix=/usr \
+    -D vendorscript="/usr/bin/$_vendor_dirname" \
+    -D vendorlib="/usr/lib/perl5/$_vendor_dirname/$pkgver" \
+    -D vendorarch="/usr/lib/perl5/$_vendor_dirname/$pkgver" \
+    -D vendorman1dir=/usr/share/man/man1 \
+    -D vendorman3dir=/usr/share/man/man3 \
+    -D man1ext=1pm \
+    -D man3ext=3pm \
+    -D inc_version_list=none
+
+  make
+}
+
+check() {
+  cd perl5
+
+  make test
+}
+
+package() {
+  cd perl5
+
+  make DESTDIR="$pkgdir" install
+
+  install -m755 -d "$pkgdir"/usr/lib/perl5/vendor_perl/$pkgver
+  echo "export PATH=\$PATH:/usr/bin/$_script_dirname:/usr/bin/$_site_dirname:/usr/bin/$_vendor_dirname" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/perl.sh
+}

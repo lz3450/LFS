@@ -1,6 +1,0 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.gnu.org.ua/software/gdbm/download.html | grep -oP 'gdbm-[0-9]+\.[0-9]+' | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
-}

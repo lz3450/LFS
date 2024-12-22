@@ -1,4 +1,4 @@
-`configure' configures gdbm 1.23 to adapt to many kinds of systems.
+`configure' configures gdbm 1.24 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

@@ -1,0 +1,6 @@
+new_version=$(git ls-remote --tags https://github.com/Perl/perl5.git | grep -oP '(?<=refs/tags/v)\d\.\d+\.\d+'  | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/perl5"
+    ./Configure -h > "$PKGBUILDDIR"/help.txt 2>&1 || :
+}
