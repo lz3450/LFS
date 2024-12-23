@@ -8,9 +8,18 @@ pkgdesc="A secure communications library implementing the SSL, TLS and DTLS prot
 arch=('x86_64')
 url="https://www.gnutls.org/"
 license=('KZL')
-depends=(gmp libidn2 libtasn1 libunistring nettle p11-kit)
-# makedepends=(tpm2-tss)
-# optiondepends=("tpm2-tss: TPM2 support")
+depends=(
+  brotli
+  gmp
+  libidn2
+  libtasn1
+  libunistring
+  nettle
+  p11-kit
+  zstd
+)
+makedepends=(tpm2-tss)
+optiondepends=("tpm2-tss: TPM2 support")
 # source=(git+https://gitlab.com/gnutls/gnutls.git#tag=$pkgver
 #         git+https://git.savannah.gnu.org/git/gnulib.git)
 source=(https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/$pkgname-$pkgver.tar.xz{,.sig})

@@ -1,4 +1,4 @@
-`configure' configures gnupg 2.4.3 to adapt to many kinds of systems.
+`configure' configures gnupg 2.5.2 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -81,7 +81,6 @@ Optional Features:
   --disable-doc           do not build the doc program
   --disable-gpgtar        do not build the gpgtar program
   --disable-wks-tools     do not build the wks-tools program
-  --enable-gpg-is-gpg2    Set installed name of gpg to gpg2
   --enable-selinux-support
                           enable SELinux support
   --enable-large-secmem   allocate extra secure memory
@@ -197,7 +196,6 @@ Some influential environment variables:
               you have headers in a nonstandard directory <include dir>
   SYSROOT     locate config scripts also below that directory
   CPP         C preprocessor
-  YAT2M       tool to convert texi to man pages
   CC_FOR_BUILD
               build system C compiler
   PKG_CONFIG  path to pkg-config utility

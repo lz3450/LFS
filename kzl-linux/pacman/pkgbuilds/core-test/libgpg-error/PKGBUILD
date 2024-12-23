@@ -1,15 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libgpg-error
-pkgver=1.47
-pkgrel=7
+pkgver=1.51
+pkgrel=1
 epoch=
 pkgdesc="Support library for libgcrypt"
 arch=('x86_64')
 url="https://www.gnupg.org"
 license=('KZL')
 source=(git+https://dev.gnupg.org/source/libgpg-error.git#tag=$pkgname-$pkgver)
-sha256sums=('SKIP')
+sha256sums=('812b4c57e6582654fc095046bfccb94835df5949384aaf6c73b48996f06c3ec6')
 
 prepare() {
   cd $pkgname

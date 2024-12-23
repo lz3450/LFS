@@ -1,4 +1,4 @@
-`configure' configures libassuan 2.5.6 to adapt to many kinds of systems.
+`configure' configures libassuan 3.0.1 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -93,6 +93,8 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot=DIR Search for dependent libraries within DIR
                         (or the compiler's sysroot if not specified).
+  --with-libtool-modification=apply|never|try
+                          how to handle libtool modification (default=never)
   --with-libgpg-error-prefix=PFX
                           prefix where GPG Error is installed (optional)
 

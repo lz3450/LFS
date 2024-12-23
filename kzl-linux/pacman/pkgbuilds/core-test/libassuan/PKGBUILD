@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libassuan
-pkgver=2.5.6
-pkgrel=4
+pkgver=3.0.1
+pkgrel=1
 epoch=
 pkgdesc="A small library implementing the so-called Assuan protocol"
 arch=('x86_64')
@@ -10,7 +10,7 @@ url="https://www.gnupg.org/related_software/libassuan/"
 license=('KZL')
 depends=(libgpg-error)
 source=(git://git.gnupg.org/libassuan.git#tag=$pkgname-$pkgver)
-sha256sums=('SKIP')
+sha256sums=('d6b286afc603e4a042bf35ccd72716357e9ca37fd5fc7a8c03de5cc841321231')
 
 prepare() {
   cd $pkgname

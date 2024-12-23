@@ -1,0 +1,61 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=ncurses
+pkgver=6.5.20241221
+pkgrel=1
+epoch=
+pkgdesc="A free software emulation of curses in System V Release 4.0 (SVr4), and more"
+arch=('x86_64')
+url="https://invisible-island.net/ncurses/ncurses.html"
+license=('KZL')
+source=(https://invisible-mirror.net/archives/$pkgname/current/$pkgname-${pkgver%.*}-${pkgver##*.}.tgz)
+sha256sums=('b84e20edd1d8fea37ee42567f5798386e1a8c712efa722439ffeadecb1869523')
+
+prepare() {
+  cd $pkgname-${pkgver%.*}-${pkgver##*.}
+
+  sed -i 's/@EXTRA_PKG_LDFLAGS@ //g' misc/gen-pkgconfig.in misc/ncurses-config.in
+}
+
+build() {
+  cd $pkgname-${pkgver%.*}-${pkgver##*.}
+
+  ./configure \
+    --prefix=/usr \
+    --without-ada \
+    --without-manpages \
+    --enable-pc-files \
+    --with-shared \
+    --with-cxx-shared \
+    --with-xterm-kbs=DEL \
+    --disable-root-environ \
+    --disable-root-access \
+    --disable-setuid-environ
+
+  make
+}
+
+package() {
+  cd $pkgname-${pkgver%.*}-${pkgver##*.}
+
+  make DESTDIR="$pkgdir" install
+
+  for lib in ncurses ncurses++ form menu panel; do
+    echo "INPUT(-l%sw)" "$lib" > "$pkgdir/usr/lib/lib$lib.so"
+    ln -vs ${lib}w.pc "$pkgdir/usr/lib/pkgconfig/$lib.pc"
+  done
+
+  echo "INPUT(-lncursesw)" > "$pkgdir/usr/lib/libcursesw.so"
+  echo "INPUT(-lncurses)" > "$pkgdir/usr/lib/libcurses.so"
+
+  for lib in tic tinfo; do
+    echo "INPUT(-lncursesw)" > "$pkgdir/usr/lib/lib$lib.so"
+    ln -vs ncursesw.pc "$pkgdir/usr/lib/pkgconfig/$lib.pc"
+  done
+
+  install -d -m 755 "$pkgdir"/usr/include/ncurses{,w}
+  for include in "$pkgdir"/usr/include/*.h; do
+    ln -vs ../$(basename $include) "$pkgdir"/usr/include/ncurses
+    ln -vs ../$(basename $include) "$pkgdir"/usr/include/ncursesw
+  done
+}

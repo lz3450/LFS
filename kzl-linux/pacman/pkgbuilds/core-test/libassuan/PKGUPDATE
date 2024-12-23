@@ -1,0 +1,6 @@
+new_version=$(git ls-remote --tags git://git.gnupg.org/libassuan.git | grep -oP '(?<=refs/tags/libassuan-)\d+\.\d+\.\d+$' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

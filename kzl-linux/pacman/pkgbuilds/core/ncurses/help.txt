@@ -69,7 +69,7 @@ Optional Features:
   --with-abi-version=XXX  override derived ABI version
   --with-system-type=XXX  test: override derived host system-type
   --with-abi-altered=XXX  override visible ABI version, for packaging
-  --without-ada           suppress check for Ada compiler, don't build demo
+  --without-ada           suppress check for Ada compiler
   --without-cxx           do not adjust ncurses bool to match C++
   --without-cxx-binding   do not build C++ binding and demo
   --disable-db-install    suppress install of terminal database
@@ -77,13 +77,14 @@ Optional Features:
   --without-progs         suppress build/install with programs (e.g., tic)
   --without-tests         suppress build/install with test-programs
   --without-curses-h      install curses.h as ncurses.h only
-  --with-config-suffix=X  suffixes ncursesXX-config file
-  --with-pkg-config{=path} enable/disable use of pkg-config
-  --with-pkg-config-libdir=XXX use given directory for installing pc-files
+  --with-config-suffix=X  name ncurses*X-config file with X
+  --with-pkg-config[=CMD] enable/disable use of pkg-config and its name CMD
+  --with-pkg-config-libdir[=XXX] use given directory for installing pc-files
   --enable-pc-files       generate and install .pc files for pkg-config
-  --with-pc-suffix        suffixes pc-files
+  --with-pc-suffix[=XXX]  suffix pkg-config files with XXX
   --enable-mixed-case     tic should assume mixed-case filenames
-  --with-install-prefix   prefixes actual install-location ($DESTDIR)
+  --with-install-prefix=DESTDIR use DESTDIR as installation directory prefix
+  --enable-install-prefix merge DESTDIR with installation prefix
 Build-Tools Needed to Compile Temporary Applications for Cross-compiling:
   --with-build-cc=XXX     the build C compiler ($BUILD_CC)
   --with-build-cpp=XXX    the build C preprocessor ($BUILD_CPP)
@@ -104,10 +105,10 @@ Options to Specify the Libraries Built/Used:
   --with-ticlib           generate separate tic library
   --enable-rpath          use rpath option when generating shared libraries
   --disable-relink        relink shared libraries during install
-  --with-shlib-version=X  Specify rel or abi version for shared libs
-  --with-libtool-opts=XXX specify additional libtool options
-  --with-export-syms=XXX  limit exported symbols using libtool
-  --with-versioned-syms=X markup versioned symbols using ld
+  --with-shlib-version[={rel|abi}] use release or ABI version in shared library file names
+  --with-libtool-opts[=XXX] give libtool additional options XXX
+  --with-export-syms[=SYM-FILE] limit symbols exported by libtool to those listed in SYM-FILE
+  --with-versioned-syms[=MAP-FILE] version ELF shared library symbols per MAP-FILE
   --with-gpm              use Alessandro Rubini's GPM library
   --without-dlsym         do not use dlsym() to load GPM dynamically
   --with-pcre2            use PCRE2 for regular-expressions
@@ -116,7 +117,7 @@ Options to Specify the Libraries Built/Used:
   --disable-rpath-hack    don't add rpath options for additional libraries
   --disable-pkg-ldflags   disable extra LDFLAGS for package-scripts
 Fine-Tuning Your Configuration:
-  --with-extra-suffix=X   append extra suffix to header/library paths
+  --with-extra-suffix[=X] append extra suffix X to header/library paths
   --disable-overwrite     put headers in subdir, omit link to -lcurses
   --disable-database      do not use terminfo, only fallbacks/termcap
   --with-database=XXX     specify terminfo source to install
@@ -125,7 +126,7 @@ Fine-Tuning Your Configuration:
   --with-tic-path=XXX     specify path of tic for fallbacks
   --with-infocmp-path=XXX     specify path of infocmp for fallbacks
   --without-xterm-new     specify if xterm terminfo should be old version
-  --with-xterm-kbs=XXX    specify if xterm backspace sends BS or DEL
+  --with-xterm-kbs[=XXX]  specify if xterm backspace sends BS or DEL
   --with-terminfo-dirs=XXX specify list of terminfo directories (default: DATADIR/terminfo)
   --with-default-terminfo-dir=DIR default terminfo directory (default: DATADIR/terminfo)
   --disable-big-core      assume machine has little memory
@@ -141,20 +142,20 @@ Fine-Tuning Your Configuration:
   --enable-symlinks       make tic use symbolic links not hard links
   --enable-broken_linker  compile with broken-linker support code
   --enable-bsdpad         recognize BSD-style prefix padding
-  --enable-widec          compile with wide-char/UTF-8 code
+  --disable-widec         compile without wide character and UTF-8 support
   --disable-lp64          allow chtype to be long (ignore _LP64)
   --disable-largefile     omit support for large files
   --disable-tparm-varargs compile tparm() without varargs interface
   --disable-tic-depends   link tic library without explicit dependency on ncurses library
   --enable-wattr-macros   enable wattr* macros
-  --with-x11-rgb=FILE   file containing X11 rgb information (EPREFIX/lib/X11/rgb.txt)
-  --with-bool=TYPE        override fallback type of bool variable
+  --with-x11-rgb=FILE     obtain X11 color definitions from FILE (default: EPREFIX/lib/X11/rgb.txt)
+  --with-bool=TYPE        fall back to TYPE for curses 'bool' typedef
   --with-caps=alt         compile with alternate Caps file
   --with-chtype=TYPE      override type of chtype
   --with-ospeed=TYPE      override type of ospeed variable
   --with-mmask-t=TYPE     override type of mmask_t
   --with-ccharw-max=XXX   override size CCHARW_MAX
-  --enable-signed-char    compile using signed Boolean's in term.h
+  --enable-signed-char    use signed chars for Boolean array in term.h
   --with-tparm-arg=TYPE   override parameter type of tparm
   --with-rcs-ids          compile-in RCS identifiers
 Options to Specify How Manpages are Installed:
@@ -181,13 +182,14 @@ Reentrant Code:
   --enable-pthreads-eintr enable EINTR in wgetch with pthreads
   --enable-weak-symbols   enable weak-symbols for pthreads
   --enable-reentrant      compile with reentrant code
-  --enable-opaque-curses  make curses WINDOW, etc., "opaque"
-  --enable-opaque-form    make form-library structures "opaque"
-  --enable-opaque-menu    make menu-library structures "opaque"
-  --enable-opaque-panel   make panel-library structures "opaque"
+  --disable-opaque-curses do not make WINDOW, etc., structures opaque
+  --disable-opaque-form   do not make form library structures opaque
+  --disable-opaque-menu   do not make menu library structures opaque
+  --disable-opaque-panel  do not make panel library structures opaque
   --with-wrap-prefix=XXX  override prefix used for public variables
 Development Code:
   --without-develop       disable development options
+  --enable-check-size     compile-in code to detect screensize of serial terminals
   --enable-hard-tabs      compile with hard-tabs code
   --enable-xmc-glitch     compile with support for xmc (magic-cookie)
 Experimental Code:
@@ -217,15 +219,16 @@ Testing/development Options:
   --with-trace            test: add trace() function to all models of ncurses
   --disable-gnat-projects test: disable GNAT projects even if usable
 Ada Binding Options:
-  --with-ada-compiler=CMD specify Ada95 compiler command (default gnatmake)
-  --with-ada-include=DIR  Ada includes are in DIR (default: PREFIX/share/ada/adainclude)
-  --with-ada-objects=DIR  Ada objects are in DIR (default: PREFIX/lib/ada/adalib)
-  --with-ada-sharedlib=soname build shared-library (requires GNAT projects)
-  --with-ada-libname=XXX  override default Ada library-name
-  --with-form-libname=XXX override form basename of library
-  --with-menu-libname=XXX override menu basename of library
-  --with-panel-libname=XXX override panel basename of library
-  --with-cxx-libname=XXX override ncurses++ basename of library
+  --with-ada-compiler[=CMD] use CMD as Ada95 compiler (default: gnatmake)
+  --with-ada-include=DIR  find Ada95 includes in DIR (default: PREFIX/share/ada/adainclude)
+  --with-ada-objects=DIR  find Ada95 objects in DIR (default: PREFIX/lib/ada/adalib)
+  --with-ada-sharedlib    build Ada95 shared library; requires GNAT project support
+  --with-ada-libname[=XXX]  use XXX as Ada95 library name
+Library basenames for pkgsrc:
+  --with-form-libname[=XXX] override ifelse(,,form,) basename of library
+  --with-menu-libname[=XXX] override ifelse(,,menu,) basename of library
+  --with-panel-libname[=XXX] override ifelse(,,panel,) basename of library
+  --with-cxx-libname[=XXX] override ifelse(ncurses++,,cxx,ncurses++) basename of library
 
 Some influential environment variables:
   CC          C compiler command

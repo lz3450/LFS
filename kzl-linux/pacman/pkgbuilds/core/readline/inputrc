@@ -2,8 +2,8 @@
 # See readline(3) for details.
 
 # terminal bell
-set bell-style audible
 #set bell-style none
+set bell-style audible
 #set bell-style visible
 
 # enable eight-bit input
@@ -16,17 +16,17 @@ set mark-symlinked-directories on
 
 $if mode=emacs
 
+# allow the use of the Insert/Delete keys
+"\e[2~": quoted-insert
+"\e[3~": delete-char
+
 # allow the use of the Home/End keys
 "\e[1~": beginning-of-line
 "\e[4~": end-of-line
 
-# allow the use of the Delete/Insert keys
-"\e[3~": delete-char
-"\e[2~": quoted-insert
-
 # mappings for pgup/pgdown to reach begin/end of the history
-# "\e[5~": beginning-of-history
-# "\e[6~": end-of-history
+#"\e[5~": beginning-of-history
+#"\e[6~": end-of-history
 # mappings for pgup/pgdown to search the history
 "\e[5~": history-search-backward
 "\e[6~": history-search-forward

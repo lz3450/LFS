@@ -8,10 +8,11 @@ arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
 license=('KZL')
 depends=(
+  bash
   curl
   fakeroot
   glibc
-  gpgme
+  # gpgme
   libarchive
   libseccomp
 )
@@ -75,7 +76,7 @@ EOF
     -D doc=disabled \
     -D doxygen=disabled \
     -D file-seccomp=enabled \
-    -D gpgme=enabled \
+    -D gpgme=disabled \
     -D ldconfig=/usr/bin/ldconfig \
     -D pkg-ext='.pkg.tar.zst' \
     -D scriptlet-shell=/usr/bin/bash \

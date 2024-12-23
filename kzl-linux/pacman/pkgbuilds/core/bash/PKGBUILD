@@ -1,52 +1,53 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=bash
-pkgver=5.2.15
-pkgrel=12
+pkgver=5.2.g39
+pkgrel=1
 epoch=
 pkgdesc="The GNU Bourne-Again SHell"
 arch=('x86_64')
 url="https://www.gnu.org/software/bash/"
 license=('KZL')
-depends=(glibc ncurses readline)
+depends=(
+  glibc
+  ncurses
+  readline
+)
 optdepends=("bash-completion")
 provides=(sh)
-source=(git+https://git.savannah.gnu.org/git/bash.git#branch=master
-        dot.bashrc
-        dot.bash_logout
-        dot.bash_profile
-        system.bashrc
-        system.bash_logout)
+source=(
+  git+https://git.savannah.gnu.org/git/bash.git#branch=master
+  dot.bashrc
+  dot.bash_logout
+  dot.bash_profile
+  bash.bashrc
+  bash.bash_logout
+)
 sha256sums=('SKIP'
-            '3e22bf86ae6708df7a6bceb88c67a00118275f9c0b5268f453dd388af7c43b53'
-            '4330edf340394d0dae50afb04ac2a621f106fe67fb634ec81c4bfb98be2a1eb5'
-            'e149407c2bee17779caec70a7edd3d0000d172e7e4347429b80cb4d55bcec9c2'
-            '5fdc20c44bc9058f728d11111327f4dbb5598fec4d948dd5265211598667f9f0'
-            '025bccfb374a3edce0ff8154d990689f30976b78f7a932dc9a6fcef81821811e')
+            'c41c92e50cf8c1d09918a20c4d51a33fd1e01f490e97b29b4ef01b966057acea'
+            'b02c0ac51db9f1a5a8ae76056280d41ace41f82cd69194e84ee7a721eae2b907'
+            'e297955ec4e6060a539e2a028cb67a4f41d5632c3360415cd14bb7d0af7b030c'
+            '3f45e0002bb378a19267655a90e7d6416dc55bf8abc112656f48cce2a20e5f01'
+            '6682154699081666aa10f52116d1904a3045df46cda3b7d7ff123e5e93d63f29')
 
 pkgver() {
   cd $pkgname
 
-  git describe --tags | sed 's/bash-//;s/-g.*//;s/-/./'
+  git describe --tags | sed 's/bash-//;s/-g.*//;s/-/.g/'
+
+  sed -i \
+    -e '/#define STANDARD_UTILS_PATH/{n; s|:/etc:/usr/etc||}' \
+    -e '/#define SYS_BASHRC/s|/\*\(.*\)\*/|\1|' \
+    -e '/#define SYS_BASH_LOGOUT/s|/\*\(.*\)\*/|\1|' \
+    -e '/#define NON_INTERACTIVE_LOGIN_SHELLS/s|/\*\(.*\)\*/|\1|' \
+    config-top.h
 }
 
 build() {
   cd $pkgname
 
-  # config-top.h
-  _bashconfig=(
-    -DDEFAULT_PATH_VALUE=\'\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"\'
-    -DSTANDARD_UTILS_PATH=\'\"/usr/sbin:/usr/bin:/sbin:/bin\"\'
-    -DSYS_BASHRC=\'\"/etc/bash.bashrc\"\'
-    -DSYS_BASH_LOGOUT=\'\"/etc/bash.bash_logout\"\'
-    -DNON_INTERACTIVE_LOGIN_SHELLS
-  )
-
-  CFLAGS+=" ${_bashconfig[@]}"
-
   ./configure \
     --prefix=/usr \
-    --enable-readline \
     --with-bash-malloc=no \
     --with-curses \
     --with-installed-readline
@@ -67,13 +68,11 @@ package() {
 
   ln -sv bash "$pkgdir"/usr/bin/sh
 
-  # system-wide configuration files
-  install -Dm644 "$srcdir"/system.bashrc "$pkgdir"/etc/bash.bashrc
-  install -Dm644 "$srcdir"/system.bash_logout "$pkgdir"/etc/bash.bash_logout
+  install -D -m 644 "$srcdir"/bash.bashrc "$pkgdir"/etc/bash.bashrc
+  install -D -m 644 "$srcdir"/bash.bash_logout "$pkgdir"/etc/bash.bash_logout
 
-  # user configuration file skeletons
-  install -dm755 "$pkgdir"/etc/skel/
-  install -Dm644 "$srcdir"/dot.bashrc "$pkgdir"/etc/skel/.bashrc
-  install -Dm644 "$srcdir"/dot.bash_profile "$pkgdir"/etc/skel/.bash_profile
-  install -Dm644 "$srcdir"/dot.bash_logout "$pkgdir"/etc/skel/.bash_logout
+  install -d -m 755 "$pkgdir"/etc/skel/
+  install -D -m 644 "$srcdir"/dot.bashrc "$pkgdir"/etc/skel/.bashrc
+  install -D -m 644 "$srcdir"/dot.bash_profile "$pkgdir"/etc/skel/.bash_profile
+  install -D -m 644 "$srcdir"/dot.bash_logout "$pkgdir"/etc/skel/.bash_logout
 }

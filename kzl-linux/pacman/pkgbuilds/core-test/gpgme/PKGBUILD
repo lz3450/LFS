@@ -15,7 +15,7 @@ depends=(
 )
 # makedepends=(pandoc python swig)
 makedepends=(swig)
-source=(git+git://git.gnupg.org/gpgme.git#tag=$pkgname-$pkgver)
+source=(git://git.gnupg.org/gpgme.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 
 prepare() {
@@ -29,7 +29,6 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --enable-maintainer-mode \
     --enable-languages=cpp
     # --enable-languages=cpp,python
 

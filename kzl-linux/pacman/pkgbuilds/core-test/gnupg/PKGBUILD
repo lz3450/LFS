@@ -1,20 +1,30 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gnupg
-pkgver=2.4.3
-pkgrel=3
+pkgver=2.5.2
+pkgrel=1
 epoch=
 pkgdesc="Complete and free implementation of the OpenPGP standard"
 arch=('x86_64')
 url="https://www.gnupg.org/"
 license=('KZL')
-depends=(gnutls libassuan libgcrypt libgpg-error libksba npth openldap pinentry sqlite)
+depends=(
+  gnutls
+  libassuan
+  libgcrypt
+  libgpg-error
+  libksba
+  npth
+  openldap
+  pinentry
+  sqlite
+)
 # makedepends=(fig2dev libusb-compat pcsclite)
 # optdepends=("libusb-compat: scdaemon"
 #             "pcsclite: scdaemon")
 checkdepends=(openssh)
 source=(git://git.gnupg.org/gnupg.git#tag=$pkgname-$pkgver)
-sha256sums=('SKIP')
+sha256sums=('aec02dd1b1cfbc2f2439e58e7528b528d80ab0ece748ca72f79fe34e1b8abb04')
 
 prepare() {
   cd $pkgname
