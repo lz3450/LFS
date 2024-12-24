@@ -1,0 +1,37 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=arch-install-scripts
+pkgver=28
+pkgrel=7
+epoch=
+pkgdesc="A small suite of scripts aimed at automating some menial tasks when installing Arch Linux"
+arch=('any')
+url="https://github.com/archlinux/arch-install-scripts"
+license=('KZL')
+depends=(pacman)
+source=(git+https://github.com/archlinux/$pkgname.git#tag=v$pkgver)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  sed -e "/^MAN/{n;N;N;d}" -i Makefile
+}
+
+build() {
+  cd $pkgname
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make check
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" PREFIX="/usr/local" install
+}
