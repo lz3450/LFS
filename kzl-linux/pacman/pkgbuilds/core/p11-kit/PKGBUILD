@@ -1,26 +1,35 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=p11-kit
-pkgver=0.25.0
-pkgrel=3
+pkgver=0.25.5
+pkgrel=1
 epoch=
 pkgdesc="Loads and enumerates PKCS#11 modules"
 arch=('x86_64')
 url="https://p11-glue.freedesktop.org"
 license=('KZL')
-depends=(libffi libtasn1)
+depends=(
+  libffi
+  libtasn1
+)
 source=(git+https://github.com/p11-glue/p11-kit.git#tag=$pkgver)
-sha256sums=('SKIP')
+sha256sums=('930b25ef02695046604eab4641626b4fde082157d1baf581f0e5e3732e89de1e')
 
-build() {
+prepare() {
   cd $pkgname
 
   meson setup \
     --prefix /usr \
     --auto-features enabled \
     --optimization 2 \
-    -D trust_paths=/etc/ca-certificates/trust-source:/usr/share/ca-certificates/trust-source \
+    -D libffi=enabled \
+    -D systemd=enabled \
+    -D trust_paths=/etc/pki/ca-trust/source:/usr/share/pki/ca-trust-source \
     build
+}
+
+build() {
+  cd $pkgname
 
   meson compile -C build
 }

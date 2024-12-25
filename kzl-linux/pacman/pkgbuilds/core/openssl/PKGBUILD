@@ -8,14 +8,16 @@ pkgdesc="A Open Source Toolkit for the Transport Layer Security (TLS) protocol f
 arch=('x86_64')
 url="https://www.openssl.org"
 license=('KZL')
-backup=(etc/ssl/openssl.cnf)
+backup=(etc/pki/tls/openssl.cnf)
 source=(git+https://github.com/openssl/openssl.git#tag=$pkgname-$pkgver)
 sha256sums=('cb272891185e7b40f5d27a5a5cac9836ed9dbf556bf907ce1f9171601dfc5e16')
+
+openssldir="/etc/pki/tls"
 
 prepare() {
   cd $pkgname
 
-  sed -i "s|./demoCA|/etc/ssl|g" apps/openssl.cnf apps/CA.pl.in
+  sed -i "s|./demoCA|$openssldir|g" apps/openssl.cnf apps/CA.pl.in
 }
 
 build() {
@@ -26,7 +28,7 @@ build() {
   ./Configure \
     --release \
     --libdir=lib \
-    --openssldir=/etc/ssl \
+    --openssldir="$openssldir" \
     --prefix=/usr \
     enable-ktls \
     enable-ec_nistp_64_gcc_128 \
@@ -38,13 +40,13 @@ build() {
 check() {
   cd $pkgname
 
-  sed -e "s|/etc/ssl|./demoCA|g" \
+  sed -e "s|$openssldir|./demoCA|g" \
       -i apps/openssl.cnf \
       -i apps/CA.pl.in
 
 	make test
 
-  sed -e "s|./demoCA|/etc/ssl|g" \
+  sed -e "s|./demoCA|$openssldir|g" \
       -i apps/openssl.cnf \
       -i apps/CA.pl.in
 }

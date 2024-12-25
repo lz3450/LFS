@@ -1,0 +1,63 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=libtasn1
+pkgver=4.19.0.g65
+pkgrel=1
+epoch=
+pkgdesc="The ASN.1 library used by GnuTLS, p11-kit"
+arch=('x86_64')
+url="https://www.gnu.org/software/libtasn1/"
+license=('KZL')
+source=(
+  # git+https://gitlab.com/gnutls/libtasn1.git#tag=v$pkgver
+  git+https://gitlab.com/gnutls/libtasn1.git
+  git+https://git.savannah.gnu.org/git/gnulib.git
+)
+# source=(https://ftp.gnu.org/gnu/libtasn1/$pkgname-$pkgver.tar.gz{,.sig})
+# validpgpkeys=('B1D2BD1375BECB784CF4F8C4D73CF638C53C06BE')
+sha256sums=('SKIP'
+            'SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/v//;s/-g.*//;s/-/.g/'
+}
+
+prepare() {
+  cd $pkgname
+
+  sed -i \
+      -e '/^GTK_DOC_CHECK/d' \
+      -e '/doc\/Makefile/d' \
+      -e '/doc\/reference\/Makefile/d' \
+      configure.ac
+  sed -e '/--enable-gtk-doc/d' \
+      -i Makefile.am
+
+  echo "$pkgver" > .tarball-version
+
+  ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr \
+    --disable-doc
+
+  make
+}
+
+check() {
+  cd $pkgname
+
+  make check
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}

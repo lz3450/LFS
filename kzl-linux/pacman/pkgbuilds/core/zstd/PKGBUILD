@@ -15,21 +15,18 @@ sha256sums=('473a5782ac3e511d476127aa7ea100e51ee4756e8c8e984144ee3a42a7387222')
 prepare() {
   cd $pkgname/build/cmake
 
-  cmake \
+  cmake -S . -B build -G Ninja \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_INSTALL_LIBDIR=lib \
-    -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
-    -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -D CMAKE_C_FLAGS="$CPPFLAGS $CFLAGS" \
+    -D CMAKE_CXX_FLAGS="$CPPFLAGS $CXXFLAGS" \
     -D ZSTD_BUILD_CONTRIB=ON \
     -D ZSTD_BUILD_TESTS=ON \
     -D ZSTD_LZ4_SUPPORT=ON \
     -D ZSTD_LZMA_SUPPORT=ON \
     -D ZSTD_PROGRAMS_LINK_SHARED=ON \
-    -D ZSTD_ZLIB_SUPPORT=ON \
-    -S . \
-    -B build \
-    -G Ninja
+    -D ZSTD_ZLIB_SUPPORT=ON
 }
 
 build() {

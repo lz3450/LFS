@@ -1,0 +1,70 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=curl
+pkgver=8.11.1
+pkgrel=1
+epoch=
+pkgdesc="An URL retrieval utility and library"
+arch=('x86_64')
+url="https://curl.se/"
+license=('KZL')
+depends=(
+  ca-certificates
+  krb5
+  libidn2
+  libpsl
+  libssh2
+  nghttp2
+  openssl
+  zlib
+  zstd
+)
+source=(git+https://github.com/curl/curl.git#tag=curl-${pkgver//./_})
+sha256sums=('56d1cb1d6f9e248b96df8ddb4f8aae8dc704fefc9238a315f2772dccdb79320c')
+
+prepare() {
+  cd $pkgname
+
+  sed -i "/\WLIBCURL_VERSION\W/s/-DEV//" include/curl/curlver.h
+
+  cmake -S . -B build -LAH \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_C_FLAGS="$CPPFLAGS $CFLAGS" \
+    -D CMAKE_CXX_FLAGS="$CPPFLAGS $CXXFLAGS" \
+    -D BUILD_EXAMPLES=OFF \
+    -D BUILD_LIBCURL_DOCS=OFF \
+    -D BUILD_MISC_DOCS=OFF \
+    -D BUILD_TESTING=OFF \
+    -D CURL_BROTLI=OFF \
+    -D CURL_CA_BUNDLE=none \
+    -D CURL_CA_PATH=/etc/pki/tls/certs \
+    -D CURL_DISABLE_KERBEROS_AUTH=OFF \
+    -D CURL_DISABLE_LDAP=ON \
+    -D CURL_DISABLE_LDAPS=ON \
+    -D CURL_LTO=ON \
+    -D CURL_USE_GNUTLS=OFF \
+    -D CURL_USE_LIBPSL=ON \
+    -D CURL_USE_LIBSSH2=ON \
+    -D CURL_USE_LIBUV=OFF \
+    -D CURL_USE_OPENSSL=ON \
+    -D CURL_USE_PKGCONFIG=ON \
+    -D CURL_ZLIB=ON \
+    -D CURL_ZSTD=ON \
+    -D ENABLE_ARES=OFF \
+    -D ENABLE_CURL_MANUAL=OFF \
+    -D USE_LIBIDN2=ON \
+    -D USE_NGHTTP2=ON
+}
+
+build() {
+  cd $pkgname
+
+  cmake --build build
+}
+
+package() {
+  cd $pkgname
+
+  DESTDIR="$pkgdir" cmake --build build --target install
+}

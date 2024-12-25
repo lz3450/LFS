@@ -1,6 +1,0 @@
-new_version=$(git ls-remote --tags https://github.com/archlinux/arch-install-scripts.git | grep -oP '(?<=refs/tags/v)\d\d' | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    cat Makefile > "$PKGBUILDDIR"/help.txt
-}

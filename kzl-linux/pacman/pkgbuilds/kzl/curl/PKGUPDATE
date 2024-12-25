@@ -1,6 +1,0 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://curl.se/ | grep -oP '(?<=The most recent stable version is <b>)\d\.\d\.\d(?=</b>)')
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
-}

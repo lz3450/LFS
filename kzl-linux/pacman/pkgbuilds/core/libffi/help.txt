@@ -1,4 +1,4 @@
-`configure' configures GNU Libtasn1 4.19.0 to adapt to many kinds of systems.
+`configure' configures libffi 3.4.6 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -47,7 +47,7 @@ Fine tuning of the installation directories:
   --infodir=DIR           info documentation [DATAROOTDIR/info]
   --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
   --mandir=DIR            man documentation [DATAROOTDIR/man]
-  --docdir=DIR            documentation root [DATAROOTDIR/doc/libtasn1]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/libffi]
   --htmldir=DIR           html documentation [DOCDIR]
   --dvidir=DIR            dvi documentation [DOCDIR]
   --pdfdir=DIR            pdf documentation [DOCDIR]
@@ -61,38 +61,42 @@ Program names:
 System types:
   --build=BUILD     configure for building on BUILD [guessed]
   --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+  --target=TARGET   configure for building compilers for TARGET [HOST]
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --disable-builddir      disable automatic build in subdir of sources
+
   --enable-silent-rules   less verbose build output (undo: "make V=1")
   --disable-silent-rules  verbose build output (undo: "make V=0")
   --enable-dependency-tracking
                           do not reject slow dependency extractors
   --disable-dependency-tracking
                           speeds up one-time build
-  --disable-largefile     omit support for large files
-  --disable-year2038      omit support for timestamps past the year 2038
-  --disable-doc           don't generate any documentation
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-gtk-doc        use gtk-doc to build documentation [[default=no]]
-  --enable-gtk-doc-html   build documentation in html format [[default=yes]]
-  --enable-gtk-doc-pdf    build documentation in pdf format [[default=no]]
-  --enable-cross-guesses={conservative|risky}
-                          specify policy for cross-compilation guesses
-  --enable-ld-version-script
-                          enable linker version script (default is enabled
-                          when possible)
-  --disable-valgrind-tests
-                          don't try to run self tests under valgrind
-  --enable-code-coverage  Whether to enable code coverage support
-  --disable-gcc-warnings  disable GCC warnings (for developers)
-  --enable-fuzzing        Turn on fuzzing build (for developers)
+  --enable-portable-binary
+                          disable compiler optimizations that would produce
+                          unportable binaries
+  --enable-maintainer-mode
+                          enable make rules and dependencies not useful (and
+                          sometimes confusing) to the casual installer
+  --enable-pax_emutramp       enable pax emulated trampolines (experimental)
+  --disable-docs          Disable building of docs (default: no)
+  --enable-debug          debugging mode
+  --disable-structs       omit code for struct support
+  --disable-raw-api       make the raw api unavailable
+  --disable-exec-static-tramp  disable use of static exec trampolines (enabled by default)
+  --enable-purify-safety  purify-safe mode
+  --disable-multi-os-directory
+                          disable use of gcc --print-multi-os-directory to change the library installation directory
+  --enable-symvers=STYLE  enables symbol versioning of the shared library
+                          [default=yes]
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -105,12 +109,8 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
-  --with-html-dir=PATH    path to installed docs
-  --with-packager         String identifying the packager of this software
-  --with-packager-version Packager-specific version information
-  --with-packager-bug-reports
-                          Packager info for bug reports (URL/e-mail/...)
-  --with-gcov=GCOV        use given GCOV for coverage (GCOV=gcov).
+  --with-gcc-arch=<arch>  use architecture <arch> for gcc -march/-mtune,
+                          instead of guessing
 
 Some influential environment variables:
   CC          C compiler command
@@ -120,26 +120,15 @@ Some influential environment variables:
   LIBS        libraries to pass to the linker, e.g. -l<library>
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
-  CPP         C preprocessor
-  YACC        The `Yet Another Compiler Compiler' implementation to use.
-              Defaults to the first program found out of: `bison -y', `byacc',
-              `yacc'.
-  YFLAGS      The list of arguments that will be passed by default to $YACC.
-              This script will default YFLAGS to the empty string to avoid a
-              default value of `-d' given by some make applications.
+  CXX         C++ compiler command
+  CXXFLAGS    C++ compiler flags
+  CCAS        assembler compiler command (defaults to CC)
+  CCASFLAGS   assembler compiler flags (defaults to CFLAGS)
   LT_SYS_LIBRARY_PATH
               User-defined run-time library search path.
-  PKG_CONFIG  path to pkg-config utility
-  GTKDOC_DEPS_CFLAGS
-              C compiler flags for GTKDOC_DEPS, overriding pkg-config
-  GTKDOC_DEPS_LIBS
-              linker flags for GTKDOC_DEPS, overriding pkg-config
-  VALGRINDFLAGS
-              Additional flags for Valgrind
+  CXXCPP      C++ preprocessor
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
-Report bugs to <help-libtasn1@gnu.org>.
-GNU Libtasn1 home page: <https://www.gnu.org/software/libtasn1/>.
-General help using GNU software: <https://www.gnu.org/gethelp/>.
+Report bugs to <http://github.com/libffi/libffi/issues>.

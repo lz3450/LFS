@@ -2,5 +2,5 @@ new_version=$(git ls-remote --tags https://github.com/p11-glue/p11-kit.git | gre
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    meson configure > "$PKGBUILDDIR"/help.txt
+    meson configure build > "$PKGBUILDDIR"/help.txt
 }
