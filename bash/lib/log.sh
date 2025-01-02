@@ -37,13 +37,32 @@ error() {
     fi
 }
 
+log_red() {
+    printf "\033[1;31m%s\033[0m" "$1"
+}
+log_green() {
+    printf "\033[1;32m%s\033[0m" "$1"
+}
+log_yellow() {
+    printf "\033[1;33m%s\033[0m" "$1"
+}
+log_blue() {
+    printf "\033[1;34m%s\033[0m" "$1"
+}
+log_magenta() {
+    printf "\033[1;35m%s\033[0m" "$1"
+}
+log_cyan() {
+    printf "\033[1;36m%s\033[0m" "$1"
+}
+
 prologue() {
-    echo -e "\e[1;30m"
+    echo -e "\033[1;30m"
     echo -e "****************************************************************"
     echo -e "* $SCRIPT_NAME"
     echo -e "****************************************************************"
     echo -e "[$SCRIPT_NAME]: Start time - $(date)"
-    echo -e "\e[0m"
+    echo -e "\033[0m"
 
     __start_time__=$(date +%s)
 }
@@ -52,11 +71,11 @@ epilogue() {
     __end_time__=$(date +%s)
     __total_time__=$(($__end_time__ - $__start_time__))
 
-    echo -e "\e[1;30m"
+    echo -e "\033[1;30m"
     echo -e "****************************************************************"
     echo -e "* Execution time Information"
     echo -e "****************************************************************"
     echo -e "[$SCRIPT_NAME]: End time - $(date)"
     echo -e "[$SCRIPT_NAME]: Total time - $(date -d@$__total_time__ -u +%H:%M:%S)"
-    echo -e "\e[0m"
+    echo -e "\033[0m"
 }
