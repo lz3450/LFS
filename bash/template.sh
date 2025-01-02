@@ -8,6 +8,8 @@ set -u
 set -o pipefail
 # set -x
 
+umask 0022
+
 SCRIPT_NAME="$(basename "$0")"
 SCRIPT_PATH="$(readlink -f "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
