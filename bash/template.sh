@@ -1,41 +1,34 @@
-#!/bin/bash
+#!/usr/bin/bash
 #
 # template.sh
 #
 
-script_name="$(basename "$0")"
-script_path="$(readlink -f "$0")"
-script_dir="$(dirname "$script_path")"
+set -e
+set -u
+set -o pipefail
+# set -x
+
+SCRIPT_NAME="$(basename "$0")"
+SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
+
+################################################################################
+
+### libraries
+source "$BASH_LIB_DIR/log.sh"
+
+### checks
+if [[ $EUID -ne 0 ]]; then
+    error "This script must be run as root" 1
+fi
+
+### constants & variables
 version="1.0"
 verbose=false
 input=
 
-# Show an INFO message
-# $1: message string
-info() {
-    local _msg="$1"
-    printf '\033[0;32m[%s] INFO: %s\033[0m\n' "$script_name" "$_msg"
-}
-
-# Show a WARNING message
-# $1: message string
-warning() {
-    local _msg="$1"
-    printf '\033[0;33m[%s] WARNING: %s\033[0m\n' "$script_name" "$_msg" >&2
-}
-
-# Show an ERROR message then exit with status
-# $1: message string
-# $2: exit code number (with 0 does not exit)
-error() {
-    local _msg="$1"
-    local _error="$2"
-    printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$script_name" "$_msg" >&2
-    if [[ "$_error" -gt 0 ]]; then
-        exit "$_error"
-    fi
-}
-
+### functions
 usage() {
     local _usage="
     Usage: $script_name -V | --version
@@ -53,19 +46,20 @@ usage() {
 example_function() {
     info "example_function"
 
+    sleep 1
+
     echo $input
 }
 
-cleanup() {
-    info "cleanup"
+clean() {
+    info "clean"
+
+    trap - EXIT SIGINT SIGTERM SIGKILL
 }
-trap cleanup EXIT SIGINT SIGTERM SIGKILL
+trap clean EXIT SIGINT SIGTERM SIGKILL
 # trap "trap - SIGTERM && kill -- -$$" EXIT SIGINT SIGTERM SIGKILL
 
 ################################################################################
-
-set -e
-# set -x
 
 # while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
 #     case "$1" in
@@ -114,25 +108,11 @@ while (($# > 0)); do
     shift
 done
 
-echo -e "\e[1;30m"
-echo -e "****************************************************************"
-echo -e "               Create Raspberry Pi image                "
-echo -e "****************************************************************"
-echo -e "[$script_name]: Start time - $(date)"
-echo -e "\e[0m"
+################################################################################
 
-start_time=$(date +%s)
+prologue
 
 example_function
-cleanup
+clean
 
-end_time=$(date +%s)
-total_time=$((end_time - start_time))
-
-echo -e "\e[1;30m"
-echo -e "****************************************************************"
-echo -e "                Execution time Information                "
-echo -e "****************************************************************"
-echo -e "[$script_name]: End time - $(date)"
-echo -e "[$script_name]: Total time - $(date -d@$total_time -u +%H:%M:%S)"
-echo -e "\e[0m"
+epilogue
