@@ -33,7 +33,7 @@ PACMAN_REPO_DIR="home/.repository"
 LFS_DIR="home/kzl/LFS"
 MAKEPKG_DIR="home/kzl/makepkg"
 
-rootfs_tarball="kzllinux_rootfs.tar.gz"
+rootfs_tarball="../../mkiso/kzllinux_rootfs.tar.gz"
 active_mounts=()
 rootfs_pkg_list=(
     base
