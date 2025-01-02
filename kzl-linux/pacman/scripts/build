@@ -382,7 +382,6 @@ kzl_stage3_pkgs=(
 )
 
 ### functions
-
 prepare() {
     info "Removing pacman cache and database..."
     (yes yes || :) | sudo pacman -Scc >/dev/null 2>&1
