@@ -24,19 +24,20 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 ### constants & variables
+VERSION="1.0"
+
 WORK_DIR="/tmp/cleanbuild"
 ROOTFS_DIR="$WORK_DIR/rootfs"
-
-user_home="/home/kzl"
-
-active_mounts=()
+USERSPEC="kzl:kzl"
+PACMAN_REPO_DIR="home/.repository"
+LFS_DIR="home/kzl/LFS"
+MAKEPKG_DIR="home/kzl/makepkg"
 
 rootfs_tarball="kzllinux_rootfs.tar.gz"
-
+active_mounts=()
 rootfs_pkg_list=(
     base
 )
-
 
 ### functions
 add_mount() {
@@ -47,26 +48,33 @@ add_mount() {
 umount_all() {
     for mount_point in "${active_mounts[@]}"; do
         umount -v "$mount_point"
+        if mountpoint -q "$mount_point"; then
+            error "Failed to unmount $mount_point" 2
+        fi
     done
 }
 
-make_rootfs() {
-    info "Making rootfs..."
+setup_rootfs() {
+    info "Setting up chroot environment..."
 
-    if [[ -d "$WORK_DIR" ]]; then
-        error "Working directory already exists: $WORK_DIR" 1
+    if [[ -f "$WORK_DIR/setup_rootfs" ]]; then
+        info "Chroot environment already set up"
+        add_mount -v --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
+        return
+    fi
+
+    if [[ -d "$ROOTFS_DIR" ]]; then
+        error "Rootfs directory already exists: $ROOTFS_DIR" 3
     fi
 
     mkdir -p -- "$ROOTFS_DIR"
     tar -C "$ROOTFS_DIR" -xpf "$rootfs_tarball"
-    add_mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
-    touch "$WORK_DIR/${FUNCNAME[0]}"
-}
+    add_mount -v --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
 
-setup_user() {
-    info "Setting up chroot environment..."
-    arch-chroot "$ROOTFS_DIR" useradd -m -G adm,wheel -U -s /bin/bash kzl
-    # arch-chroot "$ROOTFS_DIR" chpasswd <(echo "kzl:kzl")
+    chroot "$ROOTFS_DIR" useradd -m -G adm,wheel -U -s /bin/zsh kzl
+    echo kzl:3450 | chroot "$ROOTFS_DIR" chpasswd
+
+    mkdir -p -- "$ROOTFS_DIR/$PACMAN_REPO_DIR"
 
     touch "$WORK_DIR/${FUNCNAME[0]}"
 }
@@ -74,37 +82,33 @@ setup_user() {
 mount_lfs() {
     info "Mounting LFS..."
 
-    mkdir -p -- "$ROOTFS_DIR"/home/.repository
-    add_mount -v --bind /home/.repository "$ROOTFS_DIR"/home/.repository
-
-    mkdir -p -- "$ROOTFS_DIR"/home/kzl/LFS
-    add_mount -v --bind "$user_home"/LFS "$ROOTFS_DIR"/home/kzl/LFS
-
-    mkdir -p -- "$ROOTFS_DIR"/home/kzl/makepkg
-    add_mount -v --bind "$user_home"/makepkg "$ROOTFS_DIR"/home/kzl/makepkg
+    for dir in "$LFS_DIR" "$MAKEPKG_DIR"; do
+        mkdir -p -- "$ROOTFS_DIR/$dir"
+        add_mount -v --bind /"$dir" "$ROOTFS_DIR/$dir"
+    done
 
     touch "$WORK_DIR/${FUNCNAME[0]}"
 }
 
-usage() {
-    local _usage="
-    Usage: $script_name -V | --version
-    Usage: $script_name -h | --help
+build_debug() {
+    arch-chroot "$ROOTFS_DIR" /bin/zsh
+}
 
-    -V, --version                   print the script version number and exit
-    -h, --help                      print this help message and exit
-"
-    echo "$_usage"
+usage() {
+    cat <<EOF
+Usage: $script_name -V | --version
+Usage: $script_name -h | --help
+
+-V, --version                   print the script version number and exit
+-h, --help                      print this help message and exit
+
+EOF
 }
 
 clean() {
     info "Cleaning..."
 
     umount_all
-
-    if [[ ! -f "$WORK_DIR/mount_lfs" ]]; then
-        rm -vrf -- "$WORK_DIR"
-    fi
 
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
@@ -114,7 +118,12 @@ trap clean EXIT SIGINT SIGTERM SIGKILL
 
 while (( $# > 0 )); do
     case "$1" in
-    -V | --version )
+    -c | --clean)
+        clean
+        rm -rf -- "$WORK_DIR"
+        exit
+        ;;
+    -V | --version)
         echo "$version"
         exit
         ;;
@@ -133,9 +142,15 @@ done
 
 prologue
 
-make_rootfs
-setup_user
+
+setup_rootfs
 mount_lfs
+build_debug
 clean
 
 epilogue
+
+### error codes
+# 1: must be run as root
+# 2: failed to unmount
+# 3: working directory already exists
