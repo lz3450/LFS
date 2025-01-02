@@ -38,10 +38,10 @@ Usage: $SCRIPT_NAME -V | --version
 Usage: $SCRIPT_NAME -h | --help
 Usage: $SCRIPT_NAME [-v | --verbose ] -i | --input <arg>
 
--V, --version                   print the script version number and exit
--h, --help                      print this help message and exit
--i, --input <arg>               argument
--v, --verbose                   verbose
+    -V, --version                   print the script version number and exit
+    -h, --help                      print this help message and exit
+    -i, --input <arg>               argument
+    -v, --verbose                   verbose
 
 EOF
 }
