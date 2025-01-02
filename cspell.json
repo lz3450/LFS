@@ -146,6 +146,7 @@
         "tzcode",
         "updatepkg",
         "updpkgsums",
+        "USERSPEC",
         "useshrplib",
         "usethreads",
         "validpgpkeys",
