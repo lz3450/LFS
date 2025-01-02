@@ -34,9 +34,9 @@ input=
 ### functions
 usage() {
     cat <<EOF
-Usage: $script_name -V | --version
-Usage: $script_name -h | --help
-Usage: $script_name [-v | --verbose ] -i | --input <arg>
+Usage: $SCRIPT_NAME -V | --version
+Usage: $SCRIPT_NAME -h | --help
+Usage: $SCRIPT_NAME [-v | --verbose ] -i | --input <arg>
 
 -V, --version                   print the script version number and exit
 -h, --help                      print this help message and exit
@@ -51,7 +51,7 @@ example_function() {
 
     sleep 1
 
-    echo $input
+    echo "$input"
 }
 
 clean() {
