@@ -24,23 +24,24 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 ### constants & variables
-version="1.0"
+VERSION="1.0"
+
 verbose=false
 input=
 
 ### functions
 usage() {
-    local _usage="
-    Usage: $script_name -V | --version
-    Usage: $script_name -h | --help
-    Usage: $script_name [-v | --verbose ] -i | --input <arg>
+    cat <<EOF
+Usage: $script_name -V | --version
+Usage: $script_name -h | --help
+Usage: $script_name [-v | --verbose ] -i | --input <arg>
 
-    -V, --version                   print the script version number and exit
-    -h, --help                      print this help message and exit
-    -i, --input <arg>               argument
-    -v, --verbose                   verbose
-"
-    echo "$_usage"
+-V, --version                   print the script version number and exit
+-h, --help                      print this help message and exit
+-i, --input <arg>               argument
+-v, --verbose                   verbose
+
+EOF
 }
 
 example_function() {
@@ -87,8 +88,8 @@ trap clean EXIT SIGINT SIGTERM SIGKILL
 
 while (($# > 0)); do
     case "$1" in
-    -V | --version )
-        echo "$version"
+    -V | --version)
+        echo "$VERSION"
         exit
         ;;
     -h | --help)
@@ -116,3 +117,6 @@ example_function
 clean
 
 epilogue
+
+### error codes
+# 1: must be run as root
