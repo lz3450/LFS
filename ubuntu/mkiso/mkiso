@@ -1,28 +1,48 @@
-#!/bin/bash
+#!/usr/bin/bash
 #
-# mkiso
+# mkiso.sh
 #
 
-script_name="$(basename "$0")"
-script_path="$(readlink -f "$0")"
-script_dir="$(dirname "$script_path")"
-chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+set -e
+set -u
+set -o pipefail
+# set -x
+
+umask 0022
+
+SCRIPT_NAME="$(basename "$0")"
+SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
+
+################################################################################
+
+### libraries
+source "$BASH_LIB_DIR"/log.sh
+source "$BASH_LIB_DIR"/util.sh
+source "$BASH_LIB_DIR"/chroot.sh
+
+### constants & variables
+DISTRO="ubuntu"
+ISO_NAME="Ubuntu-KZL"
+declare -i no_update_rootfs=0
 mutable_image_type="f2fs"
 
-work_dir="/tmp/ubuntu-rootfstmp"
-debootstrap_dir="$work_dir"/rootfs
-rootfs_archive_name="ubuntu_rootfs-$(date +%Y%m%d)-$debootstrap_suite.tar.zstd"
-isofs_dir="$work_dir"/iso
-install_dir="LiveOS"
-iso_name="Ubuntu-KZL"
-iso_label="LIVEOS"
-iso_publisher="Ubuntu-KZL <https://github.com/lz3450/LFS>"
-iso_application="Ubuntu-KZL Live/Rescue CD"
-iso_version="$(date +%Y%m%d)"
-out_dir="$script_dir"
-log_dir="$work_dir"/log
+### libraries
+source ../../kzl-linux/mkiso/libmkiso.sh
 
-### Package lists
+### constants & variables
+VERSION="1.0"
+
+UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
+UBUNTU_PACMAN_REPO="home/.repository/ubuntu"
+
+debootstrap_suite=""
+output_name="$ISO_NAME-$(date +%Y%m%d)-$debootstrap_suite"
+rootfs_archive_name="$output_name.tar.zstd"
+iso_image_name="$output_name.iso"
+
+# deb package lists
 common_deb_pkgs=(
     sudo
     nano
@@ -55,108 +75,38 @@ pacman_pkgs=(
 )
 declare -a deb_pkgs
 
-# Options
-debootstrap_suite=""
-declare -i no_update_rootfs=0
-
-
-# Show an INFO message
-# $1: message string
-info() {
-    local _msg="$1"
-    printf '\033[0;32m[%s] INFO: %s\033[0m\n' "$script_name" "$_msg"
-}
-
-# Show a WARNING message
-# $1: message string
-warning() {
-    local _msg="$1"
-    printf '\033[0;33m[%s] WARNING: %s\033[0m\n' "$script_name" "$_msg" >&2
-}
-
-# Show an ERROR message then exit with status
-# $1: message string
-# $2: exit code number (with 0 does not exit)
-error() {
-    local _msg="$1"
-    local _error="$2"
-    printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$script_name" "$_msg" >&2
-    if [[ "$_error" -gt 0 ]]; then
-        exit "$_error"
-    fi
-}
-
+### functions
 usage() {
-    local _usage="
-    Usage: $script_name [ -h | --help ] [ -n | --no-update-rootfs ] -s | --suite <suite>
+    cat <<EOF
+    Usage: $SCRIPT_NAME -h | --help
+    Usage: $SCRIPT_NAME [ -n | --no-update-rootfs ] -s | --suite <suite>
 
     -h, --help                      display this help message and exit
     -n, --no-update-rootfs          do not update rootfs
     -s, --suite <suite>             debootstrap suite (jammy, noble)
-"
-    echo "$_usage"
+
+EOF
 }
 
-create_work_dir() {
-    # Create working directory
-    if [[ -d "$work_dir" ]]; then
-        read -p "Work directory exists. Do you want to delete it? (Y/n) " answer
-        if [[ -z "$answer" || "$answer" == "Y" || "$answer" == "y" ]]; then
-            rm -r -- "$work_dir"
-            install -d -- "$work_dir"
-        fi
-    else
-        install -d -- "$work_dir"
-    fi
-}
-
-make_rootfs() {
-    install -dm0755 -o 0 -g 0 -- "$debootstrap_dir"
-    install -dm0755 -- "$isofs_dir/$install_dir"
-    install -dm0755 -- "$log_dir"
-
-    # Write build date to file
-    printf '%s\n' "$(date '+%Y/%m/%d %H:%M:%S')" > "$isofs_dir/build_time.txt"
-
-    # Copy custom root file system files.
-    if [ -d "$script_dir/rootfs" ]; then
-        if [[ "$no_update_rootfs" -eq 0 ]]; then
-            info "Update rootfs..."
-            sudo -u $SUDO_USER ./update-rootfs &> "$log_dir"/rootfs_update.log || error "Failed to update rootfs" 1
-            info "Done!"
-        fi
-        info "Copying custom rootfs files..."
-        cp -af --no-preserve=ownership,mode -- "$script_dir"/rootfs/. "$debootstrap_dir"/
-        mkdir -p "$debootstrap_dir"/root/mutable
-        # Set ownership and mode for files and directories
-        chown -fh -- 0:0 "$debootstrap_dir"/etc/shadow
-        chmod -f -- 400 "$debootstrap_dir"/etc/shadow
-        chown -fhR -- 0:0 "$debootstrap_dir"/root
-        chmod -fR -- 750 "$debootstrap_dir"/root
-        #
-        info "Done!"
-    fi
-}
-
-bootstrap_rootfs() {
+debootstrap_rootfs() {
     local _pkg_list=("$@")
 
-    info "Bootstraping rootfs..."
+    info "Debootstrapping \"$ROOTFS_DIR/\": ${_pkg_list[*]}"
     # debootstrap
     debootstrap \
         --include="$(IFS=','; echo "${_pkg_list[*]}")" \
         --components=main,restricted,universe \
         --merged-usr \
         "$debootstrap_suite" \
-        "$debootstrap_dir" \
-        http://us.archive.ubuntu.com/ubuntu/ \
-        &> "$log_dir"/debootstrap.log || error "Failed to bootstrap rootfs" 2
+        "$ROOTFS_DIR" \
+        "$UBUNTU_MIRROR" \
+        >"$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap rootfs" 4
     if [[ "$debootstrap_suite" == "noble" ]]; then
-        rmdir -v "$debootstrap_dir"/bin.usr-is-merged
-        rmdir -v "$debootstrap_dir"/sbin.usr-is-merged
-        rmdir -v "$debootstrap_dir"/lib.usr-is-merged
+        rmdir -v "$ROOTFS_DIR"/bin.usr-is-merged
+        rmdir -v "$ROOTFS_DIR"/sbin.usr-is-merged
+        rmdir -v "$ROOTFS_DIR"/lib.usr-is-merged
     fi
-    info "Done!"
+    info "Done"
 
     info "Creating a list of installed deb packages..."
     debootstrap \
@@ -165,89 +115,75 @@ bootstrap_rootfs() {
         --merged-usr \
         --print-debs \
         "$debootstrap_suite" \
-        "$debootstrap_dir"/tmp \
-        http://us.archive.ubuntu.com/ubuntu/ \
-        > "$isofs_dir"/deb_pkglist.txt 2> /dev/null || error "Failed to bootstrap rootfs" 2
-    info "Done!"
+        "$ROOTFS_DIR"/tmp \
+        "$UBUNTU_MIRROR" \
+        >"$ISOFS_DIR"/deb_pkglist.txt 2>/dev/null || warn "Failed to creating a list of installed deb packages"
+    info "Done"
 }
 
-install_pacman_pkgs() {
+pacstrap_rootfs() {
     local _pkg_list=("$@")
 
     # pacstrap
-    info "Installing pacman packages \"${_pkg_list[*]}\" to \"$debootstrap_dir/\"..."
-    mkdir -m 0755 -p "$debootstrap_dir"/var/{cache/pacman/pkg,lib/pacman}
-    mkdir -p "$debootstrap_dir"/home/.repository/kzl
-    pacman -Sy -r "$debootstrap_dir" --noconfirm --cachedir "$debootstrap_dir"/home/.repository/kzl "${_pkg_list[@]}" &> "$log_dir"/pacman.log || error "Failed to install pacman packages" 4
-    info "Done!"
+    info "Pacstrapping \"$ROOTFS_DIR/\": ${_pkg_list[*]}"
+    mkdir -p -- "$ROOTFS_DIR/$UBUNTU_PACMAN_REPO"
+    pacstrap -c -G -M -- "$ROOTFS_DIR" "${_pkg_list[@]}" >"$LOG_DIR"/pacstrap.log 2>&1 || error "Failed to pacstrap packages" 5
+    # pacman -Sy -r "$ROOTFS_DIR" --noconfirm --cachedir "$ROOTFS_DIR/$UBUNTU_PACMAN_REPO" "${_pkg_list[@]}" >"$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
+    info "Done"
 
     info "Creating a list of installed pacman packages..."
-    pacman -Q --sysroot "$debootstrap_dir" > "$isofs_dir"/pkglist.txt
-    info "Done!"
+    pacman -Q --sysroot "$ROOTFS_DIR" >"$ISOFS_DIR"/pacman_pkglist.txt 2>/dev/null || warn "Failed to creating a list of installed pacman packages"
+    info "Done"
 
     info "Copying pacman repository to the ISO file system..."
-    for pkg in $(ls "$debootstrap_dir"/home/.repository/kzl); do
-        repo-add "$debootstrap_dir"/home/.repository/kzl/kzl.db.tar.zst "$debootstrap_dir"/home/.repository/kzl/"$pkg" &> "$log_dir"/pacman-repo-add.log
+    for pkg in $(ls "$ROOTFS_DIR/$UBUNTU_PACMAN_REPO"); do
+        repo-add "$ROOTFS_DIR"/$UBUNTU_PACMAN_REPO/ubuntu.db.tar.zst "$ROOTFS_DIR/$UBUNTU_PACMAN_REPO/$pkg" >"$LOG_DIR"/pacman-repo-add.log 2>&1
     done
-    info "Done!"
-}
-
-_chroot_run() {
-    LC_ALL=C PATH="$chroot_path" chroot "$debootstrap_dir" /bin/bash -c "$1"
+    info "Done"
 }
 
 configure_rootfs() {
     info "Configuring rootfs..."
 
-    mkdir -p -- "$debootstrap_dir"/tmp
-    chown -fh -- 0:0 "$debootstrap_dir"/tmp
-    chmod -f -- 777 "$debootstrap_dir"/tmp
+    install -d -m 1777 -- "$ROOTFS_DIR"/tmp
+    chroot_setup "$ROOTFS_DIR" >"$LOG_DIR"/chroot-setup.log || error "Failed to setup chroot environment" 6
+    chroot_run "$ROOTFS_DIR" systemctl enable systemd-networkd.service >"$LOG_DIR"/systemd-networkd.log 2>&1 || error "Failed to enable systemd-networkd" 6
+    chroot_run "$ROOTFS_DIR" apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y >"$LOG_DIR"/apt.log 2>&1 || error "Failed to run apt" 6
+    chroot_run "$ROOTFS_DIR" ldconfig
+    chroot_teardown >"$LOG_DIR"/chroot-teardown.log
 
-    for fs in dev sys proc run; do
-        mount --rbind /"$fs" "$debootstrap_dir/$fs"
-        mount --make-rslave "$debootstrap_dir/$fs"
-    done
-    _chroot_run "apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y" &> "$log_dir"/upgrade.log || error "Failed to upgrade deb packages" 3
-    _chroot_run "systemctl enable systemd-networkd.service" &> "$log_dir"/systemd-networkd.log || error "Failed to enable systemd-networkd" 3
-    _chroot_run "ldconfig"
-    for fs in dev sys proc run; do
-        umount -R "$debootstrap_dir"/$fs
-    done
-
-    info "Done!"
+    info "Done"
 }
 
 make_initramfs() {
-    for kernel_version in $(ls "$debootstrap_dir"/usr/lib/modules); do
+    for kernel_version in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
         info "Create initramfs for kernel version: $kernel_version"
         dracut --kver "$kernel_version" \
-            --force \
-            --add 'livenet dmsquash-live convertfs pollcdrom qemu qemu-net' \
-            --omit 'plymouth' \
-            --no-early-microcode \
-            --strip \
-            --nolvmconf \
-            --nomdadmconf \
-            --verbose \
-            --no-hostonly \
-            --zstd \
-            --kernel-image "$debootstrap_dir/boot/vmlinuz-$kernel_version" \
-            --kmoddir "$debootstrap_dir/lib/modules/$kernel_version" \
-            "$debootstrap_dir/boot/initramfs-$kernel_version.img" &> "$log_dir"/dracut-$kernel_version.log
-        info "Done!"
+            "${DRACUT_ARGUMENTS[@]}" \
+            --kernel-image "$ROOTFS_DIR/boot/vmlinuz-$kernel_version" \
+            --kmoddir "$ROOTFS_DIR/lib/modules/$kernel_version" \
+            "$ROOTFS_DIR/boot/initramfs-$kernel_version.img" >"$LOG_DIR"/dracut-$kernel_version.log 2>&1
+        info "Done"
     done
 }
 
-make_efibootimg() {
-    info "Setting up systemd-boot for UEFI booting..."
+_get_kernel_suffix() {
+    local _kernel_version="$1"
+    case "-${_kernel_version##*-}" in
+        -generic) echo "" ;;
+        -KZL) echo "-KZL" ;;
+        *) echo ""; warn "Unknown kernel version: $_kernel_version" ;;
+    esac
+}
 
+make_efibootimg() {
     # Calculate the required FAT image size in bytes
     # local _imgsize=$(du -bc \
-    #     "$debootstrap_dir/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
-    #     "$script_dir/efiboot/loader.conf" \
-    #     "$script_dir/efiboot/ubuntu-kzl.conf" \
-    #     "$debootstrap_dir/boot/vmlinuz" \
-    #     "$debootstrap_dir/boot/initramfs.img" \
+    #     "$ROOTFS_DIR/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
+    #     "$SCRIPT_DIR/efiboot/loader.conf" \
+    #     "$SCRIPT_DIR/efiboot/ubuntu-kzl.conf" \
+    #     "$ROOTFS_DIR/boot/vmlinuz" \
+    #     "$ROOTFS_DIR/boot/initramfs.img" \
     #     2>/dev/null | awk 'END { print $1 }')
     # info "Required FAT image size $_imgsize bytes"
     # Convert from bytes to KiB and round up to the next full MiB with an additional MiB for reserved sectors.
@@ -257,186 +193,118 @@ make_efibootimg() {
 
     local _imgsize=131072
 
-    rm -f -- "$work_dir"/efiboot.img
-    info "  Creating FAT image of size: $_imgsize KiB..."
-    mkfs.fat -C -F 32 -n "ISO_EFI" "$work_dir"/efiboot.img "$_imgsize" &>/dev/null
-    info "  Done!"
+    info "Creating FAT image of size: $_imgsize Byte..."
+    rm -f -- "$WORK_DIR"/efiboot.img
+    mkfs.fat -C -F 32 -n "ISO_EFI" "$WORK_DIR"/efiboot.img "$_imgsize" >/dev/null 2>&1
+    info "Done"
 
+    info "Setting up systemd-boot for UEFI booting..."
     # Create the default/fallback boot path in which a boot loaders will be placed later.
-    mmd -i "$work_dir"/efiboot.img ::/EFI ::/EFI/BOOT
-
+    mmd -i "$WORK_DIR"/efiboot.img ::/EFI ::/EFI/BOOT
     # Copy systemd-boot EFI binary to the default/fallback boot path
-    mcopy -i "$work_dir"/efiboot.img \
-        "$debootstrap_dir"/usr/lib/systemd/boot/efi/systemd-bootx64.efi ::/EFI/BOOT/BOOTx64.EFI
-
+    mcopy -i "$WORK_DIR"/efiboot.img \
+        "$ROOTFS_DIR"/usr/lib/systemd/boot/efi/systemd-bootx64.efi \
+        ::/EFI/BOOT/BOOTx64.EFI
     # Copy systemd-boot configuration files
-    mmd -i "$work_dir"/efiboot.img ::/loader ::/loader/entries
-    mcopy -i "$work_dir"/efiboot.img "$script_dir"/efiboot/loader.conf ::/loader/
-    sed "s|%ISOLABEL%|$iso_label|g" "$script_dir"/efiboot/ubuntu-kzl.conf | mcopy -i "$work_dir"/efiboot.img - ::/loader/entries/ubuntu-kzl.conf
-    sed "s|%ISOLABEL%|$iso_label|g" "$script_dir"/efiboot/ubuntu.conf | mcopy -i "$work_dir"/efiboot.img - ::/loader/entries/ubuntu.conf
+    mmd -i "$WORK_DIR"/efiboot.img \
+        ::/loader \
+        ::/loader/entries
+    mcopy -i "$WORK_DIR"/efiboot.img \
+        "$SCRIPT_DIR"/efiboot/loader.conf \
+        ::/loader/
+    sed "s|%ISOLABEL%|$ISO_LABEL|g" "$SCRIPT_DIR"/efiboot/ubuntu-kzl.conf \
+        | mcopy -i "$WORK_DIR"/efiboot.img - ::/loader/entries/ubuntu-kzl.conf
+    sed "s|%ISOLABEL%|$ISO_LABEL|g" "$SCRIPT_DIR"/efiboot/ubuntu.conf \
+        | mcopy -i "$WORK_DIR"/efiboot.img - ::/loader/entries/ubuntu.conf
+    info "Done"
 
     # Copy kernel and initramfs to FAT image
-    for kernel_version in $(ls "$debootstrap_dir"/usr/lib/modules); do
-        case "-${kernel_version##*-}" in
-            -generic) kernel_suffix="" ;;
-            -KZL) kernel_suffix="-KZL" ;;
-            *) kernel_suffix=""; warning "Unknown kernel version suffix: $kernel_version" ;;
-        esac
-        info "  Copying kernel ($kernel_version) and initramfs to the FAT file system..."
-        mcopy -i "$work_dir/efiboot.img" "$debootstrap_dir"/boot/vmlinuz-$kernel_version ::/vmlinuz$kernel_suffix
-        mcopy -i "$work_dir/efiboot.img" "$debootstrap_dir"/boot/initramfs-$kernel_version.img ::/initramfs$kernel_suffix.img
-        info "  Done!"
+    for kernel_version in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
+        local _kernel_suffix="$(_get_kernel_suffix "$kernel_version")"
+        info "Copying kernel ($kernel_version) and initramfs to the FAT file system..."
+        mcopy -i "$WORK_DIR/efiboot.img" "$ROOTFS_DIR"/boot/vmlinuz-$kernel_version ::/vmlinuz$_kernel_suffix
+        mcopy -i "$WORK_DIR/efiboot.img" "$ROOTFS_DIR"/boot/initramfs-$kernel_version.img ::/initramfs$_kernel_suffix.img
+        info "Done"
     done
-
-    info "Done!"
 }
 
 make_mutable_img() {
     info "Creating mutable image..."
 
-    rm -f -- "$work_dir"/mutable.img
-    fallocate -l 64M "$work_dir"/mutable.img
-    mkfs.$mutable_image_type -f -l MUTABLE "$work_dir"/mutable.img &> "$log_dir"/mkfs.f2fs.log
+    rm -f -- "$WORK_DIR"/mutable.img
+    fallocate -l 64M "$WORK_DIR"/mutable.img
+    mkfs -t "$mutable_image_type" -f -l MUTABLE "$WORK_DIR"/mutable.img >"$LOG_DIR"/mkfs-mutable.log 2>&1
 
-    info "Done!"
-}
-
-cleanup_rootfs() {
-    info "Cleaning up rootfs..."
-
-    # system
-    rm -rf -- "$debootstrap_dir"/boot/*
-    rm -rf -- "$debootstrap_dir"/dev/*
-    rm -rf -- "$debootstrap_dir"/var/tmp/*
-    rm -rf -- "$debootstrap_dir"/tmp/*
-    rm -rf -- "$debootstrap_dir"/var/log/*
-
-    # debootstrap
-    rm -rf -- "$debootstrap_dir"/var/lib/apt/lists/*
-    rm -rf -- "$debootstrap_dir"/var/cache/apt/archives/*.deb
-
-    # pacman
-    if [ -d "$debootstrap_dir/var/lib/pacman" ]; then
-        find "$debootstrap_dir/var/lib/pacman" -maxdepth 1 -type f -delete
-    fi
-    if [ -d "$debootstrap_dir/var/lib/pacman/sync" ]; then
-        find "$debootstrap_dir/var/lib/pacman/sync" -delete
-    fi
-    if [ -d "$debootstrap_dir/var/cache/pacman/pkg" ]; then
-        find "$debootstrap_dir/var/cache/pacman/pkg" -type f -delete
-    fi
-    find "$work_dir" \( -name '*.pacnew' -o -name '*.pacsave' -o -name '*.pacorig' \) -delete
-
-    # create an empty /etc/machine-id
-    rm -f -- "$debootstrap_dir/etc/machine-id"
-    printf '' > "$debootstrap_dir/etc/machine-id"
-
-    info "Done!"
-}
-
-make_rootfs_archive() {
-    info "Creating rootfs archive..."
-
-    tar -cvf "$out_dir/$rootfs_archive_name" \
-        --zstd -C "$debootstrap_dir" \
-        . \
-        &> "$log_dir"/tar.log
-    chown $SUDO_UID:$SUDO_GID "$out_dir/$rootfs_archive_name"
-
-    info "Done!"
+    info "Done"
 }
 
 make_rootfs_squashfs() {
-    local _image_path="$isofs_dir/$install_dir/squashfs.img"
+    local _image_path="$ISOFS_DIR/$INSTALL_DIR/squashfs.img"
 
     info "Creating rootfs SquashFS image, this may take some time..."
 
     # Create fstab
-    printf "%s\t\t%s\t\t%s\t%s\t\t%s %s\n" "LABEL=ISO_EFI"  "/boot"         "vfat"  "defaults"  "0" "2" >> "$debootstrap_dir"/etc/fstab
-    printf "%s\t\t%s\t\t%s\t%s\t\t%s %s\n" "LABEL=MUTABLE"  "/root/mutable" "f2fs"  "defaults"  "0" "2" >> "$debootstrap_dir"/etc/fstab
+    printf "$FSTAB_ROW_FORMAT" \
+        "LABEL=ISO_EFI" \
+        "/boot" \
+        "vfat" \
+        "defaults" \
+        "0" "2" >"$ROOTFS_DIR"/etc/fstab
+    printf "$FSTAB_ROW_FORMAT" \
+        "LABEL=MUTABLE" \
+        "/home" \
+        "$mutable_image_type" \
+        "defaults" \
+        "0" "2" >>"$ROOTFS_DIR"/etc/fstab
     # Create a squashfs image and place it in the ISO 9660 file system.
-    install -dm0755 -- "$isofs_dir/$install_dir"
-    mksquashfs "$debootstrap_dir" "$_image_path" -comp zstd -b 1M -noappend
+    mkdir -p -- "$ISOFS_DIR/$INSTALL_DIR"
+    mksquashfs "$ROOTFS_DIR" "$_image_path" -comp zstd -b 1M -noappend
 
-    info "Done!"
+    info "Done"
 }
 
-make_iso_image() {
-    local _iso_image_name="$iso_name-$iso_version-$debootstrap_suite.iso"
+configure_isofs() {
+    local -a _efi_files=(
+        "EFI/BOOT/BOOTx64.EFI"
+        "loader/loader.conf"
+        "loader/entries/ubuntu-kzl.conf"
+        "loader/entries/ubuntu.conf"
+    )
 
-    info "Creating ISO image..."
+    info "Setting up systemd-boot for ISO file system..."
 
-    mkdir -p "$isofs_dir"/EFI/BOOT
-    mkdir -p "$isofs_dir"/loader/entries
-    mcopy -i "$work_dir/efiboot.img" ::/EFI/BOOT/BOOTx64.EFI "$isofs_dir"/EFI/BOOT/BOOTx64.EFI
-    mcopy -i "$work_dir/efiboot.img" ::/loader/loader.conf "$isofs_dir"/loader/loader.conf
-    mcopy -i "$work_dir/efiboot.img" ::/loader/entries/ubuntu-kzl.conf "$isofs_dir"/loader/entries/ubuntu-kzl.conf
-    mcopy -i "$work_dir/efiboot.img" ::/loader/entries/ubuntu.conf "$isofs_dir"/loader/entries/ubuntu.conf
-    for kernel_version in $(ls "$debootstrap_dir"/usr/lib/modules); do
-        case "-${kernel_version##*-}" in
-            -generic) kernel_suffix="" ;;
-            -KZL) kernel_suffix="-KZL" ;;
-            *) kernel_suffix=""; warning "Unknown kernel version suffix: $kernel_version" ;;
-        esac
-        info "  Copying kernel ($kernel_version) and initramfs to the ISO file system..."
-        mcopy -i "$work_dir/efiboot.img" \
-            ::/vmlinuz$kernel_suffix \
-            ::/initramfs$kernel_suffix.img \
-            "$isofs_dir"/
-        info "  Done"
+    mkdir -p -- "$ISOFS_DIR"/EFI/BOOT
+    mkdir -p -- "$ISOFS_DIR"/loader/entries
+    for _file in "${_efi_files[@]}"; do
+        mcopy -i "$WORK_DIR/efiboot.img" \
+            "::/$_file" \
+            "$ISOFS_DIR/$_file"
     done
-    xorriso \
-        -as mkisofs \
-        -iso-level 3 \
-        -joliet \
-        -joliet-long \
-        -full-iso9660-filenames \
-        -rational-rock \
-        -volid "$iso_label" \
-        -publisher "$iso_publisher" \
-        -appid "$iso_application" \
-        -preparer "prepared by kzl" \
-        -partition_offset 16 \
-        -append_partition 2 'C12A7328-F81F-11D2-BA4B-00A0C93EC93B' "$work_dir"/efiboot.img \
-        -append_partition 3 '0FC63DAF-8483-4772-8E79-3D69D8477DE4' "$work_dir"/mutable.img \
-        -appended_part_as_gpt \
-        -no-pad \
-        -output "$out_dir/$_iso_image_name" \
-        "$isofs_dir/" &> "$log_dir"/xorriso.log || error "Failed to create ISO image" 5
-    chown $SUDO_UID:$SUDO_GID "$out_dir/$_iso_image_name"
+    info "Done"
 
-    info "Done!"
+    for kernel_version in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
+        local _kernel_suffix="$(_get_kernel_suffix "$kernel_version")"
+        info "Copying kernel ($kernel_version) and initramfs to the ISO file system..."
+        mcopy -i "$WORK_DIR/efiboot.img" \
+            ::/vmlinuz$_kernel_suffix \
+            ::/initramfs$_kernel_suffix.img \
+            "$ISOFS_DIR"/
+        info "Done"
+    done
 }
 
 clean() {
     info "Cleaning..."
     set +e
 
-    if [[ -n "$debootstrap_dir" ]]; then
-        for attempt in {1..10}; do
-            for fs in dev/pts dev sys proc run; do
-                mount | grep -q "$debootstrap_dir/$fs" && umount -R "$debootstrap_dir/$fs" 2> /dev/null
-            done
-            mount | grep -q "$debootstrap_dir" && umount -R "$debootstrap_dir" 2> /dev/null
-            if [[ $? -ne 0 ]]; then
-                break
-            fi
-            sleep 1
-        done
-    fi
+    chroot_teardown
 
-    info "Done!"
-    exit 0
+    info "Done"
+    trap - EXIT SIGINT SIGTERM SIGKILL
 }
-trap clean INT EXIT
+trap clean EXIT SIGINT SIGTERM SIGKILL
 
 ########################################################################################################################
-
-set -e
-set -o pipefail
-set -u
-# set -x
-
 
 while (($# > 0)); do
     case "$1" in
@@ -453,7 +321,7 @@ while (($# > 0)); do
         ;;
     *)
         usage
-        error "Unknown option: \"$1\"" 127
+        error "Unknown option: \"$1\"" 255
         ;;
     esac
     shift
@@ -467,34 +335,38 @@ else
     error "Unknown debootstrap suite: $debootstrap_suite" 127
 fi
 
+################################################################################
 
-echo -e "\e[1;30m"
-echo -e "****************************************************************"
-echo -e "               Create Ubuntu-KZL Live/Rescue CD ISO             "
-echo -e "****************************************************************"
-echo -e "[$script_name]: Start time - $(date)"
-echo -e "\e[0m"
-start_time=$(date +%s)
+prologue
 
 create_work_dir
+
 make_rootfs
-bootstrap_rootfs "${deb_pkgs[@]}"
-install_pacman_pkgs "${pacman_pkgs[@]}"
+debootstrap_rootfs "${deb_pkgs[@]}"
+pacstrap_rootfs "${pacman_pkgs[@]}"
 configure_rootfs
+
 make_initramfs
 make_efibootimg
-make_mutable_img
-cleanup_rootfs
-make_rootfs_archive
-make_rootfs_squashfs
-make_iso_image
 
-end_time=$(date +%s)
-total_time=$((end_time - start_time))
-echo -e "\e[1;30m"
-echo -e "****************************************************************"
-echo -e "                Execution time Information                "
-echo -e "****************************************************************"
-echo -e "[$script_name]: End time - $(date)"
-echo -e "[$script_name]: Total time - $(date -d@$total_time -u +%H:%M:%S)"
-echo -e "\e[0m"
+make_rootfs_archive "$rootfs_archive_name"
+
+make_mutable_img
+
+cleanup_rootfs
+make_rootfs_squashfs
+configure_isofs
+make_iso_image "$iso_image_name"
+
+epilogue
+
+### error codes
+# 1: Must be run as root
+# 2: Constant or variable is not set
+# 3: Failed to update rootfs
+# 4: Failed to debootstrap rootfs
+# 5: Failed to pacstrap packages
+# 6: Failed to configure rootfs
+# 7: Failed to create ISO image
+# 254: Unknown debootstrap suite
+# 255: Unknown option
