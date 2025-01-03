@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=llvm-project-latest
-pkgver=19.1.2
-pkgrel=2
+pkgver=19.1.6
+pkgrel=1
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
@@ -10,7 +10,7 @@ url="https://llvm.org/"
 license=('KZL')
 source=(git+https://github.com/llvm/llvm-project.git#tag=llvmorg-$pkgver
         x86_64-unknown-linux-gnu.conf)
-sha256sums=('e72e0233438eac97dac87b730213fd686cffaf52bee39b7540c4830285ad492a'
+sha256sums=('bea3dbf8d9cffa7f288868bf7d8e6d55980182ac0edc246985259e32619f5182'
             '35c30e43af264666d74e2b8fcfe07fb566b8f72001dc90bca8a76c1151d18bad')
 
 # https://releases.llvm.org/19.1.0/docs/CMake.html
