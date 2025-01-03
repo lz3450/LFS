@@ -18,7 +18,9 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 ################################################################################
 
 ### libraries
-source "$BASH_LIB_DIR/log.sh"
+source "$BASH_LIB_DIR"/log.sh
+# source "$BASH_LIB_DIR"/util.sh
+# source "$BASH_LIB_DIR"/chroot.sh
 
 ### checks
 if [[ $EUID -ne 0 ]]; then
@@ -105,7 +107,7 @@ while (($# > 0)); do
         ;;
     *)
         usage
-        error "Unknown option: $1"
+        error "Unknown option: $1" 255
         ;;
     esac
     shift
@@ -121,4 +123,5 @@ clean
 epilogue
 
 ### error codes
-# 1: must be run as root
+# 1: Must be run as root
+# 255: Unknown option

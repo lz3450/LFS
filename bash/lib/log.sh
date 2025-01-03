@@ -3,11 +3,6 @@
 # lib/log.sh
 #
 
-set -e
-set -u
-set -o pipefail
-# set -x
-
 ################################################################################
 
 ### functions
@@ -15,12 +10,12 @@ set -o pipefail
 # $1: message string
 info() {
     local _msg="$1"
-    printf '\033[0;32m[%s] INFO: %s\033[0m\n' "$SCRIPT_NAME" "$_msg"
+    printf '\033[0;32m[%s] INFO: %s\033[0m\n' "$SCRIPT_NAME" "$_msg" >&2
 }
 
 # Show a WARNING message
 # $1: message string
-warning() {
+warn() {
     local _msg="$1"
     printf '\033[0;33m[%s] WARNING: %s\033[0m\n' "$SCRIPT_NAME" "$_msg" >&2
 }
