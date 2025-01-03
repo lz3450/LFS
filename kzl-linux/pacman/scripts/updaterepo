@@ -1,94 +1,7 @@
-#!/bin/bash
+#!/usr/bin/bash
 #
-# updaterepo
+# updaterepo.sh
 #
-
-script_name="$(basename "${0}")"
-
-REPODIR="/home/.repository"
-PACKAGEDIR="$HOME/makepkg/packages"
-ARCHIVEDIR="$HOME/makepkg/archive"
-EXTENSION="zst"
-
-### options
-replace=0
-clear=0
-target=""
-
-### functions
-# Show an INFO message
-# $1: message string
-info() {
-    local _msg="$1"
-    printf '\033[0;32m[%s] INFO: %s\033[0m\n' "$script_name" "$_msg"
-}
-
-# Show a WARNING message
-# $1: message string
-warning() {
-    local _msg="$1"
-    printf '\033[0;33m[%s] WARNING: %s\033[0m\n' "$script_name" "$_msg" >&2
-}
-
-# Show an ERROR message then exit with status
-# $1: message string
-# $2: exit code number (with 0 does not exit)
-error() {
-    local _msg="$1"
-    local _error="$2"
-    printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$script_name" "$_msg" >&2
-    if [ "$_error" -gt 0 ]; then
-        exit "$_error"
-    fi
-}
-
-update() {
-    local repo
-    repo=$1
-    local pkg
-    pkg=$2
-
-    if [ ! -d $ARCHIVEDIR ]; then
-        mkdir $ARCHIVEDIR
-    fi
-
-    #           pkgname-  epoch:      pkgver                    -pkgrel-  arch                  .pkg.tar.zst
-    pkgname_regex="$pkg-\([0-9]+:\)?\([0-9a-zA-Z]+\(\.\|\+\)?\)+-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.$EXTENSION"
-    pkgname=$(find "$HOME/makepkg/packages" -type f -regex "$PACKAGEDIR/$pkgname_regex" -printf "%T@ %f\n" | sort -n | tail -n 1 | cut -d ' ' -f 2)
-
-    if [ -f $PACKAGEDIR/$pkgname ]; then
-        sudo cp -f $PACKAGEDIR/$pkgname $REPODIR/$repo
-        mv $PACKAGEDIR/$pkgname $ARCHIVEDIR
-        sudo repo-add -R $REPODIR/$repo/$repo.db.tar.$EXTENSION $REPODIR/$repo/$pkgname
-    fi
-
-    if [ $replace -gt 0 ] ; then
-        if [ $(find $REPODIR/$repo -type f -regex "$REPODIR/$repo/$pkgname_regex" -printf "%f\n" | wc -l) -gt 1 ]; then
-            error "Multiple packages with the same name \"$pkg\" are found, please check." 3
-        fi
-        pkgname=$(find $REPODIR/$repo -type f -regex "$REPODIR/$repo/$pkgname_regex" -printf "%f\n")
-        if [ -f $REPODIR/$repo/$pkgname ]; then
-            sudo repo-add -R $REPODIR/$repo/$repo.db.tar.$EXTENSION $REPODIR/$repo/$pkgname
-        fi
-    fi
-}
-
-usage() {
-    local _usage="
-update_repo (kzl-linux) %s
-\"update-repo\" will update the pacman repository.
-
-Usage: update_repo [ -c | -R ] [ -t repo ]
-
-    -h, --help      display this help message and exit
-    -t, --target    build target (kzl, rpi, tegra, ubuntu)
-    -R, --replace   replace the specified old repository
-    -c, --clear     clear the specified repository
-"
-    echo "${_usage}"
-}
-
-################################################################
 
 set -e
 set -u
@@ -97,15 +10,82 @@ set -o pipefail
 
 umask 0022
 
-while [ $# -gt 0 ]; do
+SCRIPT_NAME="$(basename "$0")"
+SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
+
+################################################################################
+
+### libraries
+source "$BASH_LIB_DIR"/log.sh
+
+### constants & variables
+REPO_ROOT="/home/.repository"
+PACKAGE_DIR="$HOME/makepkg/packages"
+ARCHIVE_DIR="$HOME/makepkg/archive"
+EXTENSION="zst"
+
+declare -i replace=0
+declare -i clear=0
+repo=""
+
+### functions
+update() {
+    local _pkg="$1"
+
+    mkdir -p -- "$ARCHIVE_DIR"
+
+    #           pkgname-  epoch:      pkgver                    -pkgrel-  arch                  .pkg.tar.zst
+    pkgname_regex="$_pkg-\([0-9]+:\)?\([0-9a-zA-Z]+\(\.\|\+\)?\)+-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.$EXTENSION"
+    pkgname=$(find "$HOME/makepkg/packages" -type f -regex "$PACKAGE_DIR/$pkgname_regex" -printf "%T@ %f\n" | sort -n | tail -n 1 | cut -d ' ' -f 2)
+
+    if [[ -f "$PACKAGE_DIR/$pkgname" ]]; then
+        sudo cp -f -- "$PACKAGE_DIR/$pkgname" "$repo_dir"
+        mv -- "$PACKAGE_DIR/$pkgname" "$ARCHIVE_DIR"
+        sudo repo-add -R "$repo_path" "$repo_dir/$pkgname"
+    fi
+
+    if (( $replace > 0 )) ; then
+        local _pkg_number=$(find "$repo_dir" -type f -regex "$repo_dir/$pkgname_regex" -printf "%f\n" | wc -l)
+        if (( $_pkg_number > 1 )); then
+            error "Multiple packages with the same name \"$_pkg\" are found, please check" 3
+        fi
+        pkgname=$(find "$repo_dir" -type f -regex "$repo_dir/$pkgname_regex" -printf "%f\n")
+        if [[ -f "$repo_dir/$pkgname" ]]; then
+            sudo repo-add -R "$repo_path" "$repo_dir/$pkgname"
+        fi
+    fi
+}
+
+usage() {
+    cat <<EOF
+
+updaterepo
+
+Usage: $SCRIPT_NAME -h | --help
+Usage: $SCRIPT_NAME -R | --replace -r | --repo <core|extra|ubuntu>
+Usage: $SCRIPT_NAME -c | --clear -r | --repo <core|extra|ubuntu>
+
+    -h, --help      display this help message and exit
+    -r, --repo      build repo (core, extra, ubuntu)
+    -R, --replace   replace the existing repository file with an empty one
+    -c, --clear     remove the repository
+
+EOF
+}
+
+################################################################################
+
+while (($# > 0)); do
     case "$1" in
         -h|--help)
             usage
             exit 0
             ;;
-        -t|--target)
+        -r|--repo)
             shift
-            target="$1"
+            repo="$1"
             ;;
         -R|--replace)
             replace=1
@@ -114,31 +94,35 @@ while [ $# -gt 0 ]; do
             clear=1
             ;;
         *)
-            error "Unknown option \"$1\"" 1
+            error "Unknown option \"$1\"" 127
             ;;
     esac
     shift
 done
 
-case $target in
+case "$repo" in
     core|extra|ubuntu)
-        readarray -t pkgs < <(find $ROOTDIR/pkgbuilds/$target/ -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
+        # ROOTDIR="LFS/<distro>/pacman"
+        readarray -t pkgs < <(find $ROOTDIR/pkgbuilds/$repo/ -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
         EXTENSION="zst"
         ;;
     # unknown repo
     *)
-        error "Unknown target repo \"$target\"." 2
+        error "Unknown repo \"$repo\"." 2
         ;;
 esac
+repo_dir="$REPO_ROOT/$repo"
+repo_path="$repo_dir/$repo.db.tar.$EXTENSION"
 
 ### clear
-if [ $clear -gt 0 ]; then
+if (( $clear > 0 )); then
     while true; do
-        read -p "Do you want to clear the repository \"$target\"? " yn
-        case $yn in
+        read -p "Do you want to clear the repository \"$repo\"? " yn
+        case "$yn" in
             [Yy]*)
-                sudo rm -vrf $REPODIR/$target
-                echo "Repository \"$target\" has been removed."
+                sudo rm -vrf -- "$repo_dir"
+                # sudo find "$repo_dir" -type f -delete
+                info "Repository \"$repo\" has been removed"
                 exit 0
                 ;;
             [Nn]*)
@@ -151,51 +135,50 @@ if [ $clear -gt 0 ]; then
     done
 fi
 
-if [ ! -d "$REPODIR/$target" ]; then
-    sudo mkdir -p "$REPODIR/$target"
+if [[ ! -d "$repo_dir" ]]; then
+    sudo mkdir -p -- "$repo_dir"
 fi
 
-if [ ! -f "$REPODIR/$target/$target.db.tar.$EXTENSION" ]; then
-    sudo repo-add "$REPODIR/$target/$target.db.tar.$EXTENSION"
+if (( $replace > 0 )); then
+    sudo find "$repo_dir" -name "$repo.db.tar.$EXTENSION" -delete
 fi
 
-if [ $replace -gt 0 ]; then
-    sudo find "$REPODIR/$target" -name "$target.db.tar.$EXTENSION" -delete
-fi
-
-if [ ! -f "$REPODIR/$target/$target.db.tar.$EXTENSION" ]; then
-    sudo repo-add "$REPODIR/$target/$target.db.tar.$EXTENSION"
+if [[ ! -f "$repo_path" ]]; then
+    info "Creating empty repo: $repo.db.tar.$EXTENSION..."
+    sudo repo-add "$repo_path"
+    info "Done"
 fi
 
 ## special cases
-for pkgbase in ${pkgs[@]}; do
+for pkgbase in "${pkgs[@]}"; do
     info "Updating $pkgbase..."
-    update $target $pkgbase
-    case $pkgbase in
+    update "$pkgbase"
+    case "$pkgbase" in
         zlib)
-            update $target minizip
+            update minizip
             ;;
         audit)
-            update $target python-audit
+            update python-audit
             ;;
         lvm2)
-            update $target device-mapper
+            update device-mapper
             ;;
         linux)
-            update $target linux-headers
+            update linux-headers
             ;;
         lapack)
-            update $target blas
-            update $target cblas
-            update $target lapacke
+            update blas
+            update cblas
+            update lapacke
             ;;
     esac
 done
 
-if [ -z "$(find "$PACKAGEDIR" -empty)" ]; then
-   warning "$PACKAGEDIR is not empty, please check."
+if [ -z $(find "$PACKAGE_DIR" -empty) ]; then
+   warn "$PACKAGE_DIR is not empty, please check"
 fi
 
-# 1: Unknown option
-# 2: Unknown target repo
+### error codes
+# 2: Unknown repo
 # 3: Multiple packages with the same name are found
+# 127: Unknown option
