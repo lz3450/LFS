@@ -27,8 +27,8 @@ VERSION="1.0"
 LOG_DIR="$HOME"/makepkg/log
 
 repo=
-stage=""
-single_package=""
+stage=
+single_package=
 declare -i build_only_updated=0
 declare -i install=0
 declare -i no_clean=0
@@ -81,7 +81,7 @@ build() {
         _log="$LOG_DIR"/$_pkgbase.log
     fi
 
-    cd "$ROOTDIR/pkgbuilds/$repo/$_pkgbase"
+    cd "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$repo/$_pkgbase"
 
     # update pkgbuild
     info "Updating PKGBUILD..."

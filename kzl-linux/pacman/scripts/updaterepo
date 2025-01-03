@@ -103,7 +103,7 @@ done
 case "$repo" in
     core|extra|ubuntu)
         # ROOTDIR="LFS/<distro>/pacman"
-        readarray -t pkgs < <(find $ROOTDIR/pkgbuilds/$repo/ -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
+        readarray -t pkgs < <(find $LFS_PACMAN_ROOT_DIR/pkgbuilds/$repo/ -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
         EXTENSION="zst"
         ;;
     # unknown repo
