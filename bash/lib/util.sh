@@ -1,11 +1,21 @@
 #!/usr/bin/bash
 #
-# lib/chroot.sh
+# lib/util.sh
 #
 
 ################################################################################
 
+# requires: log.sh
+
+################################################################################
+
 ### functions
+check_root() {
+    if [[ $EUID -ne 0 ]]; then
+        error "This script must be run as root" 255
+    fi
+}
+
 delete_dir() {
     local _dir="$1"
     if [[ -d "$_dir" ]]; then
@@ -39,3 +49,6 @@ dir_empty() {
         return 0
     fi
 }
+
+### error codes
+# 255: Must be run as root

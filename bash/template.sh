@@ -19,23 +19,25 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 
 ### libraries
 source "$BASH_LIB_DIR"/log.sh
-# source "$BASH_LIB_DIR"/util.sh
+source "$BASH_LIB_DIR"/util.sh
 # source "$BASH_LIB_DIR"/chroot.sh
 
 ### checks
-if [[ $EUID -ne 0 ]]; then
-    error "This script must be run as root" 1
-fi
+# if [[ $EUID -ne 0 ]]; then
+#     error "This script must be run as root" 255
+# fi
+check_root
 
 ### constants & variables
 VERSION="1.0"
 
-verbose=false
+declare -i verbose=0
 input=
 
 ### functions
 usage() {
     cat <<EOF
+
 Usage: $SCRIPT_NAME -V | --version
 Usage: $SCRIPT_NAME -h | --help
 Usage: $SCRIPT_NAME [-v | --verbose ] -i | --input <arg>
@@ -107,7 +109,7 @@ while (($# > 0)); do
         ;;
     *)
         usage
-        error "Unknown option: $1" 255
+        error "Unknown option: $1" 127
         ;;
     esac
     shift
@@ -123,5 +125,5 @@ clean
 epilogue
 
 ### error codes
-# 1: Must be run as root
-# 255: Unknown option
+# 127: Unknown option
+# 255: Must be run as root
