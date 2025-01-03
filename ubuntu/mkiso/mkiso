@@ -38,9 +38,6 @@ UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
 UBUNTU_PACMAN_REPO="home/.repository/ubuntu"
 
 debootstrap_suite=""
-output_name="$ISO_NAME-$(date +%Y%m%d)-$debootstrap_suite"
-rootfs_archive_name="$output_name.tar.zstd"
-iso_image_name="$output_name.iso"
 
 # deb package lists
 common_deb_pkgs=(
@@ -73,7 +70,6 @@ pacman_pkgs=(
     linux
     debootstrap
 )
-declare -a deb_pkgs
 
 ### functions
 usage() {
@@ -321,12 +317,13 @@ while (($# > 0)); do
         ;;
     *)
         usage
-        error "Unknown option: \"$1\"" 255
+        error "Unknown option: \"$1\"" 127
         ;;
     esac
     shift
 done
 
+declare -a deb_pkgs
 if [[ "$debootstrap_suite" == "jammy" ]]; then
     deb_pkgs=("${common_deb_pkgs[@]}")
 elif [[ "$debootstrap_suite" == "noble" ]]; then
@@ -334,6 +331,10 @@ elif [[ "$debootstrap_suite" == "noble" ]]; then
 else
     error "Unknown debootstrap suite: $debootstrap_suite" 127
 fi
+
+output_name="$ISO_NAME-$(date +%Y%m%d)-$debootstrap_suite"
+rootfs_archive_name="$output_name.tar.zstd"
+iso_image_name="$output_name.iso"
 
 ################################################################################
 
@@ -361,12 +362,11 @@ make_iso_image "$iso_image_name"
 epilogue
 
 ### error codes
-# 1: Must be run as root
 # 2: Constant or variable is not set
 # 3: Failed to update rootfs
 # 4: Failed to debootstrap rootfs
 # 5: Failed to pacstrap packages
 # 6: Failed to configure rootfs
 # 7: Failed to create ISO image
-# 254: Unknown debootstrap suite
-# 255: Unknown option
+# 127: Unknown option
+# 255: Must be run as root

@@ -12,9 +12,7 @@
 ################################################################################
 
 ### checks
-if [[ $EUID -ne 0 ]]; then
-    error "This script must be run as root" 1
-fi
+check_root
 
 if [[ -z "$DISTRO" ]]; then
     error "DISTRO is not set" 2
@@ -156,3 +154,13 @@ make_iso_image() {
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$_name"
     info "Done"
 }
+
+### error codes
+# 2: Constant or variable is not set
+# 3: Failed to update rootfs
+# 4: Failed to debootstrap rootfs
+# 5: Failed to pacstrap packages
+# 6: Failed to configure rootfs
+# 7: Failed to create ISO image
+# 127: Unknown option
+# 255: Must be run as root
