@@ -36,6 +36,8 @@ VCSCLIENTS=('bzr::breezy'
 CARCH="@CARCH@"
 CHOST="@CHOST@"
 
+#NPROC=2
+
 #-- Compiler and Linker Flags
 CPPFLAGS=""
 CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection"

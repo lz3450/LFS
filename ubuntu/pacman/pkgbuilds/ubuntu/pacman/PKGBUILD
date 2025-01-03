@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g13
+pkgver=7.0.0.g26
 pkgrel=2
 epoch=
 arch=('x86_64')
