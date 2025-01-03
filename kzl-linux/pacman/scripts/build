@@ -70,7 +70,7 @@ build() {
     local _pkgname="$1"
     local _pkgbase=$(get_pkgbase $_pkgname)
     local _log
-    local -i _updated
+    local -i _updated=0
     local _cleanbuild
     local _clean
     local _no_check
@@ -85,13 +85,11 @@ build() {
 
     # update pkgbuild
     info "Updating PKGBUILD..."
-    updatepkg >"$_log" 2>&1
-    _updated=$?
+    updatepkg >"$_log" 2>&1 || _updated=$?
 
     _cleanbuild='C'
     if (( $_updated == 255 )); then
         warn "Current version is newer"
-        _updated=0
     elif (( $_updated == 0 )); then
         info "No update for PKGBUILD"
     elif (( $_updated == 1 )); then
@@ -108,7 +106,7 @@ build() {
     fi
     info "Done"
 
-    if (( $build_only_updated > 0 )) && (( $_updated == 0 )); then
+    if (( $build_only_updated > 0 )) && (( $_updated == 0 || $_updated == 255 )); then
         info "Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)."
         return
     fi
