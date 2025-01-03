@@ -3,59 +3,52 @@
 # updatepkg
 #
 
-script_name="$(basename "${0}")"
+set -e
+set -u
+set -o pipefail
+# set -x
 
-cleanbuild=1
-increase=0
+umask 0022
 
-################################################################
+SCRIPT_NAME="$(basename "$0")"
+SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 
-# Show an INFO message
-# $1: message string
-info() {
-    local _msg="$1"
-    printf '\033[0;32m[%s] INFO: %s\033[0m\n' "$script_name" "$_msg"
-}
+################################################################################
 
-# Show a WARNING message
-# $1: message string
-warning() {
-    local _msg="$1"
-    printf '\033[0;33m[%s] WARNING: %s\033[0m\n' "$script_name" "$_msg" >&2
-}
+### libraries
+source "$BASH_LIB_DIR"/log.sh
+# source "$BASH_LIB_DIR"/util.sh
+# source "$BASH_LIB_DIR"/chroot.sh
 
-# Show an ERROR message then exit with status
-# $1: message string
-# $2: exit code number (with 0 does not exit)
-error() {
-    local _msg="$1"
-    local _error="$2"
-    printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$script_name" "$_msg" >&2
-    if [[ "$_error" -gt 0 ]]; then
-        exit "$_error"
-    fi
-}
+### constants & variables
+PKGBUILDDIR=$(pwd)
 
+declare -i cleanbuild=1
+declare -i increase=0
+
+### functions
 have_function() {
 	declare -f "$1" >/dev/null
 }
 
 usage() {
-    local _usage="
-updatepkg (kzl-linux)
+    cat <<EOF
 
 Update the \`pkgver\` of PKGBUILD
 
-Usage: updatepkg [ -n ] [ -i ]
+Usage: $SCRIPT_NAME -h | --help
+Usage: $SCRIPT_NAME [ -n ] [ -i ]
 
     -h, --help                  Display this help message and exit
-    -n, --no-cleanbuild         Do not remove "\$srcdir/" dir before updating PKGBUILD
-    -i, --increase-pkgrel       Increase "\$pkgrel" by 1
-"
-    echo "$_usage"
+    -n, --no-cleanbuild         Do not remove "\$srcdir/" dir before updating PKGBUILD (default: remove)
+    -i, --increase-pkgrel       Increase "\$pkgrel" by 1 (default: no increase)
+
+EOF
 }
 
-################################################################
+################################################################################
 
 while (($# > 0)); do
     case "$1" in
@@ -71,40 +64,37 @@ while (($# > 0)); do
         ;;
     *)
         usage
-        error "Unknown option: \"$1\"" 1
+        error "Unknown option: \"$1\"" 255
         ;;
     esac
     shift
 done
 
-set -e
-set -o pipefail
-set -u
-# set -x
+################################################################################
 
-#
-if [[ ! -f PKGBUILD ]]; then
+if [[ ! -f "PKGBUILD" ]]; then
    error 'PKGBUILD does not exist.' 2
 fi
 
-if [[ -f "/etc/makepkg.conf" ]]; then
-    . /etc/makepkg.conf
-elif [[ -f "/usr/local/etc/makepkg.conf" ]]; then
-    . /usr/local/etc/makepkg.conf
-else
-    error 'makepkg.conf NOT found.' 5
+if [[ ! -f "PKGUPDATE" ]]; then
+    error "PKGUPDATE does not exist." 3
 fi
-source PKGBUILD
-PKGBUILDDIR=$(pwd)
 
-if [[ ! -f PKGUPDATE ]]; then
-    error "PKGUPDATE does not exist." 2
+if [[ -f "/etc/makepkg.conf" ]]; then
+    source /etc/makepkg.conf
+elif [[ -f "/usr/local/etc/makepkg.conf" ]]; then
+    source /usr/local/etc/makepkg.conf
+else
+    error 'makepkg.conf NOT found' 4
 fi
+
+source PKGBUILD
 
 unset new_version current_version pre_update post_update
 source PKGUPDATE || :
+
 if [[ -z "$new_version" ]]; then
-    error 'Cannot get new version.' 6
+    error 'Cannot get new version' 5
 fi
 info "New pkgver is $new_version"
 current_version=${current_version:-$(grep -oP 'pkgver=\K.+$' PKGBUILD | sed 's/.g.*//')}
@@ -115,49 +105,53 @@ info "Current pkgrel is $current_pkgrel"
 # run pre_update
 if have_function 'pre_update'; then
     info "running pre_update()..."
-    pre_update || error "\`pre_update\` error" 4
+    pre_update || error "\`pre_update\` error" 6
     cd "$PKGBUILDDIR"
 fi
 
 result=$(vercmp $new_version $current_version)
-if [[ $result -eq 1 ]]; then
+if (( $result == 1 )); then
     info "PKGBUILD updated: $current_version => $new_version"
     sed -i "/^pkgver=/s/$current_version/$new_version/" PKGBUILD
     sed -i "/^pkgrel=/s/$current_pkgrel/1/" PKGBUILD
     pkgver=$new_version
     info "running updpkgsums..."
-    updpkgsums || error "\`updpkgsums\` error" 2
+    updpkgsums || error "\`updpkgsums\` error" 7
     # force cleanbuild
     cleanbuild=1
-elif [[ $result -eq 0 ]]; then
+elif (( $result == 0 )); then
     info "PKGBUILD is up to date."
     if [[ $increase -gt 0 ]]; then
         info "increase pkgrel..."
         new_pkgrel=$((current_pkgrel + 1))
         sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" PKGBUILD
     fi
-elif [[ $result -eq -1 ]]; then
-    warning "Current version is newer."
+elif (( $result == -1 )); then
+    warn "Current version is newer"
 else
-    error "Unknown \`vercmp\` result." 7
+    error "Unknown \`vercmp\` result" 8
 fi
 
 if [[ $cleanbuild -gt 0 ]]; then
-    makepkg -Cdo || error "\`makepkg -o\` error" 3
+    makepkg -Cdo || error "\`makepkg -o\` error" 9
 else
-    makepkg -do || error "\`makepkg -o\` error" 3
+    makepkg -do || error "\`makepkg -o\` error" 9
 fi
 # run post_update
 info "running post_update()..."
-post_update || error "\`post_update\` error" 4
+post_update || error "\`post_update\` error" 10
 
-# -1: current version is newer
+### error codes
+# 255: current version is newer
 # 0: no update
 # 1: updated
-# 2: PKGUPDATE does not exist
-# 3: makepkg -o error
-# 4: pre_update or post_update error
-# 5: makepkg.conf not found
-# 6: cannot get new version
-# 7: unknown `vercmp` result
+# 2: PKGBUILD does not exist
+# 3: PKGUPDATE does not exist
+# 4: makepkg.conf NOT found
+# 5: cannot get new version
+# 6: pre_update error
+# 7: updpkgsums error
+# 8: unknown vercmp result
+# 9: makepkg error
+# 10: post_update error
 exit $result
