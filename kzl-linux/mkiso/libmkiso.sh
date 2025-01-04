@@ -46,8 +46,9 @@ fi
 
 ### libraries
 source "$BASH_LIB_DIR"/log.sh
-source "$BASH_LIB_DIR"/util.sh
+source "$BASH_LIB_DIR"/utils.sh
 source "$BASH_LIB_DIR"/chroot.sh
+source "$BASH_LIB_DIR"/pacman.sh
 
 ### constants & variables
 WORK_DIR="/tmp/$DISTRO-mkiso"
@@ -56,6 +57,8 @@ ISOFS_DIR="$WORK_DIR"/iso
 INSTALL_DIR="LiveOS"
 LOG_DIR="$WORK_DIR"/log
 OUT_DIR="$SCRIPT_DIR"
+MUTABLE_IMG="$WORK_DIR/mutable.img"
+EFIBOOT_IMG="$WORK_DIR/efiboot.img"
 
 ISO_LABEL="LIVEOS ($ISO_NAME)"
 ISO_PUBLISHER="$ISO_NAME <https://github.com/lz3450/LFS>"
@@ -96,7 +99,6 @@ make_rootfs() {
         fi
         info "Copying custom rootfs files..."
         cp -af --no-preserve=ownership,mode -- "$SCRIPT_DIR"/rootfs/. "$ROOTFS_DIR"/
-        mkdir -p -- "$ROOTFS_DIR"/root/mutable
         # Set ownership and mode for files and directories
         chown -fh -- 0:0 "$ROOTFS_DIR"/etc/shadow
         chmod -f -- 400 "$ROOTFS_DIR"/etc/shadow
@@ -127,13 +129,26 @@ pacstrap_rootfs() {
     info "Done"
 }
 
+make_mutable_img() {
+    info "Creating mutable image \"$MUTABLE_IMG\"..."
+    rm -f -- "$MUTABLE_IMG"
+    fallocate -l 128M "$MUTABLE_IMG"
+    mkfs -t "$mutable_image_type" -f -l MUTABLE "$MUTABLE_IMG" >"$LOG_DIR"/mkfs-mutable.log 2>&1
+    info "Done"
+}
+
 setup_pacman_repo() {
     local _pkg_list=("$@")
+    local _pkg_file
 
     info "Setting up pacman repository to the ISO file system..."
+    mount -t "$mutable_image_type" -o loop "$MUTABLE_IMG" "$ROOTFS_DIR/home"
     for pkg in "${_pkg_list[@]}"; do
-        repo-add "$ROOTFS_DIR/$PACMAN_REPO_PATH" "$ROOTFS_DIR/$PACMAN_REPO_DIR/$pkg" >"$LOG_DIR"/pacman-repo-add.log 2>&1
+        repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_PATH" "/$PACMAN_REPO_DIR/$(get_pkg_file "$pkg" "/$PACMAN_REPO_DIR")" \
+            >"$LOG_DIR"/pacman-repo-add.log 2>&1 \
+            || error "Failed to set up pacman repository" 8
     done
+    umount "$ROOTFS_DIR/home"
     info "Done"
 }
 
@@ -220,32 +235,24 @@ make_efibootimg() {
     local _imgsize=131072
 
     info "Creating FAT image of size: $_imgsize Byte..."
-    rm -f -- "$WORK_DIR"/efiboot.img
-    mkfs.fat -C -F 32 -n "ISO_EFI" "$WORK_DIR"/efiboot.img "$_imgsize" >/dev/null 2>&1
+    rm -f -- "$EFIBOOT_IMG"
+    mkfs.fat -C -F 32 -n "ISO_EFI" "$EFIBOOT_IMG" "$_imgsize" >/dev/null 2>&1
     info "Done"
 
     info "Setting up systemd-boot for UEFI booting..."
     # Create the default/fallback boot path in which a boot loaders will be placed later.
-    mmd -i "$WORK_DIR"/efiboot.img ::/EFI ::/EFI/BOOT
+    mmd -i "$EFIBOOT_IMG" ::/EFI ::/EFI/BOOT
     # Copy systemd-boot EFI binary to the default/fallback boot path
-    mcopy -i "$WORK_DIR"/efiboot.img \
+    mcopy -i "$EFIBOOT_IMG" \
         "$ROOTFS_DIR"/usr/lib/systemd/boot/efi/systemd-bootx64.efi \
         ::/EFI/BOOT/BOOTx64.EFI
     # Copy systemd-boot configuration files
-    mmd -i "$WORK_DIR"/efiboot.img \
+    mmd -i "$EFIBOOT_IMG" \
         ::/loader \
         ::/loader/entries
-    mcopy -i "$WORK_DIR"/efiboot.img \
+    mcopy -i "$EFIBOOT_IMG" \
         "$SCRIPT_DIR"/efiboot/loader.conf \
         ::/loader/
-    info "Done"
-}
-
-make_mutable_img() {
-    info "Creating mutable image..."
-    rm -f -- "$WORK_DIR"/mutable.img
-    fallocate -l 64M "$WORK_DIR"/mutable.img
-    mkfs -t "$mutable_image_type" -f -l MUTABLE "$WORK_DIR"/mutable.img >"$LOG_DIR"/mkfs-mutable.log 2>&1
     info "Done"
 }
 
@@ -289,8 +296,8 @@ make_iso_image() {
         -appid "$ISO_APPLICATION" \
         -preparer "prepared by kzl" \
         -partition_offset 16 \
-        -append_partition 2 'C12A7328-F81F-11D2-BA4B-00A0C93EC93B' "$WORK_DIR"/efiboot.img \
-        -append_partition 3 '0FC63DAF-8483-4772-8E79-3D69D8477DE4' "$WORK_DIR"/mutable.img \
+        -append_partition 2 'C12A7328-F81F-11D2-BA4B-00A0C93EC93B' "$EFIBOOT_IMG" \
+        -append_partition 3 '0FC63DAF-8483-4772-8E79-3D69D8477DE4' "$MUTABLE_IMG" \
         -appended_part_as_gpt \
         -no-pad \
         -output "$OUT_DIR/$_name" \
@@ -308,5 +315,6 @@ debug "${BASH_SOURCE[0]} sourced"
 # 5: Failed to pacstrap packages
 # 6: Failed to configure rootfs
 # 7: Failed to create ISO image
+# 8: Failed to set up pacman repository
 # 127: Unknown option
 # 255: Must be run as root

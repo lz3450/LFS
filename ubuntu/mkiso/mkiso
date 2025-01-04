@@ -22,7 +22,7 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 
 ### libraries
 source "$BASH_LIB_DIR"/log.sh
-source "$BASH_LIB_DIR"/util.sh
+source "$BASH_LIB_DIR"/utils.sh
 source "$BASH_LIB_DIR"/chroot.sh
 
 ### constants & variables
@@ -155,19 +155,19 @@ _get_kernel_suffix() {
 configure_efibootimg() {
     info "Configuring systemd-boot entries..."
     sed "s|%ISOLABEL%|$ISO_LABEL|g" "$SCRIPT_DIR"/efiboot/ubuntu-kzl.conf \
-        | mcopy -i "$WORK_DIR"/efiboot.img - ::/loader/entries/ubuntu-kzl.conf
+        | mcopy -i "$EFIBOOT_IMG" - ::/loader/entries/ubuntu-kzl.conf
     sed "s|%ISOLABEL%|$ISO_LABEL|g" "$SCRIPT_DIR"/efiboot/ubuntu.conf \
-        | mcopy -i "$WORK_DIR"/efiboot.img - ::/loader/entries/ubuntu.conf
+        | mcopy -i "$EFIBOOT_IMG" - ::/loader/entries/ubuntu.conf
     info "Done"
 
     # Copy kernel and initramfs to FAT image
     for kernel_version in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
         local _kernel_suffix="$(_get_kernel_suffix "$kernel_version")"
         info "Copying kernel ($kernel_version) and initramfs to the FAT file system..."
-        mcopy -i "$WORK_DIR/efiboot.img" \
+        mcopy -i "$EFIBOOT_IMG" \
             "$ROOTFS_DIR"/boot/vmlinuz-$kernel_version \
             ::/vmlinuz$_kernel_suffix
-        mcopy -i "$WORK_DIR/efiboot.img" \
+        mcopy -i "$EFIBOOT_IMG" \
             "$ROOTFS_DIR"/boot/initramfs-$kernel_version.img \
             ::/initramfs$_kernel_suffix.img
         info "Done"
@@ -187,7 +187,7 @@ configure_isofs() {
     mkdir -p -- "$ISOFS_DIR"/EFI/BOOT
     mkdir -p -- "$ISOFS_DIR"/loader/entries
     for _file in "${_efi_files[@]}"; do
-        mcopy -i "$WORK_DIR/efiboot.img" \
+        mcopy -i "$EFIBOOT_IMG" \
             "::/$_file" \
             "$ISOFS_DIR/$_file"
     done
@@ -196,7 +196,7 @@ configure_isofs() {
     for kernel_version in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
         local _kernel_suffix="$(_get_kernel_suffix "$kernel_version")"
         info "Copying kernel ($kernel_version) and initramfs to the ISO file system..."
-        mcopy -i "$WORK_DIR/efiboot.img" \
+        mcopy -i "$EFIBOOT_IMG" \
             ::/vmlinuz$_kernel_suffix \
             ::/initramfs$_kernel_suffix.img \
             "$ISOFS_DIR"/
@@ -260,8 +260,10 @@ create_work_dir
 make_rootfs
 debootstrap_rootfs "${deb_pkgs[@]}"
 pacstrap_rootfs "${pacman_pkgs[@]}"
-setup_pacman_repo "${pacman_pkgs[@]}"
 configure_rootfs
+
+make_mutable_img
+setup_pacman_repo "${pacman_pkgs[@]}"
 
 cleanup_rootfs
 make_rootfs_archive "$rootfs_archive_name"
@@ -269,8 +271,6 @@ make_rootfs_archive "$rootfs_archive_name"
 make_initramfs
 make_efibootimg
 configure_efibootimg
-
-make_mutable_img
 
 cleanup_rootfs
 make_rootfs_squashfs
@@ -286,5 +286,6 @@ epilogue
 # 5: Failed to pacstrap packages
 # 6: Failed to configure rootfs
 # 7: Failed to create ISO image
+# 8: Failed to set up pacman repository
 # 127: Unknown option
 # 255: Must be run as root

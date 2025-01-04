@@ -22,7 +22,7 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 
 ### libraries
 source "$BASH_LIB_DIR"/log.sh
-source "$BASH_LIB_DIR"/util.sh
+source "$BASH_LIB_DIR"/utils.sh
 source "$BASH_LIB_DIR"/chroot.sh
 
 ### constants & variables
@@ -165,6 +165,8 @@ create_work_dir
 
 make_rootfs
 pacstrap_rootfs "${rootfs_archive_pkgs[@]}"
+
+make_mutable_img
 setup_pacman_repo "${repository_pkgs[@]}"
 
 cleanup_rootfs
@@ -175,8 +177,6 @@ pacstrap_rootfs "${iso_pkg_list[@]}"
 make_initramfs
 make_efibootimg
 configure_efibootimg
-
-make_mutable_img
 
 cleanup_rootfs
 make_rootfs_squashfs
