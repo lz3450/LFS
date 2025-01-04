@@ -205,12 +205,14 @@ configure_isofs() {
 }
 
 clean() {
-    info "Cleaning..."
     set +e
 
+    info "Cleaning..."
     chroot_teardown
-
     info "Done"
+
+    libmkiso_clean
+
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
 trap clean EXIT SIGINT SIGTERM SIGKILL

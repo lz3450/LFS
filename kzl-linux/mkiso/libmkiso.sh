@@ -120,7 +120,7 @@ pacstrap_rootfs() {
     install -d -m 1777 -- "$ROOTFS_DIR"/tmp
     install -d -m 0555 -- "$ROOTFS_DIR"/{sys,proc}
     chroot_setup "$ROOTFS_DIR" >"$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
-    unshare --fork --pid pacman -Sy -r "$ROOTFS_DIR" --noconfirm --cachedir "$ROOTFS_DIR/$PACMAN_REPO_DIR" "${_pkg_list[@]}" >>"$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
+    unshare --fork --pid pacman -Sy -r "$ROOTFS_DIR" --noconfirm --cachedir "/$PACMAN_REPO_DIR" "${_pkg_list[@]}" >>"$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
     chroot_teardown >>"$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
     info "Done"
 
@@ -143,6 +143,7 @@ setup_pacman_repo() {
 
     info "Setting up pacman repository to the ISO file system..."
     mount -t "$mutable_image_type" -o loop "$MUTABLE_IMG" "$ROOTFS_DIR/home"
+    mkdir -p -- "$ROOTFS_DIR/$PACMAN_REPO_DIR"
     for pkg in "${_pkg_list[@]}"; do
         repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_PATH" "/$PACMAN_REPO_DIR/$(get_pkg_file "$pkg" "/$PACMAN_REPO_DIR")" \
             >"$LOG_DIR"/pacman-repo-add.log 2>&1 \
@@ -303,6 +304,13 @@ make_iso_image() {
         -output "$OUT_DIR/$_name" \
         "$ISOFS_DIR/" >"$LOG_DIR"/xorriso.log 2>&1 || error "Failed to create ISO image" 7
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$_name"
+    info "Done"
+}
+
+libmkiso_clean() {
+    info "Cleaning (libmkiso)..."
+    umount "$ROOTFS_DIR/home"
+    chroot_teardown
     info "Done"
 }
 
