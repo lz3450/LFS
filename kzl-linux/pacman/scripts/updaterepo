@@ -19,12 +19,12 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 
 ### libraries
 source "$BASH_LIB_DIR"/log.sh
+source "$BASH_LIB_DIR"/pacman.sh
 
 ### constants & variables
 REPO_ROOT="/home/.repository"
 PACKAGE_DIR="$HOME/makepkg/packages"
 ARCHIVE_DIR="$HOME/makepkg/archive"
-EXTENSION="zst"
 
 declare -i replace=0
 declare -i clear=0
@@ -33,28 +33,14 @@ repo=""
 ### functions
 update() {
     local _pkg="$1"
+    local _pkg_file="$(get_pkg_file "$_pkg" "$PACKAGE_DIR")"
 
     mkdir -p -- "$ARCHIVE_DIR"
 
-    #           pkgname-  epoch:      pkgver                    -pkgrel-  arch                  .pkg.tar.zst
-    pkgname_regex="$_pkg-\([0-9]+:\)?\([0-9a-zA-Z]+\(\.\|\+\)?\)+-[0-9]+-\(x86_64\|aarch64\|any\).pkg.tar.$EXTENSION"
-    pkgname=$(find "$HOME/makepkg/packages" -type f -regex "$PACKAGE_DIR/$pkgname_regex" -printf "%T@ %f\n" | sort -n | tail -n 1 | cut -d ' ' -f 2)
-
-    if [[ -f "$PACKAGE_DIR/$pkgname" ]]; then
-        sudo cp -f -- "$PACKAGE_DIR/$pkgname" "$repo_dir"
-        mv -- "$PACKAGE_DIR/$pkgname" "$ARCHIVE_DIR"
-        sudo repo-add -R "$repo_path" "$repo_dir/$pkgname"
-    fi
-
-    if (( $replace > 0 )) ; then
-        local _pkg_number=$(find "$repo_dir" -type f -regex "$repo_dir/$pkgname_regex" -printf "%f\n" | wc -l)
-        if (( $_pkg_number > 1 )); then
-            error "Multiple packages with the same name \"$_pkg\" are found, please check" 3
-        fi
-        pkgname=$(find "$repo_dir" -type f -regex "$repo_dir/$pkgname_regex" -printf "%f\n")
-        if [[ -f "$repo_dir/$pkgname" ]]; then
-            sudo repo-add -R "$repo_path" "$repo_dir/$pkgname"
-        fi
+    if [[ -f "$PACKAGE_DIR/$_pkg_file" ]]; then
+        sudo cp -f -- "$PACKAGE_DIR/$_pkg_file" "$repo_dir"
+        mv -- "$PACKAGE_DIR/$_pkg_file" "$ARCHIVE_DIR"
+        sudo repo-add -R "$repo_path" "$repo_dir/$_pkg_file"
     fi
 }
 
@@ -77,7 +63,7 @@ EOF
 
 ################################################################################
 
-while (($# > 0)); do
+while (( $# > 0 )); do
     case "$1" in
         -h|--help)
             usage
@@ -101,18 +87,16 @@ while (($# > 0)); do
 done
 
 case "$repo" in
-    core|extra|ubuntu)
-        # ROOTDIR="LFS/<distro>/pacman"
-        readarray -t pkgs < <(find $LFS_PACMAN_ROOT_DIR/pkgbuilds/$repo/ -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
-        EXTENSION="zst"
+    kzl|ubuntu)
+        readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$repo/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
         ;;
     # unknown repo
     *)
-        error "Unknown repo \"$repo\"." 2
+        error "Unknown repo \"$repo\"." 127
         ;;
 esac
 repo_dir="$REPO_ROOT/$repo"
-repo_path="$repo_dir/$repo.db.tar.$EXTENSION"
+repo_path="$repo_dir/$repo.db.$EXTENSION"
 
 ### clear
 if (( $clear > 0 )); then
@@ -140,16 +124,19 @@ if [[ ! -d "$repo_dir" ]]; then
 fi
 
 if (( $replace > 0 )); then
-    sudo find "$repo_dir" -name "$repo.db.tar.$EXTENSION" -delete
+    sudo find "$repo_dir" -name "*.pkg.$EXTENSION" -exec mv -v -t "$PACKAGE_DIR" -- {} +
+    sudo chown -R -- "$(stat -c '%U:%G' "$PACKAGE_DIR")" "$PACKAGE_DIR"
+    sudo find "$repo_dir" -mindepth 1 -delete
 fi
 
 if [[ ! -f "$repo_path" ]]; then
-    info "Creating empty repo: $repo.db.tar.$EXTENSION..."
+    info "Creating empty repo: $repo.db.$EXTENSION..."
     sudo repo-add "$repo_path"
     info "Done"
 fi
 
-## special cases
+################################################################################
+
 for pkgbase in "${pkgs[@]}"; do
     info "Updating $pkgbase..."
     update "$pkgbase"
@@ -174,7 +161,7 @@ for pkgbase in "${pkgs[@]}"; do
     esac
 done
 
-if [ -z $(find "$PACKAGE_DIR" -empty) ]; then
+if [[ -z $(find "$PACKAGE_DIR" -empty) ]]; then
    warn "$PACKAGE_DIR is not empty, please check"
 fi
 
