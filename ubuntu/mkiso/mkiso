@@ -10,6 +10,9 @@ set -o pipefail
 
 umask 0022
 
+# unset __DEBUG__
+__DEBUG__=1
+
 SCRIPT_NAME="$(basename "$0")"
 SCRIPT_PATH="$(readlink -f "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
@@ -25,17 +28,18 @@ source "$BASH_LIB_DIR"/chroot.sh
 ### constants & variables
 DISTRO="ubuntu"
 ISO_NAME="Ubuntu-KZL"
+PACMAN_REPO_DIR="home/.repository/ubuntu"
+PACMAN_REPO_PATH="$PACMAN_REPO_DIR/ubuntu.db.tar.zst"
 declare -i no_update_rootfs=0
 mutable_image_type="f2fs"
 
 ### libraries
-source ../../kzl-linux/mkiso/libmkiso.sh
+source libmkiso.sh
 
 ### constants & variables
 VERSION="1.0"
 
 UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
-UBUNTU_PACMAN_REPO="home/.repository/ubuntu"
 
 debootstrap_suite=""
 
@@ -117,27 +121,6 @@ debootstrap_rootfs() {
     info "Done"
 }
 
-pacstrap_rootfs() {
-    local _pkg_list=("$@")
-
-    # pacstrap
-    info "Pacstrapping \"$ROOTFS_DIR/\": ${_pkg_list[*]}"
-    mkdir -p -- "$ROOTFS_DIR/$UBUNTU_PACMAN_REPO"
-    pacstrap -c -G -M -- "$ROOTFS_DIR" "${_pkg_list[@]}" >"$LOG_DIR"/pacstrap.log 2>&1 || error "Failed to pacstrap packages" 5
-    # pacman -Sy -r "$ROOTFS_DIR" --noconfirm --cachedir "$ROOTFS_DIR/$UBUNTU_PACMAN_REPO" "${_pkg_list[@]}" >"$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
-    info "Done"
-
-    info "Creating a list of installed pacman packages..."
-    pacman -Q --sysroot "$ROOTFS_DIR" >"$ISOFS_DIR"/pacman_pkglist.txt 2>/dev/null || warn "Failed to creating a list of installed pacman packages"
-    info "Done"
-
-    info "Copying pacman repository to the ISO file system..."
-    for pkg in $(ls "$ROOTFS_DIR/$UBUNTU_PACMAN_REPO"); do
-        repo-add "$ROOTFS_DIR"/$UBUNTU_PACMAN_REPO/ubuntu.db.tar.zst "$ROOTFS_DIR/$UBUNTU_PACMAN_REPO/$pkg" >"$LOG_DIR"/pacman-repo-add.log 2>&1
-    done
-    info "Done"
-}
-
 configure_rootfs() {
     info "Configuring rootfs..."
 
@@ -153,13 +136,10 @@ configure_rootfs() {
 
 make_initramfs() {
     for kernel_version in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
-        info "Create initramfs for kernel version: $kernel_version"
-        dracut --kver "$kernel_version" \
-            "${DRACUT_ARGUMENTS[@]}" \
-            --kernel-image "$ROOTFS_DIR/boot/vmlinuz-$kernel_version" \
-            --kmoddir "$ROOTFS_DIR/lib/modules/$kernel_version" \
-            "$ROOTFS_DIR/boot/initramfs-$kernel_version.img" >"$LOG_DIR"/dracut-$kernel_version.log 2>&1
-        info "Done"
+        make_initramfs_for_kernel \
+            "$kernel_version" \
+            "$ROOTFS_DIR/boot/vmlinuz-$kernel_version" \
+            "$ROOTFS_DIR/lib/modules/$kernel_version"
     done
 }
 
@@ -172,42 +152,8 @@ _get_kernel_suffix() {
     esac
 }
 
-make_efibootimg() {
-    # Calculate the required FAT image size in bytes
-    # local _imgsize=$(du -bc \
-    #     "$ROOTFS_DIR/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
-    #     "$SCRIPT_DIR/efiboot/loader.conf" \
-    #     "$SCRIPT_DIR/efiboot/ubuntu-kzl.conf" \
-    #     "$ROOTFS_DIR/boot/vmlinuz" \
-    #     "$ROOTFS_DIR/boot/initramfs.img" \
-    #     2>/dev/null | awk 'END { print $1 }')
-    # info "Required FAT image size $_imgsize bytes"
-    # Convert from bytes to KiB and round up to the next full MiB with an additional MiB for reserved sectors.
-    # local _imgsize="$(awk 'function ceil(x){return int(x)+(x>int(x))} function byte_to_kib(x){return x/1024} function mib_to_kib(x){return x*1024} END {print mib_to_kib(ceil((byte_to_kib($1)+1024)/1024))}' \
-    #     <<< "$_imgsize")"
-    # info "Required FAT image size $_imgsize KiB"
-
-    local _imgsize=131072
-
-    info "Creating FAT image of size: $_imgsize Byte..."
-    rm -f -- "$WORK_DIR"/efiboot.img
-    mkfs.fat -C -F 32 -n "ISO_EFI" "$WORK_DIR"/efiboot.img "$_imgsize" >/dev/null 2>&1
-    info "Done"
-
-    info "Setting up systemd-boot for UEFI booting..."
-    # Create the default/fallback boot path in which a boot loaders will be placed later.
-    mmd -i "$WORK_DIR"/efiboot.img ::/EFI ::/EFI/BOOT
-    # Copy systemd-boot EFI binary to the default/fallback boot path
-    mcopy -i "$WORK_DIR"/efiboot.img \
-        "$ROOTFS_DIR"/usr/lib/systemd/boot/efi/systemd-bootx64.efi \
-        ::/EFI/BOOT/BOOTx64.EFI
-    # Copy systemd-boot configuration files
-    mmd -i "$WORK_DIR"/efiboot.img \
-        ::/loader \
-        ::/loader/entries
-    mcopy -i "$WORK_DIR"/efiboot.img \
-        "$SCRIPT_DIR"/efiboot/loader.conf \
-        ::/loader/
+configure_efibootimg() {
+    info "Configuring systemd-boot entries..."
     sed "s|%ISOLABEL%|$ISO_LABEL|g" "$SCRIPT_DIR"/efiboot/ubuntu-kzl.conf \
         | mcopy -i "$WORK_DIR"/efiboot.img - ::/loader/entries/ubuntu-kzl.conf
     sed "s|%ISOLABEL%|$ISO_LABEL|g" "$SCRIPT_DIR"/efiboot/ubuntu.conf \
@@ -218,45 +164,14 @@ make_efibootimg() {
     for kernel_version in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
         local _kernel_suffix="$(_get_kernel_suffix "$kernel_version")"
         info "Copying kernel ($kernel_version) and initramfs to the FAT file system..."
-        mcopy -i "$WORK_DIR/efiboot.img" "$ROOTFS_DIR"/boot/vmlinuz-$kernel_version ::/vmlinuz$_kernel_suffix
-        mcopy -i "$WORK_DIR/efiboot.img" "$ROOTFS_DIR"/boot/initramfs-$kernel_version.img ::/initramfs$_kernel_suffix.img
+        mcopy -i "$WORK_DIR/efiboot.img" \
+            "$ROOTFS_DIR"/boot/vmlinuz-$kernel_version \
+            ::/vmlinuz$_kernel_suffix
+        mcopy -i "$WORK_DIR/efiboot.img" \
+            "$ROOTFS_DIR"/boot/initramfs-$kernel_version.img \
+            ::/initramfs$_kernel_suffix.img
         info "Done"
     done
-}
-
-make_mutable_img() {
-    info "Creating mutable image..."
-
-    rm -f -- "$WORK_DIR"/mutable.img
-    fallocate -l 64M "$WORK_DIR"/mutable.img
-    mkfs -t "$mutable_image_type" -f -l MUTABLE "$WORK_DIR"/mutable.img >"$LOG_DIR"/mkfs-mutable.log 2>&1
-
-    info "Done"
-}
-
-make_rootfs_squashfs() {
-    local _image_path="$ISOFS_DIR/$INSTALL_DIR/squashfs.img"
-
-    info "Creating rootfs SquashFS image, this may take some time..."
-
-    # Create fstab
-    printf "$FSTAB_ROW_FORMAT" \
-        "LABEL=ISO_EFI" \
-        "/boot" \
-        "vfat" \
-        "defaults" \
-        "0" "2" >"$ROOTFS_DIR"/etc/fstab
-    printf "$FSTAB_ROW_FORMAT" \
-        "LABEL=MUTABLE" \
-        "/home" \
-        "$mutable_image_type" \
-        "defaults" \
-        "0" "2" >>"$ROOTFS_DIR"/etc/fstab
-    # Create a squashfs image and place it in the ISO 9660 file system.
-    mkdir -p -- "$ISOFS_DIR/$INSTALL_DIR"
-    mksquashfs "$ROOTFS_DIR" "$_image_path" -comp zstd -b 1M -noappend
-
-    info "Done"
 }
 
 configure_isofs() {
@@ -302,7 +217,7 @@ trap clean EXIT SIGINT SIGTERM SIGKILL
 
 ########################################################################################################################
 
-while (($# > 0)); do
+while (( $# > 0 )); do
     case "$1" in
     -h|--help)
         usage
@@ -345,12 +260,15 @@ create_work_dir
 make_rootfs
 debootstrap_rootfs "${deb_pkgs[@]}"
 pacstrap_rootfs "${pacman_pkgs[@]}"
+setup_pacman_repo "${pacman_pkgs[@]}"
 configure_rootfs
+
+cleanup_rootfs
+make_rootfs_archive "$rootfs_archive_name"
 
 make_initramfs
 make_efibootimg
-
-make_rootfs_archive "$rootfs_archive_name"
+configure_efibootimg
 
 make_mutable_img
 
