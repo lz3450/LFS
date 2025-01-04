@@ -24,6 +24,7 @@ check_root
 CHROOT_PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
 
 chroot_active_mounts=()
+chroot_dir=""
 
 ### functions
 _add_mount() {
@@ -37,6 +38,7 @@ _add_mount() {
 chroot_setup() {
     chroot_active_mounts=()
     local _chroot_dir="$1"
+    chroot_dir="$_chroot_dir"
 
     if ! mountpoint -q "$_chroot_dir"; then
         info "\"$_chroot_dir\" is not a mountpoint. This may have undesirable side effects."
@@ -56,16 +58,21 @@ chroot_setup() {
     fi
 
     if [[ -f "$_chroot_dir/etc/resolv.conf" || -L "$_chroot_dir/etc/resolv.conf" ]]; then
-        mv -v "$_chroot_dir"/etc/resolv.conf "$_chroot_dir"/etc/resolv.conf.backup
+        mv -v -- "$_chroot_dir"/etc/resolv.conf "$_chroot_dir"/etc/resolv.conf.backup
     fi
     cp -v --dereference /etc/resolv.conf "$_chroot_dir"/etc/resolv.conf
 }
 
 chroot_teardown() {
-  if (( ${#chroot_active_mounts[@]} )); then
-    umount -v "${chroot_active_mounts[@]}"
-  fi
-  chroot_active_mounts=()
+    if (( ${#chroot_active_mounts[@]} )); then
+        umount -v "${chroot_active_mounts[@]}"
+    fi
+    chroot_active_mounts=()
+
+    rm -vf -- "$_chroot_dir"/etc/resolv.conf
+    if [[ -f "$_chroot_dir/etc/resolv.conf.backup" || -L "$_chroot_dir/etc/resolv.conf.backup" ]]; then
+        mv -v -- "$_chroot_dir"/etc/resolv.conf.backup "$_chroot_dir"/etc/resolv.conf
+    fi
 }
 
 chroot_run() {

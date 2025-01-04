@@ -1,0 +1,13 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - @URL@ | grep -oP '(?<=)' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags @URL@ | grep -oP '(?<=refs/tags/)' | sort -V | tail -n1)
+
+pre_update() {
+
+}
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+    meson configure > "$PKGBUILDDIR"/help.txt
+    cmake -LAH -S . -B tmp -DCMAKE_BUILD_TYPE=Release > "$PKGBUILDDIR"/help.txt
+}
