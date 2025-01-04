@@ -27,8 +27,8 @@ source "$BASH_LIB_DIR"/utils.sh
 ### constants & variables
 DISTRO="kzllinux"
 ISO_NAME="KZL-Linux"
-PACMAN_REPO_DIR="home/.repository/core"
-PACMAN_REPO_PATH="$PACMAN_REPO_DIR/core.db.tar.zst"
+PACMAN_REPO_DIR="home/.repository/kzl"
+PACMAN_REPO_PATH="$PACMAN_REPO_DIR/kzl.db.tar.zst"
 declare -i no_update_rootfs=0
 mutable_image_type="f2fs"
 
