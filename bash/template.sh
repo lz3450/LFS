@@ -22,7 +22,8 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 
 ### libraries
 source "$BASH_LIB_DIR"/log.sh
-source "$BASH_LIB_DIR"/util.sh
+source "$BASH_LIB_DIR"/utils.sh
+# source "$BASH_LIB_DIR"/loop.sh
 # source "$BASH_LIB_DIR"/chroot.sh
 
 ### checks

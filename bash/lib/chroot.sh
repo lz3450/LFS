@@ -15,11 +15,10 @@ declare -i __CHROOT__=1
 
 ### libraries
 source "$(dirname ${BASH_SOURCE[0]})"/log.sh
+source "$(dirname ${BASH_SOURCE[0]})"/utils.sh
 
 ### checks
-if [[ $EUID -ne 0 ]]; then
-    error "This script must be run as root" 1
-fi
+check_root
 
 ### constants & variables
 CHROOT_PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
