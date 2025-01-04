@@ -119,18 +119,14 @@ debootstrap_rootfs() {
         "$UBUNTU_MIRROR" \
         >"$ISOFS_DIR"/deb_pkglist.txt 2>/dev/null || warn "Failed to creating a list of installed deb packages"
     info "Done"
-}
 
-configure_rootfs() {
     info "Configuring rootfs..."
-
     install -d -m 1777 -- "$ROOTFS_DIR"/tmp
     chroot_setup "$ROOTFS_DIR" >"$LOG_DIR"/chroot-setup.log || error "Failed to setup chroot environment" 6
     chroot_run "$ROOTFS_DIR" systemctl enable systemd-networkd.service >"$LOG_DIR"/systemd-networkd.log 2>&1 || error "Failed to enable systemd-networkd" 6
     chroot_run "$ROOTFS_DIR" apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y >"$LOG_DIR"/apt.log 2>&1 || error "Failed to run apt" 6
     chroot_run "$ROOTFS_DIR" ldconfig
     chroot_teardown >"$LOG_DIR"/chroot-teardown.log
-
     info "Done"
 }
 
@@ -262,7 +258,6 @@ create_work_dir
 make_rootfs
 debootstrap_rootfs "${deb_pkgs[@]}"
 pacstrap_rootfs "${pacman_pkgs[@]}"
-configure_rootfs
 
 make_mutable_img
 setup_pacman_repo "${pacman_pkgs[@]}"
