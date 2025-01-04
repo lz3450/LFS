@@ -1,0 +1,45 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=qt6
+pkgver=6.7.0
+pkgrel=3
+epoch=
+pkgdesc="QT"
+arch=('x86_64')
+url="https://www.qt.io"
+license=('KZL')
+groups=(qt)
+depends=(brotli
+         freetype
+         glib2
+         harfbuzz
+         icu
+         libjpeg-turbo
+         libpng)
+makedepends=()
+optdepends=()
+source=(https://download.qt.io/official_releases/qt/6.7/$pkgver/submodules/qtbase-everywhere-src-$pkgver.tar.xz)
+noextract=()
+validpgpkeys=()
+sha256sums=('11b2e29e2e52fb0e3b453ea13bbe51a10fdff36e1c192d8868c5a40233b8b254')
+
+build() {
+  cd qtbase-everywhere-src-$pkgver
+
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -S . \
+    -B build \
+    -LAH
+
+  cmake --build build
+}
+
+package() {
+  cd qtbase-everywhere-src-$pkgver
+
+  DESTDIR="$pkgdir" cmake --build build --target install
+}

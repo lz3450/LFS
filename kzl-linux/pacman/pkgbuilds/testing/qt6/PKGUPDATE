@@ -1,0 +1,6 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://download.qt.io/official_releases/qt/6.7 | grep -oP '6\.7\.\d+' | sort -V | tail -n1)
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/qtbase-everywhere-src-$pkgver"
+    cmake -LAH -S . -B tmp -G Ninja -DCMAKE_BUILD_TYPE=Release > "$PKGBUILDDIR"/help.txt
+}
