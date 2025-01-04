@@ -5,7 +5,25 @@
 
 ################################################################################
 
+if [[ -n "${__LOG__:-}" ]]; then
+    return
+fi
+
+declare -i __LOG__=1
+
+################################################################################
+
 ### functions
+# Show a DEBUG message
+# $1: message string
+debug() {
+    if [[ -z "${__DEBUG__:-}" ]]; then
+        return
+    fi
+    local _msg="$1"
+    printf '\033[0;34m[%s] DEBUG: %s\033[0m\n' "$SCRIPT_NAME" "$_msg" >&2
+}
+
 # Show an INFO message
 # $1: message string
 info() {
@@ -74,3 +92,5 @@ epilogue() {
     echo -e "[$SCRIPT_NAME]: Total time - $(date -d@$__total_time__ -u +%H:%M:%S)"
     echo -e "\033[0m"
 }
+
+debug "${BASH_SOURCE[0]} sourced"

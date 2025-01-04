@@ -5,9 +5,16 @@
 
 ################################################################################
 
-# requires: log.sh
+if [[ -n "${__CHROOT__:-}" ]]; then
+    return
+fi
+
+declare -i __CHROOT__=1
 
 ################################################################################
+
+### libraries
+source "$(dirname ${BASH_SOURCE[0]})"/log.sh
 
 ### checks
 if [[ $EUID -ne 0 ]]; then
@@ -25,6 +32,9 @@ _add_mount() {
     chroot_active_mounts=(${@: -1} "${chroot_active_mounts[@]}")
 }
 
+# chroot_setup <chroot_dir>
+# when using `chroot_setup`, `chroot_teardown` must be call to clean up
+# for example, `trap chroot_teardown EXIT`
 chroot_setup() {
     chroot_active_mounts=()
     local _chroot_dir="$1"
@@ -62,6 +72,8 @@ chroot_teardown() {
 chroot_run() {
     SHELL=/bin/bash LC_ALL=C PATH="$CHROOT_PATH" unshare --fork --pid chroot "$@"
 }
+
+debug "${BASH_SOURCE[0]} sourced"
 
 ### error codes
 # 1: This script must be run as root

@@ -10,6 +10,9 @@ set -o pipefail
 
 umask 0022
 
+# unset __DEBUG__
+# __DEBUG__=1
+
 SCRIPT_NAME="$(basename "$0")"
 SCRIPT_PATH="$(readlink -f "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
@@ -92,7 +95,7 @@ trap clean EXIT SIGINT SIGTERM SIGKILL
 # done
 # if [[ "$1" == '--' ]]; then shift; fi
 
-while (($# > 0)); do
+while (( $# > 0 )); do
     case "$1" in
     -V | --version)
         echo "$VERSION"

@@ -5,9 +5,16 @@
 
 ################################################################################
 
-# requires: log.sh
+if [[ -n "${__UTIL__:-}" ]]; then
+    return
+fi
+
+declare -i __UTIL__=1
 
 ################################################################################
+
+### libraries
+source "$(dirname ${BASH_SOURCE[0]})"/log.sh
 
 ### functions
 check_root() {
@@ -49,6 +56,8 @@ dir_empty() {
         return 0
     fi
 }
+
+debug "${BASH_SOURCE[0]} sourced"
 
 ### error codes
 # 255: Must be run as root
