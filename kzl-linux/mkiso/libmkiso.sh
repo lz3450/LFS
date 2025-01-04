@@ -213,7 +213,7 @@ make_initramfs_for_kernel() {
         --zstd \
         --kernel-image "$_kernel_image" \
         --kmoddir "$_kmoddir" \
-        "$ROOTFS_DIR/boot/initramfs-$kernel_version.img" >"$LOG_DIR"/dracut-$kernel_version.log 2>&1
+        "$ROOTFS_DIR/boot/initramfs-$_kernel_version.img" >"$LOG_DIR"/dracut-$_kernel_version.log 2>&1
     info "Done"
 
 }

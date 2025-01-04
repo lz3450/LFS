@@ -77,19 +77,19 @@ make_initramfs() {
     make_initramfs_for_kernel \
         "$_kernel_version" \
         "$ROOTFS_DIR/boot/vmlinuz" \
-        "$ROOTFS_DIR/lib/modules/$kernel_version"
+        "$ROOTFS_DIR/lib/modules/$_kernel_version"
     mv -v -- "$ROOTFS_DIR/boot/initramfs-$_kernel_version.img" "$ROOTFS_DIR/boot/initramfs.img"
 }
 
 configure_efibootimg() {
     info "Configuring systemd-boot entries..."
     sed "s|%ISOLABEL%|$ISO_LABEL|g" "$SCRIPT_DIR"/efiboot/kzl-linux.conf \
-        | mcopy -i "$WORK_DIR"/efiboot.img - ::/loader/entries/kzl-linux.conf
+        | mcopy -i "$EFIBOOT_IMG" - ::/loader/entries/kzl-linux.conf
     info "Done"
 
     # Copy kernel and initramfs to FAT image
-    info "Copying kernel ($kernel_version) and initramfs to the FAT file system..."
-    mcopy -i "$WORK_DIR/efiboot.img" \
+    info "Copying kernel and initramfs to the FAT file system..."
+    mcopy -i "$EFIBOOT_IMG" \
         "$ROOTFS_DIR"/boot/vmlinuz \
         "$ROOTFS_DIR"/boot/initramfs.img \
         ::/
@@ -108,14 +108,14 @@ configure_isofs() {
     mkdir -p -- "$ISOFS_DIR"/EFI/BOOT
     mkdir -p -- "$ISOFS_DIR"/loader/entries
     for _file in "${_efi_files[@]}"; do
-        mcopy -i "$WORK_DIR/efiboot.img" \
+        mcopy -i "$EFIBOOT_IMG" \
             "::/$_file" \
             "$ISOFS_DIR/$_file"
     done
     info "Done"
 
     info "Copying kernel ($(uname -r)) and initramfs to the ISO file system..."
-    mcopy -i "$WORK_DIR/efiboot.img" \
+    mcopy -i "$EFIBOOT_IMG" \
         ::/vmlinuz \
         ::/initramfs.img \
         "$ISOFS_DIR"/
