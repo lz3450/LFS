@@ -151,7 +151,7 @@ while (( $# > 0 )); do
 done
 
 output_name="$ISO_NAME-$(date +%Y%m%d)"
-rootfs_archive_name="$output_name.tar.zstd"
+rootfs_archive_name="$output_name.tar.zst"
 iso_image_name="$output_name.iso"
 
 ################################################################################

@@ -246,7 +246,7 @@ else
 fi
 
 output_name="$ISO_NAME-$(date +%Y%m%d)-$debootstrap_suite"
-rootfs_archive_name="$output_name.tar.zstd"
+rootfs_archive_name="$output_name.tar.zst"
 iso_image_name="$output_name.iso"
 
 ################################################################################
