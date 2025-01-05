@@ -34,11 +34,11 @@ MAKEPKG_DIR="home/kzl/makepkg"
 MAKEPKG_SRCDEST="$MAKEPKG_DIR/sources"
 USERSPEC="kzl:kzl"
 
-rootfs_tarball=""
 active_mounts=()
-rootfs_pkg_list=(
-    base
-)
+
+build_opts=()
+rootfs_tarball=""
+declare -i debug=0
 
 ### functions
 setup_rootfs() {
@@ -87,8 +87,12 @@ mount_lfs() {
     info "Done"
 }
 
-build_debug() {
+run_debug_shell() {
     chroot_run "$ROOTFS_DIR" /bin/zsh
+}
+
+run_build() {
+    chroot_run "$ROOTFS_DIR" su - kzl -c "source /home/kzl/LFS/kzl-linux/pacman/setup.sh && build ${build_opts[*]}"
 }
 
 usage() {
@@ -96,10 +100,11 @@ usage() {
 
 Usage: $SCRIPT_NAME -h | --help
 Usage: $SCRIPT_NAME -V | --version
-Usage: $SCRIPT_NAME -r | --rootfs <tarball>
-Usage: $SCRIPT_NAME -c | --clean
+Usage: $SCRIPT_NAME [ -r | --rootfs <tarball> ] [ -c | --clean ] [ -d | --debug ] [ -b | --build <options passed to \`build\`> ]
 
     -r, --rootfs <tarball>          rootfs tarball
+    -b, --build <options>           build options
+    -d, --debug                     enter debug shell
     -c, --clean                     clean up work files and exit
     -V, --version                   print the script version number and exit
     -h, --help                      print this help message and exit
@@ -114,15 +119,19 @@ clean() {
 
     chroot_teardown
 
-    readarray -t mountpoints < <(grep -F "$ROOTFS_DIR" /proc/mounts | awk '{print $2}')
+    while true; do
+        local mountpoint
+        readarray -t mountpoints < <(grep -F "$ROOTFS_DIR" /proc/mounts | awk '{print $2}' | LC_ALL=C sort -r)
 
-    if (( ${#mountpoints[@]} )); then
+        if (( ${#mountpoints[@]} == 0 )); then
+            break
+        fi
+
         error "Failed to unmount: \"${mountpoints[*]}\", try again"
         for mountpoint in "${mountpoints[@]}"; do
             umount -v -- "$mountpoint"
         done
-        exit 2
-    fi
+    done
 
     info "Done"
 
@@ -134,9 +143,17 @@ trap clean EXIT SIGINT SIGTERM SIGKILL
 
 while (( $# > 0 )); do
     case "$1" in
+    -b | --build)
+        shift
+        build_opts=("$@")
+        break
+        ;;
     -r | --rootfs)
         shift
         rootfs_tarball="${1:-}"
+        ;;
+    -d | --debug)
+        debug=1
         ;;
     -c | --clean)
         clean
@@ -166,7 +183,11 @@ prologue
 
 setup_rootfs
 mount_lfs
-build_debug
+if (( debug )); then
+    run_debug_shell
+else
+    run_build
+fi
 clean
 
 epilogue
