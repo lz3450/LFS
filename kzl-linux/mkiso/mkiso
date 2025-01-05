@@ -118,7 +118,7 @@ configure_isofs() {
     mcopy -i "$EFIBOOT_IMG" \
         ::/vmlinuz \
         ::/initramfs.img \
-        "$ISOFS_DIR"/
+        "$ISOFS_DIR/"
     info "Done"
 }
 clean() {
@@ -171,7 +171,7 @@ setup_pacman_repo "${repository_pkgs[@]}"
 cleanup_rootfs
 make_rootfs_archive "$rootfs_archive_name"
 
-pacstrap_rootfs "${iso_pkg_list[@]}"
+pacstrap_rootfs "${iso_pkgs[@]}"
 
 make_initramfs
 make_efibootimg

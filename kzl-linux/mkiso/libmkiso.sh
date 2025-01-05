@@ -139,7 +139,6 @@ make_mutable_img() {
 
 setup_pacman_repo() {
     local _pkg_list=("$@")
-    local _pkg_file
 
     info "Setting up pacman repository to the ISO file system..."
     mount -t "$mutable_image_type" -o loop "$MUTABLE_IMG" "$ROOTFS_DIR/home"
