@@ -69,9 +69,9 @@ chroot_teardown() {
     fi
     chroot_active_mounts=()
 
-    rm -vf -- "$_chroot_dir"/etc/resolv.conf
-    if [[ -f "$_chroot_dir/etc/resolv.conf.backup" || -L "$_chroot_dir/etc/resolv.conf.backup" ]]; then
-        mv -v -- "$_chroot_dir"/etc/resolv.conf.backup "$_chroot_dir"/etc/resolv.conf
+    rm -vf -- "$chroot_dir"/etc/resolv.conf
+    if [[ -f "$chroot_dir/etc/resolv.conf.backup" || -L "$chroot_dir/etc/resolv.conf.backup" ]]; then
+        mv -v -- "$chroot_dir"/etc/resolv.conf.backup "$chroot_dir"/etc/resolv.conf
     fi
 }
 
