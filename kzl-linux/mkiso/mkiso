@@ -163,7 +163,7 @@ create_work_dir
 make_rootfs
 pacstrap_rootfs "${rootfs_archive_pkgs[@]}"
 
-make_mutable_img
+make_mutable_img '512M'
 setup_pacman_repo "${repository_pkgs[@]}"
 
 cleanup_rootfs

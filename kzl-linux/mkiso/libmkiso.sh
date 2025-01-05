@@ -131,9 +131,11 @@ pacstrap_rootfs() {
 }
 
 make_mutable_img() {
+    local _size="${1:-'128M'}"
+
     info "Creating mutable image \"$MUTABLE_IMG\"..."
     rm -f -- "$MUTABLE_IMG"
-    fallocate -l 128M "$MUTABLE_IMG"
+    fallocate -l "$_size" "$MUTABLE_IMG"
     mkfs -t "$mutable_image_type" -f -l MUTABLE "$MUTABLE_IMG" >"$LOG_DIR"/mkfs-mutable.log 2>&1
     info "Done"
 }
