@@ -60,7 +60,7 @@ prepare() {
 
   cat >> etc/pacman.conf.in << EOF
 
-[core]
+[kzl]
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
 EOF
