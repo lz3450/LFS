@@ -192,7 +192,7 @@ make_rootfs_archive() {
     info "Creating rootfs archive $_name..."
 
     tar --numeric-owner -vcf "$OUT_DIR/$_name" \
-        --zstd "$ROOTFS_DIR" >"$LOG_DIR"/tar.log 2>&1
+        --zstd -C "$ROOTFS_DIR" . >"$LOG_DIR"/tar.log 2>&1
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$_name"
 
     info "Done"
