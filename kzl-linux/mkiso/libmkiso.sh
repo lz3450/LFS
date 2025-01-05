@@ -60,7 +60,8 @@ OUT_DIR="$SCRIPT_DIR"
 MUTABLE_IMG="$WORK_DIR/mutable.img"
 EFIBOOT_IMG="$WORK_DIR/efiboot.img"
 
-ISO_LABEL="LIVEOS ($ISO_NAME)"
+# should not be changed
+ISO_LABEL="LIVEOS"
 ISO_PUBLISHER="$ISO_NAME <https://github.com/lz3450/LFS>"
 ISO_APPLICATION="$ISO_NAME Live/Rescue ISO Image"
 
