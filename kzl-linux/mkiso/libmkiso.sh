@@ -131,7 +131,7 @@ pacstrap_rootfs() {
 }
 
 make_mutable_img() {
-    local _size="${1:-'128M'}"
+    local _size="${1:-128M}"
 
     info "Creating mutable image \"$MUTABLE_IMG\"..."
     rm -f -- "$MUTABLE_IMG"
