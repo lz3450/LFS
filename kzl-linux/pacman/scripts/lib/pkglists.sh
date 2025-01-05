@@ -20,33 +20,33 @@ kzl_stage1_pkgs=(
     ################
     iana-etc filesystem
 
-    ################
+    # ################
+    # # glibc
+    # ################
+    # linux-api-headers
+    # tzdata
     # glibc
-    ################
-    linux-api-headers
-    tzdata
-    glibc
 
-    ################
+    # ################
+    # # binutils
+    # ################
+    # jansson
+    # zlib
+    # zstd
     # binutils
-    ################
-    jansson
-    zlib
-    zstd
-    binutils
 
-    ################
+    # ################
+    # # gcc
+    # ################
+    # gmp isl
+    # mpfr mpc
     # gcc
-    ################
-    gmp isl
-    mpfr mpc
-    gcc
 
-    ################################
-    tzdata glibc
-    jansson zlib zstd bc binutils
-    gmp isl mpfr mpc gcc
-    libtool
+    # ################################
+    # tzdata glibc
+    # jansson zlib zstd bc binutils
+    # gmp isl mpfr mpc gcc
+    # libtool
 )
 
 # base

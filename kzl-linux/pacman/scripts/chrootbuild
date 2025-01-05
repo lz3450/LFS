@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 #
-# cleanbuild.sh
+# chrootbuild.sh
 #
 
 set -e
@@ -17,98 +17,114 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 
 ### libraries
 source "$BASH_LIB_DIR/log.sh"
+source "$BASH_LIB_DIR/utils.sh"
+source "$BASH_LIB_DIR/chroot.sh"
 
 ### checks
-if [[ $EUID -ne 0 ]]; then
-    error "This script must be run as root" 1
-fi
+check_root
 
 ### constants & variables
 VERSION="1.0"
 
-WORK_DIR="/tmp/cleanbuild"
+WORK_DIR="/tmp/chrootbuild"
 ROOTFS_DIR="$WORK_DIR/rootfs"
-USERSPEC="kzl:kzl"
-PACMAN_REPO_DIR="home/.repository"
+PACMAN_REPO_DIR="home/.repository/kzl"
 LFS_DIR="home/kzl/LFS"
 MAKEPKG_DIR="home/kzl/makepkg"
+MAKEPKG_SRCDEST="$MAKEPKG_DIR/sources"
+USERSPEC="kzl:kzl"
 
-rootfs_tarball="../../mkiso/kzllinux_rootfs.tar.gz"
+rootfs_tarball=""
 active_mounts=()
 rootfs_pkg_list=(
     base
 )
 
 ### functions
-add_mount() {
-    mount "$@"
-    active_mounts=(${@: -1} "${active_mounts[@]}")
-}
-
-umount_all() {
-    for mount_point in "${active_mounts[@]}"; do
-        umount -v "$mount_point"
-        if mountpoint -q "$mount_point"; then
-            error "Failed to unmount $mount_point" 2
-        fi
-    done
-}
-
 setup_rootfs() {
+    local _status_file="$WORK_DIR/${FUNCNAME[0]}"
+
     info "Setting up chroot environment..."
 
-    if [[ -f "$WORK_DIR/setup_rootfs" ]]; then
+    if [[ -f "$_status_file" ]]; then
         info "Chroot environment already set up"
-        add_mount -v --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
+        chroot_setup "$ROOTFS_DIR"
         return
     fi
 
     if [[ -d "$ROOTFS_DIR" ]]; then
-        error "Rootfs directory already exists: $ROOTFS_DIR" 3
+        error "Non-setup rootfs directory ($ROOTFS_DIR) already exists, please delete first" 3
     fi
 
+    if [[ -z "$rootfs_tarball" ]]; then
+        error "Rootfs tarball not specified" 4
+    fi
+
+    info "Extracting rootfs tarball..."
     mkdir -p -- "$ROOTFS_DIR"
     tar -C "$ROOTFS_DIR" -xpf "$rootfs_tarball"
-    add_mount -v --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
+    info "Done"
 
-    chroot "$ROOTFS_DIR" useradd -m -G adm,wheel -U -s /bin/zsh kzl
-    echo kzl:3450 | chroot "$ROOTFS_DIR" chpasswd
+    chroot_setup "$ROOTFS_DIR"
+    chroot_run "$ROOTFS_DIR" useradd -m -G adm,wheel -U -s /bin/zsh kzl
+    echo kzl:3450 | chroot_run "$ROOTFS_DIR" chpasswd
 
     mkdir -p -- "$ROOTFS_DIR/$PACMAN_REPO_DIR"
 
-    touch "$WORK_DIR/${FUNCNAME[0]}"
+    touch "$_status_file"
 }
 
 mount_lfs() {
     info "Mounting LFS..."
 
-    for dir in "$LFS_DIR" "$MAKEPKG_DIR"; do
+    for dir in "$LFS_DIR" "$PACMAN_REPO_DIR" "$MAKEPKG_SRCDEST"; do
         mkdir -p -- "$ROOTFS_DIR/$dir"
-        add_mount -v --bind /"$dir" "$ROOTFS_DIR/$dir"
+        add_mount -v --bind "/$dir" "$ROOTFS_DIR/$dir"
     done
 
-    touch "$WORK_DIR/${FUNCNAME[0]}"
+    chown -R -- "$USERSPEC" "$ROOTFS_DIR/home/kzl"
+
+    info "Done"
 }
 
 build_debug() {
-    arch-chroot "$ROOTFS_DIR" /bin/zsh
+    chroot_run "$ROOTFS_DIR" /bin/zsh
 }
 
 usage() {
     cat <<EOF
-Usage: $script_name -V | --version
-Usage: $script_name -h | --help
 
--V, --version                   print the script version number and exit
--h, --help                      print this help message and exit
+Usage: $SCRIPT_NAME -h | --help
+Usage: $SCRIPT_NAME -V | --version
+Usage: $SCRIPT_NAME -r | --rootfs <tarball>
+Usage: $SCRIPT_NAME -c | --clean
+
+    -r, --rootfs <tarball>          rootfs tarball
+    -c, --clean                     clean up work files and exit
+    -V, --version                   print the script version number and exit
+    -h, --help                      print this help message and exit
 
 EOF
 }
 
 clean() {
+    set +e
+
     info "Cleaning..."
 
-    umount_all
+    chroot_teardown
+
+    readarray -t mountpoints < <(grep -F "$ROOTFS_DIR" /proc/mounts | awk '{print $2}')
+
+    if (( ${#mountpoints[@]} )); then
+        error "Failed to unmount: \"${mountpoints[*]}\", try again"
+        for mountpoint in "${mountpoints[@]}"; do
+            umount -v -- "$mountpoint"
+        done
+        exit 2
+    fi
+
+    info "Done"
 
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
@@ -118,10 +134,16 @@ trap clean EXIT SIGINT SIGTERM SIGKILL
 
 while (( $# > 0 )); do
     case "$1" in
+    -r | --rootfs)
+        shift
+        rootfs_tarball="${1:-}"
+        ;;
     -c | --clean)
         clean
         rm -rf -- "$WORK_DIR"
-        exit
+        if [[ -z "$rootfs_tarball" ]]; then
+            exit
+        fi
         ;;
     -V | --version)
         echo "$version"
@@ -132,7 +154,7 @@ while (( $# > 0 )); do
         ;;
     *)
         usage
-        error "Unknown option: $1"
+        error "Unknown option: $1" 127
         ;;
     esac
     shift
@@ -141,7 +163,6 @@ done
 ################################################################################
 
 prologue
-
 
 setup_rootfs
 mount_lfs
@@ -154,3 +175,4 @@ epilogue
 # 1: must be run as root
 # 2: failed to unmount
 # 3: working directory already exists
+# 4: rootfs tarball not specified

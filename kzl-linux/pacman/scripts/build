@@ -37,17 +37,17 @@ declare -i no_check=0
 ### functions
 prepare() {
     info "Removing pacman cache and database..."
-    (yes yes || :) | sudo pacman -Scc >/dev/null 2>&1
+    sudo pacman -Scc --noconfirm || :
     info "Done"
 
     if [[ ! -e "$repo_path" ]]; then
         info "Creating empty repo \"$repo\" on \"$repo_path\"..."
-        updaterepo -r "$repo" >/dev/null 2>&1
+        updaterepo -r "$repo"
         info "Done"
     fi
 
     info "Synchronizing package databases..."
-    (yes yes || :) | sudo pacman -Syy >/dev/null 2>&1
+    sudo pacman -Syy --noconfirm
     info "Done"
 
     mkdir -p -- "$LOG_DIR"
@@ -137,8 +137,8 @@ build() {
 
     if (( $install > 0 )); then
         info "Installing package..."
-        # (yes yes || :) | sudo pacman -Sddy --overwrite "*" $_pkgname --config ${pacman_conf}
-        (yes yes || :) | sudo pacman -Sy $_pkgname >>"$_log" 2>&1
+        # sudo pacman -Sddy --noconfirm --overwrite "*" $_pkgname --config $pacman_conf
+        sudo pacman -Sy --noconfirm $_pkgname >>"$_log" 2>&1
     fi
 
     info "Done"
