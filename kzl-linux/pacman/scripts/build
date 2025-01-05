@@ -212,7 +212,7 @@ while (($# > 0)); do
 done
 
 case "$repo" in
-    core)
+    kzl)
         if [[ -n "$stage" ]]; then
             case "$stage" in
             0)
