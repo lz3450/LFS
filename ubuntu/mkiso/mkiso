@@ -122,11 +122,11 @@ debootstrap_rootfs() {
 
     info "Configuring rootfs..."
     install -d -m 1777 -- "$ROOTFS_DIR"/tmp
-    chroot_setup "$ROOTFS_DIR" >"$LOG_DIR"/chroot-setup.log || error "Failed to setup chroot environment" 6
+    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
     chroot_run "$ROOTFS_DIR" systemctl enable systemd-networkd.service >"$LOG_DIR"/systemd-networkd.log 2>&1 || error "Failed to enable systemd-networkd" 6
     chroot_run "$ROOTFS_DIR" apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y >"$LOG_DIR"/apt.log 2>&1 || error "Failed to run apt" 6
     chroot_run "$ROOTFS_DIR" ldconfig
-    chroot_teardown >"$LOG_DIR"/chroot-teardown.log
+    chroot_teardown
     info "Done"
 }
 

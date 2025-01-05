@@ -53,11 +53,9 @@ iso_pkgs=(
 )
 repository_pkgs=(
     base
-    f2fs-tools
+    git
     linux
     linux-firmware
-    smartmontools
-    tmux
 )
 
 ### functions
