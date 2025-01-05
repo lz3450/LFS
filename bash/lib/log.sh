@@ -43,9 +43,9 @@ warn() {
 # $2: exit code number (with 0 does not exit)
 error() {
     local _msg="$1"
-    local _error="$2"
+    local _error="${2:-0}"
     printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$SCRIPT_NAME" "$_msg" >&2
-    if [[ "$_error" -gt 0 ]]; then
+    if (( "$_error" > 0 )); then
         exit "$_error"
     fi
 }
