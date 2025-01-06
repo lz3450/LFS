@@ -34,10 +34,8 @@ pkgver() {
 ###############################################################################
 
 prepare() {
-
+  cd $pkgname-$pkgver
 }
-
-###############################################################################
 
 build() {
   cd $pkgname-$pkgver
@@ -51,7 +49,6 @@ build() {
     --localstatedir=/var \
     --runstatedir=/run \
     --datarootdir=/usr/share
-
 
   make
 }
@@ -70,7 +67,7 @@ package() {
 
 ###############################################################################
 
-build() {
+prepare() {
   cd $pkgname-$pkgver
 
   meson setup \
@@ -80,6 +77,10 @@ build() {
     -D b_lto=true \
     -D b_pie=true \
     build
+}
+
+build() {
+  cd $pkgname-$pkgver
 
   meson compile -C build
 }
@@ -98,17 +99,18 @@ package() {
 
 ###############################################################################
 
-build() {
+prepare() {
   cd $pkgname-$pkgver
 
-  cmake \
+  cmake -LAB -S . -B build \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
-    -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
-    -S . \
-    -B build \
-    -LAH
+    -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS"
+}
+
+build() {
+  cd $pkgname-$pkgver
 
   cmake --build build
 }
