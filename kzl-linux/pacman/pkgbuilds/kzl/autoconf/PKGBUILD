@@ -1,25 +1,29 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=autoconf
-pkgver=2.71
-pkgrel=6
+pkgver=2.72
+pkgrel=2
 epoch=
 pkgdesc="A GNU tool for automatically configuring source code"
 arch=('any')
 url="https://www.gnu.org/software/autoconf/"
 license=('KZL')
 depends=(m4)
-source=(git+http://git.savannah.gnu.org/r/autoconf.git#tag=v$pkgver)
-sha256sums=('SKIP')
+# makedepends=(autoconf)
+# source=(git+http://git.savannah.gnu.org/r/autoconf.git#tag=v$pkgver)
+source=(https://ftp.gnu.org/gnu/autoconf/$pkgname-$pkgver.tar.xz{,.sig})
+validpgpkeys=('82F854F3CE73174B8B63174091FCC32B6769AA64')
+sha256sums=('ba885c1319578d6c94d46e9b0dceb4014caafe2490e437a0dbca3f270a223f5a'
+            'SKIP')
 
-prepare() {
-  cd $pkgname
+# prepare() {
+#   cd $pkgname
 
-  autoreconf -vfi
-}
+#   autoreconf -vfi
+# }
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr
@@ -28,13 +32,13 @@ build() {
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
 	make check
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir" install
 

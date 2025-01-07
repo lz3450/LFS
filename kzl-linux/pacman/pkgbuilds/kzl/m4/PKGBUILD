@@ -1,36 +1,54 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=m4
-pkgver=1.4.19.22
-pkgrel=3
+pkgver=1.4.19
+pkgrel=5
 epoch=
 pkgdesc="An implementation of the traditional Unix macro processor"
 arch=('x86_64')
 url="https://www.gnu.org/software/m4/"
 license=('KZL')
-depends=(libsigsegv)
-source=(git+https://git.savannah.gnu.org/git/m4.git#branch=branch-${pkgver:0:3}
-        git+https://git.savannah.gnu.org/git/gnulib.git)
-sha256sums=('SKIP'
+groups=(base-devel)
+# makedepends=(
+#   autoconf
+#   automake
+#   help2man
+#   m4
+#   make
+#   patch
+#   rsync
+#   texinfo
+# )
+# source=(git+https://git.savannah.gnu.org/git/m4.git#branch=branch-${pkgver:0:3}
+#         git+https://git.savannah.gnu.org/git/gnulib.git)
+makedepends=(
+  make
+)
+checkdepends=(
+  diffutils
+)
+source=(https://ftp.gnu.org/gnu/m4/$pkgname-$pkgver.tar.xz{,.sig})
+validpgpkeys=('71C2CC22B1C4602927D2F3AAA7A16B4A2527436A')
+sha256sums=('63aede5c6d33b6d9b13511cd0be2cac046f2e70fd0a07aa9573a04a82783af96'
             'SKIP')
 
-pkgver() {
-  cd $pkgname
+# pkgver() {
+#   cd $pkgname
 
-  git describe --tags | sed 's/v//;s/-g.*//;s/-/./g'
-}
+#   git describe --tags | sed 's/v//;s/-g.*//;s/-/.g/g'
+# }
 
-prepare() {
-	cd $pkgname
+# prepare() {
+# 	cd $pkgname
 
-  ./bootstrap --gnulib-srcdir="$srcdir/gnulib"
-}
+#   ./bootstrap --gnulib-srcdir="$srcdir/gnulib"
+# }
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   # for gcc-13
-  CFLAGS="$CFLAGS -Wno-error"
+  # CFLAGS="$CFLAGS -Wno-error"
 
   ./configure \
     --prefix=/usr \
@@ -40,13 +58,13 @@ build() {
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
 	make check
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir" install
 }

@@ -1,4 +1,4 @@
-`configure' configures GNU Autoconf 2.71 to adapt to many kinds of systems.
+'configure' configures GNU Autoconf 2.72 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -12,11 +12,11 @@ Configuration:
       --help=short        display options specific to this package
       --help=recursive    display the short help of all the included packages
   -V, --version           display version information and exit
-  -q, --quiet, --silent   do not print `checking ...' messages
+  -q, --quiet, --silent   do not print 'checking ...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
-  -C, --config-cache      alias for `--cache-file=config.cache'
+  -C, --config-cache      alias for '--cache-file=config.cache'
   -n, --no-create         do not create output files
-      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+      --srcdir=DIR        find the sources in DIR [configure dir or '..']
 
 Installation directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
@@ -24,10 +24,10 @@ Installation directories:
   --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
                           [PREFIX]
 
-By default, `make install' will install all the files in
-`/usr/local/bin', `/usr/local/lib' etc.  You can specify
-an installation prefix other than `/usr/local' using `--prefix',
-for instance `--prefix=$HOME'.
+By default, 'make install' will install all the files in
+'/usr/local/bin', '/usr/local/lib' etc.  You can specify
+an installation prefix other than '/usr/local' using '--prefix',
+for instance '--prefix=$HOME'.
 
 For better control, use the options below.
 
@@ -75,13 +75,13 @@ Optional Packages:
   --with-lispdir          override the default lisp directory
 
 Some influential environment variables:
-  M4          Location of GNU M4 1.4.6 or later. Defaults to the first program
+  M4          Location of GNU M4 1.4.8 or later. Defaults to the first program
               of 'm4', 'gm4', or 'gnum4' on PATH that meets Autoconf needs.
   EMACS       the Emacs editor command
   EMACSLOADPATH
               the Emacs library search path
 
-Use these variables to override the choices made by `configure' or to help
+Use these variables to override the choices made by 'configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <bug-autoconf@gnu.org>.

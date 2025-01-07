@@ -1,24 +1,27 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=automake
-pkgver=1.16.5
-pkgrel=6
+pkgver=1.17
+pkgrel=1
 epoch=
 pkgdesc="A GNU tool for automatically creating Makefiles"
 arch=('any')
 url="https://www.gnu.org/software/automake/"
 license=('KZL')
-source=(git+https://git.savannah.gnu.org/git/automake.git#tag=v$pkgver)
-sha256sums=('SKIP')
+# source=(git+https://git.savannah.gnu.org/git/automake.git#tag=v$pkgver)
+source=(https://ftp.gnu.org/gnu/automake/$pkgname-$pkgver.tar.xz{,.sig})
+validpgpkeys=('155D3FC500C834486D1EEA677FD9FCCB000BEEEE')
+sha256sums=('8920c1fc411e13b90bf704ef9db6f29d540e76d232cb3b2c9f4dc4cc599bd990'
+            'SKIP')
 
-prepare() {
-  cd $pkgname
+# prepare() {
+#   cd $pkgname
 
-  ./bootstrap
-}
+#   ./bootstrap
+# }
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr
@@ -27,13 +30,13 @@ build() {
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
 	make check
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir" install
 }
