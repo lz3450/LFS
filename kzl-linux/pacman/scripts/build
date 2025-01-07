@@ -203,12 +203,22 @@ while (( $# > 0 )); do
     shift
 done
 
-if [[ -n "$stage" ]]; then
-    if [[ -n "$single_package" ]]; then
+case "$repo" in
+    kzl)
+        ;;
+    ubuntu)
+        ;;
+    *)
+        error "Unknown repo name \"$repo\"" 3
+        ;;
+esac
+
+if [[ -n "$single_package" ]]; then
+    if [[ -n "$stage" ]]; then
         error "Cannot use -s | --stage together with -p | --package" 2
     fi
-
-    stage=1
+else
+    stage=${stage:-1}
     case "$repo" in
         kzl)
             case "$stage" in
