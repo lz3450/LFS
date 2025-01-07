@@ -1,9 +1,9 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=fakechroot
-pkgver=2.20.1.7
+pkgver=2.20.1
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Gives a fake chroot environment"
 arch=('x86_64')
 url="https://github.com/dex4er/fakechroot/wiki"
@@ -14,12 +14,13 @@ sha256sums=('SKIP')
 pkgver() {
   cd $pkgname
 
-  git describe --tags | sed "s/^master\///;s/-g.*//;s/-/./"
+  git describe --tags | sed "s/^master\///;s/-g.*//;s/-/.g/"
 }
 
 prepare() {
   cd $pkgname
 
+  autoupdate
   ./autogen.sh
 }
 
@@ -27,9 +28,7 @@ build() {
   cd $pkgname
 
   ./configure \
-    --prefix=/usr \
-    --sysconfdir=/etc \
-    --libdir=/usr/lib/libfakeroot
+    --prefix=/usr
 
   make
 }
@@ -44,7 +43,4 @@ package() {
   cd $pkgname
 
   make DESTDIR="$pkgdir/" install
-  
-  install -dm755 "$pkgdir"/etc/ld.so.conf.d/
-  echo '/usr/lib/libfakeroot/fakechroot/' > "$pkgdir"/etc/ld.so.conf.d/fakechroot.conf
 }
