@@ -134,10 +134,11 @@ build() {
 
     info "Updating repo..."
     updaterepo -r "$repo" >>"$_log" 2>&1
+    sudo pacman -Sy >>"$_log" 2>&1
     if (( $install > 0 )); then
         info "Installing package..."
         # sudo pacman -Sddy --noconfirm --overwrite "*" $_pkgname --config $pacman_conf
-        sudo pacman -Sy --noconfirm $_pkgname >>"$_log" 2>&1
+        sudo pacman -S --noconfirm $_pkgname >>"$_log" 2>&1
     fi
     info "Done"
 }

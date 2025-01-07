@@ -100,6 +100,11 @@ info "Current pkgver is $current_version"
 current_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
 info "Current pkgrel is $current_pkgrel"
 
+# receive key id
+if (( ${#validpgpkeys[@]} )); then
+    gpg --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
+fi
+
 # run pre_update
 if have_function 'pre_update'; then
     info "running pre_update()..."
@@ -115,10 +120,6 @@ if (( $result == 1 )); then
     pkgver=$new_version
     info "running updpkgsums..."
     updpkgsums || error "\`updpkgsums\` error" 7
-    # receive key id
-    if (( ${#validpgpkeys[@]} )); then
-        gpg --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
-    fi
     # force cleanbuild
     cleanbuild=1
 elif (( $result == 0 )); then

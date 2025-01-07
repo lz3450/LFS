@@ -46,45 +46,41 @@ setup_rootfs() {
 
     info "Setting up chroot environment..."
 
-    if [[ -f "$_status_file" ]]; then
-        info "Chroot environment already set up"
-        chroot_setup "$ROOTFS_DIR"
-        return
-    fi
+    if [[ ! -f "$_status_file" ]]; then
+        if [[ -d "$ROOTFS_DIR" ]]; then
+            error "Non-setup rootfs directory ($ROOTFS_DIR) already exists, please delete first" 3
+        fi
 
-    if [[ -d "$ROOTFS_DIR" ]]; then
-        error "Non-setup rootfs directory ($ROOTFS_DIR) already exists, please delete first" 3
+        if [[ -z "$rootfs_tarball" ]]; then
+            error "Rootfs tarball not specified" 4
+        fi
+        info "Extracting rootfs tarball..."
+        mkdir -p -- "$ROOTFS_DIR"
+        tar -C "$ROOTFS_DIR" -xpf "$rootfs_tarball"
+        info "Done"
     fi
-
-    if [[ -z "$rootfs_tarball" ]]; then
-        error "Rootfs tarball not specified" 4
-    fi
-
-    info "Extracting rootfs tarball..."
-    mkdir -p -- "$ROOTFS_DIR"
-    tar -C "$ROOTFS_DIR" -xpf "$rootfs_tarball"
-    info "Done"
 
     chroot_setup "$ROOTFS_DIR"
-    chroot_run "$ROOTFS_DIR" useradd -m -G adm,wheel -U -s /bin/zsh kzl
-    echo kzl:3450 | chroot_run "$ROOTFS_DIR" chpasswd
 
-    mkdir -p -- "$ROOTFS_DIR/$PACMAN_REPO_DIR"
-
-    touch "$_status_file"
-}
-
-mount_lfs() {
-    info "Mounting LFS..."
-
+    info "Mounting LFS related directories..."
     for dir in "$LFS_DIR" "$PACMAN_REPO_DIR" "$MAKEPKG_SRCDEST"; do
         mkdir -p -- "$ROOTFS_DIR/$dir"
-        add_mount -v --bind "/$dir" "$ROOTFS_DIR/$dir"
+        chroot_add_mount -v --bind "/$dir" "$ROOTFS_DIR/$dir"
     done
-
     chown -R -- "$USERSPEC" "$ROOTFS_DIR/home/kzl"
-
     info "Done"
+
+    if [[ ! -f "$_status_file" ]]; then
+        info "Configure chroot environment..."
+        chroot_run "$ROOTFS_DIR" useradd -m -G adm,wheel -U -s /bin/zsh kzl
+        echo kzl:3450 | chroot_run "$ROOTFS_DIR" chpasswd
+        chroot_run "$ROOTFS_DIR" sed -i '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^#//' /etc/sudoers
+        chroot_run "$ROOTFS_DIR" pacman -Sy
+        chroot_run "$ROOTFS_DIR" pacman -S --noconfirm pacman-contrib git
+        info "Done"
+
+        touch "$_status_file"
+    fi
 }
 
 run_debug_shell() {
@@ -186,7 +182,6 @@ fi
 prologue
 
 setup_rootfs
-mount_lfs
 if (( debug )); then
     run_debug_shell
 else
