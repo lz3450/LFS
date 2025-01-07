@@ -115,6 +115,10 @@ if (( $result == 1 )); then
     pkgver=$new_version
     info "running updpkgsums..."
     updpkgsums || error "\`updpkgsums\` error" 7
+    # receive key id
+    if (( ${#validpgpkeys[@]} )); then
+        gpg --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
+    fi
     # force cleanbuild
     cleanbuild=1
 elif (( $result == 0 )); then
@@ -131,9 +135,9 @@ else
 fi
 
 if [[ $cleanbuild -gt 0 ]]; then
-    makepkg -Cdo || error "\`makepkg -o\` error" 9
+    makepkg -C -s -r -o --noconfirm || error "\`makepkg -o\` error" 9
 else
-    makepkg -do || error "\`makepkg -o\` error" 9
+    makepkg -s -r -o --noconfirm || error "\`makepkg -o\` error" 9
 fi
 # run post_update
 info "running post_update()..."
@@ -152,4 +156,5 @@ post_update || error "\`post_update\` error" 10
 # 8: unknown vercmp result
 # 9: makepkg error
 # 10: post_update error
+# 11: gpg --recv-keys error
 exit $result
