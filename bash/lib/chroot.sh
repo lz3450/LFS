@@ -27,7 +27,7 @@ chroot_active_mounts=()
 chroot_dir=""
 
 ### functions
-add_mount() {
+chroot_add_mount() {
     mount -v "$@"
     chroot_active_mounts=(${@: -1} "${chroot_active_mounts[@]}")
 }
@@ -78,7 +78,7 @@ _add_resolv_conf() {
         install -D -m 644 /dev/null "$_dest"
     fi
 
-    add_mount --bind "$_src" "$_dest"
+    chroot_add_mount --bind "$_src" "$_dest"
 }
 
 # chroot_setup <chroot_dir>
@@ -91,18 +91,18 @@ chroot_setup() {
     if ! mountpoint -q "$chroot_dir"; then
         info "\"$chroot_dir\" is not a mountpoint. This may have undesirable side effects."
         info "Bind mounting \"$chroot_dir\" to itself."
-        add_mount --bind "$chroot_dir" "$chroot_dir"
+        chroot_add_mount --bind "$chroot_dir" "$chroot_dir"
     fi
 
-    add_mount -t sysfs -o ro,nosuid,nodev,noexec sys "$chroot_dir/sys"
-    add_mount -t proc -o nosuid,nodev,noexec proc "$chroot_dir/proc"
-    add_mount -t devtmpfs -o nosuid,mode=755 udev "$chroot_dir/dev"
-    add_mount -t devpts -o nosuid,noexec,gid=5,mode=620,ptmxmode=000 devpts "$chroot_dir/dev/pts"
-    add_mount -t tmpfs -o nosuid,nodev,noexec,mode=755 run "$chroot_dir/run"
-    add_mount -t tmpfs -o nosuid,nodev shm "$chroot_dir/dev/shm"
-    add_mount -t tmpfs -o nosuid,nodev,mode=1777 tmp "$chroot_dir/tmp"
+    chroot_add_mount -t sysfs -o ro,nosuid,nodev,noexec sys "$chroot_dir/sys"
+    chroot_add_mount -t proc -o nosuid,nodev,noexec proc "$chroot_dir/proc"
+    chroot_add_mount -t devtmpfs -o nosuid,mode=755 udev "$chroot_dir/dev"
+    chroot_add_mount -t devpts -o nosuid,noexec,gid=5,mode=620,ptmxmode=000 devpts "$chroot_dir/dev/pts"
+    chroot_add_mount -t tmpfs -o nosuid,nodev,noexec,mode=755 run "$chroot_dir/run"
+    chroot_add_mount -t tmpfs -o nosuid,nodev shm "$chroot_dir/dev/shm"
+    chroot_add_mount -t tmpfs -o nosuid,nodev,mode=1777 tmp "$chroot_dir/tmp"
     if [[ -d "$chroot_dir/sys/firmware/efi/efivars" ]]; then
-        add_mount -t efivarfs -o nosuid,nodev,noexec efivarfs "$chroot_dir/sys/firmware/efi/efivars"
+        chroot_add_mount -t efivarfs -o nosuid,nodev,noexec efivarfs "$chroot_dir/sys/firmware/efi/efivars"
     fi
 
     _add_resolv_conf
