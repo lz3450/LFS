@@ -1,117 +1,105 @@
-`configure' configures pkgconf 2.0.1 to adapt to many kinds of systems.
+Core properties:
+  Source dir /home/kzl/makepkg/build/pkgconf/src/pkgconf
+  Build dir  /home/kzl/makepkg/build/pkgconf/src/pkgconf/build
 
-Usage: ./configure [OPTION]... [VAR=VALUE]...
+Main project options:
+  
+  Core options                   Current Value                    Possible Values                  Description                                                  
+  --------------                 -------------                    ---------------                  -----------                                                  
+  auto_features                  enabled                          [enabled, disabled, auto]        Override value of all 'auto' features                        
+  backend                        ninja                            [ninja, vs, vs2010, vs2012,      Backend to use                                               
+                                                                   vs2013, vs2015, vs2017, vs2019,                                                              
+                                                                   vs2022, xcode, none]                                                                         
+  buildtype                      debug                            [plain, debug, debugoptimized,   Build type to use                                            
+                                                                   release, minsize, custom]                                                                    
+  cmake_prefix_path              []                               []                               List of additional prefixes for cmake to search              
+  debug                          true                             [true, false]                    Enable debug symbols and other information                   
+  default_both_libraries         shared                           [shared, static, auto]           Default library type for both_libraries                      
+  default_library                shared                           [shared, static, both]           Default library type                                         
+  force_fallback_for             []                               []                               Force fallback for those subprojects                         
+  genvslite                      vs2022                           [vs2022]                         Setup multiple buildtype-suffixed ninja-backend build        
+                                                                                                   directories, and a [builddir]_vs containing a Visual Studio  
+                                                                                                   meta-backend with multiple configurations that calls into    
+                                                                                                   them                                                         
+  install_umask                  0022                             [preserve, 0000-0777]            Default umask to apply on permissions of installed files     
+  layout                         mirror                           [mirror, flat]                   Build directory layout                                       
+  optimization                   2                                [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
+  pkg_config_path                []                               []                               List of additional paths for pkg-config to search            
+  prefer_static                  false                            [true, false]                    Whether to try static linking before shared linking          
+  strip                          false                            [true, false]                    Strip targets on install                                     
+  unity                          off                              [on, off, subprojects]           Unity build                                                  
+  unity_size                     4                                >=2                              Unity block size                                             
+  vsenv                          false                            [true, false]                    Activate Visual Studio environment                           
+  warning_level                  1                                [0, 1, 2, 3, everything]         Compiler warning level to use                                
+  werror                         false                            [true, false]                    Treat warnings as errors                                     
+  wrap_mode                      default                          [default, nofallback,            Wrap mode                                                    
+                                                                   nodownload, forcefallback,                                                                   
+                                                                   nopromote]                                                                                   
+  
+  Backend options                Current Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  backend_max_links              0                                >=0                              Maximum number of linker processes to run or 0 for no limit  
+  
+  Base options                   Current Value                    Possible Values                  Description                                                  
+  --------------                 -------------                    ---------------                  -----------                                                  
+  b_asneeded                     true                             [true, false]                    Use -Wl,--as-needed when linking                             
+  b_colorout                     always                           [auto, always, never]            Use colored output                                           
+  b_coverage                     false                            [true, false]                    Enable coverage tracking.                                    
+  b_lto                          true                             [true, false]                    Use link time optimization                                   
+  b_lto_threads                  0                                                                 Use multiple threads for Link Time Optimization              
+  b_lundef                       true                             [true, false]                    Use -Wl,--no-undefined when linking                          
+  b_ndebug                       false                            [true, false, if-release]        Disable asserts                                              
+  b_pch                          true                             [true, false]                    Use precompiled headers                                      
+  b_pgo                          off                              [off, generate, use]             Use profile guided optimization                              
+  b_pie                          true                             [true, false]                    Build executables as position independent                    
+  b_sanitize                     none                             [none, address, thread,          Code sanitizer to use                                        
+                                                                   undefined, memory, leak,                                                                     
+                                                                   address,undefined]                                                                           
+  b_staticpic                    true                             [true, false]                    Build static libraries as position independent               
+  
+  Compiler options               Current Value                    Possible Values                  Description                                                  
+  ------------------             -------------                    ---------------                  -----------                                                  
+  c_args                         []                               []                               Extra arguments passed to the c compiler                     
+  c_link_args                    []                               []                               Extra arguments passed to the c linker                       
+  c_std                          c99                              [none, c89, c99, c11, c17, c18,  C language standard to use                                   
+                                                                   c2x, gnu89, gnu99, gnu11,                                                                    
+                                                                   gnu17, gnu18, gnu2x]                                                                         
+  
+  pkgconfig module options       Current Value                    Possible Values                  Description                                                  
+  --------------------------     -------------                    ---------------                  -----------                                                  
+  pkgconfig.relocatable          false                            [true, false]                    Generate pkgconfig files as relocatable                      
+  
+  Directories                    Current Value                    Possible Values                  Description                                                  
+  -------------                  -------------                    ---------------                  -----------                                                  
+  bindir                         bin                                                               Executable directory                                         
+  datadir                        share                                                             Data file directory                                          
+  includedir                     include                                                           Header file directory                                        
+  infodir                        share/info                                                        Info page directory                                          
+  libdir                         lib                                                               Library directory                                            
+  libexecdir                     libexec                                                           Library executable directory                                 
+  licensedir                                                                                       Licenses directory                                           
+  localedir                      share/locale                                                      Locale data directory                                        
+  localstatedir                  /var                                                              Localstate data directory                                    
+  mandir                         share/man                                                         Manual page directory                                        
+  prefix                         /usr                                                              Installation prefix                                          
+  sbindir                        sbin                                                              System executable directory                                  
+  sharedstatedir                 /var/lib                                                          Architecture-independent data directory                      
+  sysconfdir                     /etc                                                              Sysconf data directory                                       
+  
+  Testing options                Current Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  errorlogs                      false                            [true, false]                    Whether to print the logs from failing tests                 
+  stdsplit                       false                            [true, false]                    Split stdout and stderr in test logs                         
+  
+  Project options                Current Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  tests                          disabled                         [enabled, disabled, auto]        Build tests which depends upon the kyua framework            
+  with-system-includedir                                                                           Specify the system include directory (default                
+                                                                                                   {prefix}/{includedir})                                       
+  with-system-libdir                                                                               Specify the system library directory (default                
+                                                                                                   {prefix}/{libdir})                                           
 
-To assign environment variables (e.g., CC, CFLAGS...), specify them as
-VAR=VALUE.  See below for descriptions of some of the useful variables.
+The following option(s) have a different value than the build type default
 
-Defaults for the options are specified in brackets.
-
-Configuration:
-  -h, --help              display this help and exit
-      --help=short        display options specific to this package
-      --help=recursive    display the short help of all the included packages
-  -V, --version           display version information and exit
-  -q, --quiet, --silent   do not print `checking ...' messages
-      --cache-file=FILE   cache test results in FILE [disabled]
-  -C, --config-cache      alias for `--cache-file=config.cache'
-  -n, --no-create         do not create output files
-      --srcdir=DIR        find the sources in DIR [configure dir or `..']
-
-Installation directories:
-  --prefix=PREFIX         install architecture-independent files in PREFIX
-                          [/usr/local]
-  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
-                          [PREFIX]
-
-By default, `make install' will install all the files in
-`/usr/local/bin', `/usr/local/lib' etc.  You can specify
-an installation prefix other than `/usr/local' using `--prefix',
-for instance `--prefix=$HOME'.
-
-For better control, use the options below.
-
-Fine tuning of the installation directories:
-  --bindir=DIR            user executables [EPREFIX/bin]
-  --sbindir=DIR           system admin executables [EPREFIX/sbin]
-  --libexecdir=DIR        program executables [EPREFIX/libexec]
-  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
-  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
-  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
-  --libdir=DIR            object code libraries [EPREFIX/lib]
-  --includedir=DIR        C header files [PREFIX/include]
-  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
-  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
-  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
-  --infodir=DIR           info documentation [DATAROOTDIR/info]
-  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
-  --mandir=DIR            man documentation [DATAROOTDIR/man]
-  --docdir=DIR            documentation root [DATAROOTDIR/doc/pkgconf]
-  --htmldir=DIR           html documentation [DOCDIR]
-  --dvidir=DIR            dvi documentation [DOCDIR]
-  --pdfdir=DIR            pdf documentation [DOCDIR]
-  --psdir=DIR             ps documentation [DOCDIR]
-
-Program names:
-  --program-prefix=PREFIX            prepend PREFIX to installed program names
-  --program-suffix=SUFFIX            append SUFFIX to installed program names
-  --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
-
-System types:
-  --build=BUILD     configure for building on BUILD [guessed]
-  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
-
-Optional Features:
-  --disable-option-checking  ignore unrecognized --enable/--with options
-  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-dependency-tracking
-                          do not reject slow dependency extractors
-  --disable-dependency-tracking
-                          speeds up one-time build
-  --enable-silent-rules   less verbose build output (undo: "make V=1")
-  --disable-silent-rules  verbose build output (undo: "make V=0")
-  --enable-shared[=PKGS]  build shared libraries [default=yes]
-  --enable-static[=PKGS]  build static libraries [default=yes]
-  --enable-fast-install[=PKGS]
-                          optimize for fast installation [default=yes]
-  --disable-libtool-lock  avoid locking (might break parallel builds)
-  --disable-largefile     omit support for large files
-
-Optional Packages:
-  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
-                          both]
-  --with-aix-soname=aix|svr4|both
-                          shared library versioning (aka "SONAME") variant to
-                          provide on AIX, [default=aix].
-  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
-  --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
-                          compiler's sysroot if not specified).
-  --with-personality-dir  specify the place where cross-compile personality
-                          files will be found
-  --with-pkg-config-dir   specify the place where pc files will be found
-  --with-system-libdir    specify the system library directory (default
-                          LIBDIR)
-  --with-system-includedir
-                          specify the system include directory (default
-                          INCLUDEDIR)
-
-Some influential environment variables:
-  CC          C compiler command
-  CFLAGS      C compiler flags
-  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
-              nonstandard directory <lib dir>
-  LIBS        libraries to pass to the linker, e.g. -l<library>
-  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
-              you have headers in a nonstandard directory <include dir>
-  LT_SYS_LIBRARY_PATH
-              User-defined run-time library search path.
-  CPP         C preprocessor
-
-Use these variables to override the choices made by `configure' or to help
-it to find libraries and programs with nonstandard names/locations.
-
-Report bugs to <https://github.com/pkgconf/pkgconf/issues/new>.
+               current   default
+optimization         2         0         

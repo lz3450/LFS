@@ -2,42 +2,44 @@
 
 pkgname=make
 pkgver=4.4.1
-pkgrel=9
+pkgrel=4
 epoch=
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('x86_64')
 url="https://www.gnu.org/software/make"
 license=('KZL')
-depends=(guile)
-source=(git://git.savannah.gnu.org/make.git#tag=$pkgver
-        git+https://git.savannah.gnu.org/git/gnulib.git)
-sha256sums=('SKIP'
-            'SKIP')
+makedepends=(
+  make
+)
+# source=(git+https://git.savannah.gnu.org/r/make.git#tag=$pkgver
+#         git+https://git.savannah.gnu.org/r/gnulib.git)
+source=(https://ftp.gnu.org/gnu/make/$pkgname-$pkgver.tar.gz)
+validpgpkeys=('B2508A90102F8AE3B12A0090DEACCAAEDB78137A')
+sha256sums=('dd16fb1d67bfab79a72f5e8390735c49e3e8e70b4945a15ab1f81ddb78658fb3')
 
-prepare() {
-  cd $pkgname
+# prepare() {
+#   cd $pkgname
 
-  ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
-}
+#   ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
+# }
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   ./configure \
-    --prefix=/usr \
-    --with-guile
+    --prefix=/usr
 
   make
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
 	make -k check
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir" install
 }

@@ -1,45 +1,40 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pkgconf
-pkgver=2.0.1
-pkgrel=1
+pkgver=2.3.0
+pkgrel=3
 epoch=
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=('x86_64')
 url="https://github.com/pkgconf/pkgconf.git"
 license=('KZL')
 provides=(pkg-config)
-source=(git+$url#tag=$pkgname-$pkgver
-        x86_64-linux-gnu.personality)
+source=(git+$url#tag=$pkgname-$pkgver)
 sha256sums=('SKIP'
             '59eb8ed7efb433423a50fdab0762403c1066901931bde2112a9617001f32dbd9')
 
 prepare() {
   cd $pkgname
 
-  ./autogen.sh
+  meson setup \
+    --prefix /usr \
+    --auto-features enabled \
+    --optimization 2 \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D tests=disabled \
+    build
 }
 
 build() {
   cd $pkgname
 
-  ./configure \
-    --prefix=/usr \
-    --sysconfdir=/etc \
-    --enable-static=no \
-    --with-pkg-config-dir="/usr/lib/pkgconfig:/usr/share/pkgconfig" \
-    --with-system-libdir="/usr/lib" \
-    --with-system-includedir="/usr/include"
-
-  make
+  meson compile -C build
 }
+
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir" install
-
-  ln -s pkgconf "$pkgdir"/usr/bin/pkg-config
-
-  install -Dm644 "$srcdir"/x86_64-linux-gnu.personality -t "$pkgdir"/usr/share/pkgconfig/personality.d
+  meson install -C build --destdir="$pkgdir"
 }
