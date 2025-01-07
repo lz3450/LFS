@@ -28,7 +28,7 @@ LOG_DIR="$HOME"/makepkg/log
 
 single_package=""
 repo=""
-declare -i stage=1
+declare -i stage
 declare -i build_only_updated=0
 declare -i install=0
 declare -i no_clean=0
@@ -176,16 +176,10 @@ while (( $# > 0 )); do
         repo="$1"
         ;;
     -s|--stage)
-        if [[ -n "$single_package" ]]; then
-            error "Cannot use -s | --stage together with -p | --package" 2
-        fi
         shift
         stage="$1"
         ;;
     -p|--package)
-        if [[ -n "$stage" ]]; then
-            error "Cannot use -p | --package together with -s | --stage" 2
-        fi
         shift
         single_package="$1"
         ;;
@@ -209,35 +203,41 @@ while (( $# > 0 )); do
     shift
 done
 
-case "$repo" in
-    kzl)
-        case "$stage" in
-        0)
-            updaterepo --clear -r "$repo"
-            pkgs=("${kzl_stage0_pkgs[@]}")
+if [[ -n "$stage" ]]; then
+    if [[ -n "$single_package" ]]; then
+        error "Cannot use -s | --stage together with -p | --package" 2
+    fi
+
+    stage=1
+    case "$repo" in
+        kzl)
+            case "$stage" in
+            0)
+                # updaterepo --clear -r "$repo"
+                pkgs=("${kzl_stage0_pkgs[@]}")
+                ;;
+            1)
+                pkgs=("${kzl_stage1_pkgs[@]}")
+                ;;
+            2)
+                pkgs=("${kzl_stage2_pkgs[@]}")
+                ;;
+            3)
+                pkgs=("${kzl_stage3_pkgs[@]}")
+                ;;
+            *)
+                error "Unknown stage \"$stage\"" 4
+                ;;
+            esac
             ;;
-        1)
-            pkgs=("${kzl_stage1_pkgs[@]}")
-            ;;
-        2)
-            pkgs=("${kzl_stage2_pkgs[@]}")
-            ;;
-        3)
-            pkgs=("${kzl_stage3_pkgs[@]}")
+        ubuntu)
+            pkgs=("${ubuntu_pkgs[@]}")
             ;;
         *)
-            error "Unknown stage \"$stage\"" 4
+            error "Unknown repo name \"$repo\"" 3
             ;;
-        esac
-        ;;
-    ubuntu)
-        pkgs=("${ubuntu_pkgs[@]}")
-        ;;
-    *)
-        error "Unknown repo name \"$repo\"" 3
-        ;;
-esac
-log_blue "Building stage $stage ($(date +%H:%M:%S))..."
+    esac
+fi
 
 repo_path="/home/.repository/$repo/$repo.db.tar.zst"
 
@@ -255,6 +255,7 @@ if [[ -n "$single_package" ]]; then
     __pkg_total_time__=$(($__pkg_end_time__ - $__pkg_start_time__))
     log_cyan "$single_package: $(date -d "@$__pkg_total_time__" -u +%H:%M:%S) ($(date +%H:%M:%S))"
 else
+    log_blue "Building stage $stage ($(date +%H:%M:%S))..."
     for p in ${pkgs[@]}; do
         log_magenta "Building $p ($(date +%H:%M:%S))..."
         __pkg_start_time__=$(date +%s)
