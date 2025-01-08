@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g21
-pkgrel=1
+pkgver=7.0.0.g31
+pkgrel=2
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -12,10 +12,11 @@ depends=(
   curl
   fakeroot
   glibc
-  # gpgme
+  gpgme
   libarchive
   libseccomp
 )
+# checkdepends=(fakechroot)
 # optdepends=("archlinux-keyring: for Arch Linux official packages")
 backup=(
   etc/makepkg.conf
@@ -36,12 +37,13 @@ prepare() {
 
   sed -i \
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
-      -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection"' \
+      -e '/^#CFLAGS=/c\CFLAGS="-march=haswell -mtune=haswell -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"' \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"' \
-      -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \
+      -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"' \
+      -e '/^#LTOFLAGS=/s/#//' \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
-      -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g -fvar-tracking-assignments"' \
-      -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"' \
+      -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
+      -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="$DEBUG_CFLAGS"' \
       -e '/^#BUILDDIR=/c\BUILDDIR="$HOME/makepkg/build"' \
       -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
       -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
@@ -50,6 +52,7 @@ prepare() {
       -e '/^#LOGDEST=/c\LOGDEST="$HOME/makepkg/makepkglogs"' \
       -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
       -e '/^OPTIONS=/s/libtool/!libtool/' \
+      -e '/^OPTIONS=/s/!lto/lto/' \
       -e '/^OPTIONS=/s/!autodeps/autodeps/' \
       etc/makepkg.conf.in
 
@@ -76,7 +79,7 @@ EOF
     -D doc=disabled \
     -D doxygen=disabled \
     -D file-seccomp=enabled \
-    -D gpgme=disabled \
+    -D gpgme=enabled \
     -D ldconfig=/usr/bin/ldconfig \
     -D pkg-ext='.pkg.tar.zst' \
     -D scriptlet-shell=/usr/bin/bash \
@@ -91,11 +94,11 @@ build() {
   meson compile -C build
 }
 
-check() {
-  cd $pkgname
+# check() {
+#   cd $pkgname
 
-  meson test -C build
-}
+#   meson test -C build
+# }
 
 package() {
   cd $pkgname

@@ -2,7 +2,7 @@
 
 pkgname=libarchive
 pkgver=3.7.7
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="A portable, efficient C library that can read and write streaming archives in a variety of formats"
 arch=('x86_64')
@@ -19,33 +19,37 @@ depends=(
   zlib
   zstd
 )
+makedepends=(
+  cmake
+)
 source=(git+https://github.com/libarchive/libarchive.git#tag=v$pkgver)
-sha256sums=('5f34ae74d1a780a7147f255903a04b475f674ea48252f3a059fb27d67eb083a9')
+sha256sums=('SKIP')
 
 prepare() {
   cd $pkgname
 
-  ./build/autogen.sh
+  cmake -LAH -S . -B build \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS"
 }
 
 
 build() {
   cd $pkgname
 
-  ./configure \
-    --prefix=/usr
-
-  make
+  cmake --build build
 }
 
 check() {
   cd $pkgname
 
-  make check
+  cmake --build build --target tests
 }
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir" install
+  DESTDIR="$pkgdir" cmake --build build --target install
 }

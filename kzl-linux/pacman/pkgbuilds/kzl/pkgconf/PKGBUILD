@@ -2,12 +2,13 @@
 
 pkgname=pkgconf
 pkgver=2.3.0
-pkgrel=9
+pkgrel=10
 epoch=
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=('x86_64')
 url="https://github.com/pkgconf/pkgconf.git"
 license=('KZL')
+groups=(base-devel)
 provides=(pkg-config)
 source=(git+$url#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
