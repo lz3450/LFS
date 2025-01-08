@@ -102,7 +102,7 @@ package() {
 prepare() {
   cd $pkgname-$pkgver
 
-  cmake -LAB -S . -B build \
+  cmake -LAH -S . -B build \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
