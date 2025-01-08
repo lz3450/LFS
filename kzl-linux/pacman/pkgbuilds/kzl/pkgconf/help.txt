@@ -88,8 +88,8 @@ Main project options:
   
   Testing options                Current Value                    Possible Values                  Description                                                  
   -----------------              -------------                    ---------------                  -----------                                                  
-  errorlogs                      false                            [true, false]                    Whether to print the logs from failing tests                 
-  stdsplit                       false                            [true, false]                    Split stdout and stderr in test logs                         
+  errorlogs                      true                             [true, false]                    Whether to print the logs from failing tests                 
+  stdsplit                       true                             [true, false]                    Split stdout and stderr in test logs                         
   
   Project options                Current Value                    Possible Values                  Description                                                  
   -----------------              -------------                    ---------------                  -----------                                                  

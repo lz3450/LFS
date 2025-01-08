@@ -2,13 +2,16 @@
 
 pkgname=autoconf
 pkgver=2.72
-pkgrel=2
+pkgrel=7
 epoch=
 pkgdesc="A GNU tool for automatically configuring source code"
 arch=('any')
 url="https://www.gnu.org/software/autoconf/"
 license=('KZL')
 depends=(m4)
+makedepends=(
+  make
+)
 # makedepends=(autoconf)
 # source=(git+http://git.savannah.gnu.org/r/autoconf.git#tag=v$pkgver)
 source=(https://ftp.gnu.org/gnu/autoconf/$pkgname-$pkgver.tar.xz{,.sig})

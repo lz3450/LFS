@@ -2,5 +2,5 @@ new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/make/ 
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
-    ./configure --help >$PKGBUILDDIR/help.txt
+    ./configure --help >"$PKGBUILDDIR"/help.txt
 }

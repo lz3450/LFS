@@ -2,7 +2,7 @@
 
 pkgname=pkgconf
 pkgver=2.3.0
-pkgrel=3
+pkgrel=9
 epoch=
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=('x86_64')
@@ -10,8 +10,7 @@ url="https://github.com/pkgconf/pkgconf.git"
 license=('KZL')
 provides=(pkg-config)
 source=(git+$url#tag=$pkgname-$pkgver)
-sha256sums=('SKIP'
-            '59eb8ed7efb433423a50fdab0762403c1066901931bde2112a9617001f32dbd9')
+sha256sums=('SKIP')
 
 prepare() {
   cd $pkgname
@@ -30,6 +29,7 @@ build() {
   cd $pkgname
 
   meson compile -C build
+
 }
 
 
@@ -37,4 +37,13 @@ package() {
   cd $pkgname
 
   meson install -C build --destdir="$pkgdir"
+
+  ln -s pkgconf "$pkgdir"/usr/bin/pkg-config
+  ln -s pkgconf.1 "$pkgdir"/usr/share/man/man1/pkg-config.1
+
+  echo 'Triplet: $CHOST
+SysrootDir: /
+DefaultSearchPaths: /usr/lib/pkgconfig:/usr/share/pkgconfig
+SystemIncludePaths: /usr/include
+SystemLibraryPaths: /usr/lib' | install -Dm644 /dev/stdin "$pkgdir"/usr/share/pkgconfig/personality.d/$CHOST.personality
 }
