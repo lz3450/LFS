@@ -21,7 +21,10 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 source "$BASH_LIB_DIR"/log.sh
 
 ### constants & variables
-PKGBUILDDIR=$(pwd)
+PKGBUILDDIR="$(pwd)"
+# PGP_KEY_SERVER="hkps://keyserver.ubuntu.com"
+# PGP_KEY_SERVER="hkps://keys.openpgp.org"
+# PGP_KEY_SERVER="hkps://pgp.mit.edu"
 
 declare -i cleanbuild=1
 declare -i increase=0
@@ -102,7 +105,10 @@ info "Current pkgrel is $current_pkgrel"
 
 # receive key id
 if (( ${#validpgpkeys[@]} )); then
-    gpg --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
+    if ! gpg --list-keys --with-colons "${validpgpkeys[@]}" >/dev/null 2>&1; then
+        # gpg --keyserver "$PGP_KEY_SERVER" --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
+        gpg --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
+    fi
 fi
 
 # run pre_update

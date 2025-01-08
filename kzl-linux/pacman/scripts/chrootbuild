@@ -28,10 +28,16 @@ VERSION="1.0"
 
 WORK_DIR="/tmp/chrootbuild"
 ROOTFS_DIR="$WORK_DIR/rootfs"
-PACMAN_REPO_DIR="home/.repository/kzl"
-LFS_DIR="home/kzl/LFS"
-MAKEPKG_DIR="home/kzl/makepkg"
-MAKEPKG_SRCDEST="$MAKEPKG_DIR/sources"
+CHROOT_HOME_DIR="home/kzl"
+WHEEL_DIR="$CHROOT_HOME_DIR/makepkg/wheels"
+PIP_CACHE_DIR="$WHEEL_DIR/.cache"
+HOST_DIRS=(
+    home/.repository/kzl
+    $CHROOT_HOME_DIR/LFS
+    $CHROOT_HOME_DIR/makepkg/sources
+    $WHEEL_DIR
+    $PIP_CACHE_DIR
+)
 USERSPEC="kzl:kzl"
 
 active_mounts=()
@@ -63,20 +69,25 @@ setup_rootfs() {
     chroot_setup "$ROOTFS_DIR"
 
     info "Mounting LFS related directories..."
-    for dir in "$LFS_DIR" "$PACMAN_REPO_DIR" "$MAKEPKG_SRCDEST"; do
+    for dir in "${HOST_DIRS[@]}"; do
         mkdir -p -- "$ROOTFS_DIR/$dir"
         chroot_add_mount -v --bind "/$dir" "$ROOTFS_DIR/$dir"
     done
-    chown -R -- "$USERSPEC" "$ROOTFS_DIR/home/kzl"
+    chown -R -- "$USERSPEC" "$ROOTFS_DIR/$CHROOT_HOME_DIR"
     info "Done"
 
     if [[ ! -f "$_status_file" ]]; then
         info "Configure chroot environment..."
-        chroot_run "$ROOTFS_DIR" useradd -m -G adm,wheel -U -s /bin/zsh kzl
+        sed -i '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^#//' "$ROOTFS_DIR"/etc/sudoers
+        chroot_run "$ROOTFS_DIR" useradd -d "/$CHROOT_HOME_DIR" -G adm,wheel -U -s /bin/zsh kzl
         echo kzl:3450 | chroot_run "$ROOTFS_DIR" chpasswd
-        chroot_run "$ROOTFS_DIR" sed -i '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^#//' /etc/sudoers
         chroot_run "$ROOTFS_DIR" pacman -Sy
-        chroot_run "$ROOTFS_DIR" pacman -S --noconfirm pacman-contrib git
+        chroot_run "$ROOTFS_DIR" pacman -S --noconfirm pacman-contrib git make
+        chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/config && ./update-config.sh"
+        chroot_run "$ROOTFS_DIR" pacman -Rcnsuv --noconfirm make
+        chroot_run "$ROOTFS_DIR" su - kzl -c "python -m ensurepip"
+        chroot_run "$ROOTFS_DIR" su - kzl -c "python -m pip wheel --wheel-dir /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR --no-binary :all: pip meson ninja"
+        chroot_run "$ROOTFS_DIR" su - kzl -c "python -m pip install -U --no-index --find-links /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR pip meson ninja"
         info "Done"
 
         touch "$_status_file"
@@ -88,7 +99,7 @@ run_debug_shell() {
 }
 
 run_build() {
-    chroot_run "$ROOTFS_DIR" su - kzl -c "source /home/kzl/LFS/kzl-linux/pacman/setup.sh && build ${build_opts[*]}"
+    chroot_run "$ROOTFS_DIR" su - kzl -c "source /$CHROOT_HOME_DIR/LFS/kzl-linux/pacman/setup.sh && build ${build_opts[*]}"
 }
 
 usage() {
@@ -127,6 +138,7 @@ clean() {
         for mountpoint in "${mountpoints[@]}"; do
             umount -v -- "$mountpoint"
         done
+        sleep 1
     done
 
     info "Done"
