@@ -10,16 +10,16 @@ kzl_stage0_pkgs=(
     ################################
     # base-devel
     ################################
-    # make
-    # libtool
-    # pkgconf
-    # texinfo
-    # diffutils
-    # m4 bison
-    # help2man flex
-    # cmake
+    make
+    libtool
+    pkgconf
+    m4 autoconf automake autoconf-archive
+    texinfo
+    diffutils
+    m4 bison
+    help2man flex
+    cmake
 
-    # autoconf automake autoconf-archive
     # ed bc
     # patch
     # which
@@ -27,13 +27,13 @@ kzl_stage0_pkgs=(
     ################################
     # makepkg
     ################################
-    # pacman pacman-contrib
+    pacman pacman-contrib
 
     ################################
     # toolchain
     ################################
-    # linux-api-headers
-    # binutils
+    linux-api-headers
+    binutils
     gcc
     glibc
 )

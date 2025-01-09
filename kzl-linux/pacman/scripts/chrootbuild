@@ -82,7 +82,8 @@ setup_rootfs() {
         sed -i '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^#//' "$ROOTFS_DIR"/etc/sudoers
         chroot_run "$ROOTFS_DIR" useradd -d "/$CHROOT_HOME_DIR" -G adm,wheel -U -s /bin/zsh kzl
         echo kzl:3450 | chroot_run "$ROOTFS_DIR" chpasswd
-        chroot_run "$ROOTFS_DIR" pacman -Syu --noconfirm
+        chroot_run "$ROOTFS_DIR" pacman -Syy
+        chroot_run "$ROOTFS_DIR" pacman -Syu
         chroot_run "$ROOTFS_DIR" pacman -S --noconfirm pacman-contrib git make
         chroot_run "$ROOTFS_DIR" pacman -S base-devel
         chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/config && ./update-config.sh"
