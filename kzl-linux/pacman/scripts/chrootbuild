@@ -35,6 +35,7 @@ HOST_DIRS=(
     home/.repository/kzl
     $CHROOT_HOME_DIR/LFS
     $CHROOT_HOME_DIR/makepkg/sources
+    $CHROOT_HOME_DIR/makepkg/log
     $WHEEL_DIR
     $PIP_CACHE_DIR
 )
@@ -81,10 +82,10 @@ setup_rootfs() {
         sed -i '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^#//' "$ROOTFS_DIR"/etc/sudoers
         chroot_run "$ROOTFS_DIR" useradd -d "/$CHROOT_HOME_DIR" -G adm,wheel -U -s /bin/zsh kzl
         echo kzl:3450 | chroot_run "$ROOTFS_DIR" chpasswd
-        chroot_run "$ROOTFS_DIR" pacman -Sy
+        chroot_run "$ROOTFS_DIR" pacman -Syu --noconfirm
         chroot_run "$ROOTFS_DIR" pacman -S --noconfirm pacman-contrib git make
+        chroot_run "$ROOTFS_DIR" pacman -S base-devel
         chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/config && ./update-config.sh"
-        chroot_run "$ROOTFS_DIR" pacman -Rcnsuv --noconfirm make
         chroot_run "$ROOTFS_DIR" su - kzl -c "python -m ensurepip"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python -m pip wheel --wheel-dir /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR --no-binary :all: pip meson ninja"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python -m pip install -U --no-index --find-links /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR pip meson ninja"

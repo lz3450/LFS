@@ -76,7 +76,7 @@ build() {
     local _no_check
 
     if [[ -n "$stage" ]]; then
-        _log="$LOG_DIR/$_pkgbase.stage$stage.log"
+        _log="$LOG_DIR/stage$stage.$_pkgbase.log"
     else
         _log="$LOG_DIR/$_pkgbase.log"
     fi
@@ -85,7 +85,7 @@ build() {
 
     # update pkgbuild
     info "Updating PKGBUILD..."
-    updatepkg >"$_log" 2>&1 || _updated=$?
+    updatepkg --syncdeps >"$_log" 2>&1 || _updated=$?
 
     _cleanbuild='C'
     if (( $_updated == 255 )); then

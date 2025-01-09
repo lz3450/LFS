@@ -5,14 +5,43 @@
 
 ### constants & variables
 
-# preparation
+# basic building tools
 kzl_stage0_pkgs=(
+    ################################
+    # base-devel
+    ################################
+    # make
+    # libtool
+    # pkgconf
+    # texinfo
+    # diffutils
+    # m4 bison
+    # help2man flex
+    # cmake
+
+    # autoconf automake autoconf-archive
+    # ed bc
+    # patch
+    # which
+
+    ################################
+    # makepkg
+    ################################
+    # pacman pacman-contrib
+
+    ################################
+    # toolchain
+    ################################
+    # linux-api-headers
+    # binutils
+    gcc
+    glibc
 )
 
 # toolchain
 kzl_stage1_pkgs=(
     ################################
-    # toolchain
+    # base
     ################################
 
     ################
@@ -21,39 +50,19 @@ kzl_stage1_pkgs=(
     iana-etc filesystem
 
     # ################
-    # # glibc
-    # ################
-    # linux-api-headers
-    # tzdata
-    # glibc
-
-    # ################
     # # binutils
     # ################
-    # jansson
-    # zlib
-    # zstd
-    # binutils
+    zlib zstd binutils
 
     # ################
     # # gcc
     # ################
-    # gmp isl
-    # mpfr mpc
-    # gcc
+    gmp isl mpfr mpc gcc
 
-    # ################################
-    # tzdata glibc
-    # jansson zlib zstd bc binutils
-    # gmp isl mpfr mpc gcc
-    # libtool
-)
-
-# base
-kzl_stage2_pkgs=(
-    ################################
-    # base
-    ################################
+    ################
+    # glibc
+    ################
+    tzdata glibc
 
     ################
     # bash

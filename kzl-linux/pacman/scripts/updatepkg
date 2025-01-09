@@ -26,6 +26,7 @@ PKGBUILDDIR="$(pwd)"
 # PGP_KEY_SERVER="hkps://keys.openpgp.org"
 # PGP_KEY_SERVER="hkps://pgp.mit.edu"
 
+syncdeps='-d'
 declare -i cleanbuild=1
 declare -i increase=0
 
@@ -43,6 +44,7 @@ Usage: $SCRIPT_NAME -h | --help
 Usage: $SCRIPT_NAME [ -n ] [ -i ]
 
     -h, --help                  Display this help message and exit
+    -s, --syncdeps              Install missing dependencies with pacman (default: no install)
     -n, --no-cleanbuild         Do not remove "\$srcdir/" dir before updating PKGBUILD (default: remove)
     -i, --increase-pkgrel       Increase "\$pkgrel" by 1 (default: no increase)
 
@@ -56,6 +58,9 @@ while (($# > 0)); do
     -h|--help)
         usage
         exit 0
+        ;;
+    -s | --syncdeps)
+        syncdeps='-sr'
         ;;
     -n|--no-cleanbuild)
         cleanbuild=0
@@ -141,10 +146,10 @@ else
     error "Unknown \`vercmp\` result" 8
 fi
 
-if [[ $cleanbuild -gt 0 ]]; then
-    makepkg -C -s -r -o --noconfirm || error "\`makepkg -o\` error" 9
+if (( $cleanbuild )); then
+    makepkg -C "$syncdeps" -o --noconfirm || error "\`makepkg -o\` error" 9
 else
-    makepkg -s -r -o --noconfirm || error "\`makepkg -o\` error" 9
+    makepkg "$syncdeps" -o --noconfirm || error "\`makepkg -o\` error" 9
 fi
 # run post_update
 info "running post_update()..."
