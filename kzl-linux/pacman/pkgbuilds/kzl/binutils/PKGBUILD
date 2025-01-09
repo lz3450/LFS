@@ -4,78 +4,88 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=binutils
-pkgver=2.42.82
-pkgrel=1
+pkgver=2.43.1.g176
+pkgrel=9
 epoch=
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64')
 url="https://www.gnu.org/software/binutils/"
 license=('KZL')
-depends=(jansson zlib zstd)
-# checkdepends=(bc debuginfod dejagnu)
-checkdepends=(bc)
+depends=(
+  # jansson
+  zlib
+  zstd
+)
+checkdepends=(
+  bc
+  # debuginfod
+  # dejagnu
+)
 # optdepends=("debuginfod: for debuginfod server/client functionality")
 options=(staticlibs)
-source=(git+https://sourceware.org/git/binutils-gdb.git#branch=$pkgname-${pkgver/./_}-branch)
+_branch_ver=${pkgver#*.}
+_branch_ver=${_branch_ver%%.*}
+_branch_ver="${pkgver%%.*}_${_branch_ver}"
+source=(git+https://sourceware.org/git/binutils-gdb.git#branch=$pkgname-$_branch_ver-branch)
 sha256sums=('SKIP')
 
 _common_options=(
-  --prefix=/usr
-  --sysconfdir=/etc
-  --libdir=/usr/lib
-  --build=x86_64-linux-gnu
-  --host=x86_64-linux-gnu
-  --target=x86_64-linux-gnu
-  --enable-gold=yes
-  --enable-ld=default
-  --enable-pgo-build=lto
-  --enable-lto
-  --with-system-zlib
-  --with-zstd=yes
+  "--prefix=/usr"
+  "--sysconfdir=/etc"
+  "--build=$CHOST"
+  "--host=$CHOST"
+  "--target=$CHOST"
+  "--enable-gold=yes"
+  "--enable-ld=default"
+  "--enable-lto"
+  "--with-system-zlib"
+  "--with-zstd=yes"
   # subpackage common
-  --enable-shared
-  --enable-plugins
-  --enable-relro
-  --enable-targets=x86_64-pep
-  --enable-threads=yes
-  --enable-jansson=yes
-  --enable-cet
-  --with-pic
-  --with-lib-path=/usr/lib:/usr/local/lib
+  "--enable-plugins"
+  "--enable-targets=x86_64-pep"
+  "--with-pic"
+  "--with-lib-path=/usr/lib:/usr/local/lib"
 )
 
 _binutils_options=(
-  --enable-deterministic-archives
-  --enable-colored-disassembly
-  --with-debuginfod=no
+  "--enable-deterministic-archives"
+  "--enable-colored-disassembly"
+  "--with-debuginfod=no"
+)
+
+_gold_ld_options=(
+  "--enable-relro"
+  "--enable-jansson=no"
+)
+
+_gold_options=(
+  "--enable-threads=yes"
 )
 
 _ld_options=(
-  --enable-new-dtags
-  --enable-default-execstack=no
+  "--enable-new-dtags"
+  "--enable-default-execstack=no"
 )
 
 _libiberty_options=(
-  --enable-install-libiberty
-)
-
-_gdb_options=(
-  --disable-gdb
-  --disable-gdbserver
-  --disable-gdbsupport
-  --disable-libdecnumber
-  --disable-readline
-  --disable-sim
+  "--enable-install-libiberty"
+  "--enable-cet"
 )
 
 pkgver() {
   cd binutils-gdb
 
-  git describe --tags | sed 's/^binutils-//;s/-branch//;s/-g.*//;s/-/./g;s/_/./g'
+  git describe --tags | sed 's/^binutils-//;s/-branch//;s/-g.*//;s/_/./g;s/-/.g/g'
 }
 
 prepare() {
   cd binutils-gdb
+
+  # remove items that are not in tarball
+  rm -r gdb gdbserver gdbsupport contrib gnulib libbacktrace libdecnumber readline sim
+  rm COPYING.LIBGLOSS COPYING.NEWLIB djunpack.bat
+  # remove unnecessary items
+  rm -r zlib
 
   mkdir -p build
 
@@ -88,9 +98,10 @@ build() {
   "../configure" \
     "${_common_options[@]}" \
     "${_binutils_options[@]}" \
+    "${_gold_ld_options[@]}" \
+    "${_gold_options[@]}" \
     "${_ld_options[@]}" \
-    "${_libiberty_options[@]}" \
-    "${_gdb_options[@]}"
+    "${_libiberty_options[@]}"
 
   make tooldir="/usr"
 }
@@ -107,7 +118,7 @@ package() {
   make DESTDIR="$pkgdir" tooldir="/usr" install
 
   # install PIC version of libiberty
-  install -Dm644 libiberty/pic/libiberty.a "$pkgdir"/usr/lib/
+  install -Dm644 libiberty/libiberty.a "$pkgdir"/usr/lib/
 
   # remove unnecessary man files
   rm -f "$pkgdir"/usr/share/man/man1/{dlltool,windmc,windres}*

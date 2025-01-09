@@ -1,4 +1,4 @@
-`configure' configures GNU Texinfo 7.0.3 to adapt to many kinds of systems.
+'configure' configures GNU Texinfo 7.2 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -12,11 +12,11 @@ Configuration:
       --help=short        display options specific to this package
       --help=recursive    display the short help of all the included packages
   -V, --version           display version information and exit
-  -q, --quiet, --silent   do not print `checking ...' messages
+  -q, --quiet, --silent   do not print 'checking ...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
-  -C, --config-cache      alias for `--cache-file=config.cache'
+  -C, --config-cache      alias for '--cache-file=config.cache'
   -n, --no-create         do not create output files
-      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+      --srcdir=DIR        find the sources in DIR [configure dir or '..']
 
 Installation directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
@@ -24,10 +24,10 @@ Installation directories:
   --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
                           [PREFIX]
 
-By default, `make install' will install all the files in
-`/usr/local/bin', `/usr/local/lib' etc.  You can specify
-an installation prefix other than `/usr/local' using `--prefix',
-for instance `--prefix=$HOME'.
+By default, 'make install' will install all the files in
+'/usr/local/bin', '/usr/local/lib' etc.  You can specify
+an installation prefix other than '/usr/local' using '--prefix',
+for instance '--prefix=$HOME'.
 
 For better control, use the options below.
 
@@ -73,29 +73,35 @@ Optional Features:
   --disable-dependency-tracking
                           speeds up one-time build
   --disable-largefile     omit support for large files
-  --disable-year2038      omit support for timestamps past the year 2038
   --enable-threads={isoc|posix|isoc+posix|windows}
                           specify multithreading API
   --disable-threads       build without multithread safety
   --enable-cross-guesses={conservative|risky}
                           specify policy for cross-compilation guesses
   --disable-rpath         do not hardcode runtime library paths
+  --enable-ptys-tests     run tests using pseudottys (default: detected)
   --enable-multiplatform  put executables into bin/PLATFORM and libraries into
                           lib/PLATFORM
   --disable-install-warnings  omit make install warnings about TeX files
   --disable-nls           do not use Native Language Support
+  --enable-additional-checks
+                          run tests on non-distributed components
   --enable-perl-xs        build Perl XS modules for speed (default: check)
+  --enable-xs-perl-libintl
+                          prefer Perl libintl-perl gettext in XS modules
   --enable-tp-tests       run the parser and converters testsuite (default:
                           detected)
-  --enable-perl-api-texi-build
-                          build the perl api texinfo files (default: detected)
   --enable-pod-simple-texinfo-tests
-                          run the parser and converters testsuite (default:
+                          run Pod to Texinfo conversion testsuite (default:
                           detected)
+  --enable-perl-api-texi-build
+                          build the perl api Texinfo files (default: detected)
+  --enable-year2038       support timestamps after 2038
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-gnulib-prefix=DIR  search for gnulib's runtime data in DIR/share
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
@@ -130,7 +136,7 @@ Some influential environment variables:
               you have headers in a nonstandard directory <include dir>
   CPP         C preprocessor
 
-Use these variables to override the choices made by `configure' or to help
+Use these variables to override the choices made by 'configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <bug-texinfo@gnu.org>.

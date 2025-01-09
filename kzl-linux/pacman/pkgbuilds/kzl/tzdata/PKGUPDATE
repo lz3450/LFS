@@ -1,4 +1,4 @@
-new_version=$(curl -v --stderr - https://www.iana.org/time-zones | grep -oP "tzdata\K\d{4}[a-z]\.tar\.gz" | head -1 | sed -e 's/.tar.gz$//;s/^tzdata//')
+new_version=$(curl -v --stderr - https://www.iana.org/time-zones | grep -oP "tzdata\K\d{4}[a-z]\.tar\.gz" | head -n1 | sed -e 's/.tar.gz$//;s/^tzdata//')
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src"

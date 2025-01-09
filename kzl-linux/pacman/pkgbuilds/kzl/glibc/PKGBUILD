@@ -1,19 +1,26 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 # order
-# linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
+# linux-api-headers -> binutils -> gcc -> glibc -> binutils -> gcc -> glibc
 
 pkgname=glibc
-pkgver=2.38.3
-pkgrel=4
+pkgver=2.40.g64
+pkgrel=14
 epoch=
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
 license=('KZL')
-depends=(filesystem linux-api-headers tzdata)
+depends=(
+  filesystem
+  linux-api-headers
+  tzdata
+)
+makedepends=(
+  bison
+)
 options=(staticlibs)
 source=(
-  git+https://sourceware.org/git/glibc.git#branch=release/${pkgver%.*}/master
+  git+https://sourceware.org/git/glibc.git#branch=release/${pkgver%.g*}/master
   # git+https://sourceware.org/git/glibc.git#tag=$pkgname-$pkgver
   ld.so.conf
 )
@@ -25,14 +32,12 @@ backup=(
 )
 install=$pkgname.install
 sha256sums=('SKIP'
-            'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5'
-            '436293c91051efcf712a71ee27e758387ddc82996ad23079d5ab30c0947963b9'
-            '949d9660b9ecef93776aebde70ffff161fa58c245636c21d80f3beaa919391ca')
+            'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5')
 
 pkgver() {
   cd $pkgname
 
-  git describe --tags | sed 's/glibc-//;s/-g.*//;s/-/./'
+  git describe --tags | sed 's/glibc-//;s/-g.*//;s/-/.g/'
 }
 
 prepare() {
@@ -40,7 +45,7 @@ prepare() {
 
   mkdir -p build
 
-  # Overwrite special-purpose configuration parameters in `Makeconfig`
+  # Makeconfig
   echo 'prefix = /usr
 build-programs = yes
 exec_prefix = $(prefix)
@@ -48,29 +53,31 @@ libdir = $(exec_prefix)/lib
 slibdir = $(exec_prefix)/lib
 rtlddir = $(slibdir)
 includedir = $(prefix)/include
+datadir = $(prefix)/share
 bindir = $(exec_prefix)/bin
 libexecdir = $(exec_prefix)/libexec
 rootsbindir = $(exec_prefix)/sbin
 sbindir = $(exec_prefix)/sbin
-sysconfdir = /etc' > build/configparms
+sysconfdir = /etc' >build/configparms
 }
 
 build() {
   cd $pkgname/build
 
-  ../configure \
+  CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer"
+
+  "../configure" \
     --prefix=/usr \
-    --libdir=/usr/lib \
-    --with-headers=/usr/include \
-    --enable-kernel=6.1 \
-    --enable-cet \
-    --disable-profile \
     --disable-timezone-tools \
-    --enable-stack-protector=strong \
     --enable-bind-now \
+    --enable-stack-protector=strong \
+    --enable-kernel=6.6 \
     --disable-werror \
-    --enable-fortify-source \
-    --with-pkgversion="KZL $pkgver-$pkgrel"
+    --disable-nscd \
+    --enable-cet \
+    --enable-fortify-source=3 \
+    --with-pkgversion="KZL $pkgver-$pkgrel" \
+    --with-headers=/usr/include
 
   make
 }
@@ -86,19 +93,11 @@ package() {
 
   make install_root="$pkgdir/" install
 
-  rm -f "$pkgdir"/etc/ld.so.cache
-
   # ldconfig
-  install -D -m 644 "$srcdir"/ld.so.conf etc/ld.so.conf
-  install -D -m 644 "$srcdir"/ld.so.conf usr/share/factory/etc/ld.so.conf
-
-  # name service cache daemon
-  install -d -m 755 "$pkgdir"/usr/lib/{systemd/system,tmpfiles.d}
-  install -d -m 755 "$pkgdir"/var/db/nscd
-  install -D -m 644 "$srcdir"/$pkgname/nscd/nscd.conf "$pkgdir"/etc/nscd.conf
-  install -D -m 644 "$srcdir"/$pkgname/nscd/nscd.service "$pkgdir"/usr/lib/systemd/system/nscd.service
-  install -D -m 644 "$srcdir"/$pkgname/nscd/nscd.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/nscd.conf
+  install -Dm644 "$srcdir"/ld.so.conf etc/ld.so.conf
 
   # getaddrinfo(3) configuration file
-  install -D -m 644 "$srcdir"/$pkgname/posix/gai.conf "$pkgdir"/etc/gai.conf
+  install -Dm644 "$srcdir"/$pkgname/posix/gai.conf "$pkgdir"/etc/gai.conf
+
+  rm -f "$pkgdir"/etc/ld.so.cache
 }

@@ -4,14 +4,14 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=linux-api-headers
-pkgver=6.12
-pkgrel=6
+pkgver=6.6.69
+pkgrel=4
 epoch=
 pkgdesc="Linux kernel user space headers"
 arch=('any')
 url='https://www.kernel.org'
 makedepends=(rsync)
-source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-$pkgver.y)
+source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y)
 sha256sums=('SKIP')
 
 build() {

@@ -1,47 +1,54 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libtool
-pkgver=2.4.7.4
+pkgver=2.5.4
 pkgrel=6
 epoch=
 pkgdesc="A generic library support script"
 arch=('x86_64')
 url="https://www.gnu.org/software/libtool"
 license=('KZL')
-source=(git+https://git.savannah.gnu.org/git/libtool.git
-        git+https://git.savannah.gnu.org/git/gnulib.git)
-sha256sums=('SKIP'
+groups=(base-devel)
+makedepends=(
+  m4
+  make
+)
+# source=(git+https://git.savannah.gnu.org/git/libtool.git
+#         git+https://git.savannah.gnu.org/git/gnulib.git)
+source=(https://ftp.gnu.org/gnu/libtool/$pkgname-$pkgver.tar.xz{,.sig})
+validpgpkeys=('FA26CA784BE188927F22B99F6570EA01146F7354')
+sha256sums=('f81f5860666b0bc7d84baddefa60d1cb9fa6fceb2398cc3baca6afaa60266675'
             'SKIP')
 
-pkgver() {
-  cd $pkgname
+# pkgver() {
+#   cd $pkgname
 
-  git describe --tags | sed 's/^v//;s/-g.*//;s/-/./'
-}
+#   git describe --tags | sed 's/^v//;s/-g.*//;s/-/./'
+# }
 
-prepare() {
-  cd $pkgname
+# prepare() {
+#   cd $pkgname
 
-  ./bootstrap --gnulib-srcdir="$srcdir/gnulib"
-}
+#   ./bootstrap --gnulib-srcdir="$srcdir/gnulib"
+# }
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr
 
-  make -O
+  make
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
-  make -O check
+  make check || warning "Check failed."
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir" install
 }

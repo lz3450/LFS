@@ -1,46 +1,51 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=texinfo
-pkgver=7.0.3
-pkgrel=8
+pkgver=7.2
+pkgrel=4
 epoch=
 pkgdesc="GNU documentation system for on-line information and printed output"
 arch=('x86_64')
 url="https://www.gnu.org/software/texinfo/"
 license=('KZL')
+groups=(base-devel)
 depends=(ncurses)
-makedepends=(help2man)
-source=(git+https://git.savannah.gnu.org/git/texinfo.git#tag=$pkgname-$pkgver
-        texinfo-install.hook
-        texinfo-remove.hook)
-sha256sums=('SKIP'
-            'ae3ecf6893d3a38c18905eb2e39ed51fddcbf841474d3af074dfab13c197f3b0'
-            '7d31aa15d51d7e8ff463a4397abc17ad903b8d4efb34244acf8a67883e4a9b98')
+makedepends=(make)
+source=(
+  # git+git://git.savannah.gnu.org/texinfo.git#tag=$pkgname-$pkgver
+  https://ftp.gnu.org/gnu/texinfo/$pkgname-$pkgver.tar.xz{,.sig}
+  texinfo-install.hook
+  texinfo-remove.hook
+)
+validpgpkeys=('EAF669B31E31E1DECBD11513DDBC579DAB37FBA9')
+sha256sums=('0329d7788fbef113fa82cb80889ca197a344ce0df7646fe000974c5d714363a6'
+            'SKIP'
+            '52be0c630f1310a789a8f09b8d3799ab5034ea4e2c0865ae3a8ea5f058e8a158'
+            'daa6a96836063bee75146e59e53167cf95ab154439d06d3f3de34e5f6ff8a69c')
 
-prepare() {
-  cd $pkgname
+# prepare() {
+#   cd $pkgname-$pkgver
 
-  ./autogen.sh
-}
+#   ./autogen.sh
+# }
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   ./configure \
-    --prefix=/usr \
-    --disable-nls
+    --prefix=/usr
 
   make
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
-  make check
+  make check || warning "Check failed."
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir" install
 

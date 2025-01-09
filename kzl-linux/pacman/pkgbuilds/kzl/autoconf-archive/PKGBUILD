@@ -1,42 +1,46 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=autoconf-archive
-pkgver=2023.02.20
-pkgrel=8
+pkgver=2024.10.16
+pkgrel=2
 epoch=
 pkgdesc="A collection of freely re-usable Autoconf macros"
 arch=('x86_64')
 url="https://www.gnu.org/software/autoconf-archive/"
-source=(git://git.savannah.gnu.org/autoconf-archive.git#tag=v$pkgver
-        git+https://git.savannah.gnu.org/git/gnulib.git)
+makedepends=(
+  make
+)
+# source=(git://git.savannah.gnu.org/autoconf-archive.git#tag=v$pkgver
+#         git+https://git.savannah.gnu.org/git/gnulib.git)
+source=(https://ftp.gnu.org/gnu/autoconf-archive/$pkgname-$pkgver.tar.xz{,.sig})
+validpgpkeys=('1A4F63A13A4649B632F65EE141BC28FE99089D72')
 sha256sums=('SKIP'
             'SKIP')
 
-prepare() {
-  cd $pkgname
+# prepare() {
+#   cd $pkgname
 
-  ln -rs "$srcdir"/gnulib gnulib
-  ./bootstrap.sh
-}
+#   ln -rs "$srcdir"/gnulib gnulib
+#   ./bootstrap.sh
+# }
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr
 
-  make maintainer-all
   make
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make check
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir" install
 }

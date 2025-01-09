@@ -2,5 +2,8 @@ new_version=$(git ls-remote --tags https://gcc.gnu.org/git/gcc.git | grep -oP "r
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    ./configure --help >"$PKGBUILDDIR"/help.txt
+    for config in $(find . -mindepth 2 -name 'configure' -type f); do
+        "$config" --help >>"$PKGBUILDDIR"/help.txt
+    done
 }

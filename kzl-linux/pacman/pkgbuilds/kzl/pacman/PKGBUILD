@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g31
-pkgrel=2
+pkgrel=7
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -37,8 +37,8 @@ prepare() {
 
   sed -i \
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
-      -e '/^#CFLAGS=/c\CFLAGS="-march=haswell -mtune=haswell -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"' \
-      -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"' \
+      -e '/^#CFLAGS=/c\CFLAGS="-march=haswell -mtune=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"' \
+      -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
       -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"' \
       -e '/^#LTOFLAGS=/s/#//' \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
@@ -104,6 +104,4 @@ package() {
   cd $pkgname
 
   meson install -C build --destdir="$pkgdir"
-
-  rm -rf "$pkgdir"/usr/share
 }

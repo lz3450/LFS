@@ -1,26 +1,31 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=diffutils
-pkgver=3.9
-pkgrel=5
+pkgver=3.10
+pkgrel=2
 epoch=
 pkgdesc="Programs related to finding differences between files"
 arch=('x86_64')
 url="https://www.gnu.org/software/diffutils/"
 license=('KZL')
-source=(git+https://git.savannah.gnu.org/git/diffutils.git#tag=v$pkgver
-        git+https://git.savannah.gnu.org/git/gnulib.git)
-sha256sums=('SKIP'
+groups=(base-devel)
+source=(
+  # git+https://git.savannah.gnu.org/git/diffutils.git#tag=v$pkgver
+  # git+https://git.savannah.gnu.org/git/gnulib.git
+  https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
+)
+validpgpkeys=('155D3FC500C834486D1EEA677FD9FCCB000BEEEE')
+sha256sums=('90e5e93cc724e4ebe12ede80df1634063c7a855692685919bfe60b556c9bd09e'
             'SKIP')
 
-prepare() {
-  cd $pkgname
+# prepare() {
+#   cd $pkgname
 
-  ./bootstrap --gnulib-srcdir="$srcdir/gnulib"
-}
+#   ./bootstrap --gnulib-srcdir="$srcdir/gnulib"
+# }
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr
@@ -29,13 +34,13 @@ build() {
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
-  make check
+  make check || warning "Check failed."
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir" install
 }

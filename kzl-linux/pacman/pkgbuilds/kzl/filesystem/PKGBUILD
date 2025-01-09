@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=filesystem
-pkgver=2025.01.05
+pkgver=2025.01.08
 pkgrel=1
 epoch=
 pkgdesc="Root file system"
@@ -62,9 +62,9 @@ prepare() {
 
 build() {
   # /etc/shadow
-  sed -e "s/:.*/:*:`expr $(date +%s) / 86400`:0:99999:7:::/" passwd > shadow
+  sed -e "s/:.*/:*:`expr $(date +%s) / 86400`:0:99999:7:::/" passwd >shadow
   # /etc/gshadow
-  sed -e 's/:[0-9]\+:/::/g; s/:x:/::/' group > gshadow
+  sed -e 's/:[0-9]\+:/::/g; s/:x:/::/' group >gshadow
 
   bash generate-sysusers-fragments.sh
 }
@@ -73,10 +73,10 @@ package() {
   cd $pkgdir
 
   # root filesystem
-  install -d -m 755 {boot,dev,etc,home,mnt,usr,var,opt,srv,run}
-  install -d -m 0750 root
-  install -d -m 555 {proc,sys}
-  install -d -m 1777 tmp
+  install -dm 755 {boot,dev,etc,home,mnt,usr,var,opt,srv,run}
+  install -dm 750 root
+  install -dm 555 {proc,sys}
+  install -dm 1777 tmp
 
   # /etc
   install -d -m 755 etc/{skel,profile.d}

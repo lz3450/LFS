@@ -2,13 +2,24 @@
 
 pkgname=flex
 pkgver=2.6.4
-pkgrel=5
+pkgrel=13
 epoch=
 pkgdesc="A tool for generating text-scanning programs"
 arch=('x86_64')
 url="https://github.com/westes/flex"
 license=('KZL')
+groups=(base-devel)
 depends=(m4)
+makedepends=(
+  autoconf
+  automake
+  bison
+  flex
+  help2man
+  libtool
+  make
+  texinfo
+)
 source=(git+https://github.com/westes/flex.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
