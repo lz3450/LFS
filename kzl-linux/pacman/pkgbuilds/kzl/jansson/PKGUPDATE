@@ -2,5 +2,5 @@ new_version=$(git ls-remote --tags https://github.com/akheron/jansson.git | grep
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
 }

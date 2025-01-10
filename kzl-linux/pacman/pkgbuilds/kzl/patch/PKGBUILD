@@ -1,25 +1,31 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=patch
-pkgver=2.7.6.24
-pkgrel=5
+pkgver=2.7.6.g25
+pkgrel=2
 epoch=
 pkgdesc="A utility to apply patch files to original sources"
 arch=('x86_64')
 url="https://www.gnu.org/software/patch/"
 license=('KZL')
-depends=(attr)
-makedepends=(ed)
-optdepends=("ed: for patch -e functionality")
-source=(git+git://git.savannah.gnu.org/patch.git#commit='76e775847f4954b63dc72afe34d9d921c6688b31'
-        git+https://git.savannah.gnu.org/git/gnulib.git)
+depends=(ed)
+makedepends=(
+  autoconf
+  automake
+  bison
+  diffutils
+)
+source=(
+  git+git://git.savannah.gnu.org/patch.git#commit=78ed9decdf54d6185d3d3d1ef8784f5978f81422
+  git+https://git.savannah.gnu.org/git/gnulib.git
+)
 sha256sums=('SKIP'
             'SKIP')
 
 pkgver() {
   cd $pkgname
 
-  git describe --tags | sed 's/^v//;;s/-g.*//;s/-/./g'
+  git describe --tags | sed 's/^v//;;s/-g.*//;s/-/.g/'
 }
 
 prepare() {

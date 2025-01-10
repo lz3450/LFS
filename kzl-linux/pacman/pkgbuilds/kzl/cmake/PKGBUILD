@@ -2,7 +2,7 @@
 
 pkgname=cmake
 pkgver=3.31.3
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="A powerful software build system"
 arch=('x86_64')

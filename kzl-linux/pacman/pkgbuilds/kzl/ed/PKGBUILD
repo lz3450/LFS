@@ -17,10 +17,7 @@ build() {
   cd $pkgname-$pkgver
 
   ./configure \
-    --prefix=/usr \
-    "CPPFLAGS=$CPPFLAGS" \
-    "CFLAGS=$CFLAGS" \
-    "LDFLAGS=$LDFLAGS"
+    --prefix=/usr
 
   make
 }

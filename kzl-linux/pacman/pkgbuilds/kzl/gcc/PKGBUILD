@@ -1,11 +1,11 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 # order
-# linux-api-headers -> binutils -> gcc -> glibc -> binutils -> gcc -> glibc
+# linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=gcc
-pkgver=14.2.0.g645
-pkgrel=5
+pkgver=14.2.0.g669
+pkgrel=2
 epoch=
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')

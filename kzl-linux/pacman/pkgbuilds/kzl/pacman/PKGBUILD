@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g31
-pkgrel=11
+pkgver=7.0.0.g34
+pkgrel=2
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -40,7 +40,7 @@ prepare() {
 
   sed -i \
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
-      -e '/^#CFLAGS=/c\CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm -mno-vzeroupper"' \
+      -e '/^#CFLAGS=/c\CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"' \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
       -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"' \
       -e '/^#LTOFLAGS=/s/#//' \
@@ -106,5 +106,5 @@ build() {
 package() {
   cd $pkgname
 
-  meson install -C build --destdir="$pkgdir"
+  meson install -C build --destdir "$pkgdir"
 }

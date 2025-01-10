@@ -2,7 +2,7 @@
 
 pkgname=pkgconf
 pkgver=2.3.0
-pkgrel=11
+pkgrel=12
 epoch=
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=('x86_64')
@@ -37,7 +37,7 @@ build() {
 package() {
   cd $pkgname
 
-  meson install -C build --destdir="$pkgdir"
+  meson install -C build --destdir "$pkgdir"
 
   ln -s pkgconf "$pkgdir"/usr/bin/pkg-config
   ln -s pkgconf.1 "$pkgdir"/usr/share/man/man1/pkg-config.1

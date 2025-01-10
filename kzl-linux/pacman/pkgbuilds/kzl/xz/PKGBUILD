@@ -2,7 +2,7 @@
 
 pkgname=xz
 pkgver=5.6.3
-pkgrel=1
+pkgrel=5
 epoch=
 pkgdesc="Library and command line tools for XZ and LZMA compressed files"
 arch=('x86_64')
@@ -16,15 +16,11 @@ prepare() {
 
   # ./autogen.sh --no-po4a --no-doxygen
 
-  cmake \
+  cmake -LAH -S . -B build -W no-dev \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
-    -D CMAKE_INSTALL_LIBDIR=lib \
-    -D CMAKE_C_FLAGS="$CPPFLAGS $CFLAGS" \
-    -D BUILD_SHARED_LIBS=ON \
-    -S . \
-    -B build \
-    -LAH
+    -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -D BUILD_SHARED_LIBS=ON
 }
 
 build() {

@@ -1,67 +1,40 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgbase=zlib
-pkgname=(zlib minizip)
-pkgver=1.3.1
+pkgname=zlib
+pkgver=1.2.11
 pkgrel=1
 epoch=
 arch=('x86_64')
-url="https://zlib.net"
+url="https://github.com/zlib-ng/zlib-ng"
 license=('KZL')
-source=(git+https://github.com/madler/zlib.git#tag=v$pkgver)
-sha256sums=('9ecb706a98a769e847162f1a5c3b79eebcde90b3673b8c277db14356b886c15f')
+source=(git+$url.git#tag=v$pkgver)
+sha256sums=('11aca2740fba7fc128a31cd607149cf29c3128e6038c1e9815baac345d337032')
 
 prepare() {
-  cd zlib/contrib/minizip
+  cd zlib-ng
 
-	cp Makefile Makefile.orig
-  cp ../README.contrib readme.txt
-
-	autoreconf -vfi
+  cmake -LAH -S . -B build \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -D ZLIB_COMPAT=ON
 }
 
 build() {
-  cd zlib
+  cd zlib-ng
 
-  ./configure \
-    --prefix=/usr
-
-  make
-
-	cd contrib/minizip
-
-	./configure \
-    --prefix=/usr
-
-	make
+  cmake --build build
 }
 
 check() {
-  cd zlib
+  cd zlib-ng
 
-	make test
-
-  cd contrib/minizip
-
-	make -f Makefile.orig test
+  cmake --build build --target tests
 }
 
-package_zlib() {
-  pkgdesc="A Massively Spiffy Yet Delicately Unobtrusive Compression Library"
+package() {
+  cd zlib-ng
 
-  cd zlib
-
-  make DESTDIR="$pkgdir" install
-}
-
-package_minizip() {
-	pkgdesc="Zip and UnZip additional library"
-  depends=(zlib)
-
-	cd zlib/contrib/minizip
-
-  make DESTDIR="$pkgdir" install
-
-	# https://github.com/madler/zlib/pull/229
-	rm "$pkgdir"/usr/include/minizip/crypt.h
+  DESTDIR="$pkgdir" cmake --build build --target install
 }

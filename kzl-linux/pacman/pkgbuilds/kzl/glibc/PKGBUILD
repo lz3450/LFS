@@ -1,11 +1,11 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 # order
-# linux-api-headers -> binutils -> gcc -> glibc -> binutils -> gcc -> glibc
+# linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=glibc
 pkgver=2.40.g64
-pkgrel=26
+pkgrel=28
 epoch=
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
@@ -14,9 +14,6 @@ depends=(
   filesystem
   linux-api-headers
   tzdata
-)
-makedepends=(
-  bison
 )
 options=(staticlibs)
 source=(

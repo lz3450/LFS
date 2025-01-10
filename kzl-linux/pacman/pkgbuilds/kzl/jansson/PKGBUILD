@@ -2,7 +2,7 @@
 
 pkgname=jansson
 pkgver=2.14
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="'C library for encoding, decoding and manipulating JSON data"
 arch=('x86_64')
@@ -14,20 +14,48 @@ sha256sums=('SKIP')
 prepare() {
   cd $pkgname
 
-  autoreconf -vfi
+  cmake -LAH -S . -B build \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS"
 }
 
 build() {
   cd $pkgname
 
-  ./configure \
-    --prefix=/usr
+  cmake --build build
+}
 
-  make
+check() {
+  cd $pkgname
+
+  cmake --build build --target tests || warning "Check failed."
 }
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir" install
+  DESTDIR="$pkgdir" cmake --build build --target install
 }
+
+# prepare() {
+#   cd $pkgname
+
+#   autoreconf -vfi
+# }
+
+# build() {
+#   cd $pkgname
+
+#   ./configure \
+#     --prefix=/usr
+
+#   make
+# }
+
+# package() {
+#   cd $pkgname
+
+#   make DESTDIR="$pkgdir" install
+# }

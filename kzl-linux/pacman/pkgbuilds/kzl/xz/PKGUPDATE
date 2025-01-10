@@ -2,6 +2,6 @@ new_version=$(git ls-remote https://github.com/tukaani-project/xz.git | grep -oP
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    # ./configure --help > "$PKGBUILDDIR"/help.txt
+    # ./configure --help >"$PKGBUILDDIR"/help.txt
     cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
 }
