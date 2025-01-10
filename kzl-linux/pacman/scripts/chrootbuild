@@ -82,10 +82,8 @@ setup_rootfs() {
         sed -i '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^#//' "$ROOTFS_DIR"/etc/sudoers
         chroot_run "$ROOTFS_DIR" useradd -d "/$CHROOT_HOME_DIR" -G adm,wheel -U -s /bin/zsh kzl
         echo kzl:3450 | chroot_run "$ROOTFS_DIR" chpasswd
-        chroot_run "$ROOTFS_DIR" pacman -Syy
         chroot_run "$ROOTFS_DIR" pacman -Syu
-        chroot_run "$ROOTFS_DIR" pacman -S --noconfirm pacman-contrib git make
-        chroot_run "$ROOTFS_DIR" pacman -S base-devel
+        chroot_run "$ROOTFS_DIR" pacman -Sy base-devel
         chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/config && ./update-config.sh"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python -m ensurepip"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python -m pip wheel --wheel-dir /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR --no-binary :all: pip meson ninja"
@@ -109,12 +107,13 @@ usage() {
 
 Usage: $SCRIPT_NAME -h | --help
 Usage: $SCRIPT_NAME -V | --version
-Usage: $SCRIPT_NAME [ -r | --rootfs <tarball> ] [ -c | --clean ] [ -d | --debug ] [ -b | --build <options passed to \`build\`> ]
+Usage: $SCRIPT_NAME [ -r | --rootfs <tarball> ] [ -c | --clean ] [ -d | --debug ]
+Usage: $SCRIPT_NAME [ -r | --rootfs <tarball> ] [ -c | --clean ] [ -b | --build <options passed to \`build\`> ]
 
     -r, --rootfs <tarball>          rootfs tarball
+    -c, --clean                     clean up work files and exit
     -b, --build <options>           build options
     -d, --debug                     enter debug shell
-    -c, --clean                     clean up work files and exit
     -V, --version                   print the script version number and exit
     -h, --help                      print this help message and exit
 
