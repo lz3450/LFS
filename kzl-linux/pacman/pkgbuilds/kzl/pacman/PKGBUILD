@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g31
-pkgrel=7
+pkgrel=11
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -35,9 +35,12 @@ pkgver() {
 prepare() {
   cd $pkgname
 
+  # Compare the output of `gcc -march=native -Q --help=target` in the host system and the build system
+  # Order of options matters
+
   sed -i \
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
-      -e '/^#CFLAGS=/c\CFLAGS="-march=haswell -mtune=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"' \
+      -e '/^#CFLAGS=/c\CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm -mno-vzeroupper"' \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
       -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"' \
       -e '/^#LTOFLAGS=/s/#//' \

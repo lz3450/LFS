@@ -2,7 +2,7 @@
 
 pkgname=help2man
 pkgver=1.49.3
-pkgrel=10
+pkgrel=11
 epoch=
 pkgdesc="A tool for automatically generating simple manual pages from program output"
 arch=('x86_64')

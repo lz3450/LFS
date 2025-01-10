@@ -2,7 +2,7 @@
 
 pkgname=make
 pkgver=4.4.1
-pkgrel=13
+pkgrel=14
 epoch=
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('x86_64')

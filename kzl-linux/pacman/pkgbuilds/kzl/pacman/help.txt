@@ -62,8 +62,8 @@ Main project options:
   c_args                         []                               []                               Extra arguments passed to the c compiler                     
   c_link_args                    []                               []                               Extra arguments passed to the c linker                       
   c_std                          gnu99                            [none, c89, c99, c11, c17, c18,  C language standard to use                                   
-                                                                   c2x, gnu89, gnu99, gnu11,                                                                    
-                                                                   gnu17, gnu18, gnu2x]                                                                         
+                                                                   c2x, c23, gnu89, gnu99, gnu11,                                                               
+                                                                   gnu17, gnu18, gnu2x, gnu23]                                                                  
   
   pkgconfig module options       Current Value                    Possible Values                  Description                                                  
   --------------------------     -------------                    ---------------                  -----------                                                  

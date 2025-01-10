@@ -2,11 +2,14 @@
 
 pkgname=autoconf-archive
 pkgver=2024.10.16
-pkgrel=2
+pkgrel=4
 epoch=
 pkgdesc="A collection of freely re-usable Autoconf macros"
 arch=('x86_64')
 url="https://www.gnu.org/software/autoconf-archive/"
+depends=(
+  autoconf
+)
 makedepends=(
   make
 )

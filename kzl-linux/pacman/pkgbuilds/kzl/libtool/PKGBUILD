@@ -2,7 +2,7 @@
 
 pkgname=libtool
 pkgver=2.5.4
-pkgrel=6
+pkgrel=7
 epoch=
 pkgdesc="A generic library support script"
 arch=('x86_64')

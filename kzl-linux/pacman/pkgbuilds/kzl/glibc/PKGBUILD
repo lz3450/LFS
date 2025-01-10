@@ -5,7 +5,7 @@
 
 pkgname=glibc
 pkgver=2.40.g64
-pkgrel=14
+pkgrel=26
 epoch=
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
@@ -64,7 +64,7 @@ sysconfdir = /etc' >build/configparms
 build() {
   cd $pkgname/build
 
-  CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer"
+  CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mabm -maes -mrtm -mno-vzeroupper"
 
   "../configure" \
     --prefix=/usr \

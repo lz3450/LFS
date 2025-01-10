@@ -1,10 +1,10 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 # order
-# linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
+# linux-api-headers -> binutils -> gcc -> glibc -> binutils -> gcc -> glibc
 
 pkgname=gcc
-pkgver=14.2.0
+pkgver=14.2.0.g645
 pkgrel=5
 epoch=
 pkgdesc="The GNU Compiler Collection"
@@ -25,9 +25,22 @@ depends=(
 #   inetutils
 #   python
 # )
-options=(!emptydirs)
-source=(git+git://gcc.gnu.org/git/gcc.git#tag=releases/gcc-$pkgver)
+options=(
+  !emptydirs
+  !lto
+)
+source=(
+  # git+git://gcc.gnu.org/git/gcc.git#tag=releases/gcc-$pkgver
+  git+git://gcc.gnu.org/git/gcc.git#branch=releases/gcc-${pkgver%%.*}
+)
+
 sha256sums=('SKIP')
+
+pkgver() {
+  cd gcc
+
+  git describe --tags | sed 's|releases/gcc-||;s/-g.*//;s/-/.g/g'
+}
 
 prepare() {
   cd gcc
@@ -51,11 +64,14 @@ build() {
     --target=$CHOST \
     --enable-gprofng=yes \
     --enable-default-compressed-debug-sections-algorithm=zstd \
+    --enable-host-shared \
     --disable-multilib \
     --enable-threads=posix \
     --enable-__cxa_atexit \
+    --enable-link-serialization \
+    --enable-linker-build-id \
     --enable-gnu-indirect-function \
-    --enable-languages=c,c++,fortran,lto \
+    --enable-languages=c,c++,fortran,lto,jit \
     --disable-libssp \
     --enable-default-pie \
     --enable-default-ssp \
@@ -82,6 +98,9 @@ package() {
   cd gcc/build
 
   make DESTDIR="$pkgdir" install
+
+  install -dm755 "$pkgdir"/usr/lib/bfd-plugins/
+  ln -s /usr/libexec/gcc/$CHOST/$(cat "$srcdir"/gcc/BASE-VER)/liblto_plugin.so "$pkgdir"/usr/lib/bfd-plugins/
 
   ln -s gcc "$pkgdir"/usr/bin/cc
 }
