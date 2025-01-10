@@ -5,11 +5,7 @@
 
 ### constants & variables
 
-# basic building tools
-kzl_stage0_pkgs=(
-    ################################
-    # base-devel
-    ################################
+base_devel_pkgs=(
     make
     libtool
     pkgconf
@@ -23,11 +19,20 @@ kzl_stage0_pkgs=(
     # ed bc
     # patch
     # which
+)
+
+# basic building tools
+kzl_stage0_pkgs=(
+    ################################
+    # base-devel
+    ################################
+    "${base_devel_pkgs[@]}"
 
     ################################
     # makepkg
     ################################
-    pacman pacman-contrib
+    pacman
+    pacman-contrib
 
     ################################
     # toolchain
@@ -73,30 +78,6 @@ kzl_stage1_pkgs=(
     # perl
     ################
     libxcrypt db gdbm perl
-
-    ################
-    # texinfo
-    ################
-    help2man texinfo
-
-    ################################
-    # other base-development
-    ################################
-    m4
-    autoconf automake autoconf-archive
-    bison
-    flex
-    ed bc
-    diffutils
-    patch
-    which
-    pkgconf
-
-    ################
-    # make
-    ################
-    libffi gc guile
-    make
 
     ################
     # gettext
