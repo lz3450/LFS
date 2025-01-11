@@ -16,7 +16,7 @@ source=(
   inputrc
 )
 sha256sums=('SKIP'
-            '3fcb135d5dfe1ce200057396c13cc7e65551864167fcd64f32868f30fd975cba')
+            '03229dcde6a4492bd44b76d05b2b30cfec27787d41fe57cc2ee9e3b656165ebe')
 
 pkgver() {
   cd $pkgname

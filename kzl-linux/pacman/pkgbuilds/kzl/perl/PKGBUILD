@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=perl
-pkgver=5.41.7
-pkgrel=1
+pkgver=5.40.0
+pkgrel=2
 epoch=
 pkgdesc="A highly capable, feature-rich programming language"
 arch=('x86_64')
@@ -16,7 +16,7 @@ depends=(
 options=(!purge)
 # source=(https://www.cpan.org/src/5.0/$pkgname-$pkgver.tar.xz)
 source=(git+https://github.com/Perl/perl5.git#tag=v$pkgver)
-sha256sums=('3bf30dfd9f03ddb8737a252058f13329cdd15d63257e2c85e8869033e0a6737e')
+sha256sums=('0e8ddfe991ea39a2abeb1bbbba288c7a792de193863236f6b38da7cd06567f7a')
 
 _script_dirname="perl_core"
 _site_dirname="perl_site"

@@ -5,7 +5,7 @@
 
 pkgname=glibc
 pkgver=2.40.g64
-pkgrel=36
+pkgrel=37
 epoch=
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
@@ -20,12 +20,12 @@ source=(
   git+https://sourceware.org/git/glibc.git#branch=release/${pkgver%.g*}/master
   # git+https://sourceware.org/git/glibc.git#tag=$pkgname-$pkgver
   ld.so.conf
+  # https://salsa.debian.org/glibc-team/glibc/-/raw/sid/debian/local/usr_sbin/locale-gen
 )
 backup=(
-  etc/locale.gen
   etc/ld.so.conf
+  etc/ld.so.conf.d/default.conf
   etc/gai.conf
-  etc/nscd.conf
 )
 install=$pkgname.install
 sha256sums=('SKIP'
@@ -90,11 +90,30 @@ package() {
 
   make install_root="$pkgdir/" install
 
-  # ldconfig
-  install -Dm644 "$srcdir"/ld.so.conf etc/ld.so.conf
+  ### ldconfig
+  install -Dm644 "$srcdir"/ld.so.conf "$pkgdir"/etc/ld.so.conf
+  install -dm755 "$pkgdir"/etc/ld.so.conf.d
+  echo "/usr/local/lib" | install -Dm644 /dev/stdin "$pkgdir"/etc/ld.so.conf.d/default.conf
 
-  # getaddrinfo(3) configuration file
+  ### getaddrinfo(3) configuration file
   install -Dm644 "$srcdir"/$pkgname/posix/gai.conf "$pkgdir"/etc/gai.conf
 
+  ### locale
+  make install_root="$pkgdir/" -C ../localedata objdir=$(pwd) install-locale-files
+  install -dm755 "$pkgdir"/usr/lib/locale
+  sed -e '/^#/d' -e '/^SUPPORTED-LOCALES/d' -e 's|/| |g' -e 's| \\||g' ../localedata/SUPPORTED >"$pkgdir"/usr/share/i18n/SUPPORTED
+
+  ## only keep zh_CN and en_US (not tested)
+  # sed -n -e '/^\(zh_CN\|en_US\)/p' ../localedata/SUPPORTED \
+  #   | sed -e '/^#/d' -e '/^SUPPORTED-LOCALES/d' -e 's|/| |g' -e 's| \\||g' >"$pkgdir"/usr/share/i18n/SUPPORTED
+  # find "$pkgdir"/usr/lib/locale -maxdepth 1 -mindepth 1 -type d ! -name 'zh_CN*' ! -name 'en_US*' -exec rm -vr {} +
+  # find "$pkgdir"/usr/share/i18n/locales -maxdepth 1 -type f ! -name 'zh_CN*' ! -name 'en_US*' -exec rm -v {} +
+  # find "$pkgdir"/usr/share/i18n/charmaps -maxdepth 1 -type f \
+  #   ! -name 'GB*.gz' \
+  #   ! -name 'ISO-8859-1.gz' \
+  #   ! -name 'UTF-8.gz' \
+  #   -exec rm -v {} +
+
+  ### clean up
   rm -f "$pkgdir"/etc/ld.so.cache
 }

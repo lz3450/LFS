@@ -2,13 +2,17 @@
 
 pkgname=gdbm
 pkgver=1.24
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="A library of database functions that use extensible hashing and work similar to the standard UNIX dbm"
 arch=('x86_64')
 url="https://www.gnu.org/software/gdbm/gdbm.html"
 license=('KZL')
 depends=(readline)
+makedepends=(
+  libtool
+)
+options=(!lto)
 source=(git://git.gnu.org.ua/gdbm.git#tag=v$pkgver)
 sha256sums=('731b9bdf5e16cc435c1ff81083eba393b292538d976a96d6403cb22f8570fa26')
 

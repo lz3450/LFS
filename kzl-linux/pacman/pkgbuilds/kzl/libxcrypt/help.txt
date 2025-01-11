@@ -1,4 +1,4 @@
-`configure' configures xcrypt 4.4.36 to adapt to many kinds of systems.
+'configure' configures xcrypt 4.4.37 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -12,11 +12,11 @@ Configuration:
       --help=short        display options specific to this package
       --help=recursive    display the short help of all the included packages
   -V, --version           display version information and exit
-  -q, --quiet, --silent   do not print `checking ...' messages
+  -q, --quiet, --silent   do not print 'checking ...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
-  -C, --config-cache      alias for `--cache-file=config.cache'
+  -C, --config-cache      alias for '--cache-file=config.cache'
   -n, --no-create         do not create output files
-      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+      --srcdir=DIR        find the sources in DIR [configure dir or '..']
 
 Installation directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
@@ -24,10 +24,10 @@ Installation directories:
   --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
                           [PREFIX]
 
-By default, `make install' will install all the files in
-`/usr/local/bin', `/usr/local/lib' etc.  You can specify
-an installation prefix other than `/usr/local' using `--prefix',
-for instance `--prefix=$HOME'.
+By default, 'make install' will install all the files in
+'/usr/local/bin', '/usr/local/lib' etc.  You can specify
+an installation prefix other than '/usr/local' using '--prefix',
+for instance '--prefix=$HOME'.
 
 For better control, use the options below.
 
@@ -76,8 +76,13 @@ Optional Features:
   --disable-werror        do not treat all warnings as errors
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
+  --enable-pic[=PKGS]     try to use only PIC/non-PIC objects [default=use
+                          both]
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
+  --enable-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
   --disable-libtool-lock  avoid locking (might break parallel builds)
   --disable-symvers       disable library symbol versioning [default=auto]
   --enable-valgrind       Whether to enable Valgrind on the unit tests
@@ -138,17 +143,13 @@ Optional Features:
                           with any historic libcrypt is desired (i.e. any
                           --enable-obsolete-api setting other than 'no'), the
                           'descrypt' hash must be enabled.
+  --enable-year2038       support timestamps after 2038
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-pkgconfigdir     pkg-config installation directory
                           ['${libdir}/pkgconfig']
-  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
-                          both]
-  --with-aix-soname=aix|svr4|both
-                          shared library versioning (aka "SONAME") variant to
-                          provide on AIX, [default=aix].
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
@@ -170,7 +171,7 @@ Some influential environment variables:
   LT_SYS_LIBRARY_PATH
               User-defined run-time library search path.
 
-Use these variables to override the choices made by `configure' or to help
+Use these variables to override the choices made by 'configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <https://github.com/besser82/libxcrypt/issues>.

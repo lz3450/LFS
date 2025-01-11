@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=filesystem
-pkgver=2025.01.10
-pkgrel=2
+pkgver=2025.01.11
+pkgrel=3
 epoch=
 pkgdesc="Root file system"
 arch=('any')
@@ -15,6 +15,7 @@ backup=(
   etc/gshadow
   etc/host.conf
   etc/hosts
+  etc/locale.conf
   etc/motd
   etc/passwd
   etc/profile
@@ -30,6 +31,7 @@ source=(
   fstab
   https://src.fedoraproject.org/rpms/setup/raw/rawhide/f/group
   host.conf
+  locale.conf
   hosts
   motd
   https://src.fedoraproject.org/rpms/setup/raw/rawhide/f/passwd
@@ -44,6 +46,7 @@ sha256sums=('95e89d92e3a99e86c3cad760564e871e488d9aea6adfd2acaecb3cd0b4b75759'
             '63ea61478aeaab0640ac76d915e94ddf3a0c8a661ee1188c8365536141c7afc2'
             '12e361821edc8bb813b7c38b11f61aa39c262e6b35bb2462896cb51edc821e2d'
             '4d7b647169063dfedbff5e1e22cee77bd1a4183dbcfd5e802e68939da4bbf733'
+            '075066b9785889daa04db68caba1f67d1dca283898b225254c121544437f8821'
             'ac629be54947f1796855a26abd9607797d0c62cb27a71ac33da51122121df4e8'
             '404c3f2e1d3d4097cedd08a4484119cb37d9adfc0ead49bdf5960e227e9159de'
             '2484582c0044ccbe58601ce437cf51b672de4b6ea743ab4d4223ddf2ce0afb68'
@@ -80,7 +83,7 @@ package() {
 
   # /etc
   install -d -m 755 etc/{skel,profile.d}
-  for f in fstab group host.conf hosts motd passwd profile resolv.conf shells subgid subuid; do
+  for f in fstab group host.conf locale.conf hosts motd passwd profile resolv.conf shells subgid subuid; do
     install -D -m 644 "$srcdir/$f" etc/
   done
   for f in crypttab gshadow shadow; do
