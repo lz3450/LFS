@@ -265,7 +265,7 @@ if [[ -n "$single_package" ]]; then
     build "$single_package"
     __pkg_end_time__=$(date +%s)
     __pkg_total_time__=$(($__pkg_end_time__ - $__pkg_start_time__))
-    log_cyan "Finished $single_package: $(date -d "@$__pkg_total_time__" -u +%H:%M:%S) ($(date +%H:%M:%S))"
+    log_cyan "Finished $single_package: $(date -d "@$__pkg_total_time__" +%H:%M:%S) ($(date +%H:%M:%S))"
 else
     log_blue "Building stage $stage ($(date +%H:%M:%S))..."
     for p in ${pkgs[@]}; do
@@ -274,7 +274,7 @@ else
         build "$p"
         __pkg_end_time__=$(date +%s)
         __pkg_total_time__=$(($__pkg_end_time__ - $__pkg_start_time__))
-        log_cyan "Finished $p: $(date -d "@$__pkg_total_time__" -u +%H:%M:%S) ($(date +%H:%M:%S))"
+        log_cyan "Finished $p: $(date -d "@$__pkg_total_time__" +%H:%M:%S) ($(date +%H:%M:%S))"
     done
 fi
 

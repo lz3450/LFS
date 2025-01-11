@@ -5,46 +5,67 @@
 
 ### constants & variables
 
-base_devel_pkgs=(
-    make
-    libtool
-    pkgconf
-    m4 autoconf automake autoconf-archive
-    texinfo
-    diffutils
-    m4 bison
-    help2man flex
-    cmake
-
-    # ed bc
-    # patch
-    # which
-)
-
-# basic building tools
+## basic development tools
+# command: sudo chrootbuild -b -r kzl --no-clean --no-check -s 0 -i
+# if stage0 build fails, try to build makedepends first
 kzl_stage0_pkgs=(
     ################################
     # base-devel
     ################################
-    "${base_devel_pkgs[@]}"
+    make
+    pkgconf
+    autoconf
+    automake
+    texinfo
+    diffutils
+    bison
+    flex
+    patch
+    bc
+    cmake
+)
 
+## toolchain
+# command: sudo chrootbuild -b -r kzl --no-clean --no-check -s 1 -i
+kzl_stage1_pkgs=(
     ################################
-    # makepkg
+    # pacman
     ################################
     pacman
     pacman-contrib
 
     ################################
-    # toolchain
+    # initial toolchain
     ################################
     linux-api-headers
+    glibc
     binutils
     gcc
-    glibc
+
+    ################################
+    # full toolchain
+    ################################
+    ################
+    # binutils
+    ################
+    jansson
+    zlib
+    lz4 xz zstd
+    binutils
+
+    ################
+    # gcc
+    ################
+    gmp isl mpfr mpc gcc
+
+    ################
+    # glibc
+    ################
+    tzdata glibc
 )
 
-# toolchain
-kzl_stage1_pkgs=(
+
+kzl_stage2_pkgs=(
     ################################
     # base
     ################################
@@ -54,196 +75,182 @@ kzl_stage1_pkgs=(
     ################
     iana-etc filesystem
 
-    # ################
-    # # binutils
-    # ################
-    zlib zstd binutils
-
-    # ################
-    # # gcc
-    # ################
-    gmp isl mpfr mpc gcc
-
-    ################
-    # glibc
-    ################
-    tzdata glibc
-
     ################
     # bash
     ################
     ncurses readline bash bash-completion
 
-    ################
-    # perl
-    ################
-    libxcrypt db gdbm perl
+    # ################
+    # # perl
+    # ################
+    # libxcrypt db gdbm perl
 
-    ################
-    # gettext
-    ################
-    libunistring icu libxml2 gettext
+    # ################
+    # # gettext
+    # ################
+    # libunistring icu libxml2 gettext
 
-    ################
-    # ca-certificates & openssl
-    ################
-    libtasn1 p11-kit ca-certificates
-    openssl
+    # ################
+    # # ca-certificates & openssl
+    # ################
+    # libtasn1 p11-kit ca-certificates
+    # openssl
 
-    ################
+    # ################
+    # # python
+    # ################
+    # expat
+    # e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 libtirpc libnsl
+    # tcl sqlite
+    # elfutils gdb valgrind
     # python
-    ################
-    expat
-    e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 libtirpc libnsl
-    tcl sqlite
-    elfutils gdb valgrind
-    python
 
-    ################
-    # compression utils
-    ################
-    bzip2
-    pcre2 less gzip
-    xz
-    attr acl tar
+    # ################
+    # # compression utils
+    # ################
+    # bzip2
+    # pcre2 less gzip
+    # xz
+    # attr acl tar
 
-    ################
-    # utils
-    ################
-    grep
-    sed
-    libsigsegv gawk
-    libseccomp file
-    findutils
+    # ################
+    # # utils
+    # ################
+    # grep
+    # sed
+    # libsigsegv gawk
+    # libseccomp file
+    # findutils
+    # which
 
-    ################
+    # ################
+    # # shadow
+    # ################
+    # swig libcap-ng audit
+    # pam-config pam
     # shadow
-    ################
-    swig libcap-ng audit
-    pam-config pam
-    shadow
 
-    ################
-    # coreutils
-    ################
-    libcap coreutils
+    # ################
+    # # coreutils
+    # ################
+    # libcap coreutils
 
-    ################
+    # ################
+    # # curl
+    # ################
+    # brotli
+    # libidn2
+    # nghttp2
+    # libgpg-error libgcrypt libxslt libpsl
+    # libssh2
     # curl
-    ################
-    brotli
-    libidn2
-    nghttp2
-    libgpg-error libgcrypt libxslt libpsl
-    libssh2
-    curl
 
-    ################
-    # llvm
-    ################
-    llvm-project
+    # ################
+    # # llvm
+    # ################
+    # llvm-project
 
-    ################
+    # ################
+    # # rust
+    # ################
     # rust
-    ################
-    rust
 
-    ################
+    # ################
+    # # util-linux
+    # ################
+    # thin-provisioning-tools argon2 libaio device-mapper json-c popt cryptsetup
     # util-linux
-    ################
-    thin-provisioning-tools argon2 libaio device-mapper json-c popt cryptsetup
-    util-linux
 
-    ################
+    # ################
+    # # iptables
+    # ################
+    # libmnl libnfnetlink libnetfilter_conntrack
+    # libnftnl
+    # dbus libnl libpcap
     # iptables
-    ################
-    libmnl libnfnetlink libnetfilter_conntrack
-    libnftnl
-    dbus libnl libpcap
-    iptables
 
-    ################
+    # ################
+    # # systemd
+    # ################
+    # kbd
+    # kmod
+    # lz4
+    # kexec-tools
+    # nettle gnutls libmicrohttpd
+    # gperf
+    # rpcsvc-proto quota
     # systemd
-    ################
-    kbd
-    kmod
-    lz4
-    kexec-tools
-    nettle gnutls libmicrohttpd
-    gperf
-    rpcsvc-proto quota
-    systemd
-    util-linux dbus systemd
+    # util-linux dbus systemd
 
-    ################
-    # wget
-    ################
-    lzip
-    wget2
+    # ################
+    # # wget
+    # ################
+    # lzip
+    # wget2
 
-    ################
+    # ################
+    # # sudo
+    # ################
     # sudo
-    ################
-    sudo
 
-    ################
+    # ################
+    # # pacman
+    # ################
+    # fakeroot
+    # libassuan libksba npth pinentry gnupg gpgme
+    # libarchive
     # pacman
-    ################
-    fakeroot
-    libassuan libksba npth pinentry gnupg gpgme
-    libarchive
-    pacman
-    pacman-contrib
-    arch-install-scripts
+    # pacman-contrib
+    # arch-install-scripts
 
-    ################
-    # ps utils
-    ################
-    procps-ng
-    psmisc
+    # ################
+    # # ps utils
+    # ################
+    # procps-ng
+    # psmisc
 
-    ################
-    # ip utils
-    ################
-    iputils
-    iproute2
+    # ################
+    # # ip utils
+    # ################
+    # iputils
+    # iproute2
 
-    ################
+    # ################
+    # # pciutils
+    # ################
+    # hwdata
     # pciutils
-    ################
-    hwdata
-    pciutils
 
-    ################
+    # ################
+    # # usbutils
+    # ################
+    # libusb
     # usbutils
-    ################
-    libusb
-    usbutils
 
-    ################
+    # ################
+    # # cmake
+    # ################
+    # jsoncpp
+    # libuv
+    # rhash
     # cmake
-    ################
-    jsoncpp
-    libuv
-    rhash
-    cmake
 
-    ################
+    # ################
+    # # man-db
+    # ################
+    # groff libpipeline
     # man-db
-    ################
-    groff libpipeline
-    man-db
 
-    ################
+    # ################
+    # # base
+    # ################
     # base
-    ################
-    base
 
-    ################
+    # ################
+    # # linux-firmware
+    # ################
     # linux-firmware
-    ################
-    linux-firmware
-    pahole
+    # pahole
 )
 
 kzl_stage3_pkgs=(
