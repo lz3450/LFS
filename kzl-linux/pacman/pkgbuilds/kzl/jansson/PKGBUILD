@@ -2,60 +2,70 @@
 
 pkgname=jansson
 pkgver=2.14
-pkgrel=5
+pkgrel=17
 epoch=
 pkgdesc="'C library for encoding, decoding and manipulating JSON data"
 arch=('x86_64')
 url="https://github.com/akheron/jansson"
 license=('KZL')
+makedepends=(
+  libtool
+)
+options=(
+  !lto
+)
 source=(git+https://github.com/akheron/jansson.git#tag=v$pkgver)
 sha256sums=('SKIP')
-
-prepare() {
-  cd $pkgname
-
-  cmake -LAH -S . -B build \
-    -D CMAKE_BUILD_TYPE=Release \
-    -D CMAKE_INSTALL_PREFIX=/usr \
-    -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
-    -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS"
-}
-
-build() {
-  cd $pkgname
-
-  cmake --build build
-}
-
-check() {
-  cd $pkgname
-
-  cmake --build build --target tests || warning "Check failed."
-}
-
-package() {
-  cd $pkgname
-
-  DESTDIR="$pkgdir" cmake --build build --target install
-}
 
 # prepare() {
 #   cd $pkgname
 
-#   autoreconf -vfi
+#   cmake -LAH -S . -B build \
+#     -D CMAKE_BUILD_TYPE=Release \
+#     -D CMAKE_INSTALL_PREFIX=/usr \
+#     -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+#     -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+#     -D JANSSON_BUILD_DOCS=OFF \
+#     -D JANSSON_BUILD_SHARED_LIBS=ON \
+#     -D JANSSON_EXAMPLES=OFF
 # }
 
 # build() {
 #   cd $pkgname
 
-#   ./configure \
-#     --prefix=/usr
+#   cmake --build build
+# }
 
-#   make
+# check() {
+#   cd $pkgname
+
+#   cmake --build build --target tests || warning "Check failed."
 # }
 
 # package() {
 #   cd $pkgname
 
-#   make DESTDIR="$pkgdir" install
+#   DESTDIR="$pkgdir" cmake --build build --target install
 # }
+
+prepare() {
+  cd $pkgname
+
+  autoupdate
+  autoreconf -vfi
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}

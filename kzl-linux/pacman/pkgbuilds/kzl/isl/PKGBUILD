@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=isl
-pkgver=0.26
-pkgrel=11
+pkgver=0.27
+pkgrel=3
 epoch=
 pkgdesc="A library for manipulating sets and relations of integer points bounded by linear constraints"
 arch=('x86_64')
@@ -13,7 +13,7 @@ source=(
   $url/$pkgname-$pkgver.tar.xz
   # git+https://repo.or.cz/w/isl.git#tag=isl-$pkgver
 )
-sha256sums=('a0b5cb06d24f9fa9e77b55fabbe9a3c94a336190345c2555f9915bb38e976504')
+sha256sums=('6d8babb59e7b672e8cb7870e874f3f7b813b6e00e6af3f8b04f7579965643d5c')
 
 build() {
   cd $pkgname-$pkgver

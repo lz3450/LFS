@@ -2,7 +2,7 @@
 
 pkgname=filesystem
 pkgver=2025.01.10
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Root file system"
 arch=('any')

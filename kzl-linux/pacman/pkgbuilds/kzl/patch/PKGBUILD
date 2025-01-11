@@ -2,12 +2,13 @@
 
 pkgname=patch
 pkgver=2.7.6.g25
-pkgrel=2
+pkgrel=6
 epoch=
 pkgdesc="A utility to apply patch files to original sources"
 arch=('x86_64')
 url="https://www.gnu.org/software/patch/"
 license=('KZL')
+groups=(base-devel)
 depends=(ed)
 makedepends=(
   autoconf

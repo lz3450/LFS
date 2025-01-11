@@ -2,12 +2,13 @@
 
 pkgname=automake
 pkgver=1.17
-pkgrel=7
+pkgrel=11
 epoch=
 pkgdesc="A GNU tool for automatically creating Makefiles"
 arch=('any')
 url="https://www.gnu.org/software/automake/"
 license=('KZL')
+groups=(base-devel)
 makedepends=(
   autoconf
   make

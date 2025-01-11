@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g34
-pkgrel=2
+pkgrel=8
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -43,7 +43,7 @@ prepare() {
       -e '/^#CFLAGS=/c\CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"' \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
       -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"' \
-      -e '/^#LTOFLAGS=/s/#//' \
+      -e '/^#LTOFLAGS=/s/^#//' \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="$DEBUG_CFLAGS"' \
@@ -56,7 +56,6 @@ prepare() {
       -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
       -e '/^OPTIONS=/s/libtool/!libtool/' \
       -e '/^OPTIONS=/s/!lto/lto/' \
-      -e '/^OPTIONS=/s/!autodeps/autodeps/' \
       etc/makepkg.conf.in
 
   sed -i \

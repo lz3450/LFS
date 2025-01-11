@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=zlib
-pkgver=1.2.11
-pkgrel=1
+pkgver=2.2.3
+pkgrel=4
 epoch=
 arch=('x86_64')
 url="https://github.com/zlib-ng/zlib-ng"
 license=('KZL')
-source=(git+$url.git#tag=v$pkgver)
-sha256sums=('11aca2740fba7fc128a31cd607149cf29c3128e6038c1e9815baac345d337032')
+source=(git+$url.git#tag=$pkgver)
+sha256sums=('SKIP')
 
 prepare() {
   cd zlib-ng
@@ -16,6 +16,7 @@ prepare() {
   cmake -LAH -S . -B build \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib \
     -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
     -D ZLIB_COMPAT=ON

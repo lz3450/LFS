@@ -15,9 +15,9 @@ Options and variables: [defaults in brackets]
   --mandir=DIR          man pages directory [$(datarootdir)/man]
   --program-prefix=NAME install program and documentation prefixed with NAME
   CC=COMPILER           C compiler to use [gcc]
-  CPPFLAGS=OPTIONS      command line options for the preprocessor []
-  CFLAGS=OPTIONS        command line options for the C compiler [-Wall -W -O2]
+  CPPFLAGS=OPTIONS      command-line options for the preprocessor []
+  CFLAGS=OPTIONS        command-line options for the C compiler [-Wall -W -O2]
   CFLAGS+=OPTIONS       append options to the current value of CFLAGS
-  LDFLAGS=OPTIONS       command line options for the linker []
+  LDFLAGS=OPTIONS       command-line options for the linker []
   MAKEINFO=NAME         makeinfo program to use [makeinfo]
 

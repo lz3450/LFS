@@ -2,7 +2,7 @@
 
 pkgname=autoconf-archive
 pkgver=2024.10.16
-pkgrel=5
+pkgrel=7
 epoch=
 pkgdesc="A collection of freely re-usable Autoconf macros"
 arch=('x86_64')

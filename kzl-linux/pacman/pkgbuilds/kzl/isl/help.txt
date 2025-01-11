@@ -1,4 +1,4 @@
-`configure' configures isl 0.26 to adapt to many kinds of systems.
+`configure' configures isl 0.27 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 

@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=binutils
-pkgver=2.43.1
-pkgrel=17
+pkgver=2.43.1.g179
+pkgrel=2
 epoch=
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64')
@@ -22,12 +22,16 @@ checkdepends=(
   # dejagnu
 )
 # optdepends=("debuginfod: for debuginfod server/client functionality")
-options=(staticlibs)
-source=(git+https://sourceware.org/git/binutils-gdb.git#tag=$pkgname-${pkgver//./_})
-# _branch_ver=${pkgver#*.}
-# _branch_ver=${_branch_ver%%.*}
-# _branch_ver="${pkgver%%.*}_${_branch_ver}"
-# source=(git+https://sourceware.org/git/binutils-gdb.git#branch=$pkgname-$_branch_ver-branch)
+options=(
+  staticlibs
+)
+_branch_ver=${pkgver#*.}
+_branch_ver=${_branch_ver%%.*}
+_branch_ver="${pkgver%%.*}_${_branch_ver}"
+source=(
+  # git+https://sourceware.org/git/binutils-gdb.git#tag=$pkgname-${pkgver//./_}
+  git+https://sourceware.org/git/binutils-gdb.git#branch=$pkgname-$_branch_ver-branch
+)
 sha256sums=('SKIP')
 
 _common_options=(
@@ -40,7 +44,6 @@ _common_options=(
   "--enable-ld=default"
   "--enable-gprofng=yes"
   "--enable-default-compressed-debug-sections-algorithm=zstd"
-  "--enable-pgo-build=lto"
   "--enable-lto"
   "--with-system-zlib"
   "--with-zstd=yes"
@@ -76,11 +79,11 @@ _libiberty_options=(
   "--enable-cet"
 )
 
-# pkgver() {
-#   cd binutils-gdb
+pkgver() {
+  cd binutils-gdb
 
-#   git describe --tags | sed 's/^binutils-//;s/-branch//;s/-g.*//;s/_/./g;s/-/.g/g'
-# }
+  git describe --tags | sed 's/^binutils-//;s/-branch//;s/-g.*//;s/_/./g;s/-/.g/g'
+}
 
 prepare() {
   cd binutils-gdb

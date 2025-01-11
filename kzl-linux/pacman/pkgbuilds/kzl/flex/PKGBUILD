@@ -2,7 +2,7 @@
 
 pkgname=flex
 pkgver=2.6.4
-pkgrel=15
+pkgrel=19
 epoch=
 pkgdesc="A tool for generating text-scanning programs"
 arch=('x86_64')
@@ -41,11 +41,13 @@ build() {
 check() {
   cd $pkgname
 
-  make check
+  make -k check
 }
 
 package() {
   cd $pkgname
 
   make DESTDIR="$pkgdir" install
+
+  ln -s flex "$pkgdir"/usr/bin/lex
 }

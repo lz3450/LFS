@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=gcc
-pkgver=14.2.0.g669
-pkgrel=2
+pkgver=14.2.0.g676
+pkgrel=5
 epoch=
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')

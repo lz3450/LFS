@@ -2,7 +2,7 @@
 
 pkgname=iana-etc
 pkgver=2024.12.20
-pkgrel=5
+pkgrel=6
 epoch=
 pkgdesc="/etc/protocols and /etc/services provided by IANA"
 arch=('any')
