@@ -105,6 +105,7 @@ prepare() {
   cmake -LAH -S . -B build \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib \
     -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS"
 }
