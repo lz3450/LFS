@@ -78,23 +78,23 @@ kzl_stage2_pkgs=(
     ################
     # bash
     ################
-    ncurses readline bash bash-completion
+    ncurses readline bash-completion bash
 
-    # ################
-    # # perl
-    # ################
-    # libxcrypt db gdbm perl
+    ################
+    # perl
+    ################
+    libxcrypt gdbm perl
 
-    # ################
-    # # gettext
-    # ################
-    # libunistring icu libxml2 gettext
-
-    # ################
-    # # ca-certificates & openssl
-    # ################
+    ################
+    # ca-certificates & openssl
+    ################
     # libtasn1 p11-kit ca-certificates
     # openssl
+
+    ################
+    # gettext
+    ################
+    # libunistring icu libxml2 gettext
 
     # ################
     # # python

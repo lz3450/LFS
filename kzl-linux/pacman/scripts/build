@@ -260,8 +260,8 @@ prologue
 prepare
 if [[ -n "$single_package" ]]; then
     # Build a single package
-    __pkg_start_time__=$(date +%s)
     log_magenta "Building $single_package ($(date +%H:%M:%S))..."
+    __pkg_start_time__=$(date +%s)
     build "$single_package"
     __pkg_end_time__=$(date +%s)
     __pkg_total_time__=$(($__pkg_end_time__ - $__pkg_start_time__))
