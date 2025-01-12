@@ -21,7 +21,7 @@ prepare() {
   meson setup \
     --prefix /usr \
     --auto-features enabled \
-    --optimization 2 \
+    --buildtype plain \
     -D libffi=enabled \
     -D systemd=enabled \
     -D trust_paths=/etc/pki/ca-trust/source:/usr/share/pki/ca-trust-source \

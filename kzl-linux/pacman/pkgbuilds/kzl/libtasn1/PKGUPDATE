@@ -1,8 +1,8 @@
-# new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/libtasn1/ | grep -oP 'libtasn1-\K[0-9]+\.[0-9]+' | sort -V | tail -n1)
-new_version=$(git ls-remote --tags https://gitlab.com/gnutls/libtasn1.git | grep -oP '(?<=refs/tags/v)\d+\.\d+\.\d+' | sort -V | tail -n1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/libtasn1/ | grep -oP 'libtasn1-\K\d+\.\d+\.\d+' | sort -V | tail -n1)
+# new_version=$(git ls-remote --tags https://gitlab.com/gnutls/libtasn1.git | grep -oP '(?<=refs/tags/v)\d+\.\d+\.\d+' | sort -V | tail -n1)
 
 
 post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
+    ./configure --help >"$PKGBUILDDIR"/help.txt
 }

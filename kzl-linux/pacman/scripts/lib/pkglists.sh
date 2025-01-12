@@ -64,8 +64,12 @@ kzl_stage1_pkgs=(
     tzdata glibc
 )
 
-
 kzl_stage2_pkgs=(
+    libtasn1 libffi p11-kit ca-certificates
+    openssl
+)
+
+kzl_stage2_pkgs_full=(
     ################################
     # base
     ################################
@@ -88,8 +92,8 @@ kzl_stage2_pkgs=(
     ################
     # ca-certificates & openssl
     ################
-    # libtasn1 p11-kit ca-certificates
-    # openssl
+    libtasn1 libffi p11-kit ca-certificates
+    openssl
 
     ################
     # gettext

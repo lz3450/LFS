@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g34
-pkgrel=8
+pkgrel=7
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -72,7 +72,7 @@ EOF
 
   meson setup \
     --prefix /usr \
-    --optimization 2 \
+    --buildtype plain \
     -D b_lto=true \
     -D b_pie=true \
     -D buildstatic=false \

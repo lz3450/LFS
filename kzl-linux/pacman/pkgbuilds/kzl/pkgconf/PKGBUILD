@@ -19,7 +19,7 @@ prepare() {
   meson setup \
     --prefix /usr \
     --auto-features enabled \
-    --optimization 2 \
+    --buildtype plain \
     -D b_lto=true \
     -D b_pie=true \
     -D tests=disabled \
