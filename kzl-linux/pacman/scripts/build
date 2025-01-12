@@ -71,7 +71,6 @@ build() {
     local _pkgbase=$(get_pkgbase $_pkgname)
     local _log
     local -i _updated=0
-    local _cleanbuild
     local _clean
     local _no_check
 
@@ -87,14 +86,12 @@ build() {
     info "Updating PKGBUILD..."
     updatepkg --syncdeps >"$_log" 2>&1 || _updated=$?
 
-    _cleanbuild='C'
     if (( $_updated == 255 )); then
         warn "Current version is newer"
     elif (( $_updated == 0 )); then
         info "  No update for PKGBUILD"
     elif (( $_updated == 1 )); then
         info "  Package \"$_pkgbase\" is updated to new version"
-        _cleanbuild='e'
     elif (( $_updated == 2 )); then
         error "PKGBUILD does not exist" 5
     elif (( $_updated == 3 )); then
@@ -112,14 +109,6 @@ build() {
     info "Done"
 
     info "Building package..."
-    # if package is up to date, then update the "pkgrel"
-    if (( $_updated == 0 )); then
-        # update "pkgrel"
-        current_pkgrel=$(cat PKGBUILD | grep -oP 'pkgrel=\K\d+$')
-        new_pkgrel=$(($current_pkgrel + 1))
-        sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" PKGBUILD
-    fi
-
     _no_check=''
     if (( $no_check > 0 )); then
         _no_check='--nocheck'
@@ -128,8 +117,8 @@ build() {
     if (( $no_clean <= 0 )); then
         _clean='--clean'
     fi
-    # calling makepkg without `-C` since updatepkg already removed existing `$srcdir/`
-    makepkg -sr"$_cleanbuild"f "$_clean" "$_no_check" --noconfirm >>"$_log" 2>&1
+    # Call makepkg without `-C` since updatepkg already removed existing `$srcdir/`
+    makepkg -sref "$_clean" "$_no_check" --noconfirm >>"$_log" 2>&1
     info "Done"
 
     info "Updating repo..."

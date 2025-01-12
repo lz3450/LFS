@@ -65,11 +65,9 @@ kzl_stage1_pkgs=(
 )
 
 kzl_stage2_pkgs=(
-    libtasn1 libffi p11-kit ca-certificates
-    openssl
 )
 
-kzl_stage2_pkgs_full=(
+_kzl_stage2_pkgs=(
     ################################
     # base
     ################################
@@ -96,6 +94,13 @@ kzl_stage2_pkgs_full=(
     openssl
 
     ################
+    # shadow
+    ################
+    pcre2 swig libcap-ng audit
+    # pam-config pam
+    # shadow
+
+    ################
     # gettext
     ################
     # libunistring icu libxml2 gettext
@@ -113,7 +118,7 @@ kzl_stage2_pkgs_full=(
     # # compression utils
     # ################
     # bzip2
-    # pcre2 less gzip
+    # less gzip
     # xz
     # attr acl tar
 
@@ -126,13 +131,6 @@ kzl_stage2_pkgs_full=(
     # libseccomp file
     # findutils
     # which
-
-    # ################
-    # # shadow
-    # ################
-    # swig libcap-ng audit
-    # pam-config pam
-    # shadow
 
     # ################
     # # coreutils
