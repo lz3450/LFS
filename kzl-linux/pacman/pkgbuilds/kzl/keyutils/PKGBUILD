@@ -14,11 +14,24 @@ sha256sums=('SKIP')
 build() {
   cd $pkgname
 
-  make CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" BINDIR="/usr/bin" SBINDIR="/usr/sbin" LIBDIR="/usr/lib" USRLIBDIR="/usr/lib"
+  make \
+    CFLAGS="$CFLAGS" \
+    CXXFLAGS="$CXXFLAGS" \
+    LDFLAGS="$LDFLAGS" \
+    BINDIR="/usr/bin" \
+    SBINDIR="/usr/sbin" \
+    LIBDIR="/usr/lib" \
+    USRLIBDIR="/usr/lib"
 }
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir" BINDIR="/usr/bin" SBINDIR="/usr/sbin" LIBDIR="/usr/lib" USRLIBDIR="/usr/lib" install
+  make \
+    DESTDIR="$pkgdir" \
+    BINDIR="/usr/bin" \
+    SBINDIR="/usr/sbin" \
+    LIBDIR="/usr/lib" \
+    USRLIBDIR="/usr/lib" \
+    install
 }

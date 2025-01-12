@@ -1,4 +1,4 @@
-`configure' configures audit 3.1.2 to adapt to many kinds of systems.
+'configure' configures audit 4.0.3 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -12,11 +12,11 @@ Configuration:
       --help=short        display options specific to this package
       --help=recursive    display the short help of all the included packages
   -V, --version           display version information and exit
-  -q, --quiet, --silent   do not print `checking ...' messages
+  -q, --quiet, --silent   do not print 'checking ...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
-  -C, --config-cache      alias for `--cache-file=config.cache'
+  -C, --config-cache      alias for '--cache-file=config.cache'
   -n, --no-create         do not create output files
-      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+      --srcdir=DIR        find the sources in DIR [configure dir or '..']
 
 Installation directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
@@ -24,10 +24,10 @@ Installation directories:
   --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
                           [PREFIX]
 
-By default, `make install' will install all the files in
-`/usr/local/bin', `/usr/local/lib' etc.  You can specify
-an installation prefix other than `/usr/local' using `--prefix',
-for instance `--prefix=$HOME'.
+By default, 'make install' will install all the files in
+'/usr/local/bin', '/usr/local/lib' etc.  You can specify
+an installation prefix other than '/usr/local' using '--prefix',
+for instance '--prefix=$HOME'.
 
 For better control, use the options below.
 
@@ -71,8 +71,13 @@ Optional Features:
   --disable-silent-rules  verbose build output (undo: "make V=0")
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
+  --enable-pic[=PKGS]     try to use only PIC/non-PIC objects [default=use
+                          both]
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
+  --enable-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
   --enable-dependency-tracking
                           do not reject slow dependency extractors
   --disable-dependency-tracking
@@ -81,32 +86,25 @@ Optional Features:
   --disable-listener      Disable auditd network listener support
   --disable-zos-remote    Disable audisp ZOS remote plugin
   --enable-gssapi-krb5    Enable GSSAPI Kerberos 5 support [default=no]
-  --enable-systemd        Enable systemd init scripts [default=no]
   --enable-experimental   Enable experimental audit components [default=no]
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
-                          both]
-  --with-aix-soname=aix|svr4|both
-                          shared library versioning (aka "SONAME") variant to
-                          provide on AIX, [default=aix].
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
-  --with-python           enable building python bindings
+  --with-python3          enable building python3 bindings
   --with-python-sys-prefix
                           use Python's sys.prefix and sys.exec_prefix values
   --with-python_prefix    override the default PYTHON_PREFIX
   --with-python_exec_prefix
                           override the default PYTHON_EXEC_PREFIX
-  --with-python3          enable building python3 bindings
   --with-golang           enable building golang bindings
   --with-debug            turn on debugging [default=no]
-  --with-warn             turn on warnings [default=yes]
   --with-arm              enable Arm eabi processor support
   --with-aarch64          enable Aarch64 processor support
+  --with-riscv            enable riscv processor support
   --with-apparmor         enable AppArmor events
   --with-libwrap=PATH   Compile in libwrap (tcp_wrappers) support.
   --with-io_uring         enable io_uring support
@@ -125,7 +123,7 @@ Some influential environment variables:
   CPP         C preprocessor
   PYTHON      the Python interpreter
 
-Use these variables to override the choices made by `configure' or to help
+Use these variables to override the choices made by 'configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.

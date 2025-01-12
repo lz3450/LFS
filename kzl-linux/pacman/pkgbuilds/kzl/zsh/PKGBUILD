@@ -7,10 +7,16 @@ epoch=
 arch=('x86_64')
 url="https://www.zsh.org/"
 license=('KZL')
-depends=(libcap pcre)
+depends=(
+  libcap
+  pcre
+)
 install=$pkgname.install
-source=(git://git.code.sf.net/p/zsh/code#tag=$pkgname-$pkgver
-        zprofile)
+source=(
+  # zsh::git://git.code.sf.net/p/zsh/code#tag=$pkgname-$pkgver
+  zsh::git://git.code.sf.net/p/zsh/code
+  zprofile
+)
 sha256sums=('SKIP'
             '230832038c3b8f67fdb1b284ac5f68d709cdb7f1bc752b0e60657b9b9d091045')
 

@@ -1,6 +1,7 @@
-new_version=$(git ls-remote --tags https://github.com/PCRE2Project/pcre2.git | grep -oP "refs/tags/pcre2-\K[0-9]+\.[0-9]+" | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://github.com/PCRE2Project/pcre2.git | grep -oP "refs/tags/pcre2-\K[0-9]+\.[0-9]+$" | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
+    # ./configure --help >"$PKGBUILDDIR"/help.txt
 }

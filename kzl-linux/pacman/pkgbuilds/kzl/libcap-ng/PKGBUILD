@@ -1,16 +1,19 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libcap-ng
-pkgver=0.8.3
-pkgrel=5
+pkgver=0.8.5
+pkgrel=1
 epoch=
 pkgdesc="Library making programming with POSIX capabilities easier than traditional libcap"
 arch=('x86_64')
 url="https://people.redhat.com/sgrubb/libcap-ng/"
 license=('KZL')
-makedepends=(swig)
+makedepends=(
+  libtool
+  swig
+)
 source=(git+https://github.com/stevegrubb/libcap-ng.git#tag=v$pkgver)
-sha256sums=('SKIP')
+sha256sums=('f08359cefc7f4e648db8f2641cccbddea5668495476ccd4a013191b705f85b56')
 
 prepare() {
   cd libcap-ng

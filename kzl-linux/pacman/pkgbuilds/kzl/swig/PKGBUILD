@@ -1,16 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=swig
-pkgver=4.1.1
-pkgrel=11
+pkgver=4.3.0
+pkgrel=1
 epoch=
 pkgdesc="A software development tool that connects programs written in C and C++ with a variety of high-level programming languages"
 arch=('x86_64')
 url="http://www.swig.org/"
-# depends=(boost pcre2)
 depends=(pcre2)
 source=(git+https://github.com/swig/swig.git#tag=v$pkgver)
-sha256sums=('SKIP')
+sha256sums=('d10b138ae8be91710276be5e626fed211ae6489b4d862876905e461bf069c5df')
 
 prepare() {
   cd $pkgname

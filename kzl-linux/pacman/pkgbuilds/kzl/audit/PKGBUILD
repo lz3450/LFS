@@ -1,24 +1,33 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=audit
-pkgver=3.1.2
-pkgrel=2
+pkgver=4.0.3
+pkgrel=1
 epoch=
-pkgdesc="Userspace components of the audit framework"
+pkgdesc="User space components of the audit framework"
 arch=('x86_64')
 url="https://people.redhat.com/sgrubb/audit"
 license=('KZL')
-depends=(krb5 libcap-ng)
-makedepends=(swig)
-backup=(etc/libaudit.conf
-        etc/audit/audisp-remote.conf
-        etc/audit/auditd.conf
-        etc/audit/audit-stop.rules
-        etc/audit/plugins.d/af_unix.conf
-        etc/audit/plugins.d/au-remote.conf
-        etc/audit/plugins.d/syslog.conf)
+depends=(
+  # krb5
+  libcap-ng
+)
+makedepends=(
+  libtool
+  swig
+)
+backup=(
+  etc/libaudit.conf
+  etc/audit/audisp-remote.conf
+  etc/audit/auditd.conf
+  etc/audit/audit-stop.rules
+  etc/audit/plugins.d/af_unix.conf
+  etc/audit/plugins.d/au-remote.conf
+  etc/audit/plugins.d/syslog.conf
+)
+options=(!lto)
 source=(git+https://github.com/linux-audit/audit-userspace.git#tag=v$pkgver)
-sha256sums=('SKIP')
+sha256sums=('1d0978d6cc2e9a7809de4d87cfa1fdc2277417de17df915bdb8bac1564fb3515')
 
 prepare() {
   cd audit-userspace
@@ -32,15 +41,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --disable-zos-remote \
-    --enable-gssapi-krb5=yes \
-    --enable-systemd=yes \
-    --with-python=no \
-    --with-python3=yes \
-    --with-golang=no \
-    --with-arm=no \
-    --with-aarch64=no \
-    --with-apparmor=no \
+    --enable-gssapi-krb5=no \
     --with-io_uring \
     --with-libcap-ng=yes
 
@@ -52,7 +53,7 @@ package() {
 
   make DESTDIR="$pkgdir" install
 
-  install -d -m0700 "$pkgdir"/var/log/audit
+  install -dm0700 "$pkgdir"/var/log/audit
 
   rm -rf \
     "$pkgdir"/etc/rc.d \

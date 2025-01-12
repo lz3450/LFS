@@ -8,8 +8,10 @@ pkgdesc="Ext2/3/4 Filesystem Utilities"
 arch=('x86_64')
 url="http://e2fsprogs.sourceforge.net"
 license=('KZL')
-backup=(etc/e2scrub.conf
-        etc/mke2fs.conf)
+backup=(
+  etc/e2scrub.conf
+  etc/mke2fs.conf
+)
 source=(git+https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -18,23 +20,11 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --sbindir=/usr/sbin \
-    --sysconfdir=/etc \
-    --libdir=/usr/lib \
-    --infodir=/usr/share/info \
-    --enable-symlink-install \
     --enable-elf-shlibs \
-    --disable-libuuid \
-    --disable-libblkid \
-    --disable-fsck \
     --disable-uuidd \
-    --with-root-prefix=""
+    --with-root-prefix=/usr
 
   make
-
-  # regenerate locale files
-  find po/ -name '*.gmo' -delete
-  make -C po update-gmo
 }
 
 package() {

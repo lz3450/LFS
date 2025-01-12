@@ -2,5 +2,5 @@ new_version=$(git ls-remote --tags https://git.kernel.org/pub/scm/linux/kernel/g
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    head -n24 Makefile > "$PKGBUILDDIR"/help.txt
+    cp Makefile "$PKGBUILDDIR"/help.txt
 }

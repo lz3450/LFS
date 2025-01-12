@@ -8,43 +8,39 @@ pkgdesc="The Kerberos network authentication protocol"
 arch=('x86_64')
 url="https://web.mit.edu/kerberos/"
 license=('KZL')
-depends=(e2fsprogs keyutils libedit lmdb openldap)
-backup=(etc/$pkgname/krb5.conf
-        var/$pkgname/krb5kdc/kdc.conf)
+depends=(
+  e2fsprogs
+  keyutils
+  libedit
+  lmdb
+  openssl
+)
+backup=(
+  etc/krb5.conf
+  var/krb5kdc/kdc.conf
+)
 source=(git+https://github.com/krb5/krb5.git#tag=$pkgname-$pkgver-final)
 sha256sums=('SKIP')
 
 prepare() {
   cd $pkgname/src
 
-  autoreconf -ifv
+  autoreconf -vfi
 }
 
 build() {
   cd $pkgname/src
 
   # https://web.mit.edu/kerberos/krb5-latest/doc/build/options2configure.html
-
-  _readline_options=(
-    # Using libedit for readline support
-    --with-libedit --without-readline
-    # Using GNU Readline
-    # --without-libedit --with-readline
-  )
-
   ./configure \
     --prefix=/usr \
-    --sysconfdir=/etc/$pkgname \
-    --localstatedir=/var/$pkgname \
     --enable-dns-for-realm \
     --disable-rpath \
     --with-system-et \
     --with-system-ss \
-    --with-ldap \
-    --with-keyutils \
-    --with-lmdb \
-    ${_readline_options[@]} \
-    --without-system-verto
+    --with-crypto-impl=openssl \
+    --with-tls-impl=openssl \
+    --with-lmdb
 
   make
 }

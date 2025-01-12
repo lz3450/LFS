@@ -8,15 +8,19 @@ pkgdesc="PAM configuration"
 arch=('x86_64')
 url="https://github.com/kongzelun/LFS"
 license=('KZL')
-backup=(etc/pam.d/system-auth
-        etc/pam.d/system-login
-        etc/pam.d/system-local-login
-        etc/pam.d/system-remote-login)
-source=(system-auth
-        system-login
-        system-local-login
-        system-remote-login
-        other)
+backup=(
+  etc/pam.d/system-auth
+  etc/pam.d/system-login
+  etc/pam.d/system-local-login
+  etc/pam.d/system-remote-login
+)
+source=(
+  system-auth
+  system-login
+  system-local-login
+  system-remote-login
+  other
+)
 sha256sums=('e3940fa4e2da40930888a106f40d3bb2c718e4de8691d27bad8ea471910d782f'
             '5129b34d4f1b4aefd446615a21ce8499ab58db8a110f8d067c944794289e7664'
             '5aa47286a79e392138e9b4dc373b4c254e7329f7ef5fdb4f945dd0dc3ee2d41c'

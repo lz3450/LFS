@@ -2,5 +2,5 @@ new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://zsh.sourceforge.io/New
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/code"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    ./configure --help >"$PKGBUILDDIR"/help.txt
 }

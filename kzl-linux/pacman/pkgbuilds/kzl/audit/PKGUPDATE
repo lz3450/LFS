@@ -2,5 +2,5 @@ new_version=$(git ls-remote --tags https://github.com/linux-audit/audit-userspac
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/audit-userspace"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    ./configure --help >"$PKGBUILDDIR"/help.txt
 }
