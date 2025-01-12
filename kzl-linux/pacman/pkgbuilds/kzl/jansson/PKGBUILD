@@ -51,7 +51,7 @@ sha256sums=('SKIP')
 prepare() {
   cd $pkgname
 
-  autoupdate
+  autoupdate -vf
   autoreconf -vfi
 }
 

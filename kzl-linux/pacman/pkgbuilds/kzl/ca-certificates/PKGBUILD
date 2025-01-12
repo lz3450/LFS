@@ -1,14 +1,13 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ca-certificates
-pkgver=2.70
+pkgver=2.72
 pkgrel=1
 epoch=
 pkgdesc="CA certificates"
 arch=('any')
 license=('KZL')
 depends=(p11-kit)
-makedepends=(python)
 source=(
   https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/certdata.txt
   https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h
@@ -22,8 +21,8 @@ source=(
   https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/README.usr
   40-update-ca-trust.hook
 )
-sha256sums=('36105b01631f9fc03b1eca779b44a30a1a5890b9bf8dc07ccb001a07301e01cf'
-            '8966456d7da7d949926b6ab4afb0845ca7a5385257c3328411637d9fb75c2d9b'
+sha256sums=('c99d6d3f8d3d4e47719ba2b648992f5b58b150128d3aca3c05c566d8dc98e116'
+            '0ff8165b6c5dcd1072e374e894f2ed8b80f3b011ec86ca410952254b73a76d39'
             'd2a1579dae05fd16175fac27ef08b54731ecefdf414085c610179afcf62b096c'
             '71ee47d1bd6edd8a391e5fc47bd0d420fe1d92c14a10792490143bb6abaad2a0'
             '6c7b9287c41c171c64b358fc7331b8a9ae969fc2d00d997d88bcbf4da0de598a'
@@ -41,6 +40,7 @@ prepare() {
   sed -i \
     -e '/java/d' \
     -e '/edk2/d' \
+    -e '/"$DEST"\/pem/s/ \\//' \
     -e 's/objsign/sign/g' \
     update-ca-trust
 
@@ -78,32 +78,32 @@ EOF
 package() {
   # https://src.fedoraproject.org/rpms/ca-certificates/blob/rawhide/f/ca-certificates.spec
 
-  install -D -m 755 "$srcdir"/update-ca-trust "$pkgdir"/usr/bin/update-ca-trust
-  install -D -m 644 "$srcdir"/40-update-ca-trust.hook "$pkgdir"/usr/share/libalpm/hooks/40-update-ca-trust.hook
+  install -Dm755 "$srcdir"/update-ca-trust "$pkgdir"/usr/bin/update-ca-trust
+  install -Dm644 "$srcdir"/40-update-ca-trust.hook "$pkgdir"/usr/share/libalpm/hooks/40-update-ca-trust.hook
 
   local _pkidir="etc/pki"
   local _catrustdir="$_pkidir/ca-trust"
 
-  install -d -m 755 "$pkgdir/$_pkidir"/tls/certs
-  install -d -m 755 "$pkgdir/$_catrustdir"/source
-  install -d -m 755 "$pkgdir/$_catrustdir"/source/anchors
-  install -d -m 755 "$pkgdir/$_catrustdir"/source/blocklist
-  install -d -m 755 "$pkgdir/$_catrustdir"/extracted
-  install -d -m 755 "$pkgdir/$_catrustdir"/extracted/pem
-  install -d -m 555 "$pkgdir/$_catrustdir"/extracted/pem/directory-hash
-  install -d -m 755 "$pkgdir/$_catrustdir"/extracted/openssl
-  install -d -m 755 "$pkgdir"/usr/share/pki/ca-trust-source
-  install -d -m 755 "$pkgdir"/usr/share/pki/ca-trust-source/anchors
-  install -d -m 755 "$pkgdir"/usr/share/pki/ca-trust-source/blocklist
+  install -dm755 "$pkgdir/$_pkidir"/tls/certs
+  install -dm755 "$pkgdir/$_catrustdir"/source
+  install -dm755 "$pkgdir/$_catrustdir"/source/anchors
+  install -dm755 "$pkgdir/$_catrustdir"/source/blocklist
+  install -dm755 "$pkgdir/$_catrustdir"/extracted
+  install -dm755 "$pkgdir/$_catrustdir"/extracted/pem
+  install -dm555 "$pkgdir/$_catrustdir"/extracted/pem/directory-hash
+  install -dm755 "$pkgdir/$_catrustdir"/extracted/openssl
+  install -dm755 "$pkgdir"/usr/share/pki/ca-trust-source
+  install -dm755 "$pkgdir"/usr/share/pki/ca-trust-source/anchors
+  install -dm755 "$pkgdir"/usr/share/pki/ca-trust-source/blocklist
 
-  install -D -m 644 "$srcdir"/README.etc      "$pkgdir/$_catrustdir"/README
-  install -D -m 644 "$srcdir"/README.src      "$pkgdir/$_catrustdir"/source/README
-  install -D -m 644 "$srcdir"/README.extr     "$pkgdir/$_catrustdir"/extracted/README
-  install -D -m 644 "$srcdir"/README.pem      "$pkgdir/$_catrustdir"/extracted/pem/README
-  install -p -m 644 "$srcdir"/README.openssl  "$pkgdir/$_catrustdir"/extracted/openssl/README
-  install -p -m 644 "$srcdir"/README.usr      "$pkgdir"/usr/share/pki/ca-trust-source/README
+  install -pm644 "$srcdir"/README.etc      "$pkgdir/$_catrustdir"/README
+  install -pm644 "$srcdir"/README.src      "$pkgdir/$_catrustdir"/source/README
+  install -pm644 "$srcdir"/README.extr     "$pkgdir/$_catrustdir"/extracted/README
+  install -pm644 "$srcdir"/README.pem      "$pkgdir/$_catrustdir"/extracted/pem/README
+  install -pm644 "$srcdir"/README.openssl  "$pkgdir/$_catrustdir"/extracted/openssl/README
+  install -pm644 "$srcdir"/README.usr      "$pkgdir"/usr/share/pki/ca-trust-source/README
 
-  install -D -m 644 "$p11_format_bundle" "$pkgdir"/usr/share/pki/ca-trust-source/"$p11_format_bundle"
+  install -Dm644 "$p11_format_bundle" "$pkgdir"/usr/share/pki/ca-trust-source/"$p11_format_bundle"
 
   touch "$pkgdir/$_catrustdir"/extracted/pem/tls-ca-bundle.pem
   chmod 444 "$pkgdir/$_catrustdir"/extracted/pem/tls-ca-bundle.pem

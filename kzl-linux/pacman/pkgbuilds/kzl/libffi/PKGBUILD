@@ -8,17 +8,33 @@ pkgdesc="A Portable Foreign Function Interface Library"
 arch=('x86_64')
 url="https://sourceware.org/libffi/"
 license=('KZL')
-source=(git+https://github.com/libffi/libffi.git#tag=v$pkgver)
-sha256sums=('866d2d72642c37909119f9cbf736346c76e6fb0488ab7e5d5807125f783acc84')
+makedepends=(
+  libtool
+)
+options=(!lto)
+source=(
+  ## not compatible with autoconf 2.72
+  # git+https://github.com/libffi/libffi.git#tag=v$pkgver
+  # git+https://github.com/libffi/libffi.git
+  https://github.com/libffi/libffi/releases/download/v$pkgver/libffi-$pkgver.tar.gz
+)
+sha256sums=('b0dea9df23c863a7a50e825440f3ebffabd65df1497108e5d437747843895a4e')
 
-prepare() {
-  cd $pkgname
+# pkgver() {
+#   cd $pkgname
 
-  ./autogen.sh
-}
+#   git describe --tags | sed 's/^v//;s/-g.*//;s/-/.g/'
+# }
+
+# prepare() {
+#   cd $pkgname
+
+#   autoupdate -vf
+#   ./autogen.sh
+# }
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr \
@@ -28,13 +44,13 @@ build() {
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make check
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir" install
 }

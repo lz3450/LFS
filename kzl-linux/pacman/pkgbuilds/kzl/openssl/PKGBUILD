@@ -9,15 +9,16 @@ arch=('x86_64')
 url="https://www.openssl.org"
 license=('KZL')
 backup=(etc/pki/tls/openssl.cnf)
+options=(!lto)
 source=(git+https://github.com/openssl/openssl.git#tag=$pkgname-$pkgver)
 sha256sums=('cb272891185e7b40f5d27a5a5cac9836ed9dbf556bf907ce1f9171601dfc5e16')
 
-openssldir="/etc/pki/tls"
+_openssldir="/etc/pki/tls"
 
 prepare() {
   cd $pkgname
 
-  sed -i "s|./demoCA|$openssldir|g" apps/openssl.cnf apps/CA.pl.in
+  sed -i "s|./demoCA|$_openssldir|g" apps/openssl.cnf apps/CA.pl.in
 }
 
 build() {
@@ -28,7 +29,7 @@ build() {
   ./Configure \
     --release \
     --libdir=lib \
-    --openssldir="$openssldir" \
+    --openssldir="$_openssldir" \
     --prefix=/usr \
     enable-ktls \
     enable-ec_nistp_64_gcc_128 \
@@ -40,13 +41,13 @@ build() {
 check() {
   cd $pkgname
 
-  sed -e "s|$openssldir|./demoCA|g" \
+  sed -e "s|$_openssldir|./demoCA|g" \
       -i apps/openssl.cnf \
       -i apps/CA.pl.in
 
 	make test
 
-  sed -e "s|./demoCA|$openssldir|g" \
+  sed -e "s|./demoCA|$_openssldir|g" \
       -i apps/openssl.cnf \
       -i apps/CA.pl.in
 }

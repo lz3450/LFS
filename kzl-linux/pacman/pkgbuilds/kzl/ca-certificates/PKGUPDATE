@@ -1,4 +1,4 @@
-new_version=$(wget https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h -O - | grep "NSS_BUILTINS_LIBRARY_VERSION " | awk '{print $NF}' | sed -e "s;\";;g")
+new_version=$(curl https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h | grep "NSS_BUILTINS_LIBRARY_VERSION " | awk '{print $NF}' | sed -e "s;\";;g")
 
 pre_update() {
     rm -f "$SRCDEST"/certdata.txt

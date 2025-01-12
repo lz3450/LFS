@@ -70,7 +70,7 @@ extract() {
                 # yet (rhbz#2241240)
 	        /usr/bin/mkdir -p \
 		    "$DEST"/openssl \
-		    "$DEST"/pem \
+		    "$DEST"/pem
 	fi
 
 

@@ -1,4 +1,4 @@
-`configure' configures GNU Libtasn1 4.19.0.g65 to adapt to many kinds of systems.
+`configure' configures GNU Libtasn1 4.19.0 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -73,12 +73,16 @@ Optional Features:
   --disable-dependency-tracking
                           speeds up one-time build
   --disable-largefile     omit support for large files
+  --disable-year2038      omit support for timestamps past the year 2038
   --disable-doc           don't generate any documentation
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
+  --enable-gtk-doc        use gtk-doc to build documentation [[default=no]]
+  --enable-gtk-doc-html   build documentation in html format [[default=yes]]
+  --enable-gtk-doc-pdf    build documentation in pdf format [[default=no]]
   --enable-cross-guesses={conservative|risky}
                           specify policy for cross-compilation guesses
   --enable-ld-version-script
@@ -89,7 +93,6 @@ Optional Features:
   --enable-code-coverage  Whether to enable code coverage support
   --disable-gcc-warnings  disable GCC warnings (for developers)
   --enable-fuzzing        Turn on fuzzing build (for developers)
-  --enable-year2038       support timestamps after 2038
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -102,6 +105,7 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
+  --with-html-dir=PATH    path to installed docs
   --with-packager         String identifying the packager of this software
   --with-packager-version Packager-specific version information
   --with-packager-bug-reports
@@ -125,6 +129,11 @@ Some influential environment variables:
               default value of `-d' given by some make applications.
   LT_SYS_LIBRARY_PATH
               User-defined run-time library search path.
+  PKG_CONFIG  path to pkg-config utility
+  GTKDOC_DEPS_CFLAGS
+              C compiler flags for GTKDOC_DEPS, overriding pkg-config
+  GTKDOC_DEPS_LIBS
+              linker flags for GTKDOC_DEPS, overriding pkg-config
   VALGRINDFLAGS
               Additional flags for Valgrind
 
