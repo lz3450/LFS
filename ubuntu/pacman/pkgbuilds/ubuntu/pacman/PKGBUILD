@@ -62,7 +62,7 @@ EOF
   meson setup \
     --prefix /usr/local \
     --sysconfdir etc \
-    --optimization 2 \
+    --buildtype plain \
     -D b_lto=true \
     -D b_pie=true \
     -D buildstatic=false \
