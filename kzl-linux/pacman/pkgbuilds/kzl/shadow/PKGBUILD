@@ -7,28 +7,49 @@ epoch=
 pkgdesc="Programs for converting UNIX password files to the shadow password format, plus programs for managing user and group accounts"
 arch=('x86_64')
 url="https://github.com/shadow-maint/shadow"
-depends=(acl attr audit glibc libxcrypt pam)
+depends=(
+  acl
+  attr
+  audit
+  glibc
+  libxcrypt
+  pam
+  systemd
+)
+makedepends=(
+  libtool
+)
 backup=(
   etc/default/useradd
   etc/login.defs
   etc/pam.d/{chage,chfn,chgpasswd,chpasswd,chsh,groupadd,groupdel,groupmems,groupmod,login,newusers,passwd,useradd,userdel,usermod}
 )
+options=(!lto)
+install=$pkgname.install
 source=(
   git+https://github.com/shadow-maint/shadow.git#tag=$pkgver
   useradd.defaults
-  login.pam
-  chfn-chsh.pam
   shadow.{service,timer}
+  $pkgname.install
 )
 sha256sums=('f6207dfdd35a468269fdeb62ff746cad0ce8a661a7be62573718c7fbe89dd495'
             'bc9fef974321e399fb47c229a82e37d81a8f39424082ef8e4915d0dbee9ff7c2'
-            '2ad75ea2dd54bec8e4dd113bc6a0ac6232213f686c0575aa6e0afe2982177075'
-            '189489175f8344806caec4103e85e2d7b5dedb5b8eff61d9c800086981cf6cc4'
-            '459e1e5632fe390616e352c8f816ca55fb06731f1235ff25314b5c7447cd5c61'
-            'c063768e6cd9b52ec4969796b1c988cc2d8d9f6bdec1e293fc9f87b576d84125')
+            'aa10a39f3c004cd805313dadc196bef730c9caae652dcdd2652019d3ecff49c4'
+            '736eb7b16fc2fff9c902d4823641114338f290a6825e66831f41c5474e994207'
+            'ad57255fdcff5023040a80dfca89cf3939d3cff77f79709cb97ae854d6e2d914')
 
 prepare() {
   cd $pkgname
+
+  # login.defs
+  sed -i -E \
+      -e '/^MOTD_FILE/c\MOTD_FILE' \
+      -e '/^#ISSUE_FILE/c\ISSUE_FILE' \
+      -e '/^ENV_SUPATH/c\ENV_SUPATH\tPATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin' \
+      -e '/^ENV_PATH/c\ENV_PATH\tPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' \
+      -e '/^PASS_MIN_LEN/c\PASS_MIN_LEN\t4' \
+      -e '/^#ENCRYPT_METHOD/c\ENCRYPT_METHOD\tSHA512' \
+      etc/login.defs
 
   autoreconf -vfi
 }
@@ -43,16 +64,24 @@ build() {
     --sysconfdir=/etc \
     --libdir=/usr/lib \
     --enable-shadowgrp=yes \
-    --enable-man=no \
-    --enable-account-tools-setuid=yes \
+    --enable-account-tools-setuid \
+    --enable-lastlog=no \
+    --enable-logind=no \
     --with-audit=yes \
     --with-libpam=yes \
+    --with-btrfs=no \
     --with-selinux=no \
     --with-acl=yes \
     --with-attr=yes \
+    --with-sha-crypt=yes \
+    --with-bcrypt=no \
+    --with-yescrypt=yes \
+    --with-nscd=no \
+    --with-sssd=no \
     --with-group-name-max-length=32 \
     --with-su=no \
-    --with-fcaps=yes
+    --with-libbsd=no \
+    --with-fcaps=no
 
   make
 }
@@ -62,28 +91,15 @@ package() {
 
   make DESTDIR="$pkgdir" install
 
-  # login.defs
-  sed -e '/^MOTD_FILE/c\MOTD_FILE' \
-      -e '/^#ISSUE_FILE/s/#//' \
-      -e '/^ENV_SUPATH/c\ENV_SUPATH PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' \
-      -e '/^ENV_PATH/c\ENV_PATH PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' \
-      -e '/^UMASK/c\UMASK 077' \
-      -e '/^PASS_MIN_LEN/c\PASS_MIN_LEN    4' \
-      -e '/^#ENCRYPT_METHOD/c\ENCRYPT_METHOD SHA512' \
-      -i "$pkgdir"/etc/login.defs
-
-  # useradd defaults (not provided by upstream)
+  # useradd defaults
   install -Dm600 "$srcdir"/useradd.defaults "$pkgdir"/etc/default/useradd
-
-  # pam.d
-  install -dm755 "$pkgdir"/etc/pam.d/
-  install -Dm644 "$srcdir"/login.pam "$pkgdir"/etc/pam.d/login
-  install -Dm644 "$srcdir"/chfn-chsh.pam "$pkgdir"/etc/pam.d/chfn
-  install -Dm644 "$srcdir"/chfn-chsh.pam "$pkgdir"/etc/pam.d/chsh
 
   # systemd units
   install -Dm644 "$srcdir"/shadow.timer "$pkgdir"/usr/lib/systemd/system/shadow.timer
   install -Dm644 "$srcdir"/shadow.service "$pkgdir"/usr/lib/systemd/system/shadow.service
-  install -dm755 "$pkgdir"/usr/lib/systemd/system/timers.target.wants
-  ln -s ../shadow.timer "$pkgdir"/usr/lib/systemd/system/timers.target.wants/shadow.timer
+
+  # cleanup
+  for i in chfn chsh expiry faillog login logoutd nologin sg su vigr vipw; do
+    find "$pkgdir" -name "$i*" -delete
+  done
 }

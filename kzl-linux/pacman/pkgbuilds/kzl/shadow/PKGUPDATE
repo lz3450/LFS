@@ -2,5 +2,6 @@ new_version=$(git ls-remote --tags https://github.com/shadow-maint/shadow.git | 
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    ./configure --help >"$PKGBUILDDIR"/help.txt
+    cp etc/login.defs "$PKGBUILDDIR"/login.defs
 }

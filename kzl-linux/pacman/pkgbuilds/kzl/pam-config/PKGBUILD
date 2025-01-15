@@ -9,11 +9,11 @@ arch=('x86_64')
 url="https://github.com/kongzelun/LFS"
 license=('KZL')
 backup=(
-  etc/pam.d/system-common
+  etc/pam.d/system-auth
   etc/pam.d/other
 )
 source=(
-  system-common
+  system-auth
   other
 )
 sha256sums=('5708b7615b45b87ef358c83d8278bb6933a2cb7466abc8d39fdff5de51ba3a4b'
@@ -21,6 +21,6 @@ sha256sums=('5708b7615b45b87ef358c83d8278bb6933a2cb7466abc8d39fdff5de51ba3a4b'
 
 package() {
   install -dm755 "$pkgdir"/etc/pam.d/
-  install -Dm644 "$srcdir"/system-common "$pkgdir"/etc/pam.d/
+  install -Dm644 "$srcdir"/system-auth "$pkgdir"/etc/pam.d/
   install -Dm644 "$srcdir"/other "$pkgdir"/etc/pam.d/
 }

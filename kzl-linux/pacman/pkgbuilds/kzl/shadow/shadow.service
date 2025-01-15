@@ -4,8 +4,7 @@ After=systemd-sysusers.service
 
 [Service]
 Type=simple
-# Always run both checks, but fail the service if either fails
-ExecStart=/bin/sh -c '/usr/bin/pwck -r || r=1; /usr/bin/grpck -r && exit $r'
+ExecStart=/bin/sh -c '/usr/bin/pwck -r; pwck_status=$?; /usr/bin/grpck -r; grpck_status=$?; exit $((pwck_status | grpck_status))'
 Nice=19
 IOSchedulingClass=best-effort
 IOSchedulingPriority=7
