@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=e2fsprogs
-pkgver=1.47.0
-pkgrel=8
+pkgver=1.47.1
+pkgrel=1
 epoch=
 pkgdesc="Ext2/3/4 Filesystem Utilities"
 arch=('x86_64')
@@ -12,17 +12,23 @@ backup=(
   etc/e2scrub.conf
   etc/mke2fs.conf
 )
+options=(!lto)
 source=(git+https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git#tag=v$pkgver)
-sha256sums=('SKIP')
+sha256sums=('353f7be370e8a289cfd53687254b3fcd873a7eb476f93d504fd55d2ed4f456f7')
 
 build() {
   cd $pkgname
 
   ./configure \
     --prefix=/usr \
+    --sysconfdir=/etc \
     --enable-elf-shlibs \
+    --disable-libuuid \
+    --disable-libblkid \
+    --disable-fsck \
+    --disable-e2initrd-helper \
     --disable-uuidd \
-    --with-root-prefix=/usr
+    --with-root-prefix="/usr"
 
   make
 }
