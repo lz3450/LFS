@@ -14,34 +14,18 @@ kzl_stage0_pkgs=(
     ################################
     make
     pkgconf
-    autoconf
+    m4 autoconf
     automake
     texinfo
     diffutils
     bison
     flex
-    patch
+    ed patch
     bc
     cmake
 )
 
-## toolchain
-# command: sudo chrootbuild -b -r kzl --no-clean --no-check -s 1 -i
-kzl_stage1_pkgs=(
-    ################################
-    # pacman
-    ################################
-    pacman
-    pacman-contrib
-
-    ################################
-    # initial toolchain
-    ################################
-    linux-api-headers
-    glibc
-    binutils
-    gcc
-
+_full_toolchain=(
     ################################
     # full toolchain
     ################################
@@ -64,11 +48,30 @@ kzl_stage1_pkgs=(
     tzdata glibc
 )
 
-kzl_stage2_pkgs=(
-    keyutils libedit lmdb openssl krb5
+## toolchain
+# command: sudo chrootbuild -b -r kzl --no-clean --no-check -s 1 -i
+kzl_stage1_pkgs=(
+    ################################
+    # pacman
+    ################################
+    pacman
+    pacman-contrib
+
+    ################################
+    # initial toolchain
+    ################################
+    linux-api-headers
+    glibc
+    binutils
+    gcc
+
+    ################################
+    # full toolchain
+    ################################
+    "${_full_toolchain[@]}"
 )
 
-_kzl_stage2_pkgs=(
+kzl_stage2_pkgs=(
     ################################
     # base
     ################################
@@ -77,6 +80,11 @@ _kzl_stage2_pkgs=(
     # filesystem
     ################
     iana-etc filesystem
+
+    ################
+    # full toolchain
+    ################
+    "${_full_toolchain[@]}"
 
     ################
     # bash
@@ -91,14 +99,12 @@ _kzl_stage2_pkgs=(
     ################
     # shadow
     ################
-    ### krb5
-    e2fsprogs keyutils libedit lmdb openssl krb5
     ### audit
-    # pcre2 swig libcap-ng audit
+    pcre2 swig libcap-ng audit
     ### pam
-    # gdbm libtirpc libxcrypt pam-config pam
-
-    # shadow
+    gdbm libxcrypt openssl pam-config pam
+    ### shadow
+    attr acl shadow
 
     ################
     # perl
@@ -114,7 +120,7 @@ _kzl_stage2_pkgs=(
     # # python
     # ################
     # expat
-    # e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 libtirpc libnsl
+    # e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 libnsl
     # tcl sqlite
     # elfutils gdb valgrind
     # python
@@ -125,7 +131,7 @@ _kzl_stage2_pkgs=(
     # bzip2
     # less gzip
     # xz
-    # attr acl tar
+    # tar
 
     # ################
     # # utils
