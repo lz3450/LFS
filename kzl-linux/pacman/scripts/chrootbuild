@@ -99,7 +99,9 @@ run_debug_shell() {
 }
 
 run_build() {
+    info "Running \`build\`..."
     chroot_run "$ROOTFS_DIR" su - kzl -c "source /$CHROOT_HOME_DIR/LFS/kzl-linux/pacman/setup.sh && build ${build_opts[*]}"
+    info "Done (\`build\`)"
 }
 
 usage() {

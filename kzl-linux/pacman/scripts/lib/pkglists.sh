@@ -65,6 +65,7 @@ kzl_stage1_pkgs=(
 )
 
 kzl_stage2_pkgs=(
+    keyutils libedit lmdb openssl krb5
 )
 
 _kzl_stage2_pkgs=(
@@ -83,26 +84,30 @@ _kzl_stage2_pkgs=(
     ncurses readline bash-completion bash
 
     ################
-    # perl
-    ################
-    libxcrypt gdbm perl
-
-    ################
-    # ca-certificates & openssl
+    # ca-certificates
     ################
     libtasn1 libffi p11-kit ca-certificates
-    openssl
 
     ################
     # shadow
     ################
-    pcre2 swig libcap-ng audit
-    # pam-config pam
+    ### krb5
+    e2fsprogs keyutils libedit lmdb openssl krb5
+    ### audit
+    # pcre2 swig libcap-ng audit
+    ### pam
+    # gdbm libtirpc libxcrypt pam-config pam
+
     # shadow
 
     ################
-    # gettext
+    # perl
     ################
+    perl
+
+    # ################
+    # # gettext
+    # ################
     # libunistring icu libxml2 gettext
 
     # ################
