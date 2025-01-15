@@ -15,6 +15,7 @@ depends=(
   gpgme
   libarchive
   libseccomp
+  openssl
 )
 # checkdepends=(fakechroot)
 # optdepends=("archlinux-keyring: for Arch Linux official packages")

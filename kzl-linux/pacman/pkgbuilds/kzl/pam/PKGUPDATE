@@ -2,5 +2,5 @@ new_version=$(git ls-remote --tags https://github.com/linux-pam/linux-pam.git | 
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/linux-pam"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    meson configure build >"$PKGBUILDDIR"/help.txt
 }

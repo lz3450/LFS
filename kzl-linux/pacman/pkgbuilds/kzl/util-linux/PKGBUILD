@@ -71,7 +71,7 @@ package() {
 
   make DESTDIR="$pkgdir" install
 
-  # meson install -C build --destdir="$pkgdir/"
+  # meson install -C build --destdir="$pkgdir"
 
   # install PAM files for login-utils
   install -d -m755 "$pkgdir"/etc/pam.d

@@ -7,7 +7,29 @@ epoch=
 arch=('x86_64')
 url="https://github.com/systemd/systemd-stable"
 license=('KZL')
-depends=(acl audit bzip2 cryptsetup dbus elfutils glibc iptables kbd kmod libcap libgcrypt libidn2 libseccomp lz4 openssl pam pcre2 xz zlib zstd)
+depends=(
+  acl
+  audit
+  bzip2
+  cryptsetup
+  dbus
+  elfutils
+  glibc
+  iptables
+  kbd
+  kmod
+  libcap
+  libgcrypt
+  libidn2
+  libseccomp
+  lz4
+  openssl
+  pam
+  pcre2
+  xz
+  zlib
+  zstd
+)
 makedepends=(curl kexec-tools gnutls gperf libmicrohttpd libxslt p11-kit quota util-linux)
 optdepends=("curl: libcurl support"
             "gnutls: gnutls support"

@@ -2,5 +2,5 @@ new_version=$(git ls-remote --tags git://git.linux-nfs.org/projects/steved/libti
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    ./configure --help >"$PKGBUILDDIR"/help.txt
 }

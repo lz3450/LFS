@@ -7,12 +7,22 @@ epoch=
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('x86_64')
 url="https://www.sudo.ws/sudo/"
-depends=(glibc libgcrypt openldap pam)
-backup=(etc/sudo.conf
-        etc/sudoers
-        etc/pam.d/sudo)
-source=(git+https://github.com/sudo-project/sudo.git#tag=SUDO_${pkgver//./_}
-        sudo.pam)
+depends=(
+  glibc
+  libgcrypt
+  openldap
+  openssl
+  pam
+)
+backup=(
+  etc/sudo.conf
+  etc/sudoers
+  etc/pam.d/sudo
+)
+source=(
+  git+https://github.com/sudo-project/sudo.git#tag=SUDO_${pkgver//./_}
+  sudo.pam
+)
 sha256sums=('SKIP'
             'b8270d4fbd5896428a83e8cd4a2d7217a3cc04c798da178911933465b1e85d1e')
 

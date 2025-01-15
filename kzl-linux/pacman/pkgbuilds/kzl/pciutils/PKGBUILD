@@ -28,7 +28,7 @@ package() {
   cd $pkgname
 
   make \
-    DESTDIR="$pkgdir/" \
+    DESTDIR="$pkgdir" \
     OPT="$CFLAGS" \
     ZLIB=no \
     SHARED=yes \

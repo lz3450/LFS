@@ -12,11 +12,12 @@ depends=(
   glibc
   gzip tar
   gcc
-  bash perl
+  bash
+  ca-certificates
+  pam shadow
+  perl
   grep sed gawk file findutils
   gettext
-  openssl ca-certificates
-  pam shadow
   curl
   python
   coreutils util-linux

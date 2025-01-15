@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pam
-pkgver=1.5.3
-pkgrel=5
+pkgver=1.7.0
+pkgrel=1
 epoch=
 pkgdesc="PAM (Pluggable Authentication Modules) library"
 arch=('x86_64')
@@ -10,46 +10,53 @@ url="https://github.com/linux-pam/linux-pam"
 license=('KZL')
 depends=(
   audit
+  gdbm
   glibc
   libtirpc
   libxcrypt
+  openssl
   pam-config
 )
 source=(git+https://github.com/linux-pam/linux-pam.git#tag=v$pkgver)
-sha256sums=('SKIP')
+sha256sums=('66ba7e8d6f8d1b985432a07180280e5bbc8c84bfc43fab7b1e071c26a04e2bde')
 
 prepare() {
   cd linux-pam
 
-  ./autogen.sh
+  meson setup \
+    --prefix /usr \
+    --auto-features enabled \
+    --buildtype plain \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D audit=enabled \
+    -D db=gdbm \
+    -D docs=disabled \
+    -D econf=disabled \
+    -D logind=disabled \
+    -D nis=disabled \
+    -D openssl=enabled \
+    -D pam_lastlog=enabled \
+    -D pam_unix=enabled \
+    -D pam_userdb=enabled \
+    -D selinux=disabled \
+    build
 }
 
 build() {
   cd linux-pam
 
-  ./configure \
-    --prefix=/usr \
-    --sbindir=/usr/sbin \
-    --libdir=/usr/lib \
-    --disable-doc \
-    --disable-prelude \
-    --enable-audit \
-    --enable-db=no \
-    --disable-nis \
-    --disable-selinux \
-    --disable-openssl
-
-  make
+  meson compile -C build
 }
 
 check() {
   cd linux-pam
 
-  make check
+  meson test -C build --print-errorlogs
 }
 
 package() {
   cd linux-pam
 
-  make DESTDIR="$pkgdir" install
+  meson install -C build --destdir "$pkgdir"
 }

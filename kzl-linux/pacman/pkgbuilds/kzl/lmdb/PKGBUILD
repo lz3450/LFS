@@ -4,19 +4,21 @@ pkgname=lmdb
 pkgver=0.9.31
 pkgrel=3
 epoch=
-pkgdesc="Symas Lightning Memory-Mapped Database"
+pkgdesc="An extraordinarily fast, memory-efficient database"
 arch=('x86_64')
 url="https://www.symas.com/lmdb"
 license=('KZL')
-source=(git+https://git.openldap.org/openldap/openldap.git#tag=LMDB_$pkgver
-        lmdb.pc)
+source=(
+  git+https://git.openldap.org/openldap/openldap.git#tag=LMDB_$pkgver
+  lmdb.pc.in
+)
 sha256sums=('SKIP'
             'ec9d026f29553bdd9176ce30b2d082349e7a1d03e9e705ff6b45cdfc63a77280')
 
 build() {
   cd openldap/libraries/liblmdb
 
-  make prefix=/usr
+  make prefix="/usr"
 }
 
 check() {
@@ -28,8 +30,8 @@ check() {
 package() {
   cd openldap/libraries/liblmdb
 
-  make DESTDIR="$pkgdir" prefix=/usr install
+  make DESTDIR="$pkgdir" prefix="/usr" install
 
-  install -Dm644 "$srcdir"/lmdb.pc -t "$pkgdir"/usr/lib/pkgconfig/
-  sed -e "s|@PACKAGE_VERSION@|$pkgver|" -i "$pkgdir"/usr/lib/pkgconfig/lmdb.pc
+  install -Dm644 "$srcdir"/lmdb.pc.in "$pkgdir"/usr/lib/pkgconfig/lmdb.pc
+  sed -i -e "s|@PACKAGE_VERSION@|$pkgver|" "$pkgdir"/usr/lib/pkgconfig/lmdb.pc
 }

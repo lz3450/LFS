@@ -1,16 +1,18 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openldap
-pkgver=2.6.6
-pkgrel=3
+pkgver=2.6.9
+pkgrel=1
 epoch=
-pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries"
+pkgdesc="An open source implementation of the Lightweight Directory Access Protocol"
 arch=('x86_64')
 url="https://www.openldap.org"
 license=('KZL')
-depends=(cyrus-sasl)
+depends=(
+  # cyrus-sasl
+)
 source=(git+https://git.openldap.org/openldap/openldap.git#tag=OPENLDAP_REL_ENG_${pkgver//./_})
-sha256sums=('SKIP')
+sha256sums=('a7768b5bb7ecfd7f8177443243b6ce75ed9983081fd8c7d57c0f838ce9adc9c1')
 
 build() {
   cd $pkgname
@@ -21,6 +23,9 @@ build() {
     --localstatedir=/var/lib/openldap \
     --enable-debug=no \
     --enable-dynamic=yes \
+    --enable-syslog=yes \
+    --enable-ipv6=yes \
+    --enable-local=yes \
     \
     --enable-slapd=no \
     \
@@ -28,12 +33,15 @@ build() {
     \
     --enable-overlays=no \
     \
-    --enable-static=no \
     --enable-versioning=yes \
     \
-    --with-cyrus-sasl
+    --with-cyrus-sasl=no \
+    --with-systemd=yes \
+    --with-fetch=no \
+    --with-threads=posix \
+    --with-tls=openssl \
+    --with-gnu-ld=yes
 
-  make depend
   make
 }
 

@@ -54,8 +54,8 @@ check() {
 package() {
   cd $pkgname-$pkgver
 
-  make VIMRCLOC="/etc" DESTDIR="$pkgdir/" install
-  
+  make VIMRCLOC="/etc" DESTDIR="$pkgdir" install
+
   install -dm755 "$pkgdir"/etc
   touch "$pkgdir"/etc/vimrc
 }

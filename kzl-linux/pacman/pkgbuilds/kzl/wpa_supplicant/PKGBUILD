@@ -8,7 +8,10 @@ pkgdesc="A utility providing key negotiation for WPA wireless networks"
 arch=('x86_64')
 url="https://w1.fi/wpa_supplicant/"
 license=('KZL')
-depends=(libnl openssl)
+depends=(
+  libnl
+  openssl
+)
 # source=(https://w1.fi/releases/$pkgname-$pkgver.tar.gz{,.asc}
 #         defconfig)
 # validpgpkeys=('EC4AA0A991A5F2464582D52D2B6EF432EFC895FA')
@@ -33,7 +36,7 @@ build() {
   cd hostap/$pkgname
 
   make LIBDIR="/usr/lib" INCDIR="/usr/include" BINDIR="/usr/sbin" V=1
-  make LIBDIR="/usr/lib" INCDIR="/usr/include" BINDIR="/usr/sbin" V=1 eapol_test 
+  make LIBDIR="/usr/lib" INCDIR="/usr/include" BINDIR="/usr/sbin" V=1 eapol_test
 }
 
 package() {

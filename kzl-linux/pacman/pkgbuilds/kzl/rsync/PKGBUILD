@@ -8,9 +8,16 @@ pkgdesc="'A fast and versatile file copying tool for remote and local files"
 arch=('x86_64')
 url="https://rsync.samba.org/"
 license=('KZL')
-depends=(acl openssl popt xxhash)
-backup=(etc/rsyncd.conf
-        etc/xinetd.d/rsync)
+depends=(
+  acl
+  openssl
+  popt
+  xxhash
+)
+backup=(
+  etc/rsyncd.conf
+  etc/xinetd.d/rsync
+)
 source=(git+https://github.com/WayneD/rsync#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -35,7 +42,7 @@ check() {
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 
   install -Dm0644 stunnel-rsyncd.conf "$pkgdir"/etc/stunnel-rsyncd.conf
 

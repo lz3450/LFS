@@ -1,0 +1,11 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: liblmdb
+Description: An extraordinarily fast, memory-efficient database
+URL: https://www.symas.com/lmdb
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -llmdb
+Cflags: -I${includedir}
