@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=lmdb
-pkgver=0.9.31
-pkgrel=3
+pkgver=0.9.33
+pkgrel=1
 epoch=
 pkgdesc="An extraordinarily fast, memory-efficient database"
 arch=('x86_64')
@@ -12,8 +12,8 @@ source=(
   git+https://git.openldap.org/openldap/openldap.git#tag=LMDB_$pkgver
   lmdb.pc.in
 )
-sha256sums=('SKIP'
-            'ec9d026f29553bdd9176ce30b2d082349e7a1d03e9e705ff6b45cdfc63a77280')
+sha256sums=('6da8f33ec1d5b929328a9a62fb3a1c7275c98d7a6fc33c844f385bca61f1f606'
+            '67ab53b1325ce6ece23fbf4e14f078a3b2e32b3070956745d7f9be033b6cd1bd')
 
 build() {
   cd openldap/libraries/liblmdb

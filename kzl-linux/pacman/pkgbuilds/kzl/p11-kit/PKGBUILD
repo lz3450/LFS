@@ -23,7 +23,7 @@ prepare() {
 
   meson setup \
     --prefix /usr \
-    --auto-features enabled \
+    --auto-features disabled \
     --buildtype plain \
     -D bash_completion=enabled \
     -D libffi=enabled \

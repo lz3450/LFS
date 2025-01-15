@@ -12,7 +12,6 @@ depends=(
   audit
   gdbm
   glibc
-  libtirpc
   libxcrypt
   openssl
   pam-config
@@ -25,7 +24,7 @@ prepare() {
 
   meson setup \
     --prefix /usr \
-    --auto-features enabled \
+    --auto-features disabled \
     --buildtype plain \
     -D b_lto=true \
     -D b_pie=true \

@@ -6,7 +6,7 @@ Main project options:
   
   Core options                   Current Value                    Possible Values                  Description                                                  
   --------------                 -------------                    ---------------                  -----------                                                  
-  auto_features                  enabled                          [enabled, disabled, auto]        Override value of all 'auto' features                        
+  auto_features                  auto                             [enabled, disabled, auto]        Override value of all 'auto' features                        
   backend                        ninja                            [ninja, vs, vs2010, vs2012,      Backend to use                                               
                                                                    vs2013, vs2015, vs2017, vs2019,                                                              
                                                                    vs2022, xcode, none]                                                                         
@@ -94,7 +94,7 @@ Main project options:
   Project options                Current Value                    Possible Values                  Description                                                  
   -----------------              -------------                    ---------------                  -----------                                                  
   audit                          enabled                          [enabled, disabled, auto]        audit support                                                
-  db                             auto                             [db, gdbm, ndbm, auto]           db                                                           
+  db                             gdbm                             [db, gdbm, ndbm, auto]           db                                                           
   db-uniquename                                                                                    Unique name for db libraries and functions                   
   docbook-rng                    http://docbook.org/xml/5.0/rng/d                                  RNG file for checking XML files                              
                                  ocbookxi.rng                                                                                                                   
@@ -106,21 +106,21 @@ Main project options:
                                  elease/xsl-                                                                                                                    
                                  ns/current/html/chunk.xsl                                                                                                      
   htmldir                                                                                          HTML documentation directory                                 
-  i18n                           enabled                          [enabled, disabled, auto]        i18n support                                                 
+  i18n                           auto                             [enabled, disabled, auto]        i18n support                                                 
   isadir                                                                                           Arch-specific PAM modules directory, relative to SECUREDIR   
   kernel-overflow-uid            65534                                                             Linux kernel overflow uid                                    
   lckpwdf                        true                             [true, false]                    Use lckpwdf function in pam_unix                             
-  logind                         enabled                          [enabled, disabled, auto]        logind support in pam_issue and pam_timestamp                
+  logind                         disabled                         [enabled, disabled, auto]        logind support in pam_issue and pam_timestamp                
   mailspool                                                                                        Mail spool directory                                         
   man-stylesheet                 http://docbook.sourceforge.net/r                                  man stylesheet path                                          
                                  elease/xsl-                                                                                                                    
                                  ns/current/manpages/profile-                                                                                                   
                                  docbook.xsl                                                                                                                    
   misc-conv-bufsize              4096                                                              Size of input buffer for misc_conv() conversation function   
-  nis                            enabled                          [enabled, disabled, auto]        NIS/YP support in pam_unix                                   
-  openssl                        disabled                         [enabled, disabled, auto]        Use OpenSSL crypto libraries in pam_timestamp                
+  nis                            disabled                         [enabled, disabled, auto]        NIS/YP support in pam_unix                                   
+  openssl                        enabled                          [enabled, disabled, auto]        Use OpenSSL crypto libraries in pam_timestamp                
   pam-debug                      false                            [true, false]                    Save debugging information into pam-debug.log                
-  pam_lastlog                    disabled                         [enabled, disabled, auto]        pam_lastlog module                                           
+  pam_lastlog                    enabled                          [enabled, disabled, auto]        pam_lastlog module                                           
   pam_unix                       enabled                          [enabled, disabled, auto]        pam_unix module                                              
   pam_userdb                     enabled                          [enabled, disabled, auto]        pam_userdb module                                            
   pamlocking                     false                            [true, false]                    Observe a global authentication lock                         

@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=krb5
-pkgver=1.21.1
-pkgrel=3
+pkgver=1.21.3
+pkgrel=1
 epoch=
 pkgdesc="The Kerberos network authentication protocol"
 arch=('x86_64')
@@ -19,8 +19,9 @@ backup=(
   etc/krb5.conf
   var/krb5kdc/kdc.conf
 )
+options=(!lto)
 source=(git+https://github.com/krb5/krb5.git#tag=$pkgname-$pkgver-final)
-sha256sums=('SKIP')
+sha256sums=('8b17d1c874b49d36fd59c99c00b930d350ff1af03d4a74561faf46c75e6d9960')
 
 prepare() {
   cd $pkgname/src
@@ -34,6 +35,8 @@ build() {
   # https://web.mit.edu/kerberos/krb5-latest/doc/build/options2configure.html
   ./configure \
     --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var/lib \
     --enable-dns-for-realm \
     --disable-rpath \
     --with-system-et \
@@ -48,7 +51,7 @@ build() {
 package() {
   cd $pkgname/src
 
-  make DESTDIR="$pkgdir" EXAMPLEDIR=/usr/share/doc/$pkgname/examples install
+  make DESTDIR="$pkgdir" EXAMPLEDIR="/usr/share/doc/$pkgname/examples" install
 
   install -Dpm644 config-files/krb5.conf -t "$pkgdir"/etc/$pkgname/
   install -Dpm644 config-files/kdc.conf -t "$pkgdir"/var/$pkgname/krb5kdc/

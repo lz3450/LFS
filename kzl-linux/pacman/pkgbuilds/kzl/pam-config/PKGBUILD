@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pam-config
-pkgver=2024.01.19
-pkgrel=3
+pkgver=2025.01.15
+pkgrel=1
 epoch=
 pkgdesc="PAM configuration"
 arch=('x86_64')
@@ -13,15 +13,11 @@ backup=(
   etc/pam.d/other
 )
 source=(
-  system-auth
+  system-common
   other
 )
-sha256sums=('e3940fa4e2da40930888a106f40d3bb2c718e4de8691d27bad8ea471910d782f'
-            '9c557c45af5fe16d4dda499e273a6563dd5ebabc6a8a1115c7ae5a40d5fc8293')
-
-pkgver() {
-  date +%Y.%m.%d
-}
+sha256sums=('5708b7615b45b87ef358c83d8278bb6933a2cb7466abc8d39fdff5de51ba3a4b'
+            '543aca8b2e4dcd185bbade235d9d737699e59f6d75372c5ec74fd950c1494fd2')
 
 package() {
   install -dm755 "$pkgdir"/etc/pam.d/

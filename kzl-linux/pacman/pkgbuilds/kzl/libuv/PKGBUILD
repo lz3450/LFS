@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libuv
-pkgver=1.46.0
-pkgrel=5
+pkgver=1.50.0
+pkgrel=1
 epoch=
 pkgdesc="A multi-platform support library with a focus on asynchronous I/O"
 arch=('x86_64')
@@ -14,26 +14,55 @@ sha256sums=('SKIP')
 prepare() {
   cd $pkgname
 
-	./autogen.sh
+  cmake -LAH -S . -B build \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib \
+    -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS"
 }
 
 build() {
   cd $pkgname
 
-  ./configure \
-    --prefix=/usr
-
-  make
+  cmake --build build
 }
 
 check() {
   cd $pkgname
 
-  make check
+  cmake --build build --target tests
 }
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir" install
+  DESTDIR="$pkgdir" cmake --build build --target install
 }
+
+# prepare() {
+#   cd $pkgname
+
+# 	./autogen.sh
+# }
+
+# build() {
+#   cd $pkgname
+
+#   ./configure \
+#     --prefix=/usr
+
+#   make
+# }
+
+# check() {
+#   cd $pkgname
+
+#   make check
+# }
+
+# package() {
+#   cd $pkgname
+
+#   make DESTDIR="$pkgdir" install
+# }

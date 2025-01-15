@@ -1,15 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libedit
-pkgver=20221030.3.1
-pkgrel=10
+pkgver=20250104.3.1
+pkgrel=1
 epoch=
 pkgdesc="Command line editor library providing generic line editing, history, and tokenization functions"
 arch=('x86_64')
 url="https://thrysoee.dk/editline/"
 license=('KZL')
 source=(https://thrysoee.dk/editline/$pkgname-${pkgver/./-}.tar.gz)
-sha256sums=('f0925a5adf4b1bf116ee19766b7daa766917aec198747943b1c4edf67a4be2bb')
+sha256sums=('23792701694550a53720630cd1cd6167101b5773adddcb4104f7345b73a568ac')
 
 build() {
   cd $pkgname-${pkgver/./-}
@@ -30,6 +30,4 @@ package() {
   cd $pkgname-${pkgver/./-}
 
   make DESTDIR="$pkgdir" install
-
-  rm "$pkgdir"/usr/share/man/man3/history.3
 }

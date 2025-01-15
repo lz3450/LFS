@@ -11,7 +11,7 @@ license=('KZL')
 backup=(etc/pki/tls/openssl.cnf)
 options=(!lto)
 source=(git+https://github.com/openssl/openssl.git#tag=$pkgname-$pkgver)
-sha256sums=('cb272891185e7b40f5d27a5a5cac9836ed9dbf556bf907ce1f9171601dfc5e16')
+sha256sums=('SKIP')
 
 _openssldir="/etc/pki/tls"
 

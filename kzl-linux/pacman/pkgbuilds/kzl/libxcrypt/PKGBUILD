@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libxcrypt
-pkgver=4.4.37
-pkgrel=4
+pkgver=4.4.38
+pkgrel=1
 epoch=
 pkgdesc="Modern library for one-way hashing of passwords"
 arch=('x86_64')
@@ -12,7 +12,7 @@ makedepends=(
   libtool
 )
 source=(git+https://github.com/besser82/libxcrypt.git#tag=v$pkgver)
-sha256sums=('f5f40a26ac1c1ae405646cb07524d02d3c0f7dfadefee26828e822ecab1721c7')
+sha256sums=('5a6de185e18ef6c615bf98233022220c7723ec52e47abd8f35e9e6561e5e45f9')
 
 prepare() {
   cd $pkgname

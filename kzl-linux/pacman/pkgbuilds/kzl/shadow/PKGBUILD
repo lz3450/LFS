@@ -1,22 +1,26 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=shadow
-pkgver=4.13
-pkgrel=2
+pkgver=4.17.2
+pkgrel=1
 epoch=
 pkgdesc="Programs for converting UNIX password files to the shadow password format, plus programs for managing user and group accounts"
 arch=('x86_64')
 url="https://github.com/shadow-maint/shadow"
 depends=(acl attr audit glibc libxcrypt pam)
-backup=(etc/default/useradd
-        etc/login.defs
-        etc/pam.d/{chage,chfn,chgpasswd,chpasswd,chsh,groupadd,groupdel,groupmems,groupmod,login,newusers,passwd,useradd,userdel,usermod})
-source=(git+https://github.com/shadow-maint/shadow.git#tag=$pkgver
-        useradd.defaults
-        login.pam
-        chfn-chsh.pam
-        shadow.{service,timer})
-sha256sums=('SKIP'
+backup=(
+  etc/default/useradd
+  etc/login.defs
+  etc/pam.d/{chage,chfn,chgpasswd,chpasswd,chsh,groupadd,groupdel,groupmems,groupmod,login,newusers,passwd,useradd,userdel,usermod}
+)
+source=(
+  git+https://github.com/shadow-maint/shadow.git#tag=$pkgver
+  useradd.defaults
+  login.pam
+  chfn-chsh.pam
+  shadow.{service,timer}
+)
+sha256sums=('f6207dfdd35a468269fdeb62ff746cad0ce8a661a7be62573718c7fbe89dd495'
             'bc9fef974321e399fb47c229a82e37d81a8f39424082ef8e4915d0dbee9ff7c2'
             '2ad75ea2dd54bec8e4dd113bc6a0ac6232213f686c0575aa6e0afe2982177075'
             '189489175f8344806caec4103e85e2d7b5dedb5b8eff61d9c800086981cf6cc4'

@@ -15,8 +15,8 @@ build() {
   cd $pkgname
 
   make \
-    CFLAGS="$CFLAGS" \
-    CXXFLAGS="$CXXFLAGS" \
+    CFLAGS="$CFLAGS $CPPFLAGS" \
+    CXXFLAGS="$CXXFLAGS $CPPFLAGS" \
     LDFLAGS="$LDFLAGS" \
     BINDIR="/usr/bin" \
     SBINDIR="/usr/sbin" \
