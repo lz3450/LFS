@@ -10,7 +10,7 @@
 # if stage0 build fails, try to build makedepends first
 kzl_stage0_pkgs=(
     ################################
-    # base-devel
+    # base-devel (partial)
     ################################
     make
     pkgconf
@@ -73,43 +73,74 @@ kzl_stage1_pkgs=(
 
 kzl_stage2_pkgs=(
     ################################
-    # base
-    ################################
-
-    ################
     # filesystem
-    ################
+    ################################
     iana-etc filesystem
 
-    ################
+    ################################
     # full toolchain
-    ################
+    ################################
     "${_full_toolchain[@]}"
 
-    ################
+    ################################
     # bash
-    ################
-    ncurses readline bash-completion bash
+    ################################
+    ncurses
+    readline
+    bash-completion
+    bash
 
-    ################
+    ################################
     # ca-certificates
-    ################
-    libtasn1 libffi p11-kit ca-certificates
+    ################################
+    libtasn1 libffi p11-kit
+    ca-certificates
 
-    ################
+    ################################
     # shadow
-    ################
+    ################################
     ### audit
-    pcre2 swig libcap-ng audit
+    pcre2 swig libcap-ng
+    audit
     ### pam
-    gdbm libxcrypt openssl pam-config pam
+    gdbm
+    libxcrypt
+    openssl
+    pam-config
+    pam
     ### shadow
-    attr acl shadow
+    attr acl
+    shadow
+
+    ################################
+    # perl
+    ################################
+    perl
 
     ################
-    # perl
+    # curl
     ################
-    perl
+    libunistring libidn2
+    libpsl
+    libssh2
+    nghttp2
+    curl
+
+    ################################
+    # base-devel
+    ################################
+    make
+    pkgconf
+    m4 autoconf
+    automake
+    texinfo
+    diffutils
+    bison
+    flex
+    ed patch
+    bc
+    ###
+    cmake
 
     # ################
     # # gettext
