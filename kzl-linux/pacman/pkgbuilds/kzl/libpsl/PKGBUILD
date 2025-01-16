@@ -1,34 +1,37 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libpsl
-pkgver=0.21.2
-pkgrel=13
+pkgver=0.21.5
+pkgrel=1
 epoch=
 pkgdesc="C library to handle the Public Suffix List"
 arch=('x86_64')
 url="https://github.com/rockdaboot/libpsl"
-depends=(libidn2)
-makedepends=(libxslt)
+depends=(
+  libidn2
+)
 source=(git+$url.git#tag=$pkgver)
-sha256sums=('SKIP')
+sha256sums=('d2f564ed0b45737054bfadf285436310f50f102d7a437091abd6b3e378f4bf08')
 
 prepare() {
   cd $pkgname
 
   git submodule update --init
-}
-
-build() {
-  cd $pkgname
 
   meson setup \
     --prefix /usr \
-    --auto-features enabled \
-    --optimization 2 \
+    --auto-features disabled \
+    --buildtype plain \
+    -D b_lto=true \
+    -D b_pie=true \
     -D builtin=true \
     -D docs=false \
     -D runtime=libidn2 \
     build
+}
+
+build() {
+  cd $pkgname
 
   meson compile -C build
 }
@@ -36,7 +39,7 @@ build() {
 check() {
   cd $pkgname
 
-  meson test -C build
+  meson test -C build --print-errorlogs
 }
 
 package() {

@@ -10,10 +10,10 @@ Main project options:
   backend                        ninja                            [ninja, vs, vs2010, vs2012,      Backend to use                                               
                                                                    vs2013, vs2015, vs2017, vs2019,                                                              
                                                                    vs2022, xcode, none]                                                                         
-  buildtype                      debug                            [plain, debug, debugoptimized,   Build type to use                                            
+  buildtype                      plain                            [plain, debug, debugoptimized,   Build type to use                                            
                                                                    release, minsize, custom]                                                                    
   cmake_prefix_path              []                               []                               List of additional prefixes for cmake to search              
-  debug                          true                             [true, false]                    Enable debug symbols and other information                   
+  debug                          false                            [true, false]                    Enable debug symbols and other information                   
   default_both_libraries         shared                           [shared, static, auto]           Default library type for both_libraries                      
   default_library                shared                           [shared, static, both]           Default library type                                         
   force_fallback_for             []                               []                               Force fallback for those subprojects                         
@@ -23,7 +23,7 @@ Main project options:
                                                                                                    them                                                         
   install_umask                  0022                             [preserve, 0000-0777]            Default umask to apply on permissions of installed files     
   layout                         mirror                           [mirror, flat]                   Build directory layout                                       
-  optimization                   2                                [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
+  optimization                   plain                            [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
   pkg_config_path                []                               []                               List of additional paths for pkg-config to search            
   prefer_static                  false                            [true, false]                    Whether to try static linking before shared linking          
   strip                          false                            [true, false]                    Strip targets on install                                     
@@ -62,8 +62,8 @@ Main project options:
   c_args                         []                               []                               Extra arguments passed to the c compiler                     
   c_link_args                    []                               []                               Extra arguments passed to the c linker                       
   c_std                          gnu99                            [none, c89, c99, c11, c17, c18,  C language standard to use                                   
-                                                                   c2x, gnu89, gnu99, gnu11,                                                                    
-                                                                   gnu17, gnu18, gnu2x]                                                                         
+                                                                   c2x, c23, gnu89, gnu99, gnu11,                                                               
+                                                                   gnu17, gnu18, gnu2x, gnu23]                                                                  
   
   pkgconfig module options       Current Value                    Possible Values                  Description                                                  
   --------------------------     -------------                    ---------------                  -----------                                                  
@@ -120,8 +120,3 @@ Main project options:
   scriptlet-shell                /usr/bin/bash                                                     The full path of the shell used to run install scriptlets    
   src-ext                        .src.tar.zst                                                      set the file extension used by source packages               
   use-git-version                false                            [true, false]                    take version information from git                            
-
-The following option(s) have a different value than the build type default
-
-               current   default
-optimization         2         0         

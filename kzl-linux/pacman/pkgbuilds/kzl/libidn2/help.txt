@@ -1,4 +1,4 @@
-`configure' configures Libidn2 2.3.4 to adapt to many kinds of systems.
+'configure' configures Libidn2 2.3.7 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -12,11 +12,11 @@ Configuration:
       --help=short        display options specific to this package
       --help=recursive    display the short help of all the included packages
   -V, --version           display version information and exit
-  -q, --quiet, --silent   do not print `checking ...' messages
+  -q, --quiet, --silent   do not print 'checking ...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
-  -C, --config-cache      alias for `--cache-file=config.cache'
+  -C, --config-cache      alias for '--cache-file=config.cache'
   -n, --no-create         do not create output files
-      --srcdir=DIR        find the sources in DIR [configure dir or `..']
+      --srcdir=DIR        find the sources in DIR [configure dir or '..']
 
 Installation directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
@@ -24,10 +24,10 @@ Installation directories:
   --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
                           [PREFIX]
 
-By default, `make install' will install all the files in
-`/usr/local/bin', `/usr/local/lib' etc.  You can specify
-an installation prefix other than `/usr/local' using `--prefix',
-for instance `--prefix=$HOME'.
+By default, 'make install' will install all the files in
+'/usr/local/bin', '/usr/local/lib' etc.  You can specify
+an installation prefix other than '/usr/local' using '--prefix',
+for instance '--prefix=$HOME'.
 
 For better control, use the options below.
 
@@ -73,7 +73,6 @@ Optional Features:
   --disable-dependency-tracking
                           speeds up one-time build
   --disable-largefile     omit support for large files
-  --disable-year2038      omit support for timestamps past the year 2038
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -92,8 +91,14 @@ Optional Features:
   --enable-gtk-doc-pdf    build documentation in pdf format [[default=no]]
   --disable-nls           do not use Native Language Support
   --enable-code-coverage  Whether to enable code coverage support
-  --enable-gcc-warnings   turn on lots of GCC warnings (for developers)
+  --enable-gcc-warnings[=TYPE]
+                          control generation of GCC warnings. The TYPE 'no'
+                          disables warnings; 'yes' (default) generates cheap
+                          warnings; 'expensive' in addition generates
+                          expensive warnings and 'error' also turn warnings
+                          into errors.
   --disable-doc           don't generate any documentation
+  --enable-year2038       support timestamps after 2038
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -140,7 +145,7 @@ Some influential environment variables:
   GTKDOC_DEPS_LIBS
               linker flags for GTKDOC_DEPS, overriding pkg-config
 
-Use these variables to override the choices made by `configure' or to help
+Use these variables to override the choices made by 'configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <help-libidn@gnu.org>.

@@ -1,39 +1,68 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libssh2
-pkgver=1.11.0
-pkgrel=4
+pkgver=1.11.1
+pkgrel=1
 epoch=
 pkgdesc="A library implementing the SSH2 protocol as defined by Internet Drafts"
 arch=('x86_64')
 url="https://www.libssh2.org"
 license=('KZL')
 source=(git+https://github.com/libssh2/libssh2.git#tag=$pkgname-$pkgver)
-sha256sums=('SKIP')
+sha256sums=('3e5321d9cb1b66425325f982a34ad21f75f40bb8d5c09ada1462723de0faeb7d')
 
 prepare() {
   cd $pkgname
 
-  autoreconf -vfi
+  cmake -LAH -S . -B build \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib \
+    -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS"
 }
 
 build() {
   cd $pkgname
 
-  ./configure \
-    --prefix=/usr
-
-  make
+  cmake --build build
 }
 
 check() {
   cd $pkgname
 
-  make check
+  cmake --build build --target tests
 }
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir" install
+  DESTDIR="$pkgdir" cmake --build build --target install
 }
+
+# prepare() {
+#   cd $pkgname
+
+#   autoreconf -vfi
+# }
+
+# build() {
+#   cd $pkgname
+
+#   ./configure \
+#     --prefix=/usr
+
+#   make
+# }
+
+# check() {
+#   cd $pkgname
+
+#   make check
+# }
+
+# package() {
+#   cd $pkgname
+
+#   make DESTDIR="$pkgdir" install
+# }

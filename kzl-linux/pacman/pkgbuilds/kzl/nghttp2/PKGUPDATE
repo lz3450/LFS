@@ -1,6 +1,8 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://nghttp2.org/ | grep -oP '(?<=Nghttp2 v)\d\.\d\d\.\d' | head -n1)
+# new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://nghttp2.org/ | grep -oP '(?<=Nghttp2 v)\d+\.\d+\.\d+' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://github.com/nghttp2/nghttp2.git | grep -oP '(?<=refs/tags/v)\d+\.\d+\.\d+' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
+    # ./configure --help >"$PKGBUILDDIR"/help.txt
 }

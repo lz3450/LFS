@@ -1,6 +1,8 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.libssh2.org/ | grep -Po '(?<=libssh2-)\d\.\d\d\.\d' | head -1)
+# new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.libssh2.org/ | grep -Po '(?<=libssh2-)\d+\.\d+\.\d+' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://github.com/libssh2/libssh2.git | grep -oP '(?<=refs/tags/libssh2-)\d+\.\d+\.\d+' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    # ./configure --help >"$PKGBUILDDIR"/help.txt
+    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
 }

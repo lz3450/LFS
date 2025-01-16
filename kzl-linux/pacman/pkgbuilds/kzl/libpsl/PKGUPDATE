@@ -2,5 +2,5 @@ new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://github.com/rockdaboot/
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    meson configure > "$PKGBUILDDIR"/help.txt
+    meson configure build >"$PKGBUILDDIR"/help.txt
 }
