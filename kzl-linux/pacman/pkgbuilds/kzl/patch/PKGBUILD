@@ -9,7 +9,9 @@ arch=('x86_64')
 url="https://www.gnu.org/software/patch/"
 license=('KZL')
 groups=(base-devel)
-depends=(ed)
+depends=(
+  ed
+)
 makedepends=(
   autoconf
   automake

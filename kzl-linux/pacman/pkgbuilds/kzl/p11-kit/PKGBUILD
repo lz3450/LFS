@@ -9,11 +9,11 @@ arch=('x86_64')
 url="https://p11-glue.freedesktop.org"
 license=('KZL')
 depends=(
+  libffi
   libtasn1
 )
 makedepends=(
   bash-completion
-  libffi
 )
 source=(git+https://github.com/p11-glue/p11-kit.git#tag=$pkgver)
 sha256sums=('930b25ef02695046604eab4641626b4fde082157d1baf581f0e5e3732e89de1e')

@@ -2,5 +2,6 @@ new_version=$(git ls-remote --tags https://gitlab.gnome.org/GNOME/libxml2.git | 
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
+    # ./configure --help >"$PKGBUILDDIR"/help.txt
 }

@@ -8,19 +8,29 @@ pkgdesc="A high-quality data compression program"
 arch=('x86_64')
 url="https://sourceware.org/bzip2/index.html"
 license=('KZL')
-depends=(glibc)
-source=(git://sourceware.org/git/bzip2.git#tag=$pkgname-$pkgver
-        $pkgname.pc)
+source=(
+  git+git://sourceware.org/git/bzip2.git#tag=$pkgname-$pkgver
+  $pkgname.pc.in
+)
 sha256sums=('a720711f84adceed2729cd23142537613fac924bf70ca58ef8bd7d28df6b7079'
-            'eca9d8cd6376df1fb5442667c603032023fb21d8d183684550da0b96ade39654')
+            'c70901e311f37c4d33797204ae8ff92c998abb279dea5f6d9c02226f8d1a3b8d')
 
 prepare() {
   cd $pkgname
 
-  sed -i 's/$(PREFIX)\/man/$(PREFIX)\/share\/man/g' Makefile
+  sed -i \
+    -e "s/^CFLAGS=/CFLAGS=$CFLAGS $CPPFLAGS /" \
+    -e '/^CFLAGS=/s/ -g//' \
+    -e 's/$(PREFIX)\/man/$(PREFIX)\/share\/man/g' \
+    -e 's|ln -s -f $(PREFIX)/bin/bzgrep|ln -s -f bzgrep|g' \
+    -e 's|ln -s -f $(PREFIX)/bin/bzmore|ln -s -f bzgrep|g' \
+    -e 's|ln -s -f $(PREFIX)/bin/bzdiff|ln -s -f bzgrep|g' \
+    Makefile
 
-  cp "$srcdir"/bzip2.pc bzip2.pc
-  sed "s|@VERSION@|$pkgver|" -i bzip2.pc
+  sed -i \
+    -e "s/^CFLAGS=/CFLAGS=$CFLAGS $CPPFLAGS $LDFLAGS /" \
+    -e '/^CFLAGS=/s/ -g//' \
+    Makefile-libbz2_so
 }
 
 build() {
@@ -35,10 +45,11 @@ package() {
 
   make PREFIX="$pkgdir/usr" install
 
-  cp -f libbz2.so.$pkgver "$pkgdir"/usr/lib
+  install -Dm755 libbz2.so.$pkgver "$pkgdir"/usr/lib
   ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so.${pkgver%.*}
   ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so.${pkgver%%.*}
   ln -s libbz2.so.$pkgver "$pkgdir"/usr/lib/libbz2.so
 
-  install -Dm644 bzip2.pc -t "$pkgdir"/usr/lib/pkgconfig
+  install -Dm644 "$srcdir"/$pkgname.pc.in "$pkgdir"/usr/lib/pkgconfig/$pkgname.pc
+  sed -i -e "s|@VERSION@|$pkgver|" "$pkgdir"/usr/lib/pkgconfig/$pkgname.pc
 }

@@ -7,7 +7,9 @@ epoch=
 pkgdesc="CA certificates"
 arch=('any')
 license=('KZL')
-depends=(p11-kit)
+depends=(
+  p11-kit
+)
 source=(
   https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/certdata.txt
   https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h

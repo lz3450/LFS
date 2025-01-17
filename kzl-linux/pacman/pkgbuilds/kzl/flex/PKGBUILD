@@ -9,7 +9,9 @@ arch=('x86_64')
 url="https://github.com/westes/flex"
 license=('KZL')
 groups=(base-devel)
-depends=(m4)
+depends=(
+  m4
+)
 makedepends=(
   autoconf
   automake

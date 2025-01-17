@@ -34,7 +34,7 @@ CMAKE_BUILD_TYPE:STRING=Release
 CMAKE_COLOR_MAKEFILE:BOOL=ON
 
 //No help, variable specified on the command line.
-CMAKE_CXX_FLAGS:UNINITIALIZED=-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS
+CMAKE_CXX_FLAGS:UNINITIALIZED=-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm
 
 //C compiler
 CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
@@ -48,7 +48,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 //Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2
+CMAKE_C_FLAGS:STRING=-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm
 
 //Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g

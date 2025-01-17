@@ -11,7 +11,9 @@ license=('KZL')
 depends=(
   openssl
 )
-backup=(etc/rhashrc)
+backup=(
+  etc/rhashrc
+)
 source=(git+https://github.com/rhash/RHash.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

@@ -8,7 +8,9 @@ pkgdesc="A mature, widely used set of C/C++ and Java libraries providing Unicode
 arch=('x86_64')
 url="http://site.icu-project.org/home"
 license=('KZL')
-source=(git+https://github.com/unicode-org/icu.git#tag=release-${pkgver/./-})
+source=(
+  git+https://github.com/unicode-org/icu.git#tag=release-${pkgver/./-}
+)
 sha256sums=('7f53482f1388ca6a4208fa259e767fd600d172ff6a12ab37a33d41f943d4d9fc')
 
 build() {
@@ -16,6 +18,8 @@ build() {
 
   ./configure \
     --prefix=/usr \
+    --enable-samples=no \
+    --with-data-packaging=library
 
   make
 }

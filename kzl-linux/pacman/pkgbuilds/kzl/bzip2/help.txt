@@ -21,7 +21,7 @@ RANLIB=ranlib
 LDFLAGS=
 
 BIGFILES=-D_FILE_OFFSET_BITS=64
-CFLAGS=-Wall -Winline -O2 -g $(BIGFILES)
+CFLAGS=-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm  -Wall -Winline -O2 $(BIGFILES)
 
 # Where you want it installed when you do 'make install'
 PREFIX=/usr/local
@@ -90,14 +90,14 @@ install: bzip2 bzip2recover
 	cp -f libbz2.a $(PREFIX)/lib
 	chmod a+r $(PREFIX)/lib/libbz2.a
 	cp -f bzgrep $(PREFIX)/bin/bzgrep
-	ln -s -f $(PREFIX)/bin/bzgrep $(PREFIX)/bin/bzegrep
-	ln -s -f $(PREFIX)/bin/bzgrep $(PREFIX)/bin/bzfgrep
+	ln -s -f bzgrep $(PREFIX)/bin/bzegrep
+	ln -s -f bzgrep $(PREFIX)/bin/bzfgrep
 	chmod a+x $(PREFIX)/bin/bzgrep
 	cp -f bzmore $(PREFIX)/bin/bzmore
-	ln -s -f $(PREFIX)/bin/bzmore $(PREFIX)/bin/bzless
+	ln -s -f bzgrep $(PREFIX)/bin/bzless
 	chmod a+x $(PREFIX)/bin/bzmore
 	cp -f bzdiff $(PREFIX)/bin/bzdiff
-	ln -s -f $(PREFIX)/bin/bzdiff $(PREFIX)/bin/bzcmp
+	ln -s -f bzgrep $(PREFIX)/bin/bzcmp
 	chmod a+x $(PREFIX)/bin/bzdiff
 	cp -f bzgrep.1 bzmore.1 bzdiff.1 $(PREFIX)/share/man/man1
 	chmod a+r $(PREFIX)/share/man/man1/bzgrep.1

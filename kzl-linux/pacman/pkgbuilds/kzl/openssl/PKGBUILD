@@ -8,7 +8,9 @@ pkgdesc="A Open Source Toolkit for the Transport Layer Security (TLS) protocol f
 arch=('x86_64')
 url="https://www.openssl.org"
 license=('KZL')
-backup=(etc/pki/tls/openssl.cnf)
+backup=(
+  etc/pki/tls/openssl.cnf
+)
 options=(!lto)
 source=(git+https://github.com/openssl/openssl.git#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')

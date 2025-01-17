@@ -3,4 +3,5 @@ new_version=$(git ls-remote --tags git://sourceware.org/git/bzip2.git | grep -oP
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     cp Makefile "$PKGBUILDDIR"/help.txt
+    cp Makefile-libbz2_so "$PKGBUILDDIR"/help-libbz2.txt
 }

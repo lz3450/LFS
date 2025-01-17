@@ -25,6 +25,7 @@ makedepends=(
   # qt6
 )
 # optdepends=("qt6: Qt-based GUI")
+options=(!lto)
 source=(git+https://github.com/Kitware/CMake.git#tag=v$pkgver)
 sha256sums=('SKIP')
 

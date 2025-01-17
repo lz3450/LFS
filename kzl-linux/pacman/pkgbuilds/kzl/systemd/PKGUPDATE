@@ -2,5 +2,5 @@ new_version=$(git ls-remote --tags https://github.com/systemd/systemd-stable.git
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname-stable"
-    meson configure > "$PKGBUILDDIR"/help.txt
+    meson configure build > "$PKGBUILDDIR"/help.txt
 }

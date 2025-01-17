@@ -46,7 +46,7 @@ CMAKE_BUILD_TYPE:STRING=Release
 CMAKE_COLOR_MAKEFILE:BOOL=ON
 
 //No help, variable specified on the command line.
-CMAKE_CXX_FLAGS:UNINITIALIZED=-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS
+CMAKE_CXX_FLAGS:UNINITIALIZED=-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm
 
 //C compiler
 CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
@@ -60,7 +60,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 //Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2
+CMAKE_C_FLAGS:STRING=-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm
 
 //Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -97,6 +97,9 @@ CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
 
 //Value Computed by CMake.
 CMAKE_FIND_PACKAGE_REDIRECTS_DIR:STATIC=/home/kzl/makepkg/build/libarchive/src/libarchive/build/CMakeFiles/pkgRedirects
+
+//No help, variable specified on the command line.
+CMAKE_INSTALL_LIBDIR:UNINITIALIZED=lib
 
 //Install path prefix, prepended onto install directories.
 CMAKE_INSTALL_PREFIX:PATH=/usr
@@ -513,7 +516,7 @@ CMAKE_CACHE_MAJOR_VERSION:INTERNAL=3
 //Minor version of cmake used to create the current loaded cache
 CMAKE_CACHE_MINOR_VERSION:INTERNAL=31
 //Patch version of cmake used to create the current loaded cache
-CMAKE_CACHE_PATCH_VERSION:INTERNAL=3
+CMAKE_CACHE_PATCH_VERSION:INTERNAL=4
 //ADVANCED property for variable: CMAKE_COLOR_MAKEFILE
 CMAKE_COLOR_MAKEFILE-ADVANCED:INTERNAL=1
 //Path to CMake executable.
@@ -652,13 +655,13 @@ FIND_PACKAGE_MESSAGE_DETAILS_BZip2:INTERNAL=[/usr/lib/libbz2.so][/usr/include][v
 //Details about finding LZ4
 FIND_PACKAGE_MESSAGE_DETAILS_LZ4:INTERNAL=[/usr/lib/liblz4.so][/usr/include][v()]
 //Details about finding LibLZMA
-FIND_PACKAGE_MESSAGE_DETAILS_LibLZMA:INTERNAL=[/usr/lib/liblzma.so][/usr/include][1][1][1][v5.4.4()]
+FIND_PACKAGE_MESSAGE_DETAILS_LibLZMA:INTERNAL=[/usr/lib/liblzma.so][/usr/include][1][1][1][v5.6.3()]
 //Details about finding LibXml2
-FIND_PACKAGE_MESSAGE_DETAILS_LibXml2:INTERNAL=[/usr/lib/libxml2.so][/usr/include/libxml2][v2.11.5()]
+FIND_PACKAGE_MESSAGE_DETAILS_LibXml2:INTERNAL=[/usr/lib/libxml2.so][/usr/include/libxml2][v2.13.5()]
 //Details about finding OpenSSL
-FIND_PACKAGE_MESSAGE_DETAILS_OpenSSL:INTERNAL=[/usr/lib/libcrypto.so][/usr/include][c ][v3.1.0()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenSSL:INTERNAL=[/usr/lib/libcrypto.so][/usr/include][c ][v3.4.0()]
 //Details about finding ZLIB
-FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[/usr/lib/libz.so][/usr/include][c ][v1.2.13(1.2.1)]
+FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[/usr/lib/libz.so][/usr/include][c ][v1.3.1(1.2.1)]
 //Details about finding ZSTD
 FIND_PACKAGE_MESSAGE_DETAILS_ZSTD:INTERNAL=[/usr/lib/libzstd.so][/usr/include][v()]
 //CHECK_TYPE_SIZE: sizeof(gid_t)
@@ -1271,12 +1274,12 @@ OPENSSL_CRYPTO_LIBRARY-ADVANCED:INTERNAL=1
 OPENSSL_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENSSL_SSL_LIBRARY
 OPENSSL_SSL_LIBRARY-ADVANCED:INTERNAL=1
-PC_LIBXML_CFLAGS:INTERNAL=-I/usr/include/libxml2
+PC_LIBXML_CFLAGS:INTERNAL=-I/usr/include/libxml2;-I/usr/include
 PC_LIBXML_CFLAGS_I:INTERNAL=
 PC_LIBXML_CFLAGS_OTHER:INTERNAL=
 PC_LIBXML_FOUND:INTERNAL=1
 PC_LIBXML_INCLUDEDIR:INTERNAL=/usr/include
-PC_LIBXML_INCLUDE_DIRS:INTERNAL=/usr/include/libxml2
+PC_LIBXML_INCLUDE_DIRS:INTERNAL=/usr/include/libxml2;/usr/include
 PC_LIBXML_LDFLAGS:INTERNAL=-L/usr/lib;-lxml2
 PC_LIBXML_LDFLAGS_OTHER:INTERNAL=
 PC_LIBXML_LIBDIR:INTERNAL=/usr/lib
@@ -1288,20 +1291,20 @@ PC_LIBXML_LIBS_OTHER:INTERNAL=
 PC_LIBXML_LIBS_PATHS:INTERNAL=
 PC_LIBXML_MODULE_NAME:INTERNAL=libxml-2.0
 PC_LIBXML_PREFIX:INTERNAL=/usr
-PC_LIBXML_STATIC_CFLAGS:INTERNAL=-I/usr/include/libxml2
+PC_LIBXML_STATIC_CFLAGS:INTERNAL=-I/usr/include/libxml2;-I/usr/include
 PC_LIBXML_STATIC_CFLAGS_I:INTERNAL=
 PC_LIBXML_STATIC_CFLAGS_OTHER:INTERNAL=
-PC_LIBXML_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include/libxml2
-PC_LIBXML_STATIC_LDFLAGS:INTERNAL=-L/usr/lib;-lxml2;-lz;-llzma;-licui18n;-licuuc;-licudata;-lm
+PC_LIBXML_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include/libxml2;/usr/include
+PC_LIBXML_STATIC_LDFLAGS:INTERNAL=-L/usr/lib;-lxml2;-lm;-licui18n;-licuuc;-licudata;-lpthread;-lm
 PC_LIBXML_STATIC_LDFLAGS_OTHER:INTERNAL=
 PC_LIBXML_STATIC_LIBDIR:INTERNAL=
-PC_LIBXML_STATIC_LIBRARIES:INTERNAL=xml2;z;lzma;icui18n;icuuc;icudata;m
+PC_LIBXML_STATIC_LIBRARIES:INTERNAL=xml2;m;icui18n;icuuc;icudata;pthread;m
 PC_LIBXML_STATIC_LIBRARY_DIRS:INTERNAL=/usr/lib
 PC_LIBXML_STATIC_LIBS:INTERNAL=
 PC_LIBXML_STATIC_LIBS_L:INTERNAL=
 PC_LIBXML_STATIC_LIBS_OTHER:INTERNAL=
 PC_LIBXML_STATIC_LIBS_PATHS:INTERNAL=
-PC_LIBXML_VERSION:INTERNAL=2.11.5
+PC_LIBXML_VERSION:INTERNAL=2.13.5
 PC_LIBXML_libxml-2.0_INCLUDEDIR:INTERNAL=
 PC_LIBXML_libxml-2.0_LIBDIR:INTERNAL=
 PC_LIBXML_libxml-2.0_PREFIX:INTERNAL=
@@ -1336,7 +1339,7 @@ PC_ZSTD_STATIC_LIBS:INTERNAL=
 PC_ZSTD_STATIC_LIBS_L:INTERNAL=
 PC_ZSTD_STATIC_LIBS_OTHER:INTERNAL=
 PC_ZSTD_STATIC_LIBS_PATHS:INTERNAL=
-PC_ZSTD_VERSION:INTERNAL=1.5.5
+PC_ZSTD_VERSION:INTERNAL=1.5.6
 PC_ZSTD_libzstd_INCLUDEDIR:INTERNAL=
 PC_ZSTD_libzstd_LIBDIR:INTERNAL=
 PC_ZSTD_libzstd_PREFIX:INTERNAL=
@@ -1435,7 +1438,7 @@ _OPENSSL_STATIC_LIBS:INTERNAL=
 _OPENSSL_STATIC_LIBS_L:INTERNAL=
 _OPENSSL_STATIC_LIBS_OTHER:INTERNAL=
 _OPENSSL_STATIC_LIBS_PATHS:INTERNAL=
-_OPENSSL_VERSION:INTERNAL=3.1.0
+_OPENSSL_VERSION:INTERNAL=3.4.0
 _OPENSSL_openssl_INCLUDEDIR:INTERNAL=
 _OPENSSL_openssl_LIBDIR:INTERNAL=
 _OPENSSL_openssl_PREFIX:INTERNAL=

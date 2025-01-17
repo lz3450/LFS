@@ -8,8 +8,12 @@ pkgdesc="GNU readline library"
 arch=('x86_64')
 url="https://tiswww.case.edu/php/chet/readline/rltop.html"
 license=('KZL')
-depends=(ncurses)
-backup=(etc/inputrc)
+depends=(
+  ncurses
+)
+backup=(
+  etc/inputrc
+)
 options=(!emptydirs)
 source=(
   git+https://git.savannah.gnu.org/git/readline.git#branch=master
