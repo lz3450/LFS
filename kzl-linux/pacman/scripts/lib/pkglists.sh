@@ -10,7 +10,7 @@
 # if stage0 build fails, try to build makedepends first
 kzl_stage0_pkgs=(
     ################################
-    # base-devel (partial)
+    # base-devel (GNU tools)
     ################################
     make
     pkgconf
@@ -19,33 +19,9 @@ kzl_stage0_pkgs=(
     texinfo
     diffutils
     bison
-    flex
+    libtool flex
     ed patch
     bc
-    cmake
-)
-
-_full_toolchain=(
-    ################################
-    # full toolchain
-    ################################
-    ################
-    # binutils
-    ################
-    jansson
-    zlib
-    lz4 xz zstd
-    binutils
-
-    ################
-    # gcc
-    ################
-    gmp isl mpfr mpc gcc
-
-    ################
-    # glibc
-    ################
-    tzdata glibc
 )
 
 ## toolchain
@@ -64,23 +40,35 @@ kzl_stage1_pkgs=(
     glibc
     binutils
     gcc
-
-    ################################
-    # full toolchain
-    ################################
-    "${_full_toolchain[@]}"
+    glibc
+    binutils
+    gcc
 )
 
 kzl_stage2_pkgs=(
-    ################################
-    # filesystem
-    ################################
-    iana-etc filesystem
-
+    cmake
+)
+_kzl_stage2_pkgs=(
     ################################
     # full toolchain
     ################################
-    "${_full_toolchain[@]}"
+    ################
+    # glibc
+    ################
+    tzdata glibc
+
+    ################
+    # binutils
+    ################
+    jansson
+    zlib
+    lz4 xz zstd
+    binutils
+
+    ################
+    # gcc
+    ################
+    gmp isl mpfr mpc gcc
 
     ################################
     # bash
@@ -91,32 +79,19 @@ kzl_stage2_pkgs=(
     bash
 
     ################################
+    # base-devel (GNU tools)
+    ################################
+    "${kzl_stage0_pkgs[@]}"
+
+    ################################
     # ca-certificates
     ################################
-    libtasn1 libffi p11-kit
+    libffi libtasn1 p11-kit
     ca-certificates
 
     ################################
-    # shadow
+    # base-devel (cmake)
     ################################
-    ### audit
-    pcre2 swig libcap-ng
-    audit
-    ### pam
-    gdbm
-    libxcrypt
-    openssl
-    pam-config
-    pam
-    ### shadow
-    attr acl
-    shadow
-
-    ################################
-    # perl
-    ################################
-    perl
-
     ################
     # curl
     ################
@@ -124,33 +99,64 @@ kzl_stage2_pkgs=(
     libpsl
     libssh2
     nghttp2
+    openssl
     curl
 
+    ################
+    # libarchive
+    ################
+    attr acl
+    bzip2
+    icu libxml2
+    libarchive
+
+    expat libuv rhash jsoncpp cmake
+
     ################################
-    # base-devel
+    # filesystem
     ################################
-    make
-    pkgconf
-    m4 autoconf
-    automake
-    texinfo
-    diffutils
-    bison
-    flex
-    ed patch
-    bc
-    ###
-    cmake
+    iana-etc filesystem
+
+    ################################
+    # shadow
+    ################################
+    ################
+    # audit
+    ################
+    pcre2 swig libcap-ng
+    audit
+
+    ################
+    # pam
+    ################
+    gdbm
+    libxcrypt
+    pam-config
+    pam
+
+    shadow
+
+    ################################
+    # perl
+    ################################
+    perl
+
+    ################################
+    # pacman
+    ################################
+    fakeroot
+    libassuan libksba npth pinentry gnupg gpgme
+    pacman
+    pacman-contrib
 
     # ################
     # # gettext
     # ################
-    # libunistring icu libxml2 gettext
+    # libunistring icu gettext
 
     # ################
     # # python
     # ################
-    # expat
     # e2fsprogs keyutils libedit lmdb cyrus-sasl openldap krb5 libnsl
     # tcl sqlite
     # elfutils gdb valgrind
@@ -159,7 +165,6 @@ kzl_stage2_pkgs=(
     # ################
     # # compression utils
     # ################
-    # bzip2
     # less gzip
     # xz
     # tar
@@ -218,7 +223,6 @@ kzl_stage2_pkgs=(
     # ################
     # kbd
     # kmod
-    # lz4
     # kexec-tools
     # nettle gnutls libmicrohttpd
     # gperf
@@ -236,16 +240,6 @@ kzl_stage2_pkgs=(
     # # sudo
     # ################
     # sudo
-
-    # ################
-    # # pacman
-    # ################
-    # fakeroot
-    # libassuan libksba npth pinentry gnupg gpgme
-    # libarchive
-    # pacman
-    # pacman-contrib
-    # arch-install-scripts
 
     # ################
     # # ps utils
