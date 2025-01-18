@@ -137,17 +137,17 @@ _kzl_stage2_pkgs=(
     shadow
 
     ################################
-    # perl
-    ################################
-    perl
-
-    ################################
     # pacman
     ################################
     fakeroot
     libassuan libksba npth pinentry gnupg gpgme
     pacman
     pacman-contrib
+
+    ################################
+    # perl
+    ################################
+    perl
 
     # ################
     # # gettext
