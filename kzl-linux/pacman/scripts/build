@@ -29,7 +29,8 @@ LOG_DIR="$HOME"/makepkg/log
 single_package=""
 repo=""
 declare -i stage
-declare -i build_only_updated=0
+declare -i updatepkg=1
+declare -i updated_only=0
 declare -i install=0
 declare -i no_clean=0
 declare -i no_check=0
@@ -38,6 +39,7 @@ declare -i no_check=0
 prepare() {
     info "Removing pacman cache and database..."
     sudo pacman -Scc --noconfirm || :
+    echo "Error code: $?"
     info "Done"
 
     if [[ ! -e "$repo_path" ]]; then
@@ -83,30 +85,32 @@ build() {
     cd "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$repo/$_pkgbase"
 
     # update pkgbuild
-    info "Updating PKGBUILD..."
-    updatepkg --syncdeps >"$_log" 2>&1 || _updated=$?
+    if (( $updatepkg > 0 )); then
+        info "Updating PKGBUILD..."
+        updatepkg --syncdeps >"$_log" 2>&1 || _updated=$?
 
-    if (( $_updated == 255 )); then
-        warn "Current version is newer"
-    elif (( $_updated == 0 )); then
-        info "  No update for PKGBUILD"
-    elif (( $_updated == 1 )); then
-        info "  Package \"$_pkgbase\" is updated to new version"
-    elif (( $_updated == 2 )); then
-        error "PKGBUILD does not exist" 5
-    elif (( $_updated == 3 )); then
-        warn "PKGUPDATE does not exist"
-    elif (( $_updated >= 4 )); then
-        error "Cannot update the PKGBUILD (error code: $_updated)" 5
-    else
-        error "Unknown \`updatepkg\` result" 5
-    fi
+        if (( $_updated == 255 )); then
+            warn "Current version is newer"
+        elif (( $_updated == 0 )); then
+            info "  No update for PKGBUILD"
+        elif (( $_updated == 1 )); then
+            info "  Package \"$_pkgbase\" is updated to new version"
+        elif (( $_updated == 2 )); then
+            error "PKGBUILD does not exist" 5
+        elif (( $_updated == 3 )); then
+            warn "PKGUPDATE does not exist"
+        elif (( $_updated >= 4 )); then
+            error "Cannot update the PKGBUILD (error code: $_updated)" 5
+        else
+            error "Unknown \`updatepkg\` result" 5
+        fi
 
-    if (( $build_only_updated > 0 )) && (( $_updated == 0 || $_updated == 255 )); then
-        info "Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)."
-        return
+        if (( $updated_only > 0 )) && (( $_updated == 0 || $_updated == 255 )); then
+            info "Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)."
+            return
+        fi
+        info "Done"
     fi
-    info "Done"
 
     info "Building package..."
     _no_check=''
@@ -140,8 +144,8 @@ usage() {
 
 Usage: $SCRIPT_NAME -V | --version
 Usage: $SCRIPT_NAME -h | --help
-Usage: $SCRIPT_NAME -r <repo> -s <stage> [ -n ] [ -u ] [ --no-clean ] [ --no-check ]
-Usage: $SCRIPT_NAME -r <repo> -p <pkg> [ -n ] [ -u ] [ --no-clean ] [ --no-check ]
+Usage: $SCRIPT_NAME -r <repo> -s <stage> | -p <pkgname> [ -n | --no-updatepkg ] [ --no-clean ] [ --no-check ]
+Usage: $SCRIPT_NAME -r <repo> -s <stage> | -p <pkgname> [ -u | --updated-only ] [ --no-clean ] [ --no-check ]
 
     -V, --version               display version information and exit
     -h, --help                  display this help message and exit
@@ -149,7 +153,8 @@ Usage: $SCRIPT_NAME -r <repo> -p <pkg> [ -n ] [ -u ] [ --no-clean ] [ --no-check
     -s, --stage                 target stage (0, 1(default), 2, 3; some repo are not using this)
     -p, --package               build single package
     -i, --install               install the package after building
-    -u, --build-only-updated    build the package only if the PKGBUILD is updated
+    -n, --no-updatepkg          do not update the PKGBUILD before building
+    -u, --updated-only          build the package only if the PKGBUILD is updated
     --no-clean                  skip cleaning up work files after build
     --no-check                  do not run the check() function in the PKGBUILD
 
@@ -179,8 +184,11 @@ while (( $# > 0 )); do
     -i|--install)
         install=1
         ;;
+    -n|--no-updatepkg)
+        updatepkg=0
+        ;;
     -u|--build-only-updated)
-        build_only_updated=1
+        updated_only=1
         ;;
     --no-clean)
         no_clean=1

@@ -390,7 +390,6 @@ kzl_stage3_pkgs=(
 ubuntu_pkgs=(
     pacman
     pacman-contrib
-    arch-install-scripts
-    # linux
     debootstrap
+    llvm-project-latest
 )
