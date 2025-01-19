@@ -8,15 +8,20 @@ arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
 license=('KZL')
 backup=(
-  usr/local/etc/pacman.conf
   usr/local/etc/makepkg.conf
   usr/local/etc/makepkg.conf.d/rust.conf
+  usr/local/etc/pacman.conf
 )
 # _ref="v$pkgver"
 # source=(git+https://gitlab.archlinux.org/pacman/pacman.git#tag=$_ref)
 # source=(git+https://gitlab.archlinux.org/pacman/pacman.git#branch=$_ref)
 # source=(git+https://gitlab.archlinux.org/pacman/pacman.git#commit=$_ref)
-source=(git+https://gitlab.archlinux.org/pacman/pacman.git)
+source=(
+  # git+https://gitlab.archlinux.org/pacman/pacman.git#tag=$_ref
+  # git+https://gitlab.archlinux.org/pacman/pacman.git#branch=$_ref
+  # git+https://gitlab.archlinux.org/pacman/pacman.git#commit=$_ref
+  git+https://gitlab.archlinux.org/pacman/pacman.git
+)
 sha256sums=('SKIP')
 
 pkgver() {
@@ -30,12 +35,13 @@ prepare() {
 
   sed -i \
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
-      -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection"' \
-      -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"' \
-      -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"' \
+      -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"' \
+      -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
+      -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"' \
+      -e '/^#LTOFLAGS=/s/^#//' \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
-      -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g -fvar-tracking-assignments"' \
-      -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"' \
+      -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
+      -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="$DEBUG_CFLAGS"' \
       -e '/^#BUILDDIR=/c\BUILDDIR="$HOME/makepkg/build"' \
       -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
       -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
@@ -44,7 +50,6 @@ prepare() {
       -e '/^#LOGDEST=/c\LOGDEST="$HOME/makepkg/makepkglogs"' \
       -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
       -e '/^OPTIONS=/s/libtool/!libtool/' \
-      -e '/^OPTIONS=/s/!autodeps/autodeps/' \
       etc/makepkg.conf.in
 
   sed -i \
@@ -95,7 +100,5 @@ check() {
 package() {
   cd $pkgname
 
-  meson install -C build --destdir="$pkgdir"
-
-  rm -rf "$pkgdir"/usr/share
+  meson install -C build --destdir "$pkgdir"
 }
