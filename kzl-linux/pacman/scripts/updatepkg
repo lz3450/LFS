@@ -27,7 +27,7 @@ PKGBUILDDIR="$(pwd)"
 # PGP_KEY_SERVER="hkps://pgp.mit.edu"
 
 syncdeps='-d'
-declare -i cleanbuild=1
+cleanbuild='-C'
 declare -i increase=0
 
 ### functions
@@ -63,7 +63,7 @@ while (( $# > 0 )); do
         syncdeps='-sr'
         ;;
     -n|--no-cleanbuild)
-        cleanbuild=0
+        cleanbuild=''
         ;;
     -i|--increase-pkgrel)
         increase=1
@@ -121,6 +121,7 @@ if have_function 'pre_update'; then
     info "Running pre_update()..."
     pre_update || error "\`pre_update\` error" 6
     cd "$PKGBUILDDIR"
+    info "Done"
 fi
 
 result=$(vercmp $new_version $current_version)
@@ -131,8 +132,9 @@ if (( $result == 1 )); then
     pkgver=$new_version
     info "Running updpkgsums..."
     updpkgsums || error "\`updpkgsums\` error" 7
+    info "Done"
     # force cleanbuild
-    cleanbuild=1
+    cleanbuild='-C'
 elif (( $result == 0 )); then
     info "No update for PKGBUILD"
     if (( $increase > 0 )); then
@@ -146,14 +148,16 @@ else
     error "Unknown \`vercmp\` result" 8
 fi
 
-if (( $cleanbuild )); then
-    makepkg -C "$syncdeps" -o --noconfirm || error "\`makepkg -o\` error" 9
-else
-    makepkg "$syncdeps" -o --noconfirm || error "\`makepkg -o\` error" 9
-fi
+info "Running \`makepkg -o\`..."
+makepkg "$cleanbuild" "$syncdeps" -o --noconfirm || error "\`makepkg -o\` error" 9
+info "Done"
+
 # run post_update
-info "running post_update()..."
-post_update || error "\`post_update\` error" 10
+if have_function 'post_update'; then
+    info "Running post_update()..."
+    post_update || error "\`post_update\` error" 6
+    info "Done"
+fi
 
 ### error codes
 # 255: current version is newer

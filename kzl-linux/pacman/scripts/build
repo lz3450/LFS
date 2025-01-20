@@ -73,8 +73,9 @@ build() {
     local _pkgbase=$(get_pkgbase $_pkgname)
     local _log
     local -i _updated=0
-    local _clean
-    local _no_check
+    local _cleanbuild='-C'
+    local _clean='--clean'
+    local _no_check='--nocheck'
 
     if [[ -n "$stage" ]]; then
         _log="$LOG_DIR/stage$stage.$_pkgbase.log"
@@ -88,6 +89,7 @@ build() {
     if (( $updatepkg > 0 )); then
         info "Updating PKGBUILD..."
         updatepkg --syncdeps >"$_log" 2>&1 || _updated=$?
+        _cleanbuild='-e'
 
         if (( $_updated == 255 )); then
             warn "Current version is newer"
@@ -99,6 +101,7 @@ build() {
             error "PKGBUILD does not exist" 5
         elif (( $_updated == 3 )); then
             warn "PKGUPDATE does not exist"
+            _cleanbuild='-C'
         elif (( $_updated >= 4 )); then
             error "Cannot update the PKGBUILD (error code: $_updated)" 5
         else
@@ -113,16 +116,14 @@ build() {
     fi
 
     info "Building package..."
-    _no_check=''
-    if (( $no_check > 0 )); then
-        _no_check='--nocheck'
+    if (( $no_check == 0 )); then
+        _no_check=''
     fi
-    _clean=''
-    if (( $no_clean <= 0 )); then
-        _clean='--clean'
+    if (( $no_clean > 0 )); then
+        _clean=''
     fi
-    # Call makepkg without `-C` since updatepkg already removed existing `$srcdir/`
-    makepkg -sref "$_clean" "$_no_check" --noconfirm >>"$_log" 2>&1
+
+    makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm >>"$_log" 2>&1
     info "Done"
 
     info "Updating repo..."
