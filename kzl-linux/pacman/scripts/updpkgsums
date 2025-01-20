@@ -1,0 +1,89 @@
+#!/usr/bin/bash
+#
+# updpkgsums
+#
+# https://gitlab.archlinux.org/pacman/pacman-contrib/-/raw/master/src/updpkgsums.sh.in
+#
+
+set -e
+# set -u
+set -o pipefail
+# set -x
+
+umask 0022
+
+SCRIPT_NAME="$(basename "$0")"
+SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
+
+################################################################################
+
+### libraries
+source "$BASH_LIB_DIR"/log.sh
+
+### constants & variables
+PKGBUILDDIR="$(pwd)"
+PKGBUILD_FILE="PKGBUILD"
+NEW_PKGBUILD_FILE="PKGBUILD.updpkgsums"
+
+### functions
+usage() {
+    cat <<EOF
+
+Update checksums of a PKGBUILD file
+
+Usage: $SCRIPT_NAME
+EOF
+}
+
+################################################################################
+
+if [[ ! -f "$PKGBUILD_FILE" ]]; then
+   error 'PKGBUILD does not exist.' 2
+fi
+
+if [[ -f "/usr/share/makepkg/util/schema.sh" ]]; then
+    . /usr/share/makepkg/util/schema.sh
+elif [[ -f "/usr/local/share/makepkg/util/schema.sh" ]]; then
+    . /usr/local/share/makepkg/util/schema.sh
+else
+    error '@libmakepkgdir@/util/schema.sh NOT found' 3
+fi
+
+info "Getting known hash algorithms..."
+sumtypes=$(IFS='|'; echo "${known_hash_algos[*]}")
+info "Done"
+
+info "Running \`makepkg -g\`..."
+newsums=$(makepkg -g) || error "\`makepkg -p\` error" 4
+info "Done"
+
+if [[ -z $newsums ]]; then
+	error "PKGBUILD does not contain sources to update"
+fi
+
+
+awk -v sumtypes="$sumtypes" -v newsums="$newsums" '
+	$0 ~"^[[:blank:]]*(" sumtypes ")sums(_[^=]+)?\\+?=", $0 ~ "\\)[[:blank:]]*(#.*)?$" {
+		if (!w) {
+			print newsums
+			w++
+		}
+		next
+	}
+
+	1
+	END { if (!w) print newsums }
+' "$PKGBUILD_FILE" > "$NEW_PKGBUILD_FILE" || error 'Failed to write new PKGBUILD' 5
+trap 'rm -rf "$NEW_PKGBUILD_FILE"' EXIT
+
+if ! cat -- "$NEW_PKGBUILD_FILE" >"$PKGBUILD_FILE"; then
+	error "Failed to update %s. The file has not been modified." "$PKGBUILD_FILE"
+fi
+
+### error codes
+# 2: PKGBUILD does not exist
+# 3: schema.sh NOT found
+# 4: makepkg -g error
+# 5: Failed to write new PKGBUILD
