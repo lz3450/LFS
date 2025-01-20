@@ -63,7 +63,6 @@ if [[ -z $newsums ]]; then
 	error "PKGBUILD does not contain sources to update"
 fi
 
-
 awk -v sumtypes="$sumtypes" -v newsums="$newsums" '
 	$0 ~"^[[:blank:]]*(" sumtypes ")sums(_[^=]+)?\\+?=", $0 ~ "\\)[[:blank:]]*(#.*)?$" {
 		if (!w) {
