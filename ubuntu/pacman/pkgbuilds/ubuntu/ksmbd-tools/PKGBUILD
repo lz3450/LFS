@@ -1,0 +1,55 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=ksmbd-tools
+pkgver=3.5.3.g1
+pkgrel=7
+epoch=
+pkgdesc="A collection of userspace utilities for the ksmbd kernel server"
+arch=('x86_64')
+url="https://github.com/cifsd-team/ksmbd-tools"
+license=('KZL')
+source=(
+  git+$url.git
+)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/-g.*//;s/-/.g/'
+}
+
+prepare() {
+  cd $pkgname
+
+  sed -i \
+    -e '/create mask/s/0744/0644/' \
+    ksmbd.conf.example
+
+  meson setup \
+    --prefix /usr \
+    --auto-features disabled \
+    --buildtype plain \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D systemdsystemunitdir=/usr/lib/systemd/system \
+    build
+}
+
+build() {
+  cd $pkgname
+
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname
+
+  meson test -C build --print-errorlogs
+}
+
+package() {
+  cd $pkgname
+
+  meson install -C build --destdir "$pkgdir"
+}
