@@ -7,57 +7,119 @@ epoch=
 arch=('x86_64')
 url="https://git-scm.com/"
 license=('KZL')
-depends=(curl expat pcre2)
-# makedepends=(xmlto)
-# optdepends=("tk: gitk and git gui"
-#             "libsecret: libsecret credential helper")
+depends=(
+  curl
+  expat
+  openssl
+  pcre2
+)
+makedepends=(
+  # xmlto
+)
+optdepends=(
+  # "tk: gitk and git gui"
+  # "libsecret: libsecret credential helper"
+)
 install=$pkgname.install
-source=(git+https://github.com/git/git.git#tag=v$pkgver
-        $pkgname.install)
+source=(
+  git+https://github.com/git/git.git#tag=v$pkgver
+  $pkgname.install
+)
 sha256sums=('SKIP'
             'e5676ce50dccf08536f0e89ef4d29f886f07137d186f9b878112f0d055bcfb68')
 
 prepare() {
   cd $pkgname
 
-  make configure
+  meson setup \
+    --prefix /usr \
+    --auto-features disabled \
+    --buildtype plain \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D curl=enabled \
+    -D default_editor=nano \
+    -D expat=enabled \
+    -D gettext=enabled \
+    -D https_backend=openssl \
+    -D iconv=enabled \
+    -D pcre2=enabled \
+    -D perl=enabled \
+    -D python=enabled \
+    -D regex=enabled \
+    build
 }
 
 build() {
   cd $pkgname
 
-  ./configure \
-    --prefix=/usr \
-    --with-openssl \
-    --with-libpcre2 \
-    --with-curl \
-    --with-expat \
-    --with-editor=/usr/bin/nano \
-    --without-tcltk
+  meson compile -C build
 
-
-  make all
-
-  # make -C contrib/credential/libsecret
-  make -C contrib/diff-highlight
+  # contrib
+  # make -C contrib/diff-highlight
 }
 
 check() {
   cd $pkgname
 
-  make test
+  meson test -C build --print-errorlogs
 }
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir" install
+  meson install -C build --destdir "$pkgdir"
 
-  # sysusers
-  echo 'u git - "git daemon user" / /usr/bin/git-shell' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/git.conf
-
-  # bash-completion
-  install -Dm0644 contrib/completion/git-completion.bash "$pkgdir"/usr/share/bash-completion/completions/git
   # git prompt
-  install -Dm0644 contrib/completion/git-prompt.sh "$pkgdir"/usr/share/git/git-prompt.sh
+  install -Dm644 contrib/completion/git-prompt.sh "$pkgdir"/usr/share/git/git-prompt.sh
+  # bash-completion
+  install -Dm644 contrib/completion/git-completion.bash "$pkgdir"/usr/share/bash-completion/completions/git
+  # zsh
+  install -Dm755 contrib/completion/git-completion.zsh "$pkgdir"/usr/share/zsh/site-functions/_git
 }
+
+# prepare() {
+#   cd $pkgname
+
+#   make configure
+# }
+
+# build() {
+#   cd $pkgname
+
+#   ./configure \
+#     --prefix=/usr \
+#     --with-openssl \
+#     --with-libpcre2 \
+#     --with-curl \
+#     --with-expat \
+#     --with-editor=/usr/bin/nano \
+#     --without-tcltk
+
+#   make all
+
+#   make -C contrib/diff-highlight
+# }
+
+# check() {
+#   cd $pkgname
+
+#   make test
+# }
+
+# package() {
+#   cd $pkgname
+
+#   make DESTDIR="$pkgdir" install
+
+#   # sysusers
+#   echo 'u git - "git daemon user" / /usr/bin/git-shell' | install -Dm644 /dev/stdin "$pkgdir"/usr/lib/sysusers.d/git.conf
+
+#   # git prompt
+#   install -Dm644 contrib/completion/git-prompt.sh "$pkgdir"/usr/share/git/git-prompt.sh
+#   # bash-completion
+#   install -Dm644 contrib/completion/git-completion.bash "$pkgdir"/usr/share/bash-completion/completions/git
+#   # zsh
+#   install -dm755 "$pkgdir"/usr/share/zsh/site-functions/
+#   ln -s ../../git/completion/git-completion.zsh "$pkgdir"/usr/share/zsh/site-functions/_git
+# }

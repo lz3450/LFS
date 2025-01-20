@@ -2,5 +2,6 @@ new_version=$(git ls-remote --tags https://github.com/git/git.git | grep -oP '(?
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    meson configure build >"$PKGBUILDDIR"/help.txt
+    # ./configure --help > "$PKGBUILDDIR"/help.txt
 }
