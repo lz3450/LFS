@@ -2,5 +2,5 @@ new_version=$(git ls-remote --tags https://gitlab.archlinux.org/pacman/pacman-co
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
+    ./configure --help >"$PKGBUILDDIR"/help.txt
 }
