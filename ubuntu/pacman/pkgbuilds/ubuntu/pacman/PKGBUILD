@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g26
-pkgrel=2
+pkgver=7.0.0.g37
+pkgrel=1
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -101,4 +101,6 @@ package() {
   cd $pkgname
 
   meson install -C build --destdir "$pkgdir"
+
+  rm -vr "$pkgdir"/usr/share
 }

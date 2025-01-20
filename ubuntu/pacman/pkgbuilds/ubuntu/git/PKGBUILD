@@ -1,49 +1,109 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=git
-pkgver=2.47.1
-pkgrel=2
+pkgver=2.48.1
+pkgrel=1
 epoch=
 arch=('x86_64')
 url="https://git-scm.com/"
 license=('KZL')
 install=$pkgname.install
-source=(git+https://github.com/git/git.git#tag=v$pkgver
-        $pkgname.install)
-sha256sums=('SKIP'
+source=(
+  git+https://github.com/git/git.git#tag=v$pkgver
+  $pkgname.install
+)
+sha256sums=('bb62f7930f8830f3b9d7cddb13767603de3de390ff2ef146c5bca192aa32547c'
             'e5676ce50dccf08536f0e89ef4d29f886f07137d186f9b878112f0d055bcfb68')
 
 prepare() {
   cd $pkgname
 
-  make configure
+  meson setup \
+    --prefix /usr/local \
+    --auto-features disabled \
+    --buildtype plain \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D curl=enabled \
+    -D default_editor=nano \
+    -D expat=enabled \
+    -D gettext=enabled \
+    -D https_backend=openssl \
+    -D iconv=enabled \
+    -D pcre2=enabled \
+    -D perl=enabled \
+    -D python=enabled \
+    -D regex=enabled \
+    build
 }
 
 build() {
   cd $pkgname
 
-  ./configure \
-    --prefix=/usr/local \
-    --with-openssl \
-    --with-libpcre2 \
-    --with-curl \
-    --with-expat \
-    --with-editor=/usr/bin/nano \
-    --without-tcltk
+  meson compile -C build
 
-  make all
-
-  make -C contrib/diff-highlight
+  # contrib
+  # make -C contrib/diff-highlight
 }
 
 check() {
   cd $pkgname
 
-  make test
+  meson test -C build --print-errorlogs
 }
 
 package() {
   cd $pkgname
 
-  make DESTDIR="$pkgdir" install
+  meson install -C build --destdir "$pkgdir"
+
+  # git prompt
+  install -Dm644 contrib/completion/git-prompt.sh "$pkgdir"/usr/local/share/git/git-prompt.sh
+  # bash-completion
+  install -Dm644 contrib/completion/git-completion.bash "$pkgdir"/usr/local/share/bash-completion/completions/git
+  # zsh
+  install -Dm755 contrib/completion/git-completion.zsh "$pkgdir"/usr/local/share/zsh/site-functions/_git
 }
+
+# prepare() {
+#   cd $pkgname
+
+#   make configure
+# }
+
+# build() {
+#   cd $pkgname
+
+#   ./configure \
+#     --prefix=/usr/local \
+#     --with-openssl \
+#     --with-libpcre2 \
+#     --with-curl \
+#     --with-expat \
+#     --with-editor=/usr/bin/nano \
+#     --without-tcltk
+
+#   make all
+
+#   make -C contrib/diff-highlight
+# }
+
+# check() {
+#   cd $pkgname
+
+#   make test
+# }
+
+# package() {
+#   cd $pkgname
+
+#   make DESTDIR="$pkgdir" install
+
+#   # git prompt
+#   install -Dm644 contrib/completion/git-prompt.sh "$pkgdir"/usr/local/share/git/git-prompt.sh
+#   # bash-completion
+#   install -Dm644 contrib/completion/git-completion.bash "$pkgdir"/usr/local/share/bash-completion/completions/git
+#   # zsh
+#   install -dm755 "$pkgdir"/usr/local/share/zsh/site-functions/
+#   ln -s ../../git/completion/git-completion.zsh "$pkgdir"/usr/local/share/zsh/site-functions/_git
+# }

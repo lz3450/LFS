@@ -40,15 +40,15 @@ CHOST="@CHOST@"
 
 #-- Compiler and Linker Flags
 CPPFLAGS=""
-CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection"
-CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"
-LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
-#LTOFLAGS="-flto"
+CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
+CXXFLAGS="$CFLAGS"
+LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"
+LTOFLAGS="-flto"
 #-- Make Flags: change this for DistCC/SMP systems
 MAKEFLAGS="-j$(nproc) -O"
 #-- Debugging flags
-DEBUG_CFLAGS="-g -fvar-tracking-assignments"
-DEBUG_CXXFLAGS="-g -fvar-tracking-assignments"
+DEBUG_CFLAGS="-g"
+DEBUG_CXXFLAGS="$DEBUG_CFLAGS"
 
 #########################################################################
 # BUILD ENVIRONMENT
@@ -92,7 +92,7 @@ BUILDDIR="$HOME/makepkg/build"
 #-- lto:        Add compile flags for building with link time optimization
 #-- autodeps:   Automatically add depends/provides
 #
-OPTIONS=(strip docs !libtool staticlibs emptydirs zipman purge !debug !lto autodeps)
+OPTIONS=(strip docs !libtool staticlibs emptydirs zipman purge !debug !lto !autodeps)
 
 #-- File integrity checks to use. Valid: ck, md5, sha1, sha224, sha256, sha384, sha512, b2
 INTEGRITY_CHECK=(sha256)

@@ -1,5 +1,6 @@
 #!/bin/bash
 
-sudo apt update
+sudo apt-get update
 sudo apt-get install \
-    gettext
+    gettext \
+    libpcre2-dev
