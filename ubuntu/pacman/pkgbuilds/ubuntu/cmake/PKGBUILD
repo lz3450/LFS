@@ -4,14 +4,10 @@ pkgname=cmake
 pkgver=3.23.5
 pkgrel=1
 epoch=
-pkgdesc="A cross-platform open-source make system"
+pkgdesc="A powerful software build system"
 arch=('x86_64')
 url="https://www.cmake.org/"
 license=('KZL')
-# depends=(curl expat jsoncpp libarchive libuv nghttp2 rhash)
-# depends=(curl cppdap expat jsoncpp libarchive libuv nghttp2 rhash)
-# makedepends=(qt6)
-# optdepends=("qt6: Qt-based GUI")
 source=(git+https://github.com/Kitware/CMake.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -23,6 +19,7 @@ build() {
     --datadir=share/cmake \
     --docdir=share/doc/cmake \
     --mandir=share/man \
+    --parallel=$(nproc) \
     --system-libs \
     --system-curl \
     --system-expat \
@@ -35,7 +32,6 @@ build() {
     --system-libarchive \
     --system-librhash \
     --system-libuv \
-    --parallel=$(nproc) \
     --no-qt-gui
 
   make

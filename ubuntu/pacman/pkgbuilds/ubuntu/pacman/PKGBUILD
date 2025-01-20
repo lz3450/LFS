@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g37
-pkgrel=1
+pkgrel=2
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -37,7 +37,7 @@ prepare() {
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
       -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"' \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
-      -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"' \
+      -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now"' \
       -e '/^#LTOFLAGS=/s/^#//' \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
