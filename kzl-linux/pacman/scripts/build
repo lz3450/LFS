@@ -88,7 +88,7 @@ build() {
     # update pkgbuild
     if (( $updatepkg > 0 )); then
         info "Updating PKGBUILD..."
-        updatepkg --syncdeps >"$_log" 2>&1 || _updated=$?
+        updatepkg --syncdeps -i >"$_log" 2>&1 || _updated=$?
         _cleanbuild='-e'
 
         if (( $_updated == 255 )); then
