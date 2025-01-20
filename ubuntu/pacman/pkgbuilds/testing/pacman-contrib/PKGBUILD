@@ -1,14 +1,14 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman-contrib
-pkgver=1.10.6.g5
+pkgver=1.10.5
 pkgrel=2
 epoch=
 pkgdesc="Contributed scripts and tools for pacman systems"
 arch=('x86_64')
 url="https://git.archlinux.org/pacman-contrib.git/about/"
 license=('KZL')
-source=(git+https://gitlab.archlinux.org/pacman/$pkgname.git)
+source=(git+https://gitlab.archlinux.org/pacman/$pkgname.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
 pkgver() {
@@ -28,7 +28,7 @@ build() {
 
   ./configure \
     --prefix=/usr/local \
-    --sysconfdir=/etc \
+    --sysconfdir=etc \
     --localstatedir=/var \
     --disable-doc
 
