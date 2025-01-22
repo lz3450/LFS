@@ -27,5 +27,5 @@ shift
 
 trap chroot_teardown EXIT SIGINT SIGTERM SIGKILL
 chroot_setup "$rootfs_dir"
-SHELL=/bin/bash LC_ALL=C PATH="$CHROOT_PATH"  unshare --fork --pid chroot "$rootfs_dir" "$@"
+SHELL=/bin/bash LC_ALL=C PATH="$CHROOT_PATH" unshare --fork --pid chroot "$rootfs_dir" "$@"
 chroot_teardown
