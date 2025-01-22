@@ -49,6 +49,9 @@ common_deb_pkgs=(
     nano
     parted fdisk
     dosfstools
+    e2fsprogs
+    xfsprogs
+    bcachefs-tools
     f2fs-tools
     smartmontools
     wpasupplicant
@@ -59,7 +62,7 @@ common_deb_pkgs=(
     zsh
     linux-image-generic
     initramfs-tools
-    ### pacman dependencies
+    ### pacman
     libarchive-tools
     libgpgme-dev
 )
@@ -69,8 +72,6 @@ noble_deb_pkgs=(
 )
 pacman_pkgs=(
     pacman
-    pacman-contrib
-    arch-install-scripts
     linux
     debootstrap
 )
