@@ -12,6 +12,9 @@ common_deb_pkgs=(
     nano
     parted fdisk
     dosfstools
+    e2fsprogs
+    xfsprogs
+    bcachefs-tools
     f2fs-tools
     wpasupplicant
     wget curl
@@ -61,7 +64,7 @@ debootstrap \
     http://us.archive.ubuntu.com/ubuntu
 
 # sources.list
-tee "$mountpoint"/etc/apt/sources.list << EOF
+tee "$mountpoint"/etc/apt/sources.list <<EOF
 deb http://us.archive.ubuntu.com/ubuntu $debootstrap_suite main restricted universe
 deb-src http://us.archive.ubuntu.com/ubuntu $debootstrap_suite main restricted universe
 
@@ -73,7 +76,7 @@ deb-src http://security.ubuntu.com/ubuntu/ $debootstrap_suite-security main rest
 EOF
 
 # pacman
-if [ -f "/usr/local/bin/pacman" ]; then
+if [[ -f "/usr/local/bin/pacman" ]]; then
     mkdir -m 0755 -p "$mountpoint"/var/{cache/pacman/pkg,lib/pacman}
     mkdir -p "$mountpoint"/home/.repository/kzl
     pacman -Sy -r "$mountpoint" --noconfirm --cachedir "$mountpoint"/home/.repository/kzl pacman pacman-contrib linux
@@ -86,17 +89,17 @@ mkswap "$mountpoint"/swapfile
 
 # hostname
 read -p 'hostname: ' HOSTNAME
-echo $HOSTNAME > "$mountpoint"/etc/hostname
+echo $HOSTNAME >"$mountpoint"/etc/hostname
 
 # network
-tee "$mountpoint"/etc/systemd/network/wlan.network << EOF
+tee "$mountpoint"/etc/systemd/network/wlan.network <<EOF
 [Match]
 Name=wl*
 
 [Network]
 DHCP=yes
 EOF
-tee "$mountpoint"/etc/systemd/network/ethernet.network << EOF
+tee "$mountpoint"/etc/systemd/network/ethernet.network <<EOF
 [Match]
 Name=en*
 Name=eth*
@@ -104,7 +107,7 @@ Name=eth*
 [Network]
 DHCP=yes
 EOF
-tee "$mountpoint"/etc/wpa_supplicant/wpa_supplicant-wlan.conf << EOF
+tee "$mountpoint"/etc/wpa_supplicant/wpa_supplicant-wlan.conf <<EOF
 network={
 	ssid="LuckySKZLJ"
 	psk=51d8558a663cf1d191b42cd88d542e3847ce4da204196fa016c30728bc67f6e3
@@ -115,10 +118,10 @@ network={
 }
 EOF
 
-# if [ -f "$mountpoint"/etc/NetworkManager/NetworkManager.conf ]; then
+# if [[ -f "$mountpoint"/etc/NetworkManager/NetworkManager.conf ]]; then
 #     mv "$mountpoint"/etc/NetworkManager/NetworkManager.conf "$mountpoint"/etc/NetworkManager/NetworkManager.conf.backup
 # fi
-# cat > "$mountpoint"/etc/NetworkManager/NetworkManager.conf << EOF
+# cat >"$mountpoint"/etc/NetworkManager/NetworkManager.conf <<EOF
 # [main]
 # plugins=keyfile,ifupdown
 
@@ -131,49 +134,38 @@ EOF
 
 # grml-zsh-config
 wget -O "$mountpoint"/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
-echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$mountpoint"/root/.zshrc
-echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$mountpoint"/root/.zshrc
+echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >>"$mountpoint"/root/.zshrc
+echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >>"$mountpoint"/root/.zshrc
 
 cp initialize.sh "$mountpoint"/root
 
-for fs in dev sys proc run; do
-    mount --rbind /$fs "$mountpoint"/$fs
-    mount --make-rslave "$mountpoint"/$fs
-done
-LANG=C.UTF-8 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin chroot "$mountpoint" /bin/bash
-for fs in dev sys proc run; do
-    umount -R "$mountpoint"/$fs
-done
+./kzl-chroot "$mountpoint" /bin/bash
 
 # boot
 mkdir -p "$mountpoint"/boot/efi/loader/entries
-tee "$mountpoint"/boot/efi/loader/loader.conf << EOF
+tee "$mountpoint"/boot/efi/loader/loader.conf <<EOF
 timeout 3
 console-mode max
 default ubuntu.conf
 EOF
-tee "$mountpoint"/boot/efi/loader/entries/ubuntu.conf << EOF
+tee "$mountpoint"/boot/efi/loader/entries/ubuntu.conf <<EOF
 title   Ubuntu
 linux   /vmlinuz
 initrd  /initrd.img
 options root=PARTUUID="" rw rootwait
 EOF
-tee "$mountpoint"/boot/efi/loader/entries/kzl.conf << EOF
+tee "$mountpoint"/boot/efi/loader/entries/kzl.conf <<EOF
 title   Ubuntu-KZL
 linux   /vmlinuz-KZL
 initrd  /initrd-KZL.img
 options root=PARTUUID="" rw rootwait
 EOF
 # EFI: /boot/efi
-blkid >> "$mountpoint"/boot/efi/loader/entries/ubuntu.conf
+blkid >>"$mountpoint"/boot/efi/loader/entries/ubuntu.conf
 nano "$mountpoint"/boot/efi/loader/entries/ubuntu.conf
-blkid >> "$mountpoint"/boot/efi/loader/entries/kzl.conf
+blkid >>"$mountpoint"/boot/efi/loader/entries/kzl.conf
 nano "$mountpoint"/boot/efi/loader/entries/kzl.conf
 
 # fstab
-if [ -f "/usr/bin/genfstab" ]; then
-    genfstab -t PARTUUID "$mountpoint" > "$mountpoint"/etc/fstab
-else
-    blkid > "$mountpoint"/etc/fstab
-fi
+blkid >"$mountpoint"/etc/fstab
 nano "$mountpoint"/etc/fstab
