@@ -29,15 +29,17 @@ VERSION="1.0"
 WORK_DIR="/tmp/chrootbuild"
 ROOTFS_DIR="$WORK_DIR/rootfs"
 CHROOT_HOME_DIR="home/kzl"
+PACMAN_REPO_DIR="home/.repository/kzl"
+PACMAN_REPO="$PACMAN_REPO_DIR/kzl.db"
 WHEEL_DIR="$CHROOT_HOME_DIR/makepkg/wheels"
 PIP_CACHE_DIR="$WHEEL_DIR/.cache"
 HOST_DIRS=(
-    home/.repository/kzl
-    $CHROOT_HOME_DIR/LFS
-    $CHROOT_HOME_DIR/makepkg/sources
-    $CHROOT_HOME_DIR/makepkg/log
-    $WHEEL_DIR
-    $PIP_CACHE_DIR
+    "$PACMAN_REPO_DIR"
+    "$CHROOT_HOME_DIR/LFS"
+    "$CHROOT_HOME_DIR/makepkg/sources"
+    "$CHROOT_HOME_DIR/makepkg/log"
+    "$WHEEL_DIR"
+    "$PIP_CACHE_DIR"
 )
 USERSPEC="kzl:kzl"
 
@@ -55,11 +57,11 @@ setup_rootfs() {
 
     if [[ ! -f "$_status_file" ]]; then
         if [[ -d "$ROOTFS_DIR" ]]; then
-            error "Non-setup rootfs directory ($ROOTFS_DIR) already exists, please delete first" 3
+            error "Rootfs directory ($ROOTFS_DIR) exists but not set up, please delete first" 3
         fi
 
-        if [[ -z "$rootfs_tarball" ]]; then
-            error "Rootfs tarball not specified" 4
+        if [[ ! -f "$rootfs_tarball" ]]; then
+            error "Please specify a rootfs tarball using \"-r <tarball>\"" 4
         fi
         info "Extracting rootfs tarball..."
         mkdir -p -- "$ROOTFS_DIR"
@@ -82,8 +84,9 @@ setup_rootfs() {
         sed -i '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^#//' "$ROOTFS_DIR"/etc/sudoers
         chroot_run "$ROOTFS_DIR" useradd -d "/$CHROOT_HOME_DIR" -G adm,wheel -U -s /bin/zsh kzl
         echo kzl:3450 | chroot_run "$ROOTFS_DIR" chpasswd
+        chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/kzl-linux/pacman && . ./setup.sh && updaterepo -r kzl"
         chroot_run "$ROOTFS_DIR" pacman -Syu
-        chroot_run "$ROOTFS_DIR" pacman -Sy base-devel
+        # chroot_run "$ROOTFS_DIR" pacman -Sy base-devel
         chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/config && ./update-config.sh"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python -m ensurepip"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python -m pip wheel --wheel-dir /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR --no-binary :all: pip meson ninja"
@@ -102,6 +105,32 @@ run_build() {
     info "Running \`build\`..."
     chroot_run "$ROOTFS_DIR" su - kzl -c "source /$CHROOT_HOME_DIR/LFS/kzl-linux/pacman/setup.sh && build ${build_opts[*]}"
     info "Done (\`build\`)"
+}
+
+_unmount_all_bind_mounts() {
+    while true; do
+        local mountpoint
+        readarray -t mountpoints < <(grep -F "$ROOTFS_DIR" /proc/mounts | awk '{print $2}' | LC_ALL=C sort -r)
+
+        for mountpoint in "${mountpoints[@]}"; do
+            umount -v -- "$mountpoint" || :
+        done
+
+        if (( ${#mountpoints[@]} == 0 )); then
+            break
+        fi
+
+        error "Failed to unmount: \"${mountpoints[*]}\", try again"
+        sleep 1
+    done
+}
+
+_remove_work_dir() {
+    info "Removing work directory..."
+    # must unmount all bind mounts before remove work directory, or bind mounts will be removed!!!
+    _unmount_all_bind_mounts
+    rm -rf -- "$WORK_DIR"
+    info "Done"
 }
 
 usage() {
@@ -123,26 +152,10 @@ EOF
 }
 
 clean() {
-    set +e
-
     info "Cleaning..."
 
     chroot_teardown
-
-    while true; do
-        local mountpoint
-        readarray -t mountpoints < <(grep -F "$ROOTFS_DIR" /proc/mounts | awk '{print $2}' | LC_ALL=C sort -r)
-
-        if (( ${#mountpoints[@]} == 0 )); then
-            break
-        fi
-
-        error "Failed to unmount: \"${mountpoints[*]}\", try again"
-        for mountpoint in "${mountpoints[@]}"; do
-            umount -v -- "$mountpoint"
-        done
-        sleep 1
-    done
+    _unmount_all_bind_mounts
 
     info "Done"
 
@@ -167,8 +180,7 @@ while (( $# > 0 )); do
         debug=1
         ;;
     -c | --clean)
-        clean
-        rm -rf -- "$WORK_DIR"
+        _remove_work_dir
         if [[ -z "$rootfs_tarball" ]]; then
             exit
         fi

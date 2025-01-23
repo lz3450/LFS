@@ -141,12 +141,6 @@ for pkgbase in "${pkgs[@]}"; do
     info "Updating $pkgbase..."
     update "$pkgbase"
     case "$pkgbase" in
-        zlib)
-            update minizip
-            ;;
-        audit)
-            update python-audit
-            ;;
         lvm2)
             update device-mapper
             ;;

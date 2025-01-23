@@ -46,7 +46,12 @@ kzl_stage1_pkgs=(
 )
 
 kzl_stage2_pkgs=(
-    cmake
+    git
+    # fakeroot
+    # libgpg-error
+    #  libassuan libksba npth pinentry gnupg gpgme
+    # pacman
+    # pacman-contrib
 )
 _kzl_stage2_pkgs=(
     ################################
@@ -90,7 +95,7 @@ _kzl_stage2_pkgs=(
     ca-certificates
 
     ################################
-    # base-devel (cmake)
+    # base-devel (git, cmake)
     ################################
     ################
     # curl
@@ -102,6 +107,8 @@ _kzl_stage2_pkgs=(
     openssl
     curl
 
+    expat pcre2 git
+
     ################
     # libarchive
     ################
@@ -109,8 +116,7 @@ _kzl_stage2_pkgs=(
     bzip2
     icu libxml2
     libarchive
-
-    expat libuv rhash jsoncpp cmake
+    libuv rhash jsoncpp cmake
 
     ################################
     # filesystem
@@ -123,7 +129,7 @@ _kzl_stage2_pkgs=(
     ################
     # audit
     ################
-    pcre2 swig libcap-ng
+    swig libcap-ng
     audit
 
     ################
@@ -140,7 +146,7 @@ _kzl_stage2_pkgs=(
     # pacman
     ################################
     fakeroot
-    libassuan libksba npth pinentry gnupg gpgme
+    libgpg-error libassuan libksba npth pinentry gnupg gpgme
     pacman
     pacman-contrib
 

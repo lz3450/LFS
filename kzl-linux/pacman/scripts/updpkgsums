@@ -77,7 +77,7 @@ awk -v sumtypes="$sumtypes" -v newsums="$newsums" '
 ' "$PKGBUILD_FILE" > "$NEW_PKGBUILD_FILE" || error 'Failed to write new PKGBUILD' 5
 trap 'rm -rf "$NEW_PKGBUILD_FILE"' EXIT
 
-if ! cat -- "$NEW_PKGBUILD_FILE" >"$PKGBUILD_FILE"; then
+if ! cat -- "$NEW_PKGBUILD_FILE" > "$PKGBUILD_FILE"; then
 	error "Failed to update %s. The file has not been modified." "$PKGBUILD_FILE"
 fi
 
