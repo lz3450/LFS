@@ -150,7 +150,7 @@ setup_pacman_repo() {
         local _pkg_file=$(get_pkg_file "$pkg" "/$PACMAN_REPO_DIR")
         cp -f -- "/$PACMAN_REPO_DIR/$_pkg_file" "$ROOTFS_DIR/$PACMAN_REPO_DIR"
         repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_PATH" "$ROOTFS_DIR/$PACMAN_REPO_DIR/$_pkg_file" \
-            >"$LOG_DIR"/pacman-repo-add.log 2>&1 \
+            > "$LOG_DIR"/pacman-repo-add.log 2>&1 \
             || error "Failed to set up pacman repository" 8
     done
     umount "$ROOTFS_DIR/home"
@@ -192,7 +192,7 @@ make_rootfs_archive() {
     info "Creating rootfs archive $_name..."
 
     tar --numeric-owner -vcf "$OUT_DIR/$_name" \
-        --zstd -C "$ROOTFS_DIR" . >"$LOG_DIR"/tar.log 2>&1
+        --zstd -C "$ROOTFS_DIR" . > "$LOG_DIR"/tar.log 2>&1
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$_name"
 
     info "Done"
@@ -217,7 +217,7 @@ make_initramfs_for_kernel() {
         --zstd \
         --kernel-image "$_kernel_image" \
         --kmoddir "$_kmoddir" \
-        "$ROOTFS_DIR/boot/initramfs-$_kernel_version.img" >"$LOG_DIR"/dracut-$_kernel_version.log 2>&1
+        "$ROOTFS_DIR/boot/initramfs-$_kernel_version.img" > "$LOG_DIR"/dracut-$_kernel_version.log 2>&1
     info "Done"
 
 }
@@ -241,7 +241,7 @@ make_efibootimg() {
 
     info "Creating FAT image of size: $_imgsize Byte..."
     rm -f -- "$EFIBOOT_IMG"
-    mkfs.fat -C -F 32 -n "ISO_EFI" "$EFIBOOT_IMG" "$_imgsize" >/dev/null 2>&1
+    mkfs.fat -C -F 32 -n "ISO_EFI" "$EFIBOOT_IMG" "$_imgsize" > /dev/null 2>&1
     info "Done"
 
     info "Setting up systemd-boot for UEFI booting..."
@@ -306,7 +306,7 @@ make_iso_image() {
         -appended_part_as_gpt \
         -no-pad \
         -output "$OUT_DIR/$_name" \
-        "$ISOFS_DIR/" >"$LOG_DIR"/xorriso.log 2>&1 || error "Failed to create ISO image" 7
+        "$ISOFS_DIR/" > "$LOG_DIR"/xorriso.log 2>&1 || error "Failed to create ISO image" 7
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$_name"
     info "Done"
 }
