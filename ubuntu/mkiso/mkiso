@@ -101,7 +101,7 @@ debootstrap_rootfs() {
         "$debootstrap_suite" \
         "$ROOTFS_DIR" \
         "$UBUNTU_MIRROR" \
-        >"$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap rootfs" 4
+        > "$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap rootfs" 4
     if [[ "$debootstrap_suite" == "noble" ]]; then
         rmdir -v "$ROOTFS_DIR"/bin.usr-is-merged
         rmdir -v "$ROOTFS_DIR"/sbin.usr-is-merged
@@ -118,7 +118,7 @@ debootstrap_rootfs() {
         "$debootstrap_suite" \
         "$ROOTFS_DIR"/tmp \
         "$UBUNTU_MIRROR" \
-        >"$ISOFS_DIR"/deb_pkglist.txt 2>/dev/null || warn "Failed to creating a list of installed deb packages"
+        > "$ISOFS_DIR"/deb_pkglist.txt 2> /dev/null || warn "Failed to creating a list of installed deb packages"
     info "Done"
 
     info "Configuring rootfs..."
