@@ -19,7 +19,7 @@ kzl_stage0_pkgs=(
     texinfo
     diffutils
     bison
-    libtool flex
+    libtool help2man flex
     ed patch
     bc
 )

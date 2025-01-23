@@ -86,7 +86,7 @@ setup_rootfs() {
         echo kzl:3450 | chroot_run "$ROOTFS_DIR" chpasswd
         chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/kzl-linux/pacman && . ./setup.sh && updaterepo -r kzl"
         chroot_run "$ROOTFS_DIR" pacman -Syu
-        # chroot_run "$ROOTFS_DIR" pacman -Sy base-devel
+        chroot_run "$ROOTFS_DIR" pacman -Sy base-devel
         chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/config && ./update-config.sh"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python -m ensurepip"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python -m pip wheel --wheel-dir /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR --no-binary :all: pip meson ninja"
