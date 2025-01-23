@@ -2,7 +2,7 @@
 
 pkgname=diffutils
 pkgver=3.10
-pkgrel=8
+pkgrel=11
 epoch=
 pkgdesc="Programs related to finding differences between files"
 arch=('x86_64')

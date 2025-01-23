@@ -2,7 +2,7 @@
 
 pkgname=bc
 pkgver=1.08.1
-pkgrel=9
+pkgrel=10
 epoch=
 pkgdesc="An arbitrary precision calculator language"
 arch=('x86_64')
