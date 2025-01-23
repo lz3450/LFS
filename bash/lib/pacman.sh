@@ -21,10 +21,12 @@ PKGNAME_REGEX="\([0-9]+:\)?\([0-9a-zA-Z]+\(\.\|\+\)?\)+-[0-9]+-\(x86_64\|aarch64
 ### functions
 get_pkg_file() {
     local _pkg="$1"
-    local _repo_dir="$2"
+    local _dir="$2"
     #               pkgname-
     local _pkg_regex="$_pkg-$PKGNAME_REGEX"
-    find "$_repo_dir" -type f -regex "$_repo_dir/$_pkg_regex" -printf "%T@ %f\n" | LC_ALL=C sort -n | tail -n 1 | cut -d ' ' -f 2
+    if [[ -d "$_dir" ]]; then
+        find "$_dir" -type f -regex "$_dir/$_pkg_regex" -printf "%T@ %f\n" | LC_ALL=C sort -n | tail -n 1 | cut -d ' ' -f 2
+    fi
 }
 
 debug "${BASH_SOURCE[0]} sourced"
