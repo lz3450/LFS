@@ -6,7 +6,7 @@
 set -e
 
 mountpoint="/mnt"
-debootstrap_suite="jammy"
+debootstrap_suite="noble"
 common_deb_pkgs=(
     sudo
     nano
@@ -43,8 +43,8 @@ if (($# != 1)); then
 fi
 
 case "$1" in
-    jammy)      debootstrap_suite="jammy" ;;
     noble)      debootstrap_suite="noble" ;;
+    jammy)      debootstrap_suite="jammy" ;;
     *)          echo "Unknown suite \"$1\"" && exit 1
 esac
 
@@ -64,7 +64,7 @@ debootstrap \
     http://us.archive.ubuntu.com/ubuntu
 
 # sources.list
-tee "$mountpoint"/etc/apt/sources.list <<EOF
+tee "$mountpoint"/etc/apt/sources.list << EOF
 deb http://us.archive.ubuntu.com/ubuntu $debootstrap_suite main restricted universe
 deb-src http://us.archive.ubuntu.com/ubuntu $debootstrap_suite main restricted universe
 
@@ -77,8 +77,8 @@ EOF
 
 # pacman
 if [[ -f "/usr/local/bin/pacman" ]]; then
-    mkdir -m 0755 -p "$mountpoint"/var/{cache/pacman/pkg,lib/pacman}
-    mkdir -p "$mountpoint"/home/.repository/kzl
+    mkdir -m 0755 -p -- "$mountpoint"/var/{cache/pacman/pkg,lib/pacman}
+    mkdir -p -- "$mountpoint"/home/.repository/kzl
     pacman -Sy -r "$mountpoint" --noconfirm --cachedir "$mountpoint"/home/.repository/kzl pacman pacman-contrib linux
 fi
 
@@ -89,17 +89,17 @@ mkswap "$mountpoint"/swapfile
 
 # hostname
 read -p 'hostname: ' HOSTNAME
-echo $HOSTNAME >"$mountpoint"/etc/hostname
+echo $HOSTNAME > "$mountpoint"/etc/hostname
 
 # network
-tee "$mountpoint"/etc/systemd/network/wlan.network <<EOF
+tee "$mountpoint"/etc/systemd/network/wlan.network << EOF
 [Match]
 Name=wl*
 
 [Network]
 DHCP=yes
 EOF
-tee "$mountpoint"/etc/systemd/network/ethernet.network <<EOF
+tee "$mountpoint"/etc/systemd/network/ethernet.network << EOF
 [Match]
 Name=en*
 Name=eth*
@@ -107,7 +107,7 @@ Name=eth*
 [Network]
 DHCP=yes
 EOF
-tee "$mountpoint"/etc/wpa_supplicant/wpa_supplicant-wlan.conf <<EOF
+tee "$mountpoint"/etc/wpa_supplicant/wpa_supplicant-wlan.conf << EOF
 network={
 	ssid="LuckySKZLJ"
 	psk=51d8558a663cf1d191b42cd88d542e3847ce4da204196fa016c30728bc67f6e3
@@ -121,7 +121,7 @@ EOF
 # if [[ -f "$mountpoint"/etc/NetworkManager/NetworkManager.conf ]]; then
 #     mv "$mountpoint"/etc/NetworkManager/NetworkManager.conf "$mountpoint"/etc/NetworkManager/NetworkManager.conf.backup
 # fi
-# cat >"$mountpoint"/etc/NetworkManager/NetworkManager.conf <<EOF
+# cat > "$mountpoint"/etc/NetworkManager/NetworkManager.conf << EOF
 # [main]
 # plugins=keyfile,ifupdown
 
@@ -134,8 +134,8 @@ EOF
 
 # grml-zsh-config
 wget -O "$mountpoint"/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
-echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >>"$mountpoint"/root/.zshrc
-echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >>"$mountpoint"/root/.zshrc
+echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$mountpoint"/root/.zshrc
+echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$mountpoint"/root/.zshrc
 
 cp initialize.sh "$mountpoint"/root
 
@@ -143,29 +143,29 @@ cp initialize.sh "$mountpoint"/root
 
 # boot
 mkdir -p "$mountpoint"/boot/efi/loader/entries
-tee "$mountpoint"/boot/efi/loader/loader.conf <<EOF
+tee "$mountpoint"/boot/efi/loader/loader.conf << EOF
 timeout 3
 console-mode max
 default ubuntu.conf
 EOF
-tee "$mountpoint"/boot/efi/loader/entries/ubuntu.conf <<EOF
+tee "$mountpoint"/boot/efi/loader/entries/ubuntu.conf << EOF
 title   Ubuntu
 linux   /vmlinuz
 initrd  /initrd.img
 options root=PARTUUID="" rw rootwait
 EOF
-tee "$mountpoint"/boot/efi/loader/entries/kzl.conf <<EOF
+tee "$mountpoint"/boot/efi/loader/entries/kzl.conf << EOF
 title   Ubuntu-KZL
 linux   /vmlinuz-KZL
 initrd  /initrd-KZL.img
 options root=PARTUUID="" rw rootwait
 EOF
 # EFI: /boot/efi
-blkid >>"$mountpoint"/boot/efi/loader/entries/ubuntu.conf
+blkid >> "$mountpoint"/boot/efi/loader/entries/ubuntu.conf
 nano "$mountpoint"/boot/efi/loader/entries/ubuntu.conf
-blkid >>"$mountpoint"/boot/efi/loader/entries/kzl.conf
+blkid >> "$mountpoint"/boot/efi/loader/entries/kzl.conf
 nano "$mountpoint"/boot/efi/loader/entries/kzl.conf
 
 # fstab
-blkid >"$mountpoint"/etc/fstab
+blkid > "$mountpoint"/etc/fstab
 nano "$mountpoint"/etc/fstab
