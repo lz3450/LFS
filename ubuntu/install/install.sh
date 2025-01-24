@@ -79,7 +79,7 @@ EOF
 if [[ -f "/usr/local/bin/pacman" ]]; then
     mkdir -m 0755 -p -- "$mountpoint"/var/{cache/pacman/pkg,lib/pacman}
     mkdir -p -- "$mountpoint"/home/.repository/kzl
-    pacman -Sy -r "$mountpoint" --noconfirm --cachedir "$mountpoint"/home/.repository/kzl pacman pacman-contrib linux
+    pacman -Sy -r "$mountpoint" --noconfirm --cachedir "$mountpoint"/home/.repository/kzl pacman linux
 fi
 
 # swap
@@ -139,7 +139,8 @@ echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$mountp
 
 cp initialize.sh "$mountpoint"/root
 
-./kzl-chroot "$mountpoint" /bin/bash
+# Assume that LFS located at "/home/LFS"
+BASH_LIB_DIR="/home/LFS/bash/lib" ./kzl-chroot "$mountpoint" /bin/bash
 
 # boot
 mkdir -p "$mountpoint"/boot/efi/loader/entries
@@ -167,5 +168,12 @@ blkid >> "$mountpoint"/boot/efi/loader/entries/kzl.conf
 nano "$mountpoint"/boot/efi/loader/entries/kzl.conf
 
 # fstab
-blkid > "$mountpoint"/etc/fstab
+tee "$mountpoint"/etc/fstab << EOF
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# <device> <target> <type> <options> <dump> <pass>
+
+EOF
+blkid >> "$mountpoint"/etc/fstab
 nano "$mountpoint"/etc/fstab
