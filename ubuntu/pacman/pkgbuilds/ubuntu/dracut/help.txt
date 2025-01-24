@@ -8,5 +8,5 @@ enable_documentation ?= no
 enable_dracut_cpio ?= no
 bindir ?= /usr/local/bin
 KMOD_CFLAGS ?= 
-KMOD_LIBS ?= -lkmod
+KMOD_LIBS ?= -lkmod 
 FTS_LIBS ?= -lc
