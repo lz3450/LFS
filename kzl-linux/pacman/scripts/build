@@ -122,9 +122,9 @@ build() {
         info "Installing package..."
         # sudo pacman -Sddy --noconfirm --overwrite "*" $_pkgname --config $pacman_conf
         local -a _pkgnames=$(get_pkgnames "$_pkgname")
-        sudo pacman -S --noconfirm "${_pkgnames{@}}" >> "$_log" 2>&1
+        sudo pacman -S --noconfirm "${_pkgnames[@]}" >> "$_log" 2>&1
         echo "Package Contents:" >> "$_log" 2>&1
-        pacman -Ql "${_pkgnames{@}}" >> "$_log" 2>&1
+        pacman -Ql "${_pkgnames[@]}" >> "$_log" 2>&1
         info "Done"
     fi
 }
