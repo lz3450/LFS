@@ -19,6 +19,7 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 
 ### libraries
 source "$BASH_LIB_DIR"/log.sh
+source "$BASH_LIB_DIR"/pacman.sh
 source "$SCRIPT_DIR"/lib/pkglists.sh
 
 ### constants & variables
@@ -53,19 +54,6 @@ prepare() {
     info "Done"
 
     mkdir -p -- "$LOG_DIR"
-}
-
-get_pkgbase() {
-    local _pkgbase
-    case "$1" in
-        device-mapper)
-            _pkgbase=lvm2
-            ;;
-        *)
-            _pkgbase="$1"
-            ;;
-    esac
-    echo "$_pkgbase"
 }
 
 build() {
@@ -123,19 +111,20 @@ build() {
         _clean=''
     fi
 
-    makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm >>"$_log" 2>&1
+    makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm >> "$_log" 2>&1
     info "Done"
 
     info "Updating repo..."
-    updaterepo -r "$repo" >>"$_log" 2>&1
-    sudo pacman -Sy >>"$_log" 2>&1
+    updaterepo -r "$repo" >> "$_log" 2>&1
+    sudo pacman -Sy >> "$_log" 2>&1
     info "Done"
     if (( $install > 0 )); then
         info "Installing package..."
         # sudo pacman -Sddy --noconfirm --overwrite "*" $_pkgname --config $pacman_conf
-        sudo pacman -S --noconfirm $_pkgname >>"$_log" 2>&1
-        echo "Package Contents:" >>"$_log" 2>&1
-        pacman -Ql $_pkgname >>"$_log" 2>&1
+        local -a _pkgnames=$(get_pkgnames "$_pkgname")
+        sudo pacman -S --noconfirm "${_pkgnames{@}}" >> "$_log" 2>&1
+        echo "Package Contents:" >> "$_log" 2>&1
+        pacman -Ql "${_pkgnames{@}}" >> "$_log" 2>&1
         info "Done"
     fi
 }
