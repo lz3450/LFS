@@ -2,7 +2,7 @@
 
 pkgname=debootstrap
 pkgver=1.0.140
-pkgrel=5
+pkgrel=6
 epoch=
 pkgdesc="Bootstrap a basic Debian system"
 arch=('any')

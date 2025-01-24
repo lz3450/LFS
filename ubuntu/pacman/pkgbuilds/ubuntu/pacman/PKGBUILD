@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g37
-pkgrel=4
+pkgrel=8
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
