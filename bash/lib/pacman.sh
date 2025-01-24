@@ -29,4 +29,30 @@ get_pkg_file() {
     fi
 }
 
+get_pkgbase() {
+    local _pkgbase
+    case "$1" in
+        device-mapper)
+            _pkgbase=lvm2
+            ;;
+        *)
+            _pkgbase="$1"
+            ;;
+    esac
+    echo "$_pkgbase"
+}
+
+get_pkgnames() {
+    local -a _pkgnames
+    case "$1" in
+        linux)
+            _pkgnames=(linux linux-headers)
+            ;;
+        *)
+            _pkgnames=("$1")
+            ;;
+    esac
+    echo "${_pkgnames[@]}"
+}
+
 debug "${BASH_SOURCE[0]} sourced"
