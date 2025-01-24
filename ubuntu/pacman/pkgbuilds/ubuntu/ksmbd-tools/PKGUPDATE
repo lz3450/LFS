@@ -2,6 +2,6 @@ new_version=$(git ls-remote --tags https://github.com/cifsd-team/ksmbd-tools | g
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    meson configure build >"$PKGBUILDDIR"/help.txt
+    meson configure build > "$PKGBUILDDIR"/help.txt
     cp ksmbd.conf.example "$PKGBUILDDIR"/ksmbd.conf.example
 }
