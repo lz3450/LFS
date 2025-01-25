@@ -63,6 +63,12 @@ debootstrap \
     "$mountpoint" \
     http://us.archive.ubuntu.com/ubuntu
 
+if [[ "$debootstrap_suite" == "noble" ]]; then
+    rmdir -v "$mountpoint"/bin.usr-is-merged
+    rmdir -v "$mountpoint"/sbin.usr-is-merged
+    rmdir -v "$mountpoint"/lib.usr-is-merged
+fi
+
 # sources.list
 tee "$mountpoint"/etc/apt/sources.list << EOF
 deb http://us.archive.ubuntu.com/ubuntu $debootstrap_suite main restricted universe
