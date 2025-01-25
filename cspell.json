@@ -110,6 +110,7 @@
         "groupmems",
         "groupname",
         "grpck",
+        "gsettings",
         "gshadow",
         "gssapi",
         "haswell",
