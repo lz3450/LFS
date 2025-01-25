@@ -89,13 +89,13 @@ make_rootfs() {
     mkdir -p -- "$LOG_DIR"
 
     # Write build date to file
-    echo "$(date '+%Y/%m/%d %H:%M:%S')" >"$ISOFS_DIR/build_time.txt"
+    echo "$(date '+%Y/%m/%d %H:%M:%S')" > "$ISOFS_DIR/build_time.txt"
 
     # Copy custom root file system files.
     if [[ -d "$SCRIPT_DIR/rootfs" ]]; then
         if (( "$no_update_rootfs" == 0 )); then
             info "Update custom rootfs files..."
-            sudo -u ${SUDO_USER:-root} "$SCRIPT_DIR"/update-rootfs >"$LOG_DIR"/rootfs_update.log 2>&1 || error "Failed to update rootfs" 3
+            sudo -u ${SUDO_USER:-root} "$SCRIPT_DIR"/update-rootfs > "$LOG_DIR"/rootfs_update.log 2>&1 || error "Failed to update rootfs" 3
             info "Done"
         fi
         info "Copying custom rootfs files..."
@@ -120,13 +120,13 @@ pacstrap_rootfs() {
     install -d -m 0755 -- "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman,log} "$ROOTFS_DIR"/{dev,run,etc/pacman.d}
     install -d -m 1777 -- "$ROOTFS_DIR"/tmp
     install -d -m 0555 -- "$ROOTFS_DIR"/{sys,proc}
-    chroot_setup "$ROOTFS_DIR" >"$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
-    unshare --fork --pid pacman -Sy -r "$ROOTFS_DIR" --noconfirm --cachedir "/$PACMAN_REPO_DIR" "${_pkg_list[@]}" >>"$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
-    chroot_teardown >>"$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
+    chroot_setup "$ROOTFS_DIR" > "$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
+    unshare --fork --pid pacman -Sy -r "$ROOTFS_DIR" --noconfirm --cachedir "/$PACMAN_REPO_DIR" "${_pkg_list[@]}" >> "$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
+    chroot_teardown >> "$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
     info "Done"
 
     info "Creating a list of installed pacman packages..."
-    pacman -Q --sysroot "$ROOTFS_DIR" >"$ISOFS_DIR"/pacman_pkglist.txt 2>/dev/null || warn "Failed to creating a list of installed pacman packages"
+    pacman -Q --sysroot "$ROOTFS_DIR" > "$ISOFS_DIR"/pacman_pkglist.txt 2> /dev/null || warn "Failed to creating a list of installed pacman packages"
     info "Done"
 }
 
@@ -136,7 +136,7 @@ make_mutable_img() {
     info "Creating mutable image \"$MUTABLE_IMG\"..."
     rm -f -- "$MUTABLE_IMG"
     fallocate -l "$_size" "$MUTABLE_IMG"
-    mkfs -t "$mutable_image_type" -f -l MUTABLE "$MUTABLE_IMG" >"$LOG_DIR"/mkfs-mutable.log 2>&1
+    mkfs -t "$mutable_image_type" -f -l MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
     info "Done"
 }
 
@@ -272,13 +272,13 @@ make_rootfs_squashfs() {
         "/boot" \
         "vfat" \
         "defaults" \
-        "0" "2" >"$ROOTFS_DIR"/etc/fstab
+        "0" "2" > "$ROOTFS_DIR"/etc/fstab
     printf "$FSTAB_ROW_FORMAT" \
         "LABEL=MUTABLE" \
         "/home" \
         "$mutable_image_type" \
         "defaults" \
-        "0" "2" >>"$ROOTFS_DIR"/etc/fstab
+        "0" "2" >> "$ROOTFS_DIR"/etc/fstab
     # Create a squashfs image and place it in the ISO 9660 file system.
     mkdir -p -- "$ISOFS_DIR/$INSTALL_DIR"
     mksquashfs "$ROOTFS_DIR" "$_image_path" -comp zstd -b 1M -noappend
