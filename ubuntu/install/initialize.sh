@@ -13,6 +13,8 @@ apt-get dist-upgrade -y
 dpkg-reconfigure locales
 dpkg-reconfigure tzdata
 
+dpkg --get-selections | awk '{print $1}' > bootstrap-installed-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
+
 ###############################################################################
 
 set +e

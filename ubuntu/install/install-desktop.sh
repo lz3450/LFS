@@ -3,27 +3,38 @@
 # install-desktop.sh
 #
 
-pkgs=(
-  ubuntu-desktop-minimal
-  tmux
-  landscape-client
-)
-
 set -e
+
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root"
+    exit 255
+fi
+
+pkgs=(
+  fonts-ubuntu
+  gnome-shell-extension-ubuntu-dock
+  gnome-shell-extension-ubuntu-tiling-assistant
+  gsettings-ubuntu-schemas
+  landscape-client
+  tmux
+  ubuntu-session
+  ubuntu-settings
+  ubuntu-wallpapers
+)
 
 # install packages
 apt-get update
 apt-get upgrade -y
-apt-get install -s "${pkgs[@]}" | grep "^Inst" | awk '{print $2}' | sort -n > desktop-installed-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
+apt-get install -s "${pkgs[@]}" | grep "^Inst" | awk '{print $2}' | sort -n > desktop-to-install-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
 apt-get install -y "${pkgs[@]}"
 
 # disable automount
 gsettings set org.gnome.desktop.media-handling automount false
 
 # cleanup
-if mountpoint -q /var/snap/firefox/common/host-hunspell; then
-    umount /var/snap/firefox/common/host-hunspell
-fi
+# if mountpoint -q /var/snap/firefox/common/host-hunspell; then
+#     umount /var/snap/firefox/common/host-hunspell
+# fi
 apt-get purge -y \
     ubuntu-advantage-* \
     ubuntu-drivers-* \
@@ -36,9 +47,11 @@ apt-get purge -y \
     avahi-daemon \
     memtest86+* \
     snapd \
-    xserver-xorg \
+    xserver-xorg* \
     printer-driver-*
 apt-get autoremove --purge -y
+
+dpkg --get-selections | awk '{print $1}' > desktop-installed-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
 
 rm -vrf /var/lib/update-manager
 rm -vrf /var/lib/ubuntu-drivers-common
@@ -66,5 +79,5 @@ systemctl disable wpa_supplicant@
 systemctl enable NetworkManager
 
 # configure default target
-# systemctl set-default multi-user.target
-# systemctl set-default graphics.target
+systemctl set-default multi-user.target
+systemctl set-default graphics.target
