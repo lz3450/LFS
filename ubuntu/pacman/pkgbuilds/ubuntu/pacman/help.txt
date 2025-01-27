@@ -14,7 +14,6 @@ Main project options:
                                                                    release, minsize, custom]                                                                    
   cmake_prefix_path              []                               []                               List of additional prefixes for cmake to search              
   debug                          false                            [true, false]                    Enable debug symbols and other information                   
-  default_both_libraries         shared                           [shared, static, auto]           Default library type for both_libraries                      
   default_library                shared                           [shared, static, both]           Default library type                                         
   force_fallback_for             []                               []                               Force fallback for those subprojects                         
   genvslite                      vs2022                           [vs2022]                         Setup multiple buildtype-suffixed ninja-backend build        
