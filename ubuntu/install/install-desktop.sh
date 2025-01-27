@@ -80,4 +80,14 @@ systemctl enable NetworkManager
 
 # configure default target
 systemctl set-default multi-user.target
-systemctl set-default graphics.target
+case "$(. /etc/os-release && echo $UBUNTU_CODENAME)" in
+    noble)
+        systemctl set-default graphical.target
+        ;;
+    jammy)
+        systemctl set-default graphics.target
+        ;;
+    *)
+        echo "Not supported codename"
+        ;;
+esac
