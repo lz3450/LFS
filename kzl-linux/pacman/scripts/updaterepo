@@ -123,6 +123,10 @@ if [[ ! -d "$repo_dir" ]]; then
     sudo mkdir -p -- "$repo_dir"
 fi
 
+if [[ ! -d "$PACKAGE_DIR" ]]; then
+    mkdir -p -- "$PACKAGE_DIR"
+fi
+
 if (( $replace > 0 )); then
     sudo find "$repo_dir" -name "*.pkg.$EXTENSION" -exec mv -v -t "$PACKAGE_DIR" -- {} +
     sudo chown -R -- "$(stat -c '%U:%G' "$PACKAGE_DIR")" "$PACKAGE_DIR"

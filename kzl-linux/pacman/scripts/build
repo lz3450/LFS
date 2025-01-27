@@ -40,7 +40,6 @@ declare -i no_check=0
 prepare() {
     info "Removing pacman cache and database..."
     sudo pacman -Scc --noconfirm || :
-    echo "Error code: $?"
     info "Done"
 
     if [[ ! -e "$repo_path" ]]; then
@@ -118,11 +117,12 @@ build() {
     updaterepo -r "$repo" >> "$_log" 2>&1
     sudo pacman -Sy >> "$_log" 2>&1
     info "Done"
+
     if (( $install > 0 )); then
         info "Installing package..."
-        # sudo pacman -Sddy --noconfirm --overwrite "*" $_pkgname --config $pacman_conf
-        local -a _pkgnames=$(get_pkgnames "$_pkgname")
-        sudo pacman -S --noconfirm "${_pkgnames[@]}" >> "$_log" 2>&1
+        readarray -t _pkgnames < <(get_pkgnames "$_pkgname")
+        # sudo pacman -Sddy --noconfirm --overwrite "*" "${_pkgnames[@]}" --config $pacman_conf >> "$_log" 2>&1
+        sudo pacman -S --noconfirm ${_pkgnames[@]} >> "$_log" 2>&1
         echo "Package Contents:" >> "$_log" 2>&1
         pacman -Ql "${_pkgnames[@]}" >> "$_log" 2>&1
         info "Done"
