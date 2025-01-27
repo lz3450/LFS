@@ -130,7 +130,7 @@ build() {
 }
 
 usage() {
-    cat <<EOF
+    cat << EOF
 
 Usage: $SCRIPT_NAME -V | --version
 Usage: $SCRIPT_NAME -h | --help
