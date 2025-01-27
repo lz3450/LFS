@@ -46,7 +46,7 @@ get_pkgnames() {
     local -a _pkgnames
     case "$1" in
         linux)
-            _pkgnames=(linux linux-headers)
+            _pkgnames=("linux" "linux-headers")
             ;;
         *)
             _pkgnames=("$1")
