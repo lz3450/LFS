@@ -27,6 +27,7 @@ common_deb_pkgs=(
     zstd
     build-essential
     ### pacman
+    fakeroot
     libarchive-tools
     libgpgme-dev
 )
