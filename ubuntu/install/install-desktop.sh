@@ -14,6 +14,7 @@ pkgs=(
   fonts-ubuntu
   gnome-shell-extension-ubuntu-dock
   gnome-shell-extension-ubuntu-tiling-assistant
+  gnome-system-monitor
   gnome-terminal
   gsettings-ubuntu-schemas
   landscape-client
