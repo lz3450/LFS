@@ -14,12 +14,18 @@ pkgs=(
   fonts-ubuntu
   gnome-shell-extension-ubuntu-dock
   gnome-shell-extension-ubuntu-tiling-assistant
+  gnome-terminal
   gsettings-ubuntu-schemas
   landscape-client
+  nautilus
   tmux
   ubuntu-session
   ubuntu-settings
   ubuntu-wallpapers
+  yaru-theme-gnome-shell
+  yaru-theme-gtk
+  yaru-theme-icon
+  yaru-theme-sound
 )
 
 # install packages
