@@ -11,9 +11,11 @@ set -u
 ################################################################################
 
 cp /etc/ssh/sshd_config rootfs/etc/ssh/
-sed -e '/^#PermitRootLogin/c\PermitRootLogin yes' \
+sed -i \
+    -e '/^X11Forwarding/c\#X11Forwarding yes' \
+    -e '/^#PermitRootLogin/c\PermitRootLogin yes' \
     -e '/^#PermitEmptyPasswords/c\PermitEmptyPasswords yes' \
-    -i rootfs/etc/ssh/sshd_config
+    rootfs/etc/ssh/sshd_config
 
 # grml-zsh-config
 rm -rf rootfs/root/.zsh
