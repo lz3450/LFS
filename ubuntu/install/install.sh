@@ -147,7 +147,7 @@ echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$mountp
 cp initialize.sh "$mountpoint"/root
 
 # Assume that LFS located at "/home/LFS"
-BASH_LIB_DIR="/home/LFS/bash/lib" ./kzl-chroot "$mountpoint" /bin/bash
+BASH_LIB_DIR="../../bash/lib" ./kzl-chroot "$mountpoint" /bin/bash
 
 # boot
 mkdir -p "$mountpoint"/boot/efi/loader/entries
