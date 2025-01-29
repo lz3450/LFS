@@ -70,12 +70,22 @@ build() {
         _log="$LOG_DIR/$_pkgbase.log"
     fi
 
+    if [[ -f "$_log" ]]; then
+        mv "$_log" "${_log/log/old.log}"
+    fi
+
     cd "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$repo/$_pkgbase"
+
+    if [[ -f "install-dependencies.sh" ]]; then
+        info "Installing dependencies..."
+        ./install-dependencies.sh >> "$_log" 2>&1
+        info "Done"
+    fi
 
     # update pkgbuild
     if (( $updatepkg > 0 )); then
         info "Updating PKGBUILD..."
-        updatepkg --syncdeps -i > "$_log" 2>&1 || _updated=$?
+        updatepkg --syncdeps -i >> "$_log" 2>&1 || _updated=$?
         _cleanbuild='-e'
 
         if (( $_updated == 255 )); then
