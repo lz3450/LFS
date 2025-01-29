@@ -1,6 +1,7 @@
 #!/bin/bash
 
-sudo apt-get install \
+sudo apt-get update
+sudo apt-get install -y \
     bash-completion \
     cmake \
     fakechroot \
