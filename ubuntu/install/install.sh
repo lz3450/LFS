@@ -21,7 +21,7 @@ common_deb_pkgs=(
     openssh-server
     git
     bash-completion
-    zsh
+    zsh zsh-syntax-highlighting zsh-autosuggestions
     linux-image-generic
     initramfs-tools
     zstd
@@ -158,15 +158,15 @@ default ubuntu.conf
 EOF
 tee "$mountpoint"/boot/efi/loader/entries/ubuntu.conf << EOF
 title   Ubuntu
-linux   /vmlinuz
-initrd  /initrd.img
-options root=PARTUUID="" rw rootwait
+linux   vmlinuz
+initrd  initrd.img
+options root=PARTUUID= rw rootwait
 EOF
 tee "$mountpoint"/boot/efi/loader/entries/kzl.conf << EOF
 title   Ubuntu-KZL
-linux   /vmlinuz-KZL
-initrd  /initrd-KZL.img
-options root=PARTUUID="" rw rootwait
+linux   vmlinuz-KZL
+#initrd  initrd-KZL.img
+options root=PARTUUID= rw rootwait
 EOF
 # EFI: /boot/efi
 blkid >> "$mountpoint"/boot/efi/loader/entries/ubuntu.conf
@@ -180,6 +180,10 @@ tee "$mountpoint"/etc/fstab << EOF
 # See fstab(5) for details.
 
 # <device> <target> <type> <options> <dump> <pass>
+
+PARTUUID=           /               f2fs            defaults        0 1
+PARTUUID=           /boot/efi       vfat            defaults        0 2
+/swapfile           none            swap            defaults        0 0
 
 EOF
 blkid >> "$mountpoint"/etc/fstab
