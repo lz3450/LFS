@@ -89,6 +89,7 @@ gkbd-capplet
 glib-networking
 glib-networking-common
 glib-networking-services
+gnome-accessibility-themes
 gnome-bluetooth-3-common
 gnome-bluetooth-sendto
 gnome-control-center
@@ -109,6 +110,11 @@ gnome-shell-common
 gnome-shell-extension-ubuntu-dock
 gnome-shell-extension-ubuntu-tiling-assistant
 gnome-startup-applications
+gnome-system-monitor
+gnome-terminal
+gnome-terminal-data
+gnome-themes-extra
+gnome-themes-extra-data
 gnome-user-docs
 groff-base
 gsettings-desktop-schemas
@@ -118,6 +124,8 @@ gstreamer1.0-pipewire
 gstreamer1.0-plugins-base
 gstreamer1.0-plugins-good
 gstreamer1.0-x
+gtk2-engines-murrine
+gtk2-engines-pixbuf
 gtk-update-icon-cache
 gvfs
 gvfs-backends
@@ -181,6 +189,7 @@ libbytesize-common
 libcaca0
 libcairo2
 libcairo-gobject2
+libcairomm-1.16-1
 libcairo-script-interpreter2
 libcamel-1.2-64t64
 libcanberra0t64
@@ -195,6 +204,7 @@ libcolord2
 libcolord-gtk4-1t64
 libcolorhug2
 libcrack2
+libcue2
 libcups2t64
 libdaemon0
 libdatrie1
@@ -204,6 +214,7 @@ libdconf1
 libde265-0
 libdecor-0-0
 libdecor-0-plugin-1-gtk
+libdee-1.0-4
 libdeflate0
 libdrm2
 libdrm-amdgpu1
@@ -230,7 +241,9 @@ libenchant-2-2
 libepoxy0
 libevdev2
 libevent-core-2.1-7t64
+libexempi8
 libexif12
+libexiv2-27
 libflac12t64
 libflashrom1
 libfontconfig1
@@ -238,7 +251,9 @@ libfontenc1
 libfreeaptx0
 libfreerdp3-3
 libfreerdp-server3-3
+libfreetype6
 libftdi1-2
+libfuse3-3
 libfwupd2
 libgail18t64
 libgail-common
@@ -258,6 +273,8 @@ libgdm1
 libgee-0.8-2
 libgeoclue-2-0
 libgeocode-glib-2-0
+libgexiv2-2
+libgif7
 libgjs0g
 libgl1
 libgl1-amber-dri
@@ -265,6 +282,7 @@ libgl1-mesa-dri
 libglapi-mesa
 libgles2
 libglib2.0-bin
+libglibmm-2.68-1t64
 libglvnd0
 libglx0
 libglx-mesa0
@@ -286,6 +304,8 @@ libgphoto2-port12t64
 libgpm2
 libgraphene-1.0-0
 libgraphite2-3
+libgsf-1-114
+libgsf-1-common
 libgsound0t64
 libgssdp-1.6-0
 libgstreamer1.0-0
@@ -302,6 +322,7 @@ libgtk-4-1
 libgtk-4-bin
 libgtk-4-common
 libgtk-4-media-gstreamer
+libgtkmm-4.0-0
 libgtop-2.0-11
 libgtop2-common
 libgudev-1.0-0
@@ -311,6 +332,7 @@ libgupnp-dlna-2.0-4
 libgusb2
 libgweather-4-0t64
 libgweather-4-common
+libgxps2t64
 libhandy-1-0
 libharfbuzz0b
 libharfbuzz-gobject0
@@ -368,6 +390,7 @@ libmtp9t64
 libmtp-common
 libmtp-runtime
 libmutter-14-0
+libnautilus-extension4
 libncurses6
 libndp0
 libnetfilter-conntrack3
@@ -395,6 +418,7 @@ libpam-gnome-keyring
 libpango-1.0-0
 libpangocairo-1.0-0
 libpangoft2-1.0-0
+libpangomm-2.48-1t64
 libpangoxft-1.0-0
 libpcap0.8t64
 libpci3
@@ -406,10 +430,13 @@ libpipewire-0.3-common
 libpipewire-0.3-modules
 libpixman-1-0
 libplist-2.0-4
+libpng16-16t64
 libpolkit-agent-1-0
 libpolkit-gobject-1-0
 libpoppler134
 libpoppler-glib8t64
+libportal1
+libportal-gtk4-1
 libprotobuf32t64
 libprotobuf-c1
 libproxy1v5
@@ -439,6 +466,7 @@ libsensors5
 libsensors-config
 libsharpyuv0
 libshout3
+libsigc++-3.0-0
 libsm6
 libsmbclient0
 libsnapd-glib-2-1
@@ -466,6 +494,9 @@ libthai0
 libthai-data
 libtheora0
 libtiff6
+libtotem-plparser18
+libtotem-plparser-common
+libtracker-sparql-3.0-0
 libtss2-esys-3.0.2-0t64
 libtss2-mu-4.0.1-0t64
 libtss2-rc0t64
@@ -480,6 +511,9 @@ libtss2-tcti-swtpm0t64
 libtwolame0
 libuchardet0
 libudisks2-0
+libunity9
+libunity-protocol-private0
+libunity-scopes-json-def-desktop
 libunwind8
 libupower-glib3
 libusb-1.0-0
@@ -580,6 +614,9 @@ mobile-broadband-provider-info
 modemmanager
 mutter-common
 mutter-common-bin
+nautilus
+nautilus-data
+nautilus-extension-gnome-terminal
 network-manager
 network-manager-gnome
 network-manager-pptp
@@ -666,6 +703,9 @@ tcl8.6
 tecla
 tmux
 tpm-udev
+tracker
+tracker-extract
+tracker-miner-fs
 ubuntu-docs
 ubuntu-mono
 ubuntu-session
@@ -717,6 +757,9 @@ xserver-xorg-video-vesa
 xserver-xorg-video-vmware
 xwayland
 yaru-theme-gnome-shell
+yaru-theme-gtk
+yaru-theme-icon
+yaru-theme-sound
 yelp
 yelp-xsl
 zenity
