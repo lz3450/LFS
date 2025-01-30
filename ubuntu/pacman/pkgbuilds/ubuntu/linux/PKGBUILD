@@ -3,23 +3,26 @@
 pkgbase=linux
 pkgname=(linux linux-headers)
 pkgver=6.12.11
-pkgrel=30
+pkgrel=38
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
 url="https://www.kernel.org"
 license=('KZL')
 options=(!strip)
-source=(git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
-        config
-        update-kernel.sh)
+source=(
+  git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
+  config
+  update-kernel.sh
+)
 sha256sums=('SKIP'
-            '1058826f2c1a5784d3eb4bf66e7478c7d4bc1173a35823e87a611b51afee1571'
-            '71731a67ba64fe0909fff91e390f3df4e3cfa4b1f0c303e75e5d303308f6dadd')
+            '0079caea74c91b6919c68886442aafe13861d969fc480a3fd009ffc912a81182'
+            '6ab805d9344fc6734e41daab0bcd7d8db0fd0fd46474a6cda6619826c9f5bac0')
 
+export LOCALVERSION="-KZL"
 export KBUILD_BUILD_HOST="Ubuntu"
 export KBUILD_BUILD_USER="kzl"
-export KBUILD_BUILD_TIMESTAMP="$(date '+%Y/%m/%d %T %z')"
+export KBUILD_BUILD_TIMESTAMP="$(date '+%Y/%m/%d %T %z') ($pkgrel)"
 
 pkgver() {
   cd $pkgname
@@ -61,7 +64,7 @@ package_linux() {
   ln -sf /usr/src/linux-headers-$kernelrelease "$pkgdir"/usr/lib/modules/$kernelrelease/source
   ln -sf /usr/src/linux-headers-$kernelrelease/build "$pkgdir"/usr/lib/modules/$kernelrelease/build
 
-  sed "s/@pkgver@/$pkgver/" "$srcdir"/update-kernel.sh | install -Dm755 /dev/stdin "$pkgdir"/boot/update-kernel.sh
+  sed "s/@pkgver@/$pkgver/g" "$srcdir"/update-kernel.sh | install -Dm755 /dev/stdin "$pkgdir"/boot/update-kernel.sh
 }
 
 package_linux-headers() {

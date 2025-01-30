@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# update-kernel.sh
+#
 
 set -e
 

@@ -1,0 +1,41 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=kexec-tools
+pkgver=2.0.30.g9
+pkgrel=2
+epoch=
+pkgdesc="Userspace portion of Kexec"
+arch=('x86_64')
+url="https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/"
+license=('KZL')
+source=(
+  git+git://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git
+)
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  git describe --tags | sed 's/^v//;s/-g.*//;s/-/.g/'
+}
+
+prepare() {
+  cd $pkgname
+
+  ./bootstrap
+}
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --prefix=/usr
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}
