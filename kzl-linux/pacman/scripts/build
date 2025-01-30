@@ -71,7 +71,7 @@ build() {
     fi
 
     if [[ -f "$_log" ]]; then
-        mv "$_log" "${_log/log/old.log}"
+        mv "$_log" "${_log/.log/.old.log}"
     fi
 
     cd "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$repo/$_pkgbase"
