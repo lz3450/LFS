@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rust
-pkgver=1.82.0
-pkgrel=2
+pkgver=1.84.0.g14
+pkgrel=5
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')
@@ -23,8 +23,7 @@ pkgver() {
 prepare() {
   cd $pkgname
 
-  sed -i '/# frame-pointers/s/ //' config.example.toml
-
+  local _change_id=$(grep -oP 'change_id: \K\d+' src/bootstrap/src/utils/change_tracker.rs | sort -n | tail -n1)
   local -a _options=(
     ################
     # stage2
@@ -40,38 +39,37 @@ prepare() {
     "--llvm-root=/$llvm_root"
     "--llvm-config=/$llvm_root/bin/llvm-config"
     "--llvm-filecheck=/$llvm_root/bin/FileCheck"
-    "--python=/usr/local/bin/python3.12"
+    "--python=$(which python3)"
     "--release-channel=stable"
-    # "--release-description=KZL $(date '+%Y/%m/%d %T %z')"
-    "--tools=cargo,clippy,rustdoc,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src,wasm-component-ld"
+    "--release-description=KZL $(date '+%Y/%m/%d %T %z')"
+    "--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src,wasm-component-ld"
     "--build=x86_64-unknown-linux-gnu"
     "--host=x86_64-unknown-linux-gnu"
     "--target=x86_64-unknown-linux-gnu"
     --enable-option-checking
     --enable-verbose-configure
-    "--set change-id=129295"
-    "--set rust.frame-pointers=true"
-    "--set rust.backtrace-on-ice=true"
-    "--set rust.remap-debuginfo=true"
-    "--set rust.jemalloc=true"
-    "--set target.x86_64-unknown-linux-gnu.cc=/$llvm_root/bin/clang"
-    "--set target.x86_64-unknown-linux-gnu.cxx=/$llvm_root/bin/clang++"
-    "--set target.x86_64-unknown-linux-gnu.ar=/$llvm_root/bin/llvm-ar"
-    "--set target.x86_64-unknown-linux-gnu.ranlib=/$llvm_root/bin/llvm-ranlib"
-    "--set target.x86_64-unknown-linux-gnu.linker=/$llvm_root/bin/clang"
-    "--set build.lldb=/$llvm_root/bin/lldb"
-    "--set rust.lld=true"
-    "--set rust.use-lld=true"
-    # "--set target.x86_64-linux-gnu.cc=gcc"
-    # "--set target.x86_64-linux-gnu.cxx=g++"
-    # "--set target.x86_64-linux-gnu.ar=ar"
-    # "--set target.x86_64-linux-gnu.ranlib=ranlib"
-    # "--set target.x86_64-linux-gnu.linker=gcc"
+    "--set=change-id=$_change_id"
+    "--set=rust.frame-pointers=true"
+    "--set=rust.backtrace-on-ice=true"
+    "--set=rust.remap-debuginfo=true"
+    "--set=rust.jemalloc=true"
+    "--set=target.x86_64-unknown-linux-gnu.cc=/$llvm_root/bin/clang"
+    "--set=target.x86_64-unknown-linux-gnu.cxx=/$llvm_root/bin/clang++"
+    "--set=target.x86_64-unknown-linux-gnu.ar=/$llvm_root/bin/llvm-ar"
+    "--set=target.x86_64-unknown-linux-gnu.ranlib=/$llvm_root/bin/llvm-ranlib"
+    "--set=target.x86_64-unknown-linux-gnu.linker=/$llvm_root/bin/clang"
+    "--set=build.lldb=/$llvm_root/bin/lldb"
+    "--set=rust.lld=true"
+    "--set=rust.use-lld=true"
+    # "--set=target.x86_64-linux-gnu.cc=gcc"
+    # "--set=target.x86_64-linux-gnu.cxx=g++"
+    # "--set=target.x86_64-linux-gnu.ar=ar"
+    # "--set=target.x86_64-linux-gnu.ranlib=ranlib"
+    # "--set=target.x86_64-linux-gnu.linker=gcc"
   )
 
   ./configure \
-    ${_options[@]} \
-    --release-description="KZL $(date '+%Y/%m/%d %T %z')"
+    "${_options[@]}"
 }
 
 build() {
@@ -83,7 +81,7 @@ build() {
 check() {
   cd $pkgname
 
-  # ./x.py test
+  ./x.py test
 }
 
 package() {
