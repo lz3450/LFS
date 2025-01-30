@@ -91,7 +91,7 @@ Main project options:
   -----------------              -------------                    ---------------                  -----------                                                  
   krb5                           disabled                         [enabled, disabled, auto]        Support for Kerberos 5 authentication                        
   krb5_name                      krb5                                                              Dependency name used when checking Kerberos 5 support        
-  rundir                                                                                           Directory to store modifiable per-process data               
+  rundir                         /run                                                              Directory to store modifiable per-process data               
                                                                                                    (LOCALSTATEDIR/run by default)                               
   systemdsystemunitdir           /usr/lib/systemd/system                                           Directory to install systemd unit file (query pkg-config by  
                                                                                                    default)                                                     

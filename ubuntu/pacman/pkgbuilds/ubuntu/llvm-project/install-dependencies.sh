@@ -1,7 +1,7 @@
 #!/bin/bash
 
-sudo apt update
-sudo apt install \
+sudo apt-get update
+sudo apt-get install -y \
     cmake \
     libedit-dev \
     libffi-dev \
@@ -9,5 +9,4 @@ sudo apt install \
     libxml2-dev \
     libz3-dev \
     libzstd-dev \
-    ninja-build \
     zlib1g-dev

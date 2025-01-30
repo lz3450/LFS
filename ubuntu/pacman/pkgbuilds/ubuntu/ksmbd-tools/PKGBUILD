@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ksmbd-tools
-pkgver=3.5.3.g1
-pkgrel=7
+pkgver=3.5.3.g2
+pkgrel=2
 epoch=
 pkgdesc="A collection of userspace utilities for the ksmbd kernel server"
 arch=('x86_64')
@@ -32,6 +32,7 @@ prepare() {
     --buildtype plain \
     -D b_lto=true \
     -D b_pie=true \
+    -D rundir=/run \
     -D systemdsystemunitdir=/usr/lib/systemd/system \
     build
 }

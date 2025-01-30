@@ -1,6 +1,7 @@
 #!/bin/bash
 
-sudo apt install \
+sudo apt-get update
+sudo apt-get install -y \
     bison \
     flex \
     libelf-dev \

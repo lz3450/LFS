@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
-pkgname=llvm-project-latest
+pkgname=llvm-project
 pkgver=19.1.7
-pkgrel=5
+pkgrel=8
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
