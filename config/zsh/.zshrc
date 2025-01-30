@@ -242,5 +242,5 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias pipwheel="$HOME/.local/bin/pip3 wheel --wheel-dir ~/wheels --no-binary :all:"
-alias pipinstall="$HOME/.local/bin/pip3 install -U --no-index --find-links ~/wheels"
+alias pipwheel="python3 -m pip wheel --wheel-dir ~/wheels --no-binary :all:"
+alias pipinstall="python3 -m pip install --user -U --no-index --find-links ~/wheels"
