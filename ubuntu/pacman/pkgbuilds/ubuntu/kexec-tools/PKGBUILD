@@ -2,7 +2,7 @@
 
 pkgname=kexec-tools
 pkgver=2.0.30.g9
-pkgrel=2
+pkgrel=5
 epoch=
 pkgdesc="Userspace portion of Kexec"
 arch=('x86_64')
