@@ -73,6 +73,7 @@ noble_deb_pkgs=(
 pacman_pkgs=(
     pacman
     linux
+    debootstrap
 )
 
 ### functions
