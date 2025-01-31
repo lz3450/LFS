@@ -10,6 +10,7 @@ set -u
 
 ################################################################################
 
+# sshd_config
 cp /etc/ssh/sshd_config rootfs/etc/ssh/
 sed -i \
     -e '/^X11Forwarding/c\#X11Forwarding yes' \
@@ -22,6 +23,7 @@ rm -rf rootfs/root/.zsh
 mkdir -p rootfs/root/.zsh
 wget -O rootfs/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
 
+# zsh-syntax-highlighting
 rm -rf rootfs/root/zsh-syntax-highlighting
 git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git rootfs/root/zsh-syntax-highlighting
 pushd rootfs/root/zsh-syntax-highlighting
@@ -30,7 +32,7 @@ make PREFIX="../.zsh/" SHARE_DIR="../.zsh/" DOC_DIR="../.zsh/doc" install
 popd
 rm -rf rootfs/root/zsh-syntax-highlighting
 
-
+# zsh-autosuggestions
 rm -rf rootfs/root/zsh-autosuggestions
 git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git rootfs/root/zsh-autosuggestions
 pushd rootfs/root/zsh-autosuggestions
@@ -41,5 +43,9 @@ rm -rf rootfs/root/zsh-autosuggestions
 
 rm -rf rootfs/root/.zsh/doc
 
-echo 'source ~/.zsh/zsh-syntax-highlighting.zsh' >>rootfs/root/.zshrc
-echo 'source ~/.zsh/zsh-autosuggestions.zsh' >>rootfs/root/.zshrc
+# .zshrc
+echo 'source ~/.zsh/zsh-syntax-highlighting.zsh' >> rootfs/root/.zshrc
+echo 'source ~/.zsh/zsh-autosuggestions.zsh' >> rootfs/root/.zshrc
+
+# .nanorc
+cp ../../config/nano/.nanorc rootfs/root/
