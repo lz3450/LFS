@@ -9,6 +9,9 @@ set -e
 apt-get update
 apt-get upgrade -y
 apt-get dist-upgrade -y
+apt-get purge -y \
+  grub-common
+apt-get autoremove --purge -y
 
 dpkg-reconfigure locales
 dpkg-reconfigure tzdata
