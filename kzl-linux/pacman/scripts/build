@@ -85,28 +85,29 @@ build() {
     # update pkgbuild
     if (( $updatepkg > 0 )); then
         info "Updating PKGBUILD..."
-        updatepkg --syncdeps -i >> "$_log" 2>&1 || _updated=$?
+        updatepkg --syncdeps >> "$_log" 2>&1 || _updated=$?
         _cleanbuild='-e'
 
         if (( $_updated == 255 )); then
-            warn "Current version is newer"
+            warn "  Current version is newer"
         elif (( $_updated == 0 )); then
             info "  No update for PKGBUILD"
         elif (( $_updated == 1 )); then
             info "  Package \"$_pkgbase\" is updated to new version"
+            updatepkg -I >> "$_log" 2>&1
         elif (( $_updated == 2 )); then
-            error "PKGBUILD does not exist" 5
+            error "  PKGBUILD does not exist" 5
         elif (( $_updated == 3 )); then
-            warn "PKGUPDATE does not exist"
+            warn "  PKGUPDATE does not exist"
             _cleanbuild='-C'
         elif (( $_updated >= 4 )); then
-            error "Cannot update the PKGBUILD (error code: $_updated)" 5
+            error "  Cannot update the PKGBUILD (error code: $_updated)" 5
         else
-            error "Unknown \`updatepkg\` result" 5
+            error "  Unknown \`updatepkg\` result" 5
         fi
 
         if (( $updated_only > 0 )) && (( $_updated == 0 || $_updated == 255 )); then
-            info "Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)."
+            info "  Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)."
             return
         fi
         info "Done"
@@ -219,9 +220,9 @@ if [[ -n "$single_package" ]]; then
         error "Cannot use -s | --stage together with -p | --package" 2
     fi
 else
-    stage=${stage:-1}
     case "$repo" in
         kzl)
+            stage=${stage:-1}
             case "$stage" in
             0)
                 # updaterepo --clear -r "$repo"
