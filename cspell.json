@@ -227,6 +227,7 @@
         "mlir",
         "mlocate",
         "mntops",
+        "modeset",
         "modulesdir",
         "mountpoint",
         "mountpoints",
