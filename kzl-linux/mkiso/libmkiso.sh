@@ -104,7 +104,7 @@ make_rootfs() {
         chown -fh -- 0:0 "$ROOTFS_DIR"/etc/shadow
         chmod -f -- 400 "$ROOTFS_DIR"/etc/shadow
         chown -fhR -- 0:0 "$ROOTFS_DIR"/root
-        chmod -fR -- 750 "$ROOTFS_DIR"/root
+        #chmod -fR -- 640 "$ROOTFS_DIR"/root
         info "Done"
     fi
 }
