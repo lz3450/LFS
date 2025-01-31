@@ -30,4 +30,6 @@ sudo ./nvidia-installer \
     --no-check-for-alternate-installs \
     -j $(nproc)
 
+echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
+
 # printf "%s" "blacklist nouveau" | sudo install -Dm644 /dev/stdin /etc/modprobe.d/nouveau_blacklist.conf
