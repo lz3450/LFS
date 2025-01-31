@@ -1,20 +1,20 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.12.7
-pkgrel=1
+pkgver=3.13.1
+pkgrel=4
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
 url="https://www.python.org/"
 license=('KZL')
 source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
-sha256sums=('191248d70a67528bc044ddde9330ff5f3913dd4c47ce268f183959f1466786ca')
+sha256sums=('4d5f60b4a4e3e32e2236702db45f56606c1376a12490b4db9faeac3ba50f06ec')
 
 build() {
   cd cpython
 
-  CFLAGS="${CFLAGS/-O2/-O3} -ffat-lto-objects"
+  CFLAGS="${CFLAGS/-O2/-O3}"
 
   ./configure \
     --prefix=/usr/local \
@@ -24,11 +24,10 @@ build() {
     --enable-ipv6 \
     --with-pkg-config=yes \
     --with-lto=yes \
-    --with-system-expat=no \
+    --with-system-expat=yes \
     --with-system-libmpdec=no \
     --with-dbmliborder=gdbm:ndbm \
-    --with-doc-strings=no \
-    --with-valgrind \
+    --with-doc-strings=yes \
     --with-readline=editline \
     --with-ensurepip=no
 
@@ -39,7 +38,5 @@ package() {
   cd cpython
 
   make DESTDIR="$pkgdir" install
-
-  find "$pkgdir"/usr/local/bin -type l -delete
-  rm -r "$pkgdir"/usr/local/lib/python3.12/__pycache__
+  rm -vr "$pkgdir/usr/local/lib/python${pkgver%.*}"/{test,idlelib/idle_test}
 }

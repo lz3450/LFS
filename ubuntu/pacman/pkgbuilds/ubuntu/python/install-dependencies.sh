@@ -1,29 +1,17 @@
 #!/bin/bash
 
-. /etc/os-release
-
 pkgs=(
+    "libbz2-dev"
+    "libedit-dev"
     "libexpat1-dev"
     "libffi-dev"
-    "libbz2-dev"
-    "libncurses-dev"
     "libgdbm-compat-dev"
     "libgdbm-dev"
+    "libncurses-dev"
+    "libsqlite3-dev"
     "tcl-dev"
     "tk-dev"
-    "libsqlite3-dev"
-    "libedit-dev"
-    "valgrind"
 )
 
-# case $UBUNTU_CODENAME in
-#     "jammy")
-#         pkgs+=("libmpdec-dev")
-#         ;;
-#     "noble")
-#         ;;
-#     *)
-#         ;;
-# esac
-
-sudo apt install "${pkgs[@]}"
+sudo apt-get update
+sudo apt-get install -y "${pkgs[@]}"

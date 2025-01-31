@@ -1,4 +1,4 @@
-`configure' configures python 3.12 to adapt to many kinds of systems.
+`configure' configures python 3.13 to adapt to many kinds of systems.
 
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
@@ -79,7 +79,12 @@ Optional Features:
                           no)
   --enable-profiling      enable C-level code profiling with gprof (default is
                           no)
+  --disable-gil           enable experimental support for running without the
+                          GIL (default is no)
   --enable-pystats        enable internal statistics gathering (default is no)
+  --enable-experimental-jit[=no|yes|yes-off|interpreter]
+                          build the experimental just-in-time compiler
+                          (default is no)
   --enable-optimizations  enable expensive, stable optimizations (PGO, etc.)
                           (default is no)
   --enable-bolt           enable usage of the llvm-bolt post-link optimizer
@@ -97,9 +102,9 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-build-python=python3.12
+  --with-build-python=python3.13
                           path to build python binary for cross compiling
-                          (default: _bootstrap_python or python3.12)
+                          (default: _bootstrap_python or python3.13)
   --with-pkg-config=[yes|no|check]
                           use pkg-config to detect build options (default is
                           check)
@@ -114,6 +119,10 @@ Optional Packages:
                           specify the name for the python framework on macOS
                           only valid when --enable-framework is set. see
                           Mac/README.rst (default is 'Python')
+  --with-app-store-compliance=[PATCH-FILE]
+                          Enable any patches required for compiliance with app
+                          stores. Optional PATCH-FILE specifies the custom
+                          patch to apply.
   --with-emscripten-target=[browser|node]
                           Emscripten platform
   --with-suffix=SUFFIX    set executable suffix to SUFFIX (default is empty,
@@ -151,8 +160,9 @@ Optional Packages:
   --with-libs='lib1 ...'  link against additional libs (default is no)
   --with-system-expat     build pyexpat module using an installed expat
                           library, see Doc/library/pyexpat.rst (default is no)
-  --with-system-libmpdec  build _decimal module using an installed libmpdec
-                          library, see Doc/library/decimal.rst (default is no)
+  --with-system-libmpdec  build _decimal module using an installed mpdecimal
+                          library, see Doc/library/decimal.rst (default is
+                          yes)
   --with-decimal-contextvar
                           build _decimal module using a coroutine-local rather
                           than a thread-local context (default is yes)
@@ -161,6 +171,8 @@ Optional Packages:
                           value is a colon separated string with the backend
                           names `ndbm', `gdbm' and `bdb'.
   --with-doc-strings      enable documentation strings (default is yes)
+  --with-mimalloc         build with mimalloc memory allocator (default is yes
+                          if C11 stdatomic.h is available.)
   --with-pymalloc         enable specialized mallocs (default is yes)
   --with-freelists        enable object freelists (default is yes)
   --with-c-locale-coercion
@@ -229,9 +241,10 @@ Some influential environment variables:
   LIBFFI_CFLAGS
               C compiler flags for LIBFFI, overriding pkg-config
   LIBFFI_LIBS linker flags for LIBFFI, overriding pkg-config
-  LIBNSL_CFLAGS
-              C compiler flags for LIBNSL, overriding pkg-config
-  LIBNSL_LIBS linker flags for LIBNSL, overriding pkg-config
+  LIBMPDEC_CFLAGS
+              C compiler flags for LIBMPDEC, overriding pkg-config
+  LIBMPDEC_LIBS
+              linker flags for LIBMPDEC, overriding pkg-config
   LIBSQLITE3_CFLAGS
               C compiler flags for LIBSQLITE3, overriding pkg-config
   LIBSQLITE3_LIBS
@@ -252,10 +265,6 @@ Some influential environment variables:
               C compiler flags for LIBLZMA, overriding pkg-config
   LIBLZMA_LIBS
               linker flags for LIBLZMA, overriding pkg-config
-  LIBCRYPT_CFLAGS
-              C compiler flags for LIBCRYPT, overriding pkg-config
-  LIBCRYPT_LIBS
-              linker flags for LIBCRYPT, overriding pkg-config
   LIBREADLINE_CFLAGS
               C compiler flags for LIBREADLINE, overriding pkg-config
   LIBREADLINE_LIBS
