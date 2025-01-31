@@ -2,7 +2,7 @@
 
 pkgname=llvm-project
 pkgver=19.1.7
-pkgrel=8
+pkgrel=10
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
@@ -13,7 +13,7 @@ source=(
   x86_64-unknown-linux-gnu.conf
 )
 sha256sums=('f6c754bd1b8d7da76f357a539ff8175f214b7dc1b52391a0fe75cfb9a57f28dd'
-            '35c30e43af264666d74e2b8fcfe07fb566b8f72001dc90bca8a76c1151d18bad')
+            'fad3921d1120bb5a7d9f3cc1f30fe2446f1e2eb6d339f9ef98e53cdb9a8e9ba1')
 
 # https://releases.llvm.org/19.1.0/docs/CMake.html
 
