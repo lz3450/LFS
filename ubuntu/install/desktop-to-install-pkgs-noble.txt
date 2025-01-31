@@ -367,7 +367,7 @@ libldacbt-abr2
 libldacbt-enc2
 libldb2
 liblerc4
-libllvm17t64
+libllvm19
 liblmdb0
 libltdl7
 liblua5.4-0
@@ -609,6 +609,7 @@ libyelp0
 lshw
 lsof
 man-db
+mesa-libgallium
 mesa-vulkan-drivers
 mobile-broadband-provider-info
 modemmanager

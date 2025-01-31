@@ -370,5 +370,7 @@ xxd
 xz-utils
 zlib1g:amd64
 zsh
+zsh-autosuggestions
 zsh-common
+zsh-syntax-highlighting
 zstd
