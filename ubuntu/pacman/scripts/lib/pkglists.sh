@@ -8,9 +8,10 @@ ubuntu_pkgs=(
     ksmbd-tools
     kexec-tools
     python
-    llvm-project
     debootstrap
     dracut
+    llvm-project
+    llvm-project
     rust
     texlive
 )
