@@ -546,7 +546,7 @@ libldacbt-enc2:amd64
 libldap2:amd64
 libldb2:amd64
 liblerc4:amd64
-libllvm17t64:amd64
+libllvm19:amd64
 liblmdb0:amd64
 liblocale-gettext-perl
 liblsan0:amd64
@@ -878,6 +878,7 @@ make
 man-db
 mawk
 media-types
+mesa-libgallium:amd64
 mesa-vulkan-drivers:amd64
 mobile-broadband-provider-info
 modemmanager

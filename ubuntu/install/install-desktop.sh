@@ -35,6 +35,11 @@ apt-get upgrade -y
 apt-get install -s "${pkgs[@]}" | grep "^Inst" | awk '{print $2}' | sort -n > desktop-to-install-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
 apt-get install -y "${pkgs[@]}"
 apt-get purge -y \
+  apport* \
+  avahi* \
+  gnome-user-docs \
+  ubuntu-docs \
+  xserver-xorg* \
   whoopsie
 apt-get autoremove --purge -y
 
