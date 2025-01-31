@@ -35,6 +35,11 @@ noble_deb_pkgs=(
     systemd-boot
     systemd-resolved
 )
+exclude_pkgs=(
+    ubuntu-minimal
+    ubuntu-pro-client
+    ubuntu-pro-client-l10n
+)
 declare -a deb_pkgs
 
 
@@ -57,7 +62,8 @@ elif [[ "$debootstrap_suite" == "noble" ]]; then
 fi
 debootstrap \
     --arch="amd64" \
-    --include="$(IFS=','; echo "${deb_pkgs[*]}")" \
+    --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+    --exclude="$(IFS=',' echo "${exclude_pkgs[*]}")" \
     --components=main,restricted,universe \
     --merged-usr \
     "$debootstrap_suite" \
