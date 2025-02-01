@@ -31,15 +31,16 @@ ROOTFS_DIR="$WORK_DIR/rootfs"
 CHROOT_HOME_DIR="home/kzl"
 PACMAN_REPO_DIR="home/.repository/kzl"
 PACMAN_REPO="$PACMAN_REPO_DIR/kzl.db"
-WHEEL_DIR="$CHROOT_HOME_DIR/makepkg/wheels"
+WHEEL_DIR="$CHROOT_HOME_DIR/wheels"
 PIP_CACHE_DIR="$WHEEL_DIR/.cache"
 HOST_DIRS=(
-    "$PACMAN_REPO_DIR"
-    "$CHROOT_HOME_DIR/LFS"
-    "$CHROOT_HOME_DIR/makepkg/sources"
-    "$CHROOT_HOME_DIR/makepkg/log"
-    "$WHEEL_DIR"
-    "$PIP_CACHE_DIR"
+    # host_dir:chroot_dir
+    "$PACMAN_REPO_DIR:$PACMAN_REPO_DIR"
+    "$CHROOT_HOME_DIR/LFS:$CHROOT_HOME_DIR/LFS"
+    "$CHROOT_HOME_DIR/makepkg/sources:$CHROOT_HOME_DIR/makepkg/sources"
+    "$CHROOT_HOME_DIR/chrootbuild/log:$CHROOT_HOME_DIR/makepkg/log"
+    "$CHROOT_HOME_DIR/chrootbuild/wheels:$WHEEL_DIR"
+    "$CHROOT_HOME_DIR/chrootbuild/wheels/.cache:$PIP_CACHE_DIR"
 )
 USERSPEC="kzl:kzl"
 
@@ -72,9 +73,11 @@ setup_rootfs() {
     chroot_setup "$ROOTFS_DIR"
 
     info "Mounting LFS related directories..."
-    for dir in "${HOST_DIRS[@]}"; do
-        mkdir -p -- "$ROOTFS_DIR/$dir"
-        chroot_add_mount -v --bind "/$dir" "$ROOTFS_DIR/$dir"
+    for entry in "${HOST_DIRS[@]}"; do
+        IFS=':' read -r src dest <<< "$entry"
+        mkdir -p -- "/$src"
+        mkdir -p -- "$ROOTFS_DIR/$dest"
+        chroot_add_mount -v --bind "/$src" "$ROOTFS_DIR/$dest"
     done
     chown -R -- "$USERSPEC" "$ROOTFS_DIR/$CHROOT_HOME_DIR"
     info "Done"
