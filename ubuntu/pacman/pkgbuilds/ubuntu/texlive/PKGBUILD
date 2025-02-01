@@ -1,6 +1,6 @@
 pkgname=texlive
 pkgver=70897
-_pkgyear=2024
+_texliveyear=2024
 _texmfver=20240312
 pkgrel=1
 epoch=
@@ -12,11 +12,11 @@ install=$pkgname.install
 source=(http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
         git+https://github.com/TeX-Live/installer.git
         # git+https://github.com/TeX-Live/texlive-source.git
-        git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_pkgyear
+        git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_texliveyear
         ################################################################################
-        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$pkgver-source.tar.xz
-        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/install-tl-unx.tar.gz
-        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_pkgyear/texlive-$_texmfver-texmf.tar.xz
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_texliveyear/texlive-$pkgver-source.tar.xz
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_texliveyear/install-tl-unx.tar.gz
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_texliveyear/texlive-$_texmfver-texmf.tar.xz
         $pkgname.install)
 # noextract=(texlive-$_texmfver-texmf.tar.xz)
 sha256sums=('f243378c7f5cf393a4d6278b70f8f4e84fc67d7e1ace29535116c06202db148f'
@@ -71,8 +71,6 @@ pkgver() {
 prepare() {
   cd $pkgname-source
 
-  rm -rf libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng,mpfr,pixman,potrace,teckit,zlib,zziplib}
-
   mkdir -p build
 }
 
@@ -102,26 +100,26 @@ build() {
     --enable-linked-scripts \
     --enable-shared \
     --disable-static \
-    --with-banner-add="/KZL" \
+    --with-banner-add="/KZL $(date '+%Y/%m/%d %T %z') ($pkgrel)" \
     --with-gs="/usr/bin/gs" \
-    --with-system-harfbuzz \
-    --with-system-icu \
-    --with-system-teckit \
-    --with-system-graphite2 \
-    --with-system-zziplib \
-    --with-system-mpfr \
-    --without-system-mpfi \
-    --with-system-gmp \
-    --with-system-cairo \
-    --with-system-pixman \
-    --with-system-gd \
-    --with-system-potrace \
-    --with-system-freetype2 \
-    --with-system-libpng \
-    --with-system-libpaper \
-    --with-system-zlib \
-    --without-system-ptexenc \
+    --without-system-cairo \
+    --without-system-freetype2 \
+    --without-system-gd \
+    --without-system-gmp \
+    --without-system-graphite2 \
+    --without-system-harfbuzz \
+    --without-system-icu \
     --without-system-kpathsea \
+    --without-system-libpaper \
+    --without-system-libpng \
+    --without-system-mpfi \
+    --without-system-mpfr \
+    --without-system-pixman \
+    --without-system-potrace \
+    --without-system-ptexenc \
+    --without-system-teckit \
+    --without-system-zlib \
+    --without-system-zziplib \
     --without-x
 
   make
