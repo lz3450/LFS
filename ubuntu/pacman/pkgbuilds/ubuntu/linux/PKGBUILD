@@ -3,7 +3,7 @@
 pkgbase=linux
 pkgname=(linux linux-headers)
 pkgver=6.12.11
-pkgrel=40
+pkgrel=41
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
