@@ -134,7 +134,7 @@ _remove_work_dir() {
 }
 
 usage() {
-    cat <<EOF
+    cat << EOF
 
 Usage: $SCRIPT_NAME -h | --help
 Usage: $SCRIPT_NAME -V | --version
@@ -191,6 +191,7 @@ while (( $# > 0 )); do
         ;;
     -h | --help)
         usage
+        exit 0
         ;;
     *)
         usage
