@@ -36,8 +36,6 @@ have_function() {
 	declare -f "$1" >/dev/null
 }
 
-
-
 usage() {
     cat << EOF
 
@@ -92,7 +90,7 @@ if [[ ! -f "PKGBUILD" ]]; then
    error 'PKGBUILD does not exist.' 2
 fi
 source PKGBUILD
-current_version=$(grep -oP 'pkgver=\K.+$' PKGBUILD | sed 's/.g\.*//')
+current_version=$(grep -oP 'pkgver=\K.+$' PKGBUILD | sed 's/\.g.*//')
 info "Current pkgver is $current_version"
 current_pkgrel=$(grep -oP 'pkgrel=\K\d+$' PKGBUILD)
 info "Current pkgrel is $current_pkgrel"
@@ -101,21 +99,12 @@ info "Current pkgrel is $current_pkgrel"
 if [[ ! -f "PKGUPDATE" ]]; then
     error "PKGUPDATE does not exist." 3
 fi
-unset new_version current_version pre_update post_update
+unset new_version pre_update post_update
 source PKGUPDATE || :
 if [[ -z "$new_version" ]]; then
     error 'Cannot get new version' 5
 fi
 info "New pkgver is $new_version"
-
-# makepkg.conf
-if [[ -f "/etc/makepkg.conf" ]]; then
-    . /etc/makepkg.conf
-elif [[ -f "/usr/local/etc/makepkg.conf" ]]; then
-    . /usr/local/etc/makepkg.conf
-else
-    error 'makepkg.conf NOT found' 4
-fi
 
 # update `pkgver` and `pkgrel`
 result=$(vercmp $new_version $current_version)
@@ -143,16 +132,16 @@ elif (( $result == 0 )); then
 elif (( $result == -1 )); then
     warn "Current version is newer"
 else
-else
     error "Unknown \`vercmp\` result" 8
 fi
 
-# receive key id
-if (( ${#validpgpkeys[@]} )); then
-    if ! gpg --list-keys --with-colons "${validpgpkeys[@]}" > /dev/null 2>&1; then
-        # gpg --keyserver "$PGP_KEY_SERVER" --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
-        gpg --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
-    fi
+# makepkg.conf
+if [[ -f "/etc/makepkg.conf" ]]; then
+    . /etc/makepkg.conf
+elif [[ -f "/usr/local/etc/makepkg.conf" ]]; then
+    . /usr/local/etc/makepkg.conf
+else
+    error 'makepkg.conf NOT found' 4
 fi
 
 # run pre_update
@@ -161,6 +150,14 @@ if have_function 'pre_update'; then
     pre_update || error "\`pre_update\` error" 6
     cd "$PKGBUILDDIR"
     info "Done"
+fi
+
+# receive key id
+if (( ${#validpgpkeys[@]} )); then
+    if ! gpg --list-keys --with-colons "${validpgpkeys[@]}" > /dev/null 2>&1; then
+        # gpg --keyserver "$PGP_KEY_SERVER" --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
+        gpg --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
+    fi
 fi
 
 info "Running \`makepkg -o\`..."
