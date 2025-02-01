@@ -107,7 +107,8 @@ build() {
         fi
 
         if (( $updated_only > 0 )) && (( $_updated == 0 || $_updated == 255 )); then
-            info "Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated). Skip."
+            # Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)
+            info "Skip"
             return
         fi
         info "Done"
@@ -223,30 +224,40 @@ if [[ -n "$single_package" ]]; then
         error "Cannot use -s | --stage together with -p | --package" 2
     fi
 else
+    stage=${stage:-1}
     case "$repo" in
         kzl)
-            stage=${stage:-1}
             case "$stage" in
-            0)
-                # updaterepo --clear -r "$repo"
-                pkgs=("${kzl_stage0_pkgs[@]}")
-                ;;
-            1)
-                pkgs=("${kzl_stage1_pkgs[@]}")
-                ;;
-            2)
-                pkgs=("${kzl_stage2_pkgs[@]}")
-                ;;
-            3)
-                pkgs=("${kzl_stage3_pkgs[@]}")
-                ;;
-            *)
-                error "Unknown stage \"$stage\"" 4
-                ;;
+                0)
+                    # updaterepo --clear -r "$repo"
+                    pkgs=("${kzl_stage0_pkgs[@]}")
+                    ;;
+                1)
+                    pkgs=("${kzl_stage1_pkgs[@]}")
+                    ;;
+                2)
+                    pkgs=("${kzl_stage2_pkgs[@]}")
+                    ;;
+                3)
+                    pkgs=("${kzl_stage3_pkgs[@]}")
+                    ;;
+                *)
+                    error "Unknown stage \"$stage\"" 4
+                    ;;
             esac
             ;;
         ubuntu)
-            pkgs=("${ubuntu_pkgs[@]}")
+            case "$stage" in
+                1)
+                    pkgs=("${ubuntu_stage1_pkgs[@]}")
+                    ;;
+                2)
+                    pkgs=("${ubuntu_stage2_pkgs[@]}")
+                    ;;
+                *)
+                    error "Unknown stage \"$stage\"" 4
+                    ;;
+            esac
             ;;
         *)
             error "Unknown repo name \"$repo\"" 3

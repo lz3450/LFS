@@ -110,8 +110,8 @@ info "New pkgver is $new_version"
 result=$(vercmp $new_version $current_version)
 if (( $result == 1 )); then
     info "PKGBUILD updated: $current_version => $new_version"
-    sed -i "/^pkgver=/s/$current_version/$new_version/" PKGBUILD
-    sed -i "/^pkgrel=/s/$current_pkgrel/1/" PKGBUILD
+    sed -i "/^pkgver=/c\\pkgver=$new_version" PKGBUILD
+    sed -i "/^pkgrel=/c\\pkgrel=1" PKGBUILD
     pkgver=$new_version
     info "Running updpkgsums..."
     updpkgsums || error "\`updpkgsums\` error" 7
