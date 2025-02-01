@@ -19,7 +19,7 @@ source=(http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_texliveyear/texlive-$_texmfver-texmf.tar.xz
         $pkgname.install)
 # noextract=(texlive-$_texmfver-texmf.tar.xz)
-sha256sums=('f243378c7f5cf393a4d6278b70f8f4e84fc67d7e1ace29535116c06202db148f'
+sha256sums=('96965e2753b9794316de6d7860d6fdbf2c9a6038834060e6fe70c410c3ef9ee6'
             'SKIP'
             'SKIP'
             'c31b6deaa47009e3dbccacccdcd77f9f536e0a811da45aa7117e9d57e9049814')
