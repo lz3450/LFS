@@ -12,6 +12,5 @@ sudo apt-get install -y \
     libcurl4-openssl-dev \
     libgpgme-dev \
     libssl-dev \
-    meson ninja-build \
     pkg-config \
     zstd
