@@ -94,7 +94,6 @@ build() {
             info "  No update for PKGBUILD"
         elif (( $_updated == 1 )); then
             info "  Package \"$_pkgbase\" is updated to new version"
-            updatepkg -I >> "$_log" 2>&1
         elif (( $_updated == 2 )); then
             error "  PKGBUILD does not exist" 5
         elif (( $_updated == 3 )); then
@@ -110,6 +109,9 @@ build() {
             # Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)
             info "Skip"
             return
+        fi
+        if (( $_updated == 0 )); then
+            updatepkg -I >> "$_log" 2>&1
         fi
         info "Done"
     fi
