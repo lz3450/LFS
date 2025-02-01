@@ -90,9 +90,7 @@ EOF
 
 # pacman
 if [[ -f "/usr/local/bin/pacman" ]]; then
-    mkdir -m 0755 -p -- "$mountpoint"/var/{cache/pacman/pkg,lib/pacman}
-    mkdir -p -- "$mountpoint"/home/.repository/kzl
-    pacman -Sy -r "$mountpoint" --noconfirm --cachedir "$mountpoint"/home/.repository/kzl pacman linux
+    pacman -Sy -r "$mountpoint" --noconfirm --cachedir /home/.repository/ubuntu pacman linux
 fi
 
 # swap
