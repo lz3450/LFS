@@ -1,13 +1,12 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - @URL@ | grep -oP '(?<=)' | sort -V | tail -n1)
 new_version=$(git ls-remote --tags @URL@ | grep -oP '(?<=refs/tags/)' | sort -V | tail -n1)
+srcdir="$BUILDDIR/$pkgname/src/$pkgname"
+build_system=autoconf
+build_system=meson
+build_system=cmake
 
 pre_update() {
-
 }
 
 post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
-    meson configure build > "$PKGBUILDDIR"/help.txt
-    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
 }
