@@ -91,9 +91,9 @@ setup_rootfs() {
         chroot_run "$ROOTFS_DIR" pacman -Syu
         chroot_run "$ROOTFS_DIR" pacman -Sy base-devel
         chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/config && ./update-config.sh"
-        chroot_run "$ROOTFS_DIR" su - kzl -c "python -m ensurepip"
-        chroot_run "$ROOTFS_DIR" su - kzl -c "python -m pip wheel --wheel-dir /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR --no-binary :all: pip meson ninja"
-        chroot_run "$ROOTFS_DIR" su - kzl -c "python -m pip install -U --no-index --find-links /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR pip meson ninja"
+        chroot_run "$ROOTFS_DIR" su - kzl -c "python3 -m ensurepip"
+        chroot_run "$ROOTFS_DIR" su - kzl -c "python3 -m pip wheel --wheel-dir /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR --no-binary :all: pip meson ninja"
+        chroot_run "$ROOTFS_DIR" su - kzl -c "python3 -m pip install -U --no-index --find-links /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR pip meson ninja"
         info "Done"
 
         touch "$_status_file"

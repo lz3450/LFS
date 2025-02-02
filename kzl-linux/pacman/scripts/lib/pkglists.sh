@@ -31,7 +31,6 @@ kzl_stage1_pkgs=(
     # pacman
     ################################
     pacman
-    pacman-contrib
 
     ################################
     # initial toolchain
@@ -46,14 +45,6 @@ kzl_stage1_pkgs=(
 )
 
 kzl_stage2_pkgs=(
-    git
-    # fakeroot
-    # libgpg-error
-    #  libassuan libksba npth pinentry gnupg gpgme
-    # pacman
-    # pacman-contrib
-)
-_kzl_stage2_pkgs=(
     ################################
     # full toolchain
     ################################
@@ -148,7 +139,6 @@ _kzl_stage2_pkgs=(
     fakeroot
     libgpg-error libassuan libksba npth pinentry gnupg gpgme
     pacman
-    pacman-contrib
 
     ################################
     # perl
@@ -235,6 +225,7 @@ _kzl_stage2_pkgs=(
     # rpcsvc-proto quota
     # systemd
     # util-linux dbus systemd
+    # p11-kit
 
     # ################
     # # wget
