@@ -1,4 +1,6 @@
 new_version=$(git ls-remote --tags https://github.com/TeX-Live/texlive-source.git | grep -oP 'refs/tags/(build-)?svn\K\d+' | sort -V | tail -n1)
+srcdir="$pkgname-source"
+build_system=autoconf
 
 installed_pkgs=(
     00texlive.installation
@@ -35,9 +37,4 @@ pre_update() {
     #     done)
     # > "$PKGBUILDDIR"/texlive.tlpdb
     updpkgsums
-}
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname-source"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
 }
