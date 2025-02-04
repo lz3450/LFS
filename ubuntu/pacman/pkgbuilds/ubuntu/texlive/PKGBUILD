@@ -188,7 +188,7 @@ package() {
   tlmgr install "${stage2_pkgs[@]}"
 
   ### PATH
-  echo "export PATH=\$PATH:$_bindir" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/texlive.sh
+  echo "export PATH=\$PATH:/$_bindir" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/texlive.sh
 
   ### clean
   rm -rfv "$pkgdir/$prefix/bin/$(uname -i)-$(uname -s | tr '[:upper:]' '[:lower:]')"
