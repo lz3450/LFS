@@ -99,7 +99,7 @@ info "Current pkgrel is $current_pkgrel"
 if [[ ! -f "PKGUPDATE" ]]; then
     error "PKGUPDATE does not exist." 3
 fi
-unset new_version pre_update post_update
+unset new_version srcdir build_system pre_update post_update
 source PKGUPDATE || :
 if [[ -z "$new_version" ]]; then
     error 'Cannot get new version' 5
@@ -166,9 +166,6 @@ info "Done"
 
 # get build options
 if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_system" == "cmake" ]]; then
-    if [[ -z "$srcdir" ]]; then
-        srcdir="$pkgname"
-    fi
     srcdir="$BUILDDIR/$pkgname/src/$srcdir"
     if [[ ! -d "$srcdir" ]]; then
         error "Cannot find source directory: $srcdir" 11
