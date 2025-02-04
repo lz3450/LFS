@@ -2,7 +2,7 @@ pkgname=texlive
 pkgver=70897
 _texliveyear=2024
 _texmfver=20240312
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -19,7 +19,7 @@ source=(http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
         # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_texliveyear/texlive-$_texmfver-texmf.tar.xz
         $pkgname.install)
 # noextract=(texlive-$_texmfver-texmf.tar.xz)
-sha256sums=('96965e2753b9794316de6d7860d6fdbf2c9a6038834060e6fe70c410c3ef9ee6'
+sha256sums=('e8d1b53ad956e39705153a192e0dab366cef6fc19c9c91eb8c4bf537fbf2de6f'
             'SKIP'
             'SKIP'
             'c31b6deaa47009e3dbccacccdcd77f9f536e0a811da45aa7117e9d57e9049814')
