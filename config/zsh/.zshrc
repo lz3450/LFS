@@ -94,7 +94,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "lukerandall"
     # "macovsky-ruby"
     # "macovsky"
-    "maran"
+    # "maran"
     # "mgutz"
     # "mh"
     # "michelebologna"
