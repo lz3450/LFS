@@ -1,15 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.13.1
-pkgrel=6
+pkgver=3.13.2
+pkgrel=1
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
 url="https://www.python.org/"
 license=('KZL')
 source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
-sha256sums=('4d5f60b4a4e3e32e2236702db45f56606c1376a12490b4db9faeac3ba50f06ec')
+sha256sums=('e90c9ff14ac99037c6a0d5cfd03c542a29c823d10ada600b3f76d63899458ace')
 
 build() {
   cd cpython
@@ -38,5 +38,7 @@ package() {
   cd cpython
 
   make DESTDIR="$pkgdir" install
+
+  find "$pkgdir"/usr/local/bin -type l -exec rm -v {} \;
   rm -vr "$pkgdir/usr/local/lib/python${pkgver%.*}"/{test,idlelib/idle_test}
 }

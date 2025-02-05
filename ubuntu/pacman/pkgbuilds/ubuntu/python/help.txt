@@ -230,6 +230,8 @@ Some influential environment variables:
   HOSTRUNNER  Program to run CPython for the host platform
   PROFILE_TASK
               Python args for PGO generation task
+  BOLT_COMMON_FLAGS
+              Common arguments to llvm-bolt when instrumenting and applying
   BOLT_INSTRUMENT_FLAGS
               Arguments to llvm-bolt when instrumenting binaries
   BOLT_APPLY_FLAGS
