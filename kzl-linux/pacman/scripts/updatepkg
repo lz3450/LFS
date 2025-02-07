@@ -148,11 +148,11 @@ fi
 if have_function 'pre_update'; then
     info "Running pre_update()..."
     pre_update || error "\`pre_update\` error" 6
-    cd "$PKGBUILDDIR"
     info "Done"
 fi
 
 # receive key id
+cd "$PKGBUILDDIR"
 if (( ${#validpgpkeys[@]} )); then
     if ! gpg --list-keys --with-colons "${validpgpkeys[@]}" > /dev/null 2>&1; then
         # gpg --keyserver "$PGP_KEY_SERVER" --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
@@ -165,8 +165,8 @@ makepkg "$cleanbuild" "$syncdeps" -o --noconfirm || error "\`makepkg -o\` error"
 info "Done"
 
 # get build options
+cd "$BUILDDIR/$pkgname/src"
 if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_system" == "cmake" ]]; then
-    srcdir="$BUILDDIR/$pkgname/src/$srcdir"
     if [[ ! -d "$srcdir" ]]; then
         error "Cannot find source directory: $srcdir" 11
     fi
@@ -184,35 +184,35 @@ if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_sys
                 error 'Cannot find `meson-log.txt`' 12
             fi
             awk '
-        # Step 0: Remove lines starting with "Working directory:" or "Command line:"
-        /^(Working directory:|Command line:|Cached command line:|Running command:)/ { next }
+            # Step 0: Remove lines starting with "Working directory:" or "Command line:"
+            /^(Working directory:|Command line:|Cached command line:|Running command:)/ { next }
 
-        # Step 1: Capture project name and version first
-        /^Project name: / {
-            if (!project) {  # Only capture if not already set
-                project = $3
-                print
+            # Step 1: Capture project name and version first
+            /^Project name: / {
+                if (!project) {  # Only capture if not already set
+                    project = $3
+                    print
+                }
+                next
             }
-            next
-        }
 
-        /^Project version: / {
-            if (!version) {  # Only capture if not already set
-                version = $3
-                print
+            /^Project version: / {
+                if (!version) {  # Only capture if not already set
+                    version = $3
+                    print
+                }
+                next
             }
-            next
-        }
 
-        # Step 2: Keep lines starting with an uppercase letter and containing ": "
-        /^[A-Z].*: / { print; next }
+            # Step 2: Keep lines starting with an uppercase letter and containing ": "
+            /^[A-Z].*: / { print; next }
 
-        # Step 3: Start printing from the line matching "^project 1.0" (i.e. the header line)
-        #         and continue printing until a line starting with a letter (not whitespace) is encountered.
-        $0 ~ ("^" project " " version) { to_print = 1; print; next }
-        to_print && /^[A-Za-z]/ { exit }
-        to_print { print }
-    ' build/meson-logs/meson-log.txt > "$PKGBUILDDIR"/meson-log.txt
+            # Step 3: Start printing from the line matching "^project 1.0" (i.e. the header line)
+            #         and continue printing until a line starting with a letter (not whitespace) is encountered.
+            $0 ~ ("^" project " " version) { to_print = 1; print; next }
+            to_print && /^[A-Za-z]/ { exit }
+            to_print { print }
+            ' build/meson-logs/meson-log.txt > "$PKGBUILDDIR"/meson-log.txt
             meson setup tmp > /dev/null 2>&1 && meson configure tmp > "$PKGBUILDDIR"/help.txt
             ;;
         cmake)
@@ -232,10 +232,10 @@ else
 fi
 
 # run post_update
+cd "$PKGBUILDDIR"
 if have_function 'post_update'; then
     info "Running post_update()..."
     post_update || error "\`post_update\` error" 14
-    cd "$PKGBUILDDIR"
     info "Done"
 fi
 
