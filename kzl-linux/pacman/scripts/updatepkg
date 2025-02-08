@@ -134,6 +134,7 @@ elif (( $result == -1 )); then
 else
     error "Unknown \`vercmp\` result" 8
 fi
+source PKGBUILD
 
 # makepkg.conf
 if [[ -f "/etc/makepkg.conf" ]]; then
@@ -179,6 +180,7 @@ if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_sys
                 error 'Cannot find `configure` script' 12
             fi
             ./configure --help=recursive > "$PKGBUILDDIR"/help.txt
+            rm -f "$PKGBUILDDIR"/config.cache
             find . -name 'config.cache' | LC_ALL=C sort | while read -r file; do
                 cat "$file" >> "$PKGBUILDDIR/config.cache"
             done
