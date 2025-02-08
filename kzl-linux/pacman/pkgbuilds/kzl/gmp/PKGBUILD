@@ -2,7 +2,7 @@
 
 pkgname=gmp
 pkgver=6.3.0
-pkgrel=4
+pkgrel=10
 epoch=
 pkgdesc="A free library for arbitrary precision arithmetic"
 arch=('x86_64')
@@ -11,13 +11,17 @@ license=('KZL')
 source=($url/download/gmp/$pkgname-$pkgver.tar.zst)
 sha256sums=('7f55d73f472c29cc14d7fa985f3654d48829415b649eaf61646b7b33f2a80e27')
 
-build() {
+prepare() {
   cd $pkgname-$pkgver
 
-  ./configure \
+  ./configure -C \
     --prefix=/usr \
     --enable-cxx \
     --enable-fat
+}
+
+build() {
+  cd $pkgname-$pkgver
 
   make
 }

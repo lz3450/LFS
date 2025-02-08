@@ -1,6 +1,3 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/glibc/ | grep -oP "glibc-\K\d+\.\d+" | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help >"$PKGBUILDDIR"/help.txt
-}
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/glibc/ | grep -oP "glibc-\K2\.40" | sort -V | tail -n1)
+srcdir="$pkgname"
+build_system=autoconf

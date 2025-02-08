@@ -1,0 +1,131 @@
+# This file is a shell script that caches the results of configure
+# tests run on this system so they can be shared between configure
+# scripts and configure runs, see configure's option --config-cache.
+# It is not useful on other systems.  If it contains results you don't
+# want to keep, you may remove or edit it.
+#
+# config.status only pays attention to the cache file if you give it
+# the --recheck option to rerun configure.
+#
+# 'ac_cv_env_foo' variables (set or unset) will be overridden when
+# loading this file, other *unset* 'ac_cv_foo' will be assigned the
+# following values.
+
+ac_cv_build=${ac_cv_build=x86_64-pc-linux-gnu}
+ac_cv_c_compiler_gnu=${ac_cv_c_compiler_gnu=yes}
+ac_cv_cxx_compiler_gnu=${ac_cv_cxx_compiler_gnu=yes}
+ac_cv_env_CCC_set=
+ac_cv_env_CCC_value=
+ac_cv_env_CC_set=
+ac_cv_env_CC_value=
+ac_cv_env_CFLAGS_set=
+ac_cv_env_CFLAGS_value=
+ac_cv_env_CPPFLAGS_set=
+ac_cv_env_CPPFLAGS_value=
+ac_cv_env_CPP_set=
+ac_cv_env_CPP_value=
+ac_cv_env_CXXFLAGS_set=
+ac_cv_env_CXXFLAGS_value=
+ac_cv_env_CXX_set=
+ac_cv_env_CXX_value=
+ac_cv_env_LDFLAGS_set=
+ac_cv_env_LDFLAGS_value=
+ac_cv_env_LIBS_set=
+ac_cv_env_LIBS_value=
+ac_cv_env_build_alias_set=
+ac_cv_env_build_alias_value=
+ac_cv_env_host_alias_set=
+ac_cv_env_host_alias_value=
+ac_cv_env_target_alias_set=
+ac_cv_env_target_alias_value=
+ac_cv_host=${ac_cv_host=x86_64-pc-linux-gnu}
+ac_cv_lib_selinux_is_selinux_enabled=${ac_cv_lib_selinux_is_selinux_enabled=no}
+ac_cv_objext=${ac_cv_objext=o}
+ac_cv_path_BASH_SHELL=${ac_cv_path_BASH_SHELL=/usr/bin/bash}
+ac_cv_path_EGREP=${ac_cv_path_EGREP='/usr/bin/grep -E'}
+ac_cv_path_GREP=${ac_cv_path_GREP=/usr/bin/grep}
+ac_cv_path_INSTALL_INFO=${ac_cv_path_INSTALL_INFO=/usr/bin/install-info}
+ac_cv_path_PERL=${ac_cv_path_PERL=/usr/bin/perl}
+ac_cv_path_install=${ac_cv_path_install='/usr/bin/install -c'}
+ac_cv_prog_AWK=${ac_cv_prog_AWK=gawk}
+ac_cv_prog_BISON=${ac_cv_prog_BISON=bison}
+ac_cv_prog_LD=${ac_cv_prog_LD=ld}
+ac_cv_prog_MAKE=${ac_cv_prog_MAKE=make}
+ac_cv_prog_MAKEINFO=${ac_cv_prog_MAKEINFO=makeinfo}
+ac_cv_prog_MSGFMT=${ac_cv_prog_MSGFMT=msgfmt}
+ac_cv_prog_PYTHON_PROG=${ac_cv_prog_PYTHON_PROG=python3}
+ac_cv_prog_SED=${ac_cv_prog_SED=sed}
+ac_cv_prog_ac_ct_CC=${ac_cv_prog_ac_ct_CC=gcc}
+ac_cv_prog_ac_ct_CXX=${ac_cv_prog_ac_ct_CXX=g++}
+ac_cv_prog_cc_c11=${ac_cv_prog_cc_c11=}
+ac_cv_prog_cc_g=${ac_cv_prog_cc_g=yes}
+ac_cv_prog_cc_stdc=${ac_cv_prog_cc_stdc=}
+ac_cv_prog_cxx_cxx11=${ac_cv_prog_cxx_cxx11=}
+ac_cv_prog_cxx_g=${ac_cv_prog_cxx_g=yes}
+ac_cv_prog_cxx_stdcxx=${ac_cv_prog_cxx_stdcxx=}
+libc_cv_as_noexecstack=${libc_cv_as_noexecstack=yes}
+libc_cv_asm_set_directive=${libc_cv_asm_set_directive=yes}
+libc_cv_broken_alias_attribute=${libc_cv_broken_alias_attribute=no}
+libc_cv_builtin_trap=${libc_cv_builtin_trap=yes}
+libc_cv_cc_loop_to_function=${libc_cv_cc_loop_to_function=yes}
+libc_cv_cc_mprefer_vector_width=${libc_cv_cc_mprefer_vector_width=yes}
+libc_cv_cc_nofma=${libc_cv_cc_nofma=-ffp-contract=off}
+libc_cv_cc_pie_default=${libc_cv_cc_pie_default=yes}
+libc_cv_cc_signaling_nans=${libc_cv_cc_signaling_nans=-fsignaling-nans}
+libc_cv_cc_with_libunwind=${libc_cv_cc_with_libunwind=no}
+libc_cv_compiler_default_cet=${libc_cv_compiler_default_cet=no}
+libc_cv_compiler_ok=${libc_cv_compiler_ok=yes}
+test ${libc_cv_complocaledir+y} || libc_cv_complocaledir='${exec_prefix}/lib/locale'
+libc_cv_cxx_link_ok=${libc_cv_cxx_link_ok=yes}
+libc_cv_cxx_thread_local=${libc_cv_cxx_thread_local=yes}
+libc_cv_depaudit=${libc_cv_depaudit=yes}
+libc_cv_dt_relr=${libc_cv_dt_relr=yes}
+libc_cv_fortify_source=${libc_cv_fortify_source=yes}
+libc_cv_fpie=${libc_cv_fpie=yes}
+libc_cv_gcc_builtin_memset=${libc_cv_gcc_builtin_memset=yes}
+libc_cv_gcc_builtin_redirection=${libc_cv_gcc_builtin_redirection=yes}
+libc_cv_gcc_incompatible_alias=${libc_cv_gcc_incompatible_alias=yes}
+libc_cv_gcc_indirect_function=${libc_cv_gcc_indirect_function=yes}
+libc_cv_gcc_unwind_find_fde=${libc_cv_gcc_unwind_find_fde=no}
+libc_cv_gnu_retain=${libc_cv_gnu_retain=yes}
+libc_cv_has_glob_dat=${libc_cv_has_glob_dat=yes}
+libc_cv_have_sdata_section=${libc_cv_have_sdata_section=no}
+libc_cv_have_section_quotes=${libc_cv_have_section_quotes=no}
+libc_cv_have_x86_isa_level=${libc_cv_have_x86_isa_level=baseline}
+libc_cv_have_x86_lahf_sahf=${libc_cv_have_x86_lahf_sahf=no}
+libc_cv_have_x86_movbe=${libc_cv_have_x86_movbe=no}
+libc_cv_idn=${libc_cv_idn=no}
+libc_cv_include_x86_isa_level=${libc_cv_include_x86_isa_level=yes}
+libc_cv_insert=${libc_cv_insert=yes}
+libc_cv_ld_gnu_indirect_function=${libc_cv_ld_gnu_indirect_function=yes}
+libc_cv_linux320=${libc_cv_linux320='3.2.0 or later'}
+libc_cv_localstatedir=${libc_cv_localstatedir=/var}
+libc_cv_mtls_descriptor=${libc_cv_mtls_descriptor=gnu2}
+libc_cv_multidir=${libc_cv_multidir=.}
+libc_cv_no_dynamic_linker=${libc_cv_no_dynamic_linker=yes}
+libc_cv_pic_default=${libc_cv_pic_default=yes}
+libc_cv_pie_supported=${libc_cv_pie_supported=yes}
+libc_cv_protected_data=${libc_cv_protected_data=no}
+libc_cv_rootsbindir=${libc_cv_rootsbindir=/sbin}
+libc_cv_rtlddir=${libc_cv_rtlddir=/lib64}
+libc_cv_slibdir=${libc_cv_slibdir=/lib64}
+libc_cv_ssp=${libc_cv_ssp=yes}
+libc_cv_ssp_all=${libc_cv_ssp_all=yes}
+libc_cv_ssp_strong=${libc_cv_ssp_strong=yes}
+libc_cv_static_pie=${libc_cv_static_pie=yes}
+libc_cv_static_pie_supported=${libc_cv_static_pie_supported=yes}
+libc_cv_supported_fortify_source=${libc_cv_supported_fortify_source=3}
+libc_cv_symver_needs_alias=${libc_cv_symver_needs_alias=no}
+libc_cv_sysconfdir=${libc_cv_sysconfdir=/etc}
+libc_cv_textrel_ifunc=${libc_cv_textrel_ifunc=yes}
+libc_cv_with_fp=${libc_cv_with_fp=yes}
+libc_cv_with_lld=${libc_cv_with_lld=no}
+libc_cv_wno_ignored_attributes=${libc_cv_wno_ignored_attributes=}
+libc_cv_x32=${libc_cv_x32=no}
+libc_cv_x86_cet_as=${libc_cv_x86_cet_as=yes}
+libc_cv_x86_cet_available=${libc_cv_x86_cet_available=yes}
+libc_cv_x86_have_amx_tile=${libc_cv_x86_have_amx_tile=yes}
+libc_cv_x86_have_apx=${libc_cv_x86_have_apx=no}
+libc_cv_z_execstack=${libc_cv_z_execstack=yes}
+libc_cv_z_mark_plt=${libc_cv_z_mark_plt=yes}
+libc_cv_z_start_stop_gc=${libc_cv_z_start_stop_gc=yes}

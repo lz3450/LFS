@@ -2,7 +2,7 @@
 
 pkgname=mpfr
 pkgver=4.2.1
-pkgrel=3
+pkgrel=7
 epoch=
 pkgdesc="Multiple-precision floating-point library"
 arch=('x86_64')
@@ -14,12 +14,16 @@ validpgpkeys=('A534BE3F83E241D918280AEB5831D11A0D4DB02A')
 sha256sums=('277807353a6726978996945af13e52829e3abd7a9a5b7fb2793894e18f1fcbb2'
             'SKIP')
 
-build() {
+prepare() {
   cd $pkgname-$pkgver
 
-  ./configure \
+  ./configure -C \
     --prefix=/usr \
     --enable-thread-safe
+}
+
+build() {
+  cd $pkgname-$pkgver
 
   make
 }

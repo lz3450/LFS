@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=binutils
-pkgver=2.43.1.g179
-pkgrel=2
+pkgver=2.44.g7
+pkgrel=5
 epoch=
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64')
@@ -41,8 +41,8 @@ _common_options=(
   "--build=$CHOST"
   "--host=$CHOST"
   "--target=$CHOST"
-  "--enable-gold=yes"
-  "--enable-ld=default"
+  "--enable-gold=no"
+  "--enable-ld=yes"
   "--enable-gprofng=yes"
   "--enable-default-compressed-debug-sections-algorithm=zstd"
   "--enable-lto"
@@ -61,18 +61,11 @@ _binutils_options=(
   "--with-debuginfod=no"
 )
 
-_gold_ld_options=(
-  "--enable-relro"
-  "--enable-jansson=yes"
-)
-
-_gold_options=(
-  "--enable-threads=yes"
-)
-
 _ld_options=(
   "--enable-new-dtags"
+  "--enable-relro"
   "--enable-default-execstack=no"
+  "--enable-jansson=yes"
 )
 
 _libiberty_options=(
@@ -95,21 +88,19 @@ prepare() {
   # remove unnecessary items
   rm -r zlib
 
-  mkdir -p build
-
   sed -i '/^development=/s/true/false/' bfd/development.sh
+
+  mkdir -p build
+  cd build
+  "../configure" -C \
+    "${_common_options[@]}" \
+    "${_binutils_options[@]}" \
+    "${_ld_options[@]}" \
+    "${_libiberty_options[@]}"
 }
 
 build() {
   cd binutils-gdb/build
-
-  "../configure" \
-    "${_common_options[@]}" \
-    "${_binutils_options[@]}" \
-    "${_gold_ld_options[@]}" \
-    "${_gold_options[@]}" \
-    "${_ld_options[@]}" \
-    "${_libiberty_options[@]}"
 
   make tooldir="/usr"
 }

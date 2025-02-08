@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=gcc
-pkgver=14.2.0.g676
-pkgrel=5
+pkgver=14.2.0.g754
+pkgrel=3
 epoch=
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
@@ -46,17 +46,12 @@ prepare() {
   cd gcc
 
   rm -r zlib
+  sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
 
   mkdir -p build
-
-  sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
-}
-
-build() {
-  cd gcc/build
-
+  cd build
   # https://gcc.gnu.org/install/configure.html
-  "../configure" \
+  "../configure" -C \
     --with-pkgversion="KZL $pkgver-$pkgrel `date -u '+%Y/%m/%d %T %z'`" \
     --prefix=/usr \
     --build=$CHOST \
@@ -84,6 +79,10 @@ build() {
     --with-zstd \
     --with-target-system-zlib \
     --enable-plugin
+}
+
+build() {
+  cd gcc/build
 
   make
 }

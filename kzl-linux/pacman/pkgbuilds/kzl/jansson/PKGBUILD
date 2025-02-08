@@ -2,7 +2,7 @@
 
 pkgname=jansson
 pkgver=2.14
-pkgrel=17
+pkgrel=30
 epoch=
 pkgdesc="'C library for encoding, decoding and manipulating JSON data"
 arch=('x86_64')
@@ -10,9 +10,6 @@ url="https://github.com/akheron/jansson"
 license=('KZL')
 makedepends=(
   libtool
-)
-options=(
-  !lto
 )
 source=(git+https://github.com/akheron/jansson.git#tag=v$pkgver)
 sha256sums=('SKIP')
@@ -53,13 +50,13 @@ prepare() {
 
   autoupdate -vf
   autoreconf -vfi
+
+  ./configure -C \
+    --prefix=/usr
 }
 
 build() {
   cd $pkgname
-
-  ./configure \
-    --prefix=/usr
 
   make
 }

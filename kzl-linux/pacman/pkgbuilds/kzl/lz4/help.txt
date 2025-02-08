@@ -1,12 +1,12 @@
 Core properties:
   Source dir /home/kzl/makepkg/build/lz4/src/lz4/build/meson
-  Build dir  /home/kzl/makepkg/build/lz4/src/lz4/build/meson/build
+  Build dir  /home/kzl/makepkg/build/lz4/src/lz4/build/meson/tmp
 
 Main project options:
   
   Core options                   Current Value                    Possible Values                  Description                                                  
   --------------                 -------------                    ---------------                  -----------                                                  
-  auto_features                  enabled                          [enabled, disabled, auto]        Override value of all 'auto' features                        
+  auto_features                  auto                             [enabled, disabled, auto]        Override value of all 'auto' features                        
   backend                        ninja                            [ninja, vs, vs2010, vs2012,      Backend to use                                               
                                                                    vs2013, vs2015, vs2017, vs2019,                                                              
                                                                    vs2022, xcode, none]                                                                         
@@ -23,7 +23,7 @@ Main project options:
                                                                                                    them                                                         
   install_umask                  0022                             [preserve, 0000-0777]            Default umask to apply on permissions of installed files     
   layout                         mirror                           [mirror, flat]                   Build directory layout                                       
-  optimization                   2                                [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
+  optimization                   3                                [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
   pkg_config_path                []                               []                               List of additional paths for pkg-config to search            
   prefer_static                  false                            [true, false]                    Whether to try static linking before shared linking          
   strip                          false                            [true, false]                    Strip targets on install                                     
@@ -45,13 +45,13 @@ Main project options:
   b_asneeded                     true                             [true, false]                    Use -Wl,--as-needed when linking                             
   b_colorout                     always                           [auto, always, never]            Use colored output                                           
   b_coverage                     false                            [true, false]                    Enable coverage tracking.                                    
-  b_lto                          true                             [true, false]                    Use link time optimization                                   
+  b_lto                          false                            [true, false]                    Use link time optimization                                   
   b_lto_threads                  0                                                                 Use multiple threads for Link Time Optimization              
   b_lundef                       true                             [true, false]                    Use -Wl,--no-undefined when linking                          
   b_ndebug                       false                            [true, false, if-release]        Disable asserts                                              
   b_pch                          true                             [true, false]                    Use precompiled headers                                      
   b_pgo                          off                              [off, generate, use]             Use profile guided optimization                              
-  b_pie                          true                             [true, false]                    Build executables as position independent                    
+  b_pie                          false                            [true, false]                    Build executables as position independent                    
   b_sanitize                     none                             [none, address, thread,          Code sanitizer to use                                        
                                                                    undefined, memory, leak,                                                                     
                                                                    address,undefined]                                                                           
@@ -79,12 +79,12 @@ Main project options:
   libexecdir                     libexec                                                           Library executable directory                                 
   licensedir                                                                                       Licenses directory                                           
   localedir                      share/locale                                                      Locale data directory                                        
-  localstatedir                  /var                                                              Localstate data directory                                    
+  localstatedir                  /var/local                                                        Localstate data directory                                    
   mandir                         share/man                                                         Manual page directory                                        
-  prefix                         /usr                                                              Installation prefix                                          
+  prefix                         /usr/local                                                        Installation prefix                                          
   sbindir                        sbin                                                              System executable directory                                  
-  sharedstatedir                 /var/lib                                                          Architecture-independent data directory                      
-  sysconfdir                     /etc                                                              Sysconf data directory                                       
+  sharedstatedir                 /var/local/lib                                                    Architecture-independent data directory                      
+  sysconfdir                     etc                                                               Sysconf data directory                                       
   
   Testing options                Current Value                    Possible Values                  Description                                                  
   -----------------              -------------                    ---------------                  -----------                                                  
@@ -103,17 +103,12 @@ Main project options:
   endianness-independent-output  false                            [true, false]                    See LZ4_STATIC_LINKING_ONLY_ENDIANNESS_INDEPENDENT_OUTPUT.   
                                                                                                    Static builds only                                           
   examples                       false                            [true, false]                    Enable examples                                              
-  fast-dec-loop                  enabled                          [enabled, disabled, auto]        See LZ4_FAST_DEC_LOOP                                        
+  fast-dec-loop                  auto                             [enabled, disabled, auto]        See LZ4_FAST_DEC_LOOP                                        
   force-sw-bitcount              false                            [true, false]                    See LZ4_FORCE_SW_BITCOUNT                                    
   freestanding                   false                            [true, false]                    See LZ4_FREESTANDING                                         
   memory-usage                   0                                >=0, <=20                        See LZ4_MEMORY_USAGE. 0 means use the LZ4 default            
   ossfuzz                        true                             [true, false]                    Enable ossfuzz                                               
-  programs                       true                             [true, false]                    Enable programs                                              
+  programs                       false                            [true, false]                    Enable programs                                              
   tests                          false                            [true, false]                    Enable tests                                                 
   unstable                       false                            [true, false]                    Expose unstable interfaces                                   
   user-memory-functions          false                            [true, false]                    See LZ4_USER_MEMORY_FUNCTIONS                                
-
-The following option(s) have a different value than the build type default
-
-               current   default
-optimization         2         3         

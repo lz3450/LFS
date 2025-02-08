@@ -1,6 +1,3 @@
 new_version=$(git ls-remote --tags https://github.com/zlib-ng/zlib-ng.git | grep -oP '(?<=refs/tags/)\d+\.\d+\.\d+$' | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/zlib-ng"
-    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
-}
+srcdir="$pkgname-ng"
+build_system=cmake
