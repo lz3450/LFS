@@ -1,6 +1,3 @@
 new_version=$(git ls-remote --tags https://git.savannah.gnu.org/git/readline.git | grep -oP '(?<=refs/tags/readline-)\d+\.\d+$' | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
-}
+srcdir="$pkgname"
+build_system=autoconf

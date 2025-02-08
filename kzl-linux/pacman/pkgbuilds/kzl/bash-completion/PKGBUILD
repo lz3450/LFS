@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=bash-completion
-pkgver=2.16.0.g11
+pkgver=2.16.0.g19
 pkgrel=1
 epoch=
 pkgdesc="Programmable completion for the bash shell"
@@ -22,14 +22,14 @@ prepare() {
   cd $pkgname
 
   autoreconf -vfi
+
+  ./configure -C \
+    --prefix=/usr \
+    --sysconfdir=/etc
 }
 
 build() {
   cd $pkgname
-
-  ./configure \
-    --prefix=/usr \
-    --sysconfdir=/etc
 
   make
 }

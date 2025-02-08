@@ -15,7 +15,6 @@ depends=(
   readline
 )
 provides=(sh)
-options=(!lto)
 source=(
   git+https://git.savannah.gnu.org/git/bash.git#branch=master
   dot.bashrc
@@ -35,6 +34,10 @@ pkgver() {
   cd $pkgname
 
   git describe --tags | sed 's/bash-//;s/-g.*//;s/-/.g/'
+}
+
+prepare() {
+  cd $pkgname
 
   sed -i \
     -e '/#define STANDARD_UTILS_PATH/{n; s|:/etc:/usr/etc||}' \
@@ -42,16 +45,16 @@ pkgver() {
     -e '/#define SYS_BASH_LOGOUT/s|/\*\(.*\)\*/|\1|' \
     -e '/#define NON_INTERACTIVE_LOGIN_SHELLS/s|/\*\(.*\)\*/|\1|' \
     config-top.h
-}
 
-build() {
-  cd $pkgname
-
-  ./configure \
+  ./configure -C \
     --prefix=/usr \
     --with-bash-malloc=no \
     --with-curses \
     --with-installed-readline
+}
+
+build() {
+  cd $pkgname
 
   make
 }

@@ -2,7 +2,7 @@
 
 pkgname=readline
 pkgver=8.2.g13
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="GNU readline library"
 arch=('x86_64')
@@ -28,13 +28,17 @@ pkgver() {
   git describe --tags | sed 's/readline-//;s/-g.*//;s/-/.g/'
 }
 
-build() {
+prepare() {
   cd $pkgname
 
-  ./configure \
+  ./configure -C \
     --prefix=/usr \
     --disable-install-examples \
     --with-curses
+}
+
+build() {
+  cd $pkgname
 
   make SHLIB_LIBS="-lncursesw"
 

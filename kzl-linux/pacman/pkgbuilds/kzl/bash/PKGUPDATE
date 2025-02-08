@@ -1,7 +1,8 @@
 new_version=$(git ls-remote --tags https://git.savannah.gnu.org/git/bash.git | grep -oP '(?<=refs/tags/bash-)\d+\.\d+' | sort -V | tail -n1)
+srcdir="$pkgname"
+build_system=autoconf
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     cp config-top.h "$PKGBUILDDIR/config-top.h"
-    ./configure --help > "$PKGBUILDDIR/help.txt"
 }

@@ -1,26 +1,22 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ncurses
-pkgver=6.5.20250104
-pkgrel=4
+pkgver=6.5.20250201
+pkgrel=5
 epoch=
 pkgdesc="A free software emulation of curses in System V Release 4.0 (SVr4), and more"
 arch=('x86_64')
 url="https://invisible-island.net/ncurses/ncurses.html"
 license=('KZL')
 source=(https://invisible-mirror.net/archives/$pkgname/current/$pkgname-${pkgver%.*}-${pkgver##*.}.tgz)
-sha256sums=('cf8d8ea032f17481e2fd2373b641bc5ddf4ffc2c4e0c63ff3c615157d8eea973')
+sha256sums=('8315040d6e1f9b8df8c4828f777fe24ada169a42d75bacd930b88cd597956483')
 
 prepare() {
   cd $pkgname-${pkgver%.*}-${pkgver##*.}
 
   sed -i 's/@EXTRA_PKG_LDFLAGS@ //g' misc/gen-pkgconfig.in misc/ncurses-config.in
-}
 
-build() {
-  cd $pkgname-${pkgver%.*}-${pkgver##*.}
-
-  ./configure \
+  ./configure -C \
     --prefix=/usr \
     --without-ada \
     --without-manpages \
@@ -31,6 +27,10 @@ build() {
     --disable-root-environ \
     --disable-root-access \
     --disable-setuid-environ
+}
+
+build() {
+  cd $pkgname-${pkgver%.*}-${pkgver##*.}
 
   make
 }
@@ -41,21 +41,21 @@ package() {
   make DESTDIR="$pkgdir" install
 
   for lib in ncurses ncurses++ form menu panel; do
-    echo "INPUT(-l%sw)" "$lib" > "$pkgdir/usr/lib/lib$lib.so"
-    ln -vs ${lib}w.pc "$pkgdir/usr/lib/pkgconfig/$lib.pc"
+    echo "INPUT(-l${lib}w)" > "$pkgdir/usr/lib/lib$lib.so"
+    ln -vs "${lib}w.pc" "$pkgdir/usr/lib/pkgconfig/$lib.pc"
   done
 
   echo "INPUT(-lncursesw)" > "$pkgdir/usr/lib/libcursesw.so"
   echo "INPUT(-lncurses)" > "$pkgdir/usr/lib/libcurses.so"
 
   for lib in tic tinfo; do
-    echo "INPUT(-lncursesw)" > "$pkgdir/usr/lib/lib$lib.so"
-    ln -vs ncursesw.pc "$pkgdir/usr/lib/pkgconfig/$lib.pc"
+    echo "INPUT(-lncurses)" > "$pkgdir/usr/lib/lib$lib.so"
+    ln -vs ncurses.pc "$pkgdir/usr/lib/pkgconfig/$lib.pc"
   done
 
-  install -d -m 755 "$pkgdir"/usr/include/ncurses{,w}
+  install -dm755 "$pkgdir"/usr/include/ncurses{,w}
   for include in "$pkgdir"/usr/include/*.h; do
-    ln -vs ../$(basename $include) "$pkgdir"/usr/include/ncurses
-    ln -vs ../$(basename $include) "$pkgdir"/usr/include/ncursesw
+    ln -vs "../$(basename $include)" "$pkgdir"/usr/include/ncurses
+    ln -vs "../$(basename $include)" "$pkgdir"/usr/include/ncursesw
   done
 }
