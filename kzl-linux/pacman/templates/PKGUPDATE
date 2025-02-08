@@ -1,7 +1,7 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - @URL@ | grep -oP '(?<=)' | sort -V | tail -n1)
 new_version=$(git ls-remote --tags @URL@ | grep -oP '(?<=refs/tags/)' | sort -V | tail -n1)
 srcdir="$pkgname"
-srcdir="$pkgname-$pkgver"
+srcdir="$pkgname-$new_version"
 build_system=
 build_system=autoconf
 build_system=meson
@@ -11,5 +11,5 @@ pre_update() {
 }
 
 post_update() {
-    cd "$srcdir"
+    cd "$BUILDDIR/$pkgname/src/$srcdir"
 }

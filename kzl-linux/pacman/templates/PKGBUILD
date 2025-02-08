@@ -35,10 +35,6 @@ pkgver() {
 
 prepare() {
   cd $pkgname-$pkgver
-}
-
-build() {
-  cd $pkgname-$pkgver
 
   ./configure \
     --prefix=/usr \
@@ -49,6 +45,10 @@ build() {
     --localstatedir=/var \
     --runstatedir=/run \
     --datarootdir=/usr/share
+}
+
+build() {
+  cd $pkgname-$pkgver
 
   make
 }
