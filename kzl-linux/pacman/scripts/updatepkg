@@ -18,7 +18,7 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 ################################################################################
 
 ### libraries
-source "$BASH_LIB_DIR"/log.sh
+. "$BASH_LIB_DIR"/log.sh
 
 ### constants & variables
 PKGBUILDDIR="$(pwd)"
@@ -89,7 +89,7 @@ done
 if [[ ! -f "PKGBUILD" ]]; then
    error 'PKGBUILD does not exist.' 2
 fi
-source PKGBUILD
+. PKGBUILD
 current_version=$(grep -oP 'pkgver=\K.+$' PKGBUILD | sed 's/\.g.*//')
 info "Current pkgver is $current_version"
 current_pkgrel=$(grep -oP 'pkgrel=\K\d+$' PKGBUILD)
@@ -100,7 +100,7 @@ if [[ ! -f "PKGUPDATE" ]]; then
     error "PKGUPDATE does not exist." 3
 fi
 unset new_version srcdir build_system pre_update post_update
-source PKGUPDATE || :
+. PKGUPDATE || :
 if [[ -z "$new_version" ]]; then
     error 'Cannot get new version' 5
 fi
@@ -134,7 +134,6 @@ elif (( $result == -1 )); then
 else
     error "Unknown \`vercmp\` result" 8
 fi
-source PKGBUILD
 
 # makepkg.conf
 if [[ -f "/etc/makepkg.conf" ]]; then
