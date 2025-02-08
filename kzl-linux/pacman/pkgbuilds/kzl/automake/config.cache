@@ -1,0 +1,102 @@
+# This file is a shell script that caches the results of configure
+# tests run on this system so they can be shared between configure
+# scripts and configure runs, see configure's option --config-cache.
+# It is not useful on other systems.  If it contains results you don't
+# want to keep, you may remove or edit it.
+#
+# config.status only pays attention to the cache file if you give it
+# the --recheck option to rerun configure.
+#
+# 'ac_cv_env_foo' variables (set or unset) will be overridden when
+# loading this file, other *unset* 'ac_cv_foo' will be assigned the
+# following values.
+
+ac_cv_AM_TEST_RUNNER_SHELL=${ac_cv_AM_TEST_RUNNER_SHELL=/usr/bin/sh}
+ac_cv_build=${ac_cv_build=x86_64-pc-linux-gnu}
+ac_cv_c_compiler_gnu=${ac_cv_c_compiler_gnu=yes}
+ac_cv_cxx_compiler_gnu=${ac_cv_cxx_compiler_gnu=yes}
+ac_cv_env_AM_TEST_RUNNER_SHELL_set=
+ac_cv_env_AM_TEST_RUNNER_SHELL_value=
+ac_cv_env_CCC_set=
+ac_cv_env_CCC_value=
+ac_cv_env_CC_set=
+ac_cv_env_CC_value=
+ac_cv_env_CFLAGS_set=
+ac_cv_env_CFLAGS_value=
+ac_cv_env_CPPFLAGS_set=
+ac_cv_env_CPPFLAGS_value=
+ac_cv_env_CXXFLAGS_set=
+ac_cv_env_CXXFLAGS_value=
+ac_cv_env_CXX_set=
+ac_cv_env_CXX_value=
+ac_cv_env_F77_set=
+ac_cv_env_F77_value=
+ac_cv_env_FCFLAGS_set=
+ac_cv_env_FCFLAGS_value=
+ac_cv_env_FC_set=
+ac_cv_env_FC_value=
+ac_cv_env_FFLAGS_set=
+ac_cv_env_FFLAGS_value=
+ac_cv_env_GNU_CC_set=
+ac_cv_env_GNU_CC_value=
+ac_cv_env_GNU_CFLAGS_set=
+ac_cv_env_GNU_CFLAGS_value=
+ac_cv_env_GNU_CXXFLAGS_set=
+ac_cv_env_GNU_CXXFLAGS_value=
+ac_cv_env_GNU_CXX_set=
+ac_cv_env_GNU_CXX_value=
+ac_cv_env_GNU_F77_set=
+ac_cv_env_GNU_F77_value=
+ac_cv_env_GNU_FCFLAGS_set=
+ac_cv_env_GNU_FCFLAGS_value=
+ac_cv_env_GNU_FC_set=
+ac_cv_env_GNU_FC_value=
+ac_cv_env_GNU_FFLAGS_set=
+ac_cv_env_GNU_FFLAGS_value=
+ac_cv_env_GNU_GCJFLAGS_set=
+ac_cv_env_GNU_GCJFLAGS_value=
+ac_cv_env_GNU_GCJ_set=
+ac_cv_env_GNU_GCJ_value=
+ac_cv_env_LDFLAGS_set=
+ac_cv_env_LDFLAGS_value=
+ac_cv_env_LIBS_set=
+ac_cv_env_LIBS_value=
+ac_cv_env_build_alias_set=
+ac_cv_env_build_alias_value=
+ac_cv_env_host_alias_set=
+ac_cv_env_host_alias_value=
+ac_cv_env_target_alias_set=
+ac_cv_env_target_alias_value=
+ac_cv_f77_compiler_gnu=${ac_cv_f77_compiler_gnu=yes}
+ac_cv_fc_compiler_gnu=${ac_cv_fc_compiler_gnu=yes}
+ac_cv_host=${ac_cv_host=x86_64-pc-linux-gnu}
+ac_cv_path_EGREP=${ac_cv_path_EGREP='/usr/bin/grep -E'}
+ac_cv_path_EGREP_TRADITIONAL=${ac_cv_path_EGREP_TRADITIONAL='/usr/bin/grep -E'}
+ac_cv_path_FGREP=${ac_cv_path_FGREP='/usr/bin/grep -F'}
+ac_cv_path_GREP=${ac_cv_path_GREP=/usr/bin/grep}
+ac_cv_path_PERL=${ac_cv_path_PERL=/usr/bin/perl}
+ac_cv_path_install=${ac_cv_path_install='/usr/bin/install -c'}
+ac_cv_path_mkdir=${ac_cv_path_mkdir=/usr/bin/mkdir}
+ac_cv_prog_AWK=${ac_cv_prog_AWK=gawk}
+ac_cv_prog_LEX=${ac_cv_prog_LEX=lex}
+ac_cv_prog_YACC=${ac_cv_prog_YACC=yacc}
+ac_cv_prog_ac_ct_CC=${ac_cv_prog_ac_ct_CC=cc}
+ac_cv_prog_ac_ct_CXX=${ac_cv_prog_ac_ct_CXX=c++}
+ac_cv_prog_ac_ct_F77=${ac_cv_prog_ac_ct_F77=gfortran}
+ac_cv_prog_ac_ct_FC=${ac_cv_prog_ac_ct_FC=gfortran}
+ac_cv_prog_cc_c23=${ac_cv_prog_cc_c23=-std=gnu23}
+ac_cv_prog_cc_g=${ac_cv_prog_cc_g=yes}
+ac_cv_prog_cc_stdc=${ac_cv_prog_cc_stdc=-std=gnu23}
+ac_cv_prog_cxx_g=${ac_cv_prog_cxx_g=yes}
+ac_cv_prog_f77_g=${ac_cv_prog_f77_g=yes}
+ac_cv_prog_fc_g=${ac_cv_prog_fc_g=yes}
+ac_cv_prog_make_make_set=${ac_cv_prog_make_make_set=yes}
+am_cv_autoconf_installed=${am_cv_autoconf_installed=yes}
+am_cv_autoconf_version=${am_cv_autoconf_version=yes}
+am_cv_autoconf_works=${am_cv_autoconf_works=yes}
+am_cv_filesystem_timestamp_resolution=${am_cv_filesystem_timestamp_resolution=0.01}
+am_cv_make_support_nested_variables=${am_cv_make_support_nested_variables=yes}
+am_cv_prog_cc_c_o=${am_cv_prog_cc_c_o=yes}
+am_cv_prog_ln=${am_cv_prog_ln=ln}
+am_cv_sleep_fractional_seconds=${am_cv_sleep_fractional_seconds=yes}
+am_cv_xargs_n_works=${am_cv_xargs_n_works=yes}

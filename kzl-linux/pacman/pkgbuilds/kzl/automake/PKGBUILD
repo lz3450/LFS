@@ -2,7 +2,7 @@
 
 pkgname=automake
 pkgver=1.17
-pkgrel=14
+pkgrel=18
 epoch=
 pkgdesc="A GNU tool for automatically creating Makefiles"
 arch=('any')
@@ -19,17 +19,17 @@ validpgpkeys=('155D3FC500C834486D1EEA677FD9FCCB000BEEEE')
 sha256sums=('8920c1fc411e13b90bf704ef9db6f29d540e76d232cb3b2c9f4dc4cc599bd990'
             'SKIP')
 
-# prepare() {
-#   cd $pkgname
+prepare() {
+  cd $pkgname-$pkgver
 
-#   ./bootstrap
-# }
+  # ./bootstrap
+
+  ./configure -C \
+    --prefix=/usr
+}
 
 build() {
   cd $pkgname-$pkgver
-
-  ./configure \
-    --prefix=/usr
 
   make
 }

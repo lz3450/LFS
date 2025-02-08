@@ -1,6 +1,3 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/diffutils/ | grep -oP '(?<=diffutils-)\d+\.\d+' | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
-    ./configure --help >"$PKGBUILDDIR"/help.txt
-}
+srcdir="$pkgname-$new_version"
+build_system=autoconf

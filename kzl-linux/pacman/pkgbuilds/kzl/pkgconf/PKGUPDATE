@@ -1,6 +1,3 @@
 new_version=$(git ls-remote --tags https://github.com/pkgconf/pkgconf.git | grep -oP '(?<=refs/tags/pkgconf-)\d+\.\d+\.\d+' | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    meson configure build >"$PKGBUILDDIR"/help.txt
-}
+srcdir="$pkgname"
+build_system=meson

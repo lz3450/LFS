@@ -2,7 +2,7 @@
 
 pkgname=pkgconf
 pkgver=2.3.0
-pkgrel=20
+pkgrel=43
 epoch=
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=('x86_64')
@@ -20,8 +20,6 @@ prepare() {
     --prefix /usr \
     --auto-features disabled \
     --buildtype plain \
-    -D b_lto=true \
-    -D b_pie=true \
     -D tests=disabled \
     build
 }
@@ -30,7 +28,6 @@ build() {
   cd $pkgname
 
   meson compile -C build
-
 }
 
 

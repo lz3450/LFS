@@ -2,7 +2,7 @@
 
 pkgname=bison
 pkgver=3.8.2
-pkgrel=20
+pkgrel=24
 epoch=
 pkgdesc="The GNU general-purpose parser generator"
 arch=('x86_64')
@@ -23,11 +23,15 @@ validpgpkeys=('7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E')
 sha256sums=('9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2'
             'SKIP')
 
-build() {
+prepare() {
   cd $pkgname-$pkgver
 
-  ./configure \
+  ./configure -C \
     --prefix=/usr
+}
+
+build() {
+  cd $pkgname-$pkgver
 
   make
 }

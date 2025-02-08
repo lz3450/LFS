@@ -2,7 +2,7 @@
 
 pkgname=libtool
 pkgver=2.5.4
-pkgrel=22
+pkgrel=27
 epoch=
 pkgdesc="A generic library support script"
 arch=('x86_64')
@@ -25,17 +25,17 @@ sha256sums=('f81f5860666b0bc7d84baddefa60d1cb9fa6fceb2398cc3baca6afaa60266675'
 #   git describe --tags | sed 's/^v//;s/-g.*//;s/-/./'
 # }
 
-# prepare() {
-#   cd $pkgname
+prepare() {
+  cd $pkgname-$pkgver
 
-#   ./bootstrap --gnulib-srcdir="$srcdir/gnulib"
-# }
+  # ./bootstrap --gnulib-srcdir="$srcdir/gnulib"
+
+  ./configure -C \
+    --prefix=/usr
+}
 
 build() {
   cd $pkgname-$pkgver
-
-  ./configure \
-    --prefix=/usr
 
   make
 }

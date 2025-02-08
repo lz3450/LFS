@@ -2,7 +2,7 @@
 
 pkgname=flex
 pkgver=2.6.4
-pkgrel=22
+pkgrel=26
 epoch=
 pkgdesc="A tool for generating text-scanning programs"
 arch=('x86_64')
@@ -29,13 +29,13 @@ prepare() {
   cd $pkgname
 
   ./autogen.sh
+
+  ./configure -C \
+    --prefix=/usr
 }
 
 build() {
   cd $pkgname
-
-  ./configure \
-    --prefix=/usr
 
   make
 }

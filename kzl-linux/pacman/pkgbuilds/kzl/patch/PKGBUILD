@@ -2,7 +2,7 @@
 
 pkgname=patch
 pkgver=2.7.6.g25
-pkgrel=7
+pkgrel=10
 epoch=
 pkgdesc="A utility to apply patch files to original sources"
 arch=('x86_64')
@@ -35,13 +35,13 @@ prepare() {
   cd $pkgname
 
   ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
+
+  ./configure -C \
+    --prefix=/usr
 }
 
 build() {
   cd $pkgname
-
-  ./configure \
-    --prefix=/usr
 
   make
 }

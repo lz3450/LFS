@@ -2,7 +2,7 @@
 
 pkgname=make
 pkgver=4.4.1
-pkgrel=36
+pkgrel=43
 epoch=
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('x86_64')
@@ -12,23 +12,25 @@ groups=(base-devel)
 makedepends=(
   make
 )
-# source=(git+https://git.savannah.gnu.org/r/make.git#tag=$pkgver
-#         git+https://git.savannah.gnu.org/r/gnulib.git)
-source=(https://ftp.gnu.org/gnu/make/$pkgname-$pkgver.tar.gz)
+source=(
+  # git+https://git.savannah.gnu.org/r/make.git#tag=$pkgver
+  # git+https://git.savannah.gnu.org/r/gnulib.git
+  https://ftp.gnu.org/gnu/make/$pkgname-$pkgver.tar.gz
+)
 validpgpkeys=('B2508A90102F8AE3B12A0090DEACCAAEDB78137A')
 sha256sums=('dd16fb1d67bfab79a72f5e8390735c49e3e8e70b4945a15ab1f81ddb78658fb3')
 
-# prepare() {
-#   cd $pkgname
+prepare() {
+  cd $pkgname-$pkgver
 
-#   ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
-# }
+  # ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
+
+  ./configure -C \
+    --prefix=/usr
+}
 
 build() {
   cd $pkgname-$pkgver
-
-  ./configure \
-    --prefix=/usr
 
   make
 }

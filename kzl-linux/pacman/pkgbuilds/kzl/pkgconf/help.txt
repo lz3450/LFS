@@ -1,19 +1,19 @@
 Core properties:
   Source dir /home/kzl/makepkg/build/pkgconf/src/pkgconf
-  Build dir  /home/kzl/makepkg/build/pkgconf/src/pkgconf/build
+  Build dir  /home/kzl/makepkg/build/pkgconf/src/pkgconf/tmp
 
 Main project options:
   
   Core options                   Current Value                    Possible Values                  Description                                                  
   --------------                 -------------                    ---------------                  -----------                                                  
-  auto_features                  disabled                         [enabled, disabled, auto]        Override value of all 'auto' features                        
+  auto_features                  auto                             [enabled, disabled, auto]        Override value of all 'auto' features                        
   backend                        ninja                            [ninja, vs, vs2010, vs2012,      Backend to use                                               
                                                                    vs2013, vs2015, vs2017, vs2019,                                                              
                                                                    vs2022, xcode, none]                                                                         
-  buildtype                      plain                            [plain, debug, debugoptimized,   Build type to use                                            
+  buildtype                      debug                            [plain, debug, debugoptimized,   Build type to use                                            
                                                                    release, minsize, custom]                                                                    
   cmake_prefix_path              []                               []                               List of additional prefixes for cmake to search              
-  debug                          false                            [true, false]                    Enable debug symbols and other information                   
+  debug                          true                             [true, false]                    Enable debug symbols and other information                   
   default_both_libraries         shared                           [shared, static, auto]           Default library type for both_libraries                      
   default_library                shared                           [shared, static, both]           Default library type                                         
   force_fallback_for             []                               []                               Force fallback for those subprojects                         
@@ -23,7 +23,7 @@ Main project options:
                                                                                                    them                                                         
   install_umask                  0022                             [preserve, 0000-0777]            Default umask to apply on permissions of installed files     
   layout                         mirror                           [mirror, flat]                   Build directory layout                                       
-  optimization                   plain                            [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
+  optimization                   0                                [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
   pkg_config_path                []                               []                               List of additional paths for pkg-config to search            
   prefer_static                  false                            [true, false]                    Whether to try static linking before shared linking          
   strip                          false                            [true, false]                    Strip targets on install                                     
@@ -45,13 +45,13 @@ Main project options:
   b_asneeded                     true                             [true, false]                    Use -Wl,--as-needed when linking                             
   b_colorout                     always                           [auto, always, never]            Use colored output                                           
   b_coverage                     false                            [true, false]                    Enable coverage tracking.                                    
-  b_lto                          true                             [true, false]                    Use link time optimization                                   
+  b_lto                          false                            [true, false]                    Use link time optimization                                   
   b_lto_threads                  0                                                                 Use multiple threads for Link Time Optimization              
   b_lundef                       true                             [true, false]                    Use -Wl,--no-undefined when linking                          
   b_ndebug                       false                            [true, false, if-release]        Disable asserts                                              
   b_pch                          true                             [true, false]                    Use precompiled headers                                      
   b_pgo                          off                              [off, generate, use]             Use profile guided optimization                              
-  b_pie                          true                             [true, false]                    Build executables as position independent                    
+  b_pie                          false                            [true, false]                    Build executables as position independent                    
   b_sanitize                     none                             [none, address, thread,          Code sanitizer to use                                        
                                                                    undefined, memory, leak,                                                                     
                                                                    address,undefined]                                                                           
@@ -62,8 +62,8 @@ Main project options:
   c_args                         []                               []                               Extra arguments passed to the c compiler                     
   c_link_args                    []                               []                               Extra arguments passed to the c linker                       
   c_std                          c99                              [none, c89, c99, c11, c17, c18,  C language standard to use                                   
-                                                                   c2x, gnu89, gnu99, gnu11,                                                                    
-                                                                   gnu17, gnu18, gnu2x]                                                                         
+                                                                   c2x, c23, gnu89, gnu99, gnu11,                                                               
+                                                                   gnu17, gnu18, gnu2x, gnu23]                                                                  
   
   pkgconfig module options       Current Value                    Possible Values                  Description                                                  
   --------------------------     -------------                    ---------------                  -----------                                                  
@@ -79,12 +79,12 @@ Main project options:
   libexecdir                     libexec                                                           Library executable directory                                 
   licensedir                                                                                       Licenses directory                                           
   localedir                      share/locale                                                      Locale data directory                                        
-  localstatedir                  /var                                                              Localstate data directory                                    
+  localstatedir                  /var/local                                                        Localstate data directory                                    
   mandir                         share/man                                                         Manual page directory                                        
-  prefix                         /usr                                                              Installation prefix                                          
+  prefix                         /usr/local                                                        Installation prefix                                          
   sbindir                        sbin                                                              System executable directory                                  
-  sharedstatedir                 /var/lib                                                          Architecture-independent data directory                      
-  sysconfdir                     /etc                                                              Sysconf data directory                                       
+  sharedstatedir                 /var/local/lib                                                    Architecture-independent data directory                      
+  sysconfdir                     etc                                                               Sysconf data directory                                       
   
   Testing options                Current Value                    Possible Values                  Description                                                  
   -----------------              -------------                    ---------------                  -----------                                                  
@@ -93,7 +93,7 @@ Main project options:
   
   Project options                Current Value                    Possible Values                  Description                                                  
   -----------------              -------------                    ---------------                  -----------                                                  
-  tests                          disabled                         [enabled, disabled, auto]        Build tests which depends upon the kyua framework            
+  tests                          auto                             [enabled, disabled, auto]        Build tests which depends upon the kyua framework            
   with-system-includedir                                                                           Specify the system include directory (default                
                                                                                                    {prefix}/{includedir})                                       
   with-system-libdir                                                                               Specify the system library directory (default                

@@ -2,7 +2,7 @@
 
 pkgname=bc
 pkgver=1.08.1
-pkgrel=10
+pkgrel=13
 epoch=
 pkgdesc="An arbitrary precision calculator language"
 arch=('x86_64')
@@ -21,12 +21,16 @@ validpgpkeys=('325B54E4653F935A25CF32BDA186278D426A38E9')
 sha256sums=('b71457ffeb210d7ea61825ff72b3e49dc8f2c1a04102bbe23591d783d1bfe996'
             'SKIP')
 
-build() {
+prepare() {
   cd $pkgname-$pkgver
 
-  ./configure \
+  ./configure -C \
     --prefix=/usr \
     --with-readline
+}
+
+build() {
+  cd $pkgname-$pkgver
 
   make
 }
