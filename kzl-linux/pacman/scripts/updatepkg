@@ -165,19 +165,23 @@ makepkg "$cleanbuild" "$syncdeps" -o --noconfirm || error "\`makepkg -o\` error"
 info "Done"
 
 # get build options
+info "Getting build options..."
 cd "$BUILDDIR/$pkgname/src"
 if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_system" == "cmake" ]]; then
     if [[ ! -d "$srcdir" ]]; then
         error "Cannot find source directory: $srcdir" 11
     fi
 
-    cd "$srcdir"
+    cd "./$srcdir"
     case "$build_system" in
         autoconf)
             if [[ ! -f "configure" ]]; then
                 error 'Cannot find `configure` script' 12
             fi
-            ./configure --help > "$PKGBUILDDIR"/help.txt
+            ./configure --help=recursive > "$PKGBUILDDIR"/help.txt
+            find . -name 'config.cache' | LC_ALL=C sort | while read -r file; do
+                cat "$file" >> "$PKGBUILDDIR/config.cache"
+            done
             ;;
         meson)
             if [[ ! -f "build/meson-logs/meson-log.txt" ]]; then
@@ -216,7 +220,7 @@ if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_sys
             meson setup tmp > /dev/null 2>&1 && meson configure tmp > "$PKGBUILDDIR"/help.txt
             ;;
         cmake)
-            if [[ ! -f "CMakeCache.txt" ]]; then
+            if [[ ! -f "build/CMakeCache.txt" ]]; then
                 error 'Cannot find `CMakeCache.txt`' 12
             fi
             cp build/CMakeCache.txt "$PKGBUILDDIR"/CMakeCache.txt
@@ -230,6 +234,7 @@ if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_sys
 else
     info "Unknown build_system or it is not defined, skipping auto getting build options"
 fi
+info "Done"
 
 # run post_update
 cd "$PKGBUILDDIR"
