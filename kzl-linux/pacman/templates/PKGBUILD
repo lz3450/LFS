@@ -31,11 +31,16 @@ pkgver() {
   git describe --tags | sed 's/-g.*//;s/-/.g/'
 }
 
-###############################################################################
-
 prepare() {
   cd $pkgname-$pkgver
+}
 
+###############################################################################
+
+build() {
+  cd $pkgname-$pkgver
+
+  msg2 "Configuring..."
   ./configure \
     --prefix=/usr \
     --bindir=/usr/bin \
@@ -45,11 +50,8 @@ prepare() {
     --localstatedir=/var \
     --runstatedir=/run \
     --datarootdir=/usr/share
-}
 
-build() {
-  cd $pkgname-$pkgver
-
+  msg2 "Compiling..."
   make
 }
 
@@ -67,19 +69,17 @@ package() {
 
 ###############################################################################
 
-prepare() {
+build() {
   cd $pkgname-$pkgver
 
+  msg2 "Configuring..."
   meson setup \
     --prefix /usr \
     --auto-features disabled \
     --buildtype plain \
     build
-}
 
-build() {
-  cd $pkgname-$pkgver
-
+  msg2 "Compiling..."
   meson compile -C build
 }
 
@@ -97,20 +97,18 @@ package() {
 
 ###############################################################################
 
-prepare() {
+build() {
   cd $pkgname-$pkgver
 
+  msg2 "Configuring..."
   cmake -LAH -S . -B build \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_INSTALL_LIBDIR=lib \
     -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS"
-}
 
-build() {
-  cd $pkgname-$pkgver
-
+  msg2 "Compiling..."
   cmake --build build
 }
 
