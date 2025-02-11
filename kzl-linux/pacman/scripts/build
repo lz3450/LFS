@@ -18,9 +18,9 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 ################################################################################
 
 ### libraries
-source "$BASH_LIB_DIR"/log.sh
-source "$BASH_LIB_DIR"/pacman.sh
-source "$SCRIPT_DIR"/lib/pkglists.sh
+. "$BASH_LIB_DIR"/log.sh
+. "$BASH_LIB_DIR"/pacman.sh
+. "$SCRIPT_DIR"/lib/pkglists.sh
 
 ### constants & variables
 VERSION="1.0"
@@ -124,7 +124,11 @@ build() {
         _clean=''
     fi
 
-    makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm >> "$_log" 2>&1
+    makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm --log >> "$_log" 2>&1
+    info "Done"
+
+    info "Getting package configuration log..."
+        sed -n '/^  -> Configuring...$/,/^  -> Compiling...$/{/^  -> Configuring...$/b;/^  -> Compiling...$/b;p}' "$_log" > config.txt
     info "Done"
 
     info "Updating repo..."

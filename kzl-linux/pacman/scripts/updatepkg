@@ -4,16 +4,16 @@
 #
 
 set -e
-# set -u
 set -o pipefail
+# set -u
 # set -x
 
 umask 0022
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_PATH="$0"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
+BASH_LIB_DIR=${BASH_LIB_DIR:-"$SCRIPT_DIR/../../../bash/lib"}
 
 ################################################################################
 
@@ -33,7 +33,7 @@ declare -i increase_only=0
 
 ### functions
 have_function() {
-	declare -f "$1" >/dev/null
+	declare -f "$1" > /dev/null
 }
 
 usage() {
@@ -179,53 +179,20 @@ if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_sys
                 error 'Cannot find `configure` script' 12
             fi
             ./configure --help=recursive > "$PKGBUILDDIR"/help.txt
-            rm -f "$PKGBUILDDIR"/config.cache
-            find . -name 'config.cache' | LC_ALL=C sort | while read -r file; do
-                cat "$file" >> "$PKGBUILDDIR/config.cache"
-            done
             ;;
         meson)
-            if [[ ! -f "build/meson-logs/meson-log.txt" ]]; then
-                error 'Cannot find `meson-log.txt`' 12
+            if [[ ! -f "meson.build" ]]; then
+                error 'Cannot find `meson.build` script' 12
             fi
-            awk '
-            # Step 0: Remove lines starting with "Working directory:" or "Command line:"
-            /^(Working directory:|Command line:|Cached command line:|Running command:)/ { next }
+            meson configure | sed -e '/^WARNING/d' > "$PKGBUILDDIR"/help.txt
 
-            # Step 1: Capture project name and version first
-            /^Project name: / {
-                if (!project) {  # Only capture if not already set
-                    project = $3
-                    print
-                }
-                next
-            }
-
-            /^Project version: / {
-                if (!version) {  # Only capture if not already set
-                    version = $3
-                    print
-                }
-                next
-            }
-
-            # Step 2: Keep lines starting with an uppercase letter and containing ": "
-            /^[A-Z].*: / { print; next }
-
-            # Step 3: Start printing from the line matching "^project 1.0" (i.e. the header line)
-            #         and continue printing until a line starting with a letter (not whitespace) is encountered.
-            $0 ~ ("^" project " " version) { to_print = 1; print; next }
-            to_print && /^[A-Za-z]/ { exit }
-            to_print { print }
-            ' build/meson-logs/meson-log.txt > "$PKGBUILDDIR"/meson-log.txt
-            meson setup tmp > /dev/null 2>&1 && meson configure tmp > "$PKGBUILDDIR"/help.txt
             ;;
         cmake)
-            if [[ ! -f "build/CMakeCache.txt" ]]; then
-                error 'Cannot find `CMakeCache.txt`' 12
+            if [[ ! -f "CMakeLists.txt" ]]; then
+                error 'Cannot find `CMakeLists.txt`' 12
             fi
-            cp build/CMakeCache.txt "$PKGBUILDDIR"/CMakeCache.txt
-            cmake -LAH -S . -B tmp > /dev/null 2>&1 && cp tmp/CMakeCache.txt "$PKGBUILDDIR"/help.txt
+            cmake -LAH -S . -B tmp > "$PKGBUILDDIR"/help.txt
+            rm -rf tmp
             ;;
         *)
             # should not reach here
