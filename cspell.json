@@ -1,6 +1,9 @@
 {
     "version": "0.2",
-    "ignorePaths": [],
+    "ignorePaths": [
+        "config.cache",
+        "help.txt",
+    ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
@@ -94,6 +97,7 @@
         "FATLTO",
         "fcaps",
         "fexceptions",
+        "ffat",
         "filecheck",
         "findutils",
         "flang",
@@ -123,6 +127,7 @@
         "hkps",
         "hostnames",
         "hostonly",
+        "idlelib",
         "imgsize",
         "inputrc",
         "iputils",
@@ -265,6 +270,7 @@
         "nolvmconf",
         "nomdadmconf",
         "NOPASSWD",
+        "noprepare",
         "northamerica",
         "nosuid",
         "nscd",
