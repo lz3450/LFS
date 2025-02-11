@@ -4,8 +4,8 @@
 #
 
 set -e
-set -u
 set -o pipefail
+set -u
 # set -x
 
 umask 0022
@@ -16,15 +16,15 @@ umask 0022
 SCRIPT_NAME="$(basename "$0")"
 SCRIPT_PATH="$(readlink -f "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
+BASH_LIB_DIR=${BASH_LIB_DIR:-"$LFS/bash/lib"}
 
 ################################################################################
 
 ### libraries
-source "$BASH_LIB_DIR"/log.sh
-source "$BASH_LIB_DIR"/utils.sh
-# source "$BASH_LIB_DIR"/loop.sh
-# source "$BASH_LIB_DIR"/chroot.sh
+. "$BASH_LIB_DIR"/log.sh
+. "$BASH_LIB_DIR"/utils.sh
+# . "$BASH_LIB_DIR"/loop.sh
+# . "$BASH_LIB_DIR"/chroot.sh
 
 ### checks
 # if [[ $EUID -ne 0 ]]; then
@@ -40,7 +40,7 @@ input=
 
 ### functions
 usage() {
-    cat <<EOF
+    cat << EOF
 
 Usage: $SCRIPT_NAME -V | --version
 Usage: $SCRIPT_NAME -h | --help
