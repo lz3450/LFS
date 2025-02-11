@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g34
-pkgrel=7
+pkgver=7.0.0.g39
+pkgrel=15
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -32,6 +32,11 @@ source=(
 )
 sha256sums=('SKIP')
 
+# Compare the output of `gcc -march=native -Q --help=target` in the host system and the build system
+# Order of options matters
+# MAKEPKG_CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"
+MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
+
 pkgver() {
   cd $pkgname
 
@@ -41,15 +46,12 @@ pkgver() {
 prepare() {
   cd $pkgname
 
-  # Compare the output of `gcc -march=native -Q --help=target` in the host system and the build system
-  # Order of options matters
-
   sed -i \
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
-      -e '/^#CFLAGS=/c\CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"' \
+      -e "/^#CFLAGS=/c\CFLAGS=\"$MAKEPKG_CFLAGS\"" \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
       -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"' \
-      -e '/^#LTOFLAGS=/s/^#//' \
+      -e '/^#LTOFLAGS=/c\LTOFLAGS="-flto -ffat-lto-objects"' \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="$DEBUG_CFLAGS"' \
@@ -75,12 +77,16 @@ prepare() {
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
 EOF
+}
 
+build() {
+  cd $pkgname
+
+  msg2 "Configuring..."
   meson setup \
     --prefix /usr \
+    --auto-features disabled \
     --buildtype plain \
-    -D b_lto=true \
-    -D b_pie=true \
     -D buildstatic=false \
     -D crypto=openssl \
     -D curl=enabled \
@@ -94,11 +100,8 @@ EOF
     -D src-ext='.src.tar.zst' \
     -D use-git-version=false \
     build
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   meson compile -C build
 }
 

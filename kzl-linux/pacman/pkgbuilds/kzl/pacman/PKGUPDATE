@@ -1,8 +1,9 @@
 new_version=$(git ls-remote --tags https://gitlab.archlinux.org/pacman/pacman.git | grep -oP '(?<=refs/tags/v)\d+\.\d+\.\d+' | sort -V | tail -n1)
+srcdir="$pkgname"
+build_system=meson
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    meson configure build > "$PKGBUILDDIR"/help.txt
     cp -r etc "$PKGBUILDDIR"/
     rm "$PKGBUILDDIR"/etc/.gitignore
 }
