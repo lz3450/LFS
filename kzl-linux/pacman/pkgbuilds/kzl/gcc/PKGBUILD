@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=gcc
-pkgver=14.2.0
-pkgrel=2
+pkgver=14.2.0.g776
+pkgrel=3
 epoch=
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
@@ -30,17 +30,17 @@ options=(
   !lto
 )
 source=(
-  git+git://gcc.gnu.org/git/gcc.git#tag=releases/gcc-$pkgver
-  # git+git://gcc.gnu.org/git/gcc.git#branch=releases/gcc-${pkgver%%.*}
+  # git+git://gcc.gnu.org/git/gcc.git#tag=releases/gcc-$pkgver
+  git+git://gcc.gnu.org/git/gcc.git#branch=releases/gcc-${pkgver%%.*}
 )
 
-sha256sums=('a0c5c9a2e09198436b0bcccba6deef7cb439a5364d56ffbb9ac17a9d24240034')
+sha256sums=('SKIP')
 
-# pkgver() {
-#   cd gcc
+pkgver() {
+  cd gcc
 
-#   git describe --tags | sed 's|releases/gcc-||;s/-g.*//;s/-/.g/g'
-# }
+  git describe --tags | sed 's|releases/gcc-||;s/-g.*//;s/-/.g/'
+}
 
 prepare() {
   cd gcc

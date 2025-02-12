@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libffi
-pkgver=3.4.6
+pkgver=3.4.7
 pkgrel=1
 epoch=
 pkgdesc="A Portable Foreign Function Interface Library"
@@ -11,14 +11,13 @@ license=('KZL')
 makedepends=(
   libtool
 )
-options=(!lto)
 source=(
   ## not compatible with autoconf 2.72
   # git+https://github.com/libffi/libffi.git#tag=v$pkgver
   # git+https://github.com/libffi/libffi.git
   https://github.com/libffi/libffi/releases/download/v$pkgver/libffi-$pkgver.tar.gz
 )
-sha256sums=('b0dea9df23c863a7a50e825440f3ebffabd65df1497108e5d437747843895a4e')
+sha256sums=('138607dee268bdecf374adf9144c00e839e38541f75f24a1fcf18b78fda48b2d')
 
 # pkgver() {
 #   cd $pkgname
@@ -38,7 +37,8 @@ build() {
 
   ./configure \
     --prefix=/usr \
-    --disable-docs
+    --disable-docs \
+    | tee config.txt
 
   make
 }

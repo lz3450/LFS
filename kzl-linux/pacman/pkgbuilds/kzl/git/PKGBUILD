@@ -36,8 +36,6 @@ prepare() {
     --prefix /usr \
     --auto-features disabled \
     --buildtype plain \
-    -D b_lto=true \
-    -D b_pie=true \
     -D curl=enabled \
     -D default_editor=nano \
     -D expat=enabled \

@@ -2,7 +2,7 @@
 
 pkgname=p11-kit
 pkgver=0.25.5
-pkgrel=1
+pkgrel=42
 epoch=
 pkgdesc="Loads and enumerates PKCS#11 modules"
 arch=('x86_64')
@@ -28,7 +28,13 @@ prepare() {
     -D bash_completion=enabled \
     -D libffi=enabled \
     -D systemd=enabled \
+    -D trust_module=enabled \
     -D trust_paths=/etc/pki/ca-trust/source:/usr/share/pki/ca-trust-source \
+    -D pkcs11-json:bash_completion=enabled \
+    -D pkcs11-json:libffi=enabled \
+    -D pkcs11-json:systemd=enabled \
+    -D pkcs11-json:trust_module=enabled \
+    -D pkcs11-json:trust_paths=/etc/pki/ca-trust/source:/usr/share/pki/ca-trust-source \
     build
 }
 

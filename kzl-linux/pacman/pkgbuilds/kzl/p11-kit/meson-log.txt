@@ -1,0 +1,167 @@
+Main binary: /usr/bin/python
+Build Options: -Dbash_completion=enabled -Dlibffi=enabled -Dsystemd=enabled -Dtrust_module=enabled -Dtrust_paths=/etc/pki/ca-trust/source:/usr/share/pki/ca-trust-source -Dpkcs11-json:bash_completion=enabled -Dpkcs11-json:libffi=enabled -Dpkcs11-json:systemd=enabled -Dpkcs11-json:trust_module=enabled -Dpkcs11-json:trust_paths=/etc/pki/ca-trust/source:/usr/share/pki/ca-trust-source -Dprefix=/usr -Dauto_features=disabled -Dbuildtype=plain
+Python system: Linux
+Version: 1.7.0
+Source dir: /home/kzl/makepkg/build/p11-kit/src/p11-kit
+Build dir: /home/kzl/makepkg/build/p11-kit/src/p11-kit/build
+Build type: native build
+Project name: p11-kit
+Project version: 0.25.5
+Detecting compiler via: `cc --version` -> 0
+Detecting linker via: `cc -Wl,--version` -> 0
+Sanity testing C compiler: cc
+Is cross compiler: False.
+Sanity check compiler command line: cc sanitycheckc.c -o sanitycheckc.exe -D_FILE_OFFSET_BITS=64
+Running test binary command:  /home/kzl/makepkg/build/p11-kit/src/p11-kit/build/meson-private/sanitycheckc.exe
+C compiler for the host machine: cc (gcc 14.2.1 "cc (KZL 14.2.0.g740-4 2025/02/01 22:23:56 +0000) 14.2.1 20250201")
+C linker for the host machine: cc ld.bfd 2.43.1
+Detecting archiver via: `gcc-ar --version` -> 0
+Detecting compiler via: `cc --version` -> 0
+Detecting linker via: `cc -Wl,--version` -> 0
+Sanity testing C compiler: cc
+Is cross compiler: False.
+Sanity check compiler command line: cc sanitycheckc.c -o sanitycheckc.exe -D_FILE_OFFSET_BITS=64
+Running test binary command:  /home/kzl/makepkg/build/p11-kit/src/p11-kit/build/meson-private/sanitycheckc.exe
+C compiler for the build machine: cc (gcc 14.2.1 "cc (KZL 14.2.0.g740-4 2025/02/01 22:23:56 +0000) 14.2.1 20250201")
+C linker for the build machine: cc ld.bfd 2.43.1
+Detecting archiver via: `gcc-ar --version` -> 0
+Build machine cpu family: x86_64
+Build machine cpu: x86_64
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Target machine cpu family: x86_64
+Target machine cpu: x86_64
+Has header "libintl.h" : YES 
+Library intl found: NO
+Checking for size of "unsigned long" : 8 
+Run-time dependency threads found: YES
+Checking for function "pthread_create" with dependency threads: YES 
+Checking for function "nanosleep" : YES 
+Checking for function "dlopen" : YES 
+Library nsl found: YES
+Checking for function "gethostbyname" with dependency -lnsl: YES 
+Library socket found: NO
+Has header "locale.h" : YES 
+Checking for type "locale_t" : YES 
+Checking for function "newlocale" : YES 
+Checking for function "strerror_l" : YES 
+Has header "sys/resource.h" : YES 
+Has header "sys/un.h" : YES 
+Has header "ucred.h" : NO 
+Checking for function "fdwalk" : NO 
+Checking for function "getexecname" : NO 
+Checking for function "getpeereid" : NO 
+Checking for function "getpeerucred" : NO 
+Checking for function "getprogname" : NO 
+Checking for function "getresuid" : YES 
+Checking for function "isatty" : YES 
+Checking for function "issetugid" : NO 
+Checking for function "mkdtemp" : YES 
+Checking for function "mkstemp" : YES 
+Checking for function "readpassphrase" : NO 
+Checking for function "secure_getenv" : YES 
+Checking for function "strndup" : YES 
+Checking for function "strnstr" : NO 
+Checking for function "getauxval" : YES 
+Checking whether type "struct dirent" has member "d_type" : YES 
+Checking if "thread-local storage class" compiles: YES 
+Checking for function "gmtime_r" : YES 
+Checking if "program_invocation_short_name_test_code" links: YES 
+Checking if "__libc_enable_secure" links: YES 
+Checking if "vsock_test" compiles: YES 
+Checking for type "sighandler_t" : NO 
+Checking for type "sig_t" : NO 
+Checking for type "__sighandler_t" : NO 
+Checking for type "sighandler_t" : NO 
+Checking for type "sig_t" : YES 
+Checking for type "__sighandler_t" : YES 
+Has header "stdbool.h" : YES 
+Checking for function "asprintf" : YES 
+Checking for function "basename" : YES 
+Checking for function "memdup" : NO 
+Checking for function "reallocarray" : YES 
+Checking for function "secure_getenv" : YES (cached)
+Checking for function "setenv" : YES 
+Checking for function "strnstr" : NO (cached)
+Checking for function "vasprintf" : YES 
+Checking for function "strerror_r" : YES 
+Checking if "GNU strerror_r check" compiles: YES 
+Header "errno.h" has symbol "program_invocation_short_name" : YES 
+Header "stdio.h" has symbol "asprintf" : YES 
+Header "stdio.h" has symbol "vasprintf" : YES 
+Header "stdlib.h" has symbol "reallocarray" : YES 
+Found pkg-config: YES (/usr/bin/pkg-config) 2.3.0
+Called: `/usr/bin/pkg-config --modversion libffi` -> 0
+Called: `/usr/bin/pkg-config --cflags libffi` -> 0
+Called: `/usr/bin/pkg-config --libs libffi` -> 0
+Called: `/usr/bin/pkg-config --libs libffi` -> 0
+Run-time dependency libffi found: YES 3.4.6
+Called: `/usr/bin/pkg-config --modversion libtasn1` -> 0
+Called: `/usr/bin/pkg-config --cflags libtasn1` -> 0
+Called: `/usr/bin/pkg-config --libs libtasn1` -> 0
+Called: `/usr/bin/pkg-config --libs libtasn1` -> 0
+Run-time dependency libtasn1 found: YES 4.19.0
+Program asn1Parser found: YES (/usr/bin/asn1Parser)
+Called: `/usr/bin/pkg-config --modversion libsystemd` -> 0
+Called: `/usr/bin/pkg-config --cflags libsystemd` -> 0
+Called: `/usr/bin/pkg-config --libs libsystemd` -> 0
+Called: `/usr/bin/pkg-config --libs libsystemd` -> 0
+Run-time dependency libsystemd found: YES 254
+Called: `/usr/bin/pkg-config --modversion systemd` -> 0
+Called: `/usr/bin/pkg-config --cflags systemd` -> 0
+Called: `/usr/bin/pkg-config --libs systemd` -> 0
+Called: `/usr/bin/pkg-config --libs systemd` -> 0
+Run-time dependency systemd found: YES 254
+Called: `/usr/bin/pkg-config --variable=systemduserunitdir systemd` -> 0
+Got pkg-config variable systemduserunitdir : /usr/lib/systemd/user
+Program python3 found: YES (/usr/bin/python)
+Program castxml found: NO
+Program cp found: YES (/usr/bin/cp)
+Build targets in project: 0
+Checking for function "readpassphrase" : NO (cached)
+Compiler for C supports link arguments -Wl,--version-script,/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/libp11-kit.map: YES 
+Compiler for C supports link arguments -Wl,-z,nodelete: YES 
+Compiler for C supports link arguments -Wl,--version-script,/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/p11-module.map: YES 
+Program gen-pkcs11-gnu.sh found: YES (/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/gen-pkcs11-gnu.sh)
+Program test-objects.sh found: YES (/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/test-objects.sh)
+Program test-lists.sh found: YES (/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/test-lists.sh)
+Program test-messages.sh found: YES (/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/test-messages.sh)
+Program test-server.sh found: YES (/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/test-server.sh)
+Program test-list-mechanisms.sh found: YES (/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/test-list-mechanisms.sh)
+Program test-list-tokens.sh found: YES (/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/test-list-tokens.sh)
+Program test-generate-keypair.sh found: YES (/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/test-generate-keypair.sh)
+Program test-export-public.sh found: YES (/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/test-export-public.sh)
+Program test-import-public.sh found: YES (/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/test-import-public.sh)
+Program test-profiles.sh found: YES (/home/kzl/makepkg/build/p11-kit/src/p11-kit/p11-kit/test-profiles.sh)
+Program msgfmt found: YES (/usr/bin/msgfmt)
+Program msginit found: YES (/usr/bin/msginit)
+Program msgmerge found: YES (/usr/bin/msgmerge)
+Program xgettext found: YES (/usr/bin/xgettext)
+Called: `/usr/bin/pkg-config --modversion bash-completion` -> 0
+Called: `/usr/bin/pkg-config --cflags bash-completion` -> 0
+Called: `/usr/bin/pkg-config --libs bash-completion` -> 0
+Called: `/usr/bin/pkg-config --libs bash-completion` -> 0
+Run-time dependency bash-completion found: YES 2.16.0
+Called: `/usr/bin/pkg-config --variable=completionsdir bash-completion` -> 0
+Got pkg-config variable completionsdir : /usr/share/bash-completion/completions
+Build targets in project: 197
+p11-kit 0.25.5
+
+  Subprojects
+    pkcs11-json                : YES
+
+  User defined options
+    auto_features              : disabled
+    bash_completion            : enabled
+    buildtype                  : plain
+    libffi                     : enabled
+    prefix                     : /usr
+    systemd                    : enabled
+    trust_module               : enabled
+    trust_paths                : /etc/pki/ca-trust/source:/usr/share/pki/ca-trust-source
+    pkcs11-json:bash_completion: enabled
+    pkcs11-json:libffi         : enabled
+    pkcs11-json:systemd        : enabled
+    pkcs11-json:trust_module   : enabled
+    pkcs11-json:trust_paths    : /etc/pki/ca-trust/source:/usr/share/pki/ca-trust-source
+

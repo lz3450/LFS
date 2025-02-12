@@ -89,8 +89,6 @@ build() {
   meson setup \
     --prefix /usr \
     --optimization 2 \
-    -D b_lto=true \
-    -D b_pie=true \
     -D acl=true \
     -D apparmor=false \
     -D audit=true \

@@ -2,7 +2,7 @@
 
 pkgname=ca-certificates
 pkgver=2.72
-pkgrel=1
+pkgrel=13
 epoch=
 pkgdesc="CA certificates"
 arch=('any')
@@ -36,7 +36,6 @@ sha256sums=('c99d6d3f8d3d4e47719ba2b648992f5b58b150128d3aca3c05c566d8dc98e116'
             '4e8aadd6ef62dcc5d186f9fd4a5ef244ab403bba99e68b37bf3986d188f0380b')
 
 p11_format_bundle="ca-bundle.trust.p11-kit"
-p11_kit_config="p11-kit-trust.module"
 
 prepare() {
   sed -i \
@@ -45,18 +44,12 @@ prepare() {
     -e '/"$DEST"\/pem/s/ \\//' \
     -e 's/objsign/sign/g' \
     update-ca-trust
-
-  cat > "$p11_kit_config" <<EOF
-module: p11-kit-trust.so
-trust-policy: yes
-x-init-reserved: paths="$pkgdir/usr/share/pki/ca-trust-source"
-EOF
 }
 
 build() {
   python3 certdata2pem.py
 
-  cat > "$p11_format_bundle" <<EOF
+  cat > "$p11_format_bundle" << EOF
 # This is a bundle of X.509 certificates of public Certificate Authorities.
 # It was generated from the Mozilla root CA list.
 # These certificates and trust/distrust attributes use the file format accepted by the p11-kit-trust module.
@@ -107,17 +100,25 @@ package() {
 
   install -Dm644 "$p11_format_bundle" "$pkgdir"/usr/share/pki/ca-trust-source/"$p11_format_bundle"
 
-  touch "$pkgdir/$_catrustdir"/extracted/pem/tls-ca-bundle.pem
-  chmod 444 "$pkgdir/$_catrustdir"/extracted/pem/tls-ca-bundle.pem
-  touch "$pkgdir/$_catrustdir"/extracted/pem/email-ca-bundle.pem
-  chmod 444 "$pkgdir/$_catrustdir"/extracted/pem/email-ca-bundle.pem
-  touch "$pkgdir/$_catrustdir"/extracted/pem/sign-ca-bundle.pem
-  chmod 444 "$pkgdir/$_catrustdir"/extracted/pem/sign-ca-bundle.pem
+  local _p11_kit_config="$srcdir/p11-kit-trust.module"
+  cat > "$_p11_kit_config" << EOF
+module: p11-kit-trust.so
+trust-policy: yes
+x-init-reserved: paths="$pkgdir/usr/share/pki/ca-trust-source"
+EOF
 
-  export P11_KIT_CONFIG="$p11_kit_config"
+  # update if `update-ca-trust` is updated
+  export P11_KIT_CONFIG="$_p11_kit_config"
+
+  trust extract --format=pem-bundle --filter=ca-anchors --overwrite --comment --purpose server-auth "$pkgdir/$_catrustdir"/extracted/pem/tls-ca-bundle.pem
+	trust extract --format=pem-bundle --filter=ca-anchors --overwrite --comment --purpose email "$pkgdir/$_catrustdir"/extracted/pem/email-ca-bundle.pem
+	trust extract --format=pem-bundle --filter=ca-anchors --overwrite --comment --purpose code-signing "$pkgdir/$_catrustdir"/extracted/pem/sign-ca-bundle.pem
+  chmod 444 "$pkgdir/$_catrustdir"/extracted/pem/tls-ca-bundle.pem
+  chmod 444 "$pkgdir/$_catrustdir"/extracted/pem/email-ca-bundle.pem
+  chmod 444 "$pkgdir/$_catrustdir"/extracted/pem/sign-ca-bundle.pem
 
   trust extract --format=pem-directory-hash --filter=ca-anchors --overwrite --purpose server-auth "$pkgdir/$_catrustdir"/extracted/pem/directory-hash
   find "$pkgdir/$_catrustdir"/extracted/pem/directory-hash -type l \
-      -regextype posix-extended -regex '.*/[0-9a-f]{8}\.[0-9]+' \
-      -exec cp -P {} "$pkgdir/$_pkidir"/tls/certs/ \;
+    -regextype posix-extended -regex '.*/[0-9a-f]{8}\.[0-9]+' \
+    -exec cp -vP {} "$pkgdir/$_pkidir"/tls/certs/ \;
 }

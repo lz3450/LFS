@@ -11,7 +11,6 @@ license=('KZL')
 depends=(
   libunistring
 )
-options=(!lto)
 source=(
   # git+https://gitlab.com/libidn/libidn2.git#tag=v$pkgver
   # git+https://git.savannah.gnu.org/git/gnulib.git
@@ -24,7 +23,7 @@ sha256sums=('4c21a791b610b9519b9d0e12b8097bf2f359b12f8dd92647611a929e6bfd7d64'
 build() {
   cd $pkgname-$pkgver
 
-  ./configure \
+  ./configure -C \
     --prefix=/usr \
     --disable-doc
 

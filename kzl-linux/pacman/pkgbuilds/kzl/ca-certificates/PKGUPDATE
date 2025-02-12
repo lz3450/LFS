@@ -1,16 +1,19 @@
 new_version=$(curl https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h | grep "NSS_BUILTINS_LIBRARY_VERSION " | awk '{print $NF}' | sed -e "s;\";;g")
+srcdir=
+build_system=
 
 pre_update() {
-    rm -f "$SRCDEST"/certdata.txt
-    rm -f "$SRCDEST"/nssckbi.h
-    rm -f "$SRCDEST"/certdata2pem.py
-    rm -f "$SRCDEST"/update-ca-trust
-    rm -f "$SRCDEST"/README.etc
-    rm -f "$SRCDEST"/README.src
-    rm -f "$SRCDEST"/README.extr
-    rm -f "$SRCDEST"/README.pem
-    rm -f "$SRCDEST"/README.openssl
-    rm -f "$SRCDEST"/README.usr
+    rm -vf \
+        "$SRCDEST"/certdata.txt \
+        "$SRCDEST"/nssckbi.h \
+        "$SRCDEST"/certdata2pem.py \
+        "$SRCDEST"/update-ca-trust \
+        "$SRCDEST"/README.etc \
+        "$SRCDEST"/README.src \
+        "$SRCDEST"/README.extr \
+        "$SRCDEST"/README.pem \
+        "$SRCDEST"/README.openssl \
+        "$SRCDEST"/README.usr
     updpkgsums
 }
 

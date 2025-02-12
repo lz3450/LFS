@@ -11,42 +11,29 @@ license=('KZL')
 source=(git+https://github.com/tukaani-project/xz.git#tag=v$pkgver)
 sha256sums=('0473bff1378094f9868d6f42effab0962d5c9e26616a6b88af3f72abcd8fce04')
 
-prepare() {
+build() {
   cd $pkgname
 
-  # ./autogen.sh --no-po4a --no-doxygen
-
+  msg2 "Configuring..."
   cmake -LAH -S . -B build -W no-dev \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_INSTALL_LIBDIR=lib \
     -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -D BUILD_SHARED_LIBS=ON
-}
 
-build() {
-  cd $pkgname
-
-  # ./configure \
-  #   --prefix=/usr
-
-  # make
-
+  msg2 "Compiling..."
   cmake --build build
 }
 
 check() {
   cd $pkgname
 
-  # make check
-
   cmake --build build --target test
 }
 
 package() {
   cd $pkgname
-
-  # make DESTDIR="$pkgdir" install
 
   DESTDIR="$pkgdir" cmake --build build --target install
 }

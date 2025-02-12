@@ -1,7 +1,4 @@
 new_version=$(git ls-remote --tags https://gitlab.gnome.org/GNOME/libxml2.git | grep -oP '(?<=refs/tags/v)\d+\.\d+\.\d+' | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
-    # ./configure --help >"$PKGBUILDDIR"/help.txt
-}
+srcdir="$pkgname"
+build_system=cmake
+# build_system=autoconf

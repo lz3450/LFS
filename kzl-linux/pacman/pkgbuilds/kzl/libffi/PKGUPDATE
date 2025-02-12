@@ -1,6 +1,3 @@
 new_version=$(git ls-remote --tags https://github.com/libffi/libffi.git | grep -oP "refs/tags/v\K[0-9]+\.[0-9]+\.[0-9]+" | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname-$pkgver"
-    ./configure --help >"$PKGBUILDDIR"/help.txt
-}
+srcdir="$pkgname-$new_version"
+build_system=autoconf

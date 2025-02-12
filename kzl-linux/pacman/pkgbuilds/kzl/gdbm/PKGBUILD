@@ -12,7 +12,6 @@ depends=(readline)
 makedepends=(
   libtool
 )
-options=(!lto)
 source=(git://git.gnu.org.ua/gdbm.git#tag=v$pkgver)
 sha256sums=('731b9bdf5e16cc435c1ff81083eba393b292538d976a96d6403cb22f8570fa26')
 
@@ -25,7 +24,7 @@ prepare() {
 build() {
   cd $pkgname
 
-  ./configure \
+  ./configure -C \
     --prefix=/usr
 
   make

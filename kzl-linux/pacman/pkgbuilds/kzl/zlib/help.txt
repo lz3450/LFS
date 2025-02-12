@@ -74,3 +74,479 @@
 -- Performing Test HAVE_VPCLMULQDQ_INTRIN
 -- Performing Test HAVE_VPCLMULQDQ_INTRIN - Success
 -- Architecture-specific source files: arch/x86/x86_features.c;arch/x86/chunkset_sse2.c;arch/x86/compare256_sse2.c;arch/x86/slide_hash_sse2.c;arch/x86/adler32_ssse3.c;arch/x86/chunkset_ssse3.c;arch/x86/adler32_sse42.c;arch/x86/crc32_pclmulqdq.c;arch/x86/slide_hash_avx2.c;arch/x86/chunkset_avx2.c;arch/x86/compare256_avx2.c;arch/x86/adler32_avx2.c;arch/x86/adler32_avx512.c;arch/x86/chunkset_avx512.c;arch/x86/adler32_avx512_vnni.c;arch/x86/crc32_vpclmulqdq.c
+-- The CXX compiler identification is GNU 14.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Could NOT find GTest (missing: GTEST_LIBRARY GTEST_INCLUDE_DIR GTEST_MAIN_LIBRARY) 
+-- Git checking out GoogleTest release-1.12.1
+CMake Deprecation Warning at tmp/_deps/googletest-src/CMakeLists.txt:4 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Deprecation Warning at tmp/_deps/googletest-src/googlemock/CMakeLists.txt:39 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Deprecation Warning at tmp/_deps/googletest-src/googletest/CMakeLists.txt:49 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Found Python: /usr/bin/python3.12 (found version "3.12.1") found components: Interpreter
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- The following features have been enabled:
+
+ * CMAKE_BUILD_TYPE, Build type: Release (default)
+ * XSAVE, Support XSAVE intrinsics using "-mxsave"
+ * SSSE3_ADLER32, Support SSSE3-accelerated adler32, using "-mssse3"
+ * SSE42_CRC, Support SSE4.2 optimized adler32 hash generation, using "-msse4.2"
+ * PCLMUL_CRC, Support CRC hash generation using PCLMULQDQ, using "-msse4.2 -mpclmul"
+ * AVX2_SLIDEHASH, Support AVX2 optimized slide_hash, using "-mavx2 -mbmi2"
+ * AVX2_CHUNKSET, Support AVX2 optimized chunkset, using "-mavx2 -mbmi2"
+ * AVX2_COMPARE256, Support AVX2 optimized compare256, using "-mavx2 -mbmi2"
+ * AVX2_ADLER32, Support AVX2-accelerated adler32, using "-mavx2 -mbmi2"
+ * AVX512_ADLER32, Support AVX512-accelerated adler32, using "-mavx512f -mavx512dq -mavx512bw -mavx512vl -mbmi2 -mtune=cascadelake"
+ * AVX512_CHUNKSET, Support AVX512 optimized chunkset, using "-mavx512f -mavx512dq -mavx512bw -mavx512vl -mbmi2 -mtune=cascadelake"
+ * AVX512VNNI_ADLER32, Support AVX512VNNI adler32, using "-mavx512f -mavx512dq -mavx512bw -mavx512vl -mavx512vnni -mbmi2 -mtune=cascadelake"
+ * VPCLMUL_CRC, Support CRC hash generation using VPCLMULQDQ, using "-mpclmul -mvpclmulqdq -mavx512f -mavx512f -mavx512dq -mavx512bw -mavx512vl -mbmi2 -mtune=cascadelake"
+ * WITH_GZFILEOP, Compile with support for gzFile related functions
+ * ZLIB_ENABLE_TESTS, Build test binaries
+ * ZLIBNG_ENABLE_TESTS, Test zlib-ng specific API
+ * WITH_SANITIZER, Enable sanitizer support
+ * WITH_GTEST, Build gtest_zlib
+ * WITH_OPTIM, Build with optimisation
+ * WITH_NEW_STRATEGIES, Use new strategies
+ * WITH_RUNTIME_CPU_DETECTION, Build with runtime CPU detection
+ * WITH_AVX2, Build with AVX2
+ * WITH_AVX512, Build with AVX512
+ * WITH_AVX512VNNI, Build with AVX512 VNNI
+ * WITH_SSE2, Build with SSE2
+ * WITH_SSSE3, Build with SSSE3
+ * WITH_SSE42, Build with SSE42
+ * WITH_PCLMULQDQ, Build with PCLMULQDQ
+ * WITH_VPCLMULQDQ, Build with VPCLMULQDQ
+
+-- The following OPTIONAL packages have been found:
+
+ * Git
+ * Python
+ * Threads
+
+-- The following features have been disabled:
+
+ * ZLIB_SYMBOL_PREFIX, Publicly exported symbols DO NOT have a custom prefix
+ * ZLIB_COMPAT, Compile with zlib compatible API
+ * WITH_FUZZERS, Build test/fuzz
+ * WITH_BENCHMARKS, Build test/benchmarks
+ * WITH_BENCHMARK_APPS, Build application benchmarks
+ * WITH_NATIVE_INSTRUCTIONS, Instruct the compiler to use the full instruction set on this host (gcc/clang -march=native)
+ * WITH_MAINTAINER_WARNINGS, Build with project maintainer warnings
+ * WITH_CODE_COVERAGE, Enable code coverage reporting
+ * WITH_INFLATE_STRICT, Build with strict inflate distance checking
+ * WITH_INFLATE_ALLOW_INVALID_DIST, Build with zero fill for inflate invalid distances
+ * INSTALL_UTILS, Copy minigzip and minideflate during install
+
+-- The following OPTIONAL packages have not been found:
+
+ * GTest
+
+-- Configuring done (6.9s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/kzl/makepkg/build/zlib/src/zlib-ng/tmp
+-- Cache values
+// Builds the googlemock subproject
+BUILD_GMOCK:BOOL=ON
+
+// Path to a program.
+CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
+
+// Path to a program.
+CMAKE_AR:FILEPATH=/usr/bin/ar
+
+// Choose the type of build, standard options are: Debug Release RelWithDebInfo MinSizeRel.
+CMAKE_BUILD_TYPE:STRING=Release
+
+// Enable/Disable color output during build.
+CMAKE_COLOR_MAKEFILE:BOOL=ON
+
+// CXX compiler
+CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
+
+// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
+CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
+
+// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
+CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
+
+// Flags used by the CXX compiler during all build types.
+CMAKE_CXX_FLAGS:STRING=
+
+// Flags used by the CXX compiler during DEBUG builds.
+CMAKE_CXX_FLAGS_DEBUG:STRING=-g
+
+// Flags used by the CXX compiler during MINSIZEREL builds.
+CMAKE_CXX_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG
+
+// Flags used by the CXX compiler during RELEASE builds.
+CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
+
+// Flags used by the CXX compiler during RELWITHDEBINFO builds.
+CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
+
+// C compiler
+CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
+
+// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
+CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
+
+// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
+CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
+
+// Flags used by the C compiler during all build types.
+CMAKE_C_FLAGS:STRING=
+
+// Flags used by the C compiler during DEBUG builds.
+CMAKE_C_FLAGS_DEBUG:STRING=-g
+
+// Flags used by the C compiler during MINSIZEREL builds.
+CMAKE_C_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG
+
+// Flags used by the C compiler during RELEASE builds.
+CMAKE_C_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
+
+// Flags used by the C compiler during RELWITHDEBINFO builds.
+CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
+
+// Path to a program.
+CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
+
+// Flags used by the linker during all build types.
+CMAKE_EXE_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during DEBUG builds.
+CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during MINSIZEREL builds.
+CMAKE_EXE_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during RELEASE builds.
+CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during RELWITHDEBINFO builds.
+CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// Enable/Disable output of compile commands during generation.
+CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
+
+// User executables (bin)
+CMAKE_INSTALL_BINDIR:PATH=bin
+
+// Read-only architecture-independent data (DATAROOTDIR)
+CMAKE_INSTALL_DATADIR:PATH=
+
+// Read-only architecture-independent data root (share)
+CMAKE_INSTALL_DATAROOTDIR:PATH=share
+
+// Documentation root (DATAROOTDIR/doc/PROJECT_NAME)
+CMAKE_INSTALL_DOCDIR:PATH=
+
+// C header files (include)
+CMAKE_INSTALL_INCLUDEDIR:PATH=include
+
+// Info documentation (DATAROOTDIR/info)
+CMAKE_INSTALL_INFODIR:PATH=
+
+// Object code libraries (lib64)
+CMAKE_INSTALL_LIBDIR:PATH=lib64
+
+// Program executables (libexec)
+CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
+
+// Locale-dependent data (DATAROOTDIR/locale)
+CMAKE_INSTALL_LOCALEDIR:PATH=
+
+// Modifiable single-machine data (var)
+CMAKE_INSTALL_LOCALSTATEDIR:PATH=var
+
+// Man documentation (DATAROOTDIR/man)
+CMAKE_INSTALL_MANDIR:PATH=
+
+// C header files for non-gcc (/usr/include)
+CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
+
+// Install path prefix, prepended onto install directories.
+CMAKE_INSTALL_PREFIX:PATH=/usr/local
+
+// Run-time variable data (LOCALSTATEDIR/run)
+CMAKE_INSTALL_RUNSTATEDIR:PATH=
+
+// System admin executables (sbin)
+CMAKE_INSTALL_SBINDIR:PATH=sbin
+
+// Modifiable architecture-independent data (com)
+CMAKE_INSTALL_SHAREDSTATEDIR:PATH=com
+
+// Read-only single-machine data (etc)
+CMAKE_INSTALL_SYSCONFDIR:PATH=etc
+
+// Path to a program.
+CMAKE_LINKER:FILEPATH=/usr/bin/ld
+
+// Path to a program.
+CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
+
+// Flags used by the linker during the creation of modules during all build types.
+CMAKE_MODULE_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during the creation of modules during DEBUG builds.
+CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during the creation of modules during MINSIZEREL builds.
+CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during the creation of modules during RELEASE builds.
+CMAKE_MODULE_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during the creation of modules during RELWITHDEBINFO builds.
+CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// Path to a program.
+CMAKE_NM:FILEPATH=/usr/bin/nm
+
+// Path to a program.
+CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
+
+// Path to a program.
+CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
+
+// Path to a program.
+CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
+
+// Path to a program.
+CMAKE_READELF:FILEPATH=/usr/bin/readelf
+
+// Flags used by the linker during the creation of shared libraries during all build types.
+CMAKE_SHARED_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during the creation of shared libraries during DEBUG builds.
+CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during the creation of shared libraries during MINSIZEREL builds.
+CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during the creation of shared libraries during RELEASE builds.
+CMAKE_SHARED_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during the creation of shared libraries during RELWITHDEBINFO builds.
+CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// If set, runtime paths are not added when installing shared libraries, but are added when building.
+CMAKE_SKIP_INSTALL_RPATH:BOOL=NO
+
+// If set, runtime paths are not added when using shared libraries.
+CMAKE_SKIP_RPATH:BOOL=NO
+
+// Flags used by the linker during the creation of static libraries during all build types.
+CMAKE_STATIC_LINKER_FLAGS:STRING=
+
+// Flags used by the linker during the creation of static libraries during DEBUG builds.
+CMAKE_STATIC_LINKER_FLAGS_DEBUG:STRING=
+
+// Flags used by the linker during the creation of static libraries during MINSIZEREL builds.
+CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL:STRING=
+
+// Flags used by the linker during the creation of static libraries during RELEASE builds.
+CMAKE_STATIC_LINKER_FLAGS_RELEASE:STRING=
+
+// Flags used by the linker during the creation of static libraries during RELWITHDEBINFO builds.
+CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// Path to a program.
+CMAKE_STRIP:FILEPATH=/usr/bin/strip
+
+// Path to a program.
+CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
+
+// If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.
+CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
+
+// Directory under which to collect all populated content
+FETCHCONTENT_BASE_DIR:PATH=/home/kzl/makepkg/build/zlib/src/zlib-ng/tmp/_deps
+
+// Disables all attempts to download or update content and assumes source dirs already exist
+FETCHCONTENT_FULLY_DISCONNECTED:BOOL=OFF
+
+// Enables QUIET option for all content population
+FETCHCONTENT_QUIET:BOOL=ON
+
+// When not empty, overrides where to find pre-populated content for googletest
+FETCHCONTENT_SOURCE_DIR_GOOGLETEST:PATH=
+
+// Enables UPDATE_DISCONNECTED behavior for all content population
+FETCHCONTENT_UPDATES_DISCONNECTED:BOOL=OFF
+
+// Enables UPDATE_DISCONNECTED behavior just for population of googletest
+FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST:BOOL=OFF
+
+// Git command line client
+GIT_EXECUTABLE:FILEPATH=/usr/bin/git
+
+// Path to a library.
+GMOCK_LIBRARY:FILEPATH=GMOCK_LIBRARY-NOTFOUND
+
+// Path to a library.
+GMOCK_LIBRARY_DEBUG:FILEPATH=GMOCK_LIBRARY_DEBUG-NOTFOUND
+
+// Path to a library.
+GMOCK_MAIN_LIBRARY:FILEPATH=GMOCK_MAIN_LIBRARY-NOTFOUND
+
+// Path to a library.
+GMOCK_MAIN_LIBRARY_DEBUG:FILEPATH=GMOCK_MAIN_LIBRARY_DEBUG-NOTFOUND
+
+// Path to a file.
+GTEST_INCLUDE_DIR:PATH=GTEST_INCLUDE_DIR-NOTFOUND
+
+// Path to a library.
+GTEST_LIBRARY:FILEPATH=GTEST_LIBRARY-NOTFOUND
+
+// Path to a library.
+GTEST_LIBRARY_DEBUG:FILEPATH=GTEST_LIBRARY_DEBUG-NOTFOUND
+
+// Path to a library.
+GTEST_MAIN_LIBRARY:FILEPATH=GTEST_MAIN_LIBRARY-NOTFOUND
+
+// Path to a library.
+GTEST_MAIN_LIBRARY_DEBUG:FILEPATH=GTEST_MAIN_LIBRARY_DEBUG-NOTFOUND
+
+// The directory containing a CMake configuration file for GTest.
+GTest_DIR:PATH=GTest_DIR-NOTFOUND
+
+// Enable installation of googletest. (Projects embedding googletest may want to turn this OFF.)
+INSTALL_GTEST:BOOL=ON
+
+// Copy minigzip and minideflate during install
+INSTALL_UTILS:BOOL=OFF
+
+// Installation directory for pkgconfig (.pc) files
+PKGCONFIG_INSTALL_DIR:PATH=lib64/pkgconfig
+
+// Build with AVX2
+WITH_AVX2:BOOL=ON
+
+// Build with AVX512
+WITH_AVX512:BOOL=ON
+
+// Build with AVX512 VNNI extensions
+WITH_AVX512VNNI:BOOL=ON
+
+// Build test/benchmarks
+WITH_BENCHMARKS:BOOL=OFF
+
+// Build application benchmarks
+WITH_BENCHMARK_APPS:BOOL=OFF
+
+// Enable code coverage reporting
+WITH_CODE_COVERAGE:BOOL=OFF
+
+// Build test/fuzz
+WITH_FUZZERS:BOOL=OFF
+
+// Build gtest_zlib
+WITH_GTEST:BOOL=ON
+
+// Compile with support for gzFile related functions
+WITH_GZFILEOP:BOOL=ON
+
+// Build with zero fill for inflate invalid distances
+WITH_INFLATE_ALLOW_INVALID_DIST:BOOL=OFF
+
+// Build with strict inflate distance checking
+WITH_INFLATE_STRICT:BOOL=OFF
+
+// Build with project maintainer warnings
+WITH_MAINTAINER_WARNINGS:BOOL=OFF
+
+// Instruct the compiler to use the full instruction set on this host (gcc/clang -march=native)
+WITH_NATIVE_INSTRUCTIONS:BOOL=OFF
+
+// Use new strategies
+WITH_NEW_STRATEGIES:BOOL=ON
+
+// Build with optimisation
+WITH_OPTIM:BOOL=ON
+
+// Build with PCLMULQDQ
+WITH_PCLMULQDQ:BOOL=ON
+
+// Reduced memory usage for special cases (reduces performance)
+WITH_REDUCED_MEM:BOOL=OFF
+
+// Build with runtime detection of CPU architecture
+WITH_RUNTIME_CPU_DETECTION:BOOL=ON
+
+// Enable sanitizer support
+WITH_SANITIZER:STRING=AUTO
+
+// Build with SSE2
+WITH_SSE2:BOOL=ON
+
+// Build with SSE42
+WITH_SSE42:BOOL=ON
+
+// Build with SSSE3
+WITH_SSSE3:BOOL=ON
+
+// Build with VPCLMULQDQ
+WITH_VPCLMULQDQ:BOOL=ON
+
+// Test zlib-ng specific API
+ZLIBNG_ENABLE_TESTS:BOOL=ON
+
+// Compile with zlib compatible API
+ZLIB_COMPAT:BOOL=OFF
+
+// Build test binaries
+ZLIB_ENABLE_TESTS:BOOL=ON
+
+// Give this prefix to all publicly exported symbols.
+Useful when embedding into a larger library.
+Default is no prefix (empty prefix).
+ZLIB_SYMBOL_PREFIX:STRING=
+
+// Build all of Google Mock's own tests.
+gmock_build_tests:BOOL=OFF
+
+// Build gtest's sample programs.
+gtest_build_samples:BOOL=OFF
+
+// Build all of gtest's own tests.
+gtest_build_tests:BOOL=OFF
+
+// Disable uses of pthreads in gtest.
+gtest_disable_pthreads:BOOL=OFF
+
+// Use shared (DLL) run-time lib even when Google Test is built as static lib.
+gtest_force_shared_crt:BOOL=ON
+
+// Build gtest with internal symbols hidden in shared libraries.
+gtest_hide_internal_symbols:BOOL=OFF
+

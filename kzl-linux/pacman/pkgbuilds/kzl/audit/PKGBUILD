@@ -24,7 +24,6 @@ backup=(
   etc/audit/plugins.d/au-remote.conf
   etc/audit/plugins.d/syslog.conf
 )
-options=(!lto)
 source=(git+https://github.com/linux-audit/audit-userspace.git#tag=v$pkgver)
 sha256sums=('1d0978d6cc2e9a7809de4d87cfa1fdc2277417de17df915bdb8bac1564fb3515')
 
@@ -37,7 +36,7 @@ prepare() {
 build() {
   cd audit-userspace
 
-  ./configure \
+  ./configure -C \
     --prefix=/usr \
     --sysconfdir=/etc \
     --with-io_uring \

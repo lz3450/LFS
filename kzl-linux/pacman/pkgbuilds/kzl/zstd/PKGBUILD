@@ -16,9 +16,10 @@ depends=(
 source=(git+https://github.com/facebook/zstd.git#tag=v$pkgver)
 sha256sums=('473a5782ac3e511d476127aa7ea100e51ee4756e8c8e984144ee3a42a7387222')
 
-prepare() {
+build() {
   cd $pkgname/build/cmake
 
+  msg2 "Configuring..."
   cmake -S . -B build -G Ninja \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
@@ -31,11 +32,8 @@ prepare() {
     -D ZSTD_LZMA_SUPPORT=ON \
     -D ZSTD_PROGRAMS_LINK_SHARED=ON \
     -D ZSTD_ZLIB_SUPPORT=ON
-}
 
-build() {
-  cd $pkgname/build/cmake
-
+  msg2 "Compiling..."
   cmake --build build
 }
 

@@ -1,0 +1,150 @@
+configure: creating cache config.cache
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking target system type... x86_64-pc-linux-gnu
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether ln works... yes
+checking whether ln -s works... yes
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for gawk... gawk
+checking for x86_64-pc-linux-gnu-gcc... x86_64-pc-linux-gnu-gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether x86_64-pc-linux-gnu-gcc accepts -g... yes
+checking for x86_64-pc-linux-gnu-gcc option to accept ISO C89... none needed
+checking for x86_64-pc-linux-gnu-gcc option to accept ISO C99... none needed
+checking for x86_64-pc-linux-gnu-g++... x86_64-pc-linux-gnu-g++
+checking whether we are using the GNU C++ compiler... yes
+checking whether x86_64-pc-linux-gnu-g++ accepts -g... yes
+checking whether g++ accepts -static-libstdc++ -static-libgcc... yes
+checking for x86_64-pc-linux-gnu-gnatbind... no
+checking for gnatbind... no
+checking for x86_64-pc-linux-gnu-gnatmake... no
+checking for gnatmake... no
+checking whether compiler driver understands Ada and is recent enough... no
+checking for x86_64-pc-linux-gnu-gdc... no
+checking for gdc... no
+checking whether the D compiler works... no
+checking for cargo... no
+checking how to compare bootstrapped objects... cmp --ignore-initial=16 $$f1 $$f2
+checking for objdir... .libs
+checking for isl 0.15 or later... yes
+checking whether to enable libdiagnostics... no
+checking for library containing dlopen... none required
+checking for library containing pthread_create... none required
+checking for default BUILD_CONFIG... 
+checking for --enable-vtable-verify... no
+checking for bison... bison -y
+checking for bison... bison
+checking for gm4... no
+checking for gnum4... no
+checking for m4... m4
+checking for flex... flex
+checking for flex... flex
+checking for makeinfo... makeinfo
+checking for expect... no
+checking for runtest... no
+checking for x86_64-pc-linux-gnu-ar... no
+checking for ar... ar
+checking for x86_64-pc-linux-gnu-as... no
+checking for as... as
+checking for x86_64-pc-linux-gnu-dlltool... no
+checking for dlltool... no
+checking for x86_64-pc-linux-gnu-dsymutil... no
+checking for dsymutil... no
+checking for x86_64-pc-linux-gnu-ld... no
+checking for ld... ld
+checking for x86_64-pc-linux-gnu-lipo... no
+checking for lipo... no
+checking for x86_64-pc-linux-gnu-nm... no
+checking for nm... nm
+checking for x86_64-pc-linux-gnu-ranlib... no
+checking for ranlib... ranlib
+checking for x86_64-pc-linux-gnu-strip... no
+checking for strip... strip
+checking for x86_64-pc-linux-gnu-windres... no
+checking for windres... no
+checking for x86_64-pc-linux-gnu-windmc... no
+checking for windmc... no
+checking for x86_64-pc-linux-gnu-objcopy... no
+checking for objcopy... objcopy
+checking for x86_64-pc-linux-gnu-objdump... no
+checking for objdump... objdump
+checking for x86_64-pc-linux-gnu-otool... no
+checking for otool... no
+checking for x86_64-pc-linux-gnu-readelf... no
+checking for readelf... readelf
+checking for -plugin option... checking for x86_64-pc-linux-gnu-ar... (cached) ar
+--plugin /usr/libexec/gcc/x86_64-pc-linux-gnu/14.2.0/liblto_plugin.so
+checking for x86_64-pc-linux-gnu-cc... no
+checking for cc... cc
+checking for x86_64-pc-linux-gnu-c++... x86_64-pc-linux-gnu-c++
+checking for x86_64-pc-linux-gnu-gcc... x86_64-pc-linux-gnu-gcc
+checking for x86_64-pc-linux-gnu-gfortran... x86_64-pc-linux-gnu-gfortran
+checking for x86_64-pc-linux-gnu-gccgo... no
+checking for gccgo... no
+checking for x86_64-pc-linux-gnu-gdc... no
+checking for gdc... no
+checking for x86_64-pc-linux-gnu-gm2... no
+checking for gm2... no
+checking for x86_64-pc-linux-gnu-ar... no
+checking for ar... ar
+checking for x86_64-pc-linux-gnu-as... no
+checking for as... as
+checking for x86_64-pc-linux-gnu-dlltool... no
+checking for dlltool... no
+checking for x86_64-pc-linux-gnu-dsymutil... no
+checking for dsymutil... no
+checking for x86_64-pc-linux-gnu-ld... no
+checking for ld... ld
+checking for x86_64-pc-linux-gnu-lipo... no
+checking for lipo... no
+checking for x86_64-pc-linux-gnu-nm... no
+checking for nm... nm
+checking for x86_64-pc-linux-gnu-objcopy... no
+checking for objcopy... objcopy
+checking for x86_64-pc-linux-gnu-objdump... no
+checking for objdump... objdump
+checking for x86_64-pc-linux-gnu-otool... no
+checking for otool... no
+checking for x86_64-pc-linux-gnu-ranlib... no
+checking for ranlib... ranlib
+checking for x86_64-pc-linux-gnu-readelf... no
+checking for readelf... readelf
+checking for x86_64-pc-linux-gnu-strip... no
+checking for strip... strip
+checking for x86_64-pc-linux-gnu-windres... no
+checking for windres... no
+checking for x86_64-pc-linux-gnu-windmc... no
+checking for windmc... no
+checking where to find the target ar... just compiled
+checking where to find the target as... just compiled
+checking where to find the target cc... host tool
+checking where to find the target c++... host tool
+checking where to find the target c++ for libstdc++... host tool
+checking where to find the target dlltool... just compiled
+checking where to find the target dsymutil... host tool
+checking where to find the target gcc... host tool
+checking where to find the target gfortran... host tool
+checking where to find the target gccgo... host tool
+checking where to find the target gdc... host tool
+checking where to find the target gm2... host tool
+checking where to find the target ld... just compiled
+checking where to find the target lipo... host tool
+checking where to find the target nm... just compiled
+checking where to find the target objcopy... just compiled
+checking where to find the target objdump... just compiled
+checking where to find the target otool... host tool
+checking where to find the target ranlib... just compiled
+checking where to find the target readelf... just compiled
+checking where to find the target strip... just compiled
+checking where to find the target windres... just compiled
+checking where to find the target windmc... just compiled
+checking whether to enable maintainer-specific portions of Makefiles... no
+configure: updating cache config.cache
+configure: creating ./config.status
+config.status: creating Makefile

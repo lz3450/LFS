@@ -1,6 +1,3 @@
 new_version=$(git ls-remote --tags https://github.com/linux-audit/audit-userspace.git | grep -oP '(?<=refs/tags/v)\d\.\d(\.\d)?' | sort -V | tail -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/audit-userspace"
-    ./configure --help >"$PKGBUILDDIR"/help.txt
-}
+srcdir="audit-userspace"
+build_system=autoconf

@@ -12,14 +12,13 @@ backup=(
   etc/e2scrub.conf
   etc/mke2fs.conf
 )
-options=(!lto)
 source=(git+https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git#tag=v$pkgver)
 sha256sums=('353f7be370e8a289cfd53687254b3fcd873a7eb476f93d504fd55d2ed4f456f7')
 
 build() {
   cd $pkgname
 
-  ./configure \
+  ./configure -C \
     --prefix=/usr \
     --sysconfdir=/etc \
     --enable-elf-shlibs \

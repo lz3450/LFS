@@ -17,8 +17,6 @@ prepare() {
   meson setup \
     --prefix /usr \
     --buildtype plain \
-    -D b_lto=true \
-    -D b_pie=true \
     -D tests=false \
     build
 }

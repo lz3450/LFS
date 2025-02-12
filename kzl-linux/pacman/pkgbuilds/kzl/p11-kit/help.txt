@@ -1,19 +1,19 @@
 Core properties:
   Source dir /home/kzl/makepkg/build/p11-kit/src/p11-kit
-  Build dir  /home/kzl/makepkg/build/p11-kit/src/p11-kit/build
+  Build dir  /home/kzl/makepkg/build/p11-kit/src/p11-kit/tmp
 
 Main project options:
   
   Core options                   Current Value                    Possible Values                  Description                                                  
   --------------                 -------------                    ---------------                  -----------                                                  
-  auto_features                  enabled                          [enabled, disabled, auto]        Override value of all 'auto' features                        
+  auto_features                  auto                             [enabled, disabled, auto]        Override value of all 'auto' features                        
   backend                        ninja                            [ninja, vs, vs2010, vs2012,      Backend to use                                               
                                                                    vs2013, vs2015, vs2017, vs2019,                                                              
                                                                    vs2022, xcode, none]                                                                         
-  buildtype                      plain                            [plain, debug, debugoptimized,   Build type to use                                            
+  buildtype                      debug                            [plain, debug, debugoptimized,   Build type to use                                            
                                                                    release, minsize, custom]                                                                    
   cmake_prefix_path              []                               []                               List of additional prefixes for cmake to search              
-  debug                          false                            [true, false]                    Enable debug symbols and other information                   
+  debug                          true                             [true, false]                    Enable debug symbols and other information                   
   default_both_libraries         shared                           [shared, static, auto]           Default library type for both_libraries                      
   default_library                shared                           [shared, static, both]           Default library type                                         
   force_fallback_for             []                               []                               Force fallback for those subprojects                         
@@ -23,7 +23,7 @@ Main project options:
                                                                                                    them                                                         
   install_umask                  0022                             [preserve, 0000-0777]            Default umask to apply on permissions of installed files     
   layout                         mirror                           [mirror, flat]                   Build directory layout                                       
-  optimization                   plain                            [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
+  optimization                   0                                [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
   pkg_config_path                []                               []                               List of additional paths for pkg-config to search            
   prefer_static                  false                            [true, false]                    Whether to try static linking before shared linking          
   strip                          false                            [true, false]                    Strip targets on install                                     
@@ -87,12 +87,12 @@ Main project options:
   libexecdir                     libexec                                                           Library executable directory                                 
   licensedir                                                                                       Licenses directory                                           
   localedir                      share/locale                                                      Locale data directory                                        
-  localstatedir                  /var                                                              Localstate data directory                                    
+  localstatedir                  /var/local                                                        Localstate data directory                                    
   mandir                         share/man                                                         Manual page directory                                        
-  prefix                         /usr                                                              Installation prefix                                          
+  prefix                         /usr/local                                                        Installation prefix                                          
   sbindir                        sbin                                                              System executable directory                                  
-  sharedstatedir                 /var/lib                                                          Architecture-independent data directory                      
-  sysconfdir                     /etc                                                              Sysconf data directory                                       
+  sharedstatedir                 /var/local/lib                                                    Architecture-independent data directory                      
+  sysconfdir                     etc                                                               Sysconf data directory                                       
   
   Testing options                Current Value                    Possible Values                  Description                                                  
   -----------------              -------------                    ---------------                  -----------                                                  
@@ -101,7 +101,7 @@ Main project options:
   
   Project options                Current Value                    Possible Values                  Description                                                  
   -----------------              -------------                    ---------------                  -----------                                                  
-  bash_completion                enabled                          [enabled, disabled, auto]        Install bash completion files                                
+  bash_completion                auto                             [enabled, disabled, auto]        Install bash completion files                                
   bashcompdir                                                                                      Override default location for bash completion files          
   closures                       64                                                                The number of precompiled closures, used when libffi is      
                                                                                                    unavailable                                                  
@@ -110,7 +110,7 @@ Main project options:
                                                                                                    config if undefined                                          
   gtk_doc                        false                            [true, false]                    Build documentation using gtk-doc                            
   hash_impl                      internal                         [internal, freebl]               Hash implementation to use                                   
-  libffi                         enabled                          [enabled, disabled, auto]        Use libffi for building closures                             
+  libffi                         auto                             [enabled, disabled, auto]        Use libffi for building closures                             
   man                            false                            [true, false]                    Build manpages using xsltproc                                
   module_config                                                                                    Module configuration files shipped by packages               
   module_path                                                                                      Load modules with relative path names from here              
@@ -120,12 +120,10 @@ Main project options:
   rpc_min                        0                                >=0, <=0                         Minimum RPC protocol version we support                      
   strict                         false                            [true, false]                    Strict code compilation                                      
   system_config                                                                                    Change PKCS#11 system config directory                       
-  systemd                        enabled                          [enabled, disabled, auto]        Use systemd socket activation                                
+  systemd                        auto                             [enabled, disabled, auto]        Use systemd socket activation                                
   test                           true                             [true, false]                    Enable building test programs                                
-  trust_module                   enabled                          [enabled, disabled, auto]        Build the trust module                                       
-  trust_paths                    /etc/pki/ca-                                                      Input paths for trust module                                 
-                                 trust/source:/usr/share/pki/ca-                                                                                                
-                                 trust-source                                                                                                                   
+  trust_module                   auto                             [enabled, disabled, auto]        Build the trust module                                       
+  trust_paths                                                                                      Input paths for trust module                                 
   user_config                    ~/.config/pkcs11                                                  Change PKCS#11 user config directory                         
 
 Subproject pkcs11-json:
@@ -138,7 +136,7 @@ Subproject pkcs11-json:
   
   Project options                Current Value                    Possible Values                  Description                                                  
   -----------------              -------------                    ---------------                  -----------                                                  
-  bash_completion                enabled                          [enabled, disabled, auto]        Install bash completion files                                
+  bash_completion                auto                             [enabled, disabled, auto]        Install bash completion files                                
   bashcompdir                                                                                      Override default location for bash completion files          
   closures                       64                                                                The number of precompiled closures, used when libffi is      
                                                                                                    unavailable                                                  
@@ -147,7 +145,7 @@ Subproject pkcs11-json:
                                                                                                    config if undefined                                          
   gtk_doc                        false                            [true, false]                    Build documentation using gtk-doc                            
   hash_impl                      internal                         [internal, freebl]               Hash implementation to use                                   
-  libffi                         enabled                          [enabled, disabled, auto]        Use libffi for building closures                             
+  libffi                         auto                             [enabled, disabled, auto]        Use libffi for building closures                             
   man                            false                            [true, false]                    Build manpages using xsltproc                                
   module_config                                                                                    Module configuration files shipped by packages               
   module_path                                                                                      Load modules with relative path names from here              
@@ -157,8 +155,8 @@ Subproject pkcs11-json:
   rpc_min                        0                                >=0, <=0                         Minimum RPC protocol version we support                      
   strict                         false                            [true, false]                    Strict code compilation                                      
   system_config                                                                                    Change PKCS#11 system config directory                       
-  systemd                        enabled                          [enabled, disabled, auto]        Use systemd socket activation                                
+  systemd                        auto                             [enabled, disabled, auto]        Use systemd socket activation                                
   test                           true                             [true, false]                    Enable building test programs                                
-  trust_module                   enabled                          [enabled, disabled, auto]        Build the trust module                                       
+  trust_module                   auto                             [enabled, disabled, auto]        Build the trust module                                       
   trust_paths                                                                                      Input paths for trust module                                 
   user_config                    ~/.config/pkcs11                                                  Change PKCS#11 user config directory                         

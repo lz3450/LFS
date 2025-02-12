@@ -1,7 +1,8 @@
 new_version=$(git ls-remote --tags https://github.com/shadow-maint/shadow.git | grep -oP '(?<=refs/tags/)\d\.\d{2}(\.\d)?$' | sort -V | tail -n1)
+srcdir="$pkgname"
+build_system=autoconf
 
 post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help >"$PKGBUILDDIR"/help.txt
+    cd "$srcdir"
     cp etc/login.defs "$PKGBUILDDIR"/login.defs
 }

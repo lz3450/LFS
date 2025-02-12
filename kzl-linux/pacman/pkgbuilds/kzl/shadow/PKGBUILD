@@ -24,7 +24,6 @@ backup=(
   etc/login.defs
   etc/pam.d/{chage,chfn,chgpasswd,chpasswd,chsh,groupadd,groupdel,groupmems,groupmod,login,newusers,passwd,useradd,userdel,usermod}
 )
-options=(!lto)
 install=$pkgname.install
 source=(
   git+https://github.com/shadow-maint/shadow.git#tag=$pkgver
@@ -57,7 +56,7 @@ prepare() {
 build() {
   cd $pkgname
 
-  ./configure \
+  ./configure -C \
     --prefix=/usr \
     --bindir=/usr/bin \
     --sbindir=/usr/sbin \
