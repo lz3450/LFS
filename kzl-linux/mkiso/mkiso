@@ -60,7 +60,7 @@ repository_pkgs=(
 
 ### functions
 usage() {
-    cat <<EOF
+    cat << EOF
     Usage: $SCRIPT_NAME -h | --help
     Usage: $SCRIPT_NAME [ -n | --no-update-rootfs ] -s | --suite <suite>
 
