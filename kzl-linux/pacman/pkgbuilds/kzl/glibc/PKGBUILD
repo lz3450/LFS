@@ -5,7 +5,7 @@
 
 pkgname=glibc
 pkgver=2.40.g70
-pkgrel=4
+pkgrel=5
 epoch=
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
@@ -40,7 +40,9 @@ pkgver() {
 prepare() {
   cd $pkgname
 
-  # Makeconfig
+  mkdir -p build
+
+  # See `Makeconfig`
   echo 'prefix = /usr
 build-programs = yes
 exec_prefix = $(prefix)
@@ -54,10 +56,13 @@ libexecdir = $(exec_prefix)/libexec
 rootsbindir = $(exec_prefix)/sbin
 sbindir = $(exec_prefix)/sbin
 sysconfdir = /etc' > build/configparms
+}
 
-  mkdir -p build
-  cd build
-  "../configure" -C \
+build() {
+  cd $pkgname/build
+
+  msg2 "Configuring..."
+  ./../configure \
     --prefix=/usr \
     --disable-timezone-tools \
     --enable-bind-now \
@@ -69,11 +74,8 @@ sysconfdir = /etc' > build/configparms
     --enable-fortify-source=3 \
     --with-pkgversion="KZL $pkgver-$pkgrel" \
     --with-headers=/usr/include
-}
 
-build() {
-  cd $pkgname/build
-
+  msg2 "Compiling..."
   make
 }
 

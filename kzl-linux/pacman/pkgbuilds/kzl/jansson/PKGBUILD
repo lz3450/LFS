@@ -2,21 +2,22 @@
 
 pkgname=jansson
 pkgver=2.14
-pkgrel=30
+pkgrel=33
 epoch=
 pkgdesc="'C library for encoding, decoding and manipulating JSON data"
 arch=('x86_64')
 url="https://github.com/akheron/jansson"
 license=('KZL')
 makedepends=(
-  libtool
+  # libtool
 )
 source=(git+https://github.com/akheron/jansson.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
-# prepare() {
+# build() {
 #   cd $pkgname
 
+#   msg2 "Configuring..."
 #   cmake -LAH -S . -B build \
 #     -D CMAKE_BUILD_TYPE=Release \
 #     -D CMAKE_INSTALL_PREFIX=/usr \
@@ -25,11 +26,8 @@ sha256sums=('SKIP')
 #     -D JANSSON_BUILD_DOCS=OFF \
 #     -D JANSSON_BUILD_SHARED_LIBS=ON \
 #     -D JANSSON_EXAMPLES=OFF
-# }
 
-# build() {
-#   cd $pkgname
-
+#   msg2 "Compiling..."
 #   cmake --build build
 # }
 
@@ -50,15 +48,23 @@ prepare() {
 
   autoupdate -vf
   autoreconf -vfi
-
-  ./configure -C \
-    --prefix=/usr
 }
 
 build() {
   cd $pkgname
 
+  msg2 "Configuring..."
+  ./configure -C \
+    --prefix=/usr
+
+  msg2 "Compiling..."
   make
+}
+
+check() {
+  cd $pkgname
+
+  make check
 }
 
 package() {

@@ -2,17 +2,18 @@
 
 pkgname=zlib
 pkgver=2.2.3
-pkgrel=9
+pkgrel=1
 epoch=
 arch=('x86_64')
 url="https://github.com/zlib-ng/zlib-ng"
 license=('KZL')
 source=(git+$url.git#tag=$pkgver)
-sha256sums=('SKIP')
+sha256sums=('6867f8f1e57d3e8e4158292a839fa29967c58849aabeba2199e3d95b346d675f')
 
-prepare() {
+build() {
   cd zlib-ng
 
+  msg2 "Configuring..."
   cmake -LAH -S . -B build \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
@@ -20,11 +21,8 @@ prepare() {
     -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
     -D ZLIB_COMPAT=ON
-}
 
-build() {
-  cd zlib-ng
-
+  msg2 "Compiling..."
   cmake --build build
 }
 

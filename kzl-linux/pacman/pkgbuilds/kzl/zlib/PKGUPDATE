@@ -1,3 +1,4 @@
-new_version=$(git ls-remote --tags https://github.com/zlib-ng/zlib-ng.git | grep -oP '(?<=refs/tags/)\d+\.\d+\.\d+$' | sort -V | tail -n1)
+# new_version=$(git ls-remote --tags https://github.com/zlib-ng/zlib-ng.git | grep -oP '(?<=refs/tags/)\d+\.\d+\.\d+$' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://github.com/zlib-ng/zlib-ng.git | grep -oP '(?<=refs/tags/)2\.2\.3$' | sort -V | tail -n1)
 srcdir="$pkgname-ng"
 build_system=cmake

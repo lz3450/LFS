@@ -1,4 +1,4 @@
-new_version=$(git ls-remote --tags https://github.com/akheron/jansson.git | grep -oP '(?<=refs/tags/v)\d\.\d\d' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://github.com/akheron/jansson.git | grep -oP '(?<=refs/tags/v)\d\.\d+' | sort -V | tail -n1)
 srcdir="$pkgname"
-build_system=autoconf
 # build_system=cmake
+build_system=autoconf

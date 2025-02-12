@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=gcc
-pkgver=14.2.0.g754
-pkgrel=3
+pkgver=14.2.0
+pkgrel=2
 epoch=
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
@@ -30,17 +30,17 @@ options=(
   !lto
 )
 source=(
-  # git+git://gcc.gnu.org/git/gcc.git#tag=releases/gcc-$pkgver
-  git+git://gcc.gnu.org/git/gcc.git#branch=releases/gcc-${pkgver%%.*}
+  git+git://gcc.gnu.org/git/gcc.git#tag=releases/gcc-$pkgver
+  # git+git://gcc.gnu.org/git/gcc.git#branch=releases/gcc-${pkgver%%.*}
 )
 
-sha256sums=('SKIP')
+sha256sums=('a0c5c9a2e09198436b0bcccba6deef7cb439a5364d56ffbb9ac17a9d24240034')
 
-pkgver() {
-  cd gcc
+# pkgver() {
+#   cd gcc
 
-  git describe --tags | sed 's|releases/gcc-||;s/-g.*//;s/-/.g/g'
-}
+#   git describe --tags | sed 's|releases/gcc-||;s/-g.*//;s/-/.g/g'
+# }
 
 prepare() {
   cd gcc
@@ -49,7 +49,12 @@ prepare() {
   sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
 
   mkdir -p build
-  cd build
+}
+
+build() {
+  cd gcc/build
+
+  msg2 "Configuring..."
   # https://gcc.gnu.org/install/configure.html
   "../configure" -C \
     --with-pkgversion="KZL $pkgver-$pkgrel `date -u '+%Y/%m/%d %T %z'`" \
@@ -79,11 +84,8 @@ prepare() {
     --with-zstd \
     --with-target-system-zlib \
     --enable-plugin
-}
 
-build() {
-  cd gcc/build
-
+  msg2 "Compiling..."
   make
 }
 
