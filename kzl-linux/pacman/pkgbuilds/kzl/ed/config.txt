@@ -1,0 +1,17 @@
+
+creating config.status
+creating Makefile
+VPATH = .
+prefix = /usr
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)/bin
+datarootdir = $(prefix)/share
+infodir = $(datarootdir)/info
+mandir = $(datarootdir)/man
+program_prefix = 
+CC = gcc
+CPPFLAGS = 
+CFLAGS = -Wall -W -O2
+LDFLAGS = 
+MAKEINFO = makeinfo
+OK. Now you can run make.

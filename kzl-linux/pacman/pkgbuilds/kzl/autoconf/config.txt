@@ -1,0 +1,59 @@
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /usr/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+configure: autobuild project... GNU Autoconf
+configure: autobuild revision... 2.72
+configure: autobuild hostname... UTDLAB2
+configure: autobuild timestamp... 20250212T090103Z
+checking for a shell whose -n mode is known to work... /bin/sh
+checking for characters that cannot appear in file names... none
+checking whether directories can have trailing spaces... yes
+checking for expr... /usr/bin/expr
+checking for GNU M4 that supports accurate traces... /usr/bin/m4
+checking whether /usr/bin/m4 accepts --gnu... yes
+checking how m4 supports trace files... --debugfile
+checking for perl... /usr/bin/perl
+checking whether /usr/bin/perl Fcntl::flock is implemented... yes
+checking for emacs... no
+checking for xemacs... no
+checking for emacs... no
+checking where .elc files should go... ${datadir}/emacs/site-lisp
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for a sed that does not truncate output... /usr/bin/sed
+checking whether make is case sensitive... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating tests/atlocal
+config.status: creating Makefile
+config.status: creating lib/version.m4
+config.status: executing tests/atconfig commands
+
+You are about to use an experimental version of Autoconf.  Be sure to
+read the relevant mailing lists, most importantly <autoconf@gnu.org>.
+
+Below you will find information on the status of this version of Autoconf.
+
+* Status
+
+                 /*------------------------------------.
+                 | New features need further testing.  |
+                 `------------------------------------*/
+
+* Autotest parallel testsuite support is still a work in progress.
+  There are known issues in job handling under dash and some ksh
+  variants, where a parallel testsuite can hang or cause a 100%
+  processor load.  In the current release, the overall autoconf
+  testsuite only exercises parallel autotest under bash and zsh, or if
+  you have defined TEST_PARALLEL_AUTOTEST in the environment.
+  Meanwhile, Cygwin has known problems with named fifos that cause
+  failures when attempting parallel tests in an autotest suite.  It is
+  possible that other difficulties will be encountered, whether with
+  shell or platform limitations; help is appreciated in improving
+  parallel testsuite support.
+

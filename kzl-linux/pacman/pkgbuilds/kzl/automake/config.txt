@@ -1,0 +1,130 @@
+checking whether make supports nested variables... yes
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether sleep supports fractional seconds... yes
+checking filesystem timestamp resolution... 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /usr/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking xargs -n works... yes
+checking whether ln -s works... yes
+checking for perl... /usr/bin/perl
+checking for tex... no
+checking for yacc... no
+checking for byacc... no
+checking for bison... no
+checking for lex... no
+checking for flex... no
+checking whether autoconf is installed... yes
+checking whether autoconf works... yes
+checking whether autoconf is recent enough... yes
+checking whether ln works... yes
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+configure: will now look for a sturdy POSIX shell, for our testsuite
+checking for sh... /usr/bin/sh
+checking for sh5... no
+checking for dash... no
+checking for ash... no
+checking for bash... /usr/bin/bash
+checking for zsh... /usr/bin/zsh
+checking for ksh... no
+checking for pdksh... no
+checking whether /usr/bin/sh supports $(cmd)... yes
+checking whether /usr/bin/sh supports $((expr))... yes
+checking whether /usr/bin/sh supports ${#var}... yes
+checking whether /usr/bin/sh supports ${var#glob} and ${var%glob}... yes
+checking whether /usr/bin/sh preserves exit traps with "set -e"... yes
+checking whether /usr/bin/sh can define exit traps in a shell function... yes
+checking whether /usr/bin/sh corrupts stderr with "set -x"... no
+checking whether /usr/bin/sh can return early from "dot-sourced" files... yes
+checking whether /usr/bin/sh supports alias named like shell builtins... yes
+checking whether /usr/bin/sh supports "test -e"... yes
+configure: shell /usr/bin/sh is good enough, stop looking
+configure: will use /usr/bin/sh as the testsuite shell
+configure: will now look for generic compilers
+checking for cc... cc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether cc accepts -g... yes
+checking for cc option to enable C23 features... unsupported
+checking for cc option to enable C11 features... none needed
+checking whether cc understands -c and -o together... yes
+checking for aCC... no
+checking for CC... no
+checking for FCC... no
+checking for KCC... no
+checking for RCC... no
+checking for xlC_r... no
+checking for xlC... no
+checking for c++... c++
+checking whether the C++ compiler works... yes
+checking for C++ compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C++... yes
+checking whether c++ accepts -g... yes
+checking for xlf95... no
+checking for f95... no
+checking for fort... no
+checking for ifort... no
+checking for ifc... no
+checking for efc... no
+checking for pgfortran... no
+checking for pgf95... no
+checking for lf95... no
+checking for ftn... no
+checking for nagfor... no
+checking for xlf90... no
+checking for f90... no
+checking for armflang... no
+checking for flang... no
+checking for pgf90... no
+checking for pghpf... no
+checking for epcf90... no
+checking for g95... no
+checking for gfortran... gfortran
+checking whether the Fortran compiler works... yes
+checking for Fortran compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU Fortran... yes
+checking whether gfortran accepts -g... yes
+checking for xlf... no
+checking for f77... no
+checking for frt... no
+checking for pgf77... no
+checking for cf77... no
+checking for fort77... no
+checking for fl32... no
+checking for af77... no
+checking for g77... no
+checking for armflang... no
+checking for flang... no
+checking for gfortran... gfortran
+checking whether the Fortran 77 compiler works... yes
+checking for Fortran 77 compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU Fortran 77... yes
+checking whether gfortran accepts -g... yes
+configure: will now look for GNU compilers
+configure: cc is already a GNU C compiler
+configure: c++ is already a GNU C++ compiler
+configure: gfortran is already a GNU Fortran compiler
+configure: gfortran is already a GNU Fortran 77 compiler
+checking for gcj... no
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating pre-inst-env

@@ -1,0 +1,47 @@
+The Meson build system
+Version: 1.7.0
+Source dir: /home/kzl/makepkg/build/pkgconf/src/pkgconf
+Build dir: /home/kzl/makepkg/build/pkgconf/src/pkgconf/build
+Build type: native build
+Project name: pkgconf
+Project version: 2.3.0
+C compiler for the host machine: cc (gcc 13.2.0 "cc (KZL 13.2.0-3 2023/08/12 23:51:30 +0000) 13.2.0")
+C linker for the host machine: cc ld.bfd 2.41.0
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Compiler for C supports arguments -Wimplicit-function-declaration: YES 
+Compiler for C supports arguments -Wmisleading-indentation: YES 
+Checking for function "strlcat" : YES 
+Header "string.h" has symbol "strlcat" : YES 
+Checking for function "strlcpy" : YES 
+Header "string.h" has symbol "strlcpy" : YES 
+Checking for function "strndup" : YES 
+Header "string.h" has symbol "strndup" : YES 
+Checking for function "strdup" : YES 
+Header "string.h" has symbol "strdup" : YES 
+Checking for function "strncasecmp" : YES 
+Header "strings.h" has symbol "strncasecmp" : YES 
+Checking for function "strcasecmp" : YES 
+Header "strings.h" has symbol "strcasecmp" : YES 
+Checking for function "reallocarray" : YES 
+Header "stdlib.h" has symbol "reallocarray" : YES 
+Configuring config.h using configuration
+Did not find pkg-config by name 'pkg-config'
+Found pkg-config: NO
+Program kyua skipped: feature tests disabled
+Program atf-sh skipped: feature tests disabled
+Configuring Kyuafile using configuration
+Configuring Kyuafile using configuration
+Configuring test_env.sh using configuration
+tests/meson.build:2: WARNING: The variable(s) 'datarootdir', 'exec_prefix', 'prefix' in the input file 'tests/test_env.sh.in' are not present in the given configuration data.
+Build targets in project: 2
+
+pkgconf 2.3.0
+
+  User defined options
+    auto_features: disabled
+    buildtype    : plain
+    prefix       : /usr
+    tests        : disabled
+
+Found ninja-1.11.1.git.kitware.jobserver-1 at /home/kzl/.local/bin/ninja

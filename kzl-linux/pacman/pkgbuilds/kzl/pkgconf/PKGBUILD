@@ -2,7 +2,7 @@
 
 pkgname=pkgconf
 pkgver=2.3.0
-pkgrel=43
+pkgrel=44
 epoch=
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=('x86_64')
@@ -13,20 +13,18 @@ provides=(pkg-config)
 source=(git+$url#tag=$pkgname-$pkgver)
 sha256sums=('SKIP')
 
-prepare() {
+build() {
   cd $pkgname
 
+  msg2 "Configuring..."
   meson setup \
     --prefix /usr \
     --auto-features disabled \
     --buildtype plain \
     -D tests=disabled \
     build
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   meson compile -C build
 }
 

@@ -2,7 +2,7 @@
 
 pkgname=make
 pkgver=4.4.1
-pkgrel=43
+pkgrel=44
 epoch=
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('x86_64')
@@ -20,18 +20,20 @@ source=(
 validpgpkeys=('B2508A90102F8AE3B12A0090DEACCAAEDB78137A')
 sha256sums=('dd16fb1d67bfab79a72f5e8390735c49e3e8e70b4945a15ab1f81ddb78658fb3')
 
-prepare() {
-  cd $pkgname-$pkgver
+# prepare() {
+#   cd $pkgname-$pkgver
 
-  # ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
-
-  ./configure -C \
-    --prefix=/usr
-}
+#   ./bootstrap --gnulib-srcdir="$srcdir"/gnulib
+# }
 
 build() {
   cd $pkgname-$pkgver
 
+  msg2 "Configuring..."
+  ./configure \
+    --prefix=/usr
+
+  msg2 "Compiling..."
   make
 }
 

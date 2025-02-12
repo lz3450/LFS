@@ -2,7 +2,7 @@
 
 pkgname=ed
 pkgver=1.21
-pkgrel=7
+pkgrel=8
 epoch=
 pkgdesc="A POSIX-compliant line-oriented text editor"
 arch=('x86_64')
@@ -13,16 +13,14 @@ validpgpkeys=('1D41C14B272A2219A739FA4F8FE99503132D7742')
 sha256sums=('60e24998727d453a5cf02c54664b97536de46a2b34cd1f4f67c1c1a61bbbad75'
             'SKIP')
 
-prepare() {
-  cd $pkgname-$pkgver
-
-  ./configure \
-    --prefix=/usr
-}
-
 build() {
   cd $pkgname-$pkgver
 
+  msg2 "Configuring..."
+  ./configure \
+    --prefix=/usr
+
+  msg2 "Compiling..."
   make
 }
 
