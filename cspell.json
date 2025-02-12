@@ -1,7 +1,7 @@
 {
     "version": "0.2",
     "ignorePaths": [
-        "config.cache",
+        "config.txt",
         "help.txt",
     ],
     "dictionaryDefinitions": [],
