@@ -129,6 +129,9 @@ build() {
 
     info "Getting package configuration log..."
         sed -n '/^  -> Configuring...$/,/^  -> Compiling...$/{/^  -> Configuring...$/b;/^  -> Compiling...$/b;p}' "$_log" > config.txt
+        if [[ ! -s "config.txt" ]]; then
+            rm config.txt
+        fi
     info "Done"
 
     info "Updating repo..."

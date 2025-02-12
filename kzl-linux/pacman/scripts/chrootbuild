@@ -88,8 +88,8 @@ setup_rootfs() {
         chroot_run "$ROOTFS_DIR" useradd -d "/$CHROOT_HOME_DIR" -G adm,wheel -U -s /bin/zsh kzl
         echo kzl:3450 | chroot_run "$ROOTFS_DIR" chpasswd
         chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/kzl-linux/pacman && . ./setup.sh && updaterepo -r kzl"
-        chroot_run "$ROOTFS_DIR" pacman -Syu
-        chroot_run "$ROOTFS_DIR" pacman -Sy base-devel
+        # chroot_run "$ROOTFS_DIR" pacman -Syu || :
+        # chroot_run "$ROOTFS_DIR" pacman -Sy base-devel || :
         chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/config && ./update-config.sh"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python3 -m ensurepip"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python3 -m pip wheel --wheel-dir /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR --no-binary :all: pip meson ninja"
