@@ -2,7 +2,7 @@
 
 pkgname=isl
 pkgver=0.27
-pkgrel=7
+pkgrel=8
 epoch=
 pkgdesc="A library for manipulating sets and relations of integer points bounded by linear constraints"
 arch=('x86_64')
@@ -15,16 +15,14 @@ source=(
 )
 sha256sums=('6d8babb59e7b672e8cb7870e874f3f7b813b6e00e6af3f8b04f7579965643d5c')
 
-prepare() {
-  cd $pkgname-$pkgver
-
-  ./configure -C \
-    --prefix=/usr
-}
-
 build() {
   cd $pkgname-$pkgver
 
+  msg2 "Configuring..."
+  ./configure \
+    --prefix=/usr
+
+  msg2 "Compiling..."
   make
 }
 

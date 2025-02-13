@@ -2,7 +2,7 @@
 
 pkgname=lz4
 pkgver=1.10.0
-pkgrel=32
+pkgrel=34
 epoch=
 pkgdesc="Extremely fast compression algorithm"
 arch=('x86_64')
@@ -23,12 +23,6 @@ pkgver() {
 build() {
   cd $pkgname/build/meson
 
-  meson compile -C build
-}
-
-check() {
-  cd $pkgname/build/meson
-
   msg2 "Configuring..."
   meson setup \
     --prefix /usr \
@@ -38,6 +32,12 @@ check() {
     build
 
   msg2 "Compiling..."
+  meson compile -C build
+}
+
+check() {
+  cd $pkgname/build/meson
+
   meson test -C build
 }
 

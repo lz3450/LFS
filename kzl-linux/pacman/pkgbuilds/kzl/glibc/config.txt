@@ -10,8 +10,10 @@ checking whether the compiler supports GNU C++... yes
 checking whether g++ accepts -g... yes
 checking for g++ option to enable C++11 features... none needed
 checking whether g++ can link programs... yes
-checking for sysdeps preconfigure fragments... aarch64 alpha arc arm csky hppa i386 loongarch m68k microblaze checking for egrep -e... /usr/bin/grep -E
-mips or1k powerpc riscv s390 sh checking for egrep -e... (cached) /usr/bin/grep -E
+checking for sysdeps preconfigure fragments... aarch64 alpha arc arm csky hppa i386 loongarch m68k microblaze checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+mips nios2 or1k powerpc riscv s390 sh checking for grep that handles long lines and -e... (cached) /usr/bin/grep
+checking for egrep... (cached) /usr/bin/grep -E
 sparc x86_64 checking whether gcc compiles in -mx32 mode by default... no
 
 checking for a BSD-compatible install... /usr/bin/install -c
@@ -38,8 +40,6 @@ checking if gcc is sufficient to build libc... yes
 checking for python3... python3
 checking version of python3... 3.12.1, ok
 checking for use of fpu sysdeps directories... yes
-checking for clang in testing... no
-checking for clang++ in testing... no
 checking for -fstack-protector... yes
 checking for -fstack-protector-strong... yes
 checking for -fstack-protector-all... yes
@@ -68,23 +68,14 @@ checking for linker that supports --no-dynamic-linker... yes
 checking for -static-pie... yes
 checking for -fpie... yes
 checking for GLOB_DAT reloc... yes
-checking for tls descriptor support in testing... gnu2
+checking for tls descriptor support... gnu2
 checking if -Wno-ignored-attributes is required for aliases... 
 checking whether cc puts quotes around section names... no
 checking for __builtin_memset... yes
 checking for redirection of built-in functions... yes
 checking for compiler option to disable generation of FMA instructions... -ffp-contract=off
 checking for compiler option that -fsignaling-nans... -fsignaling-nans
-checking -fsemantic-interposition in testing... yes
-checking for -ffloat-store in testing... -ffloat-store
-checking if __attribute__ ((__optimize__("-fno-tree-loop-distribute-patterns"))) works... yes
-checking for -Wimplicit-fallthrough... -Wimplicit-fallthrough
-checking support for trampolines in testing... yes
-checking -Wno-restrict in testing... -Wno-restrict
-checking -Wno-fortify-source in testing... -Wno-fortify-source
-checking -finput-charset=ascii in testing... -finput-charset=ascii
-checking g++ -finput-charset=ascii in testing... -finput-charset=ascii
-checking for STB_GNU_UNIQUE in testing... yes
+checking if gcc accepts -fno-tree-loop-distribute-patterns with __attribute__ ((__optimize__))... yes
 checking for libgd... no
 checking for is_selinux_enabled in -lselinux... no
 checking for maximum supported _FORTIFY_SOURCE level... 3
@@ -99,22 +90,19 @@ checking for kernel header at least 6.6... ok
 checking for symlinks in /usr/include... ok
 running configure fragment for sysdeps/gnu
 running configure fragment for sysdeps/x86_64
-checking for -mprefer-vector-width=128... yes
+checking -mprefer-vector-width=128... yes
 checking for linker that supports -z mark-plt... yes
 checking whether CET can be enabled... yes
 checking whether assembler supports CET... yes
-checking whether -mamx-tile works properly in testing... yes
+checking whether -mamx-tile works properly... yes
 checking whether -mapxf is enabled... no
 running configure fragment for sysdeps/x86
 checking for linker x86 ISA level support... yes
 checking for LAHF/SAHF instruction support... yes
 checking for MOVBE instruction support... yes
 checking for ISA level support... 3
-checking if -mfpmath=387 works in testing... yes
 checking whether -fPIC is default... yes
 checking whether -fPIE is default... yes
-checking PDE load address... 0x0000000000400000
-checking for linker that supports -Ttext-segment=0x0000000000400000... yes
 checking if we can build programs as PIE... yes
 checking if we can build static PIE programs... yes
 configure: creating ./config.status

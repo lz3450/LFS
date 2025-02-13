@@ -2,7 +2,7 @@
 
 pkgname=jansson
 pkgver=2.14
-pkgrel=33
+pkgrel=34
 epoch=
 pkgdesc="'C library for encoding, decoding and manipulating JSON data"
 arch=('x86_64')

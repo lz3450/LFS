@@ -82,7 +82,7 @@
 -- Detecting CXX compile features - done
 -- Could NOT find GTest (missing: GTEST_LIBRARY GTEST_INCLUDE_DIR GTEST_MAIN_LIBRARY) 
 -- Git checking out GoogleTest release-1.12.1
-CMake Deprecation Warning at tmp/_deps/googletest-src/CMakeLists.txt:4 (cmake_minimum_required):
+CMake Deprecation Warning at build/_deps/googletest-src/CMakeLists.txt:4 (cmake_minimum_required):
   Compatibility with CMake < 3.10 will be removed from a future version of
   CMake.
 
@@ -91,7 +91,7 @@ CMake Deprecation Warning at tmp/_deps/googletest-src/CMakeLists.txt:4 (cmake_mi
   to work with policies introduced by <max> or earlier.
 
 
-CMake Deprecation Warning at tmp/_deps/googletest-src/googlemock/CMakeLists.txt:39 (cmake_minimum_required):
+CMake Deprecation Warning at build/_deps/googletest-src/googlemock/CMakeLists.txt:39 (cmake_minimum_required):
   Compatibility with CMake < 3.10 will be removed from a future version of
   CMake.
 
@@ -100,7 +100,7 @@ CMake Deprecation Warning at tmp/_deps/googletest-src/googlemock/CMakeLists.txt:
   to work with policies introduced by <max> or earlier.
 
 
-CMake Deprecation Warning at tmp/_deps/googletest-src/googletest/CMakeLists.txt:49 (cmake_minimum_required):
+CMake Deprecation Warning at build/_deps/googletest-src/googletest/CMakeLists.txt:49 (cmake_minimum_required):
   Compatibility with CMake < 3.10 will be removed from a future version of
   CMake.
 
@@ -115,7 +115,7 @@ CMake Deprecation Warning at tmp/_deps/googletest-src/googletest/CMakeLists.txt:
 -- Found Threads: TRUE
 -- The following features have been enabled:
 
- * CMAKE_BUILD_TYPE, Build type: Release (default)
+ * CMAKE_BUILD_TYPE, Build type: Release (selected)
  * XSAVE, Support XSAVE intrinsics using "-mxsave"
  * SSSE3_ADLER32, Support SSSE3-accelerated adler32, using "-mssse3"
  * SSE42_CRC, Support SSE4.2 optimized adler32 hash generation, using "-msse4.2"
@@ -129,6 +129,7 @@ CMake Deprecation Warning at tmp/_deps/googletest-src/googletest/CMakeLists.txt:
  * AVX512VNNI_ADLER32, Support AVX512VNNI adler32, using "-mavx512f -mavx512dq -mavx512bw -mavx512vl -mavx512vnni -mbmi2 -mtune=cascadelake"
  * VPCLMUL_CRC, Support CRC hash generation using VPCLMULQDQ, using "-mpclmul -mvpclmulqdq -mavx512f -mavx512f -mavx512dq -mavx512bw -mavx512vl -mbmi2 -mtune=cascadelake"
  * WITH_GZFILEOP, Compile with support for gzFile related functions
+ * ZLIB_COMPAT, Compile with zlib compatible API
  * ZLIB_ENABLE_TESTS, Build test binaries
  * ZLIBNG_ENABLE_TESTS, Test zlib-ng specific API
  * WITH_SANITIZER, Enable sanitizer support
@@ -154,7 +155,6 @@ CMake Deprecation Warning at tmp/_deps/googletest-src/googletest/CMakeLists.txt:
 -- The following features have been disabled:
 
  * ZLIB_SYMBOL_PREFIX, Publicly exported symbols DO NOT have a custom prefix
- * ZLIB_COMPAT, Compile with zlib compatible API
  * WITH_FUZZERS, Build test/fuzz
  * WITH_BENCHMARKS, Build test/benchmarks
  * WITH_BENCHMARK_APPS, Build application benchmarks
@@ -169,9 +169,9 @@ CMake Deprecation Warning at tmp/_deps/googletest-src/googletest/CMakeLists.txt:
 
  * GTest
 
--- Configuring done (6.8s)
+-- Configuring done (8.2s)
 -- Generating done (0.0s)
--- Build files have been written to: /home/kzl/makepkg/build/zlib/src/zlib-ng/tmp
+-- Build files have been written to: /home/kzl/makepkg/build/zlib/src/zlib-ng/build
 -- Cache values
 // Builds the googlemock subproject
 BUILD_GMOCK:BOOL=ON
@@ -182,7 +182,7 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 // Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
-// Choose the type of build, standard options are: Debug Release RelWithDebInfo MinSizeRel.
+// Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ...
 CMAKE_BUILD_TYPE:STRING=Release
 
 // Enable/Disable color output during build.
@@ -198,7 +198,7 @@ CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the CXX compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=
+CMAKE_CXX_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the CXX compiler during DEBUG builds.
 CMAKE_CXX_FLAGS_DEBUG:STRING=-g
@@ -222,7 +222,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=
+CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -240,7 +240,7 @@ CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
 
 // Flags used by the linker during all build types.
-CMAKE_EXE_LINKER_FLAGS:STRING=
+CMAKE_EXE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during DEBUG builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
@@ -275,8 +275,8 @@ CMAKE_INSTALL_INCLUDEDIR:PATH=include
 // Info documentation (DATAROOTDIR/info)
 CMAKE_INSTALL_INFODIR:PATH=
 
-// Object code libraries (lib64)
-CMAKE_INSTALL_LIBDIR:PATH=lib64
+// Object code libraries (lib)
+CMAKE_INSTALL_LIBDIR:PATH=lib
 
 // Program executables (libexec)
 CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
@@ -294,7 +294,7 @@ CMAKE_INSTALL_MANDIR:PATH=
 CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
 
 // Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=/usr/local
+CMAKE_INSTALL_PREFIX:PATH=/usr
 
 // Run-time variable data (LOCALSTATEDIR/run)
 CMAKE_INSTALL_RUNSTATEDIR:PATH=
@@ -315,7 +315,7 @@ CMAKE_LINKER:FILEPATH=/usr/bin/ld
 CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
 
 // Flags used by the linker during the creation of modules during all build types.
-CMAKE_MODULE_LINKER_FLAGS:STRING=
+CMAKE_MODULE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of modules during DEBUG builds.
 CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
@@ -345,7 +345,7 @@ CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
 CMAKE_READELF:FILEPATH=/usr/bin/readelf
 
 // Flags used by the linker during the creation of shared libraries during all build types.
-CMAKE_SHARED_LINKER_FLAGS:STRING=
+CMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of shared libraries during DEBUG builds.
 CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
@@ -390,7 +390,7 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 // Directory under which to collect all populated content
-FETCHCONTENT_BASE_DIR:PATH=/home/kzl/makepkg/build/zlib/src/zlib-ng/tmp/_deps
+FETCHCONTENT_BASE_DIR:PATH=/home/kzl/makepkg/build/zlib/src/zlib-ng/build/_deps
 
 // Disables all attempts to download or update content and assumes source dirs already exist
 FETCHCONTENT_FULLY_DISCONNECTED:BOOL=OFF
@@ -447,7 +447,7 @@ INSTALL_GTEST:BOOL=ON
 INSTALL_UTILS:BOOL=OFF
 
 // Installation directory for pkgconfig (.pc) files
-PKGCONFIG_INSTALL_DIR:PATH=lib64/pkgconfig
+PKGCONFIG_INSTALL_DIR:PATH=lib/pkgconfig
 
 // Build with AVX2
 WITH_AVX2:BOOL=ON
@@ -522,7 +522,7 @@ WITH_VPCLMULQDQ:BOOL=ON
 ZLIBNG_ENABLE_TESTS:BOOL=ON
 
 // Compile with zlib compatible API
-ZLIB_COMPAT:BOOL=OFF
+ZLIB_COMPAT:BOOL=ON
 
 // Build test binaries
 ZLIB_ENABLE_TESTS:BOOL=ON

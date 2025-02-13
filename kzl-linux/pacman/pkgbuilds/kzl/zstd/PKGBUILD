@@ -2,7 +2,7 @@
 
 pkgname=zstd
 pkgver=1.5.6
-pkgrel=9
+pkgrel=11
 epoch=
 pkgdesc="Zstandard - Fast real-time compression algorithm"
 arch=('x86_64')
@@ -20,7 +20,7 @@ build() {
   cd $pkgname/build/cmake
 
   msg2 "Configuring..."
-  cmake -S . -B build -G Ninja \
+  cmake -LAH -S . -B build -G Ninja \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_INSTALL_LIBDIR=lib \
