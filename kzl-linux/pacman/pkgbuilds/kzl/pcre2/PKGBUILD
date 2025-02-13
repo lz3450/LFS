@@ -11,10 +11,11 @@ license=('KZL')
 source=(git+https://github.com/PCRE2Project/pcre2.git#tag=pcre2-$pkgver)
 sha256sums=('333db0f9e696a6b84201cbae3095dbd48b19baade4b7707e9c295273913a6562')
 
-prepare() {
+build() {
   cd $pkgname
 
-  cmake -LAH -S . -B build \
+  msg2 "Configuring..."
+  cmake -LAH -S . -B build -G Ninja \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_INSTALL_LIBDIR=lib \
@@ -34,21 +35,18 @@ prepare() {
     -D PCRE2_SUPPORT_LIBBZ2=OFF \
     -D PCRE2_SUPPORT_LIBEDIT=OFF \
     -D PCRE2_SUPPORT_LIBREADLINE=ON \
-    -D PCRE2_SUPPORT_LIBZ=OFF \
+    -D PCRE2_SUPPORT_LIBZ=ON \
     -D PCRE2_SUPPORT_UNICODE=ON \
     -D PCRE2_SUPPORT_VALGRIND=OFF
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   cmake --build build
 }
 
 check() {
   cd $pkgname
 
-  cmake --build build --target tests || warning "Check failed."
+  cmake --build build --target tests
 }
 
 package() {

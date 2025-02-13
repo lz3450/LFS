@@ -1,131 +1,179 @@
-`configure' configures git 2.41.0 to adapt to many kinds of systems.
 
-Usage: ./configure [OPTION]... [VAR=VALUE]...
+Core properties:
+  Source dir /home/kzl/makepkg/build/git/src/git
 
-To assign environment variables (e.g., CC, CFLAGS...), specify them as
-VAR=VALUE.  See below for descriptions of some of the useful variables.
+Main project options:
+  
+  Core options                   Default Value                    Possible Values                  Description                                                  
+  --------------                 -------------                    ---------------                  -----------                                                  
+  auto_features                  auto                             [enabled, disabled, auto]        Override value of all 'auto' features                        
+  backend                        ninja                            [ninja, vs, vs2010, vs2012,      Backend to use                                               
+                                                                   vs2013, vs2015, vs2017, vs2019,                                                              
+                                                                   vs2022, xcode, none]                                                                         
+  buildtype                      debug                            [plain, debug, debugoptimized,   Build type to use                                            
+                                                                   release, minsize, custom]                                                                    
+  cmake_prefix_path              []                               []                               List of additional prefixes for cmake to search              
+  debug                          true                             [true, false]                    Enable debug symbols and other information                   
+  default_both_libraries         shared                           [shared, static, auto]           Default library type for both_libraries                      
+  default_library                shared                           [shared, static, both]           Default library type                                         
+  force_fallback_for             []                               []                               Force fallback for those subprojects                         
+  genvslite                      vs2022                           [vs2022]                         Setup multiple buildtype-suffixed ninja-backend build        
+                                                                                                   directories, and a [builddir]_vs containing a Visual Studio  
+                                                                                                   meta-backend with multiple configurations that calls into    
+                                                                                                   them                                                         
+  install_umask                  0022                             [preserve, 0000-0777]            Default umask to apply on permissions of installed files     
+  layout                         mirror                           [mirror, flat]                   Build directory layout                                       
+  optimization                   0                                [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
+  pkg_config_path                []                               []                               List of additional paths for pkg-config to search            
+  prefer_static                  false                            [true, false]                    Whether to try static linking before shared linking          
+  strip                          false                            [true, false]                    Strip targets on install                                     
+  unity                          off                              [on, off, subprojects]           Unity build                                                  
+  unity_size                     4                                >=2                              Unity block size                                             
+  vsenv                          false                            [true, false]                    Activate Visual Studio environment                           
+  warning_level                  1                                [0, 1, 2, 3, everything]         Compiler warning level to use                                
+  werror                         false                            [true, false]                    Treat warnings as errors                                     
+  wrap_mode                      default                          [default, nofallback,            Wrap mode                                                    
+                                                                   nodownload, forcefallback,                                                                   
+                                                                   nopromote]                                                                                   
+  build.cmake_prefix_path        []                               []                               List of additional prefixes for cmake to search              
+  build.pkg_config_path          []                               []                               List of additional paths for pkg-config to search            
+  
+  Backend options                Default Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  backend_max_links              0                                >=0                              Maximum number of linker processes to run or 0 for no limit  
+  
+  Base options                   Default Value                    Possible Values                  Description                                                  
+  --------------                 -------------                    ---------------                  -----------                                                  
+  b_asneeded                     true                             [true, false]                    Use -Wl,--as-needed when linking                             
+  b_colorout                     always                           [auto, always, never]            Use colored output                                           
+  b_coverage                     false                            [true, false]                    Enable coverage tracking.                                    
+  b_lto                          false                            [true, false]                    Use link time optimization                                   
+  b_lto_threads                  0                                                                 Use multiple threads for Link Time Optimization              
+  b_lundef                       true                             [true, false]                    Use -Wl,--no-undefined when linking                          
+  b_ndebug                       false                            [true, false, if-release]        Disable asserts                                              
+  b_pch                          true                             [true, false]                    Use precompiled headers                                      
+  b_pgo                          off                              [off, generate, use]             Use profile guided optimization                              
+  b_pie                          false                            [true, false]                    Build executables as position independent                    
+  b_sanitize                     none                             [none, address, thread,          Code sanitizer to use                                        
+                                                                   undefined, memory, leak,                                                                     
+                                                                   address,undefined]                                                                           
+  b_staticpic                    true                             [true, false]                    Build static libraries as position independent               
+  
+  Compiler options               Default Value                    Possible Values                  Description                                                  
+  ------------------             -------------                    ---------------                  -----------                                                  
+  c_args                         []                               []                               Extra arguments passed to the c compiler                     
+  c_link_args                    []                               []                               Extra arguments passed to the c linker                       
+  c_std                          none                             [none, c89, c99, c11, c17, c18,  C language standard to use                                   
+                                                                   c2x, c23, gnu89, gnu99, gnu11,                                                               
+                                                                   gnu17, gnu18, gnu2x, gnu23]                                                                  
+  build.c_args                   []                               []                               Extra arguments passed to the c compiler                     
+  build.c_link_args              []                               []                               Extra arguments passed to the c linker                       
+  build.c_std                    none                             [none, c89, c99, c11, c17, c18,  C language standard to use                                   
+                                                                   c2x, c23, gnu89, gnu99, gnu11,                                                               
+                                                                   gnu17, gnu18, gnu2x, gnu23]                                                                  
+  
+  pkgconfig module options       Default Value                    Possible Values                  Description                                                  
+  --------------------------     -------------                    ---------------                  -----------                                                  
+  pkgconfig.relocatable          false                            [true, false]                    Generate pkgconfig files as relocatable                      
+  
+  python module options          Default Value                    Possible Values                  Description                                                  
+  -----------------------        -------------                    ---------------                  -----------                                                  
+  python.allow_limited_api       true                             [true, false]                    Whether to allow use of the Python Limited API               
+  python.bytecompile             0                                >=-1, <=2                        Whether to compile bytecode                                  
+  python.install_env             prefix                           [auto, prefix, system, venv]     Which python environment to install to                       
+  python.platlibdir                                                                                Directory for site-specific, platform-specific files.        
+  python.purelibdir                                                                                Directory for site-specific, non-platform-specific files.    
+  
+  Directories                    Default Value                    Possible Values                  Description                                                  
+  -------------                  -------------                    ---------------                  -----------                                                  
+  bindir                         bin                                                               Executable directory                                         
+  datadir                        share                                                             Data file directory                                          
+  includedir                     include                                                           Header file directory                                        
+  infodir                        share/info                                                        Info page directory                                          
+  libdir                         lib                                                               Library directory                                            
+  libexecdir                     libexec                                                           Library executable directory                                 
+  licensedir                                                                                       Licenses directory                                           
+  localedir                      share/locale                                                      Locale data directory                                        
+  localstatedir                  /var/local                                                        Localstate data directory                                    
+  mandir                         share/man                                                         Manual page directory                                        
+  prefix                         /usr/local                                                        Installation prefix                                          
+  sbindir                        sbin                                                              System executable directory                                  
+  sharedstatedir                 /var/local/lib                                                    Architecture-independent data directory                      
+  sysconfdir                     etc                                                               Sysconf data directory                                       
+  
+  Testing options                Default Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  errorlogs                      true                             [true, false]                    Whether to print the logs from failing tests                 
+  stdsplit                       true                             [true, false]                    Split stdout and stderr in test logs                         
+  
+  Project options                Default Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  build_date                                                                                       Build date reported by our documentation.                    
+  built_from_commit                                                                                Commit that Git was built from reported by git-version(1).   
+  curl                           enabled                          [enabled, disabled, auto]        Build helpers used to access remotes with the HTTP transport.
+  default_editor                 vi                                                                Fall-back editor.                                            
+  default_help_format            man                              [man, html]                      Default format used when executing git-help(1).              
+  default_pager                  less                                                              Fall-back pager.                                             
+  docs                           []                               [man, html]                      Which documenattion formats to build and install.            
+  docs_backend                   auto                             [asciidoc, asciidoctor, auto]    Which backend to use to generate documentation.              
+  expat                          enabled                          [enabled, disabled, auto]        Build helpers used to push to remotes with the HTTP          
+                                                                                                   transport.                                                   
+  gettext                        auto                             [enabled, disabled, auto]        Build translation files.                                     
+  gitattributes                  /etc/gitattributes                                                Path to the global git attributes file.                      
+  gitconfig                      /etc/gitconfig                                                    Path to the global git configuration file.                   
+  gitweb                         auto                             [enabled, disabled, auto]        Build Git web interface. Requires Perl.                      
+  gitweb_base_url                                                                                  gitweb_base_url                                              
+  gitweb_config                  gitweb_config.perl                                                gitweb_config                                                
+  gitweb_config_common           /etc/gitweb-common.conf                                           gitweb_config_common                                         
+  gitweb_config_system           /etc/gitweb.conf                                                  gitweb_config_system                                         
+  gitweb_css                     static/gitweb.css                                                 gitweb_css                                                   
+  gitweb_export_ok                                                                                 gitweb_export_ok                                             
+  gitweb_favicon                 static/git-favicon.png                                            gitweb_favicon                                               
+  gitweb_home_link_str           projects                                                          gitweb_home_link_str                                         
+  gitweb_hometext                indextext.html                                                    gitweb_hometext                                              
+  gitweb_js                      static/gitweb.js                                                  gitweb_js                                                    
+  gitweb_list                                                                                      gitweb_list                                                  
+  gitweb_logo                    static/git-logo.png                                               gitweb_logo                                                  
+  gitweb_project_maxdepth        2007                                                              gitweb_project_maxdepth                                      
+  gitweb_projectroot             /pub/git                                                          gitweb_projectroot                                           
+  gitweb_site_footer                                                                               gitweb_site_footer                                           
+  gitweb_site_header                                                                               gitweb_site_header                                           
+  gitweb_site_html_head_string                                                                     gitweb_site_html_head_string                                 
+  gitweb_sitename                                                                                  gitweb_sitename                                              
+  gitweb_strict_export                                                                             gitweb_strict_export                                         
+  highlight_bin                  highlight                                                         highlight_bin                                                
+  https_backend                  auto                             [auto, openssl, CommonCrypto,    The HTTPS backend to use when connecting to remotes.         
+                                                                   none]                                                                                        
+  iconv                          auto                             [enabled, disabled, auto]        Support reencoding strings with different encodings.         
+  macos_use_homebrew_gettext     true                             [true, false]                    Use gettext from Homebrew instead of the slightly-broken     
+                                                                                                   system-provided one.                                         
+  pager_environment              LESS=FRX LV=-c                                                    Environment used when spawning the pager                     
+  pcre2                          enabled                          [enabled, disabled, auto]        Support Perl-compatible regular expressions in e.g. git-     
+                                                                                                   grep(1).                                                     
+  perl                           auto                             [enabled, disabled, auto]        Build tools written in Perl.                                 
+  perl_cpan_fallback             true                             [true, false]                    Install bundled copies of CPAN modules that serve as a       
+                                                                                                   fallback in case the modules are not available on the system.
+  python                         auto                             [enabled, disabled, auto]        Build tools written in Python.                               
+  regex                          auto                             [enabled, disabled, auto]        Use the system-provided regex library instead of the bundled 
+                                                                                                   one.                                                         
+  runtime_prefix                 false                            [true, false]                    Resolve ancillary tooling and support files relative to the  
+                                                                                                   location of the runtime binary instead of hard-coding them   
+                                                                                                   into the binary.                                             
+  sane_tool_path                                                                                   A colon-separated list of paths to prepend to PATH if your   
+                                                                                                   tools in /usr/bin are broken.                                
+  sha1_backend                   sha1dc                           [openssl, block, sha1dc, common- The backend used for hashing objects with the SHA1 object    
+                                                                   crypto]                         format                                                       
+  sha256_backend                 block                            [openssl, nettle, gcrypt, block] The backend used for hashing objects with the SHA256 object  
+                                                                                                   format                                                       
+  test_output_directory                                                                            Path to the directory used to store test outputs             
+  tests                          true                             [true, false]                    Enable building tests. This requires Perl, but is separate   
+                                                                                                   from the "perl" option such that you can build tests without 
+                                                                                                   Perl features enabled.                                       
+  user_agent                                                                                       User agent reported to remote servers.                       
+  version                                                                                          Version string reported by git-version(1) and other tools.   
 
-Defaults for the options are specified in brackets.
-
-Configuration:
-  -h, --help              display this help and exit
-      --help=short        display options specific to this package
-      --help=recursive    display the short help of all the included packages
-  -V, --version           display version information and exit
-  -q, --quiet, --silent   do not print `checking ...' messages
-      --cache-file=FILE   cache test results in FILE [disabled]
-  -C, --config-cache      alias for `--cache-file=config.cache'
-  -n, --no-create         do not create output files
-      --srcdir=DIR        find the sources in DIR [configure dir or `..']
-
-Installation directories:
-  --prefix=PREFIX         install architecture-independent files in PREFIX
-                          [/usr/local]
-  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
-                          [PREFIX]
-
-By default, `make install' will install all the files in
-`/usr/local/bin', `/usr/local/lib' etc.  You can specify
-an installation prefix other than `/usr/local' using `--prefix',
-for instance `--prefix=$HOME'.
-
-For better control, use the options below.
-
-Fine tuning of the installation directories:
-  --bindir=DIR            user executables [EPREFIX/bin]
-  --sbindir=DIR           system admin executables [EPREFIX/sbin]
-  --libexecdir=DIR        program executables [EPREFIX/libexec]
-  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
-  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
-  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
-  --libdir=DIR            object code libraries [EPREFIX/lib]
-  --includedir=DIR        C header files [PREFIX/include]
-  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
-  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
-  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
-  --infodir=DIR           info documentation [DATAROOTDIR/info]
-  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
-  --mandir=DIR            man documentation [DATAROOTDIR/man]
-  --docdir=DIR            documentation root [DATAROOTDIR/doc/git]
-  --htmldir=DIR           html documentation [DOCDIR]
-  --dvidir=DIR            dvi documentation [DOCDIR]
-  --pdfdir=DIR            pdf documentation [DOCDIR]
-  --psdir=DIR             ps documentation [DOCDIR]
-
-Optional Features:
-  --disable-option-checking  ignore unrecognized --enable/--with options
-  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-pthreads=FLAGS FLAGS is the value to pass to the compiler to enable
-                          POSIX Threads. The default if FLAGS is not specified
-                          is to try first -pthread and then -lpthread.
-                          --disable-pthreads will disable threading.
-  --enable-jsmin=PATH     PATH is the name of a JavaScript minifier or the
-                          absolute path to one.
-  --enable-cssmin=PATH    PATH is the name of a CSS minifier or the absolute
-                          path to one.
-
-Optional Packages:
-  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-sane-tool-path=DIR-1[:DIR-2...:DIR-n]
-                          Directories to prepend to PATH in build system and
-                          generated scripts
-  --with-lib=ARG          ARG specifies alternative name for lib directory
-  --with-openssl          use OpenSSL library (default is YES)
-                          ARG can be prefix for openssl library and headers
-  --with-libpcre1         DEPRECATED
-  --with-libpcre          synonym for --with-libpcre2
-  --with-libpcre2         support Perl-compatible regexes via libpcre2
-                          (default is NO)
-                          ARG can be also prefix for libpcre library and
-                          headers
-  --with-curl             support http(s):// transports (default is YES)
-                          ARG can be also prefix for curl library and headers
-  --with-expat            support git-push using http:// and https://
-                          transports via WebDAV (default is YES)
-                          ARG can be also prefix for expat library and headers
-  --without-iconv         if your architecture doesn't properly support iconv
-  --with-iconv=PATH       PATH is prefix for libiconv library and headers
-                          used only if you need linking with libiconv
-  --with-gitconfig=VALUE  Use VALUE instead of /etc/gitconfig as the global
-                          git configuration file. If VALUE is not fully
-                          qualified it will be interpreted as a path relative
-                          to the computed prefix at runtime.
-  --with-gitattributes=VALUE
-                          Use VALUE instead of /etc/gitattributes as the
-                          global git attributes file. If VALUE is not fully
-                          qualified it will be interpreted as a path relative
-                          to the computed prefix at runtime.
-  --with-pager=VALUE      Use VALUE as the fall-back pager instead of 'less'.
-                          This is used by things like 'git log' when the user
-                          does not specify a pager to use through alternate
-                          methods. eg: /usr/bin/pager
-  --with-editor=VALUE     Use VALUE as the fall-back editor instead of 'vi'.
-                          This is used by things like 'git commit' when the
-                          user does not specify a preferred editor through
-                          other methods. eg: /usr/bin/editor
-  --with-shell=PATH       provide PATH to shell
-  --with-perl=PATH        provide PATH to perl
-  --with-python=PATH      provide PATH to python
-  --with-zlib=PATH        provide PATH to zlib
-  --with-tcltk            use Tcl/Tk GUI (default is YES)
-                          ARG is the full path to the Tcl/Tk interpreter.
-                          Bare --with-tcltk will make the GUI part only if
-                          Tcl/Tk interpreter will be found in a system.
-
-Some influential environment variables:
-  CC          C compiler command
-  CFLAGS      C compiler flags
-  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
-              nonstandard directory <lib dir>
-  LIBS        libraries to pass to the linker, e.g. -l<library>
-  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
-              you have headers in a nonstandard directory <include dir>
-  CPP         C preprocessor
-
-Use these variables to override the choices made by `configure' or to help
-it to find libraries and programs with nonstandard names/locations.
-
-Report bugs to <git@vger.kernel.org>.
+  -> Not downloaded yet
+  -> Not downloaded yet
+  -> Not downloaded yet
+  -> Not downloaded yet
+  -> Not downloaded yet

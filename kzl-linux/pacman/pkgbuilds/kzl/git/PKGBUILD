@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=git
-pkgver=2.41.0
-pkgrel=2
+pkgver=2.48.1
+pkgrel=1
 epoch=
 arch=('x86_64')
 url="https://git-scm.com/"
@@ -13,6 +13,7 @@ depends=(
   expat
   openssl
   pcre2
+  zlib
 )
 makedepends=(
   # xmlto
@@ -26,12 +27,13 @@ source=(
   git+https://github.com/git/git.git#tag=v$pkgver
   $pkgname.install
 )
-sha256sums=('SKIP'
+sha256sums=('bb62f7930f8830f3b9d7cddb13767603de3de390ff2ef146c5bca192aa32547c'
             'e5676ce50dccf08536f0e89ef4d29f886f07137d186f9b878112f0d055bcfb68')
 
-prepare() {
+build() {
   cd $pkgname
 
+  msg2 "Configuring..."
   meson setup \
     --prefix /usr \
     --auto-features disabled \
@@ -47,11 +49,8 @@ prepare() {
     -D python=enabled \
     -D regex=enabled \
     build
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   meson compile -C build
 
   # contrib

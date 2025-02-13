@@ -2,7 +2,7 @@
 
 pkgname=libpsl
 pkgver=0.21.5
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="C library to handle the Public Suffix List"
 arch=('x86_64')
@@ -17,7 +17,12 @@ prepare() {
   cd $pkgname
 
   git submodule update --init
+}
 
+build() {
+  cd $pkgname
+
+  msg2 "Configuring..."
   meson setup \
     --prefix /usr \
     --auto-features disabled \
@@ -26,11 +31,8 @@ prepare() {
     -D docs=false \
     -D runtime=libidn2 \
     build
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   meson compile -C build
 }
 

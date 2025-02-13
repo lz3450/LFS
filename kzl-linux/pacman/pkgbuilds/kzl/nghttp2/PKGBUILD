@@ -2,7 +2,7 @@
 
 pkgname=nghttp2
 pkgver=1.64.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="An implementation of the Hypertext Transfer Protocol version 2 in C"
 arch=('x86_64')
@@ -11,9 +11,10 @@ license=('KZL')
 source=(git+https://github.com/nghttp2/nghttp2.git#tag=v$pkgver)
 sha256sums=('aed32c01da4788a9838319dd226355cfe8f4c2e8cc7f44860b8e648819653d30')
 
-prepare() {
+build() {
   cd $pkgname
 
+  msg2 "Configuring..."
   cmake -LAH -S . -B build \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
@@ -22,11 +23,8 @@ prepare() {
     -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
     -D ENABLE_DOC=OFF \
     -D ENABLE_LIB_ONLY=ON
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   cmake --build build
 }
 

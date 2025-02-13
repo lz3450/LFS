@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=curl
-pkgver=8.11.1
+pkgver=8.12.0
 pkgrel=1
 epoch=
 pkgdesc="A command-line tool for transferring data specified with URL syntax"
@@ -20,13 +20,18 @@ depends=(
 source=(
   git+https://github.com/curl/curl.git#tag=curl-${pkgver//./_}
 )
-sha256sums=('56d1cb1d6f9e248b96df8ddb4f8aae8dc704fefc9238a315f2772dccdb79320c')
+sha256sums=('968b1a61137aee34a26338d4abcc34d2b841b8c8c98d95ed0835fede9b8ff4d3')
 
 prepare() {
   cd $pkgname
 
   sed -i "/\WLIBCURL_VERSION\W/s/-DEV//" include/curl/curlver.h
+}
 
+build() {
+  cd $pkgname
+
+  msg2 "Configuring..."
   cmake -LAH -S . -B build \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
@@ -55,11 +60,8 @@ prepare() {
     -D ENABLE_CURL_MANUAL=OFF \
     -D USE_LIBIDN2=ON \
     -D USE_NGHTTP2=ON
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   cmake --build build
 }
 

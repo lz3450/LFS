@@ -1,3 +1,13 @@
+cmake: /usr/lib/libcurl.so.4: no version information available (required by cmake)
+CMake Deprecation Warning at CMakeLists.txt:37 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
 -- The C compiler identification is GNU 14.2.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
@@ -56,8 +66,8 @@
 -- 
 -- Configuration
 --   Generator .................. Unix Makefiles
---   Build type ................. NoConfig
---   Prefix ..................... /usr/local
+--   Build type ................. Release
+--   Prefix ..................... /usr
 --   Shared libraries ........... ON
 --   Character type ............. char (UTF-8)
 --   Library name postfix ....... 
@@ -92,9 +102,9 @@
 --   sudo make install
 -- 
 -- ===========================================================================
--- Configuring done (1.6s)
+-- Configuring done (2.4s)
 -- Generating done (0.0s)
--- Build files have been written to: /home/kzl/makepkg/build/expat/src/libexpat/expat/tmp
+-- Build files have been written to: /home/kzl/makepkg/build/expat/src/libexpat/expat/build
 -- Cache values
 // Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
@@ -103,7 +113,7 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
 // Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ...
-CMAKE_BUILD_TYPE:STRING=
+CMAKE_BUILD_TYPE:STRING=Release
 
 // Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -118,16 +128,13 @@ CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the CXX compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=
+CMAKE_CXX_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the CXX compiler during DEBUG builds.
 CMAKE_CXX_FLAGS_DEBUG:STRING=-g
 
 // Flags used by the CXX compiler during MINSIZEREL builds.
 CMAKE_CXX_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG
-
-// Flags used by the CXX compiler during NOCONFIG builds.
-CMAKE_CXX_FLAGS_NOCONFIG:STRING=
 
 // Flags used by the CXX compiler during RELEASE builds.
 CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
@@ -145,7 +152,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=
+CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -163,16 +170,13 @@ CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
 
 // Flags used by the linker during all build types.
-CMAKE_EXE_LINKER_FLAGS:STRING=
+CMAKE_EXE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during DEBUG builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
 
 // Flags used by the linker during MINSIZEREL builds.
 CMAKE_EXE_LINKER_FLAGS_MINSIZEREL:STRING=
-
-// Flags used by the linker during NOCONFIG builds.
-CMAKE_EXE_LINKER_FLAGS_NOCONFIG:STRING=
 
 // Flags used by the linker during RELEASE builds.
 CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
@@ -201,8 +205,8 @@ CMAKE_INSTALL_INCLUDEDIR:PATH=include
 // Info documentation (DATAROOTDIR/info)
 CMAKE_INSTALL_INFODIR:PATH=
 
-// Object code libraries (lib64)
-CMAKE_INSTALL_LIBDIR:PATH=lib64
+// Object code libraries (lib)
+CMAKE_INSTALL_LIBDIR:PATH=lib
 
 // Program executables (libexec)
 CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
@@ -220,7 +224,7 @@ CMAKE_INSTALL_MANDIR:PATH=
 CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
 
 // Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=/usr/local
+CMAKE_INSTALL_PREFIX:PATH=/usr
 
 // Run-time variable data (LOCALSTATEDIR/run)
 CMAKE_INSTALL_RUNSTATEDIR:PATH=
@@ -241,16 +245,13 @@ CMAKE_LINKER:FILEPATH=/usr/bin/ld
 CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
 
 // Flags used by the linker during the creation of modules during all build types.
-CMAKE_MODULE_LINKER_FLAGS:STRING=
+CMAKE_MODULE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of modules during DEBUG builds.
 CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
 
 // Flags used by the linker during the creation of modules during MINSIZEREL builds.
 CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL:STRING=
-
-// Flags used by the linker during the creation of modules during NOCONFIG builds.
-CMAKE_MODULE_LINKER_FLAGS_NOCONFIG:STRING=
 
 // Flags used by the linker during the creation of modules during RELEASE builds.
 CMAKE_MODULE_LINKER_FLAGS_RELEASE:STRING=
@@ -274,16 +275,13 @@ CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
 CMAKE_READELF:FILEPATH=/usr/bin/readelf
 
 // Flags used by the linker during the creation of shared libraries during all build types.
-CMAKE_SHARED_LINKER_FLAGS:STRING=
+CMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of shared libraries during DEBUG builds.
 CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
 
 // Flags used by the linker during the creation of shared libraries during MINSIZEREL builds.
 CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL:STRING=
-
-// Flags used by the linker during the creation of shared libraries during NOCONFIG builds.
-CMAKE_SHARED_LINKER_FLAGS_NOCONFIG:STRING=
 
 // Flags used by the linker during the creation of shared libraries during RELEASE builds.
 CMAKE_SHARED_LINKER_FLAGS_RELEASE:STRING=
@@ -305,9 +303,6 @@ CMAKE_STATIC_LINKER_FLAGS_DEBUG:STRING=
 
 // Flags used by the linker during the creation of static libraries during MINSIZEREL builds.
 CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL:STRING=
-
-// Flags used by the linker during the creation of static libraries during NOCONFIG builds.
-CMAKE_STATIC_LINKER_FLAGS_NOCONFIG:STRING=
 
 // Flags used by the linker during the creation of static libraries during RELEASE builds.
 CMAKE_STATIC_LINKER_FLAGS_RELEASE:STRING=
@@ -377,9 +372,6 @@ EXPAT_MINSIZEREL_POSTFIX:STRING=
 
 // Get a smaller (but slower) parser (in particular avoid multiple copies of the tokenizer)
 EXPAT_MIN_SIZE:BOOL=OFF
-
-// Library filename postfix for build type NOCONFIG; yields filenames libexpat<postfix=[w][d][MD|MT]>.(dll|dylib|lib|so)
-EXPAT_NOCONFIG_POSTFIX:STRING=
 
 // Define to make XML Namespaces functionality available
 EXPAT_NS:BOOL=ON

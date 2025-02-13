@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openssl
-pkgver=3.4.0
+pkgver=3.4.1
 pkgrel=1
 epoch=
 pkgdesc="A Open Source Toolkit for the Transport Layer Security (TLS) protocol formerly known as the Secure Sockets Layer (SSL) protocol"
@@ -12,7 +12,7 @@ backup=(
   etc/pki/tls/openssl.cnf
 )
 source=(git+https://github.com/openssl/openssl.git#tag=$pkgname-$pkgver)
-sha256sums=('SKIP')
+sha256sums=('a5542fbda4757fda031deb8827f04d2af6406a02eb7d8dcdbf5e7ee2c66f9031')
 
 _openssldir="/etc/pki/tls"
 
@@ -25,8 +25,9 @@ prepare() {
 build() {
   cd $pkgname
 
-  # https://github.com/openssl/openssl/blob/master/INSTALL.md#configuration-options
 
+  msg2 "Configuring..."
+  # https://github.com/openssl/openssl/blob/master/INSTALL.md#configuration-options
   ./Configure \
     --release \
     --libdir=lib \
@@ -35,6 +36,7 @@ build() {
     enable-ktls \
     enable-ec_nistp_64_gcc_128 \
 
+  msg2 "Compiling..."
   make depend
   make
 }

@@ -1,6 +1,3 @@
 new_version=$(git ls-remote --tags https://github.com/curl/curl.git | grep -oP '(?<=refs/tags/curl-)\d+_\d+_\d+$' | sort -V | tail -n1 | sed 's/_/./g')
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
-}
+srcdir="$pkgname"
+build_system=cmake

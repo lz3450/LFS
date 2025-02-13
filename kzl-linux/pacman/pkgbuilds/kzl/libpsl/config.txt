@@ -1,0 +1,41 @@
+The Meson build system
+Version: 1.7.0
+Source dir: /home/kzl/makepkg/build/libpsl/src/libpsl
+Build dir: /home/kzl/makepkg/build/libpsl/src/libpsl/build
+Build type: native build
+Project name: libpsl
+Project version: 0.21.5
+C compiler for the host machine: cc (gcc 14.2.1 "cc (KZL 14.2.0.g778-3 2025/02/13 03:45:44 +0000) 14.2.1 20250213")
+C linker for the host machine: cc ld.bfd 2.44.0
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Found pkg-config: YES (/usr/bin/pkg-config) 2.3.0
+Run-time dependency libidn2 found: YES 2.3.7
+Library unistring found: YES
+Run-time dependency iconv found: YES
+Check usable header "unistd.h" : YES 
+Check usable header "stdint.h" : YES 
+Check usable header "alloca.h" : YES 
+Check usable header "dirent.h" : YES 
+Checking for function "alloca" : YES 
+Checking for function "strndup" : YES 
+Checking for function "clock_gettime" : YES 
+Checking for function "fmemopen" : YES 
+Checking for function "nl_langinfo" : YES 
+Compiler for C supports function attribute visibility: YES 
+Configuring config.h using configuration
+Program python3 found: YES (/usr/bin/python3)
+Configuring libpsl.h using configuration
+Build targets in project: 13
+
+libpsl 0.21.5
+
+  User defined options
+    auto_features: disabled
+    buildtype    : plain
+    builtin      : true
+    docs         : false
+    prefix       : /usr
+    runtime      : libidn2
+
+Found ninja-1.11.1.git.kitware.jobserver-1 at /home/kzl/.local/bin/ninja

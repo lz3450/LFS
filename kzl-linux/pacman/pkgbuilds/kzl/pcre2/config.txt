@@ -1,3 +1,13 @@
+cmake: /usr/lib/libcurl.so.4: no version information available (required by cmake)
+CMake Deprecation Warning at CMakeLists.txt:108 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
 -- The C compiler identification is GNU 14.2.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
@@ -39,19 +49,22 @@
 -- Performing Test HAVE_VISIBILITY
 -- Performing Test HAVE_VISIBILITY - Success
 -- Performing Test INTEL_CET_ENABLED
--- Performing Test INTEL_CET_ENABLED - Failed
+-- Performing Test INTEL_CET_ENABLED - Success
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
 -- 
 -- 
 -- PCRE2-10.44 configuration summary:
 -- 
---   Install prefix .................. : /usr/local
+--   Install prefix .................. : /usr
 --   C compiler ...................... : /usr/bin/cc
---   C compiler flags ................ : 
+--   C compiler flags ................ : -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects -mshstk -O3 -DNDEBUG
 -- 
 --   Build 8 bit PCRE2 library ....... : ON
---   Build 16 bit PCRE2 library ...... : OFF
---   Build 32 bit PCRE2 library ...... : OFF
---   Enable JIT compiling support .... : OFF
+--   Build 16 bit PCRE2 library ...... : ON
+--   Build 32 bit PCRE2 library ...... : ON
+--   Enable JIT compiling support .... : ON
 --   Use SELinux allocator in JIT .... : OFF
 --   Enable Unicode support .......... : ON
 --   Newline char/sequence ........... : LF
@@ -66,7 +79,7 @@
 --   Heap limit ...................... : 20000000
 --   Match limit ..................... : 10000000
 --   Match depth limit ............... : MATCH_LIMIT
---   Build shared libs ............... : OFF
+--   Build shared libs ............... : ON
 --   Build static libs ............... : ON
 --      with PIC enabled ............. : OFF
 --   Build pcre2grep ................. : ON
@@ -74,21 +87,27 @@
 --   Enable callouts in pcre2grep .... : ON
 --   Enable callout fork in pcre2grep. : ON
 --   Buffer size for pcre2grep ....... : 20480
---   Build tests (implies pcre2test .. : ON
+--   Build tests (implies pcre2test .. : OFF
 --                and pcre2grep)
 --   Link pcre2grep with libz ........ : ON
---   Link pcre2grep with libbz2 ...... : ON
+--   Link pcre2grep with libbz2 ...... : OFF
 --   Link pcre2test with libeditline . : OFF
 --   Link pcre2test with libreadline . : ON
 --   Support Valgrind .................: OFF
 --   Use %zu and %td ..................: AUTO
 -- 
--- Configuring done (1.0s)
+-- Configuring done (1.4s)
 -- Generating done (0.0s)
--- Build files have been written to: /home/kzl/makepkg/build/pcre2/src/pcre2/tmp
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    CMAKE_CXX_FLAGS
+
+
+-- Build files have been written to: /home/kzl/makepkg/build/pcre2/src/pcre2/build
 -- Cache values
 // Build shared libraries.
-BUILD_SHARED_LIBS:BOOL=OFF
+BUILD_SHARED_LIBS:BOOL=ON
 
 // Build static libraries.
 BUILD_STATIC_LIBS:BOOL=ON
@@ -109,10 +128,7 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
 // Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ...
-CMAKE_BUILD_TYPE:STRING=
-
-// Enable/Disable color output during build.
-CMAKE_COLOR_MAKEFILE:BOOL=ON
+CMAKE_BUILD_TYPE:STRING=Release
 
 // C compiler
 CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
@@ -124,7 +140,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=
+CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -142,7 +158,7 @@ CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
 
 // Flags used by the linker during all build types.
-CMAKE_EXE_LINKER_FLAGS:STRING=
+CMAKE_EXE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during DEBUG builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
@@ -155,6 +171,9 @@ CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
 
 // Flags used by the linker during RELWITHDEBINFO builds.
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+
+// Enable/Disable output of build database during the build.
+CMAKE_EXPORT_BUILD_DATABASE:BOOL=
 
 // Enable/Disable output of compile commands during generation.
 CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
@@ -177,8 +196,8 @@ CMAKE_INSTALL_INCLUDEDIR:PATH=include
 // Info documentation (DATAROOTDIR/info)
 CMAKE_INSTALL_INFODIR:PATH=
 
-// Object code libraries (lib64)
-CMAKE_INSTALL_LIBDIR:PATH=lib64
+// Object code libraries (lib)
+CMAKE_INSTALL_LIBDIR:PATH=lib
 
 // Program executables (libexec)
 CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
@@ -196,7 +215,7 @@ CMAKE_INSTALL_MANDIR:PATH=
 CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
 
 // Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=/usr/local
+CMAKE_INSTALL_PREFIX:PATH=/usr
 
 // Run-time variable data (LOCALSTATEDIR/run)
 CMAKE_INSTALL_RUNSTATEDIR:PATH=
@@ -213,11 +232,11 @@ CMAKE_INSTALL_SYSCONFDIR:PATH=etc
 // Path to a program.
 CMAKE_LINKER:FILEPATH=/usr/bin/ld
 
-// Path to a program.
-CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
+// Program used to build from build.ninja files.
+CMAKE_MAKE_PROGRAM:FILEPATH=/home/kzl/.local/bin/ninja
 
 // Flags used by the linker during the creation of modules during all build types.
-CMAKE_MODULE_LINKER_FLAGS:STRING=
+CMAKE_MODULE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of modules during DEBUG builds.
 CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
@@ -247,7 +266,7 @@ CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
 CMAKE_READELF:FILEPATH=/usr/bin/readelf
 
 // Flags used by the linker during the creation of shared libraries during all build types.
-CMAKE_SHARED_LINKER_FLAGS:STRING=
+CMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of shared libraries during DEBUG builds.
 CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
@@ -316,16 +335,16 @@ PCRE2GREP_SUPPORT_JIT:BOOL=ON
 PCRE2_BUILD_PCRE2GREP:BOOL=ON
 
 // Build 16 bit PCRE2 library
-PCRE2_BUILD_PCRE2_16:BOOL=OFF
+PCRE2_BUILD_PCRE2_16:BOOL=ON
 
 // Build 32 bit PCRE2 library
-PCRE2_BUILD_PCRE2_32:BOOL=OFF
+PCRE2_BUILD_PCRE2_32:BOOL=ON
 
 // Build 8 bit PCRE2 library
 PCRE2_BUILD_PCRE2_8:BOOL=ON
 
 // Build the tests
-PCRE2_BUILD_TESTS:BOOL=ON
+PCRE2_BUILD_TESTS:BOOL=OFF
 
 // Include debugging code
 PCRE2_DEBUG:BOOL=OFF
@@ -379,13 +398,13 @@ PCRE2_STATIC_PIC:BOOL=OFF
 PCRE2_SUPPORT_BSR_ANYCRLF:BOOL=OFF
 
 // Enable support for Just-in-time compiling.
-PCRE2_SUPPORT_JIT:BOOL=OFF
+PCRE2_SUPPORT_JIT:BOOL=ON
 
 // Enable SELinux compatible execmem allocator in JIT (experimental).
 PCRE2_SUPPORT_JIT_SEALLOC:BOOL=OFF
 
 // Enable support for linking pcre2grep with libbz2.
-PCRE2_SUPPORT_LIBBZ2:BOOL=ON
+PCRE2_SUPPORT_LIBBZ2:BOOL=OFF
 
 // Enable support for linking pcre2test with libedit.
 PCRE2_SUPPORT_LIBEDIT:BOOL=OFF

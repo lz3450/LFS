@@ -1,6 +1,3 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://libexpat.github.io | grep -oP '(?<=R_)\d+_\d+_\d+' | sort -V | tail -n1 | sed 's/_/./g')
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/libexpat/$pkgname"
-    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
-}
+srcdir="libexpat/$pkgname"
+build_system=cmake

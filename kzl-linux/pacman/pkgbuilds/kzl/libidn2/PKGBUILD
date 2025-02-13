@@ -2,7 +2,7 @@
 
 pkgname=libidn2
 pkgver=2.3.7
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Free software implementation of IDNA2008, Punycode and TR46"
 arch=('x86_64')
@@ -23,10 +23,12 @@ sha256sums=('4c21a791b610b9519b9d0e12b8097bf2f359b12f8dd92647611a929e6bfd7d64'
 build() {
   cd $pkgname-$pkgver
 
-  ./configure -C \
+  msg2 "Configuring..."
+  ./configure \
     --prefix=/usr \
     --disable-doc
 
+  msg2 "Compiling..."
   make
 }
 

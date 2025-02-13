@@ -5,17 +5,6 @@
 -- Detecting C compile features
 -- Detecting C compile features - done
 -- Found Python3: /usr/bin/python3.12 (found version "3.12.1") found components: Interpreter
--- The CXX compiler identification is GNU 14.2.1
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: /usr/bin/c++ - skipped
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Could NOT find Libev (missing: LIBEV_LIBRARY LIBEV_INCLUDE_DIR) (Required is at least version "4.11")
--- Could NOT find Libcares (missing: LIBCARES_LIBRARY LIBCARES_INCLUDE_DIR) (Required is at least version "1.7.5")
--- Found ZLIB: /usr/lib/libz.so (found suitable version "1.3.1", minimum required is "1.2.3")
--- Found Libbrotlienc: /usr/lib/libbrotlienc.so (found suitable version "1.0.9", minimum required is "1.0.9")
--- Found Libbrotlidec: /usr/lib/libbrotlidec.so (found suitable version "1.0.9", minimum required is "1.0.9")
 -- Found OpenSSL: /usr/lib/libcrypto.so (found suitable version "3.1.0", minimum required is "1.1.1")
 -- Could NOT find Libngtcp2 (missing: LIBNGTCP2_LIBRARY LIBNGTCP2_INCLUDE_DIR) (Required is at least version "1.0.0")
 -- Could NOT find Libngtcp2_crypto_quictls (missing: LIBNGTCP2_CRYPTO_QUICTLS_LIBRARY LIBNGTCP2_CRYPTO_QUICTLS_INCLUDE_DIR) (Required is at least version "1.0.0")
@@ -25,12 +14,6 @@
 -- Could NOT find Libevent (missing: LIBEVENT_CORE_LIBRARY LIBEVENT_EXTRA_LIBRARY LIBEVENT_OPENSSL_LIBRARY LIBEVENT_INCLUDE_DIR core extra openssl) (Required is at least version "2.0.8")
 -- Found LibXml2: /usr/lib/libxml2.so (found suitable version "2.11.5", minimum required is "2.6.26")
 -- Could NOT find Jemalloc (missing: JEMALLOC_LIBRARY JEMALLOC_INCLUDE_DIR) 
--- Performing Test CXX_FLAG__std_c_20
--- Performing Test CXX_FLAG__std_c_20 - Success
--- Performing Test HAVE_STD_FUTURE
--- Performing Test HAVE_STD_FUTURE - Success
--- Performing Test HAVE_STD_MAP_EMPLACE
--- Performing Test HAVE_STD_MAP_EMPLACE - Success
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE
@@ -92,17 +75,17 @@
 
     Package version: 1.64.0
     Library version: 42:3:28
-    Install prefix:  /usr/local
+    Install prefix:  /usr
     Target system:   Linux
     Compiler:
-      Build type:     RelWithDebInfo
+      Build type:     Release
       C compiler:     /usr/bin/cc
-      CFLAGS:         -O2 -g  
-      C++ compiler:   /usr/bin/c++
-      CXXFLAGS:       -O2 -g  
+      CFLAGS:         -O3  -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
+      C++ compiler:   
+      CXXFLAGS:        -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
       WARNCFLAGS:       -W -Wall -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Wshadow -Wundef -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-nonliteral -Wformat-security -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wredundant-decls -Wsign-conversion -Wstrict-prototypes -Wunreachable-code -Wunused-parameter -Wvla -Wclobbered -Wpragmas
-      CXX1XCXXFLAGS:  -std=c++20
-      WARNCXXFLAGS:     -Wall -Wformat-security
+      CXX1XCXXFLAGS:  
+      WARNCXXFLAGS:     -Wall
     Python:
       Python:          /usr/bin/python3.12
       Python3_VERSION: 3.12.1
@@ -110,11 +93,11 @@
       Failmalloc:     ON
       Build Test:     OFF
     Libs:
-      OpenSSL:        TRUE (LIBS='/usr/lib/libssl.so;/usr/lib/libcrypto.so')
+      OpenSSL:        TRUE (LIBS='')
       wolfSSL:         (LIBS='')
       Libxml2:        TRUE (LIBS='/usr/lib/libxml2.so')
-      Libev:          FALSE (LIBS='')
-      Libc-ares:      FALSE (LIBS='')
+      Libev:           (LIBS='')
+      Libc-ares:       (LIBS='')
       Libngtcp2:       (LIBS='')
       Libngtcp2_crypto_quictls:  (LIBS='')
       Libngtcp2_crypto_wolfssl:  (LIBS='')
@@ -123,24 +106,25 @@
       Libevent(SSL):  FALSE (LIBS='')
       Jansson:        TRUE (LIBS='/usr/lib/libjansson.so')
       Jemalloc:       FALSE (LIBS='')
-      Zlib:           TRUE (LIBS='/usr/lib/libz.so')
+      Zlib:            (LIBS='')
       Systemd:        TRUE (LIBS='/usr/lib/libsystemd.so')
-      Libbrotlienc:   TRUE (LIBS='/usr/lib/libbrotlienc.so')
-      Libbrotlidec:   TRUE (LIBS='/usr/lib/libbrotlidec.so')
+      Libbrotlienc:    (LIBS='')
+      Libbrotlidec:    (LIBS='')
     Third-party:
-      http-parser:    1
-      MRuby:          OFF
-      Neverbleed:     OFF
+      http-parser:    
+      MRuby:          0
+      Neverbleed:     0
     Features:
       Applications:   OFF
-      HPACK tools:    ON
+      HPACK tools:    OFF
       Examples:       OFF
       Threading:      ON
       HTTP/3(EXPERIMENTAL): OFF
 
--- Configuring done (3.8s)
--- Generating done (0.1s)
--- Build files have been written to: /home/kzl/makepkg/build/nghttp2/src/nghttp2/tmp
+Only the library will be built. To build other components (such as applications and examples), set ENABLE_LIB_ONLY=OFF.
+-- Configuring done (3.2s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/kzl/makepkg/build/nghttp2/src/nghttp2/build
 -- Cache values
 // Build libnghttp2 as a shared library
 BUILD_SHARED_LIBS:BOOL=ON
@@ -154,35 +138,11 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 // Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
-// Choose the build type
-CMAKE_BUILD_TYPE:STRING=RelWithDebInfo
+// Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ...
+CMAKE_BUILD_TYPE:STRING=Release
 
 // Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
-
-// CXX compiler
-CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
-
-// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
-
-// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
-
-// Flags used by the CXX compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=
-
-// Flags used by the CXX compiler during DEBUG builds.
-CMAKE_CXX_FLAGS_DEBUG:STRING=-g
-
-// Flags used by the CXX compiler during MINSIZEREL builds.
-CMAKE_CXX_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG
-
-// Flags used by the CXX compiler during RELEASE builds.
-CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
-
-// Flags used by the CXX compiler during RELWITHDEBINFO builds.
-CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 // C compiler
 CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
@@ -194,7 +154,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=
+CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -212,7 +172,7 @@ CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
 
 // Flags used by the linker during all build types.
-CMAKE_EXE_LINKER_FLAGS:STRING=
+CMAKE_EXE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during DEBUG builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
@@ -247,8 +207,8 @@ CMAKE_INSTALL_INCLUDEDIR:PATH=include
 // Info documentation (DATAROOTDIR/info)
 CMAKE_INSTALL_INFODIR:PATH=
 
-// Object code libraries (lib64)
-CMAKE_INSTALL_LIBDIR:PATH=lib64
+// Object code libraries (lib)
+CMAKE_INSTALL_LIBDIR:PATH=lib
 
 // Program executables (libexec)
 CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
@@ -266,7 +226,7 @@ CMAKE_INSTALL_MANDIR:PATH=
 CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
 
 // Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=/usr/local
+CMAKE_INSTALL_PREFIX:PATH=/usr
 
 // Run-time variable data (LOCALSTATEDIR/run)
 CMAKE_INSTALL_RUNSTATEDIR:PATH=
@@ -287,7 +247,7 @@ CMAKE_LINKER:FILEPATH=/usr/bin/ld
 CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
 
 // Flags used by the linker during the creation of modules during all build types.
-CMAKE_MODULE_LINKER_FLAGS:STRING=
+CMAKE_MODULE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of modules during DEBUG builds.
 CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
@@ -317,7 +277,7 @@ CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
 CMAKE_READELF:FILEPATH=/usr/bin/readelf
 
 // Flags used by the linker during the creation of shared libraries during all build types.
-CMAKE_SHARED_LINKER_FLAGS:STRING=
+CMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of shared libraries during DEBUG builds.
 CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
@@ -368,7 +328,7 @@ ENABLE_APP:BOOL=OFF
 ENABLE_DEBUG:BOOL=OFF
 
 // Build documentation
-ENABLE_DOC:BOOL=ON
+ENABLE_DOC:BOOL=OFF
 
 // Build examples
 ENABLE_EXAMPLES:BOOL=OFF
@@ -383,7 +343,7 @@ ENABLE_HPACK_TOOLS:BOOL=ON
 ENABLE_HTTP3:BOOL=OFF
 
 // Build libnghttp2 only.  This is a short hand for -DENABLE_APP=0 -DENABLE_EXAMPLES=0 -DENABLE_HPACK_TOOLS=0
-ENABLE_LIB_ONLY:BOOL=OFF
+ENABLE_LIB_ONLY:BOOL=ON
 
 // Build libnghttp2 against the MS LIBCMT[d]
 ENABLE_STATIC_CRT:BOOL=OFF
@@ -406,24 +366,6 @@ JEMALLOC_INCLUDE_DIR:PATH=JEMALLOC_INCLUDE_DIR-NOTFOUND
 // Path to a library.
 JEMALLOC_LIBRARY:FILEPATH=JEMALLOC_LIBRARY-NOTFOUND
 
-// Path to a file.
-LIBBROTLIDEC_INCLUDE_DIR:PATH=/usr/include
-
-// Path to a library.
-LIBBROTLIDEC_LIBRARY:FILEPATH=/usr/lib/libbrotlidec.so
-
-// Path to a file.
-LIBBROTLIENC_INCLUDE_DIR:PATH=/usr/include
-
-// Path to a library.
-LIBBROTLIENC_LIBRARY:FILEPATH=/usr/lib/libbrotlienc.so
-
-// Path to a file.
-LIBCARES_INCLUDE_DIR:PATH=LIBCARES_INCLUDE_DIR-NOTFOUND
-
-// Path to a library.
-LIBCARES_LIBRARY:FILEPATH=LIBCARES_LIBRARY-NOTFOUND
-
 // Path to a library.
 LIBEVENT_CORE_LIBRARY:FILEPATH=LIBEVENT_CORE_LIBRARY-NOTFOUND
 
@@ -435,12 +377,6 @@ LIBEVENT_INCLUDE_DIR:PATH=LIBEVENT_INCLUDE_DIR-NOTFOUND
 
 // Path to a library.
 LIBEVENT_OPENSSL_LIBRARY:FILEPATH=LIBEVENT_OPENSSL_LIBRARY-NOTFOUND
-
-// Path to a file.
-LIBEV_INCLUDE_DIR:PATH=LIBEV_INCLUDE_DIR-NOTFOUND
-
-// Path to a library.
-LIBEV_LIBRARY:FILEPATH=LIBEV_LIBRARY-NOTFOUND
 
 // Path to a file.
 LIBNGHTTP3_INCLUDE_DIR:PATH=LIBNGHTTP3_INCLUDE_DIR-NOTFOUND
@@ -508,23 +444,8 @@ WITH_NEVERBLEED:BOOL=OFF
 // Use wolfSSL
 WITH_WOLFSSL:BOOL=OFF
 
-// Path to a file.
-ZLIB_INCLUDE_DIR:PATH=/usr/include
-
-// Path to a library.
-ZLIB_LIBRARY_DEBUG:FILEPATH=ZLIB_LIBRARY_DEBUG-NOTFOUND
-
-// Path to a library.
-ZLIB_LIBRARY_RELEASE:FILEPATH=/usr/lib/libz.so
-
 // Path to a library.
 pkgcfg_lib_PC_JANSSON_jansson:FILEPATH=/usr/lib/libjansson.so
-
-// Path to a library.
-pkgcfg_lib_PC_LIBBROTLIDEC_brotlidec:FILEPATH=/usr/lib/libbrotlidec.so
-
-// Path to a library.
-pkgcfg_lib_PC_LIBBROTLIENC_brotlienc:FILEPATH=/usr/lib/libbrotlienc.so
 
 // Path to a library.
 pkgcfg_lib_PC_LIBXML_xml2:FILEPATH=/usr/lib/libxml2.so

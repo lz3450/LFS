@@ -1,4 +1,4 @@
 new_version=$(git ls-remote --tags https://github.com/git/git.git | grep -oP '(?<=refs/tags/v)\d+\.\d+\.\d+$' | sort -V | tail -n1)
 srcdir="$pkgname"
-# build_system=autoconf
 build_system=meson
+# build_system=autoconf
