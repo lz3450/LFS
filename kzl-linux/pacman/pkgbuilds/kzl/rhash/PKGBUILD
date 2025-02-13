@@ -2,7 +2,7 @@
 
 pkgname=rhash
 pkgver=1.4.5
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Utility for verifying hash sums of files"
 arch=('x86_64')
@@ -20,6 +20,7 @@ sha256sums=('SKIP')
 build() {
   cd RHash
 
+  msg2 "Configuring..."
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
@@ -30,6 +31,7 @@ build() {
     --extra-cflags="$CFLAGS $CPPFLAGS" \
     --extra-ldflags="$LDFLAGS"
 
+  msg2 "Compiling..."
   make
 }
 

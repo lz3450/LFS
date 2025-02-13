@@ -1,0 +1,11 @@
+Checking for sources ... RHash 1.4.5 
+Checking for target OS ... Linux 
+Checking for cc version ... gcc 14.2.1 
+Checking for linker support for dlopen ... yes 
+Checking for linker support for --version-script ... yes 
+Checking for gettext ... found 
+Checking for OpenSSL ... runtime 
+Writing config.mak
+Writing librhash/config.mak
+Writing dist/librhash.pc
+Writing dist/rhash.1

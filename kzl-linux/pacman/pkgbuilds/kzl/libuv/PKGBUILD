@@ -2,7 +2,7 @@
 
 pkgname=libuv
 pkgver=1.50.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="A multi-platform support library with a focus on asynchronous I/O"
 arch=('x86_64')
@@ -11,20 +11,18 @@ license=('KZL')
 source=(git+https://github.com/libuv/libuv.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
-prepare() {
+build() {
   cd $pkgname
 
+  msg2 "Configuring..."
   cmake -LAH -S . -B build \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_INSTALL_LIBDIR=lib \
     -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS"
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   cmake --build build
 }
 

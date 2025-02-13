@@ -2,7 +2,7 @@
 
 pkgname=jsoncpp
 pkgver=1.9.6
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="A C++ library that allows manipulating JSON values, including serialization and deserialization to and from strings"
 arch=('x86_64')
@@ -11,19 +11,18 @@ license=('KZL')
 source=(git+https://github.com/open-source-parsers/jsoncpp.git#tag=$pkgver)
 sha256sums=('SKIP')
 
-prepare() {
-  cd $pkgname
-
-  meson setup \
-    --prefix /usr \
-    --buildtype plain \
-    -D tests=false \
-    build
-}
-
 build() {
   cd $pkgname
 
+  msg2 "Configuring..."
+  meson setup \
+    --prefix /usr \
+    --auto-features disabled \
+    --buildtype plain \
+    -D tests=false \
+    build
+
+  msg2 "Compiling..."
   meson compile -C build
 }
 
