@@ -45,17 +45,19 @@ prepare() {
     -e '/#define SYS_BASH_LOGOUT/s|/\*\(.*\)\*/|\1|' \
     -e '/#define NON_INTERACTIVE_LOGIN_SHELLS/s|/\*\(.*\)\*/|\1|' \
     config-top.h
-
-  ./configure -C \
-    --prefix=/usr \
-    --with-bash-malloc=no \
-    --with-curses \
-    --with-installed-readline
 }
 
 build() {
   cd $pkgname
 
+  msg2 "Configuring..."
+  ./configure \
+    --prefix=/usr \
+    --with-bash-malloc=no \
+    --with-curses \
+    --with-installed-readline
+
+  msg2 "Compiling..."
   make
 }
 

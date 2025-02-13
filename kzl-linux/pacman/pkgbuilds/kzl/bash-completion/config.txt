@@ -1,0 +1,27 @@
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether sleep supports fractional seconds... yes
+checking filesystem timestamp resolution... 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /usr/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking xargs -n works... yes
+checking how to create a pax tar archive... gnutar
+checking whether ln -s works... yes
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for pytest... no
+checking for pytest-3... no
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating completions/Makefile
+config.status: creating doc/Makefile
+config.status: creating helpers/Makefile
+config.status: creating test/Makefile
+config.status: creating test/fallback/Makefile
+config.status: creating test/fallback/completions/Makefile
+config.status: creating test/t/Makefile
+config.status: creating test/t/unit/Makefile

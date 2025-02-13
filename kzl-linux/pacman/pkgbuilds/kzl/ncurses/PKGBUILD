@@ -1,22 +1,27 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ncurses
-pkgver=6.5.20250201
-pkgrel=5
+pkgver=6.5.20250208
+pkgrel=2
 epoch=
 pkgdesc="A free software emulation of curses in System V Release 4.0 (SVr4), and more"
 arch=('x86_64')
 url="https://invisible-island.net/ncurses/ncurses.html"
 license=('KZL')
 source=(https://invisible-mirror.net/archives/$pkgname/current/$pkgname-${pkgver%.*}-${pkgver##*.}.tgz)
-sha256sums=('8315040d6e1f9b8df8c4828f777fe24ada169a42d75bacd930b88cd597956483')
+sha256sums=('0207b66e4969da1591c42700a22b1c929647ca3534a337ec9c341c7a19238d59')
 
 prepare() {
   cd $pkgname-${pkgver%.*}-${pkgver##*.}
 
   sed -i 's/@EXTRA_PKG_LDFLAGS@ //g' misc/gen-pkgconfig.in misc/ncurses-config.in
+}
 
-  ./configure -C \
+build() {
+  cd $pkgname-${pkgver%.*}-${pkgver##*.}
+
+  msg2 "Configuring..."
+  ./configure \
     --prefix=/usr \
     --without-ada \
     --without-manpages \
@@ -27,11 +32,8 @@ prepare() {
     --disable-root-environ \
     --disable-root-access \
     --disable-setuid-environ
-}
 
-build() {
-  cd $pkgname-${pkgver%.*}-${pkgver##*.}
-
+  msg2 "Compiling..."
   make
 }
 
