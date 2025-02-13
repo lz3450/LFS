@@ -39,6 +39,8 @@ HOST_DIRS=(
     "$CHROOT_HOME_DIR/LFS:$CHROOT_HOME_DIR/LFS"
     "$CHROOT_HOME_DIR/makepkg/sources:$CHROOT_HOME_DIR/makepkg/sources"
     "$CHROOT_HOME_DIR/chrootbuild/log:$CHROOT_HOME_DIR/makepkg/log"
+    "$CHROOT_HOME_DIR/chrootbuild/archive:$CHROOT_HOME_DIR/makepkg/archive"
+    "$CHROOT_HOME_DIR/chrootbuild/makepkglogs:$CHROOT_HOME_DIR/makepkg/makepkglogs"
     "$CHROOT_HOME_DIR/chrootbuild/wheels:$WHEEL_DIR"
     "$CHROOT_HOME_DIR/chrootbuild/wheels/.cache:$PIP_CACHE_DIR"
 )
@@ -48,6 +50,7 @@ active_mounts=()
 
 build_opts=()
 rootfs_tarball=""
+declare -i from_rootfs_backups=0
 declare -i debug=0
 
 ### functions
@@ -81,6 +84,11 @@ setup_rootfs() {
     done
     chown -R -- "$USERSPEC" "$ROOTFS_DIR/$CHROOT_HOME_DIR"
     info "Done"
+
+    if (( $from_rootfs_backups )); then
+        info "Using rootfs backups, skip configure the rootfs"
+        touch "$_status_file"
+    fi
 
     if [[ ! -f "$_status_file" ]]; then
         info "Configure chroot environment..."
@@ -145,6 +153,7 @@ Usage: $SCRIPT_NAME [ -r | --rootfs <tarball> ] [ -c | --clean ] [ -d | --debug 
 Usage: $SCRIPT_NAME [ -r | --rootfs <tarball> ] [ -c | --clean ] [ -b | --build <options passed to \`build\`> ]
 
     -r, --rootfs <tarball>          rootfs tarball
+    -e, --from-rootfs-backups       use rootfs backups, skip configure the rootfs
     -c, --clean                     clean up work files and exit
     -b, --build <options>           build options
     -d, --debug                     enter debug shell
@@ -178,6 +187,9 @@ while (( $# > 0 )); do
     -r | --rootfs)
         shift
         rootfs_tarball="${1:-}"
+        ;;
+    -e | --from-rootfs-backups)
+        from_rootfs_backups=1
         ;;
     -d | --debug)
         debug=1
@@ -213,7 +225,7 @@ fi
 prologue
 
 setup_rootfs
-if (( debug )); then
+if (( $debug )); then
     run_debug_shell
 else
     run_build

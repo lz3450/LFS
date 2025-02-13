@@ -178,20 +178,25 @@ if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_sys
             if [[ ! -f "configure" ]]; then
                 error 'Cannot find `configure` script' 12
             fi
-            ./configure --help=recursive > "$PKGBUILDDIR"/help.txt 2>&1
+            ./configure --help=recursive > "$PKGBUILDDIR"/help.txt || error "\`./configure --help=recursive\` error" 12
             ;;
         meson)
             if [[ ! -f "meson.build" ]]; then
                 error 'Cannot find `meson.build` script' 12
             fi
-            meson configure | sed -e '/^WARNING/d' > "$PKGBUILDDIR"/help.txt 2>&1
-
+            meson configure | sed -e '/^WARNING/d' > "$PKGBUILDDIR"/help.txt || error "\`meson configure\` error" 12
+            if [[ -d "subprojects" ]]; then
+                meson setup tmp || error "\`meson setup\` error" 12
+                meson subprojects foreach meson configure | sed -e '/^WARNING/d' -e '/\x1B/d' \
+                    >> "$PKGBUILDDIR"/help.txt || error "\`meson subprojects foreach meson configure\` error" 12
+                rm -rf tmp
+            fi
             ;;
         cmake)
             if [[ ! -f "CMakeLists.txt" ]]; then
                 error 'Cannot find `CMakeLists.txt`' 12
             fi
-            cmake -LAH -S . -B tmp > "$PKGBUILDDIR"/help.txt 2>&1
+            cmake -LAH -S . -B tmp > "$PKGBUILDDIR"/help.txt || error "\`cmake -LAH\` error" 12
             rm -rf tmp
             ;;
         *)
