@@ -16,13 +16,12 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether the compiler supports GNU C... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to enable C23 features... unsupported
-checking for gcc option to enable C11 features... none needed
-checking whether gcc understands -c and -o together... yes
+checking for gcc option to enable C23 features... -std=gnu23
+checking whether gcc -std=gnu23 understands -c and -o together... yes
 checking whether the compiler is clang... no
 checking for compiler option needed when checking for declarations... none
 checking whether make supports the include directive... yes (GNU style)
-checking dependency style of gcc... gcc3
+checking dependency style of gcc -std=gnu23... gcc3
 checking for ranlib... ranlib
 checking for stdio.h... yes
 checking for stdlib.h... yes
@@ -53,8 +52,8 @@ checking for xlocale.h... no
 checking for sys/mman.h... yes
 checking for pthread.h... yes
 checking for malloc.h... yes
-checking for stdbit.h... no
-checking for stdckdint.h... no
+checking for stdbit.h... yes
+checking for stdckdint.h... yes
 checking for sys/random.h... yes
 checking for sys/wait.h... yes
 checking for features.h... yes
@@ -73,12 +72,12 @@ checking whether it is safe to define __EXTENSIONS__... yes
 checking whether _XOPEN_SOURCE should be defined... no
 checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
-checking how to run the C preprocessor... gcc -E
+checking how to run the C preprocessor... gcc -std=gnu23 -E
 checking for egrep -e... /usr/bin/grep -E
 checking for Minix Amsterdam compiler... no
 checking for ar... ar
-checking for gcc option to support large files... none needed
-checking for gcc option to support timestamps after 2038... none needed
+checking for gcc -std=gnu23 option to support large files... none needed
+checking for gcc -std=gnu23 option to support timestamps after 2038... none needed
 checking for size_t... yes
 checking for working alloca.h... yes
 checking for alloca... yes
@@ -138,7 +137,7 @@ checking for fork... yes
 checking for vfork... yes
 checking for nl_langinfo and CODESET... yes
 checking for a traditional french locale... none
-checking for ld used by gcc... /usr/bin/ld
+checking for ld used by gcc -std=gnu23... /usr/bin/ld
 checking if the linker (/usr/bin/ld) is GNU ld... yes
 checking for shared library run path origin... done
 checking 32-bit host C ABI... no
@@ -150,11 +149,11 @@ checking whether char32_t is correctly defined... yes
 checking for bit size of wchar_t... 32
 checking for mbstate_t... yes
 checking for a traditional japanese locale... none
-checking for an english Unicode locale... none
+checking for an english Unicode locale... en_US.UTF-8
 checking for a transitional chinese locale... none
-checking whether mbrtowc handles incomplete characters... guessing yes
+checking whether mbrtowc handles incomplete characters... yes
 checking whether mbrtowc works as well as mbtowc... guessing yes
-checking for gcc options needed to detect all undeclared functions... none needed
+checking for gcc -std=gnu23 options needed to detect all undeclared functions... none needed
 checking whether mbrtoc32 is declared... yes
 checking for mbrtoc32... yes
 checking whether mbrtoc32 works as well as mbrtowc... guessing yes
@@ -225,9 +224,9 @@ checking whether langinfo.h defines ERA... yes
 checking whether langinfo.h defines YESEXPR... yes
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
-checking for unreachable... no
+checking for unreachable... yes
 checking whether nullptr_t needs <stddef.h>... no
-checking for clean definition of __STDC_VERSION_STDDEF_H__... yes
+checking for clean definition of __STDC_VERSION_STDDEF_H__... no
 checking whether locale.h defines locale_t... yes
 checking whether locale.h conforms to POSIX:2001... yes
 checking whether struct lconv is properly defined... yes
@@ -278,7 +277,7 @@ checking which flavor of printf attribute matches inttypes macros... system
 checking whether ecvt is declared... yes
 checking whether fcvt is declared... yes
 checking whether gcvt is declared... yes
-checking whether MB_CUR_MAX is correct... guessing yes
+checking whether MB_CUR_MAX is correct... yes
 checking whether strdup is declared... yes
 checking whether strerror(0) succeeds... yes
 checking for strerror_r... yes
@@ -344,8 +343,8 @@ checking for strnlen... yes
 checking for wcrtomb... (cached) yes
 checking whether _snprintf is declared... no
 checking for alloca as a compiler built-in... yes
-checking for static_assert... yes, an <assert.h> macro
-checking for bool, true, false... no
+checking for static_assert... yes, a keyword
+checking for bool, true, false... yes
 checking whether btowc(0) is correct... yes
 checking whether btowc(EOF) is correct... guessing yes
 checking whether btowc is consistent with mbrtowc in the C locale... no
@@ -392,9 +391,9 @@ checking for gettimeofday with POSIX signature... yes
 checking whether the compiler generally respects inline... yes
 checking for iswblank... yes
 checking whether iswblank is declared... yes
-checking whether iswdigit is ISO C compliant... guessing yes
+checking whether iswdigit is ISO C compliant... yes
 checking whether iswpunct is consistent with ispunct... yes
-checking whether iswxdigit is ISO C compliant... guessing yes
+checking whether iswxdigit is ISO C compliant... yes
 checking whether the compiler supports the __inline keyword... yes
 checking whether localeconv works... yes
 checking for pthread_rwlock_t... yes
@@ -402,14 +401,14 @@ checking whether pthread_rwlock_rdlock prefers a writer to a reader... no
 checking whether mbrtoc32 works on empty input... yes
 checking whether the C locale is free of encoding errors... no
 checking whether mbrtoc32 works in an UTF-8 locale... yes
-checking whether mbrtowc handles a NULL pwc argument... guessing yes
-checking whether mbrtowc handles a NULL string argument... guessing yes
-checking whether mbrtowc has a correct return value... guessing yes
+checking whether mbrtowc handles a NULL pwc argument... yes
+checking whether mbrtowc handles a NULL string argument... yes
+checking whether mbrtowc has a correct return value... yes
 checking whether mbrtowc returns 0 when parsing a NUL character... guessing yes
-checking whether mbrtowc stores incomplete characters... guessing no
+checking whether mbrtowc stores incomplete characters... no
 checking whether mbrtowc works on empty input... yes
 checking whether the C locale is free of encoding errors... no
-checking whether mbsrtowcs works... guessing yes
+checking whether mbsrtowcs works... yes
 checking whether the C locale is free of encoding errors... (cached) no
 checking for mbtowc... yes
 checking for mempcpy... (cached) yes
@@ -420,7 +419,7 @@ checking for working mkstemp... yes
 checking for __mktime_internal... no
 checking for nl_langinfo... yes
 checking whether YESEXPR works... yes
-checking for C nullptr... no
+checking for C nullptr... yes
 checking whether open recognizes a trailing slash... yes
 checking for opendir... yes
 checking for Perl 5.005 or newer... perl
@@ -481,16 +480,16 @@ checking for unsetenv() return type... int
 checking whether unsetenv obeys POSIX... yes
 checking for variable-length arrays... yes
 checking whether wcrtomb works in the C locale... yes
-checking whether wcrtomb return value is correct... guessing yes
+checking whether wcrtomb return value is correct... yes
 checking whether wcwidth is declared... yes
 checking whether wcwidth works reasonably in UTF-8 locales... yes
 checking for wmemchr... yes
 checking for wmempcpy... yes
-checking for alignas and alignof... yes, <stdalign.h> macros
+checking for alignas and alignof... yes, keywords
 checking for atoll... yes
 checking whether c32rtomb return value is correct... yes
 checking whether fdopen sets errno... yes
-checking whether float.h conforms to ISO C23... no
+checking whether float.h conforms to ISO C23... yes
 checking whether conversion from 'int' to 'long double' works... yes
 checking for ftruncate... yes
 checking for duplocale... yes
@@ -510,8 +509,7 @@ checking for working nanosleep... no (mishandles large arguments)
 checking whether <netinet/in.h> is self-contained... yes
 checking for uselocale... (cached) yes
 checking whether uselocale works... (cached) yes
-checking whether perror matches strerror... ./configure: line 52910: cmp: command not found
-no
+checking whether perror matches strerror... yes
 checking for getppriv... no
 checking whether signature of pselect conforms to POSIX... yes
 checking whether pselect detects invalid fds... yes
@@ -576,7 +574,10 @@ checking for pr... /usr/bin/pr
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt
 checking for gmsgfmt... /usr/bin/msgfmt
+/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
+/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for xgettext... /usr/bin/xgettext
+/usr/bin/xgettext: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for msgmerge... /usr/bin/msgmerge
 checking for CFPreferencesCopyAppValue... no
 checking for CFLocaleCopyCurrent... no

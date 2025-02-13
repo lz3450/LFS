@@ -79,7 +79,10 @@ checking for a sed that does not truncate output... /usr/bin/sed
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt
 checking for gmsgfmt... /usr/bin/msgfmt
+/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
+/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for xgettext... /usr/bin/xgettext
+/usr/bin/xgettext: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for msgmerge... /usr/bin/msgmerge
 checking for ld used by gcc... /usr/bin/ld
 checking if the linker (/usr/bin/ld) is GNU ld... yes
@@ -175,8 +178,12 @@ checking for strnicmp... no
 checking for working strcoll... yes
 checking whether closedir returns void... no
 checking for struct dirent.d_type... yes
-checking for pkg-config... no
-checking for GNU Guile... no
+checking for pkg-config... /usr/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for GNU Guile... 3.0
+checking for guile-3.0... yes
+checking for libguile.h... yes
+checking whether we can link GNU Guile... yes
 checking whether sys_siglist is declared... no
 checking whether _sys_siglist is declared... no
 checking whether __sys_siglist is declared... no

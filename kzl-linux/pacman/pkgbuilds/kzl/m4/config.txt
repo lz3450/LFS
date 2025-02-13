@@ -76,7 +76,7 @@ checking for _FILE_OFFSET_BITS value needed for large files... no
 configure: autobuild project... GNU M4
 configure: autobuild revision... 1.4.19
 configure: autobuild hostname... UTDLAB2
-configure: autobuild timestamp... 20250212T090033Z
+configure: autobuild timestamp... 20250213T044808Z
 checking for unsigned long long int... yes
 checking for long long int... yes
 checking for unsigned long long int... (cached) yes
@@ -266,7 +266,11 @@ checking for promoted mode_t type... mode_t
 checking for library containing posix_spawn... none required
 checking for posix_spawn... yes
 checking whether posix_spawn is declared... yes
-checking whether posix_spawn works... no
+checking whether posix_spawn works... yes
+checking whether posix_spawn rejects scripts without shebang... yes
+checking whether posix_spawnp rejects scripts without shebang... yes
+checking whether posix_spawnattr_setschedpolicy is supported... yes
+checking whether posix_spawnattr_setschedparam is supported... yes
 checking for sigset_t... yes
 checking for SIGPIPE... yes
 checking for sched.h... yes
@@ -328,7 +332,7 @@ checking whether printf supports infinite 'double' arguments... yes
 checking whether printf supports infinite 'long double' arguments... yes
 checking whether printf supports the 'a' and 'A' directives... yes
 checking whether printf supports the 'F' directive... yes
-checking whether printf supports the 'n' directive... no
+checking whether printf supports the 'n' directive... yes
 checking whether printf supports the 'ls' directive... yes
 checking whether printf supports the grouping flag... yes
 checking whether printf supports the left-adjust flag correctly... yes
@@ -455,13 +459,9 @@ checking whether YESEXPR works... yes
 checking for obstacks that work with any size object... no
 checking whether open recognizes a trailing slash... yes
 checking for opendir... yes
-checking for paths.h... yes
-checking for confstr... yes
-checking for sched_setparam... yes
-checking for sched_setscheduler... yes
-checking for setegid... yes
-checking for seteuid... yes
-checking for vfork... yes
+checking whether posix_spawn_file_actions_addclose works... yes
+checking whether posix_spawn_file_actions_adddup2 works... yes
+checking whether posix_spawn_file_actions_addopen works... yes
 checking whether frexp works... (cached) yes
 checking whether ldexp can be used without linking with libm... (cached) yes
 checking whether frexpl() can be used without linking with libm... (cached) yes
@@ -530,7 +530,6 @@ checking for sys/single_threaded.h... yes
 checking for ptrdiff_t... yes
 checking for vasprintf... yes
 checking for vasprintf... (cached) yes
-checking for ptrdiff_t... (cached) yes
 checking for waitid... yes
 checking whether mbrtowc handles incomplete characters... (cached) guessing yes
 checking whether mbrtowc works as well as mbtowc... (cached) guessing yes
@@ -577,8 +576,7 @@ checking for working nanosleep... no (mishandles large arguments)
 checking whether <netinet/in.h> is self-contained... yes
 checking for a traditional french locale... (cached) none
 checking for a french Unicode locale... (cached) none
-checking whether perror matches strerror... ./configure: line 56159: cmp: command not found
-no
+checking whether perror matches strerror... yes
 checking whether pthread_create exists as a global function... yes
 checking whether pthread_sigmask is a macro... no
 checking whether pthread_sigmask works without -lpthread... yes
@@ -615,7 +613,10 @@ checking if malloc debugging is wanted... no
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt
 checking for gmsgfmt... /usr/bin/msgfmt
+/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
+/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for xgettext... /usr/bin/xgettext
+/usr/bin/xgettext: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for msgmerge... /usr/bin/msgmerge
 checking for CFPreferencesCopyAppValue... (cached) no
 checking for CFLocaleCopyPreferredLanguages... (cached) no

@@ -281,7 +281,7 @@ checking for error_at_line... yes
 checking for euidaccess... yes
 checking for fchownat... yes
 checking whether fchownat works with AT_SYMLINK_NOFOLLOW... yes
-checking whether fchownat works with an empty file name... yes
+checking whether fchownat works with an empty file name... no
 checking whether fcntl handles F_DUPFD correctly... yes
 checking whether fcntl understands F_DUPFD_CLOEXEC... needs runtime check
 checking whether fcntl is declared without a macro... yes

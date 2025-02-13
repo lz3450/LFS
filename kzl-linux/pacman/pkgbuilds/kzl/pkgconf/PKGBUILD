@@ -2,7 +2,7 @@
 
 pkgname=pkgconf
 pkgver=2.3.0
-pkgrel=44
+pkgrel=45
 epoch=
 pkgdesc="Package compiler and linker metadata toolkit"
 arch=('x86_64')

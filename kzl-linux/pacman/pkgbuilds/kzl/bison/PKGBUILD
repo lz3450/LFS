@@ -2,7 +2,7 @@
 
 pkgname=bison
 pkgver=3.8.2
-pkgrel=25
+pkgrel=26
 epoch=
 pkgdesc="The GNU general-purpose parser generator"
 arch=('x86_64')

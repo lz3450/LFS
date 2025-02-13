@@ -76,8 +76,7 @@ checking for shared library run path origin... done
 checking 32-bit host C ABI... no
 checking for ELF binary format... yes
 checking for the common suffixes of directories in the library search path... lib,lib,lib64
-checking for libtextstyle... yes
-checking how to link with libtextstyle... /usr/lib/libtextstyle.so
+checking for libtextstyle... no
 checking for inline... inline
 checking for tcdrain... yes
 checking for canonicalize_file_name... yes
@@ -147,11 +146,13 @@ checking for dmd... no
 checking for -g... no
 checking for Java compiler... no
 checking for Java virtual machine... no
-checking for flex... no
-checking for lex... no
-configure: WARNING: bypassing lex because flex is required
-checking for bison... no
-checking for byacc... no
+checking for flex... flex
+checking whether lex is flex... yes
+checking whether flex supports --header=FILE... yes
+checking lex output file root... lex.yy
+checking lex library... -lfl
+checking whether yytext is a pointer... yes
+checking for bison... bison -y
 checking for ranlib... (cached) ranlib
 checking for GNU M4 that supports accurate traces... /usr/bin/m4
 checking whether /usr/bin/m4 accepts --gnu... yes
@@ -191,7 +192,7 @@ checking whether long double and double are the same... no
 checking whether printf supports infinite 'long double' arguments... yes
 checking whether printf supports the 'a' and 'A' directives... yes
 checking whether printf supports the 'F' directive... yes
-checking whether printf supports the 'n' directive... no
+checking whether printf supports the 'n' directive... yes
 checking whether printf supports the 'ls' directive... yes
 checking whether printf supports POSIX/XSI format strings with positions... yes
 checking whether printf supports the grouping flag... yes
@@ -283,7 +284,6 @@ checking whether posix_spawn rejects scripts without shebang... yes
 checking whether posix_spawnp rejects scripts without shebang... yes
 checking whether posix_spawnattr_setschedpolicy is supported... yes
 checking whether posix_spawnattr_setschedparam is supported... yes
-checking for ptrdiff_t... yes
 checking whether C symbols are prefixed with underscore at the linker level... no
 checking for sigset_t... yes
 checking for shared library path variable... LD_LIBRARY_PATH
@@ -365,7 +365,6 @@ checking whether fopen supports the mode character 'x'... yes
 checking whether fopen supports the mode character 'e'... yes
 checking for __fpending... yes
 checking whether __fpending is declared... yes
-checking for ptrdiff_t... (cached) yes
 checking whether free is known to preserve errno... yes
 checking whether frexp works... yes
 checking whether frexpl is declared... yes
@@ -462,11 +461,9 @@ checking for snprintf... (cached) yes
 checking whether snprintf respects a size of 1... yes
 checking whether printf supports POSIX/XSI format strings with positions... (cached) yes
 checking for snprintf... (cached) yes
-checking whether snprintf fully supports the 'n' directive... no
+checking whether snprintf fully supports the 'n' directive... yes
 checking whether snprintf respects a size of 1... (cached) yes
 checking whether vsnprintf respects a zero size as in C99... yes
-checking for ptrdiff_t... (cached) yes
-checking for ptrdiff_t... (cached) yes
 checking for ssize_t... yes
 checking whether stat handles trailing slashes on files... yes
 checking for working stdalign.h... yes
@@ -482,19 +479,16 @@ checking whether unlink of a parent directory fails as it should... guessing yes
 checking for unsetenv... yes
 checking for unsetenv() return type... int
 checking whether unsetenv obeys POSIX... yes
-checking for ptrdiff_t... (cached) yes
+checking for ptrdiff_t... yes
 checking for vasprintf... yes
 checking for vasprintf... (cached) yes
-checking for ptrdiff_t... (cached) yes
 checking for vsnprintf... yes
 checking whether snprintf respects a size of 1... (cached) yes
 checking whether printf supports POSIX/XSI format strings with positions... (cached) yes
 checking for vsnprintf... (cached) yes
-checking whether snprintf fully supports the 'n' directive... (cached) no
+checking whether snprintf fully supports the 'n' directive... (cached) yes
 checking whether snprintf respects a size of 1... (cached) yes
 checking whether vsnprintf respects a zero size as in C99... (cached) yes
-checking for ptrdiff_t... (cached) yes
-checking for ptrdiff_t... (cached) yes
 checking for waitid... yes
 checking whether wcwidth is declared... yes
 checking whether wcwidth works reasonably in UTF-8 locales... yes
@@ -505,17 +499,20 @@ checking for stdint.h... (cached) yes
 checking whether getdtablesize works... yes
 checking whether setlocale (LC_ALL, NULL) is multithread-safe... (cached) yes
 checking whether setlocale (category, NULL) is multithread-safe... (cached) yes
-checking for ptrdiff_t... (cached) yes
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt
 checking for gmsgfmt... /usr/bin/msgfmt
+/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
+/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for xgettext... /usr/bin/xgettext
+/usr/bin/xgettext: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for msgmerge... /usr/bin/msgmerge
 checking for CFPreferencesCopyAppValue... no
 checking for CFLocaleCopyCurrent... no
 checking for GNU gettext in libc... yes
 checking whether to use NLS... yes
 checking where the gettext function comes from... libc
+bison: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for valgrind... no
 checking Valgrind suppression file... 
 checking that generated files are newer than configure... done

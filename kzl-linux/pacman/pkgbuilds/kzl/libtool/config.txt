@@ -20,7 +20,7 @@ configure: autobuild project... GNU Libtool
 configure: autobuild revision... 2.5.4
 configure: autobuild hostname... UTDLAB2
 configure: autobuild mode... default
-configure: autobuild timestamp... 20250212T090253Z
+configure: autobuild timestamp... 20250213T045108Z
 checking for gcc... gcc
 checking whether the C compiler works... yes
 checking for C compiler default output file name... a.out
@@ -100,7 +100,7 @@ checking whether to build shared libraries... yes
 checking whether to build static libraries... yes
 checking what extension is used for runtime loadable modules... .so
 checking what variable specifies run-time module search path... LD_LIBRARY_PATH
-checking for the default library search path... /lib /usr/lib
+checking for the default library search path... /lib /usr/lib /usr/local/lib 
 checking for gcc options needed to detect all undeclared functions... none needed
 checking for library containing dlopen... none required
 checking for dlerror... yes

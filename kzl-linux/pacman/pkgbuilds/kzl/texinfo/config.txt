@@ -48,7 +48,7 @@ checking for wctype.h... yes
 checking for sys/mman.h... yes
 checking for malloc.h... yes
 checking for stdbool.h... yes
-checking for stdckdint.h... no
+checking for stdckdint.h... yes
 checking for features.h... yes
 checking for sys/socket.h... yes
 checking for threads.h... yes
@@ -102,9 +102,9 @@ checking for snprintf... yes
 checking for wcrtomb... yes
 checking for nl_langinfo and CODESET... yes
 checking for a traditional japanese locale... none
-checking for an english Unicode locale... none
+checking for an english Unicode locale... en_US.UTF-8
 checking for a transitional chinese locale... none
-checking whether mbrtowc handles incomplete characters... guessing yes
+checking whether mbrtowc handles incomplete characters... yes
 checking whether mbrtowc works as well as mbtowc... guessing yes
 checking for gcc options needed to detect all undeclared functions... none needed
 checking whether mbrtoc32 is declared... yes
@@ -172,7 +172,7 @@ checking which flavor of printf attribute matches inttypes macros... system
 checking whether ecvt is declared... yes
 checking whether fcvt is declared... yes
 checking whether gcvt is declared... yes
-checking whether MB_CUR_MAX is correct... guessing yes
+checking whether MB_CUR_MAX is correct... yes
 checking for strcasestr... yes
 checking whether strcasestr works... yes
 checking whether strdup is declared... yes
@@ -240,9 +240,9 @@ checking for static_assert... yes, an <assert.h> macro
 checking whether calloc (0, n) and calloc (n, 0) return nonnull... yes
 checking for iswblank... yes
 checking whether iswblank is declared... yes
-checking whether iswdigit is ISO C compliant... guessing yes
+checking whether iswdigit is ISO C compliant... yes
 checking whether iswpunct is consistent with ispunct... yes
-checking whether iswxdigit is ISO C compliant... guessing yes
+checking whether iswxdigit is ISO C compliant... yes
 checking whether mbrtoc32 works on empty input... yes
 checking whether the C locale is free of encoding errors... no
 checking whether mbrtoc32 works in an UTF-8 locale... yes
@@ -270,18 +270,18 @@ checking whether wcwidth is declared... yes
 checking whether wcwidth works reasonably in UTF-8 locales... yes
 checking whether setlocale (LC_ALL, NULL) is multithread-safe... (cached) yes
 checking whether setlocale (category, NULL) is multithread-safe... (cached) yes
-checking whether mbrtowc handles a NULL pwc argument... guessing yes
-checking whether mbrtowc handles a NULL string argument... guessing yes
-checking whether mbrtowc has a correct return value... guessing yes
+checking whether mbrtowc handles a NULL pwc argument... yes
+checking whether mbrtowc handles a NULL string argument... yes
+checking whether mbrtowc has a correct return value... yes
 checking whether mbrtowc returns 0 when parsing a NUL character... guessing yes
-checking whether mbrtowc stores incomplete characters... guessing no
+checking whether mbrtowc stores incomplete characters... no
 checking whether mbrtowc works on empty input... yes
 checking whether the C locale is free of encoding errors... no
-checking whether iconv converts EUC-CN to UTF-8... no
+checking whether iconv converts EUC-CN to UTF-8... yes
 checking whether make sets $(MAKE)... (cached) yes
 checking whether ln -s works... yes
-checking whether diff accepts -u... no
-checking whether diff accepts -a... no
+checking whether diff accepts -u... yes
+checking whether diff accepts -a... yes
 checking for io.h... no
 checking for pwd.h... yes
 checking for termcap.h... yes
@@ -303,15 +303,18 @@ checking for a sed that does not truncate output... /usr/bin/sed
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt
 checking for gmsgfmt... /usr/bin/msgfmt
+/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for xgettext... /usr/bin/xgettext
+/usr/bin/xgettext: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for msgmerge... /usr/bin/msgmerge
+/usr/bin/msgmerge: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for CFPreferencesCopyAppValue... no
 checking for CFLocaleCopyPreferredLanguages... no
 checking for GNU gettext in libc... yes
 checking whether to use NLS... yes
 checking where the gettext function comes from... libc
 === configuring in tp/Texinfo/XS (/home/kzl/makepkg/build/texinfo/src/texinfo-7.2/tp/Texinfo/XS)
-configure: running /bin/sh ./configure --disable-option-checking '--prefix=/usr'  'CFLAGS=-march=native -O2 -pipe -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -Wp,-D_FORTIFY_SOURCE=2' 'LDFLAGS=-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now' 'CPPFLAGS=' --cache-file=/dev/null --srcdir=.
+configure: running /bin/sh ./configure --disable-option-checking '--prefix=/usr'  'CFLAGS=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects' 'LDFLAGS=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects' 'CPPFLAGS=' --cache-file=/dev/null --srcdir=.
 checking for a BSD-compatible install... /usr/bin/install -c
 checking whether sleep supports fractional seconds... yes
 checking filesystem timestamp resolution... 0.01
@@ -362,7 +365,7 @@ checking for sys/mman.h... yes
 checking for sys/param.h... yes
 checking for sys/time.h... yes
 checking for stdbool.h... yes
-checking for stdckdint.h... no
+checking for stdckdint.h... yes
 checking for uchar.h... yes
 checking for features.h... yes
 checking for crtdefs.h... no
@@ -381,8 +384,11 @@ checking for a sed that does not truncate output... /usr/bin/sed
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt
 checking for gmsgfmt... /usr/bin/msgfmt
+/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for xgettext... /usr/bin/xgettext
+/usr/bin/xgettext: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for msgmerge... /usr/bin/msgmerge
+/usr/bin/msgmerge: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for ld used by gcc... /usr/bin/ld
 checking if the linker (/usr/bin/ld) is GNU ld... yes
 checking for shared library run path origin... done
@@ -456,9 +462,9 @@ checking whether malloc (0) returns nonnull... yes
 checking for mbstate_t... yes
 checking for nl_langinfo and CODESET... yes
 checking for a traditional japanese locale... none
-checking for an english Unicode locale... none
+checking for an english Unicode locale... en_US.UTF-8
 checking for a transitional chinese locale... none
-checking whether mbrtowc handles incomplete characters... guessing yes
+checking whether mbrtowc handles incomplete characters... yes
 checking whether mbrtowc works as well as mbtowc... guessing yes
 checking for mmap... yes
 checking for MAP_ANONYMOUS... yes
@@ -476,7 +482,7 @@ checking which flavor of printf attribute matches inttypes macros... system
 checking whether ecvt is declared... yes
 checking whether fcvt is declared... yes
 checking whether gcvt is declared... yes
-checking whether MB_CUR_MAX is correct... guessing yes
+checking whether MB_CUR_MAX is correct... yes
 checking whether strndup is declared... yes
 checking whether strnlen is declared... yes
 checking for off64_t... yes
@@ -573,16 +579,13 @@ checking for archiver @FILE support... @
 checking for strip... strip
 checking command to parse /usr/bin/nm -B output from gcc object... ok
 checking for sysroot... no
-checking for a working dd... ./configure: line 32440: cmp: command not found
-./configure: line 32440: cmp: command not found
-
-checking how to truncate binary pipes... /usr/bin/sed -e 4q
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
 checking for mt... no
 checking if : is a manifest tool... no
 checking for dlfcn.h... yes
 checking for objdir... .libs
-checking if gcc supports -fno-rtti -fno-exceptions... ./configure: line 34282: diff: command not found
-no
+checking if gcc supports -fno-rtti -fno-exceptions... no
 checking for gcc option to produce PIC... -fPIC -DPIC
 checking if gcc PIC flag -fPIC -DPIC works... yes
 checking if gcc static flag -static works... yes
