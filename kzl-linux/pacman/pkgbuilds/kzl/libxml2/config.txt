@@ -1,3 +1,4 @@
+cmake: /usr/lib/libcurl.so.4: no version information available (required by cmake)
 -- The C compiler identification is GNU 14.2.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
@@ -5,14 +6,10 @@
 -- Detecting C compile features
 -- Detecting C compile features - done
 -- Found PkgConfig: /usr/bin/pkg-config (found version "2.3.0")
--- Looking for include file unistd.h
--- Looking for include file unistd.h - found
--- Looking for F_GETFL
--- Looking for F_GETFL - found
--- Found Python: /usr/bin/python3.12 (found version "3.12.1") found components: Interpreter Development Development.Module Development.Embed
 -- Performing Test Iconv_IS_BUILT_IN
 -- Performing Test Iconv_IS_BUILT_IN - Success
 -- Found Iconv: built in to C library
+-- Found ICU: /usr/include (found version "76.1") found components: data i18n uc
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE
@@ -72,18 +69,25 @@
 -- Looking for include file sys/timeb.h - found
 -- Looking for include file sys/time.h
 -- Looking for include file sys/time.h - found
+-- Looking for include file unistd.h
+-- Looking for include file unistd.h - found
 -- Performing Test XML_SOCKLEN_T_SOCKLEN_T
 -- Performing Test XML_SOCKLEN_T_SOCKLEN_T - Success
 -- Looking for include file pthread.h
 -- Looking for include file pthread.h - found
+-- Checking for module 'icu-i18n'
+--   Found icu-i18n, version 76.1
 -- Performing Test FLAG_UNDEFINED_VERSION
 -- Performing Test FLAG_UNDEFINED_VERSION - Success
-Found 1644 functions in libxml2-api.xml
-Found 53 functions in libxml2-python-api.xml
-Generated 894 wrapper functions, 593 failed, 210 skipped
--- Configuring done (2.6s)
+-- Configuring done (3.2s)
 -- Generating done (0.0s)
--- Build files have been written to: /home/kzl/makepkg/build/libxml2/src/libxml2/tmp
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    CMAKE_CXX_FLAGS
+
+
+-- Build files have been written to: /home/kzl/makepkg/build/libxml2/src/libxml2/build
 -- Cache values
 // Build shared libraries
 BUILD_SHARED_LIBS:BOOL=ON
@@ -95,7 +99,7 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
 // Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ...
-CMAKE_BUILD_TYPE:STRING=
+CMAKE_BUILD_TYPE:STRING=Release
 
 // Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -110,7 +114,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=
+CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -128,7 +132,7 @@ CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
 
 // Flags used by the linker during all build types.
-CMAKE_EXE_LINKER_FLAGS:STRING=
+CMAKE_EXE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during DEBUG builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
@@ -163,8 +167,8 @@ CMAKE_INSTALL_INCLUDEDIR:PATH=include
 // Info documentation (DATAROOTDIR/info)
 CMAKE_INSTALL_INFODIR:PATH=
 
-// Object code libraries (lib64)
-CMAKE_INSTALL_LIBDIR:PATH=lib64
+// Object code libraries (lib)
+CMAKE_INSTALL_LIBDIR:PATH=lib
 
 // Program executables (libexec)
 CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
@@ -182,7 +186,7 @@ CMAKE_INSTALL_MANDIR:PATH=
 CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
 
 // Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=/usr/local
+CMAKE_INSTALL_PREFIX:PATH=/usr
 
 // Run-time variable data (LOCALSTATEDIR/run)
 CMAKE_INSTALL_RUNSTATEDIR:PATH=
@@ -203,7 +207,7 @@ CMAKE_LINKER:FILEPATH=/usr/bin/ld
 CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
 
 // Flags used by the linker during the creation of modules during all build types.
-CMAKE_MODULE_LINKER_FLAGS:STRING=
+CMAKE_MODULE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of modules during DEBUG builds.
 CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
@@ -233,7 +237,7 @@ CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
 CMAKE_READELF:FILEPATH=/usr/bin/readelf
 
 // Flags used by the linker during the creation of shared libraries during all build types.
-CMAKE_SHARED_LINKER_FLAGS:STRING=
+CMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of shared libraries during DEBUG builds.
 CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
@@ -325,8 +329,80 @@ CPACK_SOURCE_TZ:BOOL=ON
 // Enable to build ZIP source packages
 CPACK_SOURCE_ZIP:BOOL=OFF
 
-// Python bindings install directory
-LIBXML2_PYTHON_INSTALL_DIR:PATH=/usr/local/python
+// ICU data library (debug)
+ICU_DATA_LIBRARY_DEBUG:FILEPATH=ICU_DATA_LIBRARY_DEBUG-NOTFOUND
+
+// ICU data library (release)
+ICU_DATA_LIBRARY_RELEASE:FILEPATH=/usr/lib/libicudata.so
+
+// ICU derb executable
+ICU_DERB_EXECUTABLE:FILEPATH=/usr/bin/derb
+
+// ICU genbrk executable
+ICU_GENBRK_EXECUTABLE:FILEPATH=/usr/bin/genbrk
+
+// ICU genccode executable
+ICU_GENCCODE_EXECUTABLE:FILEPATH=/usr/sbin/genccode
+
+// ICU gencfu executable
+ICU_GENCFU_EXECUTABLE:FILEPATH=/usr/bin/gencfu
+
+// ICU gencmn executable
+ICU_GENCMN_EXECUTABLE:FILEPATH=/usr/sbin/gencmn
+
+// ICU gencnval executable
+ICU_GENCNVAL_EXECUTABLE:FILEPATH=/usr/bin/gencnval
+
+// ICU gendict executable
+ICU_GENDICT_EXECUTABLE:FILEPATH=/usr/bin/gendict
+
+// ICU gennorm2 executable
+ICU_GENNORM2_EXECUTABLE:FILEPATH=/usr/sbin/gennorm2
+
+// ICU genrb executable
+ICU_GENRB_EXECUTABLE:FILEPATH=/usr/bin/genrb
+
+// ICU gensprep executable
+ICU_GENSPREP_EXECUTABLE:FILEPATH=/usr/sbin/gensprep
+
+// ICU i18n library (debug)
+ICU_I18N_LIBRARY_DEBUG:FILEPATH=ICU_I18N_LIBRARY_DEBUG-NOTFOUND
+
+// ICU i18n library (release)
+ICU_I18N_LIBRARY_RELEASE:FILEPATH=/usr/lib/libicui18n.so
+
+// ICU icu-config executable
+ICU_ICU-CONFIG_EXECUTABLE:FILEPATH=/usr/bin/icu-config
+
+// ICU icuinfo executable
+ICU_ICUINFO_EXECUTABLE:FILEPATH=/usr/bin/icuinfo
+
+// ICU icupkg executable
+ICU_ICUPKG_EXECUTABLE:FILEPATH=/usr/sbin/icupkg
+
+// ICU include directory
+ICU_INCLUDE_DIR:PATH=/usr/include
+
+// ICU makeconv executable
+ICU_MAKECONV_EXECUTABLE:FILEPATH=/usr/bin/makeconv
+
+// ICU Makefile.inc data file
+ICU_MAKEFILE_INC:FILEPATH=/usr/lib64/icu/76.1/Makefile.inc
+
+// ICU pkgdata executable
+ICU_PKGDATA_EXECUTABLE:FILEPATH=/usr/bin/pkgdata
+
+// ICU pkgdata.inc data file
+ICU_PKGDATA_INC:FILEPATH=/usr/lib64/icu/76.1/pkgdata.inc
+
+// ICU uconv executable
+ICU_UCONV_EXECUTABLE:FILEPATH=/usr/bin/uconv
+
+// ICU uc library (debug)
+ICU_UC_LIBRARY_DEBUG:FILEPATH=ICU_UC_LIBRARY_DEBUG-NOTFOUND
+
+// ICU uc library (release)
+ICU_UC_LIBRARY_RELEASE:FILEPATH=/usr/lib/libicuuc.so
 
 // Add the Canonicalization support
 LIBXML2_WITH_C14N:BOOL=ON
@@ -350,7 +426,7 @@ LIBXML2_WITH_HTTP:BOOL=OFF
 LIBXML2_WITH_ICONV:BOOL=ON
 
 // Add ICU support
-LIBXML2_WITH_ICU:BOOL=OFF
+LIBXML2_WITH_ICU:BOOL=ON
 
 // Add ISO8859X support if no iconv
 LIBXML2_WITH_ISO8859X:BOOL=ON
@@ -377,7 +453,7 @@ LIBXML2_WITH_PROGRAMS:BOOL=ON
 LIBXML2_WITH_PUSH:BOOL=ON
 
 // Build Python bindings
-LIBXML2_WITH_PYTHON:BOOL=ON
+LIBXML2_WITH_PYTHON:BOOL=OFF
 
 // Add the xmlReader parsing interface
 LIBXML2_WITH_READER:BOOL=ON
@@ -431,11 +507,14 @@ LIBXML2_WITH_XPTR_LOCS:BOOL=OFF
 LIBXML2_WITH_ZLIB:BOOL=OFF
 
 // Working directory for XML Conformance Test Suite
-LIBXML2_XMLCONF_WORKING_DIR:PATH=/home/kzl/makepkg/build/libxml2/src/libxml2/tmp
+LIBXML2_XMLCONF_WORKING_DIR:PATH=/home/kzl/makepkg/build/libxml2/src/libxml2/build
 
 // Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=
 
 // pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
+
+// Path to a library.
+pkgcfg_lib_ICU_PC_icui18n:FILEPATH=/usr/lib/libicui18n.so
 

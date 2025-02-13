@@ -24,7 +24,7 @@
 SHELL=/bin/sh
 CC=gcc
 BIGFILES=-D_FILE_OFFSET_BITS=64
-CFLAGS=-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm  -Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -fpic -fPIC -Wall -Winline -O2 $(BIGFILES)
+CFLAGS=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer  -Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -fpic -fPIC -Wall -Winline -O2 $(BIGFILES)
 
 OBJS= blocksort.o  \
       huffman.o    \

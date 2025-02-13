@@ -1,3 +1,13 @@
+cmake: /usr/lib/libcurl.so.4: no version information available (required by cmake)
+CMake Deprecation Warning at CMakeLists.txt:2 (CMAKE_MINIMUM_REQUIRED):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
 -- The C compiler identification is GNU 14.2.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
@@ -625,14 +635,21 @@
 -- Checking support for ARCHIVE_CRYPTO_SHA512_OPENSSL -- found
 -- Performing Test HAVE_VISIBILITY_ATTR
 -- Performing Test HAVE_VISIBILITY_ATTR - Success
--- Generating /home/kzl/makepkg/build/libarchive/src/libarchive/tmp/libarchive/test/list.h
--- Generating /home/kzl/makepkg/build/libarchive/src/libarchive/tmp/cat/test/list.h
--- Generating /home/kzl/makepkg/build/libarchive/src/libarchive/tmp/tar/test/list.h
--- Generating /home/kzl/makepkg/build/libarchive/src/libarchive/tmp/cpio/test/list.h
--- Generating /home/kzl/makepkg/build/libarchive/src/libarchive/tmp/unzip/test/list.h
--- Configuring done (25.4s)
+-- Generating /home/kzl/makepkg/build/libarchive/src/libarchive/build/libarchive/test/list.h
+-- Generating /home/kzl/makepkg/build/libarchive/src/libarchive/build/cat/test/list.h
+-- Generating /home/kzl/makepkg/build/libarchive/src/libarchive/build/tar/test/list.h
+-- Generating /home/kzl/makepkg/build/libarchive/src/libarchive/build/cpio/test/list.h
+-- Generating /home/kzl/makepkg/build/libarchive/src/libarchive/build/unzip/test/list.h
+-- Configuring done (31.7s)
 -- Generating done (0.1s)
--- Build files have been written to: /home/kzl/makepkg/build/libarchive/src/libarchive/tmp
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    CMAKE_CXX_FLAGS
+    CMAKE_INSTALL_LIBDIR
+
+
+-- Build files have been written to: /home/kzl/makepkg/build/libarchive/src/libarchive/build
 -- Cache values
 // Path to a library.
 ACL_LIBRARY:FILEPATH=/usr/lib/libacl.so
@@ -658,7 +675,7 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 // Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
-// Build Type
+// Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ...
 CMAKE_BUILD_TYPE:STRING=Release
 
 // Enable/Disable color output during build.
@@ -674,7 +691,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=
+CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -692,7 +709,7 @@ CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
 
 // Flags used by the linker during all build types.
-CMAKE_EXE_LINKER_FLAGS:STRING=
+CMAKE_EXE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during DEBUG builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
@@ -710,7 +727,7 @@ CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
 
 // Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=/usr/local
+CMAKE_INSTALL_PREFIX:PATH=/usr
 
 // Path to a program.
 CMAKE_LINKER:FILEPATH=/usr/bin/ld
@@ -719,7 +736,7 @@ CMAKE_LINKER:FILEPATH=/usr/bin/ld
 CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
 
 // Flags used by the linker during the creation of modules during all build types.
-CMAKE_MODULE_LINKER_FLAGS:STRING=
+CMAKE_MODULE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of modules during DEBUG builds.
 CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
@@ -749,7 +766,7 @@ CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
 CMAKE_READELF:FILEPATH=/usr/bin/readelf
 
 // Flags used by the linker during the creation of shared libraries during all build types.
-CMAKE_SHARED_LINKER_FLAGS:STRING=
+CMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of shared libraries during DEBUG builds.
 CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=

@@ -1,4 +1,6 @@
 new_version=$(git ls-remote --tags git://sourceware.org/git/bzip2.git | grep -oP '(?<=refs/tags/bzip2-)1\.0\.\d' | sort -V | tail -n1)
+srcdir=
+build_system=
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

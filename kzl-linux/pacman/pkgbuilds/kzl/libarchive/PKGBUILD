@@ -2,7 +2,7 @@
 
 pkgname=libarchive
 pkgver=3.7.7
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="A portable, efficient C library that can read and write streaming archives in a variety of formats"
 arch=('x86_64')
@@ -22,9 +22,10 @@ depends=(
 source=(git+https://github.com/libarchive/libarchive.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
-prepare() {
+build() {
   cd $pkgname
 
+  msg2 "Configuring..."
   cmake -LAH -S . -B build \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
@@ -44,12 +45,8 @@ prepare() {
     -D ENABLE_XATTR=ON \
     -D ENABLE_ZLIB=ON \
     -D ENABLE_ZSTD=ON
-}
 
-
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   cmake --build build
 }
 

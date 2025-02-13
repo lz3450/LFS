@@ -2,7 +2,7 @@
 
 pkgname=libxml2
 pkgver=2.13.5
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="the XML C parser and toolkit"
 arch=('x86_64')
@@ -16,9 +16,10 @@ source=(
 )
 sha256sums=('2266ea903ccad6558501b5e9ce6f9b47c4606c3b679b0f016bcbe0e33228684a')
 
-prepare() {
+build() {
   cd $pkgname
 
+  msg2 "Configuring..."
   cmake -LAH -S . -B build \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_INSTALL_PREFIX=/usr \
@@ -27,11 +28,8 @@ prepare() {
     -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
     -D LIBXML2_WITH_ICU=ON \
     -D LIBXML2_WITH_PYTHON=OFF
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   cmake --build build
 }
 

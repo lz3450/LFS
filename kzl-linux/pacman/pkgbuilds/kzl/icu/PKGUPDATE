@@ -1,6 +1,3 @@
 new_version=$(git ls-remote https://github.com/unicode-org/icu.git | grep -oP '(?<=refs/tags/release-)76(-\d+)?' | sort -V | tail -n1 | sed 's/-/./')
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname/icu4c/source"
-    ./configure --help >"$PKGBUILDDIR"/help.txt
-}
+srcdir="$pkgname/icu4c/source"
+build_system=autoconf
