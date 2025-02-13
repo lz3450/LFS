@@ -2,7 +2,7 @@
 
 pkgname=ca-certificates
 pkgver=2.72
-pkgrel=13
+pkgrel=14
 epoch=
 pkgdesc="CA certificates"
 arch=('any')

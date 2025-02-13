@@ -2,7 +2,7 @@
 
 pkgname=libffi
 pkgver=3.4.7
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="A Portable Foreign Function Interface Library"
 arch=('x86_64')
@@ -35,11 +35,12 @@ sha256sums=('138607dee268bdecf374adf9144c00e839e38541f75f24a1fcf18b78fda48b2d')
 build() {
   cd $pkgname-$pkgver
 
+  msg2 "Configuring..."
   ./configure \
     --prefix=/usr \
-    --disable-docs \
-    | tee config.txt
+    --disable-docs
 
+  msg2 "Compiling..."
   make
 }
 

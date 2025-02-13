@@ -2,7 +2,7 @@
 
 pkgname=p11-kit
 pkgver=0.25.5
-pkgrel=42
+pkgrel=54
 epoch=
 pkgdesc="Loads and enumerates PKCS#11 modules"
 arch=('x86_64')
@@ -18,9 +18,10 @@ makedepends=(
 source=(git+https://github.com/p11-glue/p11-kit.git#tag=$pkgver)
 sha256sums=('930b25ef02695046604eab4641626b4fde082157d1baf581f0e5e3732e89de1e')
 
-prepare() {
+build() {
   cd $pkgname
 
+  msg2 "Configuring..."
   meson setup \
     --prefix /usr \
     --auto-features disabled \
@@ -30,17 +31,9 @@ prepare() {
     -D systemd=enabled \
     -D trust_module=enabled \
     -D trust_paths=/etc/pki/ca-trust/source:/usr/share/pki/ca-trust-source \
-    -D pkcs11-json:bash_completion=enabled \
-    -D pkcs11-json:libffi=enabled \
-    -D pkcs11-json:systemd=enabled \
-    -D pkcs11-json:trust_module=enabled \
-    -D pkcs11-json:trust_paths=/etc/pki/ca-trust/source:/usr/share/pki/ca-trust-source \
     build
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   meson compile -C build
 }
 

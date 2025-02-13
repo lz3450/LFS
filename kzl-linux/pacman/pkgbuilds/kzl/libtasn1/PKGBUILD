@@ -2,7 +2,7 @@
 
 pkgname=libtasn1
 pkgver=4.20.0
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="The ASN.1 library used by GnuTLS, p11-kit"
 arch=('x86_64')
@@ -43,10 +43,12 @@ sha256sums=('92e0e3bd4c02d4aeee76036b2ddd83f0c732ba4cda5cb71d583272b23587a76c'
 build() {
   cd $pkgname-$pkgver
 
+  msg2 "Configuring..."
   ./configure \
     --prefix=/usr \
     --disable-doc
 
+  msg2 "Compiling..."
   make
 }
 
