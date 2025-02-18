@@ -25,6 +25,10 @@ prepare() {
   sed -i \
     -e '/create mask/s/0744/0644/' \
     ksmbd.conf.example
+}
+
+build() {
+  cd $pkgname
 
   meson setup \
     --prefix /usr \
@@ -35,10 +39,6 @@ prepare() {
     -D rundir=/run \
     -D systemdsystemunitdir=/usr/lib/systemd/system \
     build
-}
-
-build() {
-  cd $pkgname
 
   meson compile -C build
 }
