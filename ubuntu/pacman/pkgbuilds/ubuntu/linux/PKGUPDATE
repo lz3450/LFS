@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.kernel.org | grep -P -A 1 "<td>stable:</td>" | grep -oP '6\.12\.\d+' | sort -V | tail -n1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.kernel.org | grep -P -A 1 "<td>stable:</td>" | grep -oP '6\.13\.\d+' | sort -V | tail -n1)
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"

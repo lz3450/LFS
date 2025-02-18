@@ -2,8 +2,8 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=6.12.11
-pkgrel=42
+pkgver=6.13.3
+pkgrel=1
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -16,8 +16,8 @@ source=(
   update-kernel.sh
 )
 sha256sums=('SKIP'
-            '3a1be3a7d34fea6d9e852ed6aaf07df6115ddf7c50eea608418f5eb91f66aa45'
-            '6ab805d9344fc6734e41daab0bcd7d8db0fd0fd46474a6cda6619826c9f5bac0')
+            'a4a67f71c2f37f55d0d483292b84f23dc854891f0ced1c3b4b4a73bd07dec82e'
+            '5d9b124f6106ffc1a44957b1185cf8b078b51ac1151b8f9a8cdc27e8e9f8c5f8')
 
 export LOCALVERSION="-KZL"
 export KBUILD_BUILD_HOST="Ubuntu"

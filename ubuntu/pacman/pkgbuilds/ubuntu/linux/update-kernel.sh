@@ -23,4 +23,4 @@ update-initramfs -k all -c
 cp -v "$BOOT_DIR"/initrd.img "$BOOT_DIR"/efi/
 cp -v "$BOOT_DIR"/vmlinuz "$BOOT_DIR"/efi/
 cp -v "$BOOT_DIR"/initrd.img-@pkgver@-KZL "$BOOT_DIR"/efi/initrd-KZL.img
-cp -v "$BOOT_DIR"/vmlinuz-6.12.11-KZL "$BOOT_DIR"/efi/vmlinuz-KZL
+cp -v "$BOOT_DIR"/vmlinuz-@pkgver@-KZL "$BOOT_DIR"/efi/vmlinuz-KZL
