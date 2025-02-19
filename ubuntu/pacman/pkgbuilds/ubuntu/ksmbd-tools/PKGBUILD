@@ -2,7 +2,7 @@
 
 pkgname=ksmbd-tools
 pkgver=3.5.3.g2
-pkgrel=6
+pkgrel=8
 epoch=
 pkgdesc="A collection of userspace utilities for the ksmbd kernel server"
 arch=('x86_64')
@@ -30,6 +30,7 @@ prepare() {
 build() {
   cd $pkgname
 
+  msg2 "Configuring..."
   meson setup \
     --prefix /usr \
     --auto-features disabled \
@@ -40,6 +41,7 @@ build() {
     -D systemdsystemunitdir=/usr/lib/systemd/system \
     build
 
+  msg2 "Compiling..."
   meson compile -C build
 }
 
