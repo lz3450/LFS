@@ -25,6 +25,7 @@ sudo ./nvidia-installer \
     --expert \
     --log-file-name="$HOME"/log/nvidia-driver-install.log \
     --kernel-name=$(uname -r) \
+    --no-backup \
     --disable-nouveau \
     --no-distro-scripts \
     --no-wine-files \
@@ -33,9 +34,7 @@ sudo ./nvidia-installer \
     --concurrency-level=$(nproc) \
     --install-libglvnd \
     --systemd \
-    --kernel-module-type=open \
     --no-rebuild-initramfs
 
+sudo rm -vf /usr/lib/modprobe.d/nvidia-installer-disable-nouveau.conf
 echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
-
-# printf "%s" "blacklist nouveau" | sudo install -Dm644 /dev/stdin /etc/modprobe.d/nouveau_blacklist.conf
