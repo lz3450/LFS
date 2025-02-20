@@ -49,11 +49,11 @@ dpkg-dev
 dracut-install
 e2fsprogs
 eject
-ethtool
 f2fs-tools
 fakeroot
 fdisk
 findutils
+fonts-ubuntu
 g++
 g++-13
 g++-13-x86-64-linux-gnu
@@ -64,11 +64,14 @@ gcc-13-base
 gcc-13-x86-64-linux-gnu
 gcc-14-base
 gcc-x86-64-linux-gnu
-gettext-base
 gir1.2-girepository-2.0
 gir1.2-glib-2.0
 git
 git-man
+gnome-shell-extension-ubuntu-dock
+gnome-shell-extension-ubuntu-tiling-assistant
+gnome-system-monitor
+gnome-terminal
 gnupg
 gnupg-utils
 gpg
@@ -77,6 +80,7 @@ gpgconf
 gpgsm
 gpgv
 grep
+gsettings-ubuntu-schemas
 gzip
 hostname
 init
@@ -95,6 +99,7 @@ keyboxd
 klibc-utils
 kmod
 krb5-locales
+landscape-client
 less
 libacl1
 libaio1t64
@@ -264,6 +269,7 @@ libyaml-0-2
 libzstd1
 linux-base
 linux-firmware
+linux-image-generic
 linux-libc-dev
 locales
 login
@@ -277,6 +283,7 @@ mawk
 media-types
 mount
 nano
+nautilus
 ncurses-base
 ncurses-bin
 netbase
@@ -331,8 +338,12 @@ systemd-sysv
 systemd-timesyncd
 sysvinit-utils
 tar
+tmux
 tzdata
 ubuntu-keyring
+ubuntu-session
+ubuntu-settings
+ubuntu-wallpapers
 ucf
 udev
 util-linux
@@ -347,6 +358,10 @@ xfsprogs
 xkb-data
 xxd
 xz-utils
+yaru-theme-gnome-shell
+yaru-theme-gtk
+yaru-theme-icon
+yaru-theme-sound
 zlib1g
 zsh
 zsh-autosuggestions

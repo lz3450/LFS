@@ -16,7 +16,7 @@ apt-get autoremove --purge -y
 dpkg-reconfigure locales
 dpkg-reconfigure tzdata
 
-dpkg --get-selections | awk '{print $1}' | sed -e '/^linux-image-.+/d' -e '/^linux-modules-.+/d' \
+dpkg --get-selections | awk '{print $1}' | sed -e '/^linux-image-.+/d' -e '/^linux-modules-.+/d' -e 's/:amd64//g' \
   > bootstrap-installed-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
 
 ###############################################################################

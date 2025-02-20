@@ -43,7 +43,8 @@ apt-get purge -y \
   whoopsie
 apt-get autoremove --purge -y
 
-dpkg --get-selections | awk '{print $1}' > desktop-installed-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
+dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > desktop-installed-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
+apt-mark showmanual > manual-installed-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
 
 # disable automount
 gsettings set org.gnome.desktop.media-handling automount false
