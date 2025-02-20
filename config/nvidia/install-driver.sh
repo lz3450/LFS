@@ -3,32 +3,38 @@
 # install-driver.sh
 #
 
+set -e
+
 workdir=/tmp/nvidia
 pkgname=nvidia
 pkgver=565.77
 source=https://us.download.nvidia.com/XFree86/Linux-x86_64/$pkgver/NVIDIA-Linux-x86_64-$pkgver.run
+runfile="$HOME/Downloads/NVIDIA-Linux-x86_64-$pkgver.run"
 
-set -e
-
-if [[ ! -f "$HOME/Downloads/NVIDIA-Linux-x86_64-$pkgver.run" ]]; then
+if [[ ! -f "$runfile" ]]; then
     wget -P "$HOME/Downloads" "$source"
 fi
 
 sudo rm -rf "$workdir"
-bash "$HOME/Downloads/NVIDIA-Linux-x86_64-$pkgver.run" --extract-only --target "$workdir"
-cd "$workdir"
+bash "$runfile" -A > driver-help.txt
+bash "$runfile" --extract-only --target "$workdir"
 
+cd "$workdir"
 sudo ./nvidia-installer \
     --accept-license \
     --expert \
-    --no-install-compat32-libs \
     --log-file-name="$HOME"/log/nvidia-driver-install.log \
-    --run-nvidia-xconfig \
+    --kernel-name=$(uname -r) \
+    --disable-nouveau \
     --no-distro-scripts \
     --no-wine-files \
     --no-dkms \
     --no-check-for-alternate-installs \
-    -j $(nproc)
+    --concurrency-level=$(nproc) \
+    --install-libglvnd \
+    --systemd \
+    --kernel-module-type=open \
+    --no-rebuild-initramfs
 
 echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
 
