@@ -42,7 +42,7 @@ fi
 # LC_ALL=C comm -23 /tmp/found_files.txt "$DPKG_MANAGED_FILES" >> "$DPKG_NOT_MANAGED_FILES"
 
 ### /etc
-find /etc \
+sudo find /etc \
     \( -type d \( \
         -path /etc/ssl/certs -o \
         -path /etc/pam.d \
@@ -100,6 +100,24 @@ find /usr/share \
         -path '*/__pycache__' \
     \) -prune \) -o \
     \( -type f -o -type l \) \
+    -print \
+    | LC_ALL=C sort -u > /tmp/found_files.txt
+LC_ALL=C comm -23 /tmp/found_files.txt "$DPKG_MANAGED_FILES" >> "$DPKG_NOT_MANAGED_FILES"
+
+### /var
+sudo find /var \
+    \( -type d \( \
+        -path /var/lib/apt -o \
+        -path /var/lib/dpkg -o \
+        -path /var/lib/pacman -o \
+        -path /var/lib/docker -o \
+        -path /var/cache -o \
+        -path /var/tmp -o \
+        -path /var/log \
+    \) -prune \) -o \
+    \( -type f -o -type l \) ! \( \
+        -wholename /var/spool/mail \
+    \) \
     -print \
     | LC_ALL=C sort -u > /tmp/found_files.txt
 LC_ALL=C comm -23 /tmp/found_files.txt "$DPKG_MANAGED_FILES" >> "$DPKG_NOT_MANAGED_FILES"
