@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=filesystem
-pkgver=2025.01.11
-pkgrel=3
+pkgver=2025.03.01
+pkgrel=1
 epoch=
 pkgdesc="Root file system"
 arch=('any')

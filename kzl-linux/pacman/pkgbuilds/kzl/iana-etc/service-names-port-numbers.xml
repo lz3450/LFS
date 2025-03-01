@@ -4,7 +4,7 @@
 <registry xmlns="http://www.iana.org/assignments" id="service-names-port-numbers">
   <title>Service Name and Transport Protocol Port Number Registry</title>
   <category>Service Names and Transport Protocol Port Numbers</category>
-  <updated>2024-12-20</updated>
+  <updated>2025-02-25</updated>
   <xref type="rfc" data="rfc6335"/>
   <expert>TCP/UDP: Joe Touch; Eliot Lear, Kumiko Ono, Wes Eddy, Brian Trammell, 
 Jana Iyengar, and Michael Scharf
@@ -77,31 +77,29 @@ or prior to IANA registration.
     <description>TCP Port Service Multiplexer</description>
     <number>1</number>
   </record>
-  <record>
-    <name>compressnet</name>
+  <record updated="2025-02-13">
     <protocol>tcp</protocol>
-    <description>Management Utility</description>
+    <description>Reserved</description>
     <number>2</number>
+    <note>De-assigned on 2025-02-13, previously compressnet by <xref type="person" data="Bernie_Volz"/></note>
   </record>
-  <record>
-    <name>compressnet</name>
+  <record updated="2025-02-13">
     <protocol>udp</protocol>
-    <description>Management Utility</description>
+    <description>Reserved</description>
     <number>2</number>
+    <note>De-assigned on 2025-02-13, previously compressnet by <xref type="person" data="Bernie_Volz"/></note>
   </record>
-  <record>
-    <name>compressnet</name>
+  <record updated="2025-02-13">
     <protocol>tcp</protocol>
-    <xref type="person" data="Bernie_Volz"/>
-    <description>Compression Process</description>
+    <description>Reserved</description>
     <number>3</number>
+    <note>De-assigned on 2025-02-13, previously compressnet by <xref type="person" data="Bernie_Volz"/></note>
   </record>
-  <record>
-    <name>compressnet</name>
+  <record updated="2025-02-13">
     <protocol>udp</protocol>
-    <xref type="person" data="Bernie_Volz"/>
-    <description>Compression Process</description>
+    <description>Reserved</description>
     <number>3</number>
+    <note>De-assigned on 2025-02-13, previously compressnet by <xref type="person" data="Bernie_Volz"/></note>
   </record>
   <record>
     <protocol>tcp</protocol>
@@ -42848,15 +42846,15 @@ common service discovery mechanisms.</note>
     <description>Datusorb</description>
     <number>3282</number>
   </record>
-  <record updated="2011-11-09">
-    <name>Apple Remote Desktop (Net Assistant)</name>
+  <record updated="2025-01-23">
+    <name>net-assistant</name>
     <protocol>tcp</protocol>
     <xref type="person" data="Michael_Stein"/>
     <description>Net Assistant</description>
     <number>3283</number>
   </record>
-  <record updated="2011-11-09">
-    <name>Apple Remote Desktop (Net Assistant)</name>
+  <record updated="2025-01-23">
+    <name>net-assistant</name>
     <protocol>udp</protocol>
     <xref type="person" data="Michael_Stein"/>
     <description>Net Assistant</description>
@@ -48291,15 +48289,15 @@ common service discovery mechanisms.</note>
     <description>DataGuardianLT</description>
     <number>3678</number>
   </record>
-  <record updated="2011-11-09">
-    <name>Escale (Newton Dock)</name>
+  <record updated="2025-01-23">
+    <name>newton-dock</name>
     <protocol>tcp</protocol>
     <description>Newton Dock</description>
     <xref type="person" data="Paul_Guyot"/>
     <number>3679</number>
   </record>
-  <record updated="2011-11-09">
-    <name>Escale (Newton Dock)</name>
+  <record updated="2025-01-23">
+    <name>newton-dock</name>
     <protocol>udp</protocol>
     <description>Newton Dock</description>
     <xref type="person" data="Paul_Guyot"/>
@@ -93940,9 +93938,9 @@ common service discovery mechanisms.</note>
     <assignee>
       <xref type="person" data="IESG"/>
     </assignee>
-    <description>Bootstrapping Remote Secure Key Infrastructure registrar with CMP
-      capabilities according to the Lightweight CMP Profile (LCMPP,
-      <xref type="rfc" data="rfc9483"/>)</description>
+    <description> Bootstrapping Remote Secure Key Infrastructure
+registrar with CMP capabilities according to the Lightweight CMP
+Profile (LCMPP) <xref type="rfc" data="rfc9483"/></description>
 	<xref type="draft" data="RFC-ietf-anima-brski-ae-13"/>
     <note>Defined TXT keys: None</note>
     <xref type="person" data="IETF_Chair"/>
@@ -94193,6 +94191,26 @@ common service discovery mechanisms.</note>
     <description>ElectraStar media centre control protocol</description>
     <note>Defined TXT keys: None</note>
     <xref type="person" data="OC"/>
+  </record>
+  <record updated="2025-02-13">
+    <name>compressnet</name>
+    <protocol>tcp</protocol>
+    <assignee>
+      <xref type="person" data="Bernie_Volz"/>
+    </assignee>
+    <description>Management Utility/Compression Process</description>
+    <note>Defined TXT keys: None</note>
+    <xref type="person" data="Bernie_Volz"/>
+  </record>
+  <record updated="2025-02-13">
+    <name>compressnet</name>
+    <protocol>udp</protocol>
+    <assignee>
+      <xref type="person" data="Bernie_Volz"/>
+    </assignee>
+    <description>Management Utility/Compression Process</description>
+    <note>Defined TXT keys: None</note>
+    <xref type="person" data="Bernie_Volz"/>
   </record>
   <record date="2019-04-22">
     <name>conecube</name>
@@ -97608,6 +97626,20 @@ There is no possibility of name conflict because (by definition) GUIDs are globa
     <description>Local and remote file transfers</description>
     <note>Defined TXT keys: _payload._tcp.local, _payload._udp.local</note>
     <xref type="person" data="Didrik_Nordström"/>
+  </record>
+  <record date="2025-01-13">
+    <name>pblr</name>
+    <protocol>tcp</protocol>
+    <assignee>
+      <xref type="person" data="Prodrive_Technologies_NE_B.V."/>
+    </assignee>
+    <description>Peblar EV charger</description>
+    <note>Defined TXT keys: 
+enabled=&lt;true|false&gt; API is enabled/disabled
+accmode=&lt;read|readwrite&gt; Access mode of the API
+version=&lt;x.y&gt; API version
+sn=&lt;sn&gt; Serial number of the product</note>
+    <xref type="person" data="Pieter_Voorthuijsen"/>
   </record>
   <record>
     <name>pgpkey-hkp</name>
@@ -119171,6 +119203,12 @@ implementations.  See RFC 3692 for details.</footnote>
       <uri>mailto:ph&amp;imatix.com</uri>
       <updated>2012-12-17</updated>
     </person>
+    <person id="Pieter_Voorthuijsen">
+      <name>Pieter Voorthuijsen</name>
+      <org>Prodrive Technologies NE B.V.</org>
+      <uri>mailto:pieter.voorthuijsen&amp;prodrive-technologies.com</uri>
+      <updated>2025-01-13</updated>
+    </person>
     <person id="Pilz_GmbH_and_Co._KG">
       <org>Pilz GmbH &amp; Co. KG</org>
       <uri>mailto:m.holzaepfel&amp;pilz.de</uri>
@@ -119320,6 +119358,11 @@ implementations.  See RFC 3692 for details.</footnote>
       <name>ProControl Technology AB</name>
       <uri>mailto:info&amp;pctworld.com</uri>
       <updated>2004-12</updated>
+    </person>
+    <person id="Prodrive_Technologies_NE_B.V.">
+      <name>Prodrive Technologies NE B.V.</name>
+      <uri>mailto:pieter.voorthuijsen&amp;prodrive-technologies.com</uri>
+      <updated>2025-01-13</updated>
     </person>
     <person id="Professor_Paul_S_Wa">
       <name>Professor Paul S. Wang</name>
