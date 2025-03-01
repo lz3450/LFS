@@ -364,6 +364,7 @@
         "strictatime",
         "SUBDIRS",
         "subgid",
+        "subprojects",
         "subuid",
         "sumtypes",
         "SUPATH",
