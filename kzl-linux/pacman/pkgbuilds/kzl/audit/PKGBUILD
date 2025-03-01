@@ -2,7 +2,7 @@
 
 pkgname=audit
 pkgver=4.0.3
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="User space components of the audit framework"
 arch=('x86_64')
@@ -36,7 +36,7 @@ prepare() {
 build() {
   cd audit-userspace
 
-  ./configure -C \
+  ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
     --with-io_uring \

@@ -1,6 +1,3 @@
 new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.swig.org/ | grep -oP '(?<=SWIG-)\d\.\d\.\d' | head -n1)
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
-}
+srcdir="$pkgname"
+build_system=autoconf
