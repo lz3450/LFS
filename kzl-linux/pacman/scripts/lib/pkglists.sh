@@ -107,6 +107,7 @@ kzl_stage2_pkgs=(
     bzip2
     icu libxml2
     libarchive
+
     libuv rhash jsoncpp cmake
 
     ################################
