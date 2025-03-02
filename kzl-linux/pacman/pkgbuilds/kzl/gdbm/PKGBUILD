@@ -2,13 +2,15 @@
 
 pkgname=gdbm
 pkgver=1.24
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="A library of database functions that use extensible hashing and work similar to the standard UNIX dbm"
 arch=('x86_64')
 url="https://www.gnu.org/software/gdbm/gdbm.html"
 license=('KZL')
-depends=(readline)
+depends=(
+  readline
+)
 makedepends=(
   libtool
 )
@@ -24,7 +26,7 @@ prepare() {
 build() {
   cd $pkgname
 
-  ./configure -C \
+  ./configure \
     --prefix=/usr
 
   make

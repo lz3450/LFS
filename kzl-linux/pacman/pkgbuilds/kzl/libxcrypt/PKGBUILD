@@ -2,7 +2,7 @@
 
 pkgname=libxcrypt
 pkgver=4.4.38
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Modern library for one-way hashing of passwords"
 arch=('x86_64')
