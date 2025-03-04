@@ -36,16 +36,18 @@ VCSCLIENTS=('bzr::breezy'
 CARCH="@CARCH@"
 CHOST="@CHOST@"
 
-#NPROC=2
+PREFIX="opt"
+
+NPROC="$(nproc)"
 
 #-- Compiler and Linker Flags
 CPPFLAGS=""
 CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
 CXXFLAGS="$CFLAGS"
-LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now"
-LTOFLAGS="-flto"
+LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -Wl,-rpath,/opt/lib"
+LTOFLAGS="-flto -ffat-lto-objects"
 #-- Make Flags: change this for DistCC/SMP systems
-MAKEFLAGS="-j$(nproc) -O"
+MAKEFLAGS="-O"
 #-- Debugging flags
 DEBUG_CFLAGS="-g"
 DEBUG_CXXFLAGS="$DEBUG_CFLAGS"
@@ -92,7 +94,7 @@ BUILDDIR="$HOME/makepkg/build"
 #-- lto:        Add compile flags for building with link time optimization
 #-- autodeps:   Automatically add depends/provides
 #
-OPTIONS=(strip docs !libtool staticlibs emptydirs zipman purge !debug !lto !autodeps)
+OPTIONS=(strip docs !libtool staticlibs emptydirs zipman purge !debug lto !autodeps)
 
 #-- File integrity checks to use. Valid: ck, md5, sha1, sha224, sha256, sha384, sha512, b2
 INTEGRITY_CHECK=(sha256)

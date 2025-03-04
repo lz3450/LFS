@@ -1,16 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g39
-pkgrel=4
+pkgver=7.0.0.g40
+pkgrel=33
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
 license=('KZL')
 backup=(
-  usr/local/etc/makepkg.conf
-  usr/local/etc/makepkg.conf.d/rust.conf
-  usr/local/etc/pacman.conf
+  "$PREFIX/etc/makepkg.conf"
+  "$PREFIX/etc/makepkg.conf.d/rust.conf"
+  "$PREFIX/etc/pacman.conf"
 )
 # _ref="v$pkgver"
 # source=(git+https://gitlab.archlinux.org/pacman/pacman.git#tag=$_ref)
@@ -24,6 +24,12 @@ source=(
 )
 sha256sums=('SKIP')
 
+# Compare the output of `gcc -march=native -Q --help=target` in the host system and the build system
+# Order of options matters
+# MAKEPKG_CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"
+MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
+MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"
+
 pkgver() {
   cd $pkgname
 
@@ -34,12 +40,14 @@ prepare() {
   cd $pkgname
 
   sed -i \
+      -e '/^CHOST=/a\\n\PREFIX="opt"' \
+      -e '/^#NPROC=/c\NPROC="$(nproc)"' \
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
-      -e '/^#CFLAGS=/c\CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"' \
+      -e "/^#CFLAGS=/c\CFLAGS=\"$MAKEPKG_CFLAGS\"" \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
-      -e '/^#LDFLAGS=/c\LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now"' \
-      -e '/^#LTOFLAGS=/s/^#//' \
-      -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
+      -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS -Wl,-rpath,/$PREFIX/lib\"" \
+      -e '/^#LTOFLAGS=/c\LTOFLAGS="-flto -ffat-lto-objects"' \
+      -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-O"' \
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="$DEBUG_CFLAGS"' \
       -e '/^#BUILDDIR=/c\BUILDDIR="$HOME/makepkg/build"' \
@@ -50,6 +58,7 @@ prepare() {
       -e '/^#LOGDEST=/c\LOGDEST="$HOME/makepkg/makepkglogs"' \
       -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
       -e '/^OPTIONS=/s/libtool/!libtool/' \
+      -e '/^OPTIONS=/s/!lto/lto/' \
       etc/makepkg.conf.in
 
   sed -i \
@@ -63,13 +72,18 @@ prepare() {
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
 EOF
+}
 
+build() {
+  cd $pkgname
+
+  msg2 "Configuring..."
   meson setup \
-    --prefix /usr/local \
+    --prefix "/$PREFIX" \
+    --libdir lib \
     --sysconfdir etc \
+    --auto-features disabled \
     --buildtype plain \
-    -D b_lto=true \
-    -D b_pie=true \
     -D buildstatic=false \
     -D crypto=openssl \
     -D curl=enabled \
@@ -83,11 +97,8 @@ EOF
     -D src-ext='.src.tar.zst' \
     -D use-git-version=false \
     build
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   meson compile -C build
 }
 
@@ -102,5 +113,5 @@ package() {
 
   meson install -C build --destdir "$pkgdir"
 
-  rm -vr "$pkgdir"/usr/share
+  rm -vr "$pkgdir"/usr
 }

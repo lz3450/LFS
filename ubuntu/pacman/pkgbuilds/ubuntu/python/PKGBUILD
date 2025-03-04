@@ -2,7 +2,7 @@
 
 pkgname=python
 pkgver=3.13.2
-pkgrel=1
+pkgrel=9
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
@@ -11,26 +11,33 @@ license=('KZL')
 source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
 sha256sums=('e90c9ff14ac99037c6a0d5cfd03c542a29c823d10ada600b3f76d63899458ace')
 
+PREFIX="opt"
+
 build() {
   cd cpython
 
   CFLAGS="${CFLAGS/-O2/-O3}"
 
+  msg2 "Configuring..."
   ./configure \
-    --prefix=/usr/local \
-    --enable-shared \
-    --enable-optimizations \
-    --enable-loadable-sqlite-extensions \
-    --enable-ipv6 \
+    --prefix="/$PREFIX" \
+    --enable-shared=yes \
+    --enable-optimizations=yes \
+    --enable-loadable-sqlite-extensions=yes \
+    --enable-ipv6=yes \
+    --enable-big-digits=30 \
     --with-pkg-config=yes \
     --with-lto=yes \
+    --with-tzpath=/usr/share/zoneinfo \
     --with-system-expat=yes \
     --with-system-libmpdec=no \
+    --with-decimal-contextvar=yes \
     --with-dbmliborder=gdbm:ndbm \
     --with-doc-strings=yes \
     --with-readline=editline \
     --with-ensurepip=no
 
+  msg2 "Compiling..."
   make
 }
 
@@ -39,6 +46,6 @@ package() {
 
   make DESTDIR="$pkgdir" install
 
-  find "$pkgdir"/usr/local/bin -type l -exec rm -v {} \;
-  rm -vr "$pkgdir/usr/local/lib/python${pkgver%.*}"/{test,idlelib/idle_test}
+  find "$pkgdir"/$PREFIX/bin -type l -exec rm -v {} \;
+  rm -vr "$pkgdir/$PREFIX/lib/python${pkgver%.*}"/{test,idlelib/idle_test}
 }
