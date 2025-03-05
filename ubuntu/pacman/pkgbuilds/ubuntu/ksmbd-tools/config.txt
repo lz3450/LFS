@@ -29,10 +29,8 @@ ksmbd-tools 3.5.3
 
   User defined options
     auto_features       : disabled
-    b_lto               : true
-    b_pie               : true
     buildtype           : plain
-    prefix              : /usr
+    prefix              : /opt
     rundir              : /run
     systemdsystemunitdir: /usr/lib/systemd/system
 

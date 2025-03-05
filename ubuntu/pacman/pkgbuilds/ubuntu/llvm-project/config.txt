@@ -1,15 +1,27 @@
--- The C compiler identification is GNU 13.3.0
--- The CXX compiler identification is GNU 13.3.0
--- The ASM compiler identification is GNU
--- Found assembler: /usr/bin/cc
+CMake Deprecation Warning at /home/kzl/makepkg/build/llvm-project/src/llvm-project/cmake/Modules/CMakePolicy.cmake:6 (cmake_policy):
+  The OLD behavior for policy CMP0116 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (include)
+
+
+-- The C compiler identification is Clang 20.1.0
+-- The CXX compiler identification is Clang 20.1.0
+-- The ASM compiler identification is Clang with GNU-like command-line
+-- Found assembler: /opt/bin/clang
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
--- Check for working C compiler: /usr/bin/cc - skipped
+-- Check for working C compiler: /opt/bin/clang - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Check for working CXX compiler: /opt/bin/clang++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
 -- bolt project is disabled
@@ -26,7 +38,15 @@
 -- polly project is disabled
 -- pstl project is disabled
 -- flang project is disabled
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Found Z3: /usr/lib/x86_64-linux-gnu/libz3.so (found suitable version "4.8.12", minimum required is "4.8.9") 
 -- Found Python3: /usr/bin/python3 (found suitable version "3.12.3", minimum required is "3.0") found components: Interpreter 
+-- Performing Test LLVM_LIBSTDCXX_MIN
+-- Performing Test LLVM_LIBSTDCXX_MIN - Success
+-- Performing Test LLVM_LIBSTDCXX_SOFT_ERROR
+-- Performing Test LLVM_LIBSTDCXX_SOFT_ERROR - Success
 -- Looking for __GLIBC__
 -- Looking for __GLIBC__ - found
 -- Looking for valgrind/valgrind.h
@@ -53,9 +73,6 @@
 -- Looking for shm_open in rt - found
 -- Looking for pfm_initialize in pfm
 -- Looking for pfm_initialize in pfm - not found
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
--- Found Threads: TRUE  
 -- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.3")  
 -- Looking for compress2
 -- Looking for compress2 - found
@@ -73,7 +90,7 @@
 -- backtrace facility detected in default set of libraries
 -- Found Backtrace: /usr/include  
 -- Performing Test C_SUPPORTS_WERROR_UNGUARDED_AVAILABILITY_NEW
--- Performing Test C_SUPPORTS_WERROR_UNGUARDED_AVAILABILITY_NEW - Failed
+-- Performing Test C_SUPPORTS_WERROR_UNGUARDED_AVAILABILITY_NEW - Success
 -- Looking for __register_frame
 -- Looking for __register_frame - found
 -- Looking for __deregister_frame
@@ -152,6 +169,8 @@
 -- Found Python module pygments.lexers.c_cpp
 -- Found Python module yaml
 -- LLVM default target triple: x86_64-unknown-linux-gnu
+-- Performing Test CXX_SUPPORTS_CUSTOM_LINKER
+-- Performing Test CXX_SUPPORTS_CUSTOM_LINKER - Success
 -- Performing Test C_SUPPORTS_FPIC
 -- Performing Test C_SUPPORTS_FPIC - Success
 -- Performing Test CXX_SUPPORTS_FPIC
@@ -164,33 +183,63 @@
 -- Performing Test SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG
 -- Performing Test SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG - Success
 -- Performing Test C_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG
--- Performing Test C_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG - Failed
+-- Performing Test C_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG - Success
 -- Performing Test CXX_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG
--- Performing Test CXX_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG - Failed
+-- Performing Test CXX_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG - Success
 -- Performing Test CXX_SUPPORTS_SUGGEST_OVERRIDE_FLAG
 -- Performing Test CXX_SUPPORTS_SUGGEST_OVERRIDE_FLAG - Success
 -- Performing Test CXX_WSUGGEST_OVERRIDE_ALLOWS_ONLY_FINAL
 -- Performing Test CXX_WSUGGEST_OVERRIDE_ALLOWS_ONLY_FINAL - Success
 -- Performing Test C_WCOMMENT_ALLOWS_LINE_WRAP
--- Performing Test C_WCOMMENT_ALLOWS_LINE_WRAP - Failed
+-- Performing Test C_WCOMMENT_ALLOWS_LINE_WRAP - Success
+-- Performing Test C_SUPPORTS_MISLEADING_INDENTATION_FLAG
+-- Performing Test C_SUPPORTS_MISLEADING_INDENTATION_FLAG - Success
+-- Performing Test CXX_SUPPORTS_MISLEADING_INDENTATION_FLAG
+-- Performing Test CXX_SUPPORTS_MISLEADING_INDENTATION_FLAG - Success
 -- Performing Test C_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG
--- Performing Test C_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG - Failed
+-- Performing Test C_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG - Success
 -- Performing Test CXX_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG
 -- Performing Test CXX_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG - Success
 -- Performing Test LINKER_SUPPORTS_COLOR_DIAGNOSTICS
--- Performing Test LINKER_SUPPORTS_COLOR_DIAGNOSTICS - Failed
+-- Performing Test LINKER_SUPPORTS_COLOR_DIAGNOSTICS - Success
 -- Looking for os_signpost_interval_begin
 -- Looking for os_signpost_interval_begin - not found
--- Linker detection: GNU ld
+-- Linker detection: LLD
 -- Performing Test HAS_WERROR_GLOBAL_CTORS
--- Performing Test HAS_WERROR_GLOBAL_CTORS - Failed
+-- Performing Test HAS_WERROR_GLOBAL_CTORS - Success
+-- Performing Test LLVM_HAS_NOGLOBAL_CTOR_MUTEX
+-- Performing Test LLVM_HAS_NOGLOBAL_CTOR_MUTEX - Success
 -- Looking for __x86_64__
 -- Looking for __x86_64__ - found
 -- Found Git: /usr/bin/git (found version "2.43.0") 
 -- Looking for logf128
--- Looking for logf128 - found
+-- Looking for logf128 - not found
 -- Targeting X86
+CMake Deprecation Warning at /home/kzl/makepkg/build/llvm-project/src/llvm-project/cmake/Modules/CMakePolicy.cmake:6 (cmake_policy):
+  The OLD behavior for policy CMP0116 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+Call Stack (most recent call first):
+  /home/kzl/makepkg/build/llvm-project/src/llvm-project/lld/CMakeLists.txt:7 (include)
+
+
 -- LLD version: 20.1.0
+CMake Deprecation Warning at /home/kzl/makepkg/build/llvm-project/src/llvm-project/cmake/Modules/CMakePolicy.cmake:6 (cmake_policy):
+  The OLD behavior for policy CMP0116 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+Call Stack (most recent call first):
+  /home/kzl/makepkg/build/llvm-project/src/llvm-project/clang/CMakeLists.txt:7 (include)
+
+
 -- Looking for sys/resource.h
 -- Looking for sys/resource.h - found
 -- Looking for dlfcn.h
@@ -201,10 +250,10 @@
 -- Looking for include file sys/inotify.h
 -- Looking for include file sys/inotify.h - found
 -- Performing Test HAVE_LINKER_FLAG_LONG_PLT
--- Performing Test HAVE_LINKER_FLAG_LONG_PLT - Failed
--- Configuring done (4.8s)
+-- Performing Test HAVE_LINKER_FLAG_LONG_PLT - Success
+-- Configuring done (7.2s)
 -- Generating done (0.6s)
--- Build files have been written to: /home/kzl/makepkg/build/llvm-project/src/llvm-project/tmp
+-- Build files have been written to: /home/kzl/makepkg/build/llvm-project/src/llvm-project/build
 -- Cache values
 // Default URL where bug reports are to be submitted.
 BUG_REPORT_URL:STRING=https://github.com/llvm/llvm-project/issues/
@@ -441,19 +490,22 @@ CLANG_VENDOR:STRING=
 CLANG_VENDOR_UTI:STRING=org.llvm.clang
 
 // Path to a program.
-CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
+CMAKE_ADDR2LINE:FILEPATH=/opt/bin/llvm-addr2line
 
 // Path to a program.
-CMAKE_AR:FILEPATH=/usr/bin/ar
+CMAKE_AR:FILEPATH=/opt/bin/llvm-ar
 
 // ASM compiler
-CMAKE_ASM_COMPILER:FILEPATH=/usr/bin/cc
+CMAKE_ASM_COMPILER:FILEPATH=/opt/bin/clang
 
-// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_ASM_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
+// LLVM archiver
+CMAKE_ASM_COMPILER_AR:FILEPATH=/opt/bin/llvm-ar
 
-// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_ASM_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
+// `clang-scan-deps` dependency scanner
+CMAKE_ASM_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/opt/bin/clang-scan-deps
+
+// Generate index for LLVM archive
+CMAKE_ASM_COMPILER_RANLIB:FILEPATH=/opt/bin/llvm-ranlib
 
 // Flags used by the ASM compiler during all build types.
 CMAKE_ASM_FLAGS:STRING=
@@ -480,16 +532,19 @@ CMAKE_CXX_ARCHIVE_CREATE:STRING=<CMAKE_AR> Dqc <TARGET> <LINK_FLAGS> <OBJECTS>
 CMAKE_CXX_ARCHIVE_FINISH:STRING=<CMAKE_RANLIB> -D <TARGET>
 
 // CXX compiler
-CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
+CMAKE_CXX_COMPILER:STRING=/opt/bin/clang++
 
-// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-13
+// LLVM archiver
+CMAKE_CXX_COMPILER_AR:FILEPATH=/opt/bin/llvm-ar
 
-// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-13
+// `clang-scan-deps` dependency scanner
+CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/opt/bin/clang-scan-deps
+
+// Generate index for LLVM archive
+CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/opt/bin/llvm-ranlib
 
 // Flags used by the CXX compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer
+CMAKE_CXX_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the CXX compiler during DEBUG builds.
 CMAKE_CXX_FLAGS_DEBUG:STRING=-g
@@ -513,16 +568,19 @@ CMAKE_C_ARCHIVE_CREATE:STRING=<CMAKE_AR> Dqc <TARGET> <LINK_FLAGS> <OBJECTS>
 CMAKE_C_ARCHIVE_FINISH:STRING=<CMAKE_RANLIB> -D <TARGET>
 
 // C compiler
-CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
+CMAKE_C_COMPILER:STRING=/opt/bin/clang
 
-// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-13
+// LLVM archiver
+CMAKE_C_COMPILER_AR:FILEPATH=/opt/bin/llvm-ar
 
-// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-13
+// `clang-scan-deps` dependency scanner
+CMAKE_C_COMPILER_CLANG_SCAN_DEPS:FILEPATH=/opt/bin/clang-scan-deps
+
+// Generate index for LLVM archive
+CMAKE_C_COMPILER_RANLIB:FILEPATH=/opt/bin/llvm-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer
+CMAKE_C_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -537,10 +595,10 @@ CMAKE_C_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 // Path to a program.
-CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
+CMAKE_DLLTOOL:FILEPATH=/opt/bin/llvm-dlltool
 
 // Flags used by the linker during all build types.
-CMAKE_EXE_LINKER_FLAGS:STRING=
+CMAKE_EXE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -Wl,-rpath,/opt/lib -flto -ffat-lto-objects
 
 // Flags used by the linker during DEBUG builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
@@ -609,13 +667,13 @@ CMAKE_INSTALL_SHAREDSTATEDIR:PATH=com
 CMAKE_INSTALL_SYSCONFDIR:PATH=etc
 
 // Path to a program.
-CMAKE_LINKER:FILEPATH=/usr/bin/ld
+CMAKE_LINKER:FILEPATH=/opt/bin/ld.lld
 
 // Program used to build from build.ninja files.
 CMAKE_MAKE_PROGRAM:FILEPATH=/home/kzl/.local/bin/ninja
 
 // Flags used by the linker during the creation of modules during all build types.
-CMAKE_MODULE_LINKER_FLAGS:STRING=
+CMAKE_MODULE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -Wl,-rpath,/opt/lib -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of modules during DEBUG builds.
 CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
@@ -630,22 +688,22 @@ CMAKE_MODULE_LINKER_FLAGS_RELEASE:STRING=
 CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 // Path to a program.
-CMAKE_NM:FILEPATH=/usr/bin/nm
+CMAKE_NM:FILEPATH=/opt/bin/llvm-nm
 
 // Path to a program.
-CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
+CMAKE_OBJCOPY:FILEPATH=/opt/bin/llvm-objcopy
 
 // Path to a program.
-CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
+CMAKE_OBJDUMP:FILEPATH=/opt/bin/llvm-objdump
 
 // Path to a program.
-CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
+CMAKE_RANLIB:FILEPATH=/opt/bin/llvm-ranlib
 
 // Path to a program.
-CMAKE_READELF:FILEPATH=/usr/bin/readelf
+CMAKE_READELF:FILEPATH=/opt/bin/llvm-readelf
 
 // Flags used by the linker during the creation of shared libraries during all build types.
-CMAKE_SHARED_LINKER_FLAGS:STRING=
+CMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -Wl,-rpath,/opt/lib -flto -ffat-lto-objects
 
 // Flags used by the linker during the creation of shared libraries during DEBUG builds.
 CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
@@ -681,7 +739,7 @@ CMAKE_STATIC_LINKER_FLAGS_RELEASE:STRING=
 CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 // Path to a program.
-CMAKE_STRIP:FILEPATH=/usr/bin/strip
+CMAKE_STRIP:FILEPATH=/opt/bin/llvm-strip
 
 // Path to a program.
 CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
@@ -967,7 +1025,7 @@ LLVM_ENABLE_LIBPFM:BOOL=ON
 LLVM_ENABLE_LIBXML2:STRING=ON
 
 // Use lld as C and C++ linker.
-LLVM_ENABLE_LLD:BOOL=OFF
+LLVM_ENABLE_LLD:BOOL=ON
 
 // Set to on to link all LLVM executables against LLVM libc, assuming it is accessible by the host compiler.
 LLVM_ENABLE_LLVM_LIBC:BOOL=OFF
@@ -976,7 +1034,7 @@ LLVM_ENABLE_LLVM_LIBC:BOOL=OFF
 LLVM_ENABLE_LOCAL_SUBMODULE_VISIBILITY:BOOL=ON
 
 // Build LLVM with LTO. May be specified as Thin or Full to use a particular kind of LTO
-LLVM_ENABLE_LTO:STRING=OFF
+LLVM_ENABLE_LTO:STRING=ON
 
 // Compile with C++ modules enabled.
 LLVM_ENABLE_MODULES:BOOL=OFF
@@ -1036,7 +1094,7 @@ LLVM_ENABLE_WARNINGS:BOOL=ON
 LLVM_ENABLE_WERROR:BOOL=OFF
 
 // Enable Support for the Z3 constraint solver in LLVM.
-LLVM_ENABLE_Z3_SOLVER:BOOL=OFF
+LLVM_ENABLE_Z3_SOLVER:BOOL=ON
 
 // Use zlib for compression/decompression if available. Can be ON, OFF, or FORCE_ON
 LLVM_ENABLE_ZLIB:STRING=ON
@@ -1265,7 +1323,7 @@ LLVM_TARGET_TRIPLE_ENV:STRING=
 LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN:BOOL=OFF
 
 // Set ThinLTO cache path. This can be used when building LLVM from several different directiories.
-LLVM_THINLTO_CACHE_PATH:STRING=/home/kzl/makepkg/build/llvm-project/src/llvm-project/tmp/lto.cache
+LLVM_THINLTO_CACHE_PATH:STRING=/home/kzl/makepkg/build/llvm-project/src/llvm-project/build/lto.cache
 
 // Directory containing third party software used by LLVM (e.g. googletest)
 LLVM_THIRD_PARTY_DIR:STRING=/home/kzl/makepkg/build/llvm-project/src/llvm-project/llvm/../third-party
@@ -1710,6 +1768,12 @@ TOOL_INFO_PLIST:STRING=Info.plist
 
 // Temporary workaround before GCC_INSTALL_PREFIX is completely removed
 USE_DEPRECATED_GCC_INSTALL_PREFIX:BOOL=OFF
+
+// Path to a file.
+Z3_INCLUDE_DIR:PATH=/usr/include
+
+// Path to a library.
+Z3_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libz3.so
 
 // Path to a file.
 ZLIB_INCLUDE_DIR:PATH=/usr/include

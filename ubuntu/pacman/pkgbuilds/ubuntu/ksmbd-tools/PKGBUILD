@@ -2,7 +2,7 @@
 
 pkgname=ksmbd-tools
 pkgver=3.5.3.g2
-pkgrel=8
+pkgrel=10
 epoch=
 pkgdesc="A collection of userspace utilities for the ksmbd kernel server"
 arch=('x86_64')
@@ -32,11 +32,9 @@ build() {
 
   msg2 "Configuring..."
   meson setup \
-    --prefix /usr \
+    --prefix "/$PREFIX" \
     --auto-features disabled \
     --buildtype plain \
-    -D b_lto=true \
-    -D b_pie=true \
     -D rundir=/run \
     -D systemdsystemunitdir=/usr/lib/systemd/system \
     build
