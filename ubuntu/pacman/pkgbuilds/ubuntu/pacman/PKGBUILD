@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g40
-pkgrel=33
+pkgrel=34
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -47,7 +47,7 @@ prepare() {
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
       -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS -Wl,-rpath,/$PREFIX/lib\"" \
       -e '/^#LTOFLAGS=/c\LTOFLAGS="-flto -ffat-lto-objects"' \
-      -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-O"' \
+      -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j $(nproc) -O"' \
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="$DEBUG_CFLAGS"' \
       -e '/^#BUILDDIR=/c\BUILDDIR="$HOME/makepkg/build"' \
