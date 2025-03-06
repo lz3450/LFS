@@ -115,6 +115,7 @@ Options
 	--musl-root-mipsel=VAL         mipsel-unknown-linux-musl install directory
 	--musl-root-mips64=VAL         mips64-unknown-linux-muslabi64 install directory
 	--musl-root-mips64el=VAL       mips64el-unknown-linux-muslabi64 install directory
+	--musl-root-powerpc64le=VAL    powerpc64le-unknown-linux-musl install directory
 	--musl-root-riscv32gc=VAL      riscv32gc-unknown-linux-musl install directory
 	--musl-root-riscv64gc=VAL      riscv64gc-unknown-linux-musl install directory
 	--musl-root-loongarch64=VAL    loongarch64-unknown-linux-musl install directory

@@ -1,18 +1,21 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rust
-pkgver=1.84.1
-pkgrel=3
+pkgver=1.85.0
+pkgrel=1
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')
 url="https://www.rust-lang.org/"
 license=('KZL')
-source=(git+https://github.com/rust-lang/rust.git#branch=stable)
-sha256sums=('SKIP')
-
-prefix="usr/local"
-llvm_root="usr/local"
+depends=(
+  llvm-project
+)
+source=(
+  # git+https://github.com/rust-lang/rust.git#branch=stable
+  git+https://github.com/rust-lang/rust.git#tag=$pkgver
+)
+sha256sums=('04a229830fca2f721d0ca2579b2eb2e05f79c54dd9cd944763712a6f4620bc35')
 
 pkgver() {
   cd $pkgname
@@ -20,32 +23,33 @@ pkgver() {
   git describe --tags | sed 's/-g.*//;s/-/.g/'
 }
 
-prepare() {
+build() {
   cd $pkgname
 
+  local _target="$(clang -print-target-triple)"
   local _change_id=$(grep -oP 'change_id: \K\d+' src/bootstrap/src/utils/change_tracker.rs | sort -n | tail -n1)
   local -a _options=(
     ################
     # stage2
     ################
     # --enable-local-rust
-    # --local-rust-root=/"$prefix"
+    # --local-rust-root=/"$PREFIX"
     ################
     --enable-llvm-link-shared
     --enable-sanitizers
     --enable-profiler
-    "--prefix=/$prefix"
+    "--prefix=/$PREFIX"
     "--sysconfdir=etc"
-    "--llvm-root=/$llvm_root"
-    "--llvm-config=/$llvm_root/bin/llvm-config"
-    "--llvm-filecheck=/$llvm_root/bin/FileCheck"
-    "--python=$(which python3)"
+    "--llvm-root=/$PREFIX"
+    "--llvm-config=/$PREFIX/bin/llvm-config"
+    "--llvm-filecheck=/$PREFIX/bin/FileCheck"
+    "--python=/$PREFIX/bin/python3"
     "--release-channel=stable"
     "--release-description=KZL $(date '+%Y/%m/%d %T %z')"
     "--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src,wasm-component-ld"
-    "--build=x86_64-unknown-linux-gnu"
-    "--host=x86_64-unknown-linux-gnu"
-    "--target=x86_64-unknown-linux-gnu"
+    "--build=$_target"
+    "--host=$_target"
+    "--target=$_target"
     --enable-option-checking
     --enable-verbose-configure
     "--set=change-id=$_change_id"
@@ -53,28 +57,22 @@ prepare() {
     "--set=rust.backtrace-on-ice=true"
     "--set=rust.remap-debuginfo=true"
     "--set=rust.jemalloc=true"
-    "--set=target.x86_64-unknown-linux-gnu.cc=/$llvm_root/bin/clang"
-    "--set=target.x86_64-unknown-linux-gnu.cxx=/$llvm_root/bin/clang++"
-    "--set=target.x86_64-unknown-linux-gnu.ar=/$llvm_root/bin/llvm-ar"
-    "--set=target.x86_64-unknown-linux-gnu.ranlib=/$llvm_root/bin/llvm-ranlib"
-    "--set=target.x86_64-unknown-linux-gnu.linker=/$llvm_root/bin/clang"
-    "--set=build.lldb=/$llvm_root/bin/lldb"
+    "--set=target.$_target.cc=/$PREFIX/bin/clang"
+    "--set=target.$_target.cxx=/$PREFIX/bin/clang++"
+    "--set=target.$_target.ar=/$PREFIX/bin/llvm-ar"
+    "--set=target.$_target.ranlib=/$PREFIX/bin/llvm-ranlib"
+    "--set=target.$_target.linker=/$PREFIX/bin/clang"
+    "--set=build.lldb=/$PREFIX/bin/lldb"
     "--set=rust.lld=true"
     "--set=rust.use-lld=true"
-    # "--set=target.x86_64-linux-gnu.cc=gcc"
-    # "--set=target.x86_64-linux-gnu.cxx=g++"
-    # "--set=target.x86_64-linux-gnu.ar=ar"
-    # "--set=target.x86_64-linux-gnu.ranlib=ranlib"
-    # "--set=target.x86_64-linux-gnu.linker=gcc"
   )
 
+  msg2 "Configuring..."
   ./configure \
     "${_options[@]}"
-}
+  cat config.toml
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   RUST_BACKTRACE=full ./x.py -j "$(nproc)" build
 }
 
@@ -89,6 +87,6 @@ package() {
 
   DESTDIR="$pkgdir" ./x.py -j "$(nproc)" install
 
-  rm -f "$pkgdir"/$prefix/lib/rustlib/{components,install.log,manifest-*,rust-installer-version,uninstall.sh}
-  rm -rf "$pkgdir"/$prefix/share/doc
+  rm -f "$pkgdir"/$PREFIX/lib/rustlib/{components,install.log,manifest-*,rust-installer-version,uninstall.sh}
+  rm -rf "$pkgdir"/$PREFIX/share/doc
 }

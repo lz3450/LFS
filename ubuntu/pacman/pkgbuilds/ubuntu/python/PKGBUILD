@@ -2,7 +2,7 @@
 
 pkgname=python
 pkgver=3.13.2
-pkgrel=9
+pkgrel=10
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
@@ -46,6 +46,5 @@ package() {
 
   make DESTDIR="$pkgdir" install
 
-  find "$pkgdir"/$PREFIX/bin -type l -exec rm -v {} \;
   rm -vr "$pkgdir/$PREFIX/lib/python${pkgver%.*}"/{test,idlelib/idle_test}
 }

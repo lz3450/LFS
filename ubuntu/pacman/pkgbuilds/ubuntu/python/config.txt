@@ -76,7 +76,7 @@ checking for --enable-optimizations... yes
 checking whether C compiler accepts -fno-semantic-interposition... yes
 checking PROFILE_TASK... -m test --pgo --timeout=$(TESTTIMEOUT)
 checking for --with-lto... yes
-checking for llvm-profdata... no
+checking for llvm-profdata... /opt/bin/llvm-profdata
 checking for --enable-bolt... no
 checking BOLT_COMMON_FLAGS... checking BOLT_INSTRUMENT_FLAGS...  -update-debug-sections -skip-funcs=_PyEval_EvalFrameDefault,sre_ucs1_match/1,sre_ucs2_match/1,sre_ucs4_match/1 
 checking BOLT_APPLY_FLAGS...   -update-debug-sections -skip-funcs=_PyEval_EvalFrameDefault,sre_ucs1_match/1,sre_ucs2_match/1,sre_ucs4_match/1  -reorder-blocks=ext-tsp -reorder-functions=cdsort -split-functions -icf=1 -inline-all -split-eh -reorder-functions-use-hot-size -peepholes=none -jump-tables=aggressive -inline-ap -indirect-call-promotion=all -dyno-stats -use-gnu-stack -frame-opt=hot 

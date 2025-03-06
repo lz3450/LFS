@@ -1,4 +1,16 @@
 CMake Deprecation Warning at /home/kzl/makepkg/build/llvm-project/src/llvm-project/cmake/Modules/CMakePolicy.cmake:6 (cmake_policy):
+  The OLD behavior for policy CMP0114 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+Call Stack (most recent call first):
+  CMakeLists.txt:6 (include)
+
+
+CMake Deprecation Warning at /home/kzl/makepkg/build/llvm-project/src/llvm-project/cmake/Modules/CMakePolicy.cmake:11 (cmake_policy):
   The OLD behavior for policy CMP0116 will be removed from a future version
   of CMake.
 
@@ -7,7 +19,7 @@ CMake Deprecation Warning at /home/kzl/makepkg/build/llvm-project/src/llvm-proje
   specific short-term circumstances.  Projects should be ported to the NEW
   behavior and not rely on setting a policy to OLD.
 Call Stack (most recent call first):
-  CMakeLists.txt:8 (include)
+  CMakeLists.txt:6 (include)
 
 
 -- The C compiler identification is Clang 20.1.0
@@ -47,16 +59,52 @@ Call Stack (most recent call first):
 -- Performing Test LLVM_LIBSTDCXX_MIN - Success
 -- Performing Test LLVM_LIBSTDCXX_SOFT_ERROR
 -- Performing Test LLVM_LIBSTDCXX_SOFT_ERROR - Success
--- Looking for __GLIBC__
--- Looking for __GLIBC__ - found
+-- Looking for dlfcn.h
+-- Looking for dlfcn.h - found
+-- Looking for errno.h
+-- Looking for errno.h - found
+-- Looking for fcntl.h
+-- Looking for fcntl.h - found
+-- Looking for link.h
+-- Looking for link.h - found
+-- Looking for malloc/malloc.h
+-- Looking for malloc/malloc.h - not found
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Looking for signal.h
+-- Looking for signal.h - found
+-- Looking for sys/ioctl.h
+-- Looking for sys/ioctl.h - found
+-- Looking for sys/mman.h
+-- Looking for sys/mman.h - found
+-- Looking for sys/param.h
+-- Looking for sys/param.h - found
+-- Looking for sys/resource.h
+-- Looking for sys/resource.h - found
+-- Looking for sys/stat.h
+-- Looking for sys/stat.h - found
+-- Looking for sys/time.h
+-- Looking for sys/time.h - found
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for sysexits.h
+-- Looking for sysexits.h - found
+-- Looking for termios.h
+-- Looking for termios.h - found
+-- Looking for unistd.h
+-- Looking for unistd.h - found
 -- Looking for valgrind/valgrind.h
 -- Looking for valgrind/valgrind.h - not found
+-- Looking for fenv.h
+-- Looking for fenv.h - found
 -- Looking for FE_ALL_EXCEPT
 -- Looking for FE_ALL_EXCEPT - found
 -- Looking for FE_INEXACT
 -- Looking for FE_INEXACT - found
 -- Performing Test HAVE_BUILTIN_THREAD_POINTER
 -- Performing Test HAVE_BUILTIN_THREAD_POINTER - Success
+-- Looking for mach/mach.h
+-- Looking for mach/mach.h - not found
 -- Looking for CrashReporterClient.h
 -- Looking for CrashReporterClient.h - not found
 -- Looking for linux/magic.h
@@ -69,8 +117,8 @@ Call Stack (most recent call first):
 -- Looking for pthread_mutex_lock in pthread - found
 -- Looking for dlopen in dl
 -- Looking for dlopen in dl - found
--- Looking for shm_open in rt
--- Looking for shm_open in rt - found
+-- Looking for clock_gettime in rt
+-- Looking for clock_gettime in rt - found
 -- Looking for pfm_initialize in pfm
 -- Looking for pfm_initialize in pfm - not found
 -- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.3")  
@@ -105,6 +153,8 @@ Call Stack (most recent call first):
 -- Looking for sysconf - found
 -- Looking for getrusage
 -- Looking for getrusage - found
+-- Looking for setrlimit
+-- Looking for setrlimit - found
 -- Looking for isatty
 -- Looking for isatty - found
 -- Looking for futimens
@@ -121,6 +171,8 @@ Call Stack (most recent call first):
 -- Looking for mallinfo2 - found
 -- Looking for malloc_zone_statistics
 -- Looking for malloc_zone_statistics - not found
+-- Looking for getrlimit
+-- Looking for getrlimit - found
 -- Looking for posix_spawn
 -- Looking for posix_spawn - found
 -- Looking for pread
@@ -137,16 +189,16 @@ Call Stack (most recent call first):
 -- Performing Test HAVE_STRUCT_STAT_ST_MTIMESPEC_TV_NSEC - Failed
 -- Performing Test HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC
 -- Performing Test HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC - Success
+-- Looking for __GLIBC__
+-- Looking for __GLIBC__ - found
 -- Looking for pthread_getname_np
 -- Looking for pthread_getname_np - found
 -- Looking for pthread_setname_np
 -- Looking for pthread_setname_np - found
--- Looking for pthread_get_name_np
--- Looking for pthread_get_name_np - not found
--- Looking for pthread_set_name_np
--- Looking for pthread_set_name_np - not found
 -- Looking for dlopen
 -- Looking for dlopen - found
+-- Looking for dladdr
+-- Looking for dladdr - found
 -- Performing Test HAVE_FFI_CALL
 -- Performing Test HAVE_FFI_CALL - Success
 -- Found FFI: /usr/lib/x86_64-linux-gnu/libffi.so  
@@ -216,6 +268,18 @@ Call Stack (most recent call first):
 -- Looking for logf128 - not found
 -- Targeting X86
 CMake Deprecation Warning at /home/kzl/makepkg/build/llvm-project/src/llvm-project/cmake/Modules/CMakePolicy.cmake:6 (cmake_policy):
+  The OLD behavior for policy CMP0114 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+Call Stack (most recent call first):
+  /home/kzl/makepkg/build/llvm-project/src/llvm-project/lld/CMakeLists.txt:7 (include)
+
+
+CMake Deprecation Warning at /home/kzl/makepkg/build/llvm-project/src/llvm-project/cmake/Modules/CMakePolicy.cmake:11 (cmake_policy):
   The OLD behavior for policy CMP0116 will be removed from a future version
   of CMake.
 
@@ -227,8 +291,20 @@ Call Stack (most recent call first):
   /home/kzl/makepkg/build/llvm-project/src/llvm-project/lld/CMakeLists.txt:7 (include)
 
 
--- LLD version: 20.1.0
+-- LLD version: 19.1.7
 CMake Deprecation Warning at /home/kzl/makepkg/build/llvm-project/src/llvm-project/cmake/Modules/CMakePolicy.cmake:6 (cmake_policy):
+  The OLD behavior for policy CMP0114 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+Call Stack (most recent call first):
+  /home/kzl/makepkg/build/llvm-project/src/llvm-project/clang/CMakeLists.txt:7 (include)
+
+
+CMake Deprecation Warning at /home/kzl/makepkg/build/llvm-project/src/llvm-project/cmake/Modules/CMakePolicy.cmake:11 (cmake_policy):
   The OLD behavior for policy CMP0116 will be removed from a future version
   of CMake.
 
@@ -246,17 +322,20 @@ Call Stack (most recent call first):
 -- Looking for dlfcn.h - found
 -- Looking for dladdr
 -- Looking for dladdr - found
--- Clang version: 20.1.0
+-- Clang version: 19.1.7
 -- Looking for include file sys/inotify.h
 -- Looking for include file sys/inotify.h - found
 -- Performing Test HAVE_LINKER_FLAG_LONG_PLT
 -- Performing Test HAVE_LINKER_FLAG_LONG_PLT - Success
--- Configuring done (7.2s)
+-- Configuring done (7.5s)
 -- Generating done (0.6s)
 -- Build files have been written to: /home/kzl/makepkg/build/llvm-project/src/llvm-project/build
 -- Cache values
 // Default URL where bug reports are to be submitted.
 BUG_REPORT_URL:STRING=https://github.com/llvm/llvm-project/issues/
+
+// Build clang-format VS plugin
+BUILD_CLANG_FORMAT_VS_PLUGIN:BOOL=OFF
 
 // Build all libraries as shared libraries instead of static
 BUILD_SHARED_LIBS:BOOL=OFF
@@ -269,9 +348,6 @@ Backtrace_INCLUDE_DIR:PATH=/usr/include
 
 // Library providing backtrace(3), empty for default set of libraries
 Backtrace_LIBRARY:FILEPATH=
-
-// Host clang executable. Saves building if cross-compiling.
-CLANG:STRING=
 
 // Build XPC Support For Clangd.
 CLANGD_BUILD_XPC:BOOL=0
@@ -334,7 +410,7 @@ CLANG_ENABLE_PROTO_FUZZER:BOOL=OFF
 CLANG_ENABLE_STATIC_ANALYZER:BOOL=ON
 
 // Major version number that will be appended to the clang executable name
-CLANG_EXECUTABLE_VERSION:STRING=20
+CLANG_EXECUTABLE_VERSION:STRING=19
 
 // Force the SOVERSION of libclang to be equal to CLANG_MAJOR
 CLANG_FORCE_MATCHING_LIBCLANG_SOVERSION:BOOL=ON
@@ -359,6 +435,9 @@ CLANG_LINK_CLANG_DYLIB:BOOL=ON
 
 // Build clang with plugin support
 CLANG_PLUGIN_SUPPORT:BOOL=ON
+
+// Host clang-pseudo-gen executable. Saves building if cross-compiling.
+CLANG_PSEUDO_GEN:STRING=
 
 // Python versions to install libclang python bindings for
 CLANG_PYTHON_BINDINGS_VERSIONS:STRING=
@@ -411,6 +490,9 @@ CLANG_TOOL_CLANG_EXTDEF_MAPPING_BUILD:BOOL=ON
 // Whether to build clang-format as part of CLANG
 CLANG_TOOL_CLANG_FORMAT_BUILD:BOOL=ON
 
+// Whether to build clang-format-vs as part of CLANG
+CLANG_TOOL_CLANG_FORMAT_VS_BUILD:BOOL=ON
+
 // Whether to build clang-fuzzer as part of CLANG
 CLANG_TOOL_CLANG_FUZZER_BUILD:BOOL=ON
 
@@ -435,6 +517,9 @@ CLANG_TOOL_CLANG_OFFLOAD_PACKAGER_BUILD:BOOL=ON
 // Whether to build clang-refactor as part of CLANG
 CLANG_TOOL_CLANG_REFACTOR_BUILD:BOOL=ON
 
+// Whether to build clang-rename as part of CLANG
+CLANG_TOOL_CLANG_RENAME_BUILD:BOOL=ON
+
 // Whether to build clang-repl as part of CLANG
 CLANG_TOOL_CLANG_REPL_BUILD:BOOL=ON
 
@@ -443,9 +528,6 @@ CLANG_TOOL_CLANG_SCAN_DEPS_BUILD:BOOL=ON
 
 // Whether to build clang-shlib as part of CLANG
 CLANG_TOOL_CLANG_SHLIB_BUILD:BOOL=ON
-
-// Whether to build clang-sycl-linker as part of CLANG
-CLANG_TOOL_CLANG_SYCL_LINKER_BUILD:BOOL=ON
 
 // Whether to build c-arcmt-test as part of CLANG
 CLANG_TOOL_C_ARCMT_TEST_BUILD:BOOL=ON
@@ -634,7 +716,7 @@ CMAKE_INSTALL_INFODIR:PATH=
 CMAKE_INSTALL_LIBDIR:PATH=lib
 
 // Program executables (libexec)
-CMAKE_INSTALL_LIBEXECDIR:PATH=libexec/llvm-20
+CMAKE_INSTALL_LIBEXECDIR:PATH=libexec/llvm-19
 
 // Locale-dependent data (DATAROOTDIR/locale)
 CMAKE_INSTALL_LOCALEDIR:PATH=
@@ -838,7 +920,7 @@ GRPC_INSTALL_PATH:PATH=
 LIBCLANG_BUILD_STATIC:BOOL=OFF
 
 // Major version number that will be appended to the libclang library
-LIBCLANG_LIBRARY_VERSION:STRING=20
+LIBCLANG_LIBRARY_VERSION:STRING=19
 
 // Enable the 'libc' project targeting the GPU
 LIBC_GPU_BUILD:BOOL=OFF
@@ -885,9 +967,6 @@ LLVM_ALLOW_PROBLEMATIC_CONFIGURATIONS:BOOL=OFF
 // Embed the version control system revision in LLVM
 LLVM_APPEND_VC_REV:BOOL=OFF
 
-// Host llvm-as executable. Saves building if cross-compiling.
-LLVM_AS:STRING=
-
 // PATH to binutils/include containing plugin-api.h for gold plugin.
 LLVM_BINUTILS_INCDIR:PATH=
 
@@ -919,17 +998,11 @@ LLVM_BUILD_LLVM_C_DYLIB:BOOL=OFF
 // Build libllvm dynamic library
 LLVM_BUILD_LLVM_DYLIB:BOOL=ON
 
-// 
-LLVM_BUILD_LLVM_DYLIB_VIS:BOOL=FALSE
-
 // Build the LLVM runtime libraries.
 LLVM_BUILD_RUNTIME:BOOL=ON
 
 // Build the LLVM runtimes. If OFF, just generate build targets.
 LLVM_BUILD_RUNTIMES:BOOL=ON
-
-// Build the telemetry library. This does not enable telemetry.
-LLVM_BUILD_TELEMETRY:BOOL=ON
 
 // Build LLVM unit tests. If OFF, just generate build targets.
 LLVM_BUILD_TESTS:BOOL=OFF
@@ -975,9 +1048,6 @@ LLVM_ENABLE_CURL:STRING=OFF
 
 // Debug: Prints tablegen patterns that were used for selecting
 LLVM_ENABLE_DAGISEL_COV:BOOL=OFF
-
-// Enhance Debugify's line number coverage tracking; enabling this is ABI-breaking. Can be DISABLED, or COVERAGE.
-LLVM_ENABLE_DEBUGLOC_COVERAGE_TRACKING:STRING=DISABLED
 
 // Use doxygen to generate llvm API documentation.
 LLVM_ENABLE_DOXYGEN:BOOL=OFF
@@ -1147,6 +1217,9 @@ LLVM_EXTERNAL_LIBC_SOURCE_DIR:PATH=
 // Path to libunwind source directory
 LLVM_EXTERNAL_LIBUNWIND_SOURCE_DIR:PATH=
 
+// Command used to spawn lit
+LLVM_EXTERNAL_LIT:STRING=
+
 // Path to lldb source directory
 LLVM_EXTERNAL_LLDB_SOURCE_DIR:PATH=
 
@@ -1255,9 +1328,6 @@ LLVM_LIBDIR_SUFFIX:STRING=
 
 // Path to fuzzing library for linking with fuzz targets
 LLVM_LIB_FUZZING_ENGINE:PATH=
-
-// Host llvm-link executable. Saves building if cross-compiling.
-LLVM_LINK:STRING=
 
 // Link tools against the libllvm dynamic library
 LLVM_LINK_LLVM_DYLIB:BOOL=ON
@@ -1412,17 +1482,11 @@ LLVM_TOOL_LLVM_CAT_BUILD:BOOL=ON
 // Whether to build llvm-cfi-verify as part of LLVM
 LLVM_TOOL_LLVM_CFI_VERIFY_BUILD:BOOL=ON
 
-// Whether to build llvm-cgdata as part of LLVM
-LLVM_TOOL_LLVM_CGDATA_BUILD:BOOL=ON
-
 // Whether to build llvm-config as part of LLVM
 LLVM_TOOL_LLVM_CONFIG_BUILD:BOOL=ON
 
 // Whether to build llvm-cov as part of LLVM
 LLVM_TOOL_LLVM_COV_BUILD:BOOL=ON
-
-// Whether to build llvm-ctxprof-util as part of LLVM
-LLVM_TOOL_LLVM_CTXPROF_UTIL_BUILD:BOOL=ON
 
 // Whether to build llvm-cvtres as part of LLVM
 LLVM_TOOL_LLVM_CVTRES_BUILD:BOOL=ON
@@ -1739,9 +1803,6 @@ NINJA_VERSION:STRING=1.11.1.git.kitware.jobserver-1
 // Path to a program.
 OCAMLFIND:FILEPATH=OCAMLFIND-NOTFOUND
 
-// Host opt executable. Saves building if cross-compiling.
-OPT:STRING=
-
 // Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=
 
@@ -1785,28 +1846,10 @@ ZLIB_LIBRARY_DEBUG:FILEPATH=ZLIB_LIBRARY_DEBUG-NOTFOUND
 ZLIB_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libz.so
 
 // 
-clang_exe:STRING=$<TARGET_FILE:clang>
-
-// 
-clang_target:STRING=clang
-
-// 
 clang_tidy_confusable_chars_gen:STRING=$<TARGET_FILE:clang-tidy-confusable-chars-gen>
 
 // 
 clang_tidy_confusable_chars_gen_target:STRING=clang-tidy-confusable-chars-gen
-
-// 
-llvm_as_exe:STRING=$<TARGET_FILE:llvm-as>
-
-// 
-llvm_as_target:STRING=llvm-as
-
-// 
-llvm_link_exe:STRING=$<TARGET_FILE:llvm-link>
-
-// 
-llvm_link_target:STRING=llvm-link
 
 // 
 llvm_nm_exe:STRING=$<TARGET_FILE:llvm-nm>
@@ -1820,17 +1863,17 @@ llvm_readobj_exe:STRING=$<TARGET_FILE:llvm-readobj>
 // 
 llvm_readobj_target:STRING=llvm-readobj
 
-// 
-opt_exe:STRING=$<TARGET_FILE:opt>
-
-// 
-opt_target:STRING=opt
-
 // Path to a library.
 pkgcfg_lib_PC_LIBEDIT_edit:FILEPATH=/usr/lib/x86_64-linux-gnu/libedit.so
 
 // Path to a library.
 pkgcfg_lib_PC_LIBXML_xml2:FILEPATH=/usr/lib/x86_64-linux-gnu/libxml2.so
+
+// 
+pseudo_gen:STRING=$<TARGET_FILE:clang-pseudo-gen>
+
+// 
+pseudo_gen_target:STRING=clang-pseudo-gen
 
 // Path to a file.
 zstd_INCLUDE_DIR:PATH=/usr/include
