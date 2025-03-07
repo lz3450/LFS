@@ -1,7 +1,19 @@
 # new_version=$(curl -L --stderr - https://llvm.org/ | grep -oP '(?<=: LLVM )\d+\.\d+\.\d+(?= is now )')
-new_version=$(git ls-remote --tags https://github.com/llvm/llvm-project.git | grep -oP '(?<=refs/tags/llvmorg-)\d+\.\d+\.\d+$' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://github.com/llvm/llvm-project.git | grep -oP '(?<=refs/tags/llvmorg-)19\.\d+\.\d+$' | sort -V | tail -n1)
+srcdir="$pkgname"
+build_system=
 
 post_update() {
-    cd "$BUILDDIR/$pkgname"/src/llvm-project
-    cp build/CMakeCache.txt "$PKGBUILDDIR"/help.txt
+    cd "$BUILDDIR/$pkgname/src/$srcdir"
+
+    cmake -LAH -S llvm -B tmp -G Ninja \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX="/$PREFIX" \
+    -D CMAKE_INSTALL_LIBEXECDIR="libexec/llvm-${pkgver%%.*}" \
+    -D CMAKE_C_FLAGS="${CFLAGS/-O2/-O3} $CPPFLAGS" \
+    -D CMAKE_CXX_FLAGS="${CXXFLAGS/-O2/-O3} $CPPFLAGS" \
+    -D CMAKE_EXPORT_COMPILE_COMMANDS=ON \
+    "${_options[@]}" > "$PKGBUILDDIR"/help.txt
+
+    rm -rf tmp
 }

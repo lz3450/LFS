@@ -2,39 +2,13 @@ new_version=$(git ls-remote --tags https://github.com/TeX-Live/texlive-source.gi
 srcdir="$pkgname-source"
 build_system=autoconf
 
-installed_pkgs=(
-    00texlive.installation
-    texlive.infra
-    texlive-scripts
-)
-
 pre_update() {
-    latex_year=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive | grep -oP '\d{4}(?=-\d{2}-\d{2})' | tail -n1)
-    test -n "$latex_year" || return 1
-    echo "Latest TeX Live year: $latex_year"
-    sed -e "s|^_texliveyear=[0-9]\{4\}$|_texliveyear=$latex_year|" -i PKGBUILD
+    local _latex_year=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive | grep -oP '\d{4}(?=-\d{2}-\d{2})' | tail -n1)
+    test -n "$_latex_year" || return 1
+    echo "Latest TeX Live year: $_latex_year"
+    sed -e "s|^_texliveyear=[0-9]\{4\}$|_texliveyear=$_latex_year|" -i PKGBUILD
 
-    # texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
-    # test -n "$texmf_version" || return 1
-    # echo "texmf version: $texmf_version"
-    # sed -e "s|^_texmfver=[0-9]\{8\}$|_texmfver=$texmf_version|" -i PKGBUILD
+    rm -vf "$SRCDEST"/texlive.tlpdb
 
-    # curl -L -A 'Mozilla/5.0' -o "$SRCDEST"/texlive.tlpdb http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
-    # rm -fv "$PKGBUILDDIR"/texlive.tlpdb
-    # for pkg in "${installed_pkgs[@]}"; do
-    #     sed -n \
-    #         -e "/^name $pkg$/,/^$/p" \
-    #         -e "/^name $pkg.$platform$/,/^$/p" \
-    #         "$SRCDEST"/texlive.tlpdb >> "$PKGBUILDDIR"/texlive.tlpdb
-    # done
-    # sed -i 's/RELOC/texmf-dist/g' "$PKGBUILDDIR"/texlive.tlpdb
-    rm -fv "$SRCDEST"/texlive.tlpdb
-
-    # curl -L -A 'Mozilla/5.0' http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb | \
-    # sed -n \
-    #     $(for pkg in "${installed_pkgs[@]}"; do
-    #         echo -e "-e /^name $pkg\$/,/^\$/p"
-    #     done)
-    # > "$PKGBUILDDIR"/texlive.tlpdb
     updpkgsums
 }

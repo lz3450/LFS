@@ -8,9 +8,19 @@ pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
 url="https://www.python.org/"
 license=('KZL')
-depends=(expat gdbm glibc libedit libffi libnsl libxcrypt)
-makedepends=(sqlite)
-# makedepends=(sqlite tk)
+depends=(
+  expat
+  gdbm
+  glibc
+  libedit
+  libffi
+  libnsl
+  libxcrypt
+)
+makedepends=(
+  sqlite
+  # tk
+)
 source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
 sha256sums=('SKIP')
 
@@ -23,18 +33,21 @@ build() {
   ./configure \
     --prefix=/usr \
     --enable-shared=yes \
+    --disable-gil=no \
+    --enable-experimental-jit=no \
     --enable-optimizations=yes \
+    --enable-bolt=no \
     --enable-loadable-sqlite-extensions=yes \
     --enable-ipv6=yes \
     --enable-big-digits=30 \
     --with-pkg-config=yes \
-    --with-lto=no \
+    --with-lto=yes \
     --with-tzpath=/usr/share/zoneinfo \
     --with-system-expat=yes \
     --with-system-libmpdec=no \
     --with-decimal-contextvar=yes \
     --with-dbmliborder=gdbm:ndbm \
-    --with-valgrind \
+    --with-doc-strings=yes \
     --with-readline=editline \
     --with-ensurepip=no
 
@@ -46,7 +59,7 @@ package() {
 
   make DESTDIR="$pkgdir" install
 
-  rm -r "$pkgdir"/usr/local/lib/python3.12/__pycache__
+  ln -s python${pkgver%.*} "$pkgdir"/usr/bin/python
 
-  ln -s python${pkgver:0:4} "$pkgdir"/usr/bin/python
+  rm -vr "$pkgdir/usr/lib/python${pkgver%.*}"/{test,idlelib/idle_test}
 }

@@ -1,4 +1,6 @@
 new_version=$(git ls-remote --tags https://salsa.debian.org/installer-team/debootstrap.git | grep -oP '(?<=refs/tags/)\d\.\d\.\d\d\d(\+nmu\d)?' | sort -V | tail -n1)
+srcdir="$pkgname"
+build_system=
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
