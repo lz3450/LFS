@@ -39,7 +39,7 @@ declare -i no_check=0
 ### functions
 prepare() {
     info "Removing pacman cache and database..."
-    sudo pacman -Scc --noconfirm || :
+    sudo pacman -Scc --noconfirm
     info "Done"
 
     if [[ ! -e "$repo_path" ]]; then

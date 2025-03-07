@@ -138,8 +138,8 @@ fi
 # makepkg.conf
 if [[ -f "/etc/makepkg.conf" ]]; then
     . /etc/makepkg.conf
-elif [[ -f "/usr/local/etc/makepkg.conf" ]]; then
-    . /usr/local/etc/makepkg.conf
+elif [[ -f "/opt/etc/makepkg.conf" ]]; then
+    . /opt/etc/makepkg.conf
 else
     error 'makepkg.conf NOT found' 4
 fi
@@ -196,7 +196,7 @@ if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_sys
             if [[ ! -f "CMakeLists.txt" ]]; then
                 error 'Cannot find `CMakeLists.txt`' 12
             fi
-            cmake -LAH -S . -B tmp > "$PKGBUILDDIR"/help.txt || error "\`cmake -LAH\` error" 12
+            cmake -LAH -S . -B tmp -D CMAKE_BUILD_TYPE=Release > "$PKGBUILDDIR"/help.txt || error "\`cmake -LAH\` error" 12
             rm -rf tmp
             ;;
         *)

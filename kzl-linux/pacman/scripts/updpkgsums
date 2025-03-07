@@ -45,10 +45,10 @@ fi
 
 if [[ -f "/usr/share/makepkg/util/schema.sh" ]]; then
     . /usr/share/makepkg/util/schema.sh
-elif [[ -f "/usr/local/share/makepkg/util/schema.sh" ]]; then
-    . /usr/local/share/makepkg/util/schema.sh
+elif [[ -f "/opt/share/makepkg/util/schema.sh" ]]; then
+    . /opt/share/makepkg/util/schema.sh
 else
-    error '@libmakepkgdir@/util/schema.sh NOT found' 3
+    error '<libmakepkgdir>/util/schema.sh NOT found' 3
 fi
 
 info "Getting known hash algorithms..."
