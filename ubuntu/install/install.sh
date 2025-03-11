@@ -89,7 +89,8 @@ deb-src http://security.ubuntu.com/ubuntu/ $debootstrap_suite-security main rest
 EOF
 
 # pacman
-if [[ -f "/usr/local/bin/pacman" ]]; then
+if [[ -f "/opt/bin/pacman" ]]; then
+    mkdir -p "$mountpoint"/var/lib/pacman/
     pacman -Sy -r "$mountpoint" --noconfirm --cachedir /home/.repository/ubuntu pacman linux
 fi
 
