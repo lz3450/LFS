@@ -7,10 +7,12 @@ SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 BUILDDIR="/tmp"
 PKGBUILDDIR="$SCRIPT_DIR/../pkgbuilds/ubuntu/pacman"
 
+PREFIX="opt"
 msg2() {
   echo "  --> $1"
 }
 
+################################################################################
 
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -34,6 +36,6 @@ check || :
 cd "$BUILDDIR"
 package
 # sudo -E bash -xc "$(declare -f package); package"
-sudo cp -ru "$pkgdir"/* /
+sudo cp -vru "$pkgdir"/* /
 
 echo "pacman has been installed successfully"
