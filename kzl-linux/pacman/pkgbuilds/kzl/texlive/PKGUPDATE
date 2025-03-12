@@ -3,11 +3,19 @@ srcdir="$pkgname-source"
 build_system=autoconf
 
 pre_update() {
+    ### update `_texliveyear`
     local _latex_year=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive | grep -oP '\d{4}(?=-\d{2}-\d{2})' | tail -n1)
     test -n "$_latex_year" || return 1
     echo "Latest TeX Live year: $_latex_year"
-    sed -e "s|^_texliveyear=[0-9]\{4\}$|_texliveyear=$_latex_year|" -i PKGBUILD
+    sed -i -e "s|^_texliveyear=[0-9]\{4\}$|_texliveyear=$_latex_year|" PKGBUILD
 
+    ### update `_texmfver`
+    texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
+    test -n "$texmf_version" || return 1
+    echo "Latest texmf version: $texmf_version"
+    sed -i -e "s|^_texmfver=[0-9]\{8\}$|_texmfver=$texmf_version|" PKGBUILD
+
+    ### force update `tlpdb`
     rm -vf "$SRCDEST"/texlive.tlpdb
 
     updpkgsums
