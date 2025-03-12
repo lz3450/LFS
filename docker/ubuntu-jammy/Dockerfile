@@ -11,6 +11,9 @@ RUN echo "kzl:password" | chpasswd
 # Generate SSH host keys
 RUN ssh-keygen -A
 
+# Enable and start SSH service
+RUN mkdir /run/sshd
+
 # Switch to user kzl
 USER kzl
 WORKDIR /home/kzl
@@ -18,9 +21,6 @@ RUN mkdir -p /home/kzl/LFS
 RUN mkdir -p /home/kzl/Projects
 RUN mkdir -p /home/kzl/makepkg/sources
 RUN mkdir -p /home/kzl/wheels
-
-# Enable and start SSH service
-RUN mkdir /run/sshd
 
 # Expose SSH port
 EXPOSE 22

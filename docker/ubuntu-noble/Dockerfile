@@ -2,7 +2,7 @@ FROM ubuntu:noble
 
 # Install required packages
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential nano git zsh openssh-server sudo curl tmux
+    DEBIAN_FRONTEND=noninteractive apt-get install -y locales whiptail build-essential nano git zsh openssh-server sudo curl tmux
 
 # Create user kzl and set up password
 RUN usermod -l kzl -a -G sudo,adm -m -d /home/kzl -s /bin/zsh ubuntu
