@@ -1,8 +1,10 @@
 {
     "version": "0.2",
     "ignorePaths": [
+        "*jammy.txt",
+        "*noble.txt",
         "config.txt",
-        "help.txt"
+        "help.txt",
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
