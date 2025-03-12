@@ -2,7 +2,7 @@
 
 pkgname=python
 pkgver=3.13.2
-pkgrel=10
+pkgrel=11
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')

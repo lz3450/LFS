@@ -1,24 +1,28 @@
 The Meson build system
-Version: 1.7.0
+Version: 0.61.2
 Source dir: /home/kzl/makepkg/build/pacman/src/pacman
 Build dir: /home/kzl/makepkg/build/pacman/src/pacman/build
 Build type: native build
 Project name: pacman
 Project version: 7.0.0
-C compiler for the host machine: cc (gcc 13.3.0 "cc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0")
-C linker for the host machine: cc ld.bfd 2.42
+C compiler for the host machine: cc (gcc 11.4.0 "cc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0")
+C linker for the host machine: cc ld.bfd 2.38
 Host machine cpu family: x86_64
 Host machine cpu: x86_64
 Program python3 found: YES (/usr/bin/python3)
+WARNING: Python files installed by Meson might not be found by python interpreter.
+ This warning can be avoided by setting "python.platlibdir" option.
+WARNING: Python files installed by Meson might not be found by python interpreter.
+ This warning can be avoided by setting "python.purelibdir" option.
 Program bash found: YES (/usr/bin/bash)
-Found pkg-config: YES (/usr/bin/pkg-config) 1.8.1
+Found pkg-config: /usr/bin/pkg-config (0.29.2)
 Run-time dependency bash-completion found: YES 2.11
 Run-time dependency intl found: YES
-Run-time dependency libarchive found: YES 3.7.2
-Run-time dependency libcurl found: YES 8.5.0
-Run-time dependency gpgme found: YES 1.18.0
-Run-time dependency libcrypto found: YES 3.0.13
-Found CMake: /usr/bin/cmake (3.28.3)
+Run-time dependency libarchive found: YES 3.6.0
+Run-time dependency libcurl found: YES 7.81.0
+Run-time dependency gpgme found: YES 1.16.0
+Run-time dependency libcrypto found: YES 3.0.2
+Found CMake: /usr/bin/cmake (3.22.1)
 Run-time dependency libseccomp found: NO (tried pkgconfig and cmake)
 Has header "linux/landlock.h" : YES 
 Has header "mntent.h" : YES 
@@ -51,8 +55,7 @@ Configuring config.h using configuration
 Configuring edit-script.sh using configuration
 Program edit-script.sh found: YES (/usr/bin/bash /home/kzl/makepkg/build/pacman/src/pacman/build/scripts/edit-script.sh)
 Configuring libmakepkg.pc using configuration
-Program msgfmt found: NO
-lib/libalpm/po/meson.build:1: WARNING: Gettext not found, all translation (po) targets will be ignored.
+WARNING: Gettext not found, all translation targets will be ignored.
 Program asciidoc skipped: feature doc disabled
 Program a2x skipped: feature doc disabled
 Configuring makepkg using configuration
@@ -65,7 +68,7 @@ Configuring makepkg.conf using configuration
 Configuring fortran.conf using configuration
 Configuring rust.conf using configuration
 Configuring pacman.conf using configuration
-Checking for size of "ssize_t" : 8 
+Checking for size of "ssize_t" : 8
 Message: pacman 7.0.0
     Build information:
        prefix                  : /opt
@@ -75,7 +78,7 @@ Message: pacman 7.0.0
            database dir        : /var/lib/pacman/
            cache dir           : /var/cache/pacman/pkg/
        keyringdir              : /opt/share/pacman/keyrings
-       compiler                : gcc 13.3.0
+       compiler                : gcc 11.4.0
     
        Architecture            : x86_64
        Host Type               : x86_64-linux-gnu
@@ -106,8 +109,11 @@ pacman 7.0.0
 
   User defined options
     auto_features  : disabled
-    buildstatic    : false
     buildtype      : plain
+    libdir         : lib
+    prefix         : /opt
+    sysconfdir     : etc
+    buildstatic    : false
     crypto         : openssl
     curl           : enabled
     doc            : disabled
@@ -115,12 +121,9 @@ pacman 7.0.0
     file-seccomp   : enabled
     gpgme          : enabled
     ldconfig       : /usr/bin/ldconfig
-    libdir         : lib
     pkg-ext        : .pkg.tar.zst
-    prefix         : /opt
     scriptlet-shell: /usr/bin/bash
     src-ext        : .src.tar.zst
-    sysconfdir     : etc
     use-git-version: false
 
-Found ninja-1.11.1.git.kitware.jobserver-1 at /home/kzl/.local/bin/ninja
+Found ninja-1.10.1 at /usr/bin/ninja

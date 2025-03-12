@@ -2,6 +2,7 @@
 
 sudo apt-get update
 sudo apt-get install -y \
+    bc \
     bison \
     flex \
     libelf-dev \
