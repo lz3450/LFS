@@ -30,7 +30,8 @@ git clone https://gitlab.archlinux.org/pacman/pacman.git
 cd "$BUILDDIR"
 prepare
 cd "$BUILDDIR"
-build
+# CFLAGS="$MAKEPKG_CFLAGS" LDFLAGS="$MAKEPKG_LDFLAGS -Wl,-rpath,/$PREFIX/lib" build
+CFLAGS="$MAKEPKG_CFLAGS" LDFLAGS="$MAKEPKG_LDFLAGS -Wl,-rpath,/$PREFIX/lib" build
 cd "$BUILDDIR"
 check || :
 cd "$BUILDDIR"
