@@ -1,16 +1,15 @@
 #!/bin/bash
 
 pkgs=(
-    "libbz2-dev"
-    "libedit-dev"
-    "libexpat1-dev"
-    "libffi-dev"
-    "libgdbm-compat-dev"
-    "libgdbm-dev"
-    "libncurses-dev"
-    "libsqlite3-dev"
-    "tcl-dev"
-    "tk-dev"
+    libbz2-dev
+    libedit-dev
+    libffi-dev
+    libgdbm-compat-dev
+    libgdbm-dev
+    libncurses-dev
+    libsqlite3-dev
+    tcl-dev
+    tk-dev
 )
 
 sudo apt-get update

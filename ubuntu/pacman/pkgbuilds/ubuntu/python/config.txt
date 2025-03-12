@@ -2,8 +2,10 @@ checking for git... found
 checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
 checking for Python interpreter freezing... ./_bootstrap_python
-checking for python3.13... python3.13
-checking Python for regen version... Python 3.13.2
+checking for python3.13... no
+checking for python3.13... no
+checking for python3.12... python3.12
+checking Python for regen version... Python 3.12.9
 checking for pkg-config... /usr/bin/pkg-config
 checking pkg-config is at least version 0.9.0... yes
 checking MACHDEP... "linux"
@@ -76,7 +78,7 @@ checking for --enable-optimizations... yes
 checking whether C compiler accepts -fno-semantic-interposition... yes
 checking PROFILE_TASK... -m test --pgo --timeout=$(TESTTIMEOUT)
 checking for --with-lto... yes
-checking for llvm-profdata... /opt/bin/llvm-profdata
+checking for llvm-profdata... no
 checking for --enable-bolt... no
 checking BOLT_COMMON_FLAGS... checking BOLT_INSTRUMENT_FLAGS...  -update-debug-sections -skip-funcs=_PyEval_EvalFrameDefault,sre_ucs1_match/1,sre_ucs2_match/1,sre_ucs4_match/1 
 checking BOLT_APPLY_FLAGS...   -update-debug-sections -skip-funcs=_PyEval_EvalFrameDefault,sre_ucs1_match/1,sre_ucs2_match/1,sre_ucs4_match/1  -reorder-blocks=ext-tsp -reorder-functions=cdsort -split-functions -icf=1 -inline-all -split-eh -reorder-functions-use-hot-size -peepholes=none -jump-tables=aggressive -inline-ap -indirect-call-promotion=all -dyno-stats -use-gnu-stack -frame-opt=hot 
@@ -149,7 +151,7 @@ checking for sys/mkdev.h... no
 checking for sys/mman.h... yes
 checking for sys/modem.h... no
 checking for sys/param.h... yes
-checking for sys/pidfd.h... yes
+checking for sys/pidfd.h... no
 checking for sys/poll.h... yes
 checking for sys/random.h... yes
 checking for sys/resource.h... yes
@@ -255,7 +257,7 @@ checking for --with-tzpath... "/usr/share/zoneinfo"
 checking for t_open in -lnsl... no
 checking for socket in -lsocket... no
 checking for --with-libs... no
-checking for --with-system-expat... yes
+checking for --with-system-expat... no
 checking for libffi... yes
 checking for ffi_prep_cif_var... yes
 checking for ffi_prep_closure_loc... yes
@@ -471,7 +473,7 @@ checking for sigwaitinfo... yes
 checking for snprintf... yes
 checking for splice... yes
 checking for strftime... yes
-checking for strlcpy... yes
+checking for strlcpy... no
 checking for strsignal... yes
 checking for symlinkat... yes
 checking for sync... yes
@@ -641,7 +643,7 @@ checking for --with-wheel-pkg-dir... no
 checking whether right shift extends the sign bit... yes
 checking for getc_unlocked() and friends... yes
 checking for libedit... yes
-checking how to link readline... edit (CFLAGS: -I/usr/include/editline, LIBS: -ledit )
+checking how to link readline... edit (CFLAGS: -I/usr/include/editline, LIBS: -ledit)
 checking whether rl_completion_append_character is declared... yes
 checking whether rl_completion_suppress_append is declared... yes
 checking for rl_pre_input_hook in -ledit... yes
@@ -650,7 +652,7 @@ checking for rl_resize_terminal in -ledit... yes
 checking for rl_completion_matches in -ledit... yes
 checking whether rl_catch_signals is declared... yes
 checking for append_history in -ledit... yes
-checking for rl_compdisp_func_t... yes
+checking for rl_compdisp_func_t... no
 checking if rl_startup_hook takes arguments... yes
 checking for broken nice()... no
 checking for broken poll()... no
@@ -672,7 +674,7 @@ checking for library containing initscr... none required
 checking for library containing update_panels... none required
 checking for term.h... yes
 checking whether mvwdelch is an expression... yes
-checking whether WINDOW has _flags... no
+checking whether WINDOW has _flags... yes
 checking for curses function is_pad... yes
 checking for curses function is_term_resized... yes
 checking for curses function resize_term... yes
