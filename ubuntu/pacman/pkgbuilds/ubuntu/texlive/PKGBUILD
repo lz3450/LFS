@@ -1,8 +1,8 @@
 pkgname=texlive
-pkgver=74361
-_texliveyear=2024
-_texmfver=20240312
-pkgrel=4
+pkgver=74504
+_texliveyear=2025
+_texmfver=20250308
+pkgrel=1
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -22,9 +22,9 @@ source=(
   $pkgname.install
 )
 # noextract=(texlive-$_texmfver-texmf.tar.xz)
-sha256sums=('4f0c577501bd0ff2635d285202c029f14f9315d2b13db0d34b693c39191497bb'
+sha256sums=('8472bb554202191c85617ca1f3ffe21ba4a8b8928e87076af5aab48f247ce5ed'
             'SKIP'
-            'ab4e1c2361527e019127015203b8c17afb9154b7632f76def6267377de516ee2'
+            '68353b957b1b0daa2136c020fb9bab9c7ac8a19e1cbb37826cf74a2cc987efe2'
             '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')
 
 build_date="$(date '+%Y/%m/%d %T %z') ($pkgrel)"
@@ -200,7 +200,7 @@ EOF
       -e '/^revision [0-9]\+/c\revision '"$pkgver" \
       -e '}' \
       "$pkgdir/$PREFIX/tlpkg/texlive.tlpdb"
-  # texmfcnf.lua
+  ### texmfcnf.lua
   sed -i \
       -e 's/\.texlive2024/\.texlive/' \
       -e '/TEXMFSYSVAR/s/selfautoparent/selfautodir/' \

@@ -1,4 +1,4 @@
-Configuration of TeX Live 2024-03-10:
+Configuration of TeX Live 2025-03-07:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
