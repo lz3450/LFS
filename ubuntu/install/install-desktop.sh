@@ -10,10 +10,9 @@ if [[ $EUID -ne 0 ]]; then
     exit 255
 fi
 
-pkgs=(
+common_deb_pkgs=(
   fonts-ubuntu
   gnome-shell-extension-ubuntu-dock
-  gnome-shell-extension-ubuntu-tiling-assistant
   gnome-system-monitor
   gnome-terminal
   gsettings-ubuntu-schemas
@@ -28,12 +27,23 @@ pkgs=(
   yaru-theme-icon
   yaru-theme-sound
 )
+noble_deb_pkgs=(
+  gnome-shell-extension-ubuntu-tiling-assistant
+)
+declare -a deb_pkgs
+
+. /etc/os-release
+case "$UBUNTU_CODENAME" in
+    jammy)      deb_pkgs=("${common_deb_pkgs[@]}") ;;
+    noble)      deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}") ;;
+    *)          echo "Unknown suite \"$1\"" && exit 1
+esac
 
 # install packages
 apt-get update
 apt-get upgrade -y
-apt-get install -s "${pkgs[@]}" | grep "^Inst" | awk '{print $2}' | sort -n > desktop-to-install-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
-apt-get install -y "${pkgs[@]}"
+apt-get install -s "${deb_pkgs[@]}" | grep "^Inst" | awk '{print $2}' | sort -n > desktop-to-install-pkgs-$UBUNTU_CODENAME.txt
+apt-get install -y "${deb_pkgs[@]}"
 apt-get purge -y \
   apport* \
   avahi* \
@@ -43,8 +53,8 @@ apt-get purge -y \
   whoopsie
 apt-get autoremove --purge -y
 
-dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > desktop-installed-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
-apt-mark showmanual > manual-installed-pkgs-$(. /etc/os-release && echo $UBUNTU_CODENAME).txt
+dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > desktop-installed-pkgs-$UBUNTU_CODENAME.txt
+apt-mark showmanual > manual-installed-pkgs-$UBUNTU_CODENAME.txt
 
 # disable automount
 gsettings set org.gnome.desktop.media-handling automount false
@@ -60,14 +70,4 @@ chmod 600 /etc/netplan/00-default.yaml
 
 # configure default target
 # systemctl set-default multi-user.target
-case "$(. /etc/os-release && echo $UBUNTU_CODENAME)" in
-    noble)
-        systemctl set-default graphical.target
-        ;;
-    jammy)
-        systemctl set-default graphics.target
-        ;;
-    *)
-        echo "Not supported codename"
-        ;;
-esac
+systemctl set-default graphical.target

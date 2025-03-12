@@ -5,13 +5,17 @@
 
 set -e
 
+. /etc/os-release
+
 CERT_DIR=$HOME/.config/gnome-remote-desktop/certificates
 KEY="$CERT_DIR"/grd-tls.key
 CSR="$CERT_DIR"/grd-tls.csr
 CRT="$CERT_DIR"/grd-tls.crt
 
 sudo nano /etc/gdm3/custom.conf
-sudo systemctl disable gnome-remote-desktop.service
+if [[ $UBUNTU_CODENAME == "noble" ]]; then
+    sudo systemctl disable gnome-remote-desktop.service
+fi
 systemctl --user enable gnome-remote-desktop.service
 systemctl --user start gnome-remote-desktop.service
 
