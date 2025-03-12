@@ -4,7 +4,7 @@
         "*jammy.txt",
         "*noble.txt",
         "config.txt",
-        "help.txt",
+        "help.txt"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
@@ -286,6 +286,7 @@
         "nologin",
         "nolvmconf",
         "nomdadmconf",
+        "noninteractive",
         "NOPASSWD",
         "noprepare",
         "northamerica",
