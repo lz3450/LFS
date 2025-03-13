@@ -2,7 +2,7 @@
 
 pkgname=rust
 pkgver=1.85.0
-pkgrel=1
+pkgrel=7
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')
@@ -36,6 +36,7 @@ build() {
     # --local-rust-root=/"$PREFIX"
     ################
     --enable-llvm-link-shared
+    --enable-rpath
     --enable-sanitizers
     --enable-profiler
     "--prefix=/$PREFIX"

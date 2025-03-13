@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g40
-pkgrel=35
+pkgrel=42
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -30,6 +30,7 @@ sha256sums=('SKIP')
 MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
 # MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"
 MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now"
+RPATH_FLAGS="-Wl,-rpath=/$PREFIX/lib"
 
 pkgver() {
   cd $pkgname
@@ -46,7 +47,7 @@ prepare() {
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
       -e "/^#CFLAGS=/c\CFLAGS=\"$MAKEPKG_CFLAGS\"" \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
-      -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS -Wl,-rpath,/$PREFIX/lib\"" \
+      -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS $RPATH_FLAGS\"" \
       -e '/^#LTOFLAGS=/c\LTOFLAGS="-flto -ffat-lto-objects"' \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j $(nproc) -O"' \
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
@@ -63,6 +64,7 @@ prepare() {
       etc/makepkg.conf.in
 
   sed -i \
+      -e 's|\(RUSTFLAGS=\"[^\"]*\)\"|\1 -C link-arg='"$RPATH_FLAGS"'"|' \
       -e '/^#RUSTFLAGS=/s/#//' \
       -e '/^#DEBUG_RUSTFLAGS=/s/#//' \
       etc/makepkg.conf.d/rust.conf.in

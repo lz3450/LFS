@@ -9,9 +9,9 @@
 
 # Flags used for the Rust compiler, similar in spirit to CFLAGS. Read
 # linkman:rustc[1] for more details on the available flags.
-RUSTFLAGS="-C opt-level=3"
+RUSTFLAGS="-C opt-level=3 -C link-arg=-Wl,-rpath=/opt/lib"
 
 # Additional compiler flags appended to `RUSTFLAGS` for use in debugging.
 # Usually this would include: ``-C debuginfo=2''. Read linkman:rustc[1] for
 # more details on the available flags.
-DEBUG_RUSTFLAGS="-C debuginfo=2"
+DEBUG_RUSTFLAGS="-C debuginfo=2 -C link-arg=-Wl,-rpath=/opt/lib"
