@@ -54,20 +54,4 @@ apt-get purge -y \
 apt-get autoremove --purge -y
 
 dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > desktop-installed-pkgs-$UBUNTU_CODENAME.txt
-apt-mark showmanual > manual-installed-pkgs-$UBUNTU_CODENAME.txt
-
-# disable automount
-gsettings set org.gnome.desktop.media-handling automount false
-
-# configure network
-mkdir -p /etc/netplan
-tee /etc/netplan/00-default.yaml << EOF
-network:
-  version: 2
-  renderer: NetworkManager
-EOF
-chmod 600 /etc/netplan/00-default.yaml
-
-# configure default target
-# systemctl set-default multi-user.target
-systemctl set-default graphical.target
+apt-mark showmanual > desktop-manual-installed-pkgs-$UBUNTU_CODENAME.txt
