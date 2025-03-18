@@ -14,7 +14,7 @@ umask 0022
 # __DEBUG__=1
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_PATH="$(realpath "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 BASH_LIB_DIR=${BASH_LIB_DIR:-"$LFS/bash/lib"}
 
