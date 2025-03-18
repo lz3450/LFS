@@ -20,7 +20,7 @@ WORKDIR=/tmp/nvidia
 DOWNLOADS_DIR="$HOME/Downloads"
 LOG_FILE="$SCRIPT_DIR/nvidia-driver-install.log"
 
-DRIVER_VERSION=565.77
+DRIVER_VERSION=550.135
 RUNFILE=NVIDIA-Linux-x86_64-$DRIVER_VERSION.run
 
 ################################################################################
@@ -42,7 +42,6 @@ sudo ./nvidia-installer \
     --no-backup \
     --disable-nouveau \
     --no-distro-scripts \
-    --no-opengl-files \
     --no-wine-files \
     --no-dkms \
     --no-check-for-alternate-installs \

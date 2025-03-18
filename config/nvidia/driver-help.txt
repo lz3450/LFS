@@ -1,9 +1,9 @@
 
-/home/kzl/Downloads/NVIDIA-Linux-x86_64-565.77.run [options]
+/home/kzl/Downloads/NVIDIA-Linux-x86_64-550.135.run [options]
 
-This program will install the NVIDIA Accelerated Graphics Driver for
-Linux-x86_64 565.77 by unpacking the embedded tarball and executing
-the ./nvidia-installer  installation utility.
+This program will install the NVIDIA Accelerated Graphics Driver
+for Linux-x86_64 550.135 by unpacking the embedded tarball and
+executing the ./nvidia-installer  installation utility.
 
 --info
   Print embedded info (title, default target directory) and exit.
@@ -21,7 +21,7 @@ the ./nvidia-installer  installation utility.
   Check integrity of the archive and exit.
 
 -x, --extract-only
-  Extract the contents of /home/kzl/Downloads/NVIDIA-Linux-x86_64-565.77.run, but do not
+  Extract the contents of /home/kzl/Downloads/NVIDIA-Linux-x86_64-550.135.run, but do not
   run 'nvidia-installer'.
 
 --add-this-kernel
@@ -316,11 +316,8 @@ ADVANCED OPTIONS:
   --systemd-sysconf-prefix=SYSTEMD-SYSCONF-PREFIX
       The path to which systemd unit enable symlinks should be installed. By default, the installer uses `pkg-config --variable=systemdsystemconfdir systemd` to determine the location to install these symlinks, or '/etc/systemd/system' if pkg-config is not available. Ignored if --no-systemd is specified.
 
-  -M KERNEL-MODULE-TYPE, --kernel-module-type=KERNEL-MODULE-TYPE
-      The type of kernel modules to build and install. Valid values are open and proprietary.
-
   -m KERNEL-MODULE-BUILD-DIRECTORY, --kernel-module-build-directory=KERNEL-MODULE-BUILD-DIRECTORY
-      Directly set the directory within the package from which to build the kernel modules. This option is deprecated; use --kernel-module-type instead.
+      The path within the driver package that contains the kernel module build files is normally 'kernel/'.  This option can be used to override this value.
 
   --allow-installation-with-running-driver, --no-allow-installation-with-running-driver
       Proceed with installation even if an NVIDIA driver is already installed and running.
