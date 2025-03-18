@@ -4,7 +4,8 @@
         "*jammy.txt",
         "*noble.txt",
         "config.txt",
-        "help.txt"
+        "driver-help.txt",
+        "help.txt",
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
