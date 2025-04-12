@@ -50,6 +50,7 @@ active_mounts=()
 
 build_opts=()
 rootfs_tarball=""
+declare -i clean=0
 declare -i from_rootfs_backups=0
 declare -i debug=0
 
@@ -155,8 +156,8 @@ Usage: $SCRIPT_NAME [ -r | --rootfs <tarball> ] [ -c | --clean ] [ -b | --build 
     -r, --rootfs <tarball>          rootfs tarball
     -e, --from-rootfs-backups       use rootfs backups, skip configure the rootfs
     -c, --clean                     clean up work files and exit
-    -b, --build <options>           build options
     -d, --debug                     enter debug shell
+    -b, --build <options>           build options
     -V, --version                   print the script version number and exit
     -h, --help                      print this help message and exit
 
@@ -179,11 +180,6 @@ trap clean EXIT SIGINT SIGTERM SIGKILL
 
 while (( $# > 0 )); do
     case "$1" in
-    -b | --build)
-        shift
-        build_opts=("$@")
-        break
-        ;;
     -r | --rootfs)
         shift
         rootfs_tarball="${1:-}"
@@ -191,14 +187,16 @@ while (( $# > 0 )); do
     -e | --from-rootfs-backups)
         from_rootfs_backups=1
         ;;
+    -c | --clean)
+        clean=1
+        ;;
     -d | --debug)
         debug=1
         ;;
-    -c | --clean)
-        _remove_work_dir
-        if [[ -z "$rootfs_tarball" ]]; then
-            exit
-        fi
+    -b | --build)
+        shift
+        build_opts=("$@")
+        break
         ;;
     -V | --version)
         echo "$version"
@@ -215,6 +213,14 @@ while (( $# > 0 )); do
     esac
     shift
 done
+
+if (( $clean )); then
+    _remove_work_dir
+    if [[ -z "$rootfs_tarball" ]]; then
+        info "Cleaned up, exiting..."
+        exit
+    fi
+fi
 
 if (( ${#build_opts[@]} == 0 )); then
     build_opts=('--help')
