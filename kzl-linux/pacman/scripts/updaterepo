@@ -95,12 +95,14 @@ case "$repo" in
             "$LFS_PACMAN_ROOT_DIR/pkgbuilds/ubuntu/" \
             "$LFS_PACMAN_ROOT_DIR/pkgbuilds/22.04/" \
             -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
+        repo="ubuntu"
         ;;
     ubuntu24)
         readarray -t pkgs < <(find \
             "$LFS_PACMAN_ROOT_DIR/pkgbuilds/ubuntu/" \
             "$LFS_PACMAN_ROOT_DIR/pkgbuilds/24.04/" \
             -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
+        repo="ubuntu"
         ;;
     # unknown repo
     *)
