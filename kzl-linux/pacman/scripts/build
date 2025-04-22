@@ -74,7 +74,7 @@ build() {
         mv "$_log" "${_log/.log/.old.log}"
     fi
 
-    cd "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$repo/$_pkgbase"
+    cd "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$pkgbuilds_dir/$_pkgbase"
 
     if [[ -f "install-dependencies.sh" ]]; then
         info "Installing dependencies..."
@@ -215,9 +215,16 @@ while (( $# > 0 )); do
 done
 
 case "$repo" in
-    kzl)
+    kzl|ubuntu)
+        pkgbuilds_dir="$repo"
         ;;
-    ubuntu)
+    ubuntu22)
+        repo="ubuntu"
+        pkgbuilds_dir="22.04"
+        ;;
+    ubuntu24)
+        repo="ubuntu"
+        pkgbuilds_dir="24.04"
         ;;
     *)
         error "Unknown repo name \"$repo\"" 3
