@@ -48,11 +48,11 @@ sudo ./nvidia-installer \
     --no-check-for-alternate-installs \
     --concurrency-level="$(nproc)" \
     --install-libglvnd \
-    --systemd \
-    --print-recommended-kernel-module-type
+    --systemd
 
 sudo rm -vf /usr/lib/modprobe.d/nvidia-installer-disable-nouveau.conf
 echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
 
 sudo chown "$(id -u):$(id -g)" "$LOG_FILE"
-sudo chown "$(id -u):$(id -g)" "$SCRIPT_DIR/nvidia-uninstall-${DRIVER_VERSION%%.*}.log"
+sudo chown "$(id -u):$(id -g)" "$SCRIPT_DIR/nvidia-uninstall.log"
+mv "$SCRIPT_DIR/nvidia-uninstall.log" "$SCRIPT_DIR/nvidia-uninstall-${DRIVER_VERSION%%.*}.log"
