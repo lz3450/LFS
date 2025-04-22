@@ -16,11 +16,12 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
 
+DRIVER_VERSION=535.247.01
+
 WORKDIR=/tmp/nvidia
 DOWNLOADS_DIR="$HOME/Downloads"
-LOG_FILE="$SCRIPT_DIR/nvidia-driver-install.log"
+LOG_FILE="$SCRIPT_DIR/nvidia-driver-install-${DRIVER_VERSION%%.*}.log"
 
-DRIVER_VERSION=550.135
 RUNFILE=NVIDIA-Linux-x86_64-$DRIVER_VERSION.run
 
 ################################################################################
@@ -30,7 +31,7 @@ if [[ ! -f "$DOWNLOADS_DIR/$RUNFILE" ]]; then
 fi
 
 sudo rm -rf "$WORKDIR"
-bash "$DOWNLOADS_DIR/$RUNFILE" -A > driver-help.txt
+bash "$DOWNLOADS_DIR/$RUNFILE" -A > driver-help-${DRIVER_VERSION%%.*}.txt
 bash "$DOWNLOADS_DIR/$RUNFILE" --extract-only --target "$WORKDIR"
 
 cd "$WORKDIR"
@@ -48,10 +49,10 @@ sudo ./nvidia-installer \
     --concurrency-level="$(nproc)" \
     --install-libglvnd \
     --systemd \
-    --no-rebuild-initramfs
+    --print-recommended-kernel-module-type
 
 sudo rm -vf /usr/lib/modprobe.d/nvidia-installer-disable-nouveau.conf
 echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
 
 sudo chown "$(id -u):$(id -g)" "$LOG_FILE"
-sudo chown "$(id -u):$(id -g)" "$SCRIPT_DIR/nvidia-uninstall.log"
+sudo chown "$(id -u):$(id -g)" "$SCRIPT_DIR/nvidia-uninstall-${DRIVER_VERSION%%.*}.log"
