@@ -4,6 +4,7 @@
         "*jammy.txt",
         "*noble.txt",
         "config.txt",
+        "config",
         "driver-help.txt",
         "help.txt",
     ],
