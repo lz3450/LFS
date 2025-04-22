@@ -1,0 +1,50 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=python
+pkgver=3.13.2
+pkgrel=1
+epoch=
+pkgdesc="Next generation of the python high-level scripting language"
+arch=('x86_64')
+url="https://www.python.org/"
+license=('KZL')
+source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
+sha256sums=('e90c9ff14ac99037c6a0d5cfd03c542a29c823d10ada600b3f76d63899458ace')
+
+PREFIX="opt"
+
+build() {
+  cd cpython
+
+  CFLAGS="${CFLAGS/-O2/-O3}"
+
+  msg2 "Configuring..."
+  ./configure \
+    --prefix="/$PREFIX" \
+    --enable-shared=yes \
+    --enable-optimizations=yes \
+    --enable-loadable-sqlite-extensions=yes \
+    --enable-ipv6=yes \
+    --enable-big-digits=30 \
+    --with-pkg-config=yes \
+    --with-lto=yes \
+    --with-tzpath=/usr/share/zoneinfo \
+    --with-system-expat=no \
+    --with-system-libmpdec=no \
+    --with-decimal-contextvar=yes \
+    --with-dbmliborder=gdbm:ndbm \
+    --with-doc-strings=yes \
+    --with-readline=editline \
+    --with-ensurepip=no
+
+  msg2 "Compiling..."
+  make
+}
+
+package() {
+  cd cpython
+
+  make DESTDIR="$pkgdir" install
+
+  rm -vr "$pkgdir/$PREFIX/lib/python${pkgver%.*}"/{test,idlelib/idle_test}
+}

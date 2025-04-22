@@ -1,0 +1,11 @@
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.kernel.org | grep -P -A 1 "<td>longterm:</td>" | grep -oP '6\.6\.\d+' | sort -V | tail -n1)
+srcdir=
+build_system=
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$pkgname"
+    make O=build nconfig
+    cp -v build/.config "$PKGBUILDDIR"/config
+    cd "$PKGBUILDDIR"
+    updpkgsums
+}

@@ -1,0 +1,3 @@
+new_version=$(git ls-remote --tags https://github.com/python/cpython.git | grep -oP '(?<=refs/tags/v)\d+\.\d+\.\d+$' | sort -V | tail -n1)
+srcdir=cpython
+build_system=autoconf
