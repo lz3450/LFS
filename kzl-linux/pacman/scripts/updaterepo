@@ -87,8 +87,20 @@ while (( $# > 0 )); do
 done
 
 case "$repo" in
-    kzl|ubuntu)
+    kzl)
         readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$repo/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
+        ;;
+    ubuntu22)
+        readarray -t pkgs < <(find \
+            "$LFS_PACMAN_ROOT_DIR/pkgbuilds/ubuntu/" \
+            "$LFS_PACMAN_ROOT_DIR/pkgbuilds/22.04/" \
+            -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
+        ;;
+    ubuntu24)
+        readarray -t pkgs < <(find \
+            "$LFS_PACMAN_ROOT_DIR/pkgbuilds/ubuntu/" \
+            "$LFS_PACMAN_ROOT_DIR/pkgbuilds/24.04/" \
+            -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
         ;;
     # unknown repo
     *)
