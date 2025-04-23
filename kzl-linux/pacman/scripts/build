@@ -29,6 +29,7 @@ LOG_DIR="$HOME"/makepkg/log
 
 single_package=""
 repo=""
+repo_pkgbuilds_dirs=()
 declare -i stage
 declare -i updatepkg=1
 declare -i updated_only=0
@@ -42,17 +43,26 @@ prepare() {
     sudo pacman -Scc --noconfirm
     info "Done"
 
-    if [[ ! -e "$repo_path" ]]; then
-        info "Creating empty repo \"$repo\" on \"$repo_path\"..."
-        updaterepo -r "$repo"
-        info "Done"
-    fi
+    updaterepo -r "$repo"
 
     info "Synchronizing package databases..."
     sudo pacman -Syy --noconfirm
     info "Done"
 
     mkdir -p -- "$LOG_DIR"
+}
+
+_get_pkgbuild_dir() {
+    local _pkgbase="$1"
+    local _pkgbuild_dir
+    readarray -t _pkgbuild_dir < <(find "${repo_pkgbuilds_dirs[@]}" -mindepth 1 -maxdepth 1 -type d -name "$_pkgbase" -print)
+
+    if (( ${#_pkgbuild_dir[@]} != 1 )); then
+        error "PKGBUILD directory not found for \"$_pkgbase\"" 7
+    fi
+
+    info "Package directory: ${_pkgbuild_dir[0]}"
+    echo "${_pkgbuild_dir[0]}"
 }
 
 build() {
@@ -74,7 +84,7 @@ build() {
         mv "$_log" "${_log/.log/.old.log}"
     fi
 
-    cd "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$pkgbuilds_dir/$_pkgbase"
+    cd $(_get_pkgbuild_dir "$_pkgbase")
 
     if [[ -f "install-dependencies.sh" ]]; then
         info "Installing dependencies..."
@@ -135,8 +145,8 @@ build() {
     info "Done"
 
     info "Updating repo..."
-    updaterepo -r "$repo" >> "$_log" 2>&1
-    sudo pacman -Sy >> "$_log" 2>&1
+    updaterepo -r "$repo" 2>&1 | tee -a "$_log"
+    sudo pacman -Sy 2>&1 | tee -a "$_log"
     info "Done"
 
     if (( $install > 0 )); then
@@ -145,7 +155,7 @@ build() {
         # sudo pacman -Sddy --noconfirm --overwrite "*" "${_pkgnames[@]}" --config $pacman_conf >> "$_log" 2>&1
         sudo pacman -S --noconfirm ${_pkgnames[@]} >> "$_log" 2>&1
         echo "Package Contents:" >> "$_log" 2>&1
-        pacman -Ql "${_pkgnames[@]}" >> "$_log" 2>&1
+        pacman -Ql "${_pkgnames[@]}" 2>&1 | tee -a "$_log"
         info "Done"
     fi
 }
@@ -215,16 +225,14 @@ while (( $# > 0 )); do
 done
 
 case "$repo" in
-    kzl|ubuntu)
-        pkgbuilds_dir="$repo"
+    kzl)
+        repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/kzl")
         ;;
     ubuntu22)
-        repo="ubuntu"
-        pkgbuilds_dir="22.04"
+        repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/22.04" "$LFS_PACMAN_ROOT_DIR/pkgbuilds/ubuntu")
         ;;
     ubuntu24)
-        repo="ubuntu"
-        pkgbuilds_dir="24.04"
+        repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/24.04" "$LFS_PACMAN_ROOT_DIR/pkgbuilds/ubuntu")
         ;;
     *)
         error "Unknown repo name \"$repo\"" 3
@@ -262,7 +270,7 @@ else
                     ;;
             esac
             ;;
-        ubuntu)
+        ubuntu22|ubuntu24)
             case "$stage" in
                 1)
                     pkgs=("${ubuntu_stage1_pkgs[@]}")
@@ -280,8 +288,6 @@ else
             ;;
     esac
 fi
-
-repo_path="/home/.repository/$repo/$repo.db.tar.zst"
 
 ################################################################################
 
@@ -316,4 +322,5 @@ epilogue
 # 4: unknown stage
 # 5: cannot update the PKGBUILD
 # 6: cannot use --updated-only together with --no-updatepkg
+# 7: PKGBUILD directory not found
 # 255: unknown option
