@@ -39,11 +39,15 @@ declare -i no_check=0
 
 ### functions
 prepare() {
+    local _log="$LOG_DIR/prepare.log"
+
     info "Removing pacman cache and database..."
     sudo pacman -Scc --noconfirm
     info "Done"
 
-    updaterepo -r "$repo"
+    info "Updating pacman database..."
+    updaterepo -r "$repo" > "$_log" 2>&1
+    info "Done"
 
     info "Synchronizing package databases..."
     sudo pacman -Syy --noconfirm
@@ -145,7 +149,7 @@ build() {
     info "Done"
 
     info "Updating repo..."
-    updaterepo -r "$repo" 2>&1 | tee -a "$_log"
+    updaterepo -r "$repo" >> "$_log" 2>&1
     sudo pacman -Sy 2>&1 | tee -a "$_log"
     info "Done"
 
@@ -153,9 +157,9 @@ build() {
         info "Installing package..."
         local -a _pkgnames=($(get_pkgnames "$_pkgname"))
         # sudo pacman -Sddy --noconfirm --overwrite "*" "${_pkgnames[@]}" --config $pacman_conf >> "$_log" 2>&1
-        sudo pacman -S --noconfirm ${_pkgnames[@]} >> "$_log" 2>&1
+        sudo pacman -S --noconfirm ${_pkgnames[@]} 2>&1 | tee -a "$_log"
         echo "Package Contents:" >> "$_log" 2>&1
-        pacman -Ql "${_pkgnames[@]}" 2>&1 | tee -a "$_log"
+        pacman -Ql "${_pkgnames[@]}" >> "$_log" 2>&1
         info "Done"
     fi
 }
