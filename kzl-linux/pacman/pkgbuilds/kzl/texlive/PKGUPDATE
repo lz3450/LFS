@@ -10,10 +10,10 @@ pre_update() {
     sed -i -e "s|^_texliveyear=[0-9]\{4\}$|_texliveyear=$_latex_year|" PKGBUILD
 
     ### update `_texmfver`
-    texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
-    test -n "$texmf_version" || return 1
-    echo "Latest texmf version: $texmf_version"
-    sed -i -e "s|^_texmfver=[0-9]\{8\}$|_texmfver=$texmf_version|" PKGBUILD
+    local _texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
+    test -n "$_texmf_version" || return 1
+    echo "Latest texmf version: $_texmf_version"
+    sed -i -e "s|^_texmfver=[0-9]\{8\}$|_texmfver=$_texmf_version|" PKGBUILD
 
     ### force update `tlpdb`
     rm -vf "$SRCDEST"/texlive.tlpdb
