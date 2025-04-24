@@ -24,6 +24,7 @@ backup=(
   etc/makepkg.conf.d/rust.conf
   etc/pacman.conf
 )
+# _ref="v$pkgver"
 source=(
   # git+https://gitlab.archlinux.org/pacman/pacman.git#tag=$_ref
   # git+https://gitlab.archlinux.org/pacman/pacman.git#branch=$_ref
@@ -48,12 +49,13 @@ prepare() {
   cd $pkgname
 
   sed -i \
+      -e '/^#NPROC=/c\NPROC="$(nproc)"' \
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
       -e "/^#CFLAGS=/c\CFLAGS=\"$MAKEPKG_CFLAGS\"" \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
       -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS\"" \
       -e '/^#LTOFLAGS=/c\LTOFLAGS="-flto -ffat-lto-objects"' \
-      -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc) -O"' \
+      -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j $(nproc) -O"' \
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="$DEBUG_CFLAGS"' \
       -e '/^#BUILDDIR=/c\BUILDDIR="$HOME/makepkg/build"' \
