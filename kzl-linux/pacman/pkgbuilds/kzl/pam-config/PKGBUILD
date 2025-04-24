@@ -19,6 +19,8 @@ source=(
 sha256sums=('5708b7615b45b87ef358c83d8278bb6933a2cb7466abc8d39fdff5de51ba3a4b'
             '543aca8b2e4dcd185bbade235d9d737699e59f6d75372c5ec74fd950c1494fd2')
 
+# https://github.com/authselect/authselect
+
 package() {
   install -dm755 "$pkgdir"/etc/pam.d/
   install -Dm644 "$srcdir"/system-auth "$pkgdir"/etc/pam.d/
