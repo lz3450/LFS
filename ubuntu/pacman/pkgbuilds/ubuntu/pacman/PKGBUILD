@@ -13,9 +13,6 @@ backup=(
   "$PREFIX/etc/pacman.conf"
 )
 # _ref="v$pkgver"
-# source=(git+https://gitlab.archlinux.org/pacman/pacman.git#tag=$_ref)
-# source=(git+https://gitlab.archlinux.org/pacman/pacman.git#branch=$_ref)
-# source=(git+https://gitlab.archlinux.org/pacman/pacman.git#commit=$_ref)
 source=(
   # git+https://gitlab.archlinux.org/pacman/pacman.git#tag=$_ref
   # git+https://gitlab.archlinux.org/pacman/pacman.git#branch=$_ref
@@ -28,7 +25,6 @@ sha256sums=('SKIP')
 # Order of options matters
 # MAKEPKG_CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"
 MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
-# MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"
 MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now"
 RPATH_FLAGS="-Wl,-rpath=/$PREFIX/lib"
 
