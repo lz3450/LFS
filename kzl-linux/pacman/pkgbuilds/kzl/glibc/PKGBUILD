@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=glibc
-pkgver=2.40.g70
-pkgrel=9
+pkgver=2.40.g117
+pkgrel=5
 epoch=
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"

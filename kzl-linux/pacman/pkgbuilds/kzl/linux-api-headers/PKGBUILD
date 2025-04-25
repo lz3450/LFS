@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=linux-api-headers
-pkgver=6.6.77
-pkgrel=2
+pkgver=6.6.87
+pkgrel=3
 epoch=
 pkgdesc="Linux kernel user space headers"
 arch=('any')

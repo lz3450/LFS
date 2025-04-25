@@ -4,7 +4,7 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=gcc
-pkgver=14.2.0.g778
+pkgver=14.2.0.g1157
 pkgrel=3
 epoch=
 pkgdesc="The GNU Compiler Collection"

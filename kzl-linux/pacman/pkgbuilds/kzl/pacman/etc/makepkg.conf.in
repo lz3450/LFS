@@ -36,7 +36,7 @@ VCSCLIENTS=('bzr::breezy'
 CARCH="@CARCH@"
 CHOST="@CHOST@"
 
-#NPROC=2
+NPROC="$(nproc)"
 
 #-- Compiler and Linker Flags
 CPPFLAGS=""
@@ -45,7 +45,7 @@ CXXFLAGS="$CFLAGS"
 LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"
 LTOFLAGS="-flto -ffat-lto-objects"
 #-- Make Flags: change this for DistCC/SMP systems
-MAKEFLAGS="-j$(nproc) -O"
+MAKEFLAGS="-j $(nproc) -O"
 #-- Debugging flags
 DEBUG_CFLAGS="-g"
 DEBUG_CXXFLAGS="$DEBUG_CFLAGS"
