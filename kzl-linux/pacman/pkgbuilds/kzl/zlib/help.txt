@@ -82,40 +82,13 @@
 -- Detecting CXX compile features - done
 -- Could NOT find GTest (missing: GTEST_LIBRARY GTEST_INCLUDE_DIR GTEST_MAIN_LIBRARY) 
 -- Git checking out GoogleTest release-1.12.1
-CMake Deprecation Warning at tmp/_deps/googletest-src/CMakeLists.txt:4 (cmake_minimum_required):
-  Compatibility with CMake < 3.10 will be removed from a future version of
-  CMake.
-
-  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-  to tell CMake that the project requires at least <min> but has been updated
-  to work with policies introduced by <max> or earlier.
-
-
-CMake Deprecation Warning at tmp/_deps/googletest-src/googlemock/CMakeLists.txt:39 (cmake_minimum_required):
-  Compatibility with CMake < 3.10 will be removed from a future version of
-  CMake.
-
-  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-  to tell CMake that the project requires at least <min> but has been updated
-  to work with policies introduced by <max> or earlier.
-
-
-CMake Deprecation Warning at tmp/_deps/googletest-src/googletest/CMakeLists.txt:49 (cmake_minimum_required):
-  Compatibility with CMake < 3.10 will be removed from a future version of
-  CMake.
-
-  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-  to tell CMake that the project requires at least <min> but has been updated
-  to work with policies introduced by <max> or earlier.
-
-
 -- Found Python: /usr/bin/python3.12 (found version "3.12.1") found components: Interpreter
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE
 -- The following features have been enabled:
 
- * CMAKE_BUILD_TYPE, Build type: Release (default)
+ * CMAKE_BUILD_TYPE, Build type: Release (selected)
  * XSAVE, Support XSAVE intrinsics using "-mxsave"
  * SSSE3_ADLER32, Support SSSE3-accelerated adler32, using "-mssse3"
  * SSE42_CRC, Support SSE4.2 optimized adler32 hash generation, using "-msse4.2"
@@ -169,7 +142,7 @@ CMake Deprecation Warning at tmp/_deps/googletest-src/googletest/CMakeLists.txt:
 
  * GTest
 
--- Configuring done (6.8s)
+-- Configuring done (6.9s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/zlib/src/zlib-ng/tmp
 -- Cache values
@@ -182,7 +155,7 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 // Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
-// Choose the type of build, standard options are: Debug Release RelWithDebInfo MinSizeRel.
+// Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ...
 CMAKE_BUILD_TYPE:STRING=Release
 
 // Enable/Disable color output during build.

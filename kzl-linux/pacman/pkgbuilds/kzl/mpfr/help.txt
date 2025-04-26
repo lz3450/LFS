@@ -1,4 +1,4 @@
-Configuration of MPFR 4.2.1:
+Configuration of MPFR 4.2.2:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -47,8 +47,13 @@ Optional Features:
                           speeds up one-time build
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
+  --enable-pic[=PKGS]     try to use only PIC/non-PIC objects [default=use
+                          both]
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
+  --enable-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
   --disable-libtool-lock  avoid locking (might break parallel builds)
 
 Optional Packages:
@@ -61,11 +66,6 @@ Optional Packages:
   --with-mini-gmp=DIR     use mini-gmp (sources in DIR) instead of GMP
                           (experimental, please read doc/mini-gmp file)
   --with-mulhigh-size=NUM internal threshold table for mulhigh
-  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
-                          both]
-  --with-aix-soname=aix|svr4|both
-                          shared library versioning (aka "SONAME") variant to
-                          provide on AIX, [default=aix].
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
@@ -82,7 +82,7 @@ Some influential environment variables:
   LT_SYS_LIBRARY_PATH
               User-defined run-time library search path.
 
-Use these variables to override the choices made by `configure' or to help
+Use these variables to override the choices made by 'configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.

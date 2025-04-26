@@ -169,7 +169,7 @@ CMake Deprecation Warning at build/_deps/googletest-src/googletest/CMakeLists.tx
 
  * GTest
 
--- Configuring done (8.2s)
+-- Configuring done (8.0s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/zlib/src/zlib-ng/build
 -- Cache values

@@ -17,7 +17,7 @@ Optional Features:
 
   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
   --enable-ld[=ARG]       build ld [ARG={default,yes,no}]
-  --enable-gprofng[=ARG]  build gprofng [ARG={yes,no}]
+  --disable-gprofng       do not build gprofng
   --enable-compressed-debug-sections={all,gas,gold,ld,none}
                           Enable compressed debug sections for gas, gold or ld
                           by default
@@ -46,6 +46,8 @@ Optional Features:
                           plugins [none]
   --enable-host-pie       build position independent host executables
   --enable-host-shared    build host code as shared libraries
+  --enable-libgdiagnostics
+                          build libgdiagnostics shared library
   --enable-stage1-languages[=all]
                           choose additional languages to build during stage1.
                           Mostly useful for compiler development
@@ -368,11 +370,13 @@ Optional Features:
                           Use nano version formatted IO
 
   --enable-standard-branch-protection
-                          enable Branch Target Identification Mechanism and
-                          Return Address Signing by default for AArch64
+                          enable Branch Target Identification Mechanism,
+                          Return Address Signing, and Guarded Control Stack by
+                          default for AArch64
   --disable-standard-branch-protection
-                          disable Branch Target Identification Mechanism and
-                          Return Address Signing by default for AArch64
+                          disable Branch Target Identification Mechanism,
+                          Return Address Signing, and Guarded Control Stack by
+                          default for AArch64
 
 
   --enable-fix-cortex-a53-835769
@@ -412,9 +416,12 @@ Optional Features:
   --enable-plugin         enable plugin support
   --enable-host-shared    build host code as shared libraries
   --enable-host-pie       build host code as PIE
+  --enable-libgdiagnostics
+                          build libgdiagnostics shared library
   --enable-host-bind-now  link host code as BIND_NOW
   --disable-libquadmath-support
                           disable libquadmath support for Fortran
+  --enable-versioned-jit  enable versioned libgccjit build
   --enable-default-pie    enable Position Independent Executable as default
   --enable-cet            enable Intel CET in host libraries [default=auto]
   --enable-s390-excess-float-precision
@@ -454,7 +461,7 @@ Optional Packages:
                           generic when splitting match.pd. [default=10]
   --with-insnemit-partitions=num
                           Set the number of partitions of insn-emit.cc for
-                          genemit to create. [default=10]
+                          genemit and genrecog to create. [default=10]
   --with-dwarf2           force the default debug format to be DWARF 2 (or
                           later)
   --with-specs=SPECS      add SPECS to driver command-line processing
@@ -464,8 +471,8 @@ Optional Packages:
                           Root for documentation URLs
   --with-changes-root-url=URL
                           Root for GCC changes URLs
-  --with-multilib-list    select multilibs (AArch64, ARM, AVR, OR1K, RISC-V,
-                          SH and x86-64 only)
+  --with-multilib-list    select multilibs (AArch64, ARM, AVR, nvptx, OR1K,
+                          RISC-V, SH and x86-64 only)
   --with-multilib-generator
                           Multi-libs configuration string (RISC-V only)
   --with-zstd=PATH        specify prefix directory for installed zstd library.
@@ -543,6 +550,8 @@ Optional Features:
   --enable-maintainer-mode
                           enable make rules and dependencies not useful (and
                           sometimes confusing) to the casual installer
+  --enable-host-pie       build host code as PIE
+  --enable-host-bind-now  link host code as BIND_NOW
 
 Some influential environment variables:
   CC          C compiler command
@@ -720,6 +729,7 @@ Optional Features:
   --disable-largefile     omit support for large files
   --enable-cet            enable Intel CET in target libraries [default=auto]
   --disable-werror        disable building with -Werror
+  --enable-host-pie       build host code as PIE
   --enable-host-shared    build host code as shared libraries
   --enable-cet            enable Intel CET in host libraries [default=auto]
 
@@ -1058,6 +1068,70 @@ it to find libraries and programs with nonstandard names/locations.
 Report bugs to the package provider.
 GNU C Runtime Library home page: <http://www.gnu.org/software/libgcc/>.
 General help using GNU software: <http://www.gnu.org/gethelp/>.
+
+Configuration of package-unused version-unused:
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-multilib       build many library versions (default)
+  --enable-maintainer-mode
+                          enable make rules and dependencies not useful (and
+                          sometimes confusing) to the casual installer
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
+  --enable-version-specific-runtime-libs
+                          Specify that runtime libraries should be installed
+                          in a compiler-specific directory
+  --enable-dependency-tracking
+                          do not reject slow dependency extractors
+  --disable-dependency-tracking
+                          speeds up one-time build
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-static[=PKGS]  build static libraries [default=yes]
+  --enable-fast-install[=PKGS]
+                          optimize for fast installation [default=yes]
+  --disable-libtool-lock  avoid locking (might break parallel builds)
+  --enable-darwin-at-rpath
+                          install libraries with @rpath/library-name, requires
+                          rpaths to be added to executables
+  --disable-rpath         do not hardcode runtime library paths
+  --disable-libquadmath   disable libquadmath support for libgcobol
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-pic              try to use only PIC/non-PIC objects [default=use
+                          both]
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-toolexeclibdir=DIR
+                          install libraries built with a cross compiler within
+                          DIR
+  --with-gnu-ld           assume the C compiler uses GNU ld default=no
+  --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
+  --without-libiconv-prefix     don't search for libiconv in includedir and libdir
+  --with-libiconv-type=TYPE     type of library to search for (auto/static/shared)
+  --with-gcc-major-version-only
+                          use only GCC major number in filesystem paths
+
+Some influential environment variables:
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  CPP         C preprocessor
+  CXX         C++ compiler command
+  CXXFLAGS    C++ compiler flags
+  CXXCPP      C++ preprocessor
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to the package provider.
 
 Configuration of GNU Fortran Runtime Library 0.3:
 

@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=binutils
-pkgver=2.44.g94
-pkgrel=3
+pkgver=2.44.g96
+pkgrel=4
 epoch=
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('x86_64')
