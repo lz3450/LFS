@@ -1,7 +1,7 @@
 -- Using CMake version 3.31.5
 -- ZLIB_HEADER_VERSION: 1.3.1
 -- ZLIBNG_HEADER_VERSION: 2.2.3
--- The C compiler identification is GNU 14.2.1
+-- The C compiler identification is GNU 15.1.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
@@ -74,7 +74,7 @@
 -- Performing Test HAVE_VPCLMULQDQ_INTRIN
 -- Performing Test HAVE_VPCLMULQDQ_INTRIN - Success
 -- Architecture-specific source files: arch/x86/x86_features.c;arch/x86/chunkset_sse2.c;arch/x86/compare256_sse2.c;arch/x86/slide_hash_sse2.c;arch/x86/adler32_ssse3.c;arch/x86/chunkset_ssse3.c;arch/x86/adler32_sse42.c;arch/x86/crc32_pclmulqdq.c;arch/x86/slide_hash_avx2.c;arch/x86/chunkset_avx2.c;arch/x86/compare256_avx2.c;arch/x86/adler32_avx2.c;arch/x86/adler32_avx512.c;arch/x86/chunkset_avx512.c;arch/x86/adler32_avx512_vnni.c;arch/x86/crc32_vpclmulqdq.c
--- The CXX compiler identification is GNU 14.2.1
+-- The CXX compiler identification is GNU 15.1.1
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
 -- Check for working CXX compiler: /usr/bin/c++ - skipped
@@ -169,7 +169,7 @@ CMake Deprecation Warning at build/_deps/googletest-src/googletest/CMakeLists.tx
 
  * GTest
 
--- Configuring done (8.0s)
+-- Configuring done (8.3s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/zlib/src/zlib-ng/build
 -- Cache values

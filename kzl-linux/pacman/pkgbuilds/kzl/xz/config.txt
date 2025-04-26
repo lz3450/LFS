@@ -1,4 +1,4 @@
--- The C compiler identification is GNU 14.2.1
+-- The C compiler identification is GNU 15.1.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
@@ -167,7 +167,7 @@ CMake Warning at CMakeLists.txt:394 (message):
 -- Performing Test HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC - Success
 -- Looking for futimens
 -- Looking for futimens - found
--- Configuring done (7.1s)
+-- Configuring done (7.2s)
 -- Generating done (0.1s)
 -- Build files have been written to: /home/kzl/makepkg/build/xz/src/xz/build
 -- Cache values

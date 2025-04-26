@@ -2,7 +2,7 @@
 
 pkgname=gmp
 pkgver=6.3.0
-pkgrel=12
+pkgrel=15
 epoch=
 pkgdesc="A free library for arbitrary precision arithmetic"
 arch=('x86_64')
@@ -13,6 +13,9 @@ sha256sums=('7f55d73f472c29cc14d7fa985f3654d48829415b649eaf61646b7b33f2a80e27')
 
 build() {
   cd $pkgname-$pkgver
+
+  # gcc 15 defaults to -std=gnu23
+  CFLAGS+=" -std=gnu17"
 
   msg2 "Configuring..."
   ./configure \

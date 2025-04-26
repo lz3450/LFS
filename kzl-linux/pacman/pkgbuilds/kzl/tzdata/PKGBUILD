@@ -2,7 +2,7 @@
 
 pkgname=tzdata
 pkgver=2025b
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Sources for time zone and daylight saving time data"
 arch=('x86_64')
