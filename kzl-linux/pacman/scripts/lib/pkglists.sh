@@ -384,10 +384,3 @@ kzl_stage3_pkgs=(
     aria2
     # libtorrent-rasterbar qbittorrent
 )
-
-ubuntu_pkgs=(
-    pacman
-    pacman-contrib
-    debootstrap
-    llvm-project-latest
-)
