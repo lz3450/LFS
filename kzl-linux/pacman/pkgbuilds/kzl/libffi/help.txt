@@ -1,4 +1,4 @@
-Configuration of libffi 3.4.7:
+Configuration of libffi 3.4.8:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options

@@ -2,7 +2,7 @@
 
 pkgname=libtasn1
 pkgver=4.20.0
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="The ASN.1 library used by GnuTLS, p11-kit"
 arch=('x86_64')

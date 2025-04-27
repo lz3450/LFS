@@ -124,9 +124,9 @@ checking whether <sys/param.h> defines MIN and MAX... yes
 checking whether the compiler produces multi-arch binaries... no
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
-checking for unreachable... no
-checking whether nullptr_t needs <stddef.h>... no
-checking for clean definition of __STDC_VERSION_STDDEF_H__... yes
+checking for unreachable... yes
+checking whether nullptr_t needs <stddef.h>... yes
+checking for clean definition of __STDC_VERSION_STDDEF_H__... no
 checking for wint_t... yes
 checking whether wint_t is large enough... yes
 checking whether stdint.h conforms to C99... yes
@@ -148,7 +148,7 @@ checking for blkcnt_t... yes
 checking whether execvpe is declared... yes
 checking for valgrind... no
 checking for C compiler option to allow warnings... -Wno-error
-checking for bool, true, false... no
+checking for bool, true, false... yes
 checking if gcc/ld supports -Wl,--output-def... no
 checking if LD -Wl,--version-script works... yes
 checking whether the -Werror option is usable... yes
@@ -204,8 +204,8 @@ checking for TIME_UTC in <time.h>... yes
 checking whether <wchar.h> uses 'inline' correctly... yes
 checking whether wcsdup is declared... yes
 checking for alloca as a compiler built-in... yes
-checking for static_assert... yes, an <assert.h> macro
-checking for bool, true, false... (cached) no
+checking for static_assert... yes, a keyword
+checking for bool, true, false... (cached) yes
 checking for library containing clock_gettime... none required
 checking for clock_getres... yes
 checking for clock_gettime... (cached) yes

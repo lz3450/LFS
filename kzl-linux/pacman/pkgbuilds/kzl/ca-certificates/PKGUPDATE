@@ -1,4 +1,4 @@
-new_version=$(curl https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h | grep "NSS_BUILTINS_LIBRARY_VERSION " | awk '{print $NF}' | sed -e "s;\";;g")
+new_version=$(curl https://hg-edge.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h | grep "NSS_BUILTINS_LIBRARY_VERSION " | awk '{print $NF}' | sed -e "s;\";;g")
 srcdir=
 build_system=
 
@@ -13,11 +13,13 @@ pre_update() {
         "$SRCDEST"/README.extr \
         "$SRCDEST"/README.pem \
         "$SRCDEST"/README.openssl \
-        "$SRCDEST"/README.usr
+        "$SRCDEST"/README.usr \
+        "$SRCDEST"/ca-certificates.spec
     updpkgsums
 }
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src"
     cp update-ca-trust "$PKGBUILDDIR"/update-ca-trust.sh
+    sed -i '/%changelog/,$d' "$PKGBUILDDIR"/ca-certificates.spec
 }

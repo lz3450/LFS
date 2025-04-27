@@ -95,7 +95,7 @@ extract() {
 		     -regex '.*/[0-9a-f]{8}\.[0-9]+' | while read link; do
 			target=$(readlink -f "$link")
 			new_link="$DEST_CERTS/$(basename "$link")"
-			ln -s "$target" "$new_link"
+			ln -rs "$target" "$new_link"
 		done
 	fi
 }

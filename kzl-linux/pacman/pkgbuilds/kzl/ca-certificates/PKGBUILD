@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ca-certificates
-pkgver=2.72
-pkgrel=14
+pkgver=2.74
+pkgrel=10
 epoch=
 pkgdesc="CA certificates"
 arch=('any')
@@ -11,30 +11,32 @@ depends=(
   p11-kit
 )
 source=(
-  https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/certdata.txt
-  https://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h
+  https://hg-edge.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/certdata.txt
+  https://hg-edge.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/nssckbi.h
   https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/certdata2pem.py
   https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/update-ca-trust
   https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/README.etc
-  https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/README.src
   https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/README.extr
   https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/README.pem
-  https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/README.openssl
+  https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/README.src
   https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/README.usr
+  https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/ca-certificates.spec
   40-update-ca-trust.hook
 )
-sha256sums=('c99d6d3f8d3d4e47719ba2b648992f5b58b150128d3aca3c05c566d8dc98e116'
-            '0ff8165b6c5dcd1072e374e894f2ed8b80f3b011ec86ca410952254b73a76d39'
+sha256sums=('620fd89c02acb0019f1899dab7907db5d20735904f5a9a0d3a8771a5857ac482'
+            '6dd3073fef4d4014d2ef42dd8fcc04be32cacff0e1fe7afebb21ac591b8eada4'
             'd2a1579dae05fd16175fac27ef08b54731ecefdf414085c610179afcf62b096c'
             '71ee47d1bd6edd8a391e5fc47bd0d420fe1d92c14a10792490143bb6abaad2a0'
             '6c7b9287c41c171c64b358fc7331b8a9ae969fc2d00d997d88bcbf4da0de598a'
-            '86184318d451bec55d70c84e618cbfe10c8adb7dc893964ce4aaecff99d83433'
             '146ff96c60a8ee32bbcf2da59d624d6ecfbab7ef7442529d46d8d63064d8ca58'
             '27362e773c8b6bb065a455a66badb05e2652720bab8ade9ab91f0404cf827dab'
-            '6c812d1ec8ce5bde2216cc42be33021d6345fbea05c14f50c52191a38c175ea9'
+            '86184318d451bec55d70c84e618cbfe10c8adb7dc893964ce4aaecff99d83433'
             '0d2e90b6cf575678cd9d4f409d92258ef0d676995d4d733acdb2425309a38ff8'
+            '78837105c7c13e230a53c1d21a59b35f39b7b1a3ce494543fe41e0084ec40609'
             '4e8aadd6ef62dcc5d186f9fd4a5ef244ab403bba99e68b37bf3986d188f0380b')
 
+pkidir="etc/pki"
+catrustdir="$pkidir/ca-trust"
 p11_format_bundle="ca-bundle.trust.p11-kit"
 
 prepare() {
@@ -43,6 +45,7 @@ prepare() {
     -e '/edk2/d' \
     -e '/"$DEST"\/pem/s/ \\//' \
     -e 's/objsign/sign/g' \
+    -e '/ln -s "$target" "$new_link"/s/-s/-rs/' \
     update-ca-trust
 }
 
@@ -73,52 +76,49 @@ EOF
 package() {
   # https://src.fedoraproject.org/rpms/ca-certificates/blob/rawhide/f/ca-certificates.spec
 
-  install -Dm755 "$srcdir"/update-ca-trust "$pkgdir"/usr/bin/update-ca-trust
-  install -Dm644 "$srcdir"/40-update-ca-trust.hook "$pkgdir"/usr/share/libalpm/hooks/40-update-ca-trust.hook
-
-  local _pkidir="etc/pki"
-  local _catrustdir="$_pkidir/ca-trust"
-
-  install -dm755 "$pkgdir/$_pkidir"/tls/certs
-  install -dm755 "$pkgdir/$_catrustdir"/source
-  install -dm755 "$pkgdir/$_catrustdir"/source/anchors
-  install -dm755 "$pkgdir/$_catrustdir"/source/blocklist
-  install -dm755 "$pkgdir/$_catrustdir"/extracted
-  install -dm755 "$pkgdir/$_catrustdir"/extracted/pem
-  install -dm555 "$pkgdir/$_catrustdir"/extracted/pem/directory-hash
-  install -dm755 "$pkgdir/$_catrustdir"/extracted/openssl
+  install -dm755 "$pkgdir/$pkidir"/tls/certs
+  install -dm755 "$pkgdir/$catrustdir"/extracted
+  install -dm755 "$pkgdir/$catrustdir"/extracted/pem
+  install -dm555 "$pkgdir/$catrustdir"/extracted/pem/directory-hash
+  install -dm755 "$pkgdir/$catrustdir"/source
+  install -dm755 "$pkgdir/$catrustdir"/source/anchors
+  install -dm755 "$pkgdir/$catrustdir"/source/blocklist
   install -dm755 "$pkgdir"/usr/share/pki/ca-trust-source
   install -dm755 "$pkgdir"/usr/share/pki/ca-trust-source/anchors
   install -dm755 "$pkgdir"/usr/share/pki/ca-trust-source/blocklist
 
-  install -pm644 "$srcdir"/README.etc      "$pkgdir/$_catrustdir"/README
-  install -pm644 "$srcdir"/README.src      "$pkgdir/$_catrustdir"/source/README
-  install -pm644 "$srcdir"/README.extr     "$pkgdir/$_catrustdir"/extracted/README
-  install -pm644 "$srcdir"/README.pem      "$pkgdir/$_catrustdir"/extracted/pem/README
-  install -pm644 "$srcdir"/README.openssl  "$pkgdir/$_catrustdir"/extracted/openssl/README
+  install -pm644 "$srcdir"/README.etc      "$pkgdir/$catrustdir"/README
+  install -pm644 "$srcdir"/README.extr     "$pkgdir/$catrustdir"/extracted/README
+  install -pm644 "$srcdir"/README.pem      "$pkgdir/$catrustdir"/extracted/pem/README
+  install -pm644 "$srcdir"/README.src      "$pkgdir/$catrustdir"/source/README
   install -pm644 "$srcdir"/README.usr      "$pkgdir"/usr/share/pki/ca-trust-source/README
 
-  install -Dm644 "$p11_format_bundle" "$pkgdir"/usr/share/pki/ca-trust-source/"$p11_format_bundle"
+  install -Dm644 "$p11_format_bundle" "$pkgdir/usr/share/pki/ca-trust-source/$p11_format_bundle"
 
-  local _p11_kit_config="$srcdir/p11-kit-trust.module"
-  cat > "$_p11_kit_config" << EOF
+  install -Dm755 "$srcdir"/update-ca-trust "$pkgdir"/usr/bin/update-ca-trust
+  install -Dm644 "$srcdir"/40-update-ca-trust.hook "$pkgdir"/usr/share/libalpm/hooks/40-update-ca-trust.hook
+
+  # touch files that will be extracted dynamically by update-ca-trust
+  touch     "$pkgdir/$catrustdir"/extracted/pem/tls-ca-bundle.pem
+  chmod 444 "$pkgdir/$catrustdir"/extracted/pem/tls-ca-bundle.pem
+  touch     "$pkgdir/$catrustdir"/extracted/pem/email-ca-bundle.pem
+  chmod 444 "$pkgdir/$catrustdir"/extracted/pem/email-ca-bundle.pem
+  touch     "$pkgdir/$catrustdir"/extracted/pem/sign-ca-bundle.pem
+  chmod 444 "$pkgdir/$catrustdir"/extracted/pem/sign-ca-bundle.pem
+
+  # Populate "$catrustdir"/extracted/pem/directory-hash
+  export P11_KIT_CONFIG="$srcdir/p11-kit-trust.module"
+  cat > "$P11_KIT_CONFIG" << EOF
 module: p11-kit-trust.so
 trust-policy: yes
 x-init-reserved: paths="$pkgdir/usr/share/pki/ca-trust-source"
 EOF
 
-  # update if `update-ca-trust` is updated
-  export P11_KIT_CONFIG="$_p11_kit_config"
-
-  trust extract --format=pem-bundle --filter=ca-anchors --overwrite --comment --purpose server-auth "$pkgdir/$_catrustdir"/extracted/pem/tls-ca-bundle.pem
-	trust extract --format=pem-bundle --filter=ca-anchors --overwrite --comment --purpose email "$pkgdir/$_catrustdir"/extracted/pem/email-ca-bundle.pem
-	trust extract --format=pem-bundle --filter=ca-anchors --overwrite --comment --purpose code-signing "$pkgdir/$_catrustdir"/extracted/pem/sign-ca-bundle.pem
-  chmod 444 "$pkgdir/$_catrustdir"/extracted/pem/tls-ca-bundle.pem
-  chmod 444 "$pkgdir/$_catrustdir"/extracted/pem/email-ca-bundle.pem
-  chmod 444 "$pkgdir/$_catrustdir"/extracted/pem/sign-ca-bundle.pem
-
-  trust extract --format=pem-directory-hash --filter=ca-anchors --overwrite --purpose server-auth "$pkgdir/$_catrustdir"/extracted/pem/directory-hash
-  find "$pkgdir/$_catrustdir"/extracted/pem/directory-hash -type l \
+  trust extract --format=pem-directory-hash --filter=ca-anchors --overwrite \
+    --purpose server-auth \
+    "$pkgdir/$catrustdir"/extracted/pem/directory-hash
+  rm -f "$P11_KIT_CONFIG"
+  find "$pkgdir/$catrustdir"/extracted/pem/directory-hash -type l \
     -regextype posix-extended -regex '.*/[0-9a-f]{8}\.[0-9]+' \
-    -exec cp -vP {} "$pkgdir/$_pkidir"/tls/certs/ \;
+    -exec cp -vP {} "$pkgdir/$pkidir"/tls/certs/ \;
 }
