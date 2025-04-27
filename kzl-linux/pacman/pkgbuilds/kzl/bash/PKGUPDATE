@@ -1,4 +1,4 @@
-new_version=$(git ls-remote --tags https://git.savannah.gnu.org/git/bash.git | grep -oP '(?<=refs/tags/bash-)\d+\.\d+' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags git://git.savannah.gnu.org/bash.git | grep -oP '(?<=refs/tags/bash-)\d+\.\d+' | sort -V | tail -n1)
 srcdir="$pkgname"
 build_system=autoconf
 

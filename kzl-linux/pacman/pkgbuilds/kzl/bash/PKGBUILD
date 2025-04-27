@@ -16,7 +16,7 @@ depends=(
 )
 provides=(sh)
 source=(
-  git+https://git.savannah.gnu.org/git/bash.git#branch=master
+  git+git://git.savannah.gnu.org/bash.git#branch=master
   dot.bashrc
   dot.bash_logout
   dot.bash_profile
@@ -50,6 +50,9 @@ prepare() {
 build() {
   cd $pkgname
 
+  # gcc 15 defaults to -std=gnu23
+  CFLAGS+=" -std=gnu17"
+
   msg2 "Configuring..."
   ./configure \
     --prefix=/usr \
@@ -72,13 +75,13 @@ package() {
 
   make DESTDIR="$pkgdir" install
 
-  ln -sv bash "$pkgdir"/usr/bin/sh
+  ln -vs bash "$pkgdir"/usr/bin/sh
 
-  install -D -m 644 "$srcdir"/bash.bashrc "$pkgdir"/etc/bash.bashrc
-  install -D -m 644 "$srcdir"/bash.bash_logout "$pkgdir"/etc/bash.bash_logout
+  install -Dm644 "$srcdir"/bash.bashrc "$pkgdir"/etc/bash.bashrc
+  install -Dm644 "$srcdir"/bash.bash_logout "$pkgdir"/etc/bash.bash_logout
 
-  install -d -m 755 "$pkgdir"/etc/skel/
-  install -D -m 644 "$srcdir"/dot.bashrc "$pkgdir"/etc/skel/.bashrc
-  install -D -m 644 "$srcdir"/dot.bash_profile "$pkgdir"/etc/skel/.bash_profile
-  install -D -m 644 "$srcdir"/dot.bash_logout "$pkgdir"/etc/skel/.bash_logout
+  install -dm755 "$pkgdir"/etc/skel/
+  install -Dm644 "$srcdir"/dot.bashrc "$pkgdir"/etc/skel/.bashrc
+  install -Dm644 "$srcdir"/dot.bash_profile "$pkgdir"/etc/skel/.bash_profile
+  install -Dm644 "$srcdir"/dot.bash_logout "$pkgdir"/etc/skel/.bash_logout
 }

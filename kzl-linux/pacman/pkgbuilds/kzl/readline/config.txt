@@ -1,7 +1,4 @@
-/bin/sh: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
-checking build system type... /bin/sh: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
-/bin/sh: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
-x86_64-pc-linux-gnu
+checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
 
 Beginning configuration for readline-8.2 for x86_64-pc-linux-gnu
@@ -96,7 +93,7 @@ checking for sys/ptem.h... no
 checking for special C compiler options needed for large files... no
 checking for _FILE_OFFSET_BITS value needed for large files... no
 checking for type of signal functions... posix
-checking if signal handlers must be reinstalled when invoked... no
+checking if signal handlers must be reinstalled when invoked... yes
 checking for presence of POSIX-style sigsetjmp/siglongjmp... present
 checking for lstat... yes
 checking whether or not strcoll and strcmp differ... no
@@ -149,22 +146,13 @@ checking for wctype_t in wctype.h... yes
 checking for wint_t in wctype.h... yes
 checking for wcwidth broken with unicode combining characters... no
 checking size of wchar_t... 4
-checking configuration for building shared libraries... /bin/sh: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
-supported
+checking configuration for building shared libraries... supported
 configure: creating ./config.status
-/bin/sh: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
 config.status: creating Makefile
-awk: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
 config.status: creating doc/Makefile
-awk: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
 config.status: creating examples/Makefile
-awk: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
 config.status: creating shlib/Makefile
-awk: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
 config.status: creating readline.pc
-awk: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
 config.status: creating history.pc
-awk: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
 config.status: creating config.h
-awk: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
 config.status: executing stamp-h commands
