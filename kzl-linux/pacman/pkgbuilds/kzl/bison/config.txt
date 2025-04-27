@@ -217,7 +217,7 @@ checking for wcrtomb... yes
 checking whether _snprintf is declared... no
 checking whether frexp() can be used without linking with libm... yes
 checking whether alarm is declared... yes
-checking whether getcwd (NULL, 0) allocates memory for result... yes
+checking whether getcwd (NULL, 0) allocates memory for result... no
 checking for getcwd with POSIX signature... yes
 checking whether getcwd is declared... yes
 checking for d_ino member in directory struct... yes
@@ -300,7 +300,7 @@ checking for posix_spawnattr_t... yes
 checking for posix_spawn_file_actions_t... yes
 checking whether stat file-mode macros are broken... no
 checking for nlink_t... yes
-checking for stdbool.h that conforms to C99... yes
+checking for stdbool.h that conforms to C99... no
 checking for _Bool... yes
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
@@ -371,8 +371,6 @@ checking whether frexpl is declared... yes
 checking whether frexpl() can be used without linking with libm... yes
 checking whether frexpl works... yes
 checking whether getcwd handles long file names properly... yes
-checking for getpagesize... yes
-checking whether getcwd succeeds when 4k < cwd_length < 16k... yes
 checking whether gethrtime is declared... no
 checking whether CLOCK_MONOTONIC or CLOCK_REALTIME is defined... yes
 checking whether program_invocation_name is declared... yes
@@ -497,6 +495,14 @@ checking whether use of TIOCGWINSZ requires termios.h... (cached) no
 checking whether use of struct winsize requires sys/ptem.h... no
 checking for stdint.h... (cached) yes
 checking whether getdtablesize works... yes
+checking for closedir... yes
+checking for d_ino member in directory struct... (cached) yes
+checking whether fdopendir is declared... yes
+checking whether fdopendir works... yes
+checking whether fstatat (..., 0) works... yes
+checking for opendir... yes
+checking for readdir... yes
+checking for rewinddir... yes
 checking whether setlocale (LC_ALL, NULL) is multithread-safe... (cached) yes
 checking whether setlocale (category, NULL) is multithread-safe... (cached) yes
 checking whether NLS is requested... yes
@@ -512,7 +518,6 @@ checking for CFLocaleCopyCurrent... no
 checking for GNU gettext in libc... yes
 checking whether to use NLS... yes
 checking where the gettext function comes from... libc
-bison: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for valgrind... no
 checking Valgrind suppression file... 
 checking that generated files are newer than configure... done

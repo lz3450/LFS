@@ -16,12 +16,12 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether the compiler supports GNU C... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to enable C23 features... -std=gnu23
-checking whether gcc -std=gnu23 understands -c and -o together... yes
+checking for gcc option to enable C23 features... none needed
+checking whether gcc understands -c and -o together... yes
 checking whether the compiler is clang... no
 checking for compiler option needed when checking for declarations... none
 checking whether make supports the include directive... yes (GNU style)
-checking dependency style of gcc -std=gnu23... gcc3
+checking dependency style of gcc... gcc3
 checking for ranlib... ranlib
 checking for stdio.h... yes
 checking for stdlib.h... yes
@@ -72,12 +72,12 @@ checking whether it is safe to define __EXTENSIONS__... yes
 checking whether _XOPEN_SOURCE should be defined... no
 checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
-checking how to run the C preprocessor... gcc -std=gnu23 -E
+checking how to run the C preprocessor... gcc -E
 checking for egrep -e... /usr/bin/grep -E
 checking for Minix Amsterdam compiler... no
 checking for ar... ar
-checking for gcc -std=gnu23 option to support large files... none needed
-checking for gcc -std=gnu23 option to support timestamps after 2038... none needed
+checking for gcc option to support large files... none needed
+checking for gcc option to support timestamps after 2038... none needed
 checking for size_t... yes
 checking for working alloca.h... yes
 checking for alloca... yes
@@ -137,7 +137,7 @@ checking for fork... yes
 checking for vfork... yes
 checking for nl_langinfo and CODESET... yes
 checking for a traditional french locale... none
-checking for ld used by gcc -std=gnu23... /usr/bin/ld
+checking for ld used by gcc... /usr/bin/ld
 checking if the linker (/usr/bin/ld) is GNU ld... yes
 checking for shared library run path origin... done
 checking 32-bit host C ABI... no
@@ -153,7 +153,7 @@ checking for an english Unicode locale... en_US.UTF-8
 checking for a transitional chinese locale... none
 checking whether mbrtowc handles incomplete characters... yes
 checking whether mbrtowc works as well as mbtowc... guessing yes
-checking for gcc -std=gnu23 options needed to detect all undeclared functions... none needed
+checking for gcc options needed to detect all undeclared functions... none needed
 checking whether mbrtoc32 is declared... yes
 checking for mbrtoc32... yes
 checking whether mbrtoc32 works as well as mbrtowc... guessing yes
@@ -220,22 +220,19 @@ checking whether wctype supports the "blank" and "punct" character classes... ye
 checking whether langinfo.h defines CODESET... yes
 checking whether langinfo.h defines T_FMT_AMPM... yes
 checking whether langinfo.h defines ALTMON_1... yes
+checking whether langinfo.h defines ABALTMON_1... no
 checking whether langinfo.h defines ERA... yes
 checking whether langinfo.h defines YESEXPR... yes
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
 checking for unreachable... yes
-checking whether nullptr_t needs <stddef.h>... no
+checking whether nullptr_t needs <stddef.h>... yes
 checking for clean definition of __STDC_VERSION_STDDEF_H__... no
 checking whether locale.h defines locale_t... yes
+checking whether locale.h defines _locale_t... no
 checking whether locale.h conforms to POSIX:2001... yes
 checking whether struct lconv is properly defined... yes
 checking for LC_MESSAGES... yes
-checking for uselocale... yes
-checking whether uselocale works... yes
-checking for fake locale system (OpenBSD)... no
-checking for Solaris 11.4 locale system... no
-checking for getlocalename_l... no
 checking whether imported symbols can be declared weak... yes
 checking for multithread API to use... posix
 checking for a sed that does not truncate output... /usr/bin/sed
@@ -444,8 +441,6 @@ checking whether realloc (..., 0) returns nonnull... no
 checking for reallocarray... yes
 checking for working re_compile_pattern... yes
 checking whether setenv validates arguments... yes
-checking whether setlocale (LC_ALL, NULL) is multithread-safe... (cached) yes
-checking whether setlocale (category, NULL) is multithread-safe... (cached) yes
 checking for struct sigaction.sa_sigaction... yes
 checking for sigprocmask... (cached) yes
 checking for stack direction... grows down
@@ -462,9 +457,11 @@ checking for struct stat.st_birthtim.tv_nsec... no
 checking for va_copy... yes
 checking for stpcpy... yes
 checking for strcasecmp... yes
-checking for strncasecmp... yes
-checking whether strncasecmp is declared... yes
+checking whether strcasecmp works... guessing yes
 checking for working strerror function... yes
+checking for strncasecmp... yes
+checking whether strcasecmp works... (cached) guessing yes
+checking whether strncasecmp is declared... yes
 checking for working strnlen... yes
 checking whether strtoimax works... yes
 checking for strtoll... yes
@@ -507,8 +504,8 @@ checking for newlocale... yes
 checking for library containing nanosleep... none required
 checking for working nanosleep... no (mishandles large arguments)
 checking whether <netinet/in.h> is self-contained... yes
-checking for uselocale... (cached) yes
-checking whether uselocale works... (cached) yes
+checking for uselocale... yes
+checking whether uselocale works... yes
 checking whether perror matches strerror... yes
 checking for getppriv... no
 checking whether signature of pselect conforms to POSIX... yes

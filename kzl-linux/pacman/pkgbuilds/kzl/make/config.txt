@@ -69,7 +69,7 @@ checking for sys/loadavg.h... no
 checking whether getloadavg is declared... yes
 checking if system libc has working GNU glob... yes
 checking whether system uses MSDOS-style paths... no
-checking for bool, true, false... no
+checking for bool, true, false... yes
 checking for ranlib... (cached) ranlib
 checking how to run the C preprocessor... gcc -E
 checking for ar... ar

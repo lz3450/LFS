@@ -1,4 +1,4 @@
-Configuration of GNU diffutils 3.11:
+Configuration of GNU diffutils 3.12:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options

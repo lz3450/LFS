@@ -17,6 +17,8 @@ checking whether the compiler supports GNU C... yes
 checking whether gcc accepts -g... yes
 checking for gcc option to enable C11 features... none needed
 checking whether gcc understands -c and -o together... yes
+checking whether the compiler is clang... no
+checking for compiler option needed when checking for declarations... none
 checking whether make supports the include directive... yes (GNU style)
 checking dependency style of gcc... gcc3
 checking for stdio.h... yes
@@ -28,24 +30,32 @@ checking for strings.h... yes
 checking for sys/stat.h... yes
 checking for sys/types.h... yes
 checking for unistd.h... yes
+checking for wchar.h... yes
+checking for minix/config.h... no
+checking for stdbool.h... yes
+checking for uchar.h... yes
 checking for sys/param.h... yes
 checking for sys/socket.h... yes
 checking for dirent.h... yes
+checking for error.h... yes
+checking for stdio_ext.h... yes
 checking for getopt.h... yes
-checking for sys/cdefs.h... yes
 checking for sys/time.h... yes
+checking for threads.h... yes
 checking for limits.h... yes
-checking for wchar.h... yes
+checking for xlocale.h... no
 checking for sys/mman.h... yes
-checking for spawn.h... yes
-checking for sys/wait.h... yes
+checking for stdckdint.h... yes
+checking for sys/random.h... yes
 checking for utime.h... yes
 checking for features.h... yes
 checking for crtdefs.h... no
 checking for wctype.h... yes
-checking for minix/config.h... no
+checking for fcntl.h... yes
 checking whether it is safe to define __EXTENSIONS__... yes
 checking whether _XOPEN_SOURCE should be defined... no
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
 checking how to run the C preprocessor... gcc -E
 checking for egrep -e... /usr/bin/grep -E
 checking for Minix Amsterdam compiler... no
@@ -53,70 +63,76 @@ checking for ar... ar
 checking the archiver (ar) interface... ar
 checking for ar... (cached) ar
 checking for ranlib... ranlib
-checking build system type... x86_64-pc-linux-gnu
-checking host system type... x86_64-pc-linux-gnu
-checking for gcc option to enable large file support... none needed
-checking for grep that handles long lines and -e... /usr/bin/grep
-checking for egrep... /usr/bin/grep -E
-checking for size_t... yes
-checking for working alloca.h... yes
-checking for alloca... yes
-checking for d_ino member in directory struct... yes
-checking for long file names... yes
+checking for gcc option to support large files... none needed
+checking for gcc option to support timestamps after 2038... none needed
+checking for lstat... yes
 checking for pathconf... yes
+checking for mbsinit... yes
+checking for mbrtowc... yes
 checking for canonicalize_file_name... yes
-checking for getcwd... yes
-checking for readlink... yes
 checking for realpath... yes
 checking for chown... yes
 checking for fchown... yes
 checking for _set_invalid_parameter_handler... no
 checking for fchdir... yes
-checking for fdopendir... yes
-checking for faccessat... yes
 checking for fchmodat... yes
 checking for lchmod... yes
 checking for fcntl... yes
 checking for symlink... yes
-checking for mempcpy... yes
+checking for fdopendir... yes
 checking for fstatat... yes
 checking for getdtablesize... yes
-checking for getprogname... no
 checking for getexecname... no
 checking for gettimeofday... yes
-checking for nanotime... no
-checking for lstat... yes
-checking for mbsinit... yes
-checking for mbrtowc... yes
 checking for mprotect... yes
 checking for mkdirat... yes
-checking for tzset... yes
 checking for openat... yes
-checking for readlinkat... yes
+checking for readlink... yes
 checking for link... yes
 checking for renameat... yes
 checking for setenv... yes
-checking for sigaction... yes
-checking for sigaltstack... yes
-checking for siginterrupt... yes
-checking for strdup... yes
-checking for strndup... yes
-checking for symlinkat... yes
 checking for localtime_r... yes
-checking for timegm... yes
-checking for pipe... yes
 checking for unlinkat... yes
-checking for utime... yes
-checking for futimes... yes
-checking for futimesat... yes
-checking for futimens... yes
-checking for utimensat... yes
-checking for lutimes... yes
-checking for vasnprintf... no
-checking for snprintf... yes
+checking for utimens... no
+checking for lutimens... no
 checking for iswcntrl... yes
+checking for geteuid... yes
+checking for getuid... yes
+checking for sigaction... yes
+checking for sigfillset... yes
+checking for size_t... yes
+checking for working alloca.h... yes
+checking for alloca... yes
+checking whether the preprocessor supports include_next... yes
+checking whether source code line length is unlimited... yes
+checking for d_ino member in directory struct... yes
+checking for long file names... yes
+checking whether char8_t is correctly defined... yes
+checking whether char16_t is correctly defined... yes
+checking whether char32_t is correctly defined... yes
+checking for bit size of wchar_t... 32
+checking for mbstate_t... yes
+checking for nl_langinfo and CODESET... yes
+checking for a traditional japanese locale... none
+checking for an english Unicode locale... en_US.UTF-8
+checking for a transitional chinese locale... none
+checking whether mbrtowc handles incomplete characters... yes
+checking whether mbrtowc works as well as mbtowc... guessing yes
+checking for gcc options needed to detect all undeclared functions... none needed
+checking whether mbrtoc32 is declared... yes
+checking for mbrtoc32... yes
+checking for a traditional french locale... none
+checking whether mbrtoc32 works as well as mbrtowc... guessing yes
+checking whether c32rtomb is declared... yes
+checking for c32rtomb... yes
+checking whether c32rtomb works as well as wcrtomb... guessing yes
+checking whether malloc is ptrdiff_t safe... yes
+checking whether malloc, realloc, calloc set errno on failure... yes
+checking whether lstat correctly handles trailing slash... yes
 checking whether // is distinct from /... no
 checking whether realpath works... yes
+checking for faccessat... yes
+checking for getcwd... yes
 checking for uid_t... yes
 checking for gid_t... yes
 checking for unistd.h... (cached) yes
@@ -124,35 +140,33 @@ checking for working chown... yes
 checking whether chown dereferences symlinks... yes
 checking whether chown honors trailing slash... yes
 checking whether chown always updates ctime... yes
-checking whether the preprocessor supports include_next... yes
-checking whether system header files limit the line length... no
-checking for gcc options needed to detect all undeclared functions... none needed
 checking if environ is properly declared... yes
 checking for complete errno.h... yes
+checking for error... yes
+checking whether error_at_line is declared... yes
+checking for error_at_line... yes
+checking for working error function... yes
 checking whether strerror_r is declared... yes
 checking whether strerror_r returns char *... yes
 checking type of array argument to getgroups... gid_t
-checking for mode_t... yes
-checking whether lstat correctly handles trailing slash... yes
-checking for sig_atomic_t... yes
+checking whether ctype.h defines __header_inline... no
 checking whether fchdir is declared... yes
 checking for working fcntl.h... yes
 checking for pid_t... yes
+checking for mode_t... yes
+checking whether stdin defaults to large file offsets... yes
+checking for off64_t... yes
+checking for blksize_t... yes
+checking for blkcnt_t... yes
+checking whether fseeko is declared... yes
+checking for fseeko... yes
 checking whether stat file-mode macros are broken... no
+checking for C/C++ restrict keyword... __restrict__
 checking for nlink_t... yes
-checking whether fchmodat is declared without a macro... yes
-checking whether fstat is declared without a macro... yes
-checking whether fstatat is declared without a macro... yes
-checking whether futimens is declared without a macro... yes
-checking whether lchmod is declared without a macro... yes
-checking whether lstat is declared without a macro... yes
-checking whether mkdirat is declared without a macro... yes
-checking whether mkfifo is declared without a macro... yes
-checking whether mkfifoat is declared without a macro... yes
-checking whether mknod is declared without a macro... yes
-checking whether mknodat is declared without a macro... yes
-checking whether stat is declared without a macro... yes
-checking whether utimensat is declared without a macro... yes
+checking whether ftello is declared... yes
+checking whether ungetc works on arbitrary bytes... yes
+checking for ftello... yes
+checking whether ftello works... yes
 checking whether getcwd (NULL, 0) allocates memory for result... yes
 checking for getcwd with POSIX signature... yes
 checking whether getdtablesize is declared... yes
@@ -161,34 +175,41 @@ checking for getopt_long_only... yes
 checking whether getopt is POSIX compatible... yes
 checking for working GNU getopt function... yes
 checking for working GNU getopt_long function... yes
-checking for C/C++ restrict keyword... __restrict
+checking for glibc-compatible sys/cdefs.h... yes
+checking whether timespec_get is declared... yes
+checking for timespec_get... yes
 checking for struct timeval... yes
 checking for wide-enough struct timeval.tv_sec member... yes
-checking whether gettimeofday is declared without a macro... yes
-checking whether limits.h has ULLONG_WIDTH etc.... yes
+checking for pthread.h... yes
+checking for pthread_kill in -lpthread... yes
+checking whether POSIX threads API is available... yes
+checking whether setlocale (LC_ALL, NULL) is multithread-safe... yes
+checking whether setlocale (category, NULL) is multithread-safe... yes
+checking whether limits.h has WORD_BIT, BOOL_WIDTH etc.... yes
+checking whether limits.h has SSIZE_MAX... yes
 checking for wint_t... yes
-checking whether wint_t is too small... no
-checking for unsigned long long int... yes
-checking for long long int... yes
+checking whether wint_t is large enough... yes
+checking whether the compiler produces multi-arch binaries... no
 checking whether stdint.h conforms to C99... yes
-checking whether stdint.h predates C++11... no
+checking whether stdint.h works without ISO C predefines... yes
 checking whether stdint.h has UINTMAX_WIDTH etc.... yes
-checking whether imaxabs is declared without a macro... yes
-checking whether imaxdiv is declared without a macro... yes
-checking whether strtoimax is declared without a macro... yes
-checking whether strtoumax is declared without a macro... yes
-checking for inttypes.h... (cached) yes
-checking whether the inttypes.h PRIxNN macros are broken... no
-checking for nl_langinfo and CODESET... yes
-checking whether getc_unlocked is declared... yes
-checking whether we are using the GNU C Library >= 2.1 or uClibc... yes
+checking whether INT32_MAX < INTMAX_MAX... yes
+checking whether INT64_MAX == LONG_MAX... yes
+checking whether UINT32_MAX < UINTMAX_MAX... yes
+checking whether UINT64_MAX == ULONG_MAX... yes
+checking for good max_align_t... yes
+checking whether NULL can be used in arbitrary expressions... yes
+checking for unreachable... yes
+checking whether nullptr_t needs <stddef.h>... yes
+checking whether <stddef.h> is idempotent... guessing yes
+checking whether locale.h defines locale_t... yes
+checking whether locale.h defines _locale_t... no
+checking whether locale.h conforms to POSIX:2001... yes
+checking whether struct lconv is properly defined... yes
 checking for a sed that does not truncate output... /usr/bin/sed
-checking whether malloc, realloc, calloc are POSIX compliant... yes
-checking for GNU libc compatible malloc... yes
-checking for mbstate_t... yes
-checking for a traditional japanese locale... none
-checking for a transitional chinese locale... none
-checking for a french Unicode locale... none
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking whether malloc (0) returns nonnull... yes
+checking for inline... inline
 checking for mmap... yes
 checking for MAP_ANONYMOUS... yes
 checking whether memchr works... yes
@@ -198,395 +219,184 @@ checking whether <sys/param.h> defines MIN and MAX... yes
 checking whether time_t is signed... yes
 checking whether alarm is declared... yes
 checking for working mktime... yes
-checking whether struct tm is in sys/time.h or time.h... time.h
-checking for struct tm.tm_zone... yes
-checking for struct tm.tm_gmtoff... yes
 checking for O_CLOEXEC... yes
 checking for promoted mode_t type... mode_t
-checking for stdbool.h that conforms to C99... yes
-checking for _Bool... yes
 checking for compound literals... yes
-checking for library containing posix_spawn... none required
-checking for posix_spawn... yes
-checking whether posix_spawn works... yes
-checking whether posix_spawnattr_setschedpolicy is supported... yes
-checking whether posix_spawnattr_setschedparam is supported... yes
-checking for sigset_t... yes
-checking for ssize_t... yes
+checking for struct tm.tm_gmtoff... yes
+checking for struct tm.tm_zone... yes
+checking whether realloc should abort upon undefined behaviour... no
 checking whether setenv is declared... yes
+checking whether _putenv is declared... no
 checking for search.h... yes
 checking for tsearch... yes
-checking for wchar_t... yes
+checking for sigset_t... yes
+checking for volatile sig_atomic_t... yes
+checking for sighandler_t... yes
+checking whether fcloseall is declared... yes
+checking whether getw is declared... yes
+checking whether putw is declared... yes
+checking which flavor of printf attribute matches inttypes macros... system
+checking whether ecvt is declared... yes
+checking whether fcvt is declared... yes
+checking whether gcvt is declared... yes
+checking whether MB_CUR_MAX is correct... yes
 checking whether strdup is declared... yes
 checking whether strerror(0) succeeds... yes
-checking whether ffsl is declared without a macro... yes
-checking whether ffsll is declared without a macro... yes
-checking whether memmem is declared without a macro... yes
-checking whether mempcpy is declared without a macro... yes
-checking whether memrchr is declared without a macro... yes
-checking whether rawmemchr is declared without a macro... yes
-checking whether stpcpy is declared without a macro... yes
-checking whether stpncpy is declared without a macro... yes
-checking whether strchrnul is declared without a macro... yes
-checking whether strdup is declared without a macro... yes
-checking whether strncat is declared without a macro... yes
-checking whether strndup is declared without a macro... yes
-checking whether strnlen is declared without a macro... yes
-checking whether strpbrk is declared without a macro... yes
-checking whether strsep is declared without a macro... yes
-checking whether strcasestr is declared without a macro... yes
-checking whether strtok_r is declared without a macro... yes
-checking whether strerror_r is declared without a macro... yes
-checking whether strsignal is declared without a macro... yes
-checking whether strverscmp is declared without a macro... yes
-checking whether strndup is declared... (cached) yes
-checking whether strnlen is declared... (cached) yes
 checking for struct timespec in <time.h>... yes
+checking for TIME_UTC in <time.h>... yes
+checking whether execvpe is declared... yes
 checking whether unsetenv is declared... yes
 checking whether the utimes function works... yes
-checking for inttypes.h... yes
-checking for stdint.h... yes
-checking for intmax_t... yes
-checking where to find the exponent in a 'double'... word 1 bit 20
-checking whether snprintf returns a byte count as in C99... yes
-checking for snprintf... (cached) yes
-checking for strnlen... yes
-checking for wcslen... yes
-checking for wcsnlen... yes
-checking for mbrtowc... (cached) yes
-checking for wcrtomb... yes
-checking whether _snprintf is declared... no
 checking whether <wchar.h> uses 'inline' correctly... yes
+checking whether wcsdup is declared... yes
+checking whether iswcntrl works... yes
+checking for towlower... yes
+checking for wctype_t... yes
+checking for wctrans_t... yes
+checking for C compiler option to allow warnings... -Wno-error
+checking whether access honors trailing slash... yes
 checking for alloca as a compiler built-in... yes
-checking whether this system has an arbitrary file name length limit... yes
+checking for static_assert... yes, a keyword
+checking for bool, true, false... yes
+checking for __builtin_expect... yes
+checking whether calloc (0, n) and calloc (n, 0) return nonnull... yes
+checking whether this system supports file names of any length... no
+checking whether chmod works... yes
 checking for library containing clock_gettime... none required
+checking for clock_getres... yes
 checking for clock_gettime... yes
 checking for clock_settime... yes
 checking for closedir... yes
 checking for d_ino member in directory struct... (cached) yes
-checking whether alphasort is declared without a macro... yes
-checking whether closedir is declared without a macro... yes
-checking whether dirfd is declared without a macro... yes
-checking whether fdopendir is declared without a macro... yes
-checking whether opendir is declared without a macro... yes
-checking whether readdir is declared without a macro... yes
-checking whether rewinddir is declared without a macro... yes
-checking whether scandir is declared without a macro... yes
 checking for dirfd... yes
-checking whether dirfd is declared... (cached) yes
+checking whether dirfd is declared... yes
 checking whether dirfd is a macro... no
 checking whether // is distinct from /... (cached) no
+checking whether dup works... yes
 checking whether dup2 works... yes
-checking for error_at_line... yes
 checking for euidaccess... yes
+checking for faccessat... (cached) yes
+checking whether fchmodat works... yes
 checking for fchownat... yes
 checking whether fchownat works with AT_SYMLINK_NOFOLLOW... yes
-checking whether fchownat works with an empty file name... no
+checking whether fchownat works with an empty file name... yes
 checking whether fcntl handles F_DUPFD correctly... yes
 checking whether fcntl understands F_DUPFD_CLOEXEC... needs runtime check
-checking whether fcntl is declared without a macro... yes
-checking whether openat is declared without a macro... yes
+checking whether fdopendir is declared... yes
+checking whether fdopendir works... yes
+checking for mempcpy... yes
 checking for flexible array member... yes
-checking whether conversion from 'int' to 'long double' works... yes
+checking for __fpending... yes
+checking whether __fpending is declared... yes
+checking whether free is known to preserve errno... yes
+checking for fseeko... (cached) yes
 checking whether fstatat (..., 0) works... yes
+checking for ftello... (cached) yes
+checking whether ftello works... (cached) yes
+checking for futimens... yes
+checking whether futimens works... yes
 checking whether getdtablesize works... yes
-checking for library containing getgroups... none required
+checking for getgroups... yes
 checking for working getgroups... yes
 checking whether getgroups handles negative values... yes
+checking for getprogname... no
 checking whether program_invocation_name is declared... yes
+checking whether program_invocation_name is declared... (cached) yes
 checking whether program_invocation_short_name is declared... yes
 checking whether __argv is declared... no
-checking whether gettimeofday clobbers localtime buffer... no
+checking for getrandom... yes
+checking whether getrandom is compatible with its GNU+BSD signature... yes
 checking for gettimeofday with POSIX signature... yes
 checking for group_member... yes
-checking whether INT32_MAX < INTMAX_MAX... yes
-checking whether INT64_MAX == LONG_MAX... yes
-checking whether UINT32_MAX < UINTMAX_MAX... yes
-checking whether UINT64_MAX == ULONG_MAX... yes
 checking for lchown... yes
-checking for GNU libc compatible malloc... (cached) yes
-checking whether mbrtowc handles incomplete characters... guessing yes
-checking whether mbrtowc works as well as mbtowc... guessing yes
-checking whether mbrtowc handles a NULL pwc argument... guessing yes
-checking whether mbrtowc handles a NULL string argument... guessing yes
-checking whether mbrtowc has a correct return value... guessing yes
+checking whether the compiler supports the __inline keyword... yes
+checking whether lseek detects pipes... yes
+checking whether SEEK_DATA works but is incompatible with GNU... no
+checking whether mbrtoc32 works on empty input... yes
+checking whether the C locale is free of encoding errors... no
+checking whether mbrtoc32 works in an UTF-8 locale... yes
+checking whether mbrtowc handles a NULL pwc argument... yes
+checking whether mbrtowc handles a NULL string argument... yes
+checking whether mbrtowc has a correct return value... yes
 checking whether mbrtowc returns 0 when parsing a NUL character... guessing yes
+checking whether mbrtowc stores incomplete characters... no
 checking whether mbrtowc works on empty input... yes
 checking whether the C locale is free of encoding errors... no
-checking whether mbrtowc handles incomplete characters... (cached) guessing yes
-checking whether mbrtowc works as well as mbtowc... (cached) guessing yes
 checking for mempcpy... (cached) yes
 checking for memrchr... yes
 checking whether mkdir handles trailing slash... yes
 checking whether mkdir handles trailing dot... yes
 checking for __mktime_internal... no
+checking for C nullptr... yes
 checking whether open recognizes a trailing slash... yes
 checking for opendir... yes
-checking for struct tm.tm_zone... (cached) yes
-checking whether posix_spawn_file_actions_addopen works... yes
+checking for bison... bison
+checking for bison 2.4 or newer... 3.8.2, ok
 checking whether program_invocation_name is declared... (cached) yes
 checking whether program_invocation_short_name is declared... (cached) yes
 checking for raise... yes
-checking for sigprocmask... yes
 checking for rawmemchr... yes
 checking for readdir... yes
 checking whether readlink signature is correct... yes
 checking whether readlink handles trailing slash correctly... yes
+checking whether readlink truncates results correctly... yes
+checking for readlinkat... yes
 checking whether readlinkat signature is correct... yes
-checking for GNU libc compatible realloc... yes
+checking whether realloc (..., 0) returns nonnull... no
+checking for reallocarray... yes
 checking whether rename honors trailing slash on destination... yes
 checking whether rename honors trailing slash on source... yes
 checking whether rename manages hard links correctly... yes
 checking whether rename manages existing destinations correctly... yes
 checking for linux/fs.h... yes
+checking for renameat2... yes
+checking whether renameat2 works... yes
 checking for linux/fs.h... (cached) yes
+checking for renameat2... (cached) yes
+checking whether renameat2 works... (cached) yes
 checking whether rmdir works... yes
 checking whether setenv validates arguments... yes
-checking for struct sigaction.sa_sigaction... yes
-checking for volatile sig_atomic_t... yes
-checking for sighandler_t... yes
-checking whether pthread_sigmask is declared without a macro... yes
-checking whether sigaction is declared without a macro... yes
-checking whether sigaddset is declared without a macro... yes
-checking whether sigdelset is declared without a macro... yes
-checking whether sigemptyset is declared without a macro... yes
-checking whether sigfillset is declared without a macro... yes
-checking whether sigismember is declared without a macro... yes
-checking whether sigpending is declared without a macro... yes
-checking whether sigprocmask is declared without a macro... yes
-checking for sigprocmask... (cached) yes
-checking for stdint.h... (cached) yes
-checking for SIZE_MAX... yes
-checking for posix_spawnattr_t... yes
-checking for posix_spawn_file_actions_t... yes
-checking whether posix_spawn is declared without a macro... yes
-checking whether posix_spawnp is declared without a macro... yes
-checking whether posix_spawnattr_init is declared without a macro... yes
-checking whether posix_spawnattr_destroy is declared without a macro... yes
-checking whether posix_spawnattr_getsigdefault is declared without a macro... yes
-checking whether posix_spawnattr_setsigdefault is declared without a macro... yes
-checking whether posix_spawnattr_getsigmask is declared without a macro... yes
-checking whether posix_spawnattr_setsigmask is declared without a macro... yes
-checking whether posix_spawnattr_getflags is declared without a macro... yes
-checking whether posix_spawnattr_setflags is declared without a macro... yes
-checking whether posix_spawnattr_getpgroup is declared without a macro... yes
-checking whether posix_spawnattr_setpgroup is declared without a macro... yes
-checking whether posix_spawnattr_getschedpolicy is declared without a macro... yes
-checking whether posix_spawnattr_setschedpolicy is declared without a macro... yes
-checking whether posix_spawnattr_getschedparam is declared without a macro... yes
-checking whether posix_spawnattr_setschedparam is declared without a macro... yes
-checking whether posix_spawn_file_actions_init is declared without a macro... yes
-checking whether posix_spawn_file_actions_destroy is declared without a macro... yes
-checking whether posix_spawn_file_actions_addopen is declared without a macro... yes
-checking whether posix_spawn_file_actions_addclose is declared without a macro... yes
-checking whether posix_spawn_file_actions_adddup2 is declared without a macro... yes
-checking for ssize_t... (cached) yes
+checking for ssize_t... yes
 checking whether stat handles trailing slashes on files... yes
 checking for struct stat.st_atim.tv_nsec... yes
 checking whether struct stat.st_atim is of type struct timespec... yes
 checking for struct stat.st_birthtimespec.tv_nsec... no
 checking for struct stat.st_birthtimensec... no
 checking for struct stat.st_birthtim.tv_nsec... no
-checking for va_copy... yes
-checking for max_align_t... yes
-checking whether NULL can be used in arbitrary expressions... yes
-checking which flavor of printf attribute matches inttypes macros... system
-checking whether dprintf is declared without a macro... yes
-checking whether fpurge is declared without a macro... no
-checking whether fseeko is declared without a macro... yes
-checking whether ftello is declared without a macro... yes
-checking whether getdelim is declared without a macro... yes
-checking whether getline is declared without a macro... yes
-checking whether gets is declared without a macro... no
-checking whether pclose is declared without a macro... yes
-checking whether popen is declared without a macro... yes
-checking whether renameat is declared without a macro... yes
-checking whether snprintf is declared without a macro... yes
-checking whether tmpfile is declared without a macro... yes
-checking whether vdprintf is declared without a macro... yes
-checking whether vsnprintf is declared without a macro... yes
-checking whether _Exit is declared without a macro... yes
-checking whether atoll is declared without a macro... yes
-checking whether canonicalize_file_name is declared without a macro... yes
-checking whether getloadavg is declared without a macro... yes
-checking whether getsubopt is declared without a macro... yes
-checking whether grantpt is declared without a macro... yes
-checking whether initstate is declared without a macro... yes
-checking whether initstate_r is declared without a macro... yes
-checking whether mkdtemp is declared without a macro... yes
-checking whether mkostemp is declared without a macro... yes
-checking whether mkostemps is declared without a macro... yes
-checking whether mkstemp is declared without a macro... yes
-checking whether mkstemps is declared without a macro... yes
-checking whether posix_openpt is declared without a macro... yes
-checking whether ptsname is declared without a macro... yes
-checking whether ptsname_r is declared without a macro... yes
-checking whether qsort_r is declared without a macro... yes
-checking whether random is declared without a macro... yes
-checking whether random_r is declared without a macro... yes
-checking whether reallocarray is declared without a macro... yes
-checking whether realpath is declared without a macro... yes
-checking whether rpmatch is declared without a macro... yes
-checking whether secure_getenv is declared without a macro... yes
-checking whether setenv is declared without a macro... yes
-checking whether setstate is declared without a macro... yes
-checking whether setstate_r is declared without a macro... yes
-checking whether srandom is declared without a macro... yes
-checking whether srandom_r is declared without a macro... yes
-checking whether strtod is declared without a macro... yes
-checking whether strtoll is declared without a macro... yes
-checking whether strtoull is declared without a macro... yes
-checking whether unlockpt is declared without a macro... yes
-checking whether unsetenv is declared without a macro... yes
-checking for strchrnul... yes
-checking whether strchrnul works... yes
+checking for stpcpy... yes
 checking for working strerror function... yes
-checking for working strndup... yes
-checking for working strnlen... yes
 checking whether symlink handles trailing slash correctly... yes
+checking for symlinkat... yes
 checking whether symlinkat handles trailing slash correctly... yes
-checking for nlink_t... (cached) yes
-checking whether fchmodat is declared without a macro... (cached) yes
-checking whether fstat is declared without a macro... (cached) yes
-checking whether fstatat is declared without a macro... (cached) yes
-checking whether futimens is declared without a macro... (cached) yes
-checking whether lchmod is declared without a macro... (cached) yes
-checking whether lstat is declared without a macro... (cached) yes
-checking whether mkdirat is declared without a macro... (cached) yes
-checking whether mkfifo is declared without a macro... (cached) yes
-checking whether mkfifoat is declared without a macro... (cached) yes
-checking whether mknod is declared without a macro... (cached) yes
-checking whether mknodat is declared without a macro... (cached) yes
-checking whether stat is declared without a macro... (cached) yes
-checking whether utimensat is declared without a macro... (cached) yes
-checking whether waitpid is declared without a macro... yes
 checking whether localtime_r is declared... yes
 checking whether localtime_r is compatible with its POSIX signature... yes
+checking whether localtime works even near extrema... yes
 checking for timezone_t... no
-checking whether tzset clobbers localtime buffer... no
-checking whether chdir is declared without a macro... yes
-checking whether chown is declared without a macro... yes
-checking whether dup is declared without a macro... yes
-checking whether dup2 is declared without a macro... yes
-checking whether dup3 is declared without a macro... yes
-checking whether environ is declared without a macro... yes
-checking whether euidaccess is declared without a macro... yes
-checking whether faccessat is declared without a macro... yes
-checking whether fchdir is declared without a macro... yes
-checking whether fchownat is declared without a macro... yes
-checking whether fdatasync is declared without a macro... yes
-checking whether fsync is declared without a macro... yes
-checking whether ftruncate is declared without a macro... yes
-checking whether getcwd is declared without a macro... yes
-checking whether getdomainname is declared without a macro... yes
-checking whether getdtablesize is declared without a macro... yes
-checking whether getgroups is declared without a macro... yes
-checking whether gethostname is declared without a macro... yes
-checking whether getlogin is declared without a macro... yes
-checking whether getlogin_r is declared without a macro... yes
-checking whether getpagesize is declared without a macro... yes
-checking whether getusershell is declared without a macro... yes
-checking whether setusershell is declared without a macro... yes
-checking whether endusershell is declared without a macro... yes
-checking whether group_member is declared without a macro... yes
-checking whether isatty is declared without a macro... yes
-checking whether lchown is declared without a macro... yes
-checking whether link is declared without a macro... yes
-checking whether linkat is declared without a macro... yes
-checking whether lseek is declared without a macro... yes
-checking whether pipe is declared without a macro... yes
-checking whether pipe2 is declared without a macro... yes
-checking whether pread is declared without a macro... yes
-checking whether pwrite is declared without a macro... yes
-checking whether readlink is declared without a macro... yes
-checking whether readlinkat is declared without a macro... yes
-checking whether rmdir is declared without a macro... yes
-checking whether sethostname is declared without a macro... yes
-checking whether sleep is declared without a macro... yes
-checking whether symlink is declared without a macro... yes
-checking whether symlinkat is declared without a macro... yes
-checking whether truncate is declared without a macro... yes
-checking whether ttyname_r is declared without a macro... yes
-checking whether unlink is declared without a macro... yes
-checking whether unlinkat is declared without a macro... yes
-checking whether usleep is declared without a macro... yes
+checking for tzalloc... no
+checking for timegm... yes
 checking whether unlink honors trailing slashes... yes
 checking whether unlink of a parent directory fails as it should... guessing yes
 checking for unsetenv... yes
 checking for unsetenv() return type... int
 checking whether unsetenv obeys POSIX... yes
-checking whether utime is declared without a macro... yes
+checking for utime... yes
+checking whether utime handles trailing slashes on files... yes
+checking for futimes... yes
+checking for futimesat... yes
+checking for lutimes... yes
+checking for futimens... (cached) yes
+checking for utimensat... yes
+checking for utimensat... (cached) yes
 checking whether utimensat works... yes
-checking for ptrdiff_t... yes
-checking for vasprintf... yes
-checking for waitid... yes
-checking whether btowc is declared without a macro... yes
-checking whether wctob is declared without a macro... yes
-checking whether mbsinit is declared without a macro... yes
-checking whether mbrtowc is declared without a macro... yes
-checking whether mbrlen is declared without a macro... yes
-checking whether mbsrtowcs is declared without a macro... yes
-checking whether mbsnrtowcs is declared without a macro... yes
-checking whether wcrtomb is declared without a macro... yes
-checking whether wcsrtombs is declared without a macro... yes
-checking whether wcsnrtombs is declared without a macro... yes
-checking whether wcwidth is declared without a macro... yes
-checking whether wmemchr is declared without a macro... yes
-checking whether wmemcmp is declared without a macro... yes
-checking whether wmemcpy is declared without a macro... yes
-checking whether wmemmove is declared without a macro... yes
-checking whether wmemset is declared without a macro... yes
-checking whether wcslen is declared without a macro... yes
-checking whether wcsnlen is declared without a macro... yes
-checking whether wcscpy is declared without a macro... yes
-checking whether wcpcpy is declared without a macro... yes
-checking whether wcsncpy is declared without a macro... yes
-checking whether wcpncpy is declared without a macro... yes
-checking whether wcscat is declared without a macro... yes
-checking whether wcsncat is declared without a macro... yes
-checking whether wcscmp is declared without a macro... yes
-checking whether wcsncmp is declared without a macro... yes
-checking whether wcscasecmp is declared without a macro... yes
-checking whether wcsncasecmp is declared without a macro... yes
-checking whether wcscoll is declared without a macro... yes
-checking whether wcsxfrm is declared without a macro... yes
-checking whether wcsdup is declared without a macro... yes
-checking whether wcschr is declared without a macro... yes
-checking whether wcsrchr is declared without a macro... yes
-checking whether wcscspn is declared without a macro... yes
-checking whether wcsspn is declared without a macro... yes
-checking whether wcspbrk is declared without a macro... yes
-checking whether wcsstr is declared without a macro... yes
-checking whether wcstok is declared without a macro... yes
-checking whether wcswidth is declared without a macro... yes
-checking whether wcsftime is declared without a macro... yes
-checking whether iswcntrl works... yes
-checking for towlower... yes
-checking for wctype_t... yes
-checking for wctrans_t... yes
-checking whether wctype is declared without a macro... yes
-checking whether iswctype is declared without a macro... yes
-checking whether wctrans is declared without a macro... yes
-checking whether towctrans is declared without a macro... yes
-checking for stdint.h... (cached) yes
+checking for variable-length arrays... yes
 checking the archiver (ar) interface... (cached) ar
 checking for mode_t... (cached) yes
 checking for off_t... yes
-checking for stdint.h... (cached) yes
-checking for SIZE_MAX... (cached) yes
 checking for attr/error_context.h... yes
 checking for attr/libattr.h... yes
 checking for library containing attr_copy_file... -lattr
 checking for attr_copy_file... yes
 checking for attr_copy_action... yes
-checking for geteuid... yes
-checking for getuid... yes
-checking for raise... (cached) yes
-checking for sigaction... (cached) yes
-checking for sigprocmask... (cached) yes
-checking for sigsetmask... yes
-checking for fcntl.h... yes
-checking for unistd.h... (cached) yes
 checking for DOS-style setmode... no
 checking for ed... /usr/bin/ed
 checking that generated files are newer than configure... done

@@ -2,7 +2,7 @@
 
 pkgname=flex
 pkgver=2.6.4
-pkgrel=28
+pkgrel=29
 epoch=
 pkgdesc="A tool for generating text-scanning programs"
 arch=('x86_64')

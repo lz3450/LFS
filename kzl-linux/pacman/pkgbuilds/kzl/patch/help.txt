@@ -1,4 +1,4 @@
-Configuration of GNU patch 2.7.6.25-78ed:
+Configuration of GNU patch 2.8.3-4c302:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -12,9 +12,21 @@ Optional Features:
   --disable-dependency-tracking
                           speeds up one-time build
   --disable-largefile     omit support for large files
-  --enable-gcc-warnings   turn on lots of GCC warnings (for developers)
+  --enable-cross-guesses={conservative|risky}
+                          specify policy for cross-compilation guesses
+  --enable-gcc-warnings[=TYPE]
+                          control generation of GCC warnings. The TYPE 'no'
+                          disables warnings (default for non-developer
+                          builds); 'yes' generates cheap warnings if
+                          available; 'expensive' in addition generates
+                          expensive-to-compute warnings if available.
   --disable-xattr         do not support extended attributes
-  --enable-year2038       support timestamps after 2038
+  --disable-year2038      don't support timestamps after 2038
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-gnulib-prefix=DIR  search for gnulib's runtime data in DIR/share
 
 Some influential environment variables:
   CC          C compiler command
@@ -26,8 +38,8 @@ Some influential environment variables:
               you have headers in a nonstandard directory <include dir>
   CPP         C preprocessor
   YACC        The "Yet Another C Compiler" implementation to use. Defaults to
-              'bison -y'. Values other than 'bison -y' will most likely break
-              on most systems.
+              'bison -o y.tab.c'. Values other than 'bison -o y.tab.c' will
+              most likely break on most systems.
   YFLAGS      YFLAGS contains the list arguments that will be passed by
               default to Bison. This script will default YFLAGS to the empty
               string to avoid a default value of '-d' given by some make
