@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libidn2
-pkgver=2.3.7
-pkgrel=2
+pkgver=2.3.8
+pkgrel=1
 epoch=
 pkgdesc="Free software implementation of IDNA2008, Punycode and TR46"
 arch=('x86_64')
@@ -17,7 +17,7 @@ source=(
   https://ftp.gnu.org/gnu/libidn/$pkgname-$pkgver.tar.gz{,.sig}
 )
 validpgpkeys=('B1D2BD1375BECB784CF4F8C4D73CF638C53C06BE')
-sha256sums=('4c21a791b610b9519b9d0e12b8097bf2f359b12f8dd92647611a929e6bfd7d64'
+sha256sums=('f557911bf6171621e1f72ff35f5b1825bb35b52ed45325dcdee931e5d3c0787a'
             'SKIP')
 
 build() {

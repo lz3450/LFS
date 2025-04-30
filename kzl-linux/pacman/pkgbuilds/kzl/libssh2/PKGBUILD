@@ -2,12 +2,15 @@
 
 pkgname=libssh2
 pkgver=1.11.1
-pkgrel=2
+pkgrel=4
 epoch=
 pkgdesc="A library implementing the SSH2 protocol as defined by Internet Drafts"
 arch=('x86_64')
 url="https://www.libssh2.org"
 license=('KZL')
+depends=(
+  openssl
+)
 source=(git+https://github.com/libssh2/libssh2.git#tag=$pkgname-$pkgver)
 sha256sums=('3e5321d9cb1b66425325f982a34ad21f75f40bb8d5c09ada1462723de0faeb7d')
 

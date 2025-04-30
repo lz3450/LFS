@@ -1,24 +1,24 @@
 -- Using CMake version 3.31.5
--- curl version=[8.12.0]
--- The C compiler identification is GNU 14.2.1
+-- curl version=[8.13.0]
+-- The C compiler identification is GNU 15.1.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
 -- CMake platform flags: UNIX GCC
--- Picky compiler options: -Werror-implicit-function-declaration -W -Wall -pedantic -Wbad-function-cast -Wconversion -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-sign-conversion -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wclobbered -Wmissing-parameter-type -Wold-style-declaration -Wpragmas -Wstrict-aliasing=3 -Wdouble-promotion -Wformat=2 -Wtrampolines -Warray-bounds=2 -ftree-vrp -Wduplicated-cond -Wnull-dereference -fdelete-null-pointer-checks -Wshift-negative-value -Wshift-overflow=2 -Wunused-const-variable -Walloc-zero -Wduplicated-branches -Wformat-truncation=2 -Wimplicit-fallthrough -Wrestrict -Warith-conversion -Wenum-conversion
--- Performing Test HAVE_SOCKADDR_IN6_SIN6_ADDR
--- Performing Test HAVE_SOCKADDR_IN6_SIN6_ADDR - Success
--- Performing Test HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID
--- Performing Test HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID - Success
+-- Picky compiler options: -Werror-implicit-function-declaration -W -Wall -pedantic -Wbad-function-cast -Wconversion -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wcast-qual -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-sign-conversion -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wclobbered -Wmissing-parameter-type -Wold-style-declaration -Wpragmas -Wstrict-aliasing=3 -ftree-vrp -Wjump-misses-init -Wdouble-promotion -Wformat=2 -Wtrampolines -Warray-bounds=2 -Wduplicated-cond -Wnull-dereference -fdelete-null-pointer-checks -Wshift-negative-value -Wshift-overflow=2 -Wunused-const-variable -Walloc-zero -Wduplicated-branches -Wformat-truncation=2 -Wimplicit-fallthrough -Wrestrict -Warith-conversion -Wenum-conversion
 -- Found Perl: /usr/bin/perl (found version "5.38.0")
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE
 -- Looking for connect in socket
 -- Looking for connect in socket - not found
--- Found OpenSSL: /usr/lib/libcrypto.so (found version "3.4.1")
+-- Performing Test HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID
+-- Performing Test HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID - Success
+-- Performing Test HAVE_SOCKADDR_IN6_SIN6_ADDR
+-- Performing Test HAVE_SOCKADDR_IN6_SIN6_ADDR - Success
+-- Found OpenSSL: /usr/lib/libcrypto.so (found version "3.5.0")
 -- Looking for OPENSSL_IS_BORINGSSL
 -- Looking for OPENSSL_IS_BORINGSSL - not found
 -- Looking for OPENSSL_IS_AWSLC
@@ -27,18 +27,18 @@
 -- Looking for LIBRESSL_VERSION_NUMBER - not found
 -- Found ZLIB: /usr/lib/libz.so (found version "1.3.1")
 -- Checking for module 'libzstd'
---   Found libzstd, version 1.5.6
--- Found Zstd (via pkg-config): /usr/include (found version "1.5.6")
+--   Found libzstd, version 1.5.7
+-- Found Zstd (via pkg-config): /usr/include (found version "1.5.7")
 -- Looking for SSL_set0_wbio
 -- Looking for SSL_set0_wbio - found
 -- Looking for SSL_CTX_set_srp_username
 -- Looking for SSL_CTX_set_srp_username - found
 -- Checking for module 'libnghttp2'
---   Found libnghttp2, version 1.64.0
--- Found NGHTTP2 (via pkg-config): /usr/include (found version "1.64.0")
+--   Found libnghttp2, version 1.65.0
+-- Found NGHTTP2 (via pkg-config): /usr/include (found version "1.65.0")
 -- Checking for module 'libidn2'
---   Found libidn2, version 2.3.7
--- Found Libidn2 (via pkg-config): /usr/include (found version "2.3.7")
+--   Found libidn2, version 2.3.8
+-- Found Libidn2 (via pkg-config): /usr/include (found version "2.3.8")
 -- Checking for module 'libpsl'
 --   Found libpsl, version 0.21.5
 -- Found Libpsl (via pkg-config): /usr/include (found version "0.21.5")
@@ -111,6 +111,8 @@
 -- Looking for stdatomic.h - found
 -- Looking for stdbool.h
 -- Looking for stdbool.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
 -- Looking for strings.h
 -- Looking for strings.h - found
 -- Looking for stropts.h
@@ -123,8 +125,6 @@
 -- Looking for 13 include files sys/select.h, ..., unistd.h - found
 -- Looking for utime.h
 -- Looking for utime.h - found
--- Looking for stdint.h
--- Looking for stdint.h - found
 -- Looking for stddef.h
 -- Looking for stddef.h - found
 -- Check size of size_t
@@ -167,8 +167,6 @@
 -- Looking for select - found
 -- Looking for strdup
 -- Looking for strdup - found
--- Looking for strtok_r
--- Looking for strtok_r - found
 -- Looking for memrchr
 -- Looking for memrchr - found
 -- Looking for alarm
@@ -203,8 +201,6 @@
 -- Looking for gethostname - found
 -- Looking for signal
 -- Looking for signal - found
--- Looking for strtoll
--- Looking for strtoll - found
 -- Looking for strerror_r
 -- Looking for strerror_r - found
 -- Looking for sigaction
@@ -227,16 +223,16 @@
 -- Looking for getpeername - found
 -- Looking for getsockname
 -- Looking for getsockname - found
--- Looking for if_nametoindex
--- Looking for if_nametoindex - found
 -- Looking for getrlimit
 -- Looking for getrlimit - found
 -- Looking for setlocale
 -- Looking for setlocale - found
--- Looking for setmode
--- Looking for setmode - not found
 -- Looking for setrlimit
 -- Looking for setrlimit - found
+-- Looking for if_nametoindex
+-- Looking for if_nametoindex - found
+-- Looking for realpath
+-- Looking for realpath - found
 -- Looking for sched_yield
 -- Looking for sched_yield - found
 -- Looking for strcasecmp
@@ -245,6 +241,8 @@
 -- Looking for stricmp - not found
 -- Looking for strcmpi
 -- Looking for strcmpi - not found
+-- Looking for setmode
+-- Looking for setmode - not found
 -- Looking for snprintf
 -- Looking for snprintf - found
 -- Looking for inet_ntop
@@ -281,22 +279,20 @@
 -- Performing Test HAVE_GETHOSTBYNAME_R_5 - Failed
 -- Performing Test HAVE_GETHOSTBYNAME_R_6
 -- Performing Test HAVE_GETHOSTBYNAME_R_6 - Success
+-- Performing Test HAVE_BOOL_T
+-- Performing Test HAVE_BOOL_T - Success
+-- Performing Test STDC_HEADERS
+-- Performing Test STDC_HEADERS - Success
+-- Performing Test HAVE_ATOMIC
+-- Performing Test HAVE_ATOMIC - Success
 -- Performing Test HAVE_GETHOSTBYNAME_R_3_REENTRANT
 -- Performing Test HAVE_GETHOSTBYNAME_R_3_REENTRANT - Failed
 -- Performing Test HAVE_GETHOSTBYNAME_R_5_REENTRANT
 -- Performing Test HAVE_GETHOSTBYNAME_R_5_REENTRANT - Failed
 -- Performing Test HAVE_GETHOSTBYNAME_R_6_REENTRANT
 -- Performing Test HAVE_GETHOSTBYNAME_R_6_REENTRANT - Success
--- Performing Test HAVE_IN_ADDR_T
--- Performing Test HAVE_IN_ADDR_T - Success
--- Performing Test HAVE_BOOL_T
--- Performing Test HAVE_BOOL_T - Success
--- Performing Test STDC_HEADERS
--- Performing Test STDC_HEADERS - Success
 -- Performing Test HAVE_FILE_OFFSET_BITS
 -- Performing Test HAVE_FILE_OFFSET_BITS - Success
--- Performing Test HAVE_ATOMIC
--- Performing Test HAVE_ATOMIC - Success
 -- Check size of off_t
 -- Check size of off_t - done
 -- Looking for fseeko
@@ -585,6 +581,12 @@ CURL_CA_PATH:STRING=/etc/pki/tls/certs
 // Run the build through clang-tidy
 CURL_CLANG_TIDY:BOOL=OFF
 
+// Install fish completions
+CURL_COMPLETION_FISH:BOOL=OFF
+
+// Install zsh completions
+CURL_COMPLETION_ZSH:BOOL=OFF
+
 // Disable alt-svc support
 CURL_DISABLE_ALTSVC:BOOL=OFF
 
@@ -741,6 +743,9 @@ CURL_LIBCURL_VERSIONED_SYMBOLS:BOOL=OFF
 // Enable compiler Link Time Optimizations
 CURL_LTO:BOOL=ON
 
+// Build tests into single-binary bundles
+CURL_TEST_BUNDLES:BOOL=OFF
+
 // Enable BearSSL for SSL/TLS
 CURL_USE_BEARSSL:BOOL=OFF
 
@@ -806,6 +811,9 @@ ENABLE_DEBUG:BOOL=OFF
 
 // Enable IPv6 support
 ENABLE_IPV6:BOOL=ON
+
+// Apply curl debug options to test servers
+ENABLE_SERVER_DEBUG:BOOL=OFF
 
 // Enable threaded DNS lookup
 ENABLE_THREADED_RESOLVER:BOOL=ON
@@ -878,6 +886,9 @@ ZLIB_LIBRARY_DEBUG:FILEPATH=ZLIB_LIBRARY_DEBUG-NOTFOUND
 
 // Path to a library.
 ZLIB_LIBRARY_RELEASE:FILEPATH=/usr/lib/libz.so
+
+// Fast-track known feature detection results (Windows, some Apple)
+_CURL_PREFILL:BOOL=OFF
 
 // Path to a library.
 pkgcfg_lib_LIBIDN2_idn2:FILEPATH=/usr/lib/libidn2.so

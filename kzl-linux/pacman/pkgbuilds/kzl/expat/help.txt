@@ -1,10 +1,10 @@
--- The C compiler identification is GNU 14.2.1
+-- The C compiler identification is GNU 15.1.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
--- The CXX compiler identification is GNU 14.2.1
+-- The CXX compiler identification is GNU 15.1.1
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
 -- Check for working CXX compiler: /usr/bin/c++ - skipped
@@ -33,13 +33,15 @@
 -- Looking for unistd.h
 -- Looking for unistd.h - found
 -- Looking for getpagesize
--- Looking for getpagesize - found
+-- Looking for getpagesize - not found
 -- Looking for mmap
 -- Looking for mmap - found
 -- Looking for getrandom
 -- Looking for getrandom - found
 -- Looking for arc4random_buf
--- Looking for arc4random_buf - found
+-- Looking for arc4random_buf - not found
+-- Looking for arc4random
+-- Looking for arc4random - not found
 -- Looking for 4 include files stdlib.h, ..., float.h
 -- Looking for 4 include files stdlib.h, ..., float.h - found
 -- Performing Test HAVE_OFF_T
@@ -56,7 +58,7 @@
 -- 
 -- Configuration
 --   Generator .................. Unix Makefiles
---   Build type ................. NoConfig
+--   Build type ................. Release
 --   Prefix ..................... /usr/local
 --   Shared libraries ........... ON
 --   Character type ............. char (UTF-8)
@@ -92,7 +94,7 @@
 --   sudo make install
 -- 
 -- ===========================================================================
--- Configuring done (1.6s)
+-- Configuring done (1.8s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/expat/src/libexpat/expat/tmp
 -- Cache values
@@ -103,7 +105,7 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
 // Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ...
-CMAKE_BUILD_TYPE:STRING=
+CMAKE_BUILD_TYPE:STRING=Release
 
 // Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -125,9 +127,6 @@ CMAKE_CXX_FLAGS_DEBUG:STRING=-g
 
 // Flags used by the CXX compiler during MINSIZEREL builds.
 CMAKE_CXX_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG
-
-// Flags used by the CXX compiler during NOCONFIG builds.
-CMAKE_CXX_FLAGS_NOCONFIG:STRING=
 
 // Flags used by the CXX compiler during RELEASE builds.
 CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
@@ -170,9 +169,6 @@ CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
 
 // Flags used by the linker during MINSIZEREL builds.
 CMAKE_EXE_LINKER_FLAGS_MINSIZEREL:STRING=
-
-// Flags used by the linker during NOCONFIG builds.
-CMAKE_EXE_LINKER_FLAGS_NOCONFIG:STRING=
 
 // Flags used by the linker during RELEASE builds.
 CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
@@ -249,9 +245,6 @@ CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
 // Flags used by the linker during the creation of modules during MINSIZEREL builds.
 CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL:STRING=
 
-// Flags used by the linker during the creation of modules during NOCONFIG builds.
-CMAKE_MODULE_LINKER_FLAGS_NOCONFIG:STRING=
-
 // Flags used by the linker during the creation of modules during RELEASE builds.
 CMAKE_MODULE_LINKER_FLAGS_RELEASE:STRING=
 
@@ -282,9 +275,6 @@ CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
 // Flags used by the linker during the creation of shared libraries during MINSIZEREL builds.
 CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL:STRING=
 
-// Flags used by the linker during the creation of shared libraries during NOCONFIG builds.
-CMAKE_SHARED_LINKER_FLAGS_NOCONFIG:STRING=
-
 // Flags used by the linker during the creation of shared libraries during RELEASE builds.
 CMAKE_SHARED_LINKER_FLAGS_RELEASE:STRING=
 
@@ -305,9 +295,6 @@ CMAKE_STATIC_LINKER_FLAGS_DEBUG:STRING=
 
 // Flags used by the linker during the creation of static libraries during MINSIZEREL builds.
 CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL:STRING=
-
-// Flags used by the linker during the creation of static libraries during NOCONFIG builds.
-CMAKE_STATIC_LINKER_FLAGS_NOCONFIG:STRING=
 
 // Flags used by the linker during the creation of static libraries during RELEASE builds.
 CMAKE_STATIC_LINKER_FLAGS_RELEASE:STRING=
@@ -378,13 +365,10 @@ EXPAT_MINSIZEREL_POSTFIX:STRING=
 // Get a smaller (but slower) parser (in particular avoid multiple copies of the tokenizer)
 EXPAT_MIN_SIZE:BOOL=OFF
 
-// Library filename postfix for build type NOCONFIG; yields filenames libexpat<postfix=[w][d][MD|MT]>.(dll|dylib|lib|so)
-EXPAT_NOCONFIG_POSTFIX:STRING=
-
 // Define to make XML Namespaces functionality available
 EXPAT_NS:BOOL=ON
 
-// Build fuzzers via ossfuzz for the expat library
+// Build fuzzers via OSS-Fuzz for the expat library
 EXPAT_OSSFUZZ_BUILD:BOOL=OFF
 
 // Library filename postfix for build type RELEASE; yields filenames libexpat<postfix=[w][d][MD|MT]>.(dll|dylib|lib|so)

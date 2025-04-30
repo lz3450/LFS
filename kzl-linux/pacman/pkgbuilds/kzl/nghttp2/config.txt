@@ -1,18 +1,18 @@
--- The C compiler identification is GNU 14.2.1
+-- The C compiler identification is GNU 15.1.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
 -- Found Python3: /usr/bin/python3.12 (found version "3.12.1") found components: Interpreter
--- Found OpenSSL: /usr/lib/libcrypto.so (found suitable version "3.1.0", minimum required is "1.1.1")
+-- Found OpenSSL: /usr/lib/libcrypto.so (found suitable version "3.5.0", minimum required is "1.1.1")
 -- Could NOT find Libngtcp2 (missing: LIBNGTCP2_LIBRARY LIBNGTCP2_INCLUDE_DIR) (Required is at least version "1.0.0")
 -- Could NOT find Libngtcp2_crypto_quictls (missing: LIBNGTCP2_CRYPTO_QUICTLS_LIBRARY LIBNGTCP2_CRYPTO_QUICTLS_INCLUDE_DIR) (Required is at least version "1.0.0")
 -- Could NOT find Libnghttp3 (missing: LIBNGHTTP3_LIBRARY LIBNGHTTP3_INCLUDE_DIR) (Required is at least version "1.1.0")
 -- Found Systemd: /usr/include (Required is at least version "209")
 -- Found Jansson: /usr/lib/libjansson.so (found suitable version "2.14", minimum required is "2.5")
 -- Could NOT find Libevent (missing: LIBEVENT_CORE_LIBRARY LIBEVENT_EXTRA_LIBRARY LIBEVENT_OPENSSL_LIBRARY LIBEVENT_INCLUDE_DIR core extra openssl) (Required is at least version "2.0.8")
--- Found LibXml2: /usr/lib/libxml2.so (found suitable version "2.11.5", minimum required is "2.6.26")
+-- Found LibXml2: /usr/lib/libxml2.so (found suitable version "2.13.5", minimum required is "2.6.26")
 -- Could NOT find Jemalloc (missing: JEMALLOC_LIBRARY JEMALLOC_INCLUDE_DIR) 
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
@@ -73,8 +73,8 @@
 -- Performing Test OPT_Wpragmas - Success
 -- summary of build options:
 
-    Package version: 1.64.0
-    Library version: 42:3:28
+    Package version: 1.65.0
+    Library version: 42:4:28
     Install prefix:  /usr
     Target system:   Linux
     Compiler:
@@ -122,7 +122,7 @@
       HTTP/3(EXPERIMENTAL): OFF
 
 Only the library will be built. To build other components (such as applications and examples), set ENABLE_LIB_ONLY=OFF.
--- Configuring done (3.2s)
+-- Configuring done (3.4s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/nghttp2/src/nghttp2/build
 -- Cache values

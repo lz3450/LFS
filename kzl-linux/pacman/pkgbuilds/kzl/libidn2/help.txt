@@ -1,4 +1,4 @@
-Configuration of Libidn2 2.3.7:
+Configuration of Libidn2 2.3.8:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -49,6 +49,7 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
+  --with-gnulib-prefix=DIR  search for gnulib's runtime data in DIR/share
   --with-packager         String identifying the packager of this software
   --with-packager-version Packager-specific version information
   --with-packager-bug-reports
@@ -83,7 +84,7 @@ Some influential environment variables:
   GTKDOC_DEPS_LIBS
               linker flags for GTKDOC_DEPS, overriding pkg-config
 
-Use these variables to override the choices made by 'configure' or to help
+Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <help-libidn@gnu.org>.

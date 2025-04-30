@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=curl
-pkgver=8.12.0
+pkgver=8.13.0
 pkgrel=1
 epoch=
 pkgdesc="A command-line tool for transferring data specified with URL syntax"
@@ -20,7 +20,7 @@ depends=(
 source=(
   git+https://github.com/curl/curl.git#tag=curl-${pkgver//./_}
 )
-sha256sums=('968b1a61137aee34a26338d4abcc34d2b841b8c8c98d95ed0835fede9b8ff4d3')
+sha256sums=('cf0be1fdf3caef407bfe30e45d7cd54a0afe929ec2cfd91b262ce7195544c747')
 
 prepare() {
   cd $pkgname

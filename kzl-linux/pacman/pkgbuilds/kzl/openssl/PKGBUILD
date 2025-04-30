@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=openssl
-pkgver=3.4.1
+pkgver=3.5.0
 pkgrel=1
 epoch=
 pkgdesc="A Open Source Toolkit for the Transport Layer Security (TLS) protocol formerly known as the Secure Sockets Layer (SSL) protocol"
@@ -12,14 +12,14 @@ backup=(
   etc/pki/tls/openssl.cnf
 )
 source=(git+https://github.com/openssl/openssl.git#tag=$pkgname-$pkgver)
-sha256sums=('a5542fbda4757fda031deb8827f04d2af6406a02eb7d8dcdbf5e7ee2c66f9031')
+sha256sums=('02250a0c64f270d968e2d61f4867967f8b9ccecb902bba7a26ea037a74cf6479')
 
-_openssldir="/etc/pki/tls"
+openssldir="/etc/pki/tls"
 
 prepare() {
   cd $pkgname
 
-  sed -i "s|./demoCA|$_openssldir|g" apps/openssl.cnf apps/CA.pl.in
+  sed -i "s|./demoCA|$openssldir|g" apps/openssl.cnf apps/CA.pl.in
 }
 
 build() {
@@ -31,7 +31,7 @@ build() {
   ./Configure \
     --release \
     --libdir=lib \
-    --openssldir="$_openssldir" \
+    --openssldir="$openssldir" \
     --prefix=/usr \
     enable-ktls \
     enable-ec_nistp_64_gcc_128 \
@@ -44,13 +44,13 @@ build() {
 check() {
   cd $pkgname
 
-  sed -e "s|$_openssldir|./demoCA|g" \
+  sed -e "s|$openssldir|./demoCA|g" \
       -i apps/openssl.cnf \
       -i apps/CA.pl.in
 
 	make test
 
-  sed -e "s|./demoCA|$_openssldir|g" \
+  sed -e "s|./demoCA|$openssldir|g" \
       -i apps/openssl.cnf \
       -i apps/CA.pl.in
 }

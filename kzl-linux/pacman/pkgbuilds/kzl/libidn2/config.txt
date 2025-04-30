@@ -1,10 +1,13 @@
-configure: Libidn2 2.3.7 libidn2 2.3.7 0x02030007 4:0:4 0
+configure: Libidn2 2.3.8 libidn2 2.3.8 0x02030008 4:0:4 0
 checking for a BSD-compatible install... /usr/bin/install -c
 checking whether build environment is sane... yes
 checking for a race-free mkdir -p... /usr/bin/mkdir -p
 checking for gawk... gawk
 checking whether make sets $(MAKE)... yes
 checking whether make supports nested variables... yes
+checking whether UID '1000' is supported by ustar format... yes
+checking whether GID '1000' is supported by ustar format... yes
+checking how to create a ustar tar archive... gnutar
 checking whether make supports nested variables... (cached) yes
 checking for gcc... gcc
 checking whether the C compiler works... yes
@@ -31,14 +34,13 @@ checking for sys/types.h... yes
 checking for unistd.h... yes
 checking for wchar.h... yes
 checking for minix/config.h... no
+checking for stdbool.h... yes
 checking for sys/socket.h... yes
 checking for error.h... yes
 checking for getopt.h... yes
-checking for sys/cdefs.h... yes
 checking for limits.h... yes
 checking for sys/param.h... yes
 checking for sys/time.h... yes
-checking for stdbool.h... yes
 checking for stdckdint.h... yes
 checking for iconv.h... yes
 checking for features.h... yes
@@ -48,15 +50,14 @@ checking whether _XOPEN_SOURCE should be defined... no
 checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
 checking how to run the C preprocessor... gcc -E
-checking for egrep -e... /usr/bin/grep -E
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
 checking for Minix Amsterdam compiler... no
 checking for ar... ar
 checking for ranlib... ranlib
-checking for gcc option to enable large file support... none needed
+checking for gcc option to support large files... none needed
 checking how to print strings... printf
 checking for a sed that does not truncate output... /usr/bin/sed
-checking for grep that handles long lines and -e... /usr/bin/grep
-checking for egrep... /usr/bin/grep -E
 checking for fgrep... /usr/bin/grep -F
 checking for ld used by gcc... /usr/bin/ld
 checking if the linker (/usr/bin/ld) is GNU ld... yes
@@ -67,6 +68,7 @@ checking the maximum length of command line arguments... 1572864
 checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
 checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
 checking for /usr/bin/ld option to reload object files... -r
+checking for file... file
 checking for objdump... objdump
 checking how to recognize dependent libraries... pass_all
 checking for dlltool... no
@@ -130,17 +132,21 @@ checking for getopt_long_only... yes
 checking whether getopt is POSIX compatible... yes
 checking for working GNU getopt function... yes
 checking for working GNU getopt_long function... yes
+checking for glibc-compatible sys/cdefs.h... yes
 checking for inline... inline
 checking whether limits.h has WORD_BIT, BOOL_WIDTH etc.... yes
 checking whether limits.h has SSIZE_MAX... yes
-checking for GNU libc compatible malloc... yes
+checking whether malloc is ptrdiff_t safe... yes
+checking whether malloc, realloc, calloc set errno on failure... yes
+checking whether malloc (0) returns nonnull... yes
 checking whether the compiler produces multi-arch binaries... no
 checking for O_CLOEXEC... yes
 checking for promoted mode_t type... mode_t
-checking for wchar_t... yes
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
-checking for unreachable... no
+checking for unreachable... yes
+checking whether nullptr_t needs <stddef.h>... yes
+checking for clean definition of __STDC_VERSION_STDDEF_H__... no
 checking for wint_t... yes
 checking whether wint_t is large enough... yes
 checking whether stdint.h conforms to C99... yes
@@ -151,19 +157,23 @@ checking whether getw is declared... yes
 checking whether putw is declared... yes
 checking which flavor of printf attribute matches inttypes macros... system
 checking for nl_langinfo and CODESET... yes
-checking for a french Unicode locale... none
+checking for an english Unicode locale... en_US.UTF-8
 checking whether ecvt is declared... yes
 checking whether fcvt is declared... yes
 checking whether gcvt is declared... yes
-checking whether MB_CUR_MAX is correct... guessing yes
+checking whether MB_CUR_MAX is correct... yes
 checking whether strerror(0) succeeds... yes
+checking for off64_t... yes
+checking for blksize_t... yes
+checking for blkcnt_t... yes
 checking for struct timespec in <time.h>... yes
 checking for TIME_UTC in <time.h>... yes
 checking whether execvpe is declared... yes
 checking for valgrind... no
 checking for C compiler option to allow warnings... -Wno-error
 checking for alloca as a compiler built-in... yes
-checking for static_assert... yes, an <assert.h> macro
+checking for static_assert... yes, a keyword
+checking for bool, true, false... yes
 checking whether // is distinct from /... no
 checking whether dup2 works... yes
 checking whether fcntl handles F_DUPFD correctly... yes
@@ -196,7 +206,6 @@ checking for struct stat.st_birthtimespec.tv_nsec... no
 checking for struct stat.st_birthtimensec... no
 checking for struct stat.st_birthtim.tv_nsec... no
 checking for va_copy... yes
-checking for bool, true, false... no
 checking for strchrnul... yes
 checking whether strchrnul works... yes
 checking for working strerror function... yes
@@ -219,11 +228,11 @@ checking for libunistring version... 1.3.0
 checking for unistring/woe32dll.h... yes
 checking whether <wchar.h> uses 'inline' correctly... yes
 checking whether wcsdup is declared... yes
+checking for bool, true, false... (cached) yes
 checking whether free is known to preserve errno... yes
 checking whether the compiler generally respects inline... (cached) yes
 checking whether to use the included libunistring... no
 checking for ssize_t... (cached) yes
-checking for bool, true, false... (cached) no
 checking for pkg-config... /usr/bin/pkg-config
 checking pkg-config is at least version 0.9.0... yes
 checking for gtk-doc... no
@@ -265,12 +274,14 @@ checking whether C compiler handles -Wduplicated-branches... yes
 checking whether C compiler handles -Wduplicated-cond... yes
 checking whether C compiler handles -Wextra... yes
 checking whether C compiler handles -Wformat-signedness... yes
+checking whether C compiler handles -Wflex-array-member-not-at-end... yes
 checking whether C compiler handles -Winit-self... yes
 checking whether C compiler handles -Winvalid-pch... yes
 checking whether C compiler handles -Wlogical-op... yes
 checking whether C compiler handles -Wmissing-declarations... yes
 checking whether C compiler handles -Wmissing-include-dirs... yes
 checking whether C compiler handles -Wmissing-prototypes... yes
+checking whether C compiler handles -Wmissing-variable-declarations... yes
 checking whether C compiler handles -Wnested-externs... yes
 checking whether C compiler handles -Wnull-dereference... yes
 checking whether C compiler handles -Wold-style-definition... yes
@@ -309,8 +320,10 @@ checking whether C compiler handles -Wshift-overflow=2... yes
 checking whether C compiler handles -Wuse-after-free=3... yes
 checking whether C compiler handles -Wunused-const-variable=2... yes
 checking whether C compiler handles -Wvla-larger-than=4031... yes
+checking whether C compiler handles -Wthread-safety... no
 checking whether C compiler handles -Wno-analyzer-malloc-leak... yes
 checking whether C compiler handles -Wno-sign-compare... yes
+checking whether C compiler handles -Wno-system-headers... yes
 checking that generated files are newer than configure... done
 configure: creating ./config.status
 config.status: creating Makefile
@@ -330,12 +343,13 @@ config.status: executing libtool commands
 config.status: executing po-directories commands
 config.status: creating po/POTFILES
 config.status: creating po/Makefile
+config.status: executing version-timestamp commands
 configure: summary of main build options:
 
-  Version:            2.3.7
+  Version:            2.3.8
   Libtool version     4:0:4
   DLL version:        0
-  Header version:     major 2 minor 3 patch 7 number 0x02030007
+  Header version:     major 2 minor 3 patch 8 number 0x02030008
   Build system:       x86_64-pc-linux-gnu
   Host/Target system: x86_64-pc-linux-gnu
   Install prefix:     /usr
@@ -348,7 +362,7 @@ configure: summary of main build options:
   Warning flags:      
       WERROR_CFLAGS:  
 WERROR_TESTS_CFLAGS:  
-        WARN_CFLAGS:   -fanalyzer -fstrict-flex-arrays -Wall -Warith-conversion -Wcast-align=strict -Wdate-time -Wdisabled-optimization -Wdouble-promotion -Wduplicated-branches -Wduplicated-cond -Wextra -Wformat-signedness -Winit-self -Winvalid-pch -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wmissing-prototypes -Wnested-externs -Wnull-dereference -Wold-style-definition -Wopenmp-simd -Woverlength-strings -Wpacked -Wpointer-arith -Wshadow -Wstack-protector -Wstrict-flex-arrays -Wstrict-prototypes -Wsuggest-attribute=cold -Wsuggest-attribute=format -Wsuggest-attribute=malloc -Wsuggest-attribute=noreturn -Wsuggest-final-methods -Wsuggest-final-types -Wsync-nand -Wtrampolines -Wuninitialized -Wunknown-pragmas -Wunsafe-loop-optimizations -Wunused-macros -Wvariadic-macros -Wvector-operation-performance -Wvla -Wwrite-strings -Warray-bounds=2 -Wattribute-alias=2 -Wbidi-chars=any,ucn -Wformat-overflow=2 -Wformat=2 -Wformat-truncation=2 -Wimplicit-fallthrough=5 -Wshift-overflow=2 -Wuse-after-free=3 -Wunused-const-variable=2 -Wvla-larger-than=4031 -Wno-analyzer-malloc-leak -Wno-sign-compare
+        WARN_CFLAGS:   -fanalyzer -fstrict-flex-arrays -Wall -Warith-conversion -Wcast-align=strict -Wdate-time -Wdisabled-optimization -Wdouble-promotion -Wduplicated-branches -Wduplicated-cond -Wextra -Wformat-signedness -Wflex-array-member-not-at-end -Winit-self -Winvalid-pch -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wmissing-prototypes -Wmissing-variable-declarations -Wnested-externs -Wnull-dereference -Wold-style-definition -Wopenmp-simd -Woverlength-strings -Wpacked -Wpointer-arith -Wshadow -Wstack-protector -Wstrict-flex-arrays -Wstrict-prototypes -Wsuggest-attribute=cold -Wsuggest-attribute=format -Wsuggest-attribute=malloc -Wsuggest-attribute=noreturn -Wsuggest-final-methods -Wsuggest-final-types -Wsync-nand -Wtrampolines -Wuninitialized -Wunknown-pragmas -Wunsafe-loop-optimizations -Wunused-macros -Wvariadic-macros -Wvector-operation-performance -Wvla -Wwrite-strings -Warray-bounds=2 -Wattribute-alias=2 -Wbidi-chars=any,ucn -Wformat-overflow=2 -Wformat=2 -Wformat-truncation=2 -Wimplicit-fallthrough=5 -Wshift-overflow=2 -Wuse-after-free=3 -Wunused-const-variable=2 -Wvla-larger-than=4031 -Wno-analyzer-malloc-leak -Wno-sign-compare -Wno-system-headers
 
   Documentation:      no
 

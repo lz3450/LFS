@@ -2,7 +2,7 @@
 
 pkgname=libpsl
 pkgver=0.21.5
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="C library to handle the Public Suffix List"
 arch=('x86_64')
