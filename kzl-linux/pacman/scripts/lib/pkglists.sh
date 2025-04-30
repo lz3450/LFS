@@ -93,9 +93,8 @@ kzl_stage2_pkgs=(
     ################
     libunistring libidn2
     libpsl
-    libssh2
+    openssl libssh2
     nghttp2
-    openssl
     curl
 
     expat pcre2 git
