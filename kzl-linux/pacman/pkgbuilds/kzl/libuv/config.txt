@@ -1,5 +1,4 @@
-cmake: /usr/lib/libcurl.so.4: no version information available (required by cmake)
--- The C compiler identification is GNU 14.2.1
+-- The C compiler identification is GNU 15.1.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped

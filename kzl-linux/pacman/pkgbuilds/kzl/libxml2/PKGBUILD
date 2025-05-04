@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libxml2
-pkgver=2.13.5
-pkgrel=2
+pkgver=2.14.2
+pkgrel=7
 epoch=
 pkgdesc="the XML C parser and toolkit"
 arch=('x86_64')
@@ -10,60 +10,42 @@ url="http://xmlsoft.org"
 license=('KZL')
 depends=(
   icu
+  readline
+  xz
+  zlib
 )
 source=(
   git+https://gitlab.gnome.org/GNOME/libxml2.git#tag=v$pkgver
 )
-sha256sums=('2266ea903ccad6558501b5e9ce6f9b47c4606c3b679b0f016bcbe0e33228684a')
+sha256sums=('ea5bb9e9949bd71c725013b8fff73046433c44bb22773a3103f83c932bc63273')
 
 build() {
   cd $pkgname
 
   msg2 "Configuring..."
-  cmake -LAH -S . -B build \
-    -D CMAKE_BUILD_TYPE=Release \
-    -D CMAKE_INSTALL_PREFIX=/usr \
-    -D CMAKE_INSTALL_LIBDIR=lib \
-    -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
-    -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
-    -D LIBXML2_WITH_ICU=ON \
-    -D LIBXML2_WITH_PYTHON=OFF
+  meson setup \
+    --prefix /usr \
+    --auto-features enabled \
+    --buildtype plain \
+    -D icu=enabled \
+    -D lzma=enabled \
+    -D python=disabled \
+    -D readline=enabled \
+    -D zlib=enabled \
+    build
 
   msg2 "Compiling..."
-  cmake --build build
+  meson compile -C build
 }
 
 check() {
   cd $pkgname
 
-  cmake --build build --target tests
+  meson test -C build --print-errorlogs
 }
 
 package() {
   cd $pkgname
 
-  DESTDIR="$pkgdir" cmake --build build --target install
+  meson install -C build --destdir "$pkgdir"
 }
-
-# prepare() {
-#   cd $pkgname
-
-#   NOCONFIGURE=1 ./autogen.sh
-# }
-
-# build() {
-#   cd $pkgname
-
-#   ./configure \
-#     --prefix=/usr \
-#     --with-threads \
-#     --with-icu
-
-#   make
-# }
-
-# package() {
-#   cd $pkgname
-
-#   make DESTDIR="$pkgdir" install
-# }

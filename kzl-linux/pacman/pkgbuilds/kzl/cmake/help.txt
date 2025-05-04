@@ -65,9 +65,9 @@ Directory and file names:
   --bindir=DIR            install binaries in PREFIX/DIR
                           [bin]
   --datadir=DIR           install data files in PREFIX/DIR
-                          [share/cmake-3.31]
+                          [share/cmake-4.0]
   --docdir=DIR            install documentation files in PREFIX/DIR
-                          [doc/cmake-3.31]
+                          [doc/cmake-4.0]
   --mandir=DIR            install man pages files in PREFIX/DIR/manN
                           [man]
   --xdgdatadir=DIR        install XDG specific files in PREFIX/DIR

@@ -18,14 +18,14 @@ checking whether c++ accepts -g... yes
 checking for c++ option to enable C++11 features... none needed
 configure: versions of the compilers used:
   + cc --version
-  cc (KZL 14.2.0.g778-3 2025/02/13 03:45:44 +0000) 14.2.1 20250213
-  Copyright (C) 2024 Free Software Foundation, Inc.
+  cc (KZL 15.1.0.g8-4 2025/04/26 16:58:58 +0000) 15.1.1 20250426
+  Copyright (C) 2025 Free Software Foundation, Inc.
   This is free software; see the source for copying conditions.  There is NO
   warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   
   + c++ --version
-  c++ (KZL 14.2.0.g778-3 2025/02/13 03:45:44 +0000) 14.2.1 20250213
-  Copyright (C) 2024 Free Software Foundation, Inc.
+  c++ (KZL 15.1.0.g8-4 2025/04/26 16:58:58 +0000) 15.1.1 20250426
+  Copyright (C) 2025 Free Software Foundation, Inc.
   This is free software; see the source for copying conditions.  There is NO
   warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   

@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libarchive
-pkgver=3.7.7
+pkgver=3.7.9
 pkgrel=4
 epoch=
 pkgdesc="A portable, efficient C library that can read and write streaming archives in a variety of formats"
@@ -20,7 +20,7 @@ depends=(
   zstd
 )
 source=(git+https://github.com/libarchive/libarchive.git#tag=v$pkgver)
-sha256sums=('SKIP')
+sha256sums=('564839b9c4ecae3d87ea0e3b6a9af1e5e26774c8d5dbb2f465480873a7dc0ef8')
 
 build() {
   cd $pkgname

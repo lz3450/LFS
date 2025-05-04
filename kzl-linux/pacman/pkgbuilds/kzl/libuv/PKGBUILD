@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libuv
-pkgver=1.50.0
+pkgver=1.51.0
 pkgrel=2
 epoch=
 pkgdesc="A multi-platform support library with a focus on asynchronous I/O"
@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://github.com/libuv/libuv"
 license=('KZL')
 source=(git+https://github.com/libuv/libuv.git#tag=v$pkgver)
-sha256sums=('SKIP')
+sha256sums=('d59fb524afffc2b0e27351581cb165e5ce04578f823691b17d209f8772493604')
 
 build() {
   cd $pkgname
