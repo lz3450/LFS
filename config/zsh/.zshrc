@@ -244,3 +244,4 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias pipwheel="/opt/bin/python3 -m pip wheel --wheel-dir ~/wheels --no-binary :all:"
 alias pipinstall="/opt/bin/python3 -m pip install --user -U --no-index --find-links ~/wheels"
+alias pipuninstall="/opt/bin/python3 -m pip uninstall -y"
