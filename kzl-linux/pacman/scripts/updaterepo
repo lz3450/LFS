@@ -50,11 +50,11 @@ usage() {
 updaterepo
 
 Usage: $SCRIPT_NAME -h | --help
-Usage: $SCRIPT_NAME -R | --replace -r | --repo <core|extra|ubuntu>
-Usage: $SCRIPT_NAME -c | --clear -r | --repo <core|extra|ubuntu>
+Usage: $SCRIPT_NAME -R | --replace -r | --repo <kzl|ubuntu22|ubuntu24>
+Usage: $SCRIPT_NAME -c | --clear -r | --repo <kzl|ubuntu22|ubuntu24>
 
     -h, --help      display this help message and exit
-    -r, --repo      build repo (core, extra, ubuntu)
+    -r, --repo      build repo (kzl, ubuntu22, ubuntu24)
     -R, --replace   replace the existing repository file with an empty one
     -c, --clear     remove the repository
 
@@ -91,17 +91,11 @@ case "$repo" in
         readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$repo/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
         ;;
     ubuntu22)
-        readarray -t pkgs < <(find \
-            "$LFS_PACMAN_ROOT_DIR/pkgbuilds/ubuntu/" \
-            "$LFS_PACMAN_ROOT_DIR/pkgbuilds/22.04/" \
-            -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
+        readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/22.04/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
         repo="ubuntu"
         ;;
     ubuntu24)
-        readarray -t pkgs < <(find \
-            "$LFS_PACMAN_ROOT_DIR/pkgbuilds/ubuntu/" \
-            "$LFS_PACMAN_ROOT_DIR/pkgbuilds/24.04/" \
-            -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
+        readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/24.04/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
         repo="ubuntu"
         ;;
     # unknown repo

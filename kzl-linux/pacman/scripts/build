@@ -173,7 +173,7 @@ Usage: $SCRIPT_NAME -r <repo> -s <stage> | -p <pkgname> [ -n | -u ] [ --no-clean
 
     -V, --version               display version information and exit
     -h, --help                  display this help message and exit
-    -r, --repo                  target repository (kzl, ubuntu, ...)
+    -r, --repo                  target repository (kzl, ubuntu22, ubuntu24, ...)
     -s, --stage                 target stage (0, 1(default), 2, 3; some repo are not using this)
     -p, --package               build single package
     -i, --install               install the package after building
@@ -233,10 +233,10 @@ case "$repo" in
         repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/kzl")
         ;;
     ubuntu22)
-        repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/22.04" "$LFS_PACMAN_ROOT_DIR/pkgbuilds/ubuntu")
+        repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/22.04")
         ;;
     ubuntu24)
-        repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/24.04" "$LFS_PACMAN_ROOT_DIR/pkgbuilds/ubuntu")
+        repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/24.04")
         ;;
     *)
         error "Unknown repo name \"$repo\"" 3
