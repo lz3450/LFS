@@ -108,10 +108,13 @@ info "New pkgver is $new_version"
 
 # update `pkgver` and `pkgrel`
 result=$(vercmp $new_version $current_version)
+pkgbuild_path="$(realpath PKGBUILD)"
 if (( $result == 1 )); then
     info "PKGBUILD updated: $current_version => $new_version"
-    sed -i "/^pkgver=/c\\pkgver=$new_version" PKGBUILD
-    sed -i "/^pkgrel=/c\\pkgrel=1" PKGBUILD
+    sed -i \
+        -e "/^pkgver=/c\\pkgver=$new_version" \
+        -e "/^pkgrel=/c\\pkgrel=1" \
+        "$pkgbuild_path"
     pkgver=$new_version
     info "Running updpkgsums..."
     updpkgsums || error "\`updpkgsums\` error" 7
@@ -123,7 +126,7 @@ elif (( $result == 0 )); then
     if (( $increase > 0 )); then
         info "Increase pkgrel..."
         new_pkgrel=$(($current_pkgrel + 1))
-        sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" PKGBUILD
+        sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" "$pkgbuild_path"
         info "New pkgrel is $new_pkgrel"
         if (( $increase_only > 0 )); then
             exit $result
@@ -216,6 +219,8 @@ if have_function 'post_update'; then
     post_update || error "\`post_update\` error" 14
     info "Done"
 fi
+
+info "Update PKGBUILD finished successfully"
 
 ### error codes
 # 255: current version is newer
