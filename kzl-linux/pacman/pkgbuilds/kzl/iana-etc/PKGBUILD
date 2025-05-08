@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=iana-etc
-pkgver=2025.02.25
+pkgver=2025.05.05
 pkgrel=1
 epoch=
 pkgdesc="/etc/protocols and /etc/services provided by IANA"
@@ -16,7 +16,7 @@ source=(
   service-names-port-numbers-$pkgver.xml::https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml
 )
 sha256sums=('fa44617654a4356f7018051e021fcf0f7ffc6e7762dfbc8129e8832760f76851'
-            '7faf31adfefbafd4e257166faa356285197381e0d9b91a8b520778116920c83f')
+            '3365fedcfd25458302e404a38d9bbc184d4a3bfa1778f06d7b1e9287ec757a92')
 
 package() {
   install -dm755 "$pkgdir"/etc
