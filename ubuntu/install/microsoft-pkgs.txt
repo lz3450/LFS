@@ -1,5 +1,6 @@
 code
 fonts-liberation
+fonts-liberation-sans-narrow
 libauthen-sasl-perl
 libclone-perl
 libdata-dump-perl
