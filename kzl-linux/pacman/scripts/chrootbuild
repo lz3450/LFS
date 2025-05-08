@@ -50,6 +50,7 @@ active_mounts=()
 
 build_opts=()
 rootfs_tarball=""
+declare -i backup=0
 declare -i clean=0
 declare -i from_rootfs_backups=0
 declare -i debug=0
@@ -184,6 +185,9 @@ while (( $# > 0 )); do
         shift
         rootfs_tarball="${1:-}"
         ;;
+    -B | --rootfs-backup)
+        backup=1
+        ;;
     -e | --from-rootfs-backups)
         from_rootfs_backups=1
         ;;
@@ -222,6 +226,20 @@ if (( $clean )); then
     fi
 fi
 
+if (( $backup )); then
+    info "Backing up rootfs..."
+    if [[ -d "$ROOTFS_DIR" ]]; then
+        if [[ -f "chrootbuild-rootfs.tar.zst" ]]; then
+            mv -v chrootbuild-rootfs.tar.zst chrootbuild-rootfs.old.tar.zst
+        fi
+        tar --transform='s|^./||' --zstd -cpf chrootbuild-rootfs.tar.zst -C "$ROOTFS_DIR" .
+        info "Done"
+    else
+        error "Rootfs directory ($ROOTFS_DIR) does not exist" 5
+    fi
+    exit
+fi
+
 if (( ${#build_opts[@]} == 0 )); then
     build_opts=('--help')
 fi
@@ -245,3 +263,4 @@ epilogue
 # 2: failed to unmount
 # 3: working directory already exists
 # 4: rootfs tarball not specified
+# 5: failed to backup rootfs
