@@ -1,4 +1,4 @@
-Configuration of swig 4.3.0:
+Configuration of swig 4.3.1:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
