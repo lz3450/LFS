@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gdbm
-pkgver=1.24
-pkgrel=4
+pkgver=1.25
+pkgrel=1
 epoch=
 pkgdesc="A library of database functions that use extensible hashing and work similar to the standard UNIX dbm"
 arch=('x86_64')
@@ -15,7 +15,7 @@ makedepends=(
   libtool
 )
 source=(git://git.gnu.org.ua/gdbm.git#tag=v$pkgver)
-sha256sums=('731b9bdf5e16cc435c1ff81083eba393b292538d976a96d6403cb22f8570fa26')
+sha256sums=('80744dd5ba75ca8857e0b12dd18544c9b0fcd50ff2d9ee8fc3d1ba0e60424577')
 
 prepare() {
   cd $pkgname
