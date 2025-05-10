@@ -1,5 +1,5 @@
--- The C compiler identification is Clang 19.1.7
--- The CXX compiler identification is Clang 19.1.7
+-- The C compiler identification is Clang 20.1.4
+-- The CXX compiler identification is Clang 20.1.4
 -- The ASM compiler identification is Clang with GNU-like command-line
 -- Found assembler: /opt/bin/clang
 -- Detecting C compiler ABI info
