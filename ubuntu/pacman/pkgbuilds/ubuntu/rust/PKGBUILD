@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rust
-pkgver=1.85.0
-pkgrel=7
+pkgver=1.86.0
+pkgrel=1
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')
@@ -15,7 +15,7 @@ source=(
   # git+https://github.com/rust-lang/rust.git#branch=stable
   git+https://github.com/rust-lang/rust.git#tag=$pkgver
 )
-sha256sums=('04a229830fca2f721d0ca2579b2eb2e05f79c54dd9cd944763712a6f4620bc35')
+sha256sums=('310338e2c3c6cf75b07edb12afc5bc7356d8de60c474b950c38d40b4cc85f787')
 
 pkgver() {
   cd $pkgname
