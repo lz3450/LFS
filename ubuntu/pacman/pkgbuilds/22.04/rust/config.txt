@@ -1,6 +1,6 @@
 configure: processing command line
 configure: 
-configure: build.configure-args := ['--enable-llvm-link-shared', '--enable-rpath', '--enable-sanitizers', '--enable-profiler', '--prefix=/opt', '--sysconfdir=etc', '--llvm-root=/opt', '--llvm-config=/opt/bin/llvm-config', '--llvm-filecheck=/opt/bin/FileCheck', '--python=/opt/bin/python3', '--release-channel=stable', '--release-description=KZL 2025/03/12 22:32:53 -0500', '--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src,wasm-component-ld', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set=change-id=134809', '--set=rust.frame-pointers=true', '--set=rust.backtrace-on-ice=true', '--set=rust.remap-debuginfo=true', '--set=rust.jemalloc=true', '--set=target.x86_64-unknown-linux-gnu.cc=/opt/bin/clang', '--set=target.x86_64-unknown-linux-gnu.cxx=/opt/bin/clang++', '--set=target.x86_64-unknown-linux-gnu.ar=/opt/bin/llvm-ar', '--set=target.x86_64-unknown-linux-gnu.ranlib=/opt/bin/llvm-ranlib', '--set=target.x86_64-unknown-linux-gnu.linker=/opt/bin/clang', '--set=build.lldb=/opt/bin/lldb', '--set=rust.lld=true', '--set=rust.use-lld=true']
+configure: build.configure-args := ['--enable-llvm-link-shared', '--enable-rpath', '--enable-sanitizers', '--enable-profiler', '--prefix=/opt', '--sysconfdir=etc', '--llvm-root=/opt', '--llvm-config=/opt/bin/llvm-config', '--llvm-filecheck=/opt/bin/FileCheck', '--python=/opt/bin/python3', '--release-channel=stable', '--release-description=KZL 2025/05/10 12:23:42 -0500', '--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src,wasm-component-ld', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set=change-id=136941', '--set=rust.frame-pointers=true', '--set=rust.backtrace-on-ice=true', '--set=rust.remap-debuginfo=true', '--set=rust.jemalloc=true', '--set=target.x86_64-unknown-linux-gnu.cc=/opt/bin/clang', '--set=target.x86_64-unknown-linux-gnu.cxx=/opt/bin/clang++', '--set=target.x86_64-unknown-linux-gnu.ar=/opt/bin/llvm-ar', '--set=target.x86_64-unknown-linux-gnu.ranlib=/opt/bin/llvm-ranlib', '--set=target.x86_64-unknown-linux-gnu.linker=/opt/bin/clang', '--set=build.lldb=/opt/bin/lldb', '--set=rust.lld=true', '--set=rust.use-lld=true']
 configure: llvm.link-shared     := True
 configure: rust.rpath           := True
 configure: build.sanitizers     := True
@@ -12,12 +12,12 @@ configure: target.x86_64-unknown-linux-gnu.llvm-config := /opt/bin/llvm-config
 configure: target.x86_64-unknown-linux-gnu.llvm-filecheck := /opt/bin/FileCheck
 configure: build.python         := /opt/bin/python3
 configure: rust.channel         := stable
-configure: rust.description     := KZL 2025/03/12 22:32:53 -0500
+configure: rust.description     := KZL 2025/05/10 12:23:42 -0500
 configure: build.tools          := ['cargo', 'clippy', 'rustfmt', 'rust-analyzer', 'rust-analyzer-proc-macro-srv', 'analysis', 'src', 'wasm-component-ld']
 configure: build.build          := x86_64-unknown-linux-gnu
 configure: build.host           := ['x86_64-unknown-linux-gnu']
 configure: build.target         := ['x86_64-unknown-linux-gnu']
-configure: change-id            := 134809
+configure: change-id            := 136941
 configure: rust.frame-pointers  := True
 configure: rust.backtrace-on-ice := True
 configure: rust.remap-debuginfo := True
@@ -52,7 +52,7 @@ profile = 'dist'
 #
 # If `change-id` does not match the version that is currently running,
 # `x.py` will inform you about the changes made on bootstrap.
-change-id = 134809
+change-id = 136941
 
 [llvm]
 
@@ -131,7 +131,7 @@ profiler = true
 # Arguments passed to the `./configure` script, used during distcheck. You
 # probably won't fill this in but rather it's filled in by the `./configure`
 # script. Useful for debugging.
-configure-args = ['--enable-llvm-link-shared', '--enable-rpath', '--enable-sanitizers', '--enable-profiler', '--prefix=/opt', '--sysconfdir=etc', '--llvm-root=/opt', '--llvm-config=/opt/bin/llvm-config', '--llvm-filecheck=/opt/bin/FileCheck', '--python=/opt/bin/python3', '--release-channel=stable', '--release-description=KZL 2025/03/12 22:32:53 -0500', '--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src,wasm-component-ld', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set=change-id=134809', '--set=rust.frame-pointers=true', '--set=rust.backtrace-on-ice=true', '--set=rust.remap-debuginfo=true', '--set=rust.jemalloc=true', '--set=target.x86_64-unknown-linux-gnu.cc=/opt/bin/clang', '--set=target.x86_64-unknown-linux-gnu.cxx=/opt/bin/clang++', '--set=target.x86_64-unknown-linux-gnu.ar=/opt/bin/llvm-ar', '--set=target.x86_64-unknown-linux-gnu.ranlib=/opt/bin/llvm-ranlib', '--set=target.x86_64-unknown-linux-gnu.linker=/opt/bin/clang', '--set=build.lldb=/opt/bin/lldb', '--set=rust.lld=true', '--set=rust.use-lld=true']
+configure-args = ['--enable-llvm-link-shared', '--enable-rpath', '--enable-sanitizers', '--enable-profiler', '--prefix=/opt', '--sysconfdir=etc', '--llvm-root=/opt', '--llvm-config=/opt/bin/llvm-config', '--llvm-filecheck=/opt/bin/FileCheck', '--python=/opt/bin/python3', '--release-channel=stable', '--release-description=KZL 2025/05/10 12:23:42 -0500', '--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src,wasm-component-ld', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set=change-id=136941', '--set=rust.frame-pointers=true', '--set=rust.backtrace-on-ice=true', '--set=rust.remap-debuginfo=true', '--set=rust.jemalloc=true', '--set=target.x86_64-unknown-linux-gnu.cc=/opt/bin/clang', '--set=target.x86_64-unknown-linux-gnu.cxx=/opt/bin/clang++', '--set=target.x86_64-unknown-linux-gnu.ar=/opt/bin/llvm-ar', '--set=target.x86_64-unknown-linux-gnu.ranlib=/opt/bin/llvm-ranlib', '--set=target.x86_64-unknown-linux-gnu.linker=/opt/bin/clang', '--set=build.lldb=/opt/bin/lldb', '--set=rust.lld=true', '--set=rust.use-lld=true']
 
 [install]
 
@@ -161,7 +161,7 @@ channel = 'stable'
 # upstream Rust you need to set this to "". However, note that if you are not
 # actually compatible -- for example if you've backported patches that change
 # behavior -- this may lead to miscompilations or other bugs.
-description = 'KZL 2025/03/12 22:32:53 -0500'
+description = 'KZL 2025/05/10 12:23:42 -0500'
 
 # By default the `rustc` executable is built with `-Wl,-rpath` flags on Unix
 # platforms to ensure that the compiler is usable by default from the build

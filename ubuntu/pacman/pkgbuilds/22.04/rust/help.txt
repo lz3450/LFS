@@ -12,9 +12,9 @@ Options
 	--enable-verbose-tests             OR --disable-verbose-tests
 		enable verbose output when running tests
 	--enable-ccache                    OR --disable-ccache
-		invoke gcc/clang via ccache to reuse object files between builds
+		invoke gcc/clang/rustc via ccache to reuse object files between builds
 	--enable-sccache                   OR --disable-sccache
-		invoke gcc/clang via sccache to reuse object files between builds
+		invoke gcc/clang/rustc via sccache to reuse object files between builds
 	--enable-local-rust                OR --disable-local-rust
 		use an installed rustc rather than downloading a snapshot
 	--local-rust-root=VAL          set prefix for local rust binary
