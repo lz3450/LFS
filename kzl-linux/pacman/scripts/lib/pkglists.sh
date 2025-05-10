@@ -110,6 +110,11 @@ kzl_stage2_pkgs=(
     libuv rhash jsoncpp cmake
 
     ################################
+    # gettext
+    ################################
+    gettext
+
+    ################################
     # filesystem
     ################################
     iana-etc filesystem
@@ -144,11 +149,6 @@ kzl_stage2_pkgs=(
     # perl
     ################################
     perl
-
-    # ################
-    # # gettext
-    # ################
-    # libunistring icu gettext
 
     # ################
     # # python
