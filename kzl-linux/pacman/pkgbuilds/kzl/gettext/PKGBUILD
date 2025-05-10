@@ -1,17 +1,22 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=gettext
-pkgver=0.22
-pkgrel=13
+pkgver=0.25
+pkgrel=3
 epoch=
 pkgdesc="GNU internationalization library"
 arch=('x86_64')
 url="https://www.gnu.org/software/gettext/"
 license=('KZL')
-depends=(acl glibc libunistring libxml2)
+depends=(
+  acl
+  glibc
+  libunistring
+  libxml2
+)
 source=(https://ftp.gnu.org/pub/gnu/gettext/$pkgname-$pkgver.tar.gz{,.sig})
-validpgpkeys=('9001B85AF9E1B83DF1BDA942F5BE8B267C6A406D')
-sha256sums=('49f089be11b490170bbf09ed2f51e5f5177f55be4cc66504a5861820e0fb06ab'
+validpgpkeys=('E0FFBD975397F77A32AB76ECB6301D9E1BBEAC08')
+sha256sums=('aee02dab79d9138fdcc7226b67ec985121bce6007edebe30d0e39d42f69a340e'
             'SKIP')
 # source=(git+https://git.savannah.gnu.org/git/gettext.git#tag=v$pkgver
 #         git+https://git.savannah.gnu.org/git/gnulib.git)
@@ -32,11 +37,13 @@ build() {
     --prefix=/usr \
     --disable-java \
     --disable-csharp \
+    --disable-d \
     --enable-c++ \
     --enable-shared \
     --disable-static \
     --enable-nls \
     --disable-rpath \
+    --without-selinux \
     --without-emacs
 
   make

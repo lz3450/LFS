@@ -2,7 +2,7 @@
 
 pkgname=pam
 pkgver=1.7.0
-pkgrel=1
+pkgrel=5
 epoch=
 pkgdesc="PAM (Pluggable Authentication Modules) library"
 arch=('x86_64')
@@ -18,19 +18,19 @@ depends=(
 source=(git+https://github.com/linux-pam/linux-pam.git#tag=v$pkgver)
 sha256sums=('66ba7e8d6f8d1b985432a07180280e5bbc8c84bfc43fab7b1e071c26a04e2bde')
 
-prepare() {
+build() {
   cd linux-pam
 
+  msg2 "Configuring..."
   meson setup \
     --prefix /usr \
     --auto-features disabled \
     --buildtype plain \
-    -D b_lto=true \
-    -D b_pie=true \
     -D audit=enabled \
     -D db=gdbm \
     -D docs=disabled \
     -D econf=disabled \
+    -D i18n=enabled \
     -D logind=disabled \
     -D nis=disabled \
     -D openssl=enabled \
@@ -39,11 +39,8 @@ prepare() {
     -D pam_userdb=enabled \
     -D selinux=disabled \
     build
-}
 
-build() {
-  cd linux-pam
-
+  msg2 "Compiling..."
   meson compile -C build
 }
 

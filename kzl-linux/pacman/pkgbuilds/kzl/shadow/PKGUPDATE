@@ -3,6 +3,6 @@ srcdir="$pkgname"
 build_system=autoconf
 
 post_update() {
-    cd "$srcdir"
+    cd "$BUILDDIR/$pkgname/src/$srcdir"
     cp etc/login.defs "$PKGBUILDDIR"/login.defs
 }

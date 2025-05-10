@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=shadow
-pkgver=4.17.2
-pkgrel=1
+pkgver=4.17.4
+pkgrel=2
 epoch=
 pkgdesc="Programs for converting UNIX password files to the shadow password format, plus programs for managing user and group accounts"
 arch=('x86_64')
@@ -31,7 +31,7 @@ source=(
   shadow.{service,timer}
   $pkgname.install
 )
-sha256sums=('f6207dfdd35a468269fdeb62ff746cad0ce8a661a7be62573718c7fbe89dd495'
+sha256sums=('ef2340e422c16d25d44ecfd01d74e333b667c0c15f68ed61849aa5711dd30fd9'
             'bc9fef974321e399fb47c229a82e37d81a8f39424082ef8e4915d0dbee9ff7c2'
             'aa10a39f3c004cd805313dadc196bef730c9caae652dcdd2652019d3ecff49c4'
             '736eb7b16fc2fff9c902d4823641114338f290a6825e66831f41c5474e994207'
@@ -56,7 +56,8 @@ prepare() {
 build() {
   cd $pkgname
 
-  ./configure -C \
+  msg2 "Configuring..."
+  ./configure \
     --prefix=/usr \
     --bindir=/usr/bin \
     --sbindir=/usr/sbin \
@@ -82,6 +83,7 @@ build() {
     --with-libbsd=no \
     --with-fcaps=no
 
+  msg2 "Compiling..."
   make
 }
 

@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pam-config
-pkgver=2025.01.15
+pkgver=2025.05.10
 pkgrel=1
 epoch=
 pkgdesc="PAM configuration"
@@ -10,19 +10,27 @@ url="https://github.com/kongzelun/LFS"
 license=('KZL')
 backup=(
   etc/pam.d/system-auth
-  etc/pam.d/other
+  etc/pam.d/system-login
+  etc/pam.d/system-local-login
+  etc/pam.d/system-remote-login
 )
 source=(
   system-auth
-  other
+  system-login
+  system-local-login
+  system-remote-login
 )
-sha256sums=('5708b7615b45b87ef358c83d8278bb6933a2cb7466abc8d39fdff5de51ba3a4b'
-            '543aca8b2e4dcd185bbade235d9d737699e59f6d75372c5ec74fd950c1494fd2')
+sha256sums=('207ab2eecc1b1b447beda016d6383bfb78faad1b2d7fce1fc2fe29055e2374d9'
+            'be704b560efc514b13cad45cfd83e638374de796a6b195b10ffd7c7a300a7d64'
+            '1832a52bcd761fbe9007d5adbd08e44b6a34b1d7b1ce689bfbe73dbcab7ff838'
+            '4b083cbfa72982cf0229366573c318186a608836029b853b6bde679a8cd1f15d')
 
 # https://github.com/authselect/authselect
 
 package() {
   install -dm755 "$pkgdir"/etc/pam.d/
   install -Dm644 "$srcdir"/system-auth "$pkgdir"/etc/pam.d/
-  install -Dm644 "$srcdir"/other "$pkgdir"/etc/pam.d/
+  install -Dm644 "$srcdir"/system-login "$pkgdir"/etc/pam.d/
+  install -Dm644 "$srcdir"/system-local-login "$pkgdir"/etc/pam.d/
+  install -Dm644 "$srcdir"/system-remote-login "$pkgdir"/etc/pam.d/
 }

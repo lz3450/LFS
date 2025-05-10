@@ -1,0 +1,114 @@
+The Meson build system
+Version: 1.7.0
+Source dir: /home/kzl/makepkg/build/pam/src/linux-pam
+Build dir: /home/kzl/makepkg/build/pam/src/linux-pam/build
+Build type: native build
+Project name: Linux-PAM
+Project version: 1.7.0
+C compiler for the host machine: cc (gcc 15.1.1 "cc (KZL 15.1.0.g8-4 2025/04/26 16:58:58 +0000) 15.1.1 20250426")
+C linker for the host machine: cc ld.bfd 2.44.0
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Checking for size of "long" : 8 
+Compiler for C supports arguments -Wbad-function-cast: YES 
+Compiler for C supports arguments -Wcast-align: YES 
+Compiler for C supports arguments -Wcast-align=strict: YES 
+Compiler for C supports arguments -Wcast-qual: YES 
+Compiler for C supports arguments -Wdeprecated: YES 
+Compiler for C supports arguments -Wformat=2: YES 
+Compiler for C supports arguments -Winit-self: YES 
+Compiler for C supports arguments -Wmain: YES 
+Compiler for C supports arguments -Wmissing-declarations: YES 
+Compiler for C supports arguments -Wmissing-format-attribute: YES 
+Compiler for C supports arguments -Wmissing-prototypes: YES 
+Compiler for C supports arguments -Wnull-dereference: YES 
+Compiler for C supports arguments -Wpointer-arith: YES 
+Compiler for C supports arguments -Wreturn-type: YES 
+Compiler for C supports arguments -Wshadow: YES 
+Compiler for C supports arguments -Wstrict-prototypes: YES 
+Compiler for C supports arguments -Wundef: YES 
+Compiler for C supports arguments -Wuninitialized: YES 
+Compiler for C supports arguments -Wunused: YES 
+Compiler for C supports arguments -Wwrite-strings: YES 
+Compiler for C supports link arguments -Wl,--fatal-warnings: YES 
+Compiler for C supports link arguments -Wl,-O1: YES 
+Compiler for C supports link arguments -Wl,-z,relro: YES 
+Compiler for C supports link arguments -Wl,-z,now: YES 
+Has header "crypt.h" : YES 
+Has header "paths.h" : YES 
+Has header "sys/random.h" : YES 
+Checking for function "close_range" : YES 
+Checking for function "explicit_bzero" : YES 
+Checking for function "getdomainname" : YES 
+Checking for function "getgrgid_r" : YES 
+Checking for function "getgrnam_r" : YES 
+Checking for function "getgrouplist" : YES 
+Checking for function "getmntent_r" : YES 
+Checking for function "getpwnam" : YES 
+Checking for function "getpwnam_r" : YES 
+Checking for function "getpwuid_r" : YES 
+Checking for function "getrandom" : YES 
+Checking for function "getspnam_r" : YES 
+Checking for function "getutent_r" : YES 
+Checking for function "innetgr" : YES 
+Checking for function "memset_explicit" : NO 
+Checking for function "quotactl" : YES 
+Checking for function "ruserok" : YES 
+Checking for function "ruserok_af" : YES 
+Checking for function "unshare" : YES 
+Checking for size of "__NR_keyctl" : 4 
+Checking for size of "_PATH_MAILDIR" : 10 
+Run-time dependency dl found: YES
+Run-time dependency intl found: YES
+Checking for function "bindtextdomain" with dependency intl: YES 
+Checking for function "dngettext" with dependency intl: YES 
+Found pkg-config: YES (/usr/bin/pkg-config) 2.4.3
+Run-time dependency audit found: YES 4.0.3
+Checking for size of "struct audit_tty_status" : 8 
+Checking whether type "struct audit_tty_status" has member "log_passwd" : YES 
+Run-time dependency libcrypt found: YES 4.4.38
+Checking for function "crypt_r" with dependency libcrypt: YES 
+Dependency libeconf skipped: feature econf disabled
+Dependency libselinux skipped: feature selinux disabled
+Run-time dependency libcrypto found: YES 3.5.0
+Checking for function "EVP_MAC_CTX_new" with dependency libcrypto: YES 
+Dependency libsystemd skipped: feature logind disabled
+Run-time dependency systemd found: YES 254
+Library gdbm found: YES
+Checking for function "gdbm_store" with dependency -lgdbm: YES 
+Checking if "gdbm_close returns int" compiles: YES 
+Library util found: YES
+Checking for function "logwtmp" with dependency -lutil: YES 
+Checking for function "lckpwdf" : YES 
+Program flex found: YES (/usr/bin/flex)
+Program bison found: YES (/usr/bin/bison)
+Program gettext found: YES (/usr/bin/gettext)
+Program msgfmt found: YES (/usr/bin/msgfmt)
+Program msginit found: YES (/usr/bin/msginit)
+Program msgmerge found: YES (/usr/bin/msgmerge)
+Program xgettext found: YES (/usr/bin/xgettext)
+Configuring config.h using configuration
+Configuring pam_namespace_helper using configuration
+Configuring pam_namespace.service using configuration
+Build targets in project: 183
+
+Linux-PAM 1.7.0
+
+  User defined options
+    audit        : enabled
+    auto_features: disabled
+    buildtype    : plain
+    db           : gdbm
+    docs         : disabled
+    econf        : disabled
+    i18n         : enabled
+    logind       : disabled
+    nis          : disabled
+    openssl      : enabled
+    pam_lastlog  : enabled
+    pam_unix     : enabled
+    pam_userdb   : enabled
+    prefix       : /usr
+    selinux      : disabled
+
+Found ninja-1.11.1.git.kitware.jobserver-1 at /home/kzl/.local/bin/ninja
