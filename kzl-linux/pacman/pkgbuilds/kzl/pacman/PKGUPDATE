@@ -4,6 +4,5 @@ build_system=meson
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    cp -r etc "$PKGBUILDDIR"/
-    rm "$PKGBUILDDIR"/etc/.gitignore
+    find etc -type f ! -name '.gitignore' -exec cp {} "$PKGBUILDDIR"/ \;
 }
