@@ -1,0 +1,247 @@
+pkgname=texlive
+pkgver=74920
+_texliveyear=2025
+_texmfver=20250308
+pkgrel=3
+epoch=
+pkgdesc="TeX Live"
+arch=('x86_64')
+url="https://tug.org/texlive/"
+license=('KZL')
+install=$pkgname.install
+source=(
+  http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
+  git+https://github.com/TeX-Live/installer.git
+  # git+https://github.com/TeX-Live/texlive-source.git
+  # git+https://github.com/TeX-Live/texlive-source.git#branch=branch$_texliveyear
+  git+https://github.com/TeX-Live/texlive-source.git#tag=svn$pkgver
+  ################################################################################
+  # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_texliveyear/texlive-$pkgver-source.tar.xz
+  # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_texliveyear/install-tl-unx.tar.gz
+  # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_texliveyear/texlive-$_texmfver-texmf.tar.xz
+  $pkgname.install
+)
+# noextract=(texlive-$_texmfver-texmf.tar.xz)
+sha256sums=('b4f0324a90adb20b4a2be25ebc360e768fb327c8dfc4bce729ec450f9fde7329'
+            'SKIP'
+            'a52c2ba6b7f88e0f159c139e911eacc5baf13de8d226d165e9665237f242217a'
+            '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')
+
+build_date="$(date '+%Y/%m/%d %T %z') ($pkgrel)"
+
+# already installed
+stage0_pkgs=(
+  00texlive.installation
+  texlive.infra
+  texlive-scripts
+  kpathsea
+)
+# need to reinstall
+stage1_pkgs=(
+  scheme-infraonly
+  scheme-minimal
+  dehyph-exptl
+)
+stage2_pkgs=(
+  scheme-basic
+  ###
+  collection-latexrecommended
+  collection-latexextra
+  collection-fontsrecommended
+  collection-fontutils
+  ###
+  chktex
+  latexindent
+  latexmk
+  pdfcrop
+  ###
+  cascadia-code
+  fontawesome
+  inconsolata
+  newtx
+  ###
+  algorithm2e
+  ###
+  acmart
+  ieeetran
+)
+
+pkgver() {
+  cd $pkgname-source
+
+  git describe --tags | sed 's/svn//;s/^v//;s/-g.*//;s/-/.g/'
+}
+
+prepare() {
+  cd $pkgname-source
+
+  mkdir -p build
+}
+
+build() {
+  cd $pkgname-source/build
+
+  # https://tug.org/texlive/doc/tlbuild.html
+
+  msg2 "Configuring..."
+  ./../configure -C \
+    --prefix="/$PREFIX" \
+    --datarootdir='${prefix}' \
+    --infodir='${prefix}/share/info' \
+    --mandir='${prefix}/share/man' \
+    --disable-all-pkgs \
+    --disable-native-texlive-build \
+    --disable-multiplatform \
+    --enable-web2c \
+    --enable-tex \
+    --enable-luatex \
+    --enable-luajittex \
+    --enable-pdftex \
+    --enable-pdftex-synctex \
+    --enable-synctex \
+    --enable-chktex \
+    --enable-dvipng \
+    --enable-texlive \
+    --enable-linked-scripts \
+    --enable-shared \
+    --disable-static \
+    --with-banner-add="/KZL $(date '+%Y/%m/%d %T %z') ($pkgrel)" \
+    --with-gs="/usr/bin/gs" \
+    --without-system-cairo \
+    --without-system-freetype2 \
+    --without-system-gd \
+    --without-system-gmp \
+    --without-system-graphite2 \
+    --without-system-harfbuzz \
+    --without-system-icu \
+    --without-system-kpathsea \
+    --without-system-libpaper \
+    --without-system-libpng \
+    --without-system-mpfi \
+    --without-system-mpfr \
+    --without-system-pixman \
+    --without-system-potrace \
+    --without-system-ptexenc \
+    --without-system-teckit \
+    --without-system-zlib \
+    --without-system-zziplib \
+    --without-x
+
+  msg2 "Compiling..."
+  make
+}
+
+package() {
+  cd $pkgname-source/build
+
+  export PATH="$pkgdir/$PREFIX/bin:$PATH"
+  export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$pkgdir/$PREFIX/lib"
+
+  make DESTDIR="$pkgdir" install-strip
+  make DESTDIR="$pkgdir" texlinks
+
+  ### texmf
+  cp -vr "$srcdir"/installer/texmf-dist "$pkgdir/$PREFIX"
+  mkdir -vp "$pkgdir/$PREFIX/share/texmf-local/web2c"
+  cat > "$pkgdir/$PREFIX/share/texmf-local/web2c/texmf.cnf" <<EOF
+TEXMFROOT = \$SELFAUTODIR
+TEXMFLOCAL = \$TEXMFROOT/share/texmf-local
+TEXMFHOME = ~/.texlive/texmf-dist
+TEXMFVAR = ~/.texlive/texmf-var
+TEXMFCONFIG = ~/.texlive/texmf-config
+EOF
+
+  ### tlpkg
+  cp -vr "$srcdir"/installer/tlpkg "$pkgdir/$PREFIX"/
+  mkdir -vp "$pkgdir/$PREFIX"/tlpkg/{backups,tlpobj}
+  rm -vf "$pkgdir/$PREFIX"/tlpkg/texlive.tlpdb
+  for _pkg in "${stage0_pkgs[@]}"; do
+      sed -n \
+          -e "/^name $_pkg$/,/^$/p" \
+          "$srcdir"/texlive.tlpdb >> "$pkgdir/$PREFIX"/tlpkg/texlive.tlpdb
+  done
+  sed -i \
+      -e '/^name texlive-scripts$/,/^revision [0-9]\+/{' \
+      -e '/^revision [0-9]\+/c\revision '"$pkgver" \
+      -e '}' \
+      "$pkgdir/$PREFIX/tlpkg/texlive.tlpdb"
+  sed -i \
+      -e "/ReleaseYear/s/20[0-9]\{2\}/$_texliveyear/" \
+      "$pkgdir/$PREFIX/tlpkg/TeXLive/TLConfig.pm"
+
+  ### texmf-var
+  mkdir -vp "$pkgdir/$PREFIX/texmf-var/tex/generic/config/"
+
+  ### tlmgr
+  sed -i \
+      -e '/^my \$svnrev/s|Revision|Revision: '"$pkgver"' |' \
+      -e '/^my \$datrev/s|Date|Date: '"$build_date"' |' \
+      "$pkgdir/$PREFIX/bin/tlmgr"
+  tlmgr option repository https://mirror.ctan.org/systems/texlive/tlnet
+  tlmgr platform remove \
+    aarch64-linux \
+    amd64-freebsd \
+    amd64-netbsd \
+    armhf-linux \
+    i386-freebsd \
+    i386-linux \
+    i386-netbsd \
+    i386-solaris \
+    universal-darwin \
+    windows \
+    x86_64-cygwin \
+    x86_64-darwinlegacy \
+    x86_64-linuxmusl \
+    x86_64-solaris 2> /dev/null || :
+  tlmgr update --self || :
+  tlmgr install --reinstall "${stage1_pkgs[@]}"
+  sed -i \
+      -e '/^name texlive-scripts$/,/^revision [0-9]\+/{' \
+      -e '/^revision [0-9]\+/c\revision '"$pkgver" \
+      -e '}' \
+      "$pkgdir/$PREFIX/tlpkg/texlive.tlpdb"
+  ### texmfcnf.lua
+  sed -i \
+      -e 's/\.texlive2024/\.texlive/' \
+      -e '/TEXMFSYSVAR/s/selfautoparent/selfautodir/' \
+      -e '/TEXMFDIST/s/selfautoparent/selfautodir/' \
+      -e '/TEXMFSYSCONFIG/s/selfautoparent/selfautodir/' \
+      -e '/TEXMFLOCAL/s/selfautoparent/selfautodir/' \
+      -e '/TEXMFLOCAL/s|../texmf-local|texmf-local|' \
+      -e '/TEXMFFONTS/s/selfautoparent/selfautodir/' \
+      -e '/TEXMFPROJECT/s/selfautoparent/selfautodir/' \
+      -e '/TEXMFHOME/s|texmf|.texlive/texmf-dist|' \
+      "$pkgdir/$PREFIX/texmf-dist/web2c/texmfcnf.lua"
+  tlmgr install "${stage2_pkgs[@]}"
+
+  ### clean
+  for _pkg in $(grep -oP '^name \K.+\.x86_64-linux' "$pkgdir/$PREFIX"/tlpkg/texlive.tlpdb); do
+    tlmgr remove --force $_pkg
+  done
+
+  rm -vrf "$pkgdir/$PREFIX/bin/$(uname -i)-$(uname -s | tr '[:upper:]' '[:lower:]')"
+  rm -vrf "$pkgdir/$PREFIX"/share/{info,man}
+  rm -vrf "$pkgdir/$PREFIX"/{readme-html.dir,readme-txt.dir}
+  rm -vf "$pkgdir/$PREFIX"/install-tl
+  rm -vf "$pkgdir/$PREFIX"/LICENSE.*
+  rm -vf "$pkgdir/$PREFIX"/README*
+  rm -vf "$pkgdir/$PREFIX"/*.html
+  rm -vf "$pkgdir/$PREFIX"/*.txt
+  rm -vrf "$pkgdir/$PREFIX"/texmf-dist/doc
+  rm -vf "$pkgdir/$PREFIX"/tlpkg/texlive.tlpdb.*
+  rm -vf "$pkgdir/$PREFIX"/tlpkg/backups/*
+  rm -vf "$pkgdir/$PREFIX"/tlpkg/tlpobj/*.tlpobj
+  rm -vrf "$pkgdir/$PREFIX"/tlpkg/tlperl
+  # rm -vrf "$pkgdir/$PREFIX"/tlpkg/installer
+  find "$pkgdir/$PREFIX"/tlpkg/installer -mindepth 1 ! -name 'config.guess' -exec rm -vrf {} +
+
+  local -a _path=(
+    texmf-dist/web2c
+    texmf-var/fonts/map
+    texmf-var/tex/generic/config
+    texmf-var/web2c
+  )
+  for _p in ${_path[@]}; do
+    grep -rl "$pkgdir" "$pkgdir/$PREFIX/$_p" | xargs sed -i -e "s|$pkgdir||g"
+  done
+}
