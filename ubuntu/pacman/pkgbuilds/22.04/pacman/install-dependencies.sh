@@ -1,0 +1,1 @@
+../../ubuntu/pacman/install-dependencies.sh
