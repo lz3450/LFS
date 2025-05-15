@@ -1,0 +1,1 @@
+../../ubuntu/linux/update-kernel.sh
