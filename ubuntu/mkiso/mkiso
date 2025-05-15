@@ -51,8 +51,9 @@ common_deb_pkgs=(
     dosfstools
     e2fsprogs
     xfsprogs
-    bcachefs-tools
     f2fs-tools
+    btrfs-progs
+    bcachefs-tools
     smartmontools
     wpasupplicant
     wget curl
