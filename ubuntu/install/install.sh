@@ -43,7 +43,7 @@ exclude_pkgs=(
 declare -a deb_pkgs
 
 
-if (( $# != 1 )); then
+if (($# != 1)); then
     echo "Usage: $0 <suite>"
     exit 1
 fi
@@ -90,7 +90,7 @@ EOF
 
 # pacman
 if [[ -f "/opt/bin/pacman" ]]; then
-    mkdir -p "$mountpoint"/var/lib/pacman/
+    mkdir -p "$mountpoint/var/lib/pacman/"
     pacman -Sy -r "$mountpoint" --noconfirm --cachedir /home/.repository/ubuntu pacman linux
 fi
 
