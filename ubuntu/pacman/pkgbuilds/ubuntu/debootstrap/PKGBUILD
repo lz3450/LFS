@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=debootstrap
-pkgver=1.0.140
-pkgrel=8
+pkgver=1.0.141
+pkgrel=3
 epoch=
 pkgdesc="Bootstrap a basic Debian system"
 arch=('any')
