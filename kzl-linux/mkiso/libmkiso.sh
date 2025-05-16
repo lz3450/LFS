@@ -80,7 +80,7 @@ create_work_dir() {
         fi
     fi
     mkdir -p -- "$WORK_DIR"
-    info "Done"
+    info "Done (Create working directory)"
 }
 
 make_rootfs() {
@@ -96,7 +96,7 @@ make_rootfs() {
         if (( "$no_update_rootfs" == 0 )); then
             info "Update custom rootfs files..."
             sudo -u ${SUDO_USER:-root} "$SCRIPT_DIR"/update-rootfs > "$LOG_DIR"/rootfs_update.log 2>&1 || error "Failed to update rootfs" 3
-            info "Done"
+            info "Done (Update custom rootfs files)"
         fi
         info "Copying custom rootfs files..."
         cp -af --no-preserve=ownership,mode -- "$SCRIPT_DIR"/rootfs/. "$ROOTFS_DIR"/
@@ -105,7 +105,7 @@ make_rootfs() {
         chmod -f -- 400 "$ROOTFS_DIR"/etc/shadow
         chown -fhR -- 0:0 "$ROOTFS_DIR"/root
         #chmod -fR -- 640 "$ROOTFS_DIR"/root
-        info "Done"
+        info "Done (Copying custom rootfs files)"
     fi
 }
 
@@ -114,7 +114,7 @@ pacstrap_rootfs() {
 
     # info "Pacstrapping \"$ROOTFS_DIR/\": ${_pkg_list[*]}"
     # pacstrap -c -G -M -- "$ROOTFS_DIR" "${_pkg_list[@]}" >"$LOG_DIR"/pacstrap.log 2>&1 || error "Failed to pacstrap packages" 5
-    # info "Done"
+    # info "Done (Pacstrapping)"
 
     info "Pacstrapping \"$ROOTFS_DIR/\": ${_pkg_list[*]}"
     install -d -m 0755 -- "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman,log} "$ROOTFS_DIR"/{dev,run,etc/pacman.d}
@@ -123,11 +123,11 @@ pacstrap_rootfs() {
     chroot_setup "$ROOTFS_DIR" > "$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
     unshare --fork --pid pacman -Sy -r "$ROOTFS_DIR" --noconfirm --cachedir "/$PACMAN_REPO_DIR" "${_pkg_list[@]}" >> "$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
     chroot_teardown >> "$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
-    info "Done"
+    info "Done (Pacstrapping)"
 
     info "Creating a list of installed pacman packages..."
     pacman -Q --sysroot "$ROOTFS_DIR" > "$ISOFS_DIR"/pacman_pkglist.txt 2> /dev/null || warn "Failed to creating a list of installed pacman packages"
-    info "Done"
+    info "Done (Creating a list of installed pacman packages)"
 }
 
 make_mutable_img() {
@@ -137,7 +137,7 @@ make_mutable_img() {
     rm -f -- "$MUTABLE_IMG"
     fallocate -l "$_size" "$MUTABLE_IMG"
     mkfs -t "$mutable_image_type" -f -l MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
-    info "Done"
+    info "Done (Creating mutable image)"
 }
 
 setup_pacman_repo() {
@@ -154,7 +154,7 @@ setup_pacman_repo() {
             || error "Failed to set up pacman repository" 8
     done
     umount "$ROOTFS_DIR/home"
-    info "Done"
+    info "Done (Setting up pacman repository)"
 }
 
 cleanup_rootfs() {
@@ -184,7 +184,7 @@ cleanup_rootfs() {
     rm -f -- "$ROOTFS_DIR/etc/machine-id"
     touch "$ROOTFS_DIR/etc/machine-id"
 
-    info "Done"
+    info "Done (Cleaning up rootfs)"
 }
 
 make_rootfs_archive() {
@@ -195,7 +195,7 @@ make_rootfs_archive() {
         --zstd -C "$ROOTFS_DIR" . > "$LOG_DIR"/tar.log 2>&1
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$_name"
 
-    info "Done"
+    info "Done (Creating rootfs archive)"
 }
 
 make_initramfs_for_kernel() {
@@ -218,7 +218,7 @@ make_initramfs_for_kernel() {
         --kernel-image "$_kernel_image" \
         --kmoddir "$_kmoddir" \
         "$ROOTFS_DIR/boot/initramfs-$_kernel_version.img" > "$LOG_DIR"/dracut-$_kernel_version.log 2>&1
-    info "Done"
+    info "Done (Create initramfs for kernel version: $_kernel_version)"
 
 }
 
@@ -242,7 +242,7 @@ make_efibootimg() {
     info "Creating FAT image of size: $_imgsize Byte..."
     rm -f -- "$EFIBOOT_IMG"
     mkfs.fat -C -F 32 -n "ISO_EFI" "$EFIBOOT_IMG" "$_imgsize" > /dev/null 2>&1
-    info "Done"
+    info "Done (Creating FAT image)"
 
     info "Setting up systemd-boot for UEFI booting..."
     # Create the default/fallback boot path in which a boot loaders will be placed later.
@@ -258,7 +258,7 @@ make_efibootimg() {
     mcopy -i "$EFIBOOT_IMG" \
         "$SCRIPT_DIR"/efiboot/loader.conf \
         ::/loader/
-    info "Done"
+    info "Done (Set up systemd-boot for UEFI booting)"
 }
 
 make_rootfs_squashfs() {
@@ -283,7 +283,7 @@ make_rootfs_squashfs() {
     mkdir -p -- "$ISOFS_DIR/$INSTALL_DIR"
     mksquashfs "$ROOTFS_DIR" "$_image_path" -comp zstd -b 1M -noappend
 
-    info "Done"
+    info "Done (Creating rootfs SquashFS image)"
 }
 
 make_iso_image() {
@@ -308,14 +308,14 @@ make_iso_image() {
         -output "$OUT_DIR/$_name" \
         "$ISOFS_DIR/" > "$LOG_DIR"/xorriso.log 2>&1 || error "Failed to create ISO image" 7
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$_name"
-    info "Done"
+    info "Done (Creating ISO image)"
 }
 
 libmkiso_clean() {
     info "Cleaning (libmkiso)..."
     umount "$ROOTFS_DIR/home"
     chroot_teardown
-    info "Done"
+    info "Done (Cleaning (libmkiso))"
 }
 
 debug "${BASH_SOURCE[0]} sourced"
