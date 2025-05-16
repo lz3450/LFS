@@ -72,7 +72,7 @@ setup_rootfs() {
         info "Extracting rootfs tarball..."
         mkdir -p -- "$ROOTFS_DIR"
         tar -C "$ROOTFS_DIR" -xpf "$rootfs_tarball"
-        info "Done"
+        info "Done (Extracting rootfs tarball)"
     fi
 
     chroot_setup "$ROOTFS_DIR"
@@ -85,7 +85,7 @@ setup_rootfs() {
         chroot_add_mount -v --bind "/$src" "$ROOTFS_DIR/$dest"
     done
     chown -R -- "$USERSPEC" "$ROOTFS_DIR/$CHROOT_HOME_DIR"
-    info "Done"
+    info "Done (Mounting LFS related directories)"
 
     if (( $from_rootfs_backups )); then
         info "Using rootfs backups, skip configure the rootfs"
@@ -104,10 +104,12 @@ setup_rootfs() {
         chroot_run "$ROOTFS_DIR" su - kzl -c "python3 -m ensurepip"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python3 -m pip wheel --wheel-dir /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR --no-binary :all: pip meson ninja"
         chroot_run "$ROOTFS_DIR" su - kzl -c "python3 -m pip install -U --no-index --find-links /$WHEEL_DIR --cache-dir /$PIP_CACHE_DIR pip meson ninja"
-        info "Done"
+        info "Done (Configure chroot environment)"
 
         touch "$_status_file"
     fi
+
+    info "Done (Setting up chroot environment)"
 }
 
 run_debug_shell() {
@@ -117,7 +119,7 @@ run_debug_shell() {
 run_build() {
     info "Running \`build\`..."
     chroot_run "$ROOTFS_DIR" su - kzl -c "source /$CHROOT_HOME_DIR/LFS/kzl-linux/pacman/setup.sh && build ${build_opts[*]}"
-    info "Done (\`build\`)"
+    info "Done (Running \`build\`)"
 }
 
 _unmount_all_bind_mounts() {
@@ -139,11 +141,11 @@ _unmount_all_bind_mounts() {
 }
 
 _remove_work_dir() {
-    info "Removing work directory..."
-    # must unmount all bind mounts before remove work directory, or bind mounts will be removed!!!
+    info "Removing working directory..."
+    # must unmount all bind mounts before remove working directory, or bind mounts will be removed!!!
     _unmount_all_bind_mounts
     rm -rf -- "$WORK_DIR"
-    info "Done"
+    info "Done (Removing work directory)"
 }
 
 usage() {
@@ -171,7 +173,7 @@ clean() {
     chroot_teardown
     _unmount_all_bind_mounts
 
-    info "Done"
+    info "Done (Cleaning)"
 
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
@@ -233,7 +235,7 @@ if (( $backup )); then
             mv -v chrootbuild-rootfs.tar.zst chrootbuild-rootfs.old.tar.zst
         fi
         tar --transform='s|^./||' --zstd -cpf chrootbuild-rootfs.tar.zst -C "$ROOTFS_DIR" .
-        info "Done"
+        info "Done (Backing up rootfs)"
     else
         error "Rootfs directory ($ROOTFS_DIR) does not exist" 5
     fi
