@@ -8,7 +8,9 @@ pkgdesc="Tool for simulating superuser privileges"
 arch=('x86_64')
 url="https://packages.debian.org/fakeroot"
 license=('KZL')
-source=(git+https://salsa.debian.org/clint/fakeroot.git#tag=upstream/$pkgver)
+source=(
+  git+https://salsa.debian.org/clint/fakeroot.git#tag=upstream/$pkgver
+)
 sha256sums=('41895b87a7ae1625014fb7e4a6e43dccab7dcd5ce902b45455b679d17b3cd206')
 
 prepare() {
@@ -24,11 +26,13 @@ prepare() {
 build() {
   cd $pkgname
 
+  msg2 "Configuring..."
   ./configure \
     --prefix=/usr \
-    --enable-static=no \
+    --libdir=/usr/lib/libfakeroot \
     --with-ipc=sysv
 
+  msg2 "Compiling..."
   make
 }
 

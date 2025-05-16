@@ -1,12 +1,9 @@
-new_version=$(git ls-remote --tags https://salsa.debian.org/clint/fakeroot.git | grep -oP '(?<=refs/tags/upstream/)\d\.\d\d' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://salsa.debian.org/clint/fakeroot.git | grep -oP '(?<=refs/tags/upstream/)\d+\.\d+(\.\d+)*' | sort -V | tail -n1)
+srcdir="$pkgname"
+build_system=autoconf
 
 pre_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     cp Makefile.am "$PKGBUILDDIR"
     cp configure.ac "$PKGBUILDDIR"
-}
-
-post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    ./configure --help > "$PKGBUILDDIR"/help.txt
 }
