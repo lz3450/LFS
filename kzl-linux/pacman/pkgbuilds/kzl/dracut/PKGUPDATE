@@ -1,4 +1,6 @@
 new_version=$(git ls-remote --tags https://github.com/dracutdevs/dracut.git | grep -oP '(?<=refs/tags/)\d+' | sort -V | tail -n1)
+srcdir="$pkgname"
+build_system=
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
