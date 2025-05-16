@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 # chrootbuild.sh
 #
@@ -47,16 +47,28 @@ HOST_DIRS=(
 USERSPEC="kzl:kzl"
 
 active_mounts=()
+build_args=()
 
-build_opts=()
-rootfs_tarball=""
-declare -i backup=0
-declare -i clean=0
-declare -i from_rootfs_backups=0
-declare -i debug=0
+arg_rootfs_tarball=""
+declare -i opt_backup=0
+declare -i opt_clean=0
+declare -i opt_from_rootfs_backups=0
+declare -i opt_debug=0
 
 ### functions
+backup() {
+    info "Backing up rootfs..."
+    if [[ -d "$ROOTFS_DIR" ]]; then
+        tar --transform='s|^./||' --zstd -cpf chrootbuild_rootfs-$(date '+%Y%m%d_%H%M%S').tar.zst -C "$ROOTFS_DIR" .
+        info "Done (Backing up rootfs)"
+    else
+        error "Rootfs directory ($ROOTFS_DIR) does not exist" 5
+    fi
+}
+
 setup_rootfs() {
+    local _rootfs_tarball="$1"
+    local _from_rootfs_backups="$2"
     local _status_file="$WORK_DIR/${FUNCNAME[0]}"
 
     info "Setting up chroot environment..."
@@ -66,12 +78,12 @@ setup_rootfs() {
             error "Rootfs directory ($ROOTFS_DIR) exists but not set up, please delete first" 3
         fi
 
-        if [[ ! -f "$rootfs_tarball" ]]; then
+        if [[ ! -f "$_rootfs_tarball" ]]; then
             error "Please specify a rootfs tarball using \"-r <tarball>\"" 4
         fi
         info "Extracting rootfs tarball..."
         mkdir -p -- "$ROOTFS_DIR"
-        tar -C "$ROOTFS_DIR" -xpf "$rootfs_tarball"
+        tar -C "$ROOTFS_DIR" -xpf "$_rootfs_tarball"
         info "Done (Extracting rootfs tarball)"
     fi
 
@@ -87,8 +99,8 @@ setup_rootfs() {
     chown -R -- "$USERSPEC" "$ROOTFS_DIR/$CHROOT_HOME_DIR"
     info "Done (Mounting LFS related directories)"
 
-    if (( $from_rootfs_backups )); then
-        info "Using rootfs backups, skip configure the rootfs"
+    if (( $_from_rootfs_backups )); then
+        info "Using rootfs opt_backups, skip configure the rootfs"
         touch "$_status_file"
     fi
 
@@ -118,11 +130,11 @@ run_debug_shell() {
 
 run_build() {
     info "Running \`build\`..."
-    chroot_run "$ROOTFS_DIR" su - kzl -c "source /$CHROOT_HOME_DIR/LFS/kzl-linux/pacman/setup.sh && build ${build_opts[*]}"
+    chroot_run "$ROOTFS_DIR" su - kzl -c "source /$CHROOT_HOME_DIR/LFS/kzl-linux/pacman/setup.sh && build ${build_args[*]}"
     info "Done (Running \`build\`)"
 }
 
-_unmount_all_bind_mounts() {
+unmount_all_bind_mounts() {
     while true; do
         local mountpoint
         readarray -t mountpoints < <(grep -F "$ROOTFS_DIR" /proc/mounts | awk '{print $2}' | LC_ALL=C sort -r)
@@ -140,10 +152,10 @@ _unmount_all_bind_mounts() {
     done
 }
 
-_remove_work_dir() {
+remove_work_dir() {
     info "Removing working directory..."
     # must unmount all bind mounts before remove working directory, or bind mounts will be removed!!!
-    _unmount_all_bind_mounts
+    unmount_all_bind_mounts
     rm -rf -- "$WORK_DIR"
     info "Done (Removing work directory)"
 }
@@ -156,13 +168,23 @@ Usage: $SCRIPT_NAME -V | --version
 Usage: $SCRIPT_NAME [ -r | --rootfs <tarball> ] [ -c | --clean ] [ -d | --debug ]
 Usage: $SCRIPT_NAME [ -r | --rootfs <tarball> ] [ -c | --clean ] [ -b | --build <options passed to \`build\`> ]
 
+General options:
+    -h, --help                     show this help message and exit
+    -V, --version                  show version and exit
+
+Existing chrootbuild environment maintenance options:
+    -c, --clean                     clean up work files and exit
+    -B, --rootfs-backup             backup rootfs tarball
+
+Chrootbuild environment setup options:
     -r, --rootfs <tarball>          rootfs tarball
     -e, --from-rootfs-backups       use rootfs backups, skip configure the rootfs
-    -c, --clean                     clean up work files and exit
+
+Chrootbuild environment debug options:
     -d, --debug                     enter debug shell
+
+Chrootbuild options:
     -b, --build <options>           build options
-    -V, --version                   print the script version number and exit
-    -h, --help                      print this help message and exit
 
 EOF
 }
@@ -171,7 +193,7 @@ clean() {
     info "Cleaning..."
 
     chroot_teardown
-    _unmount_all_bind_mounts
+    unmount_all_bind_mounts
 
     info "Done (Cleaning)"
 
@@ -185,23 +207,23 @@ while (( $# > 0 )); do
     case "$1" in
     -r | --rootfs)
         shift
-        rootfs_tarball="${1:-}"
+        arg_rootfs_tarball="${1:-}"
         ;;
-    -B | --rootfs-backup)
-        backup=1
+    -B | --backup-rootfs)
+        opt_backup=1
         ;;
     -e | --from-rootfs-backups)
-        from_rootfs_backups=1
+        opt_from_rootfs_backups=1
         ;;
     -c | --clean)
-        clean=1
+        opt_clean=1
         ;;
     -d | --debug)
-        debug=1
+        opt_debug=1
         ;;
     -b | --build)
         shift
-        build_opts=("$@")
+        build_args=("$@")
         break
         ;;
     -V | --version)
@@ -220,38 +242,30 @@ while (( $# > 0 )); do
     shift
 done
 
-if (( $clean )); then
-    _remove_work_dir
-    if [[ -z "$rootfs_tarball" ]]; then
-        info "Cleaned up, exiting..."
-        exit
-    fi
-fi
-
-if (( $backup )); then
-    info "Backing up rootfs..."
-    if [[ -d "$ROOTFS_DIR" ]]; then
-        if [[ -f "chrootbuild-rootfs.tar.zst" ]]; then
-            mv -v chrootbuild-rootfs.tar.zst chrootbuild-rootfs.old.tar.zst
-        fi
-        tar --transform='s|^./||' --zstd -cpf chrootbuild-rootfs.tar.zst -C "$ROOTFS_DIR" .
-        info "Done (Backing up rootfs)"
-    else
-        error "Rootfs directory ($ROOTFS_DIR) does not exist" 5
-    fi
-    exit
-fi
-
-if (( ${#build_opts[@]} == 0 )); then
-    build_opts=('--help')
+if (( ${#build_args[@]} == 0 )); then
+    build_args=('--help')
 fi
 
 ################################################################################
 
 prologue
 
-setup_rootfs
-if (( $debug )); then
+if (( $opt_backup )); then
+    backup
+    epilogue
+    exit
+fi
+
+if (( $opt_clean )); then
+    remove_work_dir
+    if [[ -z "$arg_rootfs_tarball" ]]; then
+        epilogue
+        exit
+    fi
+fi
+
+setup_rootfs "$arg_rootfs_tarball" "$opt_from_rootfs_backups"
+if (( $opt_debug )); then
     run_debug_shell
 else
     run_build
@@ -265,4 +279,4 @@ epilogue
 # 2: failed to unmount
 # 3: working directory already exists
 # 4: rootfs tarball not specified
-# 5: failed to backup rootfs
+# 5: failed to opt_backup rootfs
