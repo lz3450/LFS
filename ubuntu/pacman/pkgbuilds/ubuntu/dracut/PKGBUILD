@@ -1,15 +1,20 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=dracut
-pkgver=059.g217
-pkgrel=5
+pkgver=059.g215
+pkgrel=3
 epoch=
 pkgdesc="An event driven initramfs infrastructure"
 arch=('x86_64')
 url="https://github.com/dracutdevs/dracut/wiki/"
 license=('KZL')
-backup=(usr/local/etc/dracut.conf)
-source=(git+https://github.com/lz3450/dracut.git)
+backup=(
+  etc/dracut.conf
+)
+source=(
+  # git+https://github.com/lz3450/dracut.git
+  git+https://github.com/dracutdevs/dracut.git
+)
 sha256sums=('SKIP')
 
 pkgver() {
@@ -22,7 +27,7 @@ prepare() {
   cd $pkgname
 
   ./configure \
-    --prefix=/usr/local \
+    --prefix=/usr \
     --disable-documentation
 }
 
