@@ -1,40 +1,70 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libgpg-error
-pkgver=1.51
-pkgrel=1
+pkgver=1.55
+pkgrel=2
 epoch=
 pkgdesc="Support library for libgcrypt"
 arch=('x86_64')
 url="https://www.gnupg.org"
+# https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git
 license=('KZL')
-source=(git+https://dev.gnupg.org/source/libgpg-error.git#tag=$pkgname-$pkgver)
-sha256sums=('812b4c57e6582654fc095046bfccb94835df5949384aaf6c73b48996f06c3ec6')
+source=(
+  # git+https://dev.gnupg.org/source/libgpg-error.git#tag=$pkgname-$pkgver
+  https://www.gnupg.org/ftp/gcrypt/libgpg-error/$pkgname-$pkgver.tar.bz2{,.sig}
+)
+sha256sums=('95b178148863f07d45df0cea67e880a79b9ef71f5d230baddc0071128516ef78'
+            'SKIP')
+validpgpkeys=('6DAA6E64A76D2840571B4902528897B826403ADA')
 
-prepare() {
-  cd $pkgname
+# prepare() {
+#   cd $pkgname
 
-  ./autogen.sh --force
-}
+#   ./autogen.sh --force
+# }
+
+# build() {
+#   cd $pkgname
+
+#   msg2 "Configuring..."
+#   ./configure \
+#     --prefix=/usr
+
+#   msg2 "Compiling..."
+#   make
+# }
+
+# check() {
+#   cd $pkgname
+
+#   make check
+# }
+
+# package() {
+#   cd $pkgname
+
+#   make DESTDIR="$pkgdir" install
+# }
 
 build() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
+  msg2 "Configuring..."
   ./configure \
-    --prefix=/usr \
-    --enable-maintainer-mode
+    --prefix=/usr
 
+  msg2 "Compiling..."
   make
 }
 
 check() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make check
 }
 
 package() {
-  cd $pkgname
+  cd $pkgname-$pkgver
 
   make DESTDIR="$pkgdir" install
 }
