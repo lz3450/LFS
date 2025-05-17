@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cmake
-pkgver=4.0.1
+pkgver=4.0.2
 pkgrel=1
 epoch=
 pkgdesc="A powerful software build system"
@@ -26,7 +26,7 @@ makedepends=(
 )
 # optdepends=("qt6: Qt-based GUI")
 source=(git+https://github.com/Kitware/CMake.git#tag=v$pkgver)
-sha256sums=('73fb5743a93d45ac2f46c086ce81ca5a205a8ad9cbaa4808ad4f6b2e641c3600')
+sha256sums=('152410f6c86e24aeb0d2769bb31e31b0cad2f7f818af27a35bcb6cb89d6031a0')
 
 build() {
   cd CMake

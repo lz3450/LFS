@@ -50,9 +50,6 @@ prepare() {
 build() {
   cd $pkgname
 
-  # gcc 15 defaults to -std=gnu23
-  CFLAGS+=" -std=gnu17"
-
   msg2 "Configuring..."
   ./configure \
     --prefix=/usr \

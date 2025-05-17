@@ -1,7 +1,8 @@
-Checking for sources ... RHash 1.4.5 
+Checking for sources ... RHash 1.4.6 
 Checking for target OS ... Linux 
-Checking for cc version ... gcc 15.1.1 
+Checking for cc version ... gcc 14.2.0 
 Checking for linker support for dlopen ... yes 
+Checking for sha1 intrinsics ... yes 
 Checking for linker support for --version-script ... yes 
 Checking for gettext ... found 
 Checking for OpenSSL ... runtime 

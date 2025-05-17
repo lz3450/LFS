@@ -2,7 +2,7 @@
 
 pkgname=libidn2
 pkgver=2.3.8
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Free software implementation of IDNA2008, Punycode and TR46"
 arch=('x86_64')

@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rhash
-pkgver=1.4.5
-pkgrel=4
+pkgver=1.4.6
+pkgrel=1
 epoch=
 pkgdesc="Utility for verifying hash sums of files"
 arch=('x86_64')
@@ -15,7 +15,7 @@ backup=(
   etc/rhashrc
 )
 source=(git+https://github.com/rhash/RHash.git#tag=v$pkgver)
-sha256sums=('SKIP')
+sha256sums=('45de8f49566658a2aff2d901e5024b19256ecc88d7276a82b2b9949e8e87d32d')
 
 build() {
   cd RHash

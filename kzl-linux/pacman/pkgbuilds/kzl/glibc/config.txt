@@ -19,7 +19,7 @@ sparc x86_64 checking whether gcc compiles in -mx32 mode by default... no
 checking for a BSD-compatible install... /usr/bin/install -c
 checking whether ln -s works... yes
 checking for ld... ld
-checking version of ld... 2.44.0, ok
+checking version of ld... 2.44, ok
 checking for gnumake... no
 checking for gmake... no
 checking for make... make
@@ -27,7 +27,7 @@ checking version of make... 4.4.1, ok
 checking for gnumsgfmt... no
 checking for gmsgfmt... no
 checking for msgfmt... msgfmt
-checking version of msgfmt... 0.22, ok
+checking version of msgfmt... 0.25, ok
 checking for makeinfo... makeinfo
 checking version of makeinfo... 7.2, ok
 checking for sed... sed

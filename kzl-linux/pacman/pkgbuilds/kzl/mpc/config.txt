@@ -102,7 +102,7 @@ checking for MPFR... yes
 checking for recent GMP... yes
 checking for recent MPFR... yes
 checking if gcc accepts -dumpversion option... yes
-checking gcc version... 15.1.1
+checking gcc version... 14.2.0
 checking that generated files are newer than configure... done
 configure: creating ./config.status
 config.status: creating Makefile

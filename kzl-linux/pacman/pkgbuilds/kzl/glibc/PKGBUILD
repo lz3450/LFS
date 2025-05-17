@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=glibc
-pkgver=2.40.g117
-pkgrel=9
+pkgver=2.40
+pkgrel=3
 epoch=
 arch=('x86_64')
 url="https://www.gnu.org/software/libc"
@@ -17,8 +17,8 @@ depends=(
 )
 options=(staticlibs)
 source=(
-  # git+https://sourceware.org/git/glibc.git#tag=$pkgname-$pkgver
-  git+https://sourceware.org/git/glibc.git#branch=release/${pkgver%.g*}/master
+  git+https://sourceware.org/git/glibc.git#tag=$pkgname-$pkgver
+  # git+https://sourceware.org/git/glibc.git#branch=release/${pkgver%.g*}/master
   ld.so.conf
 )
 backup=(
@@ -30,7 +30,7 @@ options=(
   !lto
 )
 install=$pkgname.install
-sha256sums=('SKIP'
+sha256sums=('ea18167f9d9271124d56c5628fa33298499b2f7df9dc0a6a922a6872290df4bd'
             'dad04a370e488aa85fb0a813a5c83cf6fd981ce01883fc59685447b092de84b5')
 
 pkgver() {

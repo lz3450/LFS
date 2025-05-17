@@ -1,4 +1,4 @@
-Configuration of GNU M4 1.4.19:
+Configuration of GNU M4 1.4.20:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -22,21 +22,23 @@ Optional Features:
   --disable-rpath         do not hardcode runtime library paths
   --enable-changeword     enable -W and changeword() builtin
   --disable-nls           do not use Native Language Support
+  --enable-year2038       support timestamps after 2038
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-libsigsegv       use the GNU libsigsegv library, when present,
+                          instead of the gnulib module 'sigsegv'
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-libsigsegv-prefix[=DIR]  search for libsigsegv in DIR/include and DIR/lib
+  --without-libsigsegv-prefix     don't search for libsigsegv in includedir and libdir
+  --with-gnulib-prefix=DIR  search for gnulib's runtime data in DIR/share
   --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
   --without-included-regex
                           don't compile regex; this is the default on systems
                           with recent-enough versions of the GNU C Library
                           (use with caution on other systems).
-  --with-libsigsegv       use the GNU libsigsegv library, when present,
-                          instead of the gnulib module 'sigsegv'
-  --with-libsigsegv-prefix[=DIR]  search for libsigsegv in DIR/include and DIR/lib
-  --without-libsigsegv-prefix     don't search for libsigsegv in includedir and libdir
   --with-packager         String identifying the packager of this software
   --with-packager-version Packager-specific version information
   --with-packager-bug-reports
@@ -59,7 +61,7 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
 
-Use these variables to override the choices made by `configure' or to help
+Use these variables to override the choices made by 'configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <bug-m4@gnu.org>.

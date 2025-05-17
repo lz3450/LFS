@@ -51,8 +51,8 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether the compiler supports GNU C... yes
 checking whether cc accepts -g... yes
-checking for cc option to enable C23 features... none needed
-checking whether cc understands -c and -o together... yes
+checking for cc option to enable C23 features... -std=gnu23
+checking whether cc -std=gnu23 understands -c and -o together... yes
 checking for aCC... no
 checking for CC... no
 checking for FCC... no
@@ -115,7 +115,7 @@ checking for suffix of object files... o
 checking whether the compiler supports GNU Fortran 77... yes
 checking whether gfortran accepts -g... yes
 configure: will now look for GNU compilers
-configure: cc is already a GNU C compiler
+configure: cc -std=gnu23 is already a GNU C compiler
 configure: c++ is already a GNU C++ compiler
 configure: gfortran is already a GNU Fortran compiler
 configure: gfortran is already a GNU Fortran 77 compiler

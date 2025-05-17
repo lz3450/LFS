@@ -206,7 +206,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of bfd 2.44.0:
+Configuration of bfd 2.44:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -288,7 +288,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of binutils 2.44.0:
+Configuration of binutils 2.44:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -401,7 +401,7 @@ Optional Features:
 
 Report bugs to the package provider.
 
-Configuration of gas 2.44.0:
+Configuration of gas 2.44:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -576,7 +576,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of gprof 2.44.0:
+Configuration of gprof 2.44:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -632,7 +632,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of gprofng 2.44.0:
+Configuration of gprofng 2.44:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -683,7 +683,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of gprofng 2.44.0:
+Configuration of gprofng 2.44:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -729,7 +729,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of ld 2.44.0:
+Configuration of ld 2.44:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -990,7 +990,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to the package provider.
 
-Configuration of opcodes 2.44.0:
+Configuration of opcodes 2.44:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options

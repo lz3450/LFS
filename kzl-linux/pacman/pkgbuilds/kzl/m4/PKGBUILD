@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=m4
-pkgver=1.4.19
-pkgrel=35
+pkgver=1.4.20
+pkgrel=2
 epoch=
 pkgdesc="An implementation of the traditional Unix macro processor"
 arch=('x86_64')
@@ -28,7 +28,7 @@ checkdepends=(
 )
 source=(https://ftp.gnu.org/gnu/m4/$pkgname-$pkgver.tar.xz{,.sig})
 validpgpkeys=('71C2CC22B1C4602927D2F3AAA7A16B4A2527436A')
-sha256sums=('63aede5c6d33b6d9b13511cd0be2cac046f2e70fd0a07aa9573a04a82783af96'
+sha256sums=('e236ea3a1ccf5f6c270b1c4bb60726f371fa49459a8eaaebc90b216b328daf2b'
             'SKIP')
 
 # pkgver() {
@@ -45,9 +45,6 @@ sha256sums=('63aede5c6d33b6d9b13511cd0be2cac046f2e70fd0a07aa9573a04a82783af96'
 
 build() {
   cd $pkgname-$pkgver
-
-  # gcc 15 defaults to -std=gnu23
-  CFLAGS+=" -std=gnu17"
 
   msg2 "Configuring..."
   ./configure \

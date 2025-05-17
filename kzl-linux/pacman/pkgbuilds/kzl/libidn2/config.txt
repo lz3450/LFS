@@ -144,9 +144,9 @@ checking for O_CLOEXEC... yes
 checking for promoted mode_t type... mode_t
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
-checking for unreachable... yes
-checking whether nullptr_t needs <stddef.h>... yes
-checking for clean definition of __STDC_VERSION_STDDEF_H__... no
+checking for unreachable... no
+checking whether nullptr_t needs <stddef.h>... no
+checking for clean definition of __STDC_VERSION_STDDEF_H__... yes
 checking for wint_t... yes
 checking whether wint_t is large enough... yes
 checking whether stdint.h conforms to C99... yes
@@ -172,8 +172,8 @@ checking whether execvpe is declared... yes
 checking for valgrind... no
 checking for C compiler option to allow warnings... -Wno-error
 checking for alloca as a compiler built-in... yes
-checking for static_assert... yes, a keyword
-checking for bool, true, false... yes
+checking for static_assert... yes, an <assert.h> macro
+checking for bool, true, false... no
 checking whether // is distinct from /... no
 checking whether dup2 works... yes
 checking whether fcntl handles F_DUPFD correctly... yes
@@ -228,7 +228,7 @@ checking for libunistring version... 1.3.0
 checking for unistring/woe32dll.h... yes
 checking whether <wchar.h> uses 'inline' correctly... yes
 checking whether wcsdup is declared... yes
-checking for bool, true, false... (cached) yes
+checking for bool, true, false... (cached) no
 checking whether free is known to preserve errno... yes
 checking whether the compiler generally respects inline... (cached) yes
 checking whether to use the included libunistring... no
@@ -248,10 +248,7 @@ checking for GTKDOC_DEPS... no
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt
 checking for gmsgfmt... /usr/bin/msgfmt
-/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
-/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for xgettext... /usr/bin/xgettext
-/usr/bin/xgettext: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for msgmerge... /usr/bin/msgmerge
 checking for CFPreferencesCopyAppValue... no
 checking for CFLocaleCopyCurrent... no
@@ -354,7 +351,7 @@ configure: summary of main build options:
   Host/Target system: x86_64-pc-linux-gnu
   Install prefix:     /usr
   Compiler:           gcc
-  CFLAGS:             -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
+  CFLAGS:             -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3 -flto -ffat-lto-objects
   CPPFLAGS:           
   LDFLAGS:            -Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
   Library types:      Shared=yes, Static=yes

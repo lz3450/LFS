@@ -1,0 +1,198 @@
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking target system type... x86_64-pc-linux-gnu
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether sleep supports fractional seconds... yes
+checking filesystem timestamp resolution... 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /usr/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking xargs -n works... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking whether make supports the include directive... yes (GNU style)
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking dependency style of gcc... gcc3
+checking how to run the C preprocessor... gcc -E
+checking whether make sets $(MAKE)... (cached) yes
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by gcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for file... file
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ranlib... ranlib
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking command to parse /usr/bin/nm -B output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC -DPIC
+checking if gcc PIC flag -fPIC -DPIC works... yes
+checking if gcc static flag -static works... yes
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking which IPC method to use... (cached) sysv
+checking whether SysV IPC message queues are actually working on the host... Yes
+checking which database format to use... (cached) inode
+checking for dlopen in -ldl... yes
+checking for dirent.h that defines DIR... yes
+checking for library containing opendir... none required
+checking for fcntl.h... yes
+checking for unistd.h... (cached) yes
+checking for features.h... yes
+checking for sys/feature_tests.h... no
+checking for pthread.h... yes
+checking for stdint.h... (cached) yes
+checking for inttypes.h... (cached) yes
+checking for grp.h... yes
+checking for endian.h... yes
+checking for sys/sysmacros.h... yes
+checking for sys/socket.h... yes
+checking for sys/acl.h... yes
+checking for sys/capability.h... yes
+checking for sys/xattr.h... yes
+checking for fts.h... yes
+checking for an ANSI C-conforming const... yes
+checking for mode_t... yes
+checking for off_t... yes
+checking for size_t... yes
+checking for id_t... yes
+checking for return value and second and third argument of readlink... ssize_t, char, size_t
+checking for first argument of setgroups... size_t
+checking for union semun... no
+checking for __xmknod... yes
+checking for type of arg of __xmknod... needs *
+checking for __xmknodat... yes
+checking for type of arg of __xmknodat... needs *
+checking for type of arg of initgroups... gid_t
+checking for type of arg of setreuid... gid_t
+checking for type of arg of setregid... gid_t
+checking for type of second arg to stat... struct stat *
+checking for d_off in struct dirent... yes
+checking for d_type in struct dirent... yes
+checking for acl_t struct... yes
+checking for fchmodat... yes
+checking for fchownat... yes
+checking for fstatat... yes
+checking for mkdirat... yes
+checking for mknodat... yes
+checking for openat... yes
+checking for renameat... yes
+checking for renameat2... yes
+checking for unlinkat... yes
+checking for lchmod... yes
+checking for fgetattrlist... no
+checking for library containing acl_get_fd... -lacl
+checking for acl_get_fd... yes
+checking for library containing acl_trivial... no
+checking for acl_trivial... no
+checking for capset... yes
+checking for listxattr... yes
+checking for llistxattr... yes
+checking for flistxattr... yes
+checking for getxattr... yes
+checking for lgetxattr... yes
+checking for fgetxattr... yes
+checking for setxattr... yes
+checking for lsetxattr... yes
+checking for fsetxattr... yes
+checking for removexattr... yes
+checking for lremovexattr... yes
+checking for fremovexattr... yes
+checking for statx... yes
+checking if we need to cope with time64... checking for egrep -e... (cached) /usr/bin/grep -E
+no
+checking for __xstat... yes
+Extra wrapper for stat is required because of __xstat
+checking for __fxstat... yes
+Extra wrapper for fstat is required because of __fxstat
+checking for __lxstat... yes
+Extra wrapper for lstat is required because of __lxstat
+checking for __fxstatat... yes
+Extra wrapper for fstatat is required because of __fxstatat
+checking for __xstat64... yes
+Extra wrapper for stat64 is required because of __xstat64
+checking for __fxstat64... yes
+Extra wrapper for fstat64 is required because of __fxstat64
+checking for __lxstat64... yes
+Extra wrapper for lstat64 is required because of __lxstat64
+checking for __fxstatat64... yes
+Extra wrapper for fstatat64 is required because of __fxstatat64
+checking for __xmknod... (cached) yes
+Extra wrapper for mknod is required because of __xmknod
+checking for __xmknodat... (cached) yes
+Extra wrapper for mknodat is required because of __xmknodat
+created fakerootconfig.h
+checking for strdup... yes
+checking for strstr... yes
+checking for getresuid... yes
+checking for setresuid... yes
+checking for getresgid... yes
+checking for setresgid... yes
+checking for setfsuid... yes
+checking for setfsgid... yes
+checking for fts_read... yes
+checking for fts_children... yes
+checking for close_range... yes
+checking for gcc options needed to detect all undeclared functions... none needed
+checking whether setenv is declared... yes
+checking whether unsetenv is declared... yes
+checking for setenv... yes
+checking for macOS/Darwin... no
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating scripts/Makefile
+config.status: creating test/Makefile
+config.status: creating test/defs
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands

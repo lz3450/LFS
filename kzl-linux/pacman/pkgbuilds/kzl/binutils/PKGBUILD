@@ -4,7 +4,7 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=binutils
-pkgver=2.44.g96
+pkgver=2.44
 pkgrel=5
 epoch=
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
@@ -30,10 +30,10 @@ _branch_ver=${pkgver#*.}
 _branch_ver=${_branch_ver%%.*}
 _branch_ver="${pkgver%%.*}_${_branch_ver}"
 source=(
-  # git+https://sourceware.org/git/binutils-gdb.git#tag=$pkgname-${pkgver//./_}
-  git+https://sourceware.org/git/binutils-gdb.git#branch=$pkgname-$_branch_ver-branch
+  git+https://sourceware.org/git/binutils-gdb.git#tag=$pkgname-${pkgver//./_}
+  # git+https://sourceware.org/git/binutils-gdb.git#branch=$pkgname-$_branch_ver-branch
 )
-sha256sums=('SKIP')
+sha256sums=('8dd44ba88dd86a4dfb4de3fd3a83f1b3f797c97e7513225e8b92d8796ac25741')
 
 _common_options=(
   "--prefix=/usr"

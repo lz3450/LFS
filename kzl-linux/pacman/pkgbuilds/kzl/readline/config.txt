@@ -93,7 +93,7 @@ checking for sys/ptem.h... no
 checking for special C compiler options needed for large files... no
 checking for _FILE_OFFSET_BITS value needed for large files... no
 checking for type of signal functions... posix
-checking if signal handlers must be reinstalled when invoked... yes
+checking if signal handlers must be reinstalled when invoked... no
 checking for presence of POSIX-style sigsetjmp/siglongjmp... present
 checking for lstat... yes
 checking whether or not strcoll and strcmp differ... no

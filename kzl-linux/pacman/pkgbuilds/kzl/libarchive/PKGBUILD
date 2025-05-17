@@ -2,7 +2,7 @@
 
 pkgname=libarchive
 pkgver=3.7.9
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="A portable, efficient C library that can read and write streaming archives in a variety of formats"
 arch=('x86_64')

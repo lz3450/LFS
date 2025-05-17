@@ -124,9 +124,9 @@ checking whether <sys/param.h> defines MIN and MAX... yes
 checking whether the compiler produces multi-arch binaries... no
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
-checking for unreachable... yes
-checking whether nullptr_t needs <stddef.h>... yes
-checking for clean definition of __STDC_VERSION_STDDEF_H__... no
+checking for unreachable... no
+checking whether nullptr_t needs <stddef.h>... no
+checking for clean definition of __STDC_VERSION_STDDEF_H__... yes
 checking for wint_t... yes
 checking whether wint_t is large enough... yes
 checking whether stdint.h conforms to C99... yes
@@ -148,7 +148,7 @@ checking for blkcnt_t... yes
 checking whether execvpe is declared... yes
 checking for valgrind... no
 checking for C compiler option to allow warnings... -Wno-error
-checking for bool, true, false... yes
+checking for bool, true, false... no
 checking if gcc/ld supports -Wl,--output-def... no
 checking if LD -Wl,--version-script works... yes
 checking whether the -Werror option is usable... yes
@@ -204,8 +204,8 @@ checking for TIME_UTC in <time.h>... yes
 checking whether <wchar.h> uses 'inline' correctly... yes
 checking whether wcsdup is declared... yes
 checking for alloca as a compiler built-in... yes
-checking for static_assert... yes, a keyword
-checking for bool, true, false... (cached) yes
+checking for static_assert... yes, an <assert.h> macro
+checking for bool, true, false... (cached) no
 checking for library containing clock_gettime... none required
 checking for clock_getres... yes
 checking for clock_gettime... (cached) yes
@@ -398,7 +398,7 @@ configure: Summary of build options:
   Install prefix:    /usr
   Compiler:          gcc
   Warning flags:      -fanalyzer -fstrict-flex-arrays -Wall -Warith-conversion -Wbad-function-cast -Wcast-align=strict -Wdate-time -Wdisabled-optimization -Wdouble-promotion -Wduplicated-branches -Wduplicated-cond -Wextra -Wformat-signedness -Wflex-array-member-not-at-end -Winit-self -Winline -Winvalid-pch -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wmissing-prototypes -Wmissing-variable-declarations -Wnested-externs -Wnull-dereference -Wold-style-definition -Wopenmp-simd -Wpacked -Wpointer-arith -Wshadow -Wstack-protector -Wstrict-flex-arrays -Wstrict-overflow -Wstrict-prototypes -Wsuggest-attribute=cold -Wsuggest-attribute=const -Wsuggest-attribute=format -Wsuggest-attribute=malloc -Wsuggest-attribute=noreturn -Wsuggest-final-methods -Wsuggest-final-types -Wsync-nand -Wtrampolines -Wuninitialized -Wunknown-pragmas -Wunsafe-loop-optimizations -Wvariadic-macros -Wvector-operation-performance -Wvla -Wwrite-strings -Warray-bounds=2 -Wattribute-alias=2 -Wbidi-chars=any,ucn -Wformat-overflow=2 -Wformat=2 -Wformat-truncation=2 -Wimplicit-fallthrough=5 -Wshift-overflow=2 -Wuse-after-free=3 -Wunused-const-variable=2 -Wvla-larger-than=4031 -Wno-analyzer-malloc-leak -Wno-type-limits -Wformat-truncation=1 -Wimplicit-fallthrough=2 -Wno-unused-parameter -fdiagnostics-show-option -fdiagnostics-color=always
-  CFLAGS:            -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects 
+  CFLAGS:            -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3 -flto -ffat-lto-objects 
   LDFlags:           -Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects
   Documentation:     no
   Library types:     Shared=yes, Static=yes

@@ -2,7 +2,7 @@
 
 pkgname=expat
 pkgver=2.7.1
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="An XML parser library"
 arch=('x86_64')

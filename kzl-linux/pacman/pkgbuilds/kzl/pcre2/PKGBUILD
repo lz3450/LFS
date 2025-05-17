@@ -2,7 +2,7 @@
 
 pkgname=pcre2
 pkgver=10.44
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Perl Compatible Regular Expressions"
 arch=('x86_64')

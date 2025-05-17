@@ -1,5 +1,5 @@
--- Using CMake version 3.31.5
--- The C compiler identification is GNU 15.1.1
+-- Using CMake version 4.0.1
+-- The C compiler identification is GNU 14.2.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
@@ -75,7 +75,7 @@
  * Without deprecated APIs
  * Compression, using zlib for compression
 
--- Configuring done (1.8s)
+-- Configuring done (1.7s)
 -- Generating done (0.1s)
 -- Build files have been written to: /home/kzl/makepkg/build/libssh2/src/libssh2/tmp
 -- Cache values

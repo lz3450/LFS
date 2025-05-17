@@ -69,7 +69,7 @@ checking for sys/loadavg.h... no
 checking whether getloadavg is declared... yes
 checking if system libc has working GNU glob... yes
 checking whether system uses MSDOS-style paths... no
-checking for bool, true, false... yes
+checking for bool, true, false... no
 checking for ranlib... (cached) ranlib
 checking how to run the C preprocessor... gcc -E
 checking for ar... ar
@@ -79,10 +79,7 @@ checking for a sed that does not truncate output... /usr/bin/sed
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt
 checking for gmsgfmt... /usr/bin/msgfmt
-/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
-/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for xgettext... /usr/bin/xgettext
-/usr/bin/xgettext: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for msgmerge... /usr/bin/msgmerge
 checking for ld used by gcc... /usr/bin/ld
 checking if the linker (/usr/bin/ld) is GNU ld... yes

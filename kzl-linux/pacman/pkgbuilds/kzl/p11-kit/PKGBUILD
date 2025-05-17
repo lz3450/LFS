@@ -2,7 +2,7 @@
 
 pkgname=p11-kit
 pkgver=0.25.5
-pkgrel=55
+pkgrel=56
 epoch=
 pkgdesc="Loads and enumerates PKCS#11 modules"
 arch=('x86_64')

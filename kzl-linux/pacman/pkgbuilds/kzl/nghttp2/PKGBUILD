@@ -2,7 +2,7 @@
 
 pkgname=nghttp2
 pkgver=1.65.0
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="An implementation of the Hypertext Transfer Protocol version 2 in C"
 arch=('x86_64')

@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libxml2
-pkgver=2.14.2
-pkgrel=7
+pkgver=2.14.3
+pkgrel=1
 epoch=
 pkgdesc="the XML C parser and toolkit"
 arch=('x86_64')
@@ -17,7 +17,7 @@ depends=(
 source=(
   git+https://gitlab.gnome.org/GNOME/libxml2.git#tag=v$pkgver
 )
-sha256sums=('ea5bb9e9949bd71c725013b8fff73046433c44bb22773a3103f83c932bc63273')
+sha256sums=('0a9e76a0870ab916374554712ce1ea756b292cbd772508ec2a485b54ab3307a1')
 
 build() {
   cd $pkgname

@@ -1,9 +1,9 @@
 checking for ggrep... no
 checking for grep... grep
 checking for egrep... grep -E
-Configuring NCURSES 6.5 ABI 6 (Sat Apr 26 20:14:47 UTC 2025)
+Configuring NCURSES 6.5 ABI 6 (Fri May 16 22:48:16 UTC 2025)
 checking for package version... 6.5
-checking for package patch date... 20250419
+checking for package patch date... 20250510
 checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
 checking target system type... x86_64-pc-linux-gnu
@@ -18,11 +18,12 @@ checking for executable suffix...
 checking for object suffix... o
 checking whether we are using the GNU C compiler... yes
 checking whether gcc accepts -g... yes
-checking version of gcc... 15.1.1
+checking version of gcc... 14.2.0
 checking if this is really Intel C compiler... no
 checking if this is really Clang C compiler... no
 checking for gcc option to accept ANSI C... none needed
-checking $CFLAGS variable... ok
+checking $CFLAGS variable... broken
+configure: WARNING: your environment uses the CFLAGS variable to hold CPPFLAGS options
 checking $CC variable... ok
 checking how to run the C preprocessor... gcc -E
 checking whether gcc needs -traditional... no
@@ -34,7 +35,7 @@ checking whether we are using the GNU C++ compiler... yes
 checking whether g++ accepts -g... yes
 checking if g++ works... yes
 checking for g++... /usr/bin/g++
-checking version of /usr/bin/g++... 15.1.1
+checking version of /usr/bin/g++... 14.2.0
 checking if you want to build C++ binding and demo... yes
 checking if you want to build with Ada... no
 checking if you want to install terminal database... yes
@@ -351,7 +352,7 @@ checking for sigset_t... yes
 checking for openpty in -lutil... yes
 checking for openpty header... pty.h
 checking if we can include stdbool.h... yes
-checking for builtin bool type... yes
+checking for builtin bool type... no
 checking if we already have C++ library... yes
 checking whether /usr/bin/g++ understands -c and -o together... yes
 checking how to run the C++ preprocessor... /usr/bin/g++ -E
@@ -429,7 +430,7 @@ Appending rules for normal model (c++: ticlib+termlib+ext_tinfo+base+widechar+ex
 Appending rules for debug model (c++: ticlib+termlib+ext_tinfo+base+widechar+ext_funcs)
 creating headers.sh
 
-** Configuration summary for NCURSES 6.5 20250419:
+** Configuration summary for NCURSES 6.5 20250510:
 
        extended funcs: yes
        xterm terminfo: xterm-new

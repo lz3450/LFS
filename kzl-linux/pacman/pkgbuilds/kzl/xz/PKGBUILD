@@ -2,7 +2,7 @@
 
 pkgname=xz
 pkgver=5.8.1
-pkgrel=2
+pkgrel=5
 epoch=
 pkgdesc="Library and command line tools for XZ and LZMA compressed files"
 arch=('x86_64')
@@ -20,7 +20,8 @@ build() {
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_INSTALL_LIBDIR=lib \
     -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
-    -D BUILD_SHARED_LIBS=ON
+    -D BUILD_SHARED_LIBS=ON \
+    -D XZ_DOCS=OFF \
 
   msg2 "Compiling..."
   cmake --build build

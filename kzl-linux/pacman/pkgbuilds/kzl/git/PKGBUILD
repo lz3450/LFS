@@ -2,7 +2,7 @@
 
 pkgname=git
 pkgver=2.49.0
-pkgrel=1
+pkgrel=2
 epoch=
 arch=('x86_64')
 url="https://git-scm.com/"

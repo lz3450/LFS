@@ -1,11 +1,11 @@
--- The C compiler identification is GNU 15.1.1
+-- The C compiler identification is GNU 14.2.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
 -- Found Python3: /usr/bin/python3.12 (found version "3.12.1") found components: Interpreter
--- The CXX compiler identification is GNU 15.1.1
+-- The CXX compiler identification is GNU 14.2.0
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
 -- Check for working CXX compiler: /usr/bin/c++ - skipped
@@ -23,7 +23,7 @@
 -- Found Systemd: /usr/include (Required is at least version "209")
 -- Found Jansson: /usr/lib/libjansson.so (found suitable version "2.14", minimum required is "2.5")
 -- Could NOT find Libevent (missing: LIBEVENT_CORE_LIBRARY LIBEVENT_EXTRA_LIBRARY LIBEVENT_OPENSSL_LIBRARY LIBEVENT_INCLUDE_DIR core extra openssl) (Required is at least version "2.0.8")
--- Found LibXml2: /usr/lib/libxml2.so (found suitable version "2.13.5", minimum required is "2.6.26")
+-- Found LibXml2: /usr/lib/libxml2.so (found suitable version "2.14.2", minimum required is "2.6.26")
 -- Could NOT find Jemalloc (missing: JEMALLOC_LIBRARY JEMALLOC_INCLUDE_DIR) 
 -- Performing Test CXX_FLAG__std_c_20
 -- Performing Test CXX_FLAG__std_c_20 - Success
@@ -138,7 +138,7 @@
       Threading:      ON
       HTTP/3(EXPERIMENTAL): OFF
 
--- Configuring done (3.8s)
+-- Configuring done (4.0s)
 -- Generating done (0.1s)
 -- Build files have been written to: /home/kzl/makepkg/build/nghttp2/src/nghttp2/tmp
 -- Cache values

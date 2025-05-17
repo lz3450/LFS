@@ -16,12 +16,12 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether the compiler supports GNU C... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to enable C23 features... none needed
-checking whether gcc understands -c and -o together... yes
+checking for gcc option to enable C23 features... -std=gnu23
+checking whether gcc -std=gnu23 understands -c and -o together... yes
 checking whether the compiler is clang... no
 checking for compiler option needed when checking for declarations... none
 checking whether make supports the include directive... yes (GNU style)
-checking dependency style of gcc... gcc3
+checking dependency style of gcc -std=gnu23... gcc3
 checking for ranlib... ranlib
 checking for stdio.h... yes
 checking for stdlib.h... yes
@@ -72,12 +72,12 @@ checking whether it is safe to define __EXTENSIONS__... yes
 checking whether _XOPEN_SOURCE should be defined... no
 checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
-checking how to run the C preprocessor... gcc -E
+checking how to run the C preprocessor... gcc -std=gnu23 -E
 checking for egrep -e... /usr/bin/grep -E
 checking for Minix Amsterdam compiler... no
 checking for ar... ar
-checking for gcc option to support large files... none needed
-checking for gcc option to support timestamps after 2038... none needed
+checking for gcc -std=gnu23 option to support large files... none needed
+checking for gcc -std=gnu23 option to support timestamps after 2038... none needed
 checking for size_t... yes
 checking for working alloca.h... yes
 checking for alloca... yes
@@ -137,7 +137,7 @@ checking for fork... yes
 checking for vfork... yes
 checking for nl_langinfo and CODESET... yes
 checking for a traditional french locale... none
-checking for ld used by gcc... /usr/bin/ld
+checking for ld used by gcc -std=gnu23... /usr/bin/ld
 checking if the linker (/usr/bin/ld) is GNU ld... yes
 checking for shared library run path origin... done
 checking 32-bit host C ABI... no
@@ -153,7 +153,7 @@ checking for an english Unicode locale... en_US.UTF-8
 checking for a transitional chinese locale... none
 checking whether mbrtowc handles incomplete characters... yes
 checking whether mbrtowc works as well as mbtowc... guessing yes
-checking for gcc options needed to detect all undeclared functions... none needed
+checking for gcc -std=gnu23 options needed to detect all undeclared functions... none needed
 checking whether mbrtoc32 is declared... yes
 checking for mbrtoc32... yes
 checking whether mbrtoc32 works as well as mbrtowc... guessing yes
@@ -226,7 +226,7 @@ checking whether langinfo.h defines YESEXPR... yes
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
 checking for unreachable... yes
-checking whether nullptr_t needs <stddef.h>... yes
+checking whether nullptr_t needs <stddef.h>... no
 checking for clean definition of __STDC_VERSION_STDDEF_H__... no
 checking whether locale.h defines locale_t... yes
 checking whether locale.h defines _locale_t... no
@@ -571,10 +571,7 @@ checking for pr... /usr/bin/pr
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt
 checking for gmsgfmt... /usr/bin/msgfmt
-/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
-/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for xgettext... /usr/bin/xgettext
-/usr/bin/xgettext: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for msgmerge... /usr/bin/msgmerge
 checking for CFPreferencesCopyAppValue... no
 checking for CFLocaleCopyCurrent... no

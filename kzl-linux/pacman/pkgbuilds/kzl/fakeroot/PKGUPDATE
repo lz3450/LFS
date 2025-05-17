@@ -2,7 +2,7 @@ new_version=$(git ls-remote --tags https://salsa.debian.org/clint/fakeroot.git |
 srcdir="$pkgname"
 build_system=autoconf
 
-pre_update() {
+post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
     cp Makefile.am "$PKGBUILDDIR"
     cp configure.ac "$PKGBUILDDIR"

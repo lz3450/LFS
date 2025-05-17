@@ -212,9 +212,9 @@ checking whether langinfo.h defines ERA... yes
 checking whether langinfo.h defines YESEXPR... yes
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
-checking for unreachable... yes
-checking whether nullptr_t needs <stddef.h>... yes
-checking for clean definition of __STDC_VERSION_STDDEF_H__... no
+checking for unreachable... no
+checking whether nullptr_t needs <stddef.h>... no
+checking for clean definition of __STDC_VERSION_STDDEF_H__... yes
 checking whether locale.h defines locale_t... yes
 checking whether locale.h conforms to POSIX:2001... yes
 checking whether struct lconv is properly defined... yes
@@ -346,10 +346,10 @@ checking whether <sys/ioctl.h> declares ioctl... yes
 checking for a traditional Arabic locale... none
 checking whether unsetenv is declared... yes
 checking for alloca as a compiler built-in... yes
-checking for static_assert... yes, a keyword
+checking for static_assert... yes, an <assert.h> macro
 checking for __builtin_expect... yes
 checking for flexible array member... yes
-checking whether float.h conforms to ISO C23... yes
+checking whether float.h conforms to ISO C23... no
 checking whether conversion from 'int' to 'long double' works... yes
 checking whether free is known to preserve errno... yes
 checking whether frexp works... yes
@@ -403,7 +403,7 @@ checking for signbit compiler built-ins... yes
 checking for stdint.h... (cached) yes
 checking for SIZE_MAX... yes
 checking for ssize_t... yes
-checking for bool, true, false... yes
+checking for bool, true, false... no
 checking whether strstr works in linear time... yes
 checking whether strstr works... (cached) yes
 checking for sys/single_threaded.h... yes
@@ -415,7 +415,7 @@ checking for stpcpy... yes
 checking whether wcwidth is declared... yes
 checking whether wcwidth works reasonably in UTF-8 locales... yes
 checking for stdint.h... (cached) yes
-checking for alignas and alignof... yes, keywords
+checking for alignas and alignof... yes, <stdalign.h> macros
 checking whether btowc(0) is correct... yes
 checking whether btowc(EOF) is correct... guessing yes
 checking whether btowc is consistent with mbrtowc in the C locale... no

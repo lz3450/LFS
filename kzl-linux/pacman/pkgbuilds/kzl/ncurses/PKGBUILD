@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ncurses
-pkgver=6.5.20250419
+pkgver=6.5.20250510
 pkgrel=1
 epoch=
 pkgdesc="A free software emulation of curses in System V Release 4.0 (SVr4), and more"
@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://invisible-island.net/ncurses/ncurses.html"
 license=('KZL')
 source=(https://invisible-mirror.net/archives/$pkgname/current/$pkgname-${pkgver%.*}-${pkgver##*.}.tgz)
-sha256sums=('a1dcc10899d5bdb78b3cca0848e5f1d6aeed78992f495d84d449587fe36c7cf4')
+sha256sums=('5886d54b13c661c55c16a340033be4b2bc11df6ab07602cd87cf812da3877833')
 
 prepare() {
   cd $pkgname-${pkgver%.*}-${pkgver##*.}

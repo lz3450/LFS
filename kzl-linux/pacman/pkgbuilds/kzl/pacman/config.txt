@@ -5,19 +5,19 @@ Build dir: /home/kzl/makepkg/build/pacman/src/pacman/build
 Build type: native build
 Project name: pacman
 Project version: 7.0.0
-C compiler for the host machine: cc (gcc 15.1.1 "cc (KZL 15.1.0.g8-1 2025/04/26 04:06:06 +0000) 15.1.1 20250426")
+C compiler for the host machine: cc (gcc 15.1.1 "cc (KZL 15.1.0.g8-4 2025/04/26 16:58:58 +0000) 15.1.1 20250426")
 C linker for the host machine: cc ld.bfd 2.44.0
 Host machine cpu family: x86_64
 Host machine cpu: x86_64
 Program python3 found: YES (/usr/bin/python3)
 Program bash found: YES (/usr/bin/bash)
-Found pkg-config: YES (/usr/bin/pkg-config) 2.3.0
+Found pkg-config: YES (/usr/bin/pkg-config) 2.4.3
 Run-time dependency bash-completion found: YES 2.16.0
 Run-time dependency intl found: YES
-Run-time dependency libarchive found: YES 3.7.7
-Run-time dependency libcurl found: YES 8.12.0
+Run-time dependency libarchive found: YES 3.7.9
+Run-time dependency libcurl found: YES 8.13.0
 Run-time dependency gpgme found: YES 1.21.0
-Run-time dependency libcrypto found: YES 3.4.1
+Run-time dependency libcrypto found: YES 3.5.0
 Run-time dependency libseccomp found: YES 2.5.4
 Has header "linux/landlock.h" : YES 
 Has header "mntent.h" : YES 

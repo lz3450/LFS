@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([fakeroot],[1.36],[clint@debian.org],[fakeroot])
+AC_INIT([fakeroot],[1.37.1.2],[clint@debian.org],[fakeroot])
 AC_PREREQ([2.71])
 AC_CONFIG_MACRO_DIR([build-aux])
 LT_PREREQ(2.1a)
@@ -55,7 +55,7 @@ int main() {
 
   if test $ac_cv_use_ipc = cross; then
     case "$host_os" in
-      (linux-gnu*)
+      (linux-gnu*|linux-musl*)
         ac_cv_use_ipc=sysv
         AC_MSG_RESULT([cross, guessing yes])
       ;;

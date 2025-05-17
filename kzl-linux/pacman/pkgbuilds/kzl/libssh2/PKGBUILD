@@ -2,7 +2,7 @@
 
 pkgname=libssh2
 pkgver=1.11.1
-pkgrel=4
+pkgrel=5
 epoch=
 pkgdesc="A library implementing the SSH2 protocol as defined by Internet Drafts"
 arch=('x86_64')

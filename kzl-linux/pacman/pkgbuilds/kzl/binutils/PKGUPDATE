@@ -1,3 +1,3 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/binutils/ | grep -oP "binutils-\K\d+\.\d+(\.\d+)?" | sort -V | tail -n1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://ftp.gnu.org/gnu/binutils/ | grep -oP "binutils-\K2\.44(\.\d+)?" | sort -V | tail -n1)
 srcdir="binutils-gdb"
 build_system=autoconf

@@ -2,7 +2,7 @@
 
 pkgname=curl
 pkgver=8.13.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="A command-line tool for transferring data specified with URL syntax"
 arch=('x86_64')

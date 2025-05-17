@@ -199,9 +199,9 @@ checking whether UINT32_MAX < UINTMAX_MAX... yes
 checking whether UINT64_MAX == ULONG_MAX... yes
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
-checking for unreachable... yes
-checking whether nullptr_t needs <stddef.h>... yes
-checking whether <stddef.h> is idempotent... guessing yes
+checking for unreachable... no
+checking whether nullptr_t needs <stddef.h>... no
+checking whether <stddef.h> is idempotent... guessing no
 checking whether locale.h defines locale_t... yes
 checking whether locale.h defines _locale_t... no
 checking whether locale.h conforms to POSIX:2001... yes
@@ -256,8 +256,8 @@ checking for wctrans_t... yes
 checking for C compiler option to allow warnings... -Wno-error
 checking whether access honors trailing slash... yes
 checking for alloca as a compiler built-in... yes
-checking for static_assert... yes, a keyword
-checking for bool, true, false... yes
+checking for static_assert... yes, an <assert.h> macro
+checking for bool, true, false... no
 checking for __builtin_expect... yes
 checking whether calloc (0, n) and calloc (n, 0) return nonnull... yes
 checking whether this system supports file names of any length... no
@@ -327,7 +327,7 @@ checking for memrchr... yes
 checking whether mkdir handles trailing slash... yes
 checking whether mkdir handles trailing dot... yes
 checking for __mktime_internal... no
-checking for C nullptr... yes
+checking for C nullptr... no
 checking whether open recognizes a trailing slash... yes
 checking for opendir... yes
 checking for bison... bison

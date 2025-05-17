@@ -2,7 +2,7 @@
 
 pkgname=gettext
 pkgver=0.25
-pkgrel=3
+pkgrel=6
 epoch=
 pkgdesc="GNU internationalization library"
 arch=('x86_64')

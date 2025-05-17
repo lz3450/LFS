@@ -162,9 +162,9 @@ checking whether alarm is declared... yes
 checking for inline... inline
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
-checking for unreachable... yes
-checking whether nullptr_t needs <stddef.h>... yes
-checking for clean definition of __STDC_VERSION_STDDEF_H__... no
+checking for unreachable... no
+checking whether nullptr_t needs <stddef.h>... no
+checking for clean definition of __STDC_VERSION_STDDEF_H__... yes
 checking whether fcloseall is declared... yes
 checking whether getw is declared... yes
 checking whether putw is declared... yes
@@ -230,13 +230,13 @@ checking for strnlen... yes
 checking for wcrtomb... (cached) yes
 checking whether _snprintf is declared... no
 checking for C compiler option to allow warnings... -Wno-error
-checking for alignas and alignof... yes, keywords
+checking for alignas and alignof... yes, <stdalign.h> macros
 checking for alloca as a compiler built-in... yes
 checking for argz.h... yes
 checking for error_t... yes
 checking for argz_replace... yes
 checking if argz actually works... yes
-checking for static_assert... yes, a keyword
+checking for static_assert... yes, an <assert.h> macro
 checking whether calloc (0, n) and calloc (n, 0) return nonnull... yes
 checking for iswblank... yes
 checking whether iswblank is declared... yes
@@ -255,7 +255,7 @@ checking for reallocarray... yes
 checking for working re_compile_pattern... yes
 checking for ssize_t... yes
 checking for va_copy... yes
-checking for bool, true, false... yes
+checking for bool, true, false... no
 checking for strcasecmp... yes
 checking for strncasecmp... yes
 checking whether strncasecmp is declared... yes
@@ -277,7 +277,7 @@ checking whether mbrtowc returns 0 when parsing a NUL character... guessing yes
 checking whether mbrtowc stores incomplete characters... no
 checking whether mbrtowc works on empty input... yes
 checking whether the C locale is free of encoding errors... no
-checking whether iconv converts EUC-CN to UTF-8... no
+checking whether iconv converts EUC-CN to UTF-8... yes
 checking whether make sets $(MAKE)... (cached) yes
 checking whether ln -s works... yes
 checking whether diff accepts -u... yes
@@ -303,18 +303,15 @@ checking for a sed that does not truncate output... /usr/bin/sed
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt
 checking for gmsgfmt... /usr/bin/msgfmt
-/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for xgettext... /usr/bin/xgettext
-/usr/bin/xgettext: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for msgmerge... /usr/bin/msgmerge
-/usr/bin/msgmerge: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for CFPreferencesCopyAppValue... no
 checking for CFLocaleCopyPreferredLanguages... no
 checking for GNU gettext in libc... yes
 checking whether to use NLS... yes
 checking where the gettext function comes from... libc
 === configuring in tp/Texinfo/XS (/home/kzl/makepkg/build/texinfo/src/texinfo-7.2/tp/Texinfo/XS)
-configure: running /bin/sh ./configure --disable-option-checking '--prefix=/usr'  'CFLAGS=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects' 'LDFLAGS=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects' 'CPPFLAGS=' --cache-file=/dev/null --srcdir=.
+configure: running /bin/sh ./configure --disable-option-checking '--prefix=/usr'  'CFLAGS=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3 -flto -ffat-lto-objects' 'LDFLAGS=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -flto -ffat-lto-objects' 'CPPFLAGS=' --cache-file=/dev/null --srcdir=.
 checking for a BSD-compatible install... /usr/bin/install -c
 checking whether sleep supports fractional seconds... yes
 checking filesystem timestamp resolution... 0.01
@@ -384,11 +381,8 @@ checking for a sed that does not truncate output... /usr/bin/sed
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt
 checking for gmsgfmt... /usr/bin/msgfmt
-/usr/bin/msgfmt: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for xgettext... /usr/bin/xgettext
-/usr/bin/xgettext: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for msgmerge... /usr/bin/msgmerge
-/usr/bin/msgmerge: /usr/lib/libncursesw.so.6: no version information available (required by /usr/lib/libtextstyle.so.0)
 checking for ld used by gcc... /usr/bin/ld
 checking if the linker (/usr/bin/ld) is GNU ld... yes
 checking for shared library run path origin... done
@@ -450,9 +444,9 @@ checking how to link with libunistring... /usr/lib/libunistring.so
 checking for libunistring version... 1.3.0
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
-checking for unreachable... yes
-checking whether nullptr_t needs <stddef.h>... yes
-checking for clean definition of __STDC_VERSION_STDDEF_H__... no
+checking for unreachable... no
+checking whether nullptr_t needs <stddef.h>... no
+checking for clean definition of __STDC_VERSION_STDDEF_H__... yes
 checking whether locale.h defines locale_t... yes
 checking whether locale.h conforms to POSIX:2001... yes
 checking whether struct lconv is properly defined... yes
@@ -515,12 +509,12 @@ checking for wctrans_t... yes
 checking for C compiler option to allow warnings... -Wno-error
 checking whether access honors trailing slash... yes
 checking for alloca as a compiler built-in... yes
-checking for static_assert... yes, a keyword
+checking for static_assert... yes, an <assert.h> macro
 checking whether dup2 works... yes
 checking for euidaccess... yes
 checking whether fcntl handles F_DUPFD correctly... yes
 checking whether fcntl understands F_DUPFD_CLOEXEC... needs runtime check
-checking whether float.h conforms to ISO C23... yes
+checking whether float.h conforms to ISO C23... no
 checking whether conversion from 'int' to 'long double' works... yes
 checking whether free is known to preserve errno... yes
 checking for getdelim... yes
@@ -544,7 +538,7 @@ checking whether struct stat.st_atim is of type struct timespec... yes
 checking for struct stat.st_birthtimespec.tv_nsec... no
 checking for struct stat.st_birthtimensec... no
 checking for struct stat.st_birthtim.tv_nsec... no
-checking for bool, true, false... yes
+checking for bool, true, false... no
 checking for strchrnul... yes
 checking whether strchrnul works... yes
 checking for working strndup... yes

@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=fakeroot
-pkgver=1.36
-pkgrel=1
+pkgver=1.37.1.2
+pkgrel=2
 epoch=
 pkgdesc="Tool for simulating superuser privileges"
 arch=('x86_64')
@@ -11,7 +11,7 @@ license=('KZL')
 source=(
   git+https://salsa.debian.org/clint/fakeroot.git#tag=upstream/$pkgver
 )
-sha256sums=('41895b87a7ae1625014fb7e4a6e43dccab7dcd5ce902b45455b679d17b3cd206')
+sha256sums=('41dda8c3dd030b9ee4d159e3f76150b3bef3ecac37ad89e4684b68e41c94159e')
 
 prepare() {
   cd $pkgname

@@ -2,7 +2,7 @@
 
 pkgname=pam
 pkgver=1.7.0
-pkgrel=5
+pkgrel=6
 epoch=
 pkgdesc="PAM (Pluggable Authentication Modules) library"
 arch=('x86_64')

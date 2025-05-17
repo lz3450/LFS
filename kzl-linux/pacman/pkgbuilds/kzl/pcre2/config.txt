@@ -7,7 +7,7 @@ CMake Deprecation Warning at CMakeLists.txt:108 (cmake_minimum_required):
   to work with policies introduced by <max> or earlier.
 
 
--- The C compiler identification is GNU 15.1.1
+-- The C compiler identification is GNU 14.2.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
@@ -58,7 +58,7 @@ CMake Deprecation Warning at CMakeLists.txt:108 (cmake_minimum_required):
 -- 
 --   Install prefix .................. : /usr
 --   C compiler ...................... : /usr/bin/cc
---   C compiler flags ................ : -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects -mshstk -O3 -DNDEBUG
+--   C compiler flags ................ : -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3 -flto -ffat-lto-objects -mshstk -O3 -DNDEBUG
 -- 
 --   Build 8 bit PCRE2 library ....... : ON
 --   Build 16 bit PCRE2 library ...... : ON
@@ -95,7 +95,7 @@ CMake Deprecation Warning at CMakeLists.txt:108 (cmake_minimum_required):
 --   Support Valgrind .................: OFF
 --   Use %zu and %td ..................: AUTO
 -- 
--- Configuring done (1.4s)
+-- Configuring done (1.3s)
 -- Generating done (0.0s)
 CMake Warning:
   Manually-specified variables were not used by the project:
@@ -139,7 +139,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
+CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3 -flto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g

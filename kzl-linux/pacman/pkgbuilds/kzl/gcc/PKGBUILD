@@ -4,8 +4,8 @@
 # linux-api-headers -> glibc -> binutils -> gcc -> glibc -> binutils -> gcc
 
 pkgname=gcc
-pkgver=15.1.0.g8
-pkgrel=4
+pkgver=14.2.0
+pkgrel=8
 epoch=
 pkgdesc="The GNU Compiler Collection"
 arch=('x86_64')
@@ -30,11 +30,11 @@ options=(
   !lto
 )
 source=(
-  # git+git://gcc.gnu.org/git/gcc.git#tag=releases/gcc-$pkgver
-  git+git://gcc.gnu.org/git/gcc.git#branch=releases/gcc-${pkgver%%.*}
+  git+git://gcc.gnu.org/git/gcc.git#tag=releases/gcc-$pkgver
+  # git+git://gcc.gnu.org/git/gcc.git#branch=releases/gcc-${pkgver%%.*}
+  # git+git://gcc.gnu.org/git/gcc.git#commit=releases/gcc-${pkgver%%.*}
 )
-
-sha256sums=('SKIP')
+sha256sums=('a0c5c9a2e09198436b0bcccba6deef7cb439a5364d56ffbb9ac17a9d24240034')
 
 pkgver() {
   cd gcc
@@ -56,12 +56,13 @@ build() {
 
   msg2 "Configuring..."
   # https://gcc.gnu.org/install/configure.html
-  "../configure" -C \
-    --with-pkgversion="KZL $pkgver-$pkgrel `date -u '+%Y/%m/%d %T %z'`" \
+  "../configure" \
+    --with-pkgversion="KZL $pkgver-$pkgrel `date '+%Y/%m/%d %T %z'`" \
     --prefix=/usr \
     --build=$CHOST \
     --host=$CHOST \
     --target=$CHOST \
+    --enable-gprofng=yes \
     --enable-default-compressed-debug-sections-algorithm=zstd \
     --enable-host-shared \
     --disable-multilib \
