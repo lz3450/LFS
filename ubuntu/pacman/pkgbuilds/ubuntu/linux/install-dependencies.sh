@@ -8,4 +8,5 @@ sudo apt-get install -y \
     libelf-dev \
     libncurses-dev \
     libssl-dev \
+    pahole \
     rsync

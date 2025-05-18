@@ -2,8 +2,8 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=6.12.28
-pkgrel=3
+pkgver=6.12.29
+pkgrel=4
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -16,7 +16,7 @@ source=(
   update-kernel.sh
 )
 sha256sums=('SKIP'
-            'ab55ab11da014bb89962fa65191783438d811e8c461fc1e7a36fbac46d45df2f'
+            '183e98441a6de47ee3416faaafbcd4cb1d6096cde91f80b508e1ea0f3a543dab'
             '5d9b124f6106ffc1a44957b1185cf8b078b51ac1151b8f9a8cdc27e8e9f8c5f8')
 
 export LOCALVERSION="-KZL"
