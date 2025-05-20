@@ -1,44 +1,41 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=dracut
-pkgver=059.g215
+pkgver=107
 pkgrel=3
 epoch=
 pkgdesc="An event driven initramfs infrastructure"
 arch=('x86_64')
-url="https://github.com/dracutdevs/dracut/wiki/"
+url="https://github.com/dracut-ng/dracut-ng"
 license=('KZL')
 backup=(
   etc/dracut.conf
 )
 source=(
-  # git+https://github.com/lz3450/dracut.git
-  git+https://github.com/dracutdevs/dracut.git
+  git+$url.git#tag=$pkgver
 )
-sha256sums=('SKIP')
+sha256sums=('4ef7140114aac39556f6f53ea20ab46dde1af387f5f188bbfc265a951f1545c7')
 
-pkgver() {
-  cd $pkgname
+# pkgver() {
+#   cd dracut-ng
+#
+#   git describe --tags | sed 's/-g.*//;s/-/.g/'
+# }
 
-  git describe --tags | sed 's/-g.*//;s/-/.g/'
-}
+build() {
+  cd dracut-ng
 
-prepare() {
-  cd $pkgname
-
+  msg2 "Configuring..."
   ./configure \
     --prefix=/usr \
     --disable-documentation
-}
 
-build() {
-  cd $pkgname
-
+  msg2 "Compiling..."
   make
 }
 
 package() {
-  cd $pkgname
+  cd dracut-ng
 
   make DESTDIR="$pkgdir" install
 }

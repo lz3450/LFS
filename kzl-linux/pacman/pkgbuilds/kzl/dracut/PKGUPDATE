@@ -1,8 +1,8 @@
-new_version=$(git ls-remote --tags https://github.com/dracutdevs/dracut.git | grep -oP '(?<=refs/tags/)\d+' | sort -V | tail -n1)
-srcdir="$pkgname"
+new_version=$(git ls-remote --tags https://github.com/dracut-ng/dracut-ng.git | grep -oP '(?<=refs/tags/)\d+' | sort -V | tail -n1)
+srcdir=dracut-ng
 build_system=
 
 post_update() {
-    cd "$BUILDDIR/$pkgname/src/$pkgname"
-    cp Makefile.inc "$PKGBUILDDIR"/help.txt
+    cd "$BUILDDIR/$pkgname/src/dracut-ng"
+    cat Makefile.inc configure > "$PKGBUILDDIR"/help.txt
 }

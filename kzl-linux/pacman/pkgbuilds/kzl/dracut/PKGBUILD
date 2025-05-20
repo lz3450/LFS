@@ -6,11 +6,15 @@ pkgrel=8
 epoch=
 pkgdesc="An event driven initramfs infrastructure"
 arch=('x86_64')
-url="https://github.com/dracutdevs/dracut/wiki/"
+url="https://github.com/dracut-ng/dracut-ng"
 license=('KZL')
 depends=(cpio kmod)
-backup=(etc/dracut.conf)
-source=(git+https://github.com/dracutdevs/dracut.git#tag=$pkgver)
+backup=(
+  etc/dracut.conf
+)
+source=(
+  git+$url.git
+)
 sha256sums=('SKIP')
 
 build() {
