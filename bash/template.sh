@@ -82,7 +82,11 @@ trap clean EXIT SIGINT SIGTERM SIGKILL
 #         usage
 #         ;;
 #     -i | --input)
-#         shift; input="$1"
+#         shift
+#         if [[ -z "$1" || "$1" =~ ^- ]]; then
+#             error "Missing value for input"
+#         fi
+#         input="$1"
 #         ;;
 #     -v | --verbose)
 #         shift; verbose=true
