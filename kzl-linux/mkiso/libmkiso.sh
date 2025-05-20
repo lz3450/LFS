@@ -117,12 +117,34 @@ pacstrap_rootfs() {
     # info "Done (Pacstrapping)"
 
     info "Pacstrapping \"$ROOTFS_DIR/\": ${_pkg_list[*]}"
+    local _pacman_config
+    local _tmp_conf_file="$(mktemp -t pacman.conf.XXXX)"
+
+    if [[ $(which pacman) =~ ^/usr/bin/pacman$ ]]; then
+        _pacman_config="/etc/pacman.conf"
+    elif [[ $(which pacman) =~ ^/opt/bin/pacman$ ]]; then
+        _pacman_config="/opt/etc/pacman.conf"
+    else
+        error "pacman not in standard location" 5
+    fi
+    cp -v "$_pacman_config" "$_tmp_conf_file"
+    sed -i 's/^DownloadUser/#&/' "$_tmp_conf_file"
+    _pacman_config="$_tmp_conf_file"
+
     install -d -m 0755 -- "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman,log} "$ROOTFS_DIR"/{dev,run,etc/pacman.d}
     install -d -m 1777 -- "$ROOTFS_DIR"/tmp
     install -d -m 0555 -- "$ROOTFS_DIR"/{sys,proc}
-    chroot_setup "$ROOTFS_DIR" > "$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
-    unshare --fork --pid pacman -Sy -r "$ROOTFS_DIR" --noconfirm --cachedir "/$PACMAN_REPO_DIR" "${_pkg_list[@]}" >> "$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
-    chroot_teardown >> "$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
+    chroot_setup "$ROOTFS_DIR" || error "Failed to install pacman packages" 5
+    unshare --fork --pid \
+        pacman -Sy \
+        -r "$ROOTFS_DIR" \
+        --cachedir "/$PACMAN_REPO_DIR" \
+        --config "$_pacman_config" \
+        --disable-sandbox \
+        --noconfirm \
+        "${_pkg_list[@]}" \
+        >> "$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
+    chroot_teardown || error "Failed to install pacman packages" 5
     info "Done (Pacstrapping)"
 
     info "Creating a list of installed pacman packages..."
@@ -191,8 +213,11 @@ make_rootfs_archive() {
     local _name="$1"
     info "Creating rootfs archive $_name..."
 
-    tar --numeric-owner -vcf "$OUT_DIR/$_name" \
-        --zstd -C "$ROOTFS_DIR" . > "$LOG_DIR"/tar.log 2>&1
+    tar -vcf "$OUT_DIR/$_name" \
+        --transform='s|^./||' \
+        --numeric-owner  \
+        --zstd -C "$ROOTFS_DIR" . \
+        > "$LOG_DIR"/tar.log 2>&1
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$_name"
 
     info "Done (Creating rootfs archive)"
@@ -206,14 +231,14 @@ make_initramfs_for_kernel() {
     info "Create initramfs for kernel version: $_kernel_version"
     dracut --kver "$_kernel_version" \
         --force \
-        --add 'livenet dmsquash-live convertfs pollcdrom qemu qemu-net' \
-        --omit 'plymouth' \
-        --no-early-microcode \
+        --add 'dmsquash-live overlayfs livenet pollcdrom' \
+        --omit 'multipath' \
         --strip \
         --nolvmconf \
         --nomdadmconf \
         --verbose \
         --no-hostonly \
+        --no-hostonly-cmdline \
         --zstd \
         --kernel-image "$_kernel_image" \
         --kmoddir "$_kmoddir" \
@@ -237,7 +262,7 @@ make_efibootimg() {
     #     <<< "$_imgsize")"
     # info "Required FAT image size $_imgsize KiB"
 
-    local _imgsize=131072
+    local -i _imgsize=262144
 
     info "Creating FAT image of size: $_imgsize Byte..."
     rm -f -- "$EFIBOOT_IMG"
@@ -281,7 +306,8 @@ make_rootfs_squashfs() {
         "0" "2" >> "$ROOTFS_DIR"/etc/fstab
     # Create a squashfs image and place it in the ISO 9660 file system.
     mkdir -p -- "$ISOFS_DIR/$INSTALL_DIR"
-    mksquashfs "$ROOTFS_DIR" "$_image_path" -comp zstd -b 1M -noappend
+    # mksquashfs "$ROOTFS_DIR" "$_image_path" -b 1M -comp zstd -noappend
+    mkfs.erofs -- "$_image_path" "$ROOTFS_DIR"
 
     info "Done (Creating rootfs SquashFS image)"
 }

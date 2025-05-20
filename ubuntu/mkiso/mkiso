@@ -45,22 +45,27 @@ debootstrap_suite=""
 
 # deb package lists
 common_deb_pkgs=(
-    sudo
+    # general
     nano
+    bash-completion
+    zsh
+    zstd
+    # disk
     parted fdisk
+    smartmontools
+    # filesystem
     dosfstools
     e2fsprogs
     xfsprogs
     f2fs-tools
     btrfs-progs
     bcachefs-tools
-    smartmontools
+    # network
     wpasupplicant
     wget curl
     openssh-server
     git
-    bash-completion
-    zsh
+    # kernel
     linux-image-generic
     initramfs-tools
     ### pacman
