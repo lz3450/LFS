@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g55
-pkgrel=4
+pkgver=7.0.0.g61
+pkgrel=6
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -112,5 +112,7 @@ package() {
 
   meson install -C build --destdir "$pkgdir"
 
-  rm -vr "$pkgdir"/usr
+  mv -v "$pkgdir/$PREFIX/share/zsh" "$pkgdir/usr/share/"
+  mv -v "$pkgdir/usr/share/zsh/site-functions" "$pkgdir/usr/share/zsh/vendor-completions"
+  rm -v "$pkgdir/usr/share/bash-completion/completions/makepkg"
 }
