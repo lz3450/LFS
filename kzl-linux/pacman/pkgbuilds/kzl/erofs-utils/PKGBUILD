@@ -1,40 +1,49 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=erofs-utils
-pkgver=1.4
+pkgver=1.8.6
 pkgrel=1
-epoch=1
+epoch=
 pkgdesc="Userspace utilities for linux-erofs file system"
 arch=('x86_64')
 url="https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git"
 license=('KZL')
-depends=(lz4)
-source=(https://git.kernel.org/pub/scm/linux/kernel/git/xiang/$pkgname.git/snapshot/$pkgname-$pkgver.tar.gz)
-sha256sums=('67702b1fc5da05719d95ddb7c107e334b04365f5161a9717479d2831fca85a98')
+depends=(
+  lz4
+  zstd
+)
+source=(
+  git+git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git
+)
+sha256sums=('SKIP')
 
 prepare() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
-  autoreconf -fiv
+  ./autogen.sh
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --enable-multithreading \
+    --enable-fuse \
+    --with-libzstd \
+    --with-xxhash
 
   make
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make -k check
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
 
   make DESTDIR="$pkgdir" install
 }
