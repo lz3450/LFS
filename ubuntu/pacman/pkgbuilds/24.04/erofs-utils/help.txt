@@ -1,0 +1,123 @@
+Configuration of erofs-utils 1.8.6:
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
+  --enable-dependency-tracking
+                          do not reject slow dependency extractors
+  --disable-dependency-tracking
+                          speeds up one-time build
+  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-static[=PKGS]  build static libraries [default=yes]
+  --enable-fast-install[=PKGS]
+                          optimize for fast installation [default=yes]
+  --disable-libtool-lock  avoid locking (might break parallel builds)
+  --enable-multithreading enable multi-threading support (EXPERIMENTAL)
+                          [default=no]
+  --enable-debug          enable debugging mode [default=no]
+  --enable-werror         enable -Werror [default=no]
+  --enable-fuzzing        set up fuzzing mode [default=no]
+  --disable-lz4           disable LZ4 compression support [default=auto]
+  --disable-lzma          disable LZMA compression support [default=auto]
+  --enable-fuse           enable erofsfuse [default=no]
+  --enable-static-fuse    build erofsfuse as a static library [default=no]
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+                          both]
+  --with-aix-soname=aix|svr4|both
+                          shared library versioning (aka "SONAME") variant to
+                          provide on AIX, [default=aix].
+  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
+  --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
+                          compiler's sysroot if not specified).
+  --without-zlib          Ignore presence of zlib inflate support
+                          [default=auto]
+  --with-libdeflate       Enable and build with libdeflate inflate support
+                          [default=disabled]
+  --with-libzstd          Enable and build with of libzstd support
+                          [default=auto]
+  --with-qpl              Enable and build with Intel QPL support
+                          [default=disabled]
+  --with-xxhash           Enable and build with libxxhash support
+                          [default=auto]
+  --without-uuid          Ignore presence of libuuid and disable uuid support
+                          [default=enabled]
+  --with-selinux          enable and build with selinux support [default=no]
+
+Some influential environment variables:
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  LT_SYS_LIBRARY_PATH
+              User-defined run-time library search path.
+  MAX_BLOCK_SIZE
+              The maximum block size which erofs-utils supports
+  CPP         C preprocessor
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  libuuid_CFLAGS
+              C compiler flags for libuuid, overriding pkg-config
+  libuuid_LIBS
+              linker flags for libuuid, overriding pkg-config
+  libselinux_CFLAGS
+              C compiler flags for libselinux, overriding pkg-config
+  libselinux_LIBS
+              linker flags for libselinux, overriding pkg-config
+  libfuse3_CFLAGS
+              C compiler flags for libfuse3, overriding pkg-config
+  libfuse3_LIBS
+              linker flags for libfuse3, overriding pkg-config
+  libfuse2_CFLAGS
+              C compiler flags for libfuse2, overriding pkg-config
+  libfuse2_LIBS
+              linker flags for libfuse2, overriding pkg-config
+  libfuse3_0_CFLAGS
+              C compiler flags for libfuse3_0, overriding pkg-config
+  libfuse3_0_LIBS
+              linker flags for libfuse3_0, overriding pkg-config
+  libfuse3_2_CFLAGS
+              C compiler flags for libfuse3_2, overriding pkg-config
+  libfuse3_2_LIBS
+              linker flags for libfuse3_2, overriding pkg-config
+  liblz4_CFLAGS
+              C compiler flags for liblz4, overriding pkg-config
+  liblz4_LIBS linker flags for liblz4, overriding pkg-config
+  liblzma_CFLAGS
+              C compiler flags for liblzma, overriding pkg-config
+  liblzma_LIBS
+              linker flags for liblzma, overriding pkg-config
+  zlib_CFLAGS C compiler flags for zlib, overriding pkg-config
+  zlib_LIBS   linker flags for zlib, overriding pkg-config
+  libdeflate_CFLAGS
+              C compiler flags for libdeflate, overriding pkg-config
+  libdeflate_LIBS
+              linker flags for libdeflate, overriding pkg-config
+  libzstd_CFLAGS
+              C compiler flags for libzstd, overriding pkg-config
+  libzstd_LIBS
+              linker flags for libzstd, overriding pkg-config
+  libqpl_CFLAGS
+              C compiler flags for libqpl, overriding pkg-config
+  libqpl_LIBS linker flags for libqpl, overriding pkg-config
+  libxxhash_CFLAGS
+              C compiler flags for libxxhash, overriding pkg-config
+  libxxhash_LIBS
+              linker flags for libxxhash, overriding pkg-config
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to <linux-erofs@lists.ozlabs.org>.
