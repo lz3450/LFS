@@ -1,6 +1,6 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log'
-creation time: Wed May 21 23:25:40 2025
-installer version: 535.247.01
+creation time: Fri May 23 01:15:05 2025
+installer version: 550.135
 
 PATH: /home/kzl/.local/bin:/home/kzl/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
 
@@ -12,18 +12,24 @@ nvidia-installer command line:
 
 Using built-in stream user interface
 -> Detected 16 CPUs online; setting concurrency level to 16.
+-> Scanning the initramfs with lsinitramfs...
+-> Executing: /usr/bin/lsinitramfs   -l /boot/initrd.img-6.12.30-KZL
 -> If you plan to no longer use the NVIDIA driver, you should make sure that no X screens are configured to use the NVIDIA X driver in your X configuration file. If you used nvidia-xconfig to configure X, it may have created a backup of your original configuration. Would you like to run `nvidia-xconfig --restore-original-backup` to attempt restoration of the original X configuration file? (Answer: No)
 -> Parsing log file:
 -> done.
 -> Validating previous installation:
+-> Initramfs scan complete.
+-> Unable to find installed file '/lib/modules/6.12.29-KZL/kernel/drivers/video/nvidia.ko' (No such file or directory).
+-> Unable to find installed file '/lib/modules/6.12.29-KZL/kernel/drivers/video/nvidia-uvm.ko' (No such file or directory).
+-> Unable to find installed file '/lib/modules/6.12.29-KZL/kernel/drivers/video/nvidia-modeset.ko' (No such file or directory).
+-> Unable to find installed file '/lib/modules/6.12.29-KZL/kernel/drivers/video/nvidia-drm.ko' (No such file or directory).
+-> Unable to find installed file '/lib/modules/6.12.29-KZL/kernel/drivers/video/nvidia-peermem.ko' (No such file or directory).
 -> done.
--> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-53524701 (535.247.01)):
--> Failed to delete the directory '/lib/modules/6.12.29-KZL/kernel/drivers/video' (Directory not empty).
-WARNING: Failed to delete some directories. See /home/kzl/LFS/config/nvidia/nvidia-uninstall.log for details.
--> Unable to delete directories created by previous installation.
+WARNING: Your driver installation has been altered since it was initially installed; this may happen, for example, if you have since installed the NVIDIA driver through a mechanism other than nvidia-installer (such as your distribution's native package management system).  nvidia-installer will attempt to uninstall as best it can.  Please see the file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log' for details.
+-> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-550135 (550.135)):
 -> done.
 -> Running ldconfig:
 -> done.
 -> Running `/usr/bin/systemctl daemon-reload`:
 -> done.
--> Uninstallation of existing driver: NVIDIA Accelerated Graphics Driver for Linux-x86_64 (535.247.01) is complete.
+-> Uninstallation of existing driver: NVIDIA Accelerated Graphics Driver for Linux-x86_64 (550.135) is complete.
