@@ -142,13 +142,13 @@ kzl_stage2_pkgs=(
     # pacman
     ################################
     fakeroot
-    libgpg-error libassuan libksba npth pinentry gnupg gpgme
-    pacman
+    # libgpg-error libassuan libksba npth pinentry gnupg gpgme
+    # pacman
 
     ################################
     # perl
     ################################
-    perl
+    # perl
 
     # ################
     # # python
