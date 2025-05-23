@@ -1,8 +1,0 @@
-#!/bin/bash
-
-for c in $(find $1 -name 'configure'); do
-    echo $c
-    # cat $c | sed -n -e '/Optional Features:/,$p' | sed -e '/Some influential environment variables:/Q'
-    /bin/bash $c --help
-    echo
-done
