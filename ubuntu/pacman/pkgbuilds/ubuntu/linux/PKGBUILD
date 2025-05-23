@@ -16,7 +16,7 @@ source=(
   update-kernel.sh
 )
 sha256sums=('SKIP'
-            '4a259fe838710f443fc7332eb81dc2e71f567fb18f56c978efe11ebdf1791301'
+            '98a0cb67409028d6a0f382ce3625999d9832501e0cc60696153e9fd3369b0e4d'
             '5d9b124f6106ffc1a44957b1185cf8b078b51ac1151b8f9a8cdc27e8e9f8c5f8')
 
 export LOCALVERSION="-KZL"
