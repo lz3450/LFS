@@ -82,6 +82,7 @@ _add_resolv_conf() {
 }
 
 # chroot_setup <chroot_dir>
+# $1: the directory to chroot into
 # when using `chroot_setup`, `chroot_teardown` must be call to clean up
 # for example, `trap chroot_teardown EXIT`
 chroot_setup() {
@@ -116,7 +117,8 @@ chroot_teardown() {
 }
 
 chroot_run() {
-    SHELL=/bin/bash LC_ALL=C PATH="$CHROOT_PATH" unshare --fork --pid chroot "$@"
+    # SHELL=/bin/bash LC_ALL=C PATH="$CHROOT_PATH" unshare --fork --pid chroot "$@"
+    SHELL=/bin/bash PATH="$CHROOT_PATH" unshare --fork --pid chroot "$@"
 }
 
 debug "${BASH_SOURCE[0]} sourced"
