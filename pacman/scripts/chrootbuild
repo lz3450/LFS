@@ -49,6 +49,7 @@ active_mounts=()
 build_args=()
 
 arg_rootfs_tarball=""
+opt_distro="kzl-linux"
 declare -i opt_backup=0
 declare -i opt_clean=0
 declare -i opt_from_rootfs_backups=0
@@ -90,10 +91,10 @@ setup_rootfs() {
 
     info "Mounting LFS related directories..."
     for entry in "${HOST_DIRS[@]}"; do
-        IFS=':' read -r src dest <<< "$entry"
+        IFS=':' read -r src dst <<< "$entry"
         mkdir -p -- "/$src"
-        mkdir -p -- "$ROOTFS_DIR/$dest"
-        chroot_add_mount -v --bind "/$src" "$ROOTFS_DIR/$dest"
+        mkdir -p -- "$ROOTFS_DIR/$dst"
+        chroot_add_mount -v --bind "/$src" "$ROOTFS_DIR/$dst"
     done
     chown -R -- "$USERSPEC" "$ROOTFS_DIR/$CHROOT_HOME_DIR"
     info "Done (Mounting LFS related directories)"
@@ -204,6 +205,10 @@ trap clean EXIT SIGINT SIGTERM SIGKILL
 
 while (( $# > 0 )); do
     case "$1" in
+    -D | --distro)
+        shift
+        opt_distro="${1:-}"
+        ;;
     -r | --rootfs)
         shift
         arg_rootfs_tarball="${1:-}"
