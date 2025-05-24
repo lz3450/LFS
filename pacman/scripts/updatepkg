@@ -13,12 +13,11 @@ umask 0022
 SCRIPT_NAME="$(basename "$0")"
 SCRIPT_PATH="$0"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-BASH_LIB_DIR=${BASH_LIB_DIR:-"$SCRIPT_DIR/../../../bash/lib"}
 
 ################################################################################
 
 ### libraries
-. "$BASH_LIB_DIR"/log.sh
+. lib/log.sh
 
 ### constants & variables
 PKGBUILDDIR="$(pwd)"

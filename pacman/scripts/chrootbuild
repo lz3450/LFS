@@ -4,21 +4,20 @@
 #
 
 set -e
-set -u
 set -o pipefail
+set -u
 # set -x
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_PATH="$0"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 
 ################################################################################
 
 ### libraries
-source "$BASH_LIB_DIR/log.sh"
-source "$BASH_LIB_DIR/utils.sh"
-source "$BASH_LIB_DIR/chroot.sh"
+. lib/log.sh
+. lib/utils.sh
+. lib/chroot.sh
 
 ### checks
 check_root
@@ -250,13 +249,13 @@ fi
 
 prologue
 
-if (( $opt_backup )); then
+if (( $opt_backup > 0 )); then
     backup
     epilogue
     exit
 fi
 
-if (( $opt_clean )); then
+if (( $opt_clean > 0 )); then
     remove_work_dir
     if [[ -z "$arg_rootfs_tarball" ]]; then
         epilogue
@@ -265,7 +264,7 @@ if (( $opt_clean )); then
 fi
 
 setup_rootfs "$arg_rootfs_tarball" "$opt_from_rootfs_backups"
-if (( $opt_debug )); then
+if (( $opt_debug > 0 )); then
     run_debug_shell
 else
     run_build
