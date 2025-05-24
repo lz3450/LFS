@@ -4,8 +4,8 @@
 #
 
 set -e
-# set -u
 set -o pipefail
+# set -u
 # set -x
 
 umask 0022
@@ -27,15 +27,16 @@ VERSION="1.0"
 
 LOG_DIR="$HOME"/makepkg/log
 
-single_package=""
-repo=""
+opt_repo=""
+opt_single_package=""
+declare -i opt_stage
+declare -i opt_updatepkg=1
+declare -i opt_updated_only=0
+declare -i opt_install=0
+declare -i opt_no_clean=0
+declare -i opt_no_check=0
+
 repo_pkgbuilds_dirs=()
-declare -i stage
-declare -i updatepkg=1
-declare -i updated_only=0
-declare -i install=0
-declare -i no_clean=0
-declare -i no_check=0
 
 ### functions
 prepare() {
@@ -46,7 +47,7 @@ prepare() {
     info "Done"
 
     info "Updating pacman database..."
-    updaterepo -r "$repo" > "$_log" 2>&1
+    updaterepo -r "$opt_repo" 2>&1 | tee -a "$_log"
     info "Done"
 
     info "Synchronizing package databases..."
@@ -56,17 +57,28 @@ prepare() {
     mkdir -p -- "$LOG_DIR"
 }
 
-_get_pkgbuild_dir() {
+_get_pkgbuilds_dir() {
     local _pkgbase="$1"
-    local _pkgbuild_dir
-    readarray -t _pkgbuild_dir < <(find "${repo_pkgbuilds_dirs[@]}" -mindepth 1 -maxdepth 1 -type d -name "$_pkgbase" -print)
+    local _pkgbuilds_dir
+    readarray -t _pkgbuilds_dir < <(find "${repo_pkgbuilds_dirs[@]}" -mindepth 1 -maxdepth 1 -type d -name "$_pkgbase" -print)
 
-    if (( ${#_pkgbuild_dir[@]} != 1 )); then
+    if (( ${#_pkgbuilds_dir[@]} != 1 )); then
         error "PKGBUILD directory not found for \"$_pkgbase\"" 7
     fi
 
-    info "Package directory: ${_pkgbuild_dir[0]}"
-    echo "${_pkgbuild_dir[0]}"
+    info "Package directory: ${_pkgbuilds_dir[0]}"
+    echo "${_pkgbuilds_dir[0]}"
+}
+
+_install_dependencies() {
+    if [[ "$opt_repo" == "kzl" ]]; then
+        return
+    fi
+    if [[ -f "install-dependencies.sh" ]]; then
+        info "Installing dependencies..."
+        ./install-dependencies.sh >> "$_log" 2>&1
+        info "Done"
+    fi
 }
 
 build() {
@@ -78,8 +90,8 @@ build() {
     local _clean='--clean'
     local _no_check='--nocheck'
 
-    if [[ -n "$stage" ]]; then
-        _log="$LOG_DIR/stage$stage.$_pkgbase.log"
+    if [[ -n "$opt_stage" ]]; then
+        _log="$LOG_DIR/stage$opt_stage.$_pkgbase.log"
     else
         _log="$LOG_DIR/$_pkgbase.log"
     fi
@@ -88,16 +100,17 @@ build() {
         mv "$_log" "${_log/.log/.old.log}"
     fi
 
-    cd $(_get_pkgbuild_dir "$_pkgbase")
+    cd $(_get_pkgbuilds_dir "$_pkgbase")
 
-    if [[ -f "install-dependencies.sh" ]]; then
+    # run install-dependencies.sh for "ubuntu" repo
+    if [[ "$opt_repo" != "kzl" && -f "install-dependencies.sh" ]]; then
         info "Installing dependencies..."
         ./install-dependencies.sh >> "$_log" 2>&1
         info "Done"
     fi
 
     # update pkgbuild
-    if (( $updatepkg > 0 )); then
+    if (( $opt_updatepkg > 0 )); then
         info "Updating PKGBUILD..."
         updatepkg --syncdeps >> "$_log" 2>&1 || _updated=$?
         _cleanbuild='-e'
@@ -119,7 +132,7 @@ build() {
             error "  Unknown \`updatepkg\` result" 5
         fi
 
-        if (( $updated_only > 0 )) && (( $_updated == 0 || $_updated == 255 )); then
+        if (( $opt_updated_only > 0 )) && (( $_updated == 0 || $_updated == 255 )); then
             # Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)
             info "Skip"
             return
@@ -131,14 +144,14 @@ build() {
     fi
 
     info "Building package..."
-    if (( $no_check == 0 )); then
+    if (( $opt_no_check == 0 )); then
         _no_check=''
     fi
-    if (( $no_clean > 0 )); then
+    if (( $opt_no_clean > 0 )); then
         _clean=''
     fi
 
-    makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm --log >> "$_log" 2>&1
+    makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm >> "$_log" 2>&1
     info "Done"
 
     info "Getting package configuration log..."
@@ -149,11 +162,11 @@ build() {
     info "Done"
 
     info "Updating repo..."
-    updaterepo -r "$repo" >> "$_log" 2>&1
+    updaterepo -r "$opt_repo" >> "$_log" 2>&1
     sudo pacman -Sy 2>&1 | tee -a "$_log"
     info "Done"
 
-    if (( $install > 0 )); then
+    if (( $opt_install > 0 )); then
         info "Installing package..."
         local -a _pkgnames=($(get_pkgnames "$_pkgname"))
         # sudo pacman -Sddy --noconfirm --overwrite "*" "${_pkgnames[@]}" --config $pacman_conf >> "$_log" 2>&1
@@ -169,18 +182,19 @@ usage() {
 
 Usage: $SCRIPT_NAME -V | --version
 Usage: $SCRIPT_NAME -h | --help
-Usage: $SCRIPT_NAME -r <repo> -s <stage> | -p <pkgname> [ -n | -u ] [ --no-clean ] [ --no-check ]
+Usage: $SCRIPT_NAME [ --no-updatepkg | --updated-only ] [ --no-check ] [ --no-clean ] -r <repo>  -s <stage> | -p <pkgname> [ --install ]
+Usage: $SCRIPT_NAME [ -n | -u ] [ --no-check ] [ --no-clean ] -r <repo> -s <stage> | -p <pkgname> [ -i ]
 
     -V, --version               display version information and exit
     -h, --help                  display this help message and exit
     -r, --repo                  target repository (kzl, ubuntu22, ubuntu24, ...)
     -s, --stage                 target stage (0, 1(default), 2, 3; some repo are not using this)
     -p, --package               build single package
-    -i, --install               install the package after building
     -n, --no-updatepkg          do not update the PKGBUILD before building
     -u, --updated-only          build the package only if the PKGBUILD is updated
     --no-clean                  skip cleaning up work files after build
     --no-check                  do not run the check() function in the PKGBUILD
+    -i, --install               install the package after building
 
 EOF
 }
@@ -195,30 +209,30 @@ while (( $# > 0 )); do
         ;;
     -r|--repo)
         shift
-        repo="$1"
+        opt_repo="$1"
         ;;
     -s|--stage)
         shift
-        stage="$1"
+        opt_stage="$1"
         ;;
     -p|--package)
         shift
-        single_package="$1"
-        ;;
-    -i|--install)
-        install=1
+        opt_single_package="$1"
         ;;
     -n|--no-updatepkg)
-        updatepkg=0
+        opt_updatepkg=0
         ;;
     -u|--build-only-updated)
-        updated_only=1
+        opt_updated_only=1
         ;;
     --no-clean)
-        no_clean=1
+        opt_no_clean=1
         ;;
     --no-check)
-        no_check=1
+        opt_no_check=1
+        ;;
+    -i|--install)
+        opt_install=1
         ;;
     *)
         usage
@@ -228,36 +242,34 @@ while (( $# > 0 )); do
     shift
 done
 
-case "$repo" in
+case "$opt_repo" in
     kzl)
-        repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/kzl")
         ;;
-    ubuntu22)
-        repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/22.04")
+    jammy)
         ;;
-    ubuntu24)
-        repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/24.04")
+    noble)
         ;;
     *)
-        error "Unknown repo name \"$repo\"" 3
+        error "Unknown repo name \"$opt_repo\"" 3
         ;;
 esac
+repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/$opt_repo")
 
-if (( $updatepkg == 0 )) && (( $updated_only == 1 )); then
+if (( $opt_updatepkg == 0 )) && (( $opt_updated_only == 1 )); then
     error "Cannot use --updated-only together with --no-updatepkg" 6
 fi
 
-if [[ -n "$single_package" ]]; then
-    if [[ -n "$stage" ]]; then
+if [[ -n "$opt_single_package" ]]; then
+    if [[ -n "$opt_stage" ]]; then
         error "Cannot use -s | --stage together with -p | --package" 2
     fi
 else
     stage=${stage:-1}
-    case "$repo" in
+    case "$opt_repo" in
         kzl)
-            case "$stage" in
+            case "$opt_stage" in
                 0)
-                    # updaterepo --clear -r "$repo"
+                    # updaterepo --clear -r "$opt_repo"
                     pkgs=("${kzl_stage0_pkgs[@]}")
                     ;;
                 1)
@@ -270,12 +282,12 @@ else
                     pkgs=("${kzl_stage3_pkgs[@]}")
                     ;;
                 *)
-                    error "Unknown stage \"$stage\"" 4
+                    error "Unknown stage \"$opt_stage\"" 4
                     ;;
             esac
             ;;
-        ubuntu22|ubuntu24)
-            case "$stage" in
+        jammy|noble)
+            case "$opt_stage" in
                 1)
                     pkgs=("${ubuntu_stage1_pkgs[@]}")
                     ;;
@@ -283,12 +295,12 @@ else
                     pkgs=("${ubuntu_stage2_pkgs[@]}")
                     ;;
                 *)
-                    error "Unknown stage \"$stage\"" 4
+                    error "Unknown stage \"$opt_stage\"" 4
                     ;;
             esac
             ;;
         *)
-            error "Unknown repo name \"$repo\"" 3
+            error "Unknown repo name \"$opt_repo\"" 3
             ;;
     esac
 fi
@@ -298,16 +310,16 @@ fi
 prologue
 
 prepare
-if [[ -n "$single_package" ]]; then
+if [[ -n "$opt_single_package" ]]; then
     # Build a single package
-    log_magenta "Building $single_package ($(date +%H:%M:%S))..."
+    log_magenta "Building $opt_single_package ($(date +%H:%M:%S))..."
     __pkg_start_time__=$(date +%s)
-    build "$single_package"
+    build "$opt_single_package"
     __pkg_end_time__=$(date +%s)
     __pkg_total_time__=$(($__pkg_end_time__ - $__pkg_start_time__))
-    log_cyan "Finished $single_package: $(date -d "@$__pkg_total_time__" +%H:%M:%S) ($(date +%H:%M:%S))"
+    log_cyan "Finished $opt_single_package: $(date -d "@$__pkg_total_time__" +%H:%M:%S) ($(date +%H:%M:%S))"
 else
-    log_blue "Building stage $stage ($(date +%H:%M:%S))..."
+    log_blue "Building stage $opt_stage ($(date +%H:%M:%S))..."
     for p in ${pkgs[@]}; do
         log_magenta "Building $p ($(date +%H:%M:%S))..."
         __pkg_start_time__=$(date +%s)
