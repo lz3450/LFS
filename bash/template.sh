@@ -14,7 +14,8 @@ umask 0022
 # __DEBUG__=1
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(realpath "$0")"
+SCRIPT_PATH="$0"
+# SCRIPT_PATH="$(realpath "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 BASH_LIB_DIR=${BASH_LIB_DIR:-"$LFS/bash/lib"}
 
@@ -39,21 +40,6 @@ declare -i verbose=0
 input=
 
 ### functions
-usage() {
-    cat << EOF
-
-Usage: $SCRIPT_NAME -V | --version
-Usage: $SCRIPT_NAME -h | --help
-Usage: $SCRIPT_NAME [-v | --verbose ] -i | --input <arg>
-
-    -V, --version                   print the script version number and exit
-    -h, --help                      print this help message and exit
-    -i, --input <arg>               argument
-    -v, --verbose                   verbose
-
-EOF
-}
-
 example_function() {
     info "example_function"
 
@@ -69,6 +55,21 @@ clean() {
 }
 trap clean EXIT SIGINT SIGTERM SIGKILL
 # trap "trap - SIGTERM && kill -- -$$" EXIT SIGINT SIGTERM SIGKILL
+
+usage() {
+    cat << EOF
+
+Usage: $SCRIPT_NAME -V | --version
+Usage: $SCRIPT_NAME -h | --help
+Usage: $SCRIPT_NAME [-v | --verbose ] -i | --input <arg>
+
+    -V, --version                   print the script version number and exit
+    -h, --help                      print this help message and exit
+    -i, --input <arg>               argument
+    -v, --verbose                   verbose
+
+EOF
+}
 
 ################################################################################
 
