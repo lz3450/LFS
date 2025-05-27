@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 # lib/pacman.sh
 #
@@ -29,28 +29,25 @@ get_pkg_file() {
     fi
 }
 
+# get_pkgbase <pkgname>
+# $1: pkgname
 get_pkgbase() {
     local _pkgbase
     case "$1" in
-        device-mapper)
-            _pkgbase=lvm2
-            ;;
-        *)
-            _pkgbase="$1"
-            ;;
+        device-mapper) _pkgbase=lvm2 ;;
+        linux-headers) _pkgbase=linux ;;
+        *) _pkgbase="$1" ;;
     esac
     echo "$_pkgbase"
 }
 
+# get_pkgnames <pkgbase>
+# $1: pkgbase
 get_pkgnames() {
     local -a _pkgnames
     case "$1" in
-        linux)
-            _pkgnames=("linux" "linux-headers")
-            ;;
-        *)
-            _pkgnames=("$1")
-            ;;
+        linux) _pkgnames=("linux" "linux-headers") ;;
+        *) _pkgnames=("$1") ;;
     esac
     echo "${_pkgnames[@]}"
 }
