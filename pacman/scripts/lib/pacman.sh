@@ -47,6 +47,7 @@ get_pkgnames() {
     local -a _pkgnames
     case "$1" in
         linux) _pkgnames=("linux" "linux-headers") ;;
+        lvm2) _pkgnames=("lvm2" "device-mapper") ;;
         *) _pkgnames=("$1") ;;
     esac
     echo "${_pkgnames[@]}"
