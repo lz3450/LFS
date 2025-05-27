@@ -16,25 +16,22 @@ __DEBUG__=1
 SCRIPT_NAME="$(basename "$0")"
 SCRIPT_PATH="$(readlink -f "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-BASH_LIB_DIR=${BASH_LIB_DIR:-"/home/kzl/LFS/bash/lib"}
 
 ################################################################################
 
 ### libraries
-source "$BASH_LIB_DIR"/log.sh
-source "$BASH_LIB_DIR"/utils.sh
-source "$BASH_LIB_DIR"/chroot.sh
+. lib/log.sh
+. lib/utils.sh
+. lib/chroot.sh
 
-### constants & variables
+### mkiso constants and variables
 DISTRO="ubuntu"
 ISO_NAME="Ubuntu-KZL"
 PACMAN_REPO_DIR="home/.repository/ubuntu"
 PACMAN_REPO_PATH="$PACMAN_REPO_DIR/ubuntu.db.tar.zst"
 declare -i no_update_rootfs=0
 mutable_image_type="f2fs"
-
-### libraries
-source libmkiso.sh
+. lib/mkiso.sh
 
 ### constants & variables
 VERSION="1.0"
