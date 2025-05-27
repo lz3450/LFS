@@ -1,0 +1,30 @@
+#!/usr/bin/bash
+#
+# kzl-chroot.sh
+#
+
+set -e
+set -u
+set -o pipefail
+# set -x
+
+umask 0022
+
+SCRIPT_NAME="$(basename "$0")"
+SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+
+################################################################################
+
+### libraries
+. lib/log.sh
+. lib/chroot.sh
+
+### constants & variables
+rootfs_dir="$1"
+shift
+
+trap chroot_teardown EXIT SIGINT SIGTERM SIGKILL
+chroot_setup "$rootfs_dir"
+SHELL=/bin/bash LC_ALL=C PATH="$CHROOT_PATH" unshare --fork --pid chroot "$rootfs_dir" "$@"
+chroot_teardown
