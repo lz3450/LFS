@@ -45,7 +45,7 @@ prepare() {
       -e '/^MOTD_FILE/c\MOTD_FILE' \
       -e '/^#ISSUE_FILE/c\ISSUE_FILE' \
       -e '/^ENV_SUPATH/c\ENV_SUPATH\tPATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin' \
-      -e '/^ENV_PATH/c\ENV_PATH\tPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' \
+      -e '/^ENV_PATH/c\ENV_PATH\tPATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin' \
       -e '/^PASS_MIN_LEN/c\PASS_MIN_LEN\t4' \
       -e '/^#ENCRYPT_METHOD/c\ENCRYPT_METHOD\tSHA512' \
       etc/login.defs
