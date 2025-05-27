@@ -23,7 +23,10 @@ dpkg --get-selections | awk '{print $1}' | sed -e '/^linux-image-.+/d' -e '/^lin
 
 set +e
 
-# passwd
+# etc/environment
+echo 'PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"' > /etc/environment
+
+# password
 echo "root password:"
 passwd
 
