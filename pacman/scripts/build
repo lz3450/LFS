@@ -17,9 +17,9 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 ################################################################################
 
 ### libraries
-. lib/log.sh
-. lib/pacman.sh
-. "$SCRIPT_DIR/lib/pkglists.sh"
+. "$SCRIPT_DIR"/lib/log.sh
+. "$SCRIPT_DIR"/lib/pacman.sh
+. "$SCRIPT_DIR"/lib/pkglists.sh
 
 ### constants & variables
 VERSION="1.0"

@@ -17,8 +17,8 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 ################################################################################
 
 ### libraries
-. lib/log.sh
-. lib/pacman.sh
+. "$SCRIPT_DIR"/lib/log.sh
+. "$SCRIPT_DIR"/lib/pacman.sh
 
 ### constants & variables
 REPO_ROOT="/home/.repository"
