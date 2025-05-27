@@ -369,6 +369,7 @@
         "rustc",
         "RUSTFLAGS",
         "rustlib",
+        "samplefs",
         "sasl",
         "Sddy",
         "seccomp",
