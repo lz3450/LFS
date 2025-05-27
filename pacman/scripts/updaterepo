@@ -25,9 +25,9 @@ REPO_ROOT="/home/.repository"
 PACKAGE_DIR="$HOME/makepkg/packages"
 ARCHIVE_DIR="$HOME/makepkg/archive"
 
-declare -i replace=0
-declare -i clear=0
-repo=""
+arg_repo=""
+declare -i opt_replace=0
+declare -i opt_clear=0
 
 ### functions
 update() {
@@ -49,11 +49,11 @@ usage() {
 updaterepo
 
 Usage: $SCRIPT_NAME -h | --help
-Usage: $SCRIPT_NAME -R | --replace -r | --repo <kzl|ubuntu22|ubuntu24>
-Usage: $SCRIPT_NAME -c | --clear -r | --repo <kzl|ubuntu22|ubuntu24>
+Usage: $SCRIPT_NAME -R | --replace -r | --repo <kzl|jammy|noble>
+Usage: $SCRIPT_NAME -c | --clear -r | --repo <kzl|jammy|noble>
 
     -h, --help      display this help message and exit
-    -r, --repo      build repo (kzl, ubuntu22, ubuntu24)
+    -r, --repo      build repo (kzl, jammy, noble)
     -R, --replace   replace the existing repository file with an empty one
     -c, --clear     remove the repository
 
@@ -70,13 +70,13 @@ while (( $# > 0 )); do
             ;;
         -r|--repo)
             shift
-            repo="$1"
+            arg_repo="$1"
             ;;
         -R|--replace)
-            replace=1
+            opt_replace=1
             ;;
         -c|--clear)
-            clear=1
+            opt_clear=1
             ;;
         *)
             error "Unknown option \"$1\"" 127
@@ -85,35 +85,24 @@ while (( $# > 0 )); do
     shift
 done
 
-case "$repo" in
-    kzl)
-        readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$repo/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
-        ;;
-    ubuntu22)
-        readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/22.04/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
-        repo="ubuntu"
-        ;;
-    ubuntu24)
-        readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/24.04/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
-        repo="ubuntu"
-        ;;
-    # unknown repo
-    *)
-        error "Unknown repo \"$repo\"." 127
-        ;;
-esac
-repo_dir="$REPO_ROOT/$repo"
-repo_path="$repo_dir/$repo.db.$EXTENSION"
+if [[ -d "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$arg_repo/" ]]; then
+    readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$arg_repo/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
+else
+    error "Unknown repo \"$arg_repo\"." 127
+fi
+
+repo_dir="$REPO_ROOT/$arg_repo"
+repo_path="$repo_dir/$arg_repo.db.$EXTENSION"
 
 ### clear
-if (( $clear > 0 )); then
+if (( $opt_clear > 0 )); then
     while true; do
-        read -p "Do you want to clear the repository \"$repo\"? " yn
+        read -p "Do you want to clear the repository \"$arg_repo\"? " yn
         case "$yn" in
             [Yy]*)
                 sudo rm -vrf -- "$repo_dir"
                 # sudo find "$repo_dir" -type f -delete
-                info "Repository \"$repo\" has been removed"
+                info "Repository \"$arg_repo\" has been removed"
                 exit 0
                 ;;
             [Nn]*)
@@ -134,14 +123,14 @@ if [[ ! -d "$PACKAGE_DIR" ]]; then
     mkdir -p -- "$PACKAGE_DIR"
 fi
 
-if (( $replace > 0 )); then
+if (( $opt_replace > 0 )); then
     sudo find "$repo_dir" -name "*.pkg.$EXTENSION" -exec mv -v -t "$PACKAGE_DIR" -- {} +
     sudo chown -R -- "$(stat -c '%U:%G' "$PACKAGE_DIR")" "$PACKAGE_DIR"
     sudo find "$repo_dir" -mindepth 1 -delete
 fi
 
 if [[ ! -f "$repo_path" ]]; then
-    info "Creating empty repo: $repo.db.$EXTENSION..."
+    info "Creating empty repo: $arg_repo.db.$EXTENSION..."
     sudo repo-add "$repo_path"
     info "Done"
 fi
@@ -150,20 +139,9 @@ fi
 
 for pkgbase in "${pkgs[@]}"; do
     info "Updating $pkgbase..."
-    update "$pkgbase"
-    case "$pkgbase" in
-        lvm2)
-            update device-mapper
-            ;;
-        linux)
-            update linux-headers
-            ;;
-        lapack)
-            update blas
-            update cblas
-            update lapacke
-            ;;
-    esac
+    for pkgname in $(get_pkgnames "$pkgbase"); do
+        update "$pkgname"
+    done
 done
 
 if [[ -z $(find "$PACKAGE_DIR" -empty) ]]; then
