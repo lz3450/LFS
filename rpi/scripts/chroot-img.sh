@@ -10,7 +10,7 @@ mountpoint="$(mktemp -d)"
 file_name=""
 declare -i is_device=0
 loop=""
-chroot_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+chroot_path="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
 
 # Show an INFO message
 # $1: message string
