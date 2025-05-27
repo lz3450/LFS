@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 # kzl-chroot.sh
 #
@@ -11,14 +11,14 @@ set -o pipefail
 umask 0022
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_PATH="$0"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
 
 ### libraries
-. lib/log.sh
-. lib/chroot.sh
+. "$SCRIPT_PATH"/lib/log.sh
+. "$SCRIPT_PATH"/lib/chroot.sh
 
 ### constants & variables
 rootfs_dir="$1"

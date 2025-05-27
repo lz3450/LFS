@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 # template.sh
 #
@@ -22,10 +22,10 @@ BASH_LIB_DIR=${BASH_LIB_DIR:-"$LFS/bash/lib"}
 ################################################################################
 
 ### libraries
-. "$BASH_LIB_DIR"/log.sh
-. "$BASH_LIB_DIR"/utils.sh
-# . "$BASH_LIB_DIR"/loop.sh
-# . "$BASH_LIB_DIR"/chroot.sh
+. "$SCRIPT_PATH"/lib/log.sh
+. "$SCRIPT_PATH"/lib/utils.sh
+# . "$SCRIPT_PATH"/lib/loop.sh
+# . "$SCRIPT_PATH"/lib/chroot.sh
 
 ### checks
 # if [[ $EUID -ne 0 ]]; then
