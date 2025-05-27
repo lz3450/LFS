@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# install.sh
+# os-install.sh
 #
 
 set -e
@@ -97,7 +97,7 @@ EOF
 
 # pacman
 if [[ -f "/opt/bin/pacman" ]]; then
-    mkdir -p "$mountpoint/var/lib/pacman/"
+    install -d -m 0755 "$mountpoint/var/lib/pacman/"
     pacman -Sy -r "$mountpoint" --noconfirm --cachedir /home/.repository/ubuntu pacman linux
 fi
 

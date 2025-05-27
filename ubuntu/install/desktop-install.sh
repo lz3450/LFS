@@ -42,7 +42,7 @@ esac
 # install packages
 apt-get update
 apt-get upgrade -y
-apt-get install -s "${deb_pkgs[@]}" | grep "^Inst" | awk '{print $2}' | sort -n > desktop-to-install-pkgs-$UBUNTU_CODENAME.txt
+apt-get install -s "${deb_pkgs[@]}" | grep "^Inst" | awk '{print $2}' | sort -n > log/desktop-to-install-pkgs-$UBUNTU_CODENAME.txt
 apt-get install -y "${deb_pkgs[@]}"
 apt-get purge -y \
   apport* \
@@ -53,5 +53,5 @@ apt-get purge -y \
   whoopsie
 apt-get autoremove --purge -y
 
-dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > desktop-installed-pkgs-$UBUNTU_CODENAME.txt
-apt-mark showmanual > desktop-manual-installed-pkgs-$UBUNTU_CODENAME.txt
+dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > log/desktop-installed-pkgs-$UBUNTU_CODENAME.txt
+apt-mark showmanual > log/desktop-manual-installed-pkgs-$UBUNTU_CODENAME.txt

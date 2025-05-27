@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# initialize.sh
+# os-config.sh
 #
 
 set -e
