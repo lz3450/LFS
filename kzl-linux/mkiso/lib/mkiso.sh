@@ -45,13 +45,13 @@ if [[ -z "$mutable_image_type" ]]; then
 fi
 
 ### libraries
-source "$BASH_LIB_DIR"/log.sh
-source "$BASH_LIB_DIR"/utils.sh
-source "$BASH_LIB_DIR"/chroot.sh
-source "$BASH_LIB_DIR"/pacman.sh
+. log.sh
+. utils.sh
+. chroot.sh
+. pacman.sh
 
 ### constants & variables
-WORK_DIR="/tmp/$DISTRO-mkiso"
+WORK_DIR="/tmp/mkiso-$DISTRO"
 ROOTFS_DIR="$WORK_DIR"/rootfs
 ISOFS_DIR="$WORK_DIR"/iso
 INSTALL_DIR="LiveOS"
