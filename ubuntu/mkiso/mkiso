@@ -138,6 +138,7 @@ debootstrap_rootfs() {
     chroot_run "$ROOTFS_DIR" apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get autoremove --purge -y > "$LOG_DIR"/apt.log 2>&1 || error "Failed to run apt" 6
     chroot_run "$ROOTFS_DIR" ldconfig
     chroot_teardown
+    echo 'PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"' > /etc/environment
     info "Done (Configuring rootfs)"
 }
 
