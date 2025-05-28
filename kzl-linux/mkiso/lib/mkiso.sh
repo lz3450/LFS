@@ -1,6 +1,5 @@
-#!/usr/bin/bash
 #
-# libmkiso.sh
+# mkiso.sh
 #
 
 ################################################################################
@@ -15,10 +14,6 @@ declare -i __LIBMKISO__=1
 
 ### checks
 check_root
-
-if [[ -z "$BASH_LIB_DIR" ]]; then
-    error "BASH_LIB_DIR unbound" 2
-fi
 
 if [[ -z "$DISTRO" ]]; then
     error "DISTRO unbound" 2
@@ -45,10 +40,10 @@ if [[ -z "$mutable_image_type" ]]; then
 fi
 
 ### libraries
-. log.sh
-. utils.sh
-. chroot.sh
-. pacman.sh
+. "$(dirname ${BASH_SOURCE[0]})"/log.sh
+. "$(dirname ${BASH_SOURCE[0]})"/utils.sh
+. "$(dirname ${BASH_SOURCE[0]})"/chroot.sh
+. "$(dirname ${BASH_SOURCE[0]})"/pacman.sh
 
 ### constants & variables
 WORK_DIR="/tmp/mkiso-$DISTRO"
