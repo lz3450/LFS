@@ -63,7 +63,7 @@ common_deb_pkgs=(
     git
     ### kernel
     linux-image-generic
-    dracut
+    # dracut
     initramfs-tools
     ### pacman
     libarchive-tools
