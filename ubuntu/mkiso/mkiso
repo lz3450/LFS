@@ -80,18 +80,6 @@ pacman_pkgs=(
 )
 
 ### functions
-usage() {
-    cat <<EOF
-    Usage: $SCRIPT_NAME -h | --help
-    Usage: $SCRIPT_NAME [ -n | --no-update-rootfs ] -s | --suite <suite>
-
-    -h, --help                      display this help message and exit
-    -n, --no-update-rootfs          do not update rootfs
-    -s, --suite <suite>             debootstrap suite (jammy, noble)
-
-EOF
-}
-
 debootstrap_rootfs() {
     local -a _pkg_list=("$@")
     local -a _pkg_exclude=(
@@ -123,7 +111,7 @@ debootstrap_rootfs() {
         "$debootstrap_suite" \
         "$ROOTFS_DIR" \
         "$UBUNTU_MIRROR" \
-        > "$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap rootfs" 4
+        2>&1 | tee "$LOG_DIR"/debootstrap.log || error "Failed to debootstrap rootfs" 4
     if [[ "$debootstrap_suite" == "noble" ]]; then
         rmdir -v "$ROOTFS_DIR"/bin.usr-is-merged
         rmdir -v "$ROOTFS_DIR"/sbin.usr-is-merged
@@ -224,6 +212,18 @@ clean() {
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
 trap clean EXIT SIGINT SIGTERM SIGKILL
+
+usage() {
+    cat <<EOF
+    Usage: $SCRIPT_NAME -h | --help
+    Usage: $SCRIPT_NAME [ -n | --no-update-rootfs ] -s | --suite <suite>
+
+    -h, --help                      display this help message and exit
+    -n, --no-update-rootfs          do not update rootfs
+    -s, --suite <suite>             debootstrap suite (jammy, noble)
+
+EOF
+}
 
 ########################################################################################################################
 
