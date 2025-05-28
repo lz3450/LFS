@@ -23,7 +23,7 @@ common_deb_pkgs=(
     git
     ### kernel
     linux-image-generic
-    dracut
+    # dracut
     initramfs-tools
     ### pacman
     libarchive-tools
@@ -36,6 +36,7 @@ noble_deb_pkgs=(
     systemd-resolved
 )
 questing_deb_pkgs=(
+    systemd-boot-efi
     systemd-boot
     systemd-resolved
 )
