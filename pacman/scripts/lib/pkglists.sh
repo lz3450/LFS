@@ -383,3 +383,28 @@ kzl_stage3_pkgs=(
     aria2
     # libtorrent-rasterbar qbittorrent
 )
+
+jammy_stage1_pkgs=(
+    pacman
+    llvm-project
+    python
+    ksmbd-tools
+    texlive
+    debootstrap
+    dracut
+    erofs-utils
+    kexec-tools
+)
+
+jammy_stage2_pkgs=(
+    llvm-project
+    rust
+)
+
+noble_stage1_pkgs=(
+    pacman
+    debootstrap
+    dracut
+    erofs-utils
+    kexec-tools
+)

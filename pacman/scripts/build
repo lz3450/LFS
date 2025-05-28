@@ -285,13 +285,23 @@ else
                     ;;
             esac
             ;;
-        jammy|noble)
+        jammy)
             case "$opt_stage" in
                 1)
-                    pkgs=("${ubuntu_stage1_pkgs[@]}")
+                    pkgs=("${jammy_stage1_pkgs[@]}")
                     ;;
                 2)
-                    pkgs=("${ubuntu_stage2_pkgs[@]}")
+                    pkgs=("${jammy_stage2_pkgs[@]}")
+                    ;;
+                *)
+                    error "Unknown stage \"$opt_stage\"" 4
+                    ;;
+            esac
+            ;;
+        noble)
+            case "$opt_stage" in
+                1)
+                    pkgs=("${noble_stage1_pkgs[@]}")
                     ;;
                 *)
                     error "Unknown stage \"$opt_stage\"" 4
