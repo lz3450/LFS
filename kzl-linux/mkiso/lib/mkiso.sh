@@ -138,7 +138,7 @@ pacstrap_rootfs() {
         --disable-sandbox \
         --noconfirm \
         "${_pkg_list[@]}" \
-        >> "$LOG_DIR"/pacman.log 2>&1 || error "Failed to install pacman packages" 5
+        2>&1 | tee "$LOG_DIR"/pacman.log || error "Failed to install pacman packages" 5
     chroot_teardown || error "Failed to install pacman packages" 5
     info "Done (Pacstrapping)"
 
