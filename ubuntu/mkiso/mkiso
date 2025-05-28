@@ -42,26 +42,26 @@ debootstrap_suite=""
 
 # deb package lists
 common_deb_pkgs=(
-    # general
+    ### general
     nano
     bash-completion
     zsh
-    # disk
+    ### disk
     parted fdisk
     smartmontools
-    # filesystem
+    ### filesystem
     dosfstools
     e2fsprogs
     xfsprogs
     f2fs-tools
     btrfs-progs
-    bcachefs-tools
-    # network
+    # bcachefs-tools
+    ### network
     wpasupplicant
     wget curl
     openssh-server
     git
-    # kernel
+    ### kernel
     linux-image-generic
     ### pacman
     libarchive-tools
