@@ -52,21 +52,24 @@ if (($# != 1)); then
     exit 1
 fi
 
-case "$1" in
-    noble)      debootstrap_suite="noble" ;;
-    jammy)      debootstrap_suite="jammy" ;;
-    plucky)     debootstrap_suite="plucky" ;;
-    *)          echo "Unknown suite \"$1\"" && exit 1
+debootstrap_suite="$1"
+case "$debootstrap_suite" in
+    jammy)
+        deb_pkgs=("${common_deb_pkgs[@]}")
+        ;;
+    noble)
+        deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
+        ;;
+    plucky)
+        deb_pkgs=("${common_deb_pkgs[@]}" "${plucky_deb_pkgs[@]}")
+        ;;
+    *)
+        echo "Unknown suite \"$debootstrap_suite\""
+        exit 1
+        ;;
 esac
 
 # debootstrap
-if [[ "$debootstrap_suite" == "jammy" ]]; then
-    deb_pkgs=("${common_deb_pkgs[@]}")
-elif [[ "$debootstrap_suite" == "noble" ]]; then
-    deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
-elif [[ "$debootstrap_suite" == "plucky" ]]; then
-    deb_pkgs=("${common_deb_pkgs[@]}" "${plucky_deb_pkgs[@]}")
-fi
 debootstrap \
     --arch="amd64" \
     --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
