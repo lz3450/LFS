@@ -26,8 +26,8 @@ VERSION="1.0"
 
 LOG_DIR="$HOME"/makepkg/log
 
-opt_repo=""
-opt_single_package=""
+arg_repo=""
+arg_single_package=""
 declare -i opt_stage
 declare -i opt_updatepkg=1
 declare -i opt_updated_only=0
@@ -46,7 +46,7 @@ prepare() {
     info "Done"
 
     info "Updating pacman database..."
-    updaterepo -r "$opt_repo" 2>&1 | tee -a "$_log"
+    updaterepo -r "$arg_repo" 2>&1 | tee -a "$_log"
     info "Done"
 
     info "Synchronizing package databases..."
@@ -70,7 +70,7 @@ _get_pkgbuilds_dir() {
 }
 
 _install_dependencies() {
-    if [[ "$opt_repo" == "kzl" ]]; then
+    if [[ "$arg_repo" == "kzl" ]]; then
         return
     fi
     if [[ -f "install-dependencies.sh" ]]; then
@@ -101,9 +101,9 @@ build() {
 
     cd $(_get_pkgbuilds_dir "$_pkgbase")
 
-    # run install-dependencies.sh for "ubuntu" repo
-    if [[ "$opt_repo" != "kzl" && -f "install-dependencies.sh" ]]; then
-        info "Installing dependencies..."
+    # run install-dependencies.sh if exists
+    if [[ -f "install-dependencies.sh" ]]; then
+        info "Running install-dependencies.sh..."
         ./install-dependencies.sh >> "$_log" 2>&1
         info "Done"
     fi
@@ -161,7 +161,7 @@ build() {
     info "Done"
 
     info "Updating repo..."
-    updaterepo -r "$opt_repo" >> "$_log" 2>&1
+    updaterepo -r "$arg_repo" >> "$_log" 2>&1
     sudo pacman -Sy 2>&1 | tee -a "$_log"
     info "Done"
 
@@ -186,7 +186,7 @@ Usage: $SCRIPT_NAME [ -n | -u ] [ --no-check ] [ --no-clean ] -r <repo> -s <stag
 
     -V, --version               display version information and exit
     -h, --help                  display this help message and exit
-    -r, --repo                  target repository (kzl, ubuntu22, ubuntu24, ...)
+    -r, --repo                  target repository (kzl, jammy, noble, ...)
     -s, --stage                 target stage (0, 1(default), 2, 3; some repo are not using this)
     -p, --package               build single package
     -n, --no-updatepkg          do not update the PKGBUILD before building
@@ -208,7 +208,7 @@ while (( $# > 0 )); do
         ;;
     -r|--repo)
         shift
-        opt_repo="$1"
+        arg_repo="$1"
         ;;
     -s|--stage)
         shift
@@ -216,7 +216,7 @@ while (( $# > 0 )); do
         ;;
     -p|--package)
         shift
-        opt_single_package="$1"
+        arg_single_package="$1"
         ;;
     -n|--no-updatepkg)
         opt_updatepkg=0
@@ -241,7 +241,7 @@ while (( $# > 0 )); do
     shift
 done
 
-case "$opt_repo" in
+case "$arg_repo" in
     kzl)
         ;;
     jammy)
@@ -249,26 +249,26 @@ case "$opt_repo" in
     noble)
         ;;
     *)
-        error "Unknown repo name \"$opt_repo\"" 3
+        error "Unknown repo name \"$arg_repo\"" 3
         ;;
 esac
-repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/$opt_repo")
+repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/$arg_repo")
 
 if (( $opt_updatepkg == 0 )) && (( $opt_updated_only == 1 )); then
     error "Cannot use --updated-only together with --no-updatepkg" 6
 fi
 
-if [[ -n "$opt_single_package" ]]; then
+if [[ -n "$arg_single_package" ]]; then
     if [[ -n "$opt_stage" ]]; then
         error "Cannot use -s | --stage together with -p | --package" 2
     fi
 else
     stage=${stage:-1}
-    case "$opt_repo" in
+    case "$arg_repo" in
         kzl)
             case "$opt_stage" in
                 0)
-                    # updaterepo --clear -r "$opt_repo"
+                    # updaterepo --clear -r "$arg_repo"
                     pkgs=("${kzl_stage0_pkgs[@]}")
                     ;;
                 1)
@@ -299,7 +299,7 @@ else
             esac
             ;;
         *)
-            error "Unknown repo name \"$opt_repo\"" 3
+            error "Unknown repo name \"$arg_repo\"" 3
             ;;
     esac
 fi
@@ -309,14 +309,14 @@ fi
 prologue
 
 prepare
-if [[ -n "$opt_single_package" ]]; then
+if [[ -n "$arg_single_package" ]]; then
     # Build a single package
-    log_magenta "Building $opt_single_package ($(date +%H:%M:%S))..."
+    log_magenta "Building $arg_single_package ($(date +%H:%M:%S))..."
     __pkg_start_time__=$(date +%s)
-    build "$opt_single_package"
+    build "$arg_single_package"
     __pkg_end_time__=$(date +%s)
     __pkg_total_time__=$(($__pkg_end_time__ - $__pkg_start_time__))
-    log_cyan "Finished $opt_single_package: $(date -d "@$__pkg_total_time__" +%H:%M:%S) ($(date +%H:%M:%S))"
+    log_cyan "Finished $arg_single_package: $(date -d "@$__pkg_total_time__" +%H:%M:%S) ($(date +%H:%M:%S))"
 else
     log_blue "Building stage $opt_stage ($(date +%H:%M:%S))..."
     for p in ${pkgs[@]}; do
