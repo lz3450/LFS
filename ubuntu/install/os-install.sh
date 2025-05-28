@@ -23,6 +23,8 @@ common_deb_pkgs=(
     git
     ### kernel
     linux-image-generic
+    dracut
+    initramfs-tools
     ### pacman
     libarchive-tools
     zstd
@@ -33,7 +35,7 @@ noble_deb_pkgs=(
     systemd-boot
     systemd-resolved
 )
-plucky_deb_pkgs=(
+questing_deb_pkgs=(
     systemd-boot
     systemd-resolved
 )
@@ -58,8 +60,8 @@ case "$debootstrap_suite" in
     noble)
         deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
         ;;
-    plucky)
-        deb_pkgs=("${common_deb_pkgs[@]}" "${plucky_deb_pkgs[@]}")
+    questing)
+        deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}")
         ;;
     *)
         echo "Unknown suite \"$debootstrap_suite\""
