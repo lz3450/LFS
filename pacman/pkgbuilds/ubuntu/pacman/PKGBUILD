@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g67
-pkgrel=2
+pkgrel=8
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -28,7 +28,7 @@ MAKEPKG_CPPFLAGS="-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS"
 # MAKEPKG_CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"
 # MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security"
 MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
-MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"
+MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now"
 RPATH_FLAGS="-Wl,-rpath=/$PREFIX/lib"
 
 pkgver() {
@@ -43,7 +43,7 @@ prepare() {
   sed -i \
       -e '/^CHOST=/a\\n\PREFIX="opt"' \
       -e '/^#NPROC=/c\NPROC="$(nproc)"' \
-      -e "/^#CPPFLAGS=/c\CPPFLAGS=\"$MAKEPKG_CPPFLAGS\"" \
+      -e "/^#CPPFLAGS=/c\CPPFLAGS=\"\"" \
       -e "/^#CFLAGS=/c\CFLAGS=\"$MAKEPKG_CFLAGS\"" \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
       -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS $RPATH_FLAGS\"" \

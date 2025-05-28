@@ -100,7 +100,7 @@ Message: pacman 7.0.0
       Use OpenSSL              : true
       Use nettle               : false
     
-Build targets in project: 112
+Build targets in project: 113
 
 pacman 7.0.0
 
