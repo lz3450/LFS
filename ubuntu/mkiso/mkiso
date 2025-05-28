@@ -63,6 +63,8 @@ common_deb_pkgs=(
     git
     ### kernel
     linux-image-generic
+    dracut
+    initramfs-tools
     ### pacman
     libarchive-tools
     zstd
@@ -72,7 +74,8 @@ noble_deb_pkgs=(
     systemd-boot
     systemd-resolved
 )
-plucky_deb_pkgs=(
+questing_deb_pkgs=(
+    systemd-boot-efi
     systemd-boot
     systemd-resolved
 )
@@ -126,6 +129,7 @@ debootstrap_rootfs() {
     install -d -m 1777 -- "$ROOTFS_DIR"/tmp
     chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
     chroot_run "$ROOTFS_DIR" systemctl enable systemd-networkd.service > "$LOG_DIR"/systemd-networkd.log 2>&1 || error "Failed to enable systemd-networkd" 6
+    chroot_run "$ROOTFS_DIR" apt modernize-sources -y
     chroot_run "$ROOTFS_DIR" apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get autoremove --purge -y > "$LOG_DIR"/apt.log 2>&1 || error "Failed to run apt" 6
     chroot_run "$ROOTFS_DIR" ldconfig
     chroot_teardown
@@ -259,8 +263,8 @@ case "$debootstrap_suite" in
     noble)
         deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
         ;;
-    plucky)
-        deb_pkgs=("${common_deb_pkgs[@]}" "${plucky_deb_pkgs[@]}")
+    questing)
+        deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}")
         ;;
     *)
         error "Unknown debootstrap suite: $debootstrap_suite" 127
