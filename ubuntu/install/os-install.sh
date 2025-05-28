@@ -8,28 +8,26 @@ set -e
 mountpoint="/mnt"
 debootstrap_suite="noble"
 common_deb_pkgs=(
+    ### general
     sudo
     nano
+    bash-completion
+    zsh zsh-syntax-highlighting zsh-autosuggestions
+    build-essential
+    ### disk
     parted fdisk
-    dosfstools
-    e2fsprogs
-    xfsprogs
-    bcachefs-tools
-    f2fs-tools
+    ### network
     wpasupplicant
     wget curl
     openssh-server
     git
-    bash-completion
-    zsh zsh-syntax-highlighting zsh-autosuggestions
+    ### kernel
     linux-image-generic
-    initramfs-tools
-    zstd
-    build-essential
     ### pacman
-    fakeroot
     libarchive-tools
+    zstd
     libgpgme-dev
+    fakeroot
 )
 noble_deb_pkgs=(
     systemd-boot
