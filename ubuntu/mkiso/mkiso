@@ -46,7 +46,6 @@ common_deb_pkgs=(
     nano
     bash-completion
     zsh
-    zstd
     # disk
     parted fdisk
     smartmontools
@@ -64,12 +63,16 @@ common_deb_pkgs=(
     git
     # kernel
     linux-image-generic
-    initramfs-tools
     ### pacman
     libarchive-tools
+    zstd
     libgpgme-dev
 )
 noble_deb_pkgs=(
+    systemd-boot
+    systemd-resolved
+)
+plucky_deb_pkgs=(
     systemd-boot
     systemd-resolved
 )
@@ -249,13 +252,20 @@ while (( $# > 0 )); do
 done
 
 declare -a deb_pkgs
-if [[ "$debootstrap_suite" == "jammy" ]]; then
-    deb_pkgs=("${common_deb_pkgs[@]}")
-elif [[ "$debootstrap_suite" == "noble" ]]; then
-    deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
-else
-    error "Unknown debootstrap suite: $debootstrap_suite" 127
-fi
+case "$debootstrap_suite" in
+    jammy)
+        deb_pkgs=("${common_deb_pkgs[@]}")
+        ;;
+    noble)
+        deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
+        ;;
+    plucky)
+        deb_pkgs=("${common_deb_pkgs[@]}" "${plucky_deb_pkgs[@]}")
+        ;;
+    *)
+        error "Unknown debootstrap suite: $debootstrap_suite" 127
+        ;;
+esac
 
 output_name="$ISO_NAME-$(date +%Y%m%d)-$debootstrap_suite"
 rootfs_archive_name="$output_name.tar.zst"
