@@ -9,7 +9,7 @@ auth        sufficient      pam_systemd_home.so
 auth        required        pam_faillock.so    authfail
 auth        required        pam_deny.so
 
-#    /etc/security/access.conf
+# /etc/security/access.conf
 account     required        pam_access.so
 account     required        pam_faillock.so
 account     sufficient      pam_systemd_home.so
