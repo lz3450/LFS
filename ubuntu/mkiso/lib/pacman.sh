@@ -1,0 +1,1 @@
+../../../pacman/scripts/lib/pacman.sh
