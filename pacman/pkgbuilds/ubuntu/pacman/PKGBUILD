@@ -1,16 +1,16 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g61
-pkgrel=6
+pkgver=7.0.0.g67
+pkgrel=2
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
 license=('KZL')
 backup=(
-  "$PREFIX/etc/makepkg.conf"
-  "$PREFIX/etc/makepkg.conf.d/rust.conf"
-  "$PREFIX/etc/pacman.conf"
+  "$PREFIX"/etc/makepkg.conf
+  "$PREFIX"/etc/makepkg.conf.d/rust.conf
+  "$PREFIX"/etc/pacman.conf
 )
 # _ref="v$pkgver"
 source=(
@@ -23,9 +23,12 @@ sha256sums=('SKIP')
 
 # Compare the output of `gcc -march=native -Q --help=target` in the host system and the build system
 # Order of options matters
+# MAKEPKG_CPPFLAGS="-D_FORTIFY_SOURCE=3"
+MAKEPKG_CPPFLAGS="-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS"
 # MAKEPKG_CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"
+# MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security"
 MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
-MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now"
+MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"
 RPATH_FLAGS="-Wl,-rpath=/$PREFIX/lib"
 
 pkgver() {
@@ -40,7 +43,7 @@ prepare() {
   sed -i \
       -e '/^CHOST=/a\\n\PREFIX="opt"' \
       -e '/^#NPROC=/c\NPROC="$(nproc)"' \
-      -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
+      -e "/^#CPPFLAGS=/c\CPPFLAGS=\"$MAKEPKG_CPPFLAGS\"" \
       -e "/^#CFLAGS=/c\CFLAGS=\"$MAKEPKG_CFLAGS\"" \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
       -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS $RPATH_FLAGS\"" \
@@ -67,7 +70,7 @@ prepare() {
 
   cat >> etc/pacman.conf.in << EOF
 
-[ubuntu]
+[$(grep -Po '(?<=^VERSION_CODENAME=).*' /etc/os-release | tr -d '"')]
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
 EOF
