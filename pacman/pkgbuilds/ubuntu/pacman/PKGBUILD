@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g67
-pkgrel=8
+pkgrel=9
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -68,9 +68,11 @@ prepare() {
       -e '/^#DEBUG_RUSTFLAGS=/s/#//' \
       etc/makepkg.conf.d/rust.conf.in
 
+  # local _repo=$(grep -Po '(?<=^VERSION_CODENAME=).*' /etc/os-release | tr -d '"')
+  local _repo="ubuntu"
   cat >> etc/pacman.conf.in << EOF
 
-[$(grep -Po '(?<=^VERSION_CODENAME=).*' /etc/os-release | tr -d '"')]
+[$_repo]
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
 EOF

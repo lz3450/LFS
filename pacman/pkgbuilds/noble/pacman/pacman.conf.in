@@ -78,6 +78,6 @@ ParallelDownloads = 5
 #SigLevel = Optional TrustAll
 #Server = file:///home/packages
 
-[noble]
+[ubuntu]
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/$repo
