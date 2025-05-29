@@ -166,7 +166,7 @@ echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$mountp
 cp os-config.sh "$mountpoint"/root
 
 # Assume that LFS located at "/home/LFS"
-BASH_LIB_DIR="../../bash/lib" ./kzl-chroot "$mountpoint" /bin/bash
+./lfs-chroot "$mountpoint" /bin/bash
 
 # boot
 mkdir -p "$mountpoint"/boot/efi/loader/entries
