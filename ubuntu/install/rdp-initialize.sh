@@ -32,8 +32,9 @@ grdctl rdp enable
 grdctl rdp disable-view-only
 
 ./../scripts/unlock_remote_desktop.sh
+read -r -s -p "Enter rdp username: " username
 read -r -s -p "Enter rdp password: " password
-grdctl rdp set-credentials kzl "$password"
+grdctl rdp set-credentials "$username" "$password"
 grdctl status --show-credentials
 
 echo "Successfully initialized RDP service"
