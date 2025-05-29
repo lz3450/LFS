@@ -165,7 +165,7 @@ setup_pacman_repo() {
     mkdir -p -- "$ROOTFS_DIR/$PACMAN_REPO_DIR"
     for pkg in "${_pkg_list[@]}"; do
         local _pkg_file=$(get_pkg_file "$pkg" "/$PACMAN_REPO_DIR")
-        cp -f -- "/$PACMAN_REPO_DIR/$_pkg_file" "$ROOTFS_DIR/$PACMAN_REPO_DIR"
+        cp -vf -- "/$PACMAN_REPO_DIR/$_pkg_file" "$ROOTFS_DIR/$PACMAN_REPO_DIR"
         repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_PATH" "$ROOTFS_DIR/$PACMAN_REPO_DIR/$_pkg_file" \
             > "$LOG_DIR"/pacman-repo-add.log 2>&1 \
             || error "Failed to set up pacman repository" 8
