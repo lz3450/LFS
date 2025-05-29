@@ -5,6 +5,9 @@
 
 set -e
 
+# ubuntu_mirror="http://us.archive.ubuntu.com/ubuntu/"
+ubuntu_mirror="https://mirror.arizona.edu/ubuntu/"
+
 mountpoint="/mnt"
 debootstrap_suite="noble"
 common_deb_pkgs=(
@@ -79,7 +82,7 @@ debootstrap \
     --merged-usr \
     "$debootstrap_suite" \
     "$mountpoint" \
-    http://us.archive.ubuntu.com/ubuntu
+    "$ubuntu_mirror"
 
 if [[ "$debootstrap_suite" == "noble" ]]; then
     rmdir -v "$mountpoint"/bin.usr-is-merged
