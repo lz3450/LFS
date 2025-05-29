@@ -217,4 +217,4 @@ EOF
 blkid >> "$mountpoint"/etc/fstab
 nano "$mountpoint"/etc/fstab
 
-echo "Ubuntu $debootstrap_suite installed successfully at $mountpoint"
+echo "Successfully installed Ubuntu $debootstrap_suite at $mountpoint"

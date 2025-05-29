@@ -1,6 +1,6 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
-# install-desktop.sh
+# desktop-install.sh
 #
 
 set -e
@@ -11,31 +11,73 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 common_deb_pkgs=(
-  fonts-ubuntu
+  # depends
+  fonts-dejavu-core
+  gnome-shell
+  gnome-shell-extension-appindicator
+  gnome-shell-extension-desktop-icons-ng
   gnome-shell-extension-ubuntu-dock
+  nautilus
+  ubuntu-session
+  ubuntu-settings
+  # recommends
+  fonts-noto-cjk
+  fonts-noto-color-emoji
+  fonts-ubuntu
+  fwupd
+  gnome-calculator
+  gnome-characters
+  gnome-disk-utility
+  gnome-font-viewer
+  gnome-logs
+  gnome-power-manager
+  gnome-remote-desktop
   gnome-system-monitor
   gnome-terminal
   gsettings-ubuntu-schemas
-  landscape-client
-  nautilus
-  tmux
-  ubuntu-session
-  ubuntu-settings
+  seahorse
   ubuntu-wallpapers
   yaru-theme-gnome-shell
   yaru-theme-gtk
   yaru-theme-icon
   yaru-theme-sound
+  # custom
+  landscape-client
+  tmux
+)
+jammy_deb_pkgs=(
+  # depends
+  fonts-freefont-ttf
+  # recommends
+  fonts-opensymbol
+  gedit
 )
 noble_deb_pkgs=(
+  # depends
   gnome-shell-extension-ubuntu-tiling-assistant
+  # recommends
+  baobab
+  fonts-noto-core
+  gnome-clocks
+  gnome-text-editor
+)
+questing_deb_pkgs=(
+  # depends
+  gnome-shell-extension-ubuntu-tiling-assistant
+  # recommends
+  baobab
+  fonts-noto-core
+  gnome-clocks
+  gnome-text-editor
+  papers
 )
 declare -a deb_pkgs
 
 . /etc/os-release
 case "$UBUNTU_CODENAME" in
-    jammy)      deb_pkgs=("${common_deb_pkgs[@]}") ;;
+    jammy)      deb_pkgs=("${common_deb_pkgs[@]}" "${jammy_deb_pkgs[@]}") ;;
     noble)      deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}") ;;
+    questing)   deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}") ;;
     *)          echo "Unknown suite \"$1\"" && exit 1
 esac
 
@@ -44,14 +86,9 @@ apt-get update
 apt-get upgrade -y
 apt-get install -s "${deb_pkgs[@]}" | grep "^Inst" | awk '{print $2}' | sort -n > log/desktop-to-install-pkgs-$UBUNTU_CODENAME.txt
 apt-get install -y "${deb_pkgs[@]}"
-apt-get purge -y \
-  apport* \
-  avahi* \
-  gnome-user-docs \
-  ubuntu-docs \
-  xserver-xorg* \
-  whoopsie
 apt-get autoremove --purge -y
 
 dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > log/desktop-installed-pkgs-$UBUNTU_CODENAME.txt
 apt-mark showmanual > log/desktop-manual-installed-pkgs-$UBUNTU_CODENAME.txt
+
+echo "Successfully installed desktop packages for Ubuntu $UBUNTU_CODENAME"

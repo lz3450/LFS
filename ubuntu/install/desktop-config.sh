@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# install-desktop.sh
+# desktop-config.sh
 #
 
 set -e
