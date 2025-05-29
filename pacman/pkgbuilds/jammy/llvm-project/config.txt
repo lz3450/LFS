@@ -205,14 +205,14 @@
 -- Looking for logf128
 -- Looking for logf128 - not found
 -- Targeting X86
--- LLD version: 20.1.4
+-- LLD version: 20.1.6
 -- Looking for sys/resource.h
 -- Looking for sys/resource.h - found
 -- Looking for dlfcn.h
 -- Looking for dlfcn.h - found
 -- Looking for dladdr
 -- Looking for dladdr - found
--- Clang version: 20.1.4
+-- Clang version: 20.1.6
 -- Looking for include file sys/inotify.h
 -- Looking for include file sys/inotify.h - found
 -- Performing Test HAVE_LINKER_FLAG_LONG_PLT

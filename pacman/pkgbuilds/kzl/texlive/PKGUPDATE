@@ -1,4 +1,4 @@
-new_version=$(git ls-remote --tags https://github.com/TeX-Live/texlive-source.git | grep -oP 'refs/tags/(build-)?svn\K\d+' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://github.com/TeX-Live/texlive-source.git | grep -oP 'refs/tags/(build-)?svn\K\d+(\.\d+)?' | sort -V | tail -n1)
 srcdir="$pkgname-source"
 build_system=autoconf
 

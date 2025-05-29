@@ -1,5 +1,5 @@
 The Meson build system
-Version: 1.7.0
+Version: 1.8.0
 Source dir: /home/kzl/makepkg/build/ksmbd-tools/src/ksmbd-tools
 Build dir: /home/kzl/makepkg/build/ksmbd-tools/src/ksmbd-tools/build
 Build type: native build

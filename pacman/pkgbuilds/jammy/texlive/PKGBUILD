@@ -1,8 +1,8 @@
 pkgname=texlive
-pkgver=74920
+pkgver=75246.2
 _texliveyear=2025
 _texmfver=20250308
-pkgrel=3
+pkgrel=2
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -22,9 +22,9 @@ source=(
   $pkgname.install
 )
 # noextract=(texlive-$_texmfver-texmf.tar.xz)
-sha256sums=('b4f0324a90adb20b4a2be25ebc360e768fb327c8dfc4bce729ec450f9fde7329'
+sha256sums=('1e9fea07932be25e47b56ed219cc2d7f4f591bb2655bb686a70781b3c566253f'
             'SKIP'
-            'a52c2ba6b7f88e0f159c139e911eacc5baf13de8d226d165e9665237f242217a'
+            '6969990f00e03a802f08806a055b817b8e0c80f967ab34ff9047fc1dc8fc0253'
             '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')
 
 build_date="$(date '+%Y/%m/%d %T %z') ($pkgrel)"
