@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 # updatepkg
 #
@@ -115,15 +115,14 @@ if (( $result == 1 )); then
         -e "/^pkgrel=/c\\pkgrel=1" \
         "$pkgbuild_path"
     pkgver=$new_version
-    info "Running updpkgsums..."
+    info "Running \`updpkgsums\`..."
     updpkgsums || error "\`updpkgsums\` error" 7
-    info "Done"
+    info "Done (Running \`updpkgsums\`)"
     # force cleanbuild
     cleanbuild='-C'
 elif (( $result == 0 )); then
     info "No update for PKGBUILD"
     if (( $increase > 0 )); then
-        info "Increase pkgrel..."
         new_pkgrel=$(($current_pkgrel + 1))
         sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" "$pkgbuild_path"
         info "New pkgrel is $new_pkgrel"
@@ -150,7 +149,7 @@ fi
 if have_function 'pre_update'; then
     info "Running pre_update()..."
     pre_update || error "\`pre_update\` error" 6
-    info "Done"
+    info "Done (Running pre_update())"
 fi
 
 # receive key id
@@ -164,7 +163,7 @@ fi
 
 info "Running \`makepkg -o\`..."
 makepkg "$cleanbuild" "$syncdeps" -o --noconfirm || error "\`makepkg -o\` error" 9
-info "Done"
+info "Done (Running \`makepkg -o\`)"
 
 # get build options
 info "Getting build options..."
@@ -209,14 +208,14 @@ if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_sys
 else
     info "Unknown build_system or it is not defined, skipping auto getting build options"
 fi
-info "Done"
+info "Done (Getting build options)"
 
 # run post_update
 cd "$PKGBUILDDIR"
 if have_function 'post_update'; then
     info "Running post_update()..."
     post_update || error "\`post_update\` error" 14
-    info "Done"
+    info "Done (Running post_update())"
 fi
 
 info "Update PKGBUILD finished successfully"

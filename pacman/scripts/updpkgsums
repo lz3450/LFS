@@ -52,36 +52,41 @@ fi
 
 info "Getting known hash algorithms..."
 sumtypes=$(IFS='|'; echo "${known_hash_algos[*]}")
-info "Done"
+info "Done (Getting known hash algorithms)"
 
 info "Running \`makepkg -g\`..."
-newsums=$(makepkg -g) || error "\`makepkg -p\` error" 4
-info "Done"
+newsums=$(makepkg -g)
+if (( $? )); then
+    error "\`makepkg -g\` failed" 4
+fi
+info "Done (Running \`makepkg -g\`)"
 
 if [[ -z $newsums ]]; then
-	error "PKGBUILD does not contain sources to update"
+    error "PKGBUILD does not contain sources to update" 5
 fi
 
 awk -v sumtypes="$sumtypes" -v newsums="$newsums" '
-	$0 ~"^[[:blank:]]*(" sumtypes ")sums(_[^=]+)?\\+?=", $0 ~ "\\)[[:blank:]]*(#.*)?$" {
-		if (!w) {
-			print newsums
-			w++
-		}
-		next
-	}
+    $0 ~ "^[[:blank:]]*(" sumtypes ")sums(_[^=]+)?\\+?=",
+	$0 ~ "^[^)]*\\)[[:blank:]]*(#.*)?$" {
+        if (!w) {
+            print newsums
+            w++
+        }
+        next
+    }
 
-	1
-	END { if (!w) print newsums }
-' "$PKGBUILD_FILE" > "$NEW_PKGBUILD_FILE" || error 'Failed to write new PKGBUILD' 5
+    1
+    END { if (!w) print newsums }
+' "$PKGBUILD_FILE" > "$NEW_PKGBUILD_FILE" || error 'Failed to write new PKGBUILD' 6
 trap 'rm -rf "$NEW_PKGBUILD_FILE"' EXIT
 
 if ! cat -- "$NEW_PKGBUILD_FILE" > "$PKGBUILD_FILE"; then
-	error "Failed to update %s. The file has not been modified." "$PKGBUILD_FILE"
+    error "Failed to update $PKGBUILD_FILE. The file has not been modified." 6
 fi
 
 ### error codes
 # 2: PKGBUILD does not exist
 # 3: schema.sh NOT found
 # 4: makepkg -g error
-# 5: Failed to write new PKGBUILD
+# 5: PKGBUILD does not contain sources to update
+# 6: Failed to write new PKGBUILD
