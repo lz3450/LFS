@@ -85,14 +85,25 @@ while (( $# > 0 )); do
     shift
 done
 
+case "$arg_repo" in
+    kzl)
+        repo_dir="$REPO_ROOT/$arg_repo"
+        repo_path="$repo_dir/$arg_repo.db.$EXTENSION"
+        ;;
+    jammy|noble)
+        repo_dir="$REPO_ROOT/ubuntu"
+        repo_path="$repo_dir/ubuntu.db.$EXTENSION"
+        ;;
+    *)
+        error "Unknown repo name \"$arg_repo\"" 127
+        ;;
+esac
+
 if [[ -d "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$arg_repo/" ]]; then
     readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$arg_repo/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
 else
-    error "Unknown repo \"$arg_repo\"." 127
+    error "Cannot find pkgbuilds directory for \"$arg_repo\"." 126
 fi
-
-repo_dir="$REPO_ROOT/$arg_repo"
-repo_path="$repo_dir/$arg_repo.db.$EXTENSION"
 
 ### clear
 if (( $opt_clear > 0 )); then
@@ -151,4 +162,5 @@ fi
 ### error codes
 # 2: Unknown repo
 # 3: Multiple packages with the same name are found
+# 126: Cannot find pkgbuilds directory
 # 127: Unknown option
