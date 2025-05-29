@@ -163,7 +163,7 @@ wget -O "$mountpoint"/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/z
 echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$mountpoint"/root/.zshrc
 echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$mountpoint"/root/.zshrc
 
-cp initialize.sh "$mountpoint"/root
+cp os-config.sh "$mountpoint"/root
 
 # Assume that LFS located at "/home/LFS"
 BASH_LIB_DIR="../../bash/lib" ./kzl-chroot "$mountpoint" /bin/bash
