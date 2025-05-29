@@ -102,6 +102,15 @@ deb http://security.ubuntu.com/ubuntu/ $debootstrap_suite-security main restrict
 deb-src http://security.ubuntu.com/ubuntu/ $debootstrap_suite-security main restricted universe
 EOF
 
+# modernized sources, for future use
+# tee "$mountpoint"/etc/apt/sources.list.d/ubuntu.sources << EOF
+# Types: deb deb-src
+# URIs: https://mirror.arizona.edu/ubuntu/
+# Suites: $debootstrap_suite
+# Components: main restricted universe
+# Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+# EOF
+
 # pacman
 if [[ -f "/opt/bin/pacman" ]]; then
     install -d -m 0755 "$mountpoint/var/lib/pacman/"
@@ -201,9 +210,11 @@ tee "$mountpoint"/etc/fstab << EOF
 # <device> <target> <type> <options> <dump> <pass>
 
 PARTUUID=           /               f2fs            defaults        0 1
-PARTUUID=           /boot/efi       vfat            defaults        0 2
+PARTUUID=           /boot/efi       vfat            umask=0077      0 2
 /swapfile           none            swap            defaults        0 0
 
 EOF
 blkid >> "$mountpoint"/etc/fstab
 nano "$mountpoint"/etc/fstab
+
+echo "Ubuntu $debootstrap_suite installed successfully at $mountpoint"
