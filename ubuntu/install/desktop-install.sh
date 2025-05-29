@@ -11,7 +11,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 common_deb_pkgs=(
-  # depends
+  ### depends
   fonts-dejavu-core
   gnome-shell
   gnome-shell-extension-appindicator
@@ -20,17 +20,17 @@ common_deb_pkgs=(
   nautilus
   ubuntu-session
   ubuntu-settings
-  # recommends
+  ### recommends
   fonts-noto-cjk
   fonts-noto-color-emoji
   fonts-ubuntu
   fwupd
   gnome-calculator
   gnome-characters
-  gnome-disk-utility
+  # gnome-disk-utility
   gnome-font-viewer
   gnome-logs
-  gnome-power-manager
+  # gnome-power-manager
   gnome-remote-desktop
   gnome-system-monitor
   gnome-terminal
@@ -41,14 +41,14 @@ common_deb_pkgs=(
   yaru-theme-gtk
   yaru-theme-icon
   yaru-theme-sound
-  # custom
+  ### custom
   landscape-client
   tmux
 )
 jammy_deb_pkgs=(
-  # depends
+  ### depends
   fonts-freefont-ttf
-  # recommends
+  ### recommends
   fonts-opensymbol
   gedit
 )
@@ -56,20 +56,20 @@ noble_deb_pkgs=(
   # depends
   gnome-shell-extension-ubuntu-tiling-assistant
   # recommends
-  baobab
+  # baobab
   fonts-noto-core
-  gnome-clocks
+  # gnome-clocks
   gnome-text-editor
 )
 questing_deb_pkgs=(
-  # depends
+  ### depends
   gnome-shell-extension-ubuntu-tiling-assistant
-  # recommends
-  baobab
+  ### recommends
+  # baobab
   fonts-noto-core
-  gnome-clocks
+  # gnome-clocks
   gnome-text-editor
-  papers
+  # papers
 )
 declare -a deb_pkgs
 
