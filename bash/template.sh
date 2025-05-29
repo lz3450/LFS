@@ -17,15 +17,14 @@ SCRIPT_NAME="$(basename "$0")"
 SCRIPT_PATH="$0"
 # SCRIPT_PATH="$(realpath "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-BASH_LIB_DIR=${BASH_LIB_DIR:-"$LFS/bash/lib"}
 
 ################################################################################
 
 ### libraries
-. "$SCRIPT_PATH"/lib/log.sh
-. "$SCRIPT_PATH"/lib/utils.sh
-# . "$SCRIPT_PATH"/lib/loop.sh
-# . "$SCRIPT_PATH"/lib/chroot.sh
+. "$SCRIPT_DIR"/lib/log.sh
+. "$SCRIPT_DIR"/lib/utils.sh
+# . "$SCRIPT_DIR"/lib/loop.sh
+# . "$SCRIPT_DIR"/lib/chroot.sh
 
 ### checks
 # if [[ $EUID -ne 0 ]]; then
