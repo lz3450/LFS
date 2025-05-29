@@ -37,6 +37,7 @@ mutable_image_type="f2fs"
 VERSION="1.0"
 
 UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
+# UBUNTU_MIRROR="https://mirror.arizona.edu/ubuntu/"
 
 debootstrap_suite=""
 
