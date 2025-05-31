@@ -90,7 +90,7 @@ case "$arg_repo" in
         repo_dir="$REPO_ROOT/$arg_repo"
         repo_path="$repo_dir/$arg_repo.db.$EXTENSION"
         ;;
-    jammy|noble)
+    jammy|noble|questing)
         repo_dir="$REPO_ROOT/ubuntu"
         repo_path="$repo_dir/ubuntu.db.$EXTENSION"
         ;;
