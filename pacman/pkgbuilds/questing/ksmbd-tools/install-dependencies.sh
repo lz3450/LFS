@@ -1,0 +1,1 @@
+../../ubuntu/ksmbd-tools/install-dependencies.sh

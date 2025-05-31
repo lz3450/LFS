@@ -2,7 +2,7 @@
 
 pkgname=ksmbd-tools
 pkgver=3.5.3.g2
-pkgrel=13
+pkgrel=14
 epoch=
 pkgdesc="A collection of userspace utilities for the ksmbd kernel server"
 arch=('x86_64')
