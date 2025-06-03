@@ -109,7 +109,7 @@ setup_rootfs() {
         sed -i '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^#//' "$ROOTFS_DIR"/etc/sudoers
         chroot_run "$ROOTFS_DIR" useradd -d "/$CHROOT_HOME_DIR" -G adm,wheel -U -s /bin/zsh kzl
         echo kzl:3450 | chroot_run "$ROOTFS_DIR" chpasswd
-        chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/kzl-linux/pacman && . ./setup.sh && updaterepo -r kzl"
+        chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/pacman && . ./setup.sh && updaterepo -r kzl"
         # chroot_run "$ROOTFS_DIR" pacman -Syu || :
         # chroot_run "$ROOTFS_DIR" pacman -Sy base-devel || :
         chroot_run "$ROOTFS_DIR" su - kzl -c "cd LFS/config && ./update-config.sh"
@@ -130,7 +130,7 @@ run_debug_shell() {
 
 run_build() {
     info "Running \`build\`..."
-    chroot_run "$ROOTFS_DIR" su - kzl -c "source /$CHROOT_HOME_DIR/LFS/kzl-linux/pacman/setup.sh && build ${build_args[*]}"
+    chroot_run "$ROOTFS_DIR" su - kzl -c "source /$CHROOT_HOME_DIR/LFS/pacman/setup.sh && build ${build_args[*]}"
     info "Done (Running \`build\`)"
 }
 
