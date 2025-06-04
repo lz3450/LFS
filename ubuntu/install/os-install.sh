@@ -5,8 +5,8 @@
 
 set -e
 
-# ubuntu_mirror="http://us.archive.ubuntu.com/ubuntu/"
-ubuntu_mirror="https://mirror.arizona.edu/ubuntu/"
+ubuntu_mirror="http://us.archive.ubuntu.com/ubuntu/"
+# ubuntu_mirror="https://mirror.arizona.edu/ubuntu/"
 
 mountpoint="/mnt"
 debootstrap_suite="noble"
@@ -91,15 +91,24 @@ if [[ "$debootstrap_suite" == "noble" ]]; then
 fi
 
 # sources.list
-tee "$mountpoint"/etc/apt/sources.list << EOF
-deb http://us.archive.ubuntu.com/ubuntu $debootstrap_suite main restricted universe
-deb-src http://us.archive.ubuntu.com/ubuntu $debootstrap_suite main restricted universe
+tee "$mountpoint"/etc/apt/sources.list.d/ubuntu.sources << EOF
+Types: deb deb-src
+URIs: $ubuntu_mirror
+Suites: $debootstrap_suite
+Components: main restricted universe
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
-deb http://us.archive.ubuntu.com/ubuntu/ $debootstrap_suite-updates main restricted universe
-deb-src http://us.archive.ubuntu.com/ubuntu/ $debootstrap_suite-updates main restricted universe
+Types: deb deb-src
+URIs: $ubuntu_mirror
+Suites: $debootstrap_suite-updates
+Components: main restricted universe
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
-deb http://security.ubuntu.com/ubuntu/ $debootstrap_suite-security main restricted universe
-deb-src http://security.ubuntu.com/ubuntu/ $debootstrap_suite-security main restricted universe
+Types: deb deb-src
+URIs: http://security.ubuntu.com/ubuntu/
+Suites: $debootstrap_suite-security
+Components: main restricted universe
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 EOF
 
 # modernized sources, for future use
