@@ -89,7 +89,7 @@ checking for otool... no
 checking for x86_64-pc-linux-gnu-readelf... no
 checking for readelf... readelf
 checking for -plugin option... checking for x86_64-pc-linux-gnu-ar... (cached) ar
---plugin /usr/libexec/gcc/x86_64-pc-linux-gnu/14.2.0/liblto_plugin.so
+--plugin /usr/libexec/gcc/x86_64-pc-linux-gnu/14.3.0/liblto_plugin.so
 checking for x86_64-pc-linux-gnu-cc... no
 checking for cc... cc
 checking for x86_64-pc-linux-gnu-c++... x86_64-pc-linux-gnu-c++
