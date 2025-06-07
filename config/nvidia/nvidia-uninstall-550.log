@@ -1,8 +1,8 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log'
-creation time: Wed May 28 19:25:59 2025
+creation time: Sat Jun  7 13:59:52 2025
 installer version: 550.135
 
-PATH: /home/kzl/.local/bin:/home/kzl/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
+PATH: /home/kzl/.local/bin:/home/kzl/.cargo/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin
 
 nvidia-installer command line:
     /usr/bin/nvidia-uninstall
@@ -13,7 +13,7 @@ nvidia-installer command line:
 Using built-in stream user interface
 -> Detected 16 CPUs online; setting concurrency level to 16.
 -> Scanning the initramfs with lsinitramfs...
--> Executing: /usr/bin/lsinitramfs   -l /boot/initrd.img-6.12.30-KZL
+-> Executing: /usr/bin/lsinitramfs   -l /boot/initrd.img-6.12.32-KZL
 -> If you plan to no longer use the NVIDIA driver, you should make sure that no X screens are configured to use the NVIDIA X driver in your X configuration file. If you used nvidia-xconfig to configure X, it may have created a backup of your original configuration. Would you like to run `nvidia-xconfig --restore-original-backup` to attempt restoration of the original X configuration file? (Answer: No)
 -> Parsing log file:
 -> done.
