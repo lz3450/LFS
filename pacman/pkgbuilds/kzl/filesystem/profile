@@ -1,0 +1,19 @@
+# /etc/profile
+
+if [ "${PS1:-}" ]; then
+  if [ "${BASH:-}" ] && [ "$BASH" != "/bin/sh" ]; then
+    if [ -f "/etc/bash.bashrc" ]; then
+      . /etc/bash.bashrc
+    fi
+  fi
+fi
+
+# Load profiles from /etc/profile.d
+if [ -d /etc/profile.d/ ]; then
+  for profile in /etc/profile.d/*.sh; do
+    if [ -r "$profile" ]; then
+      . "$profile"
+    fi
+  done
+  unset profile
+fi
