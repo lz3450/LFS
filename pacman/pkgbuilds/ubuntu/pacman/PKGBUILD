@@ -23,10 +23,8 @@ sha256sums=('SKIP')
 
 # Compare the output of `gcc -march=native -Q --help=target` in the host system and the build system
 # Order of options matters
-# MAKEPKG_CPPFLAGS="-D_FORTIFY_SOURCE=3"
-MAKEPKG_CPPFLAGS="-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS"
-# MAKEPKG_CFLAGS="-march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"
-# MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security"
+# MAKEPKG_CFLAGS="-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"
+# MAKEPKG_CFLAGS="-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security"
 MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
 MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now"
 RPATH_FLAGS="-Wl,-rpath=/$PREFIX/lib"
@@ -43,7 +41,7 @@ prepare() {
   sed -i \
       -e '/^CHOST=/a\\n\PREFIX="opt"' \
       -e '/^#NPROC=/c\NPROC="$(nproc)"' \
-      -e "/^#CPPFLAGS=/c\CPPFLAGS=\"\"" \
+      -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
       -e "/^#CFLAGS=/c\CFLAGS=\"$MAKEPKG_CFLAGS\"" \
       -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
       -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS $RPATH_FLAGS\"" \
@@ -95,9 +93,7 @@ build() {
     -D doxygen=disabled \
     -D file-seccomp=enabled \
     -D gpgme=enabled \
-    -D ldconfig=/usr/bin/ldconfig \
     -D pkg-ext='.pkg.tar.zst' \
-    -D scriptlet-shell=/usr/bin/bash \
     -D src-ext='.src.tar.zst' \
     -D use-git-version=false \
     build
