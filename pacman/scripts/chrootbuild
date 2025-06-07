@@ -125,12 +125,12 @@ setup_rootfs() {
 }
 
 run_debug_shell() {
-    chroot_run "$ROOTFS_DIR" /bin/zsh
+    chroot_run "$ROOTFS_DIR" su - kzl
 }
 
 run_build() {
     info "Running \`build\`..."
-    chroot_run "$ROOTFS_DIR" su - kzl -c "source /$CHROOT_HOME_DIR/LFS/pacman/setup.sh && build ${build_args[*]}"
+    chroot_run "$ROOTFS_DIR" su -c ". /$CHROOT_HOME_DIR/LFS/pacman/setup.sh && build ${build_args[*]}" - kzl
     info "Done (Running \`build\`)"
 }
 
