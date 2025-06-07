@@ -1,4 +1,4 @@
--- The C compiler identification is GNU 14.2.0
+-- The C compiler identification is GNU 14.3.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
@@ -161,8 +161,8 @@
 -- Performing Test HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC - Success
 -- Looking for futimens
 -- Looking for futimens - found
--- Configuring done (5.0s)
--- Generating done (0.1s)
+-- Configuring done (21.9s)
+-- Generating done (0.2s)
 -- Build files have been written to: /home/kzl/makepkg/build/xz/src/xz/tmp
 -- Cache values
 // Build liblzma as a shared library instead of static

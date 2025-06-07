@@ -1,7 +1,7 @@
--- The C compiler identification is GNU 14.2.0
+-- The C compiler identification is GNU 14.3.0
 -- The ASM compiler identification is GNU
 -- Found assembler: /usr/bin/cc
--- The CXX compiler identification is GNU 14.2.0
+-- The CXX compiler identification is GNU 14.3.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
@@ -65,8 +65,8 @@
 -- Looking for lzma_lzma_preset in /usr/lib/liblzma.so - found
 -- Found LibLZMA: /usr/lib/liblzma.so (found version "5.8.1")
 -- Found LibLZ4: /usr/include (found version "1.10.0")
--- Configuring done (2.2s)
--- Generating done (0.0s)
+-- Configuring done (8.9s)
+-- Generating done (0.1s)
 -- Build files have been written to: /home/kzl/makepkg/build/zstd/src/zstd/build/cmake/build
 -- Cache values
 // Path to a program.
@@ -112,7 +112,7 @@ CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the CXX compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -flto -ffat-lto-objects
+CMAKE_CXX_FLAGS:STRING=-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the CXX compiler during DEBUG builds.
 CMAKE_CXX_FLAGS_DEBUG:STRING=-g
@@ -136,7 +136,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3 -flto -ffat-lto-objects
+CMAKE_C_FLAGS:STRING=-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g

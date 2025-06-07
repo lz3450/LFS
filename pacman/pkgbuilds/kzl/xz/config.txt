@@ -1,4 +1,4 @@
--- The C compiler identification is GNU 14.2.0
+-- The C compiler identification is GNU 14.3.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
@@ -167,8 +167,8 @@ CMake Warning at CMakeLists.txt:394 (message):
 -- Performing Test HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC - Success
 -- Looking for futimens
 -- Looking for futimens - found
--- Configuring done (6.8s)
--- Generating done (0.1s)
+-- Configuring done (29.6s)
+-- Generating done (0.2s)
 CMake Warning:
   Manually-specified variables were not used by the project:
 
@@ -205,7 +205,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3 -flto -ffat-lto-objects
+CMAKE_C_FLAGS:STRING=-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g

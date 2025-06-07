@@ -44,10 +44,10 @@ checking whether C compiler accepts -fstrict-aliasing... yes
 checking whether C compiler accepts -ffast-math... yes
 checking for gcc architecture flag... 
 checking for x86 cpuid 0 output... d:756e6547:6c65746e:49656e69
-checking for x86 cpuid 1 output... 306c3:6100800:7ffafbff:bfebfbff
+checking for x86 cpuid 1 output... 306c3:4100800:7ffafbff:bfebfbff
 checking whether C compiler accepts -march=haswell... yes
 checking for gcc architecture flag... -march=haswell
-checking whether C compiler accepts -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3 -flto -ffat-lto-objects -O3 -fomit-frame-pointer -malign-double -fstrict-aliasing -ffast-math -march=haswell... yes
+checking whether C compiler accepts -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects -O3 -fomit-frame-pointer -malign-double -fstrict-aliasing -ffast-math -march=haswell... yes
 checking whether the compiler supports function __attribute__((__warn_unused_result__))... yes
 checking for __attribute__... yes
 checking for grep that handles long lines and -e... /usr/bin/grep
@@ -132,7 +132,7 @@ checking for python extension module directory (pyexecdir)... ${PYTHON_EXEC_PREF
 checking for cygpath... no
 checking for perl... perl
 checking for pdflatex... no
-checking for pod2html... pod2html
+checking for pod2html... no
 checking for diff... /usr/bin/diff
 checking for /usr/bin/diff context option... -u
 checking for stdint types... stdint.h (shortcircuit)

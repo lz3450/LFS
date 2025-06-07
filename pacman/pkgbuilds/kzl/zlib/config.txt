@@ -1,7 +1,7 @@
--- Using CMake version 4.0.1
+-- Using CMake version 4.0.2
 -- ZLIB_HEADER_VERSION: 1.3.1
 -- ZLIBNG_HEADER_VERSION: 2.2.3
--- The C compiler identification is GNU 14.2.0
+-- The C compiler identification is GNU 14.3.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
 -- Check for working C compiler: /usr/bin/cc - skipped
@@ -74,7 +74,7 @@
 -- Performing Test HAVE_VPCLMULQDQ_INTRIN
 -- Performing Test HAVE_VPCLMULQDQ_INTRIN - Success
 -- Architecture-specific source files: arch/x86/x86_features.c;arch/x86/chunkset_sse2.c;arch/x86/compare256_sse2.c;arch/x86/slide_hash_sse2.c;arch/x86/adler32_ssse3.c;arch/x86/chunkset_ssse3.c;arch/x86/adler32_sse42.c;arch/x86/crc32_pclmulqdq.c;arch/x86/slide_hash_avx2.c;arch/x86/chunkset_avx2.c;arch/x86/compare256_avx2.c;arch/x86/adler32_avx2.c;arch/x86/adler32_avx512.c;arch/x86/chunkset_avx512.c;arch/x86/adler32_avx512_vnni.c;arch/x86/crc32_vpclmulqdq.c
--- The CXX compiler identification is GNU 14.2.0
+-- The CXX compiler identification is GNU 14.3.0
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
 -- Check for working CXX compiler: /usr/bin/c++ - skipped
@@ -169,8 +169,8 @@ CMake Deprecation Warning at build/_deps/googletest-src/googletest/CMakeLists.tx
 
  * GTest
 
--- Configuring done (7.9s)
--- Generating done (0.0s)
+-- Configuring done (32.9s)
+-- Generating done (0.2s)
 -- Build files have been written to: /home/kzl/makepkg/build/zlib/src/zlib-ng/build
 -- Cache values
 // Builds the googlemock subproject
@@ -198,7 +198,7 @@ CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the CXX compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -flto -ffat-lto-objects
+CMAKE_CXX_FLAGS:STRING=-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the CXX compiler during DEBUG builds.
 CMAKE_CXX_FLAGS_DEBUG:STRING=-g
@@ -222,7 +222,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3 -flto -ffat-lto-objects
+CMAKE_C_FLAGS:STRING=-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
