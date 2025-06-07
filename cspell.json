@@ -145,6 +145,7 @@
         "hostnames",
         "hostonly",
         "hwdb",
+        "iconvconfig",
         "idlelib",
         "ieeetran",
         "imgsize",
