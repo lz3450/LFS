@@ -35,8 +35,8 @@ check_root
 ### constants & variables
 VERSION="1.0"
 
-declare -i verbose=0
-input=
+declare -i opt_verbose=0
+arg_input=""
 
 ### functions
 example_function() {
@@ -44,7 +44,7 @@ example_function() {
 
     sleep 1
 
-    echo "$input"
+    echo "$arg_input"
 }
 
 clean() {
@@ -86,10 +86,10 @@ EOF
 #         if [[ -z "$1" || "$1" =~ ^- ]]; then
 #             error "Missing value for input"
 #         fi
-#         input="$1"
+#         arg_input="$1"
 #         ;;
 #     -v | --verbose)
-#         shift; verbose=true
+#         shift; opt_verbose=1
 #         ;;
 #     *)
 #         usage
@@ -110,10 +110,12 @@ while (( $# > 0 )); do
         usage
         ;;
     -i | --input)
-        shift; input="$1"
+        shift
+        arg_input="$1"
         ;;
     -v | --verbose)
-        shift; verbose=true
+        shift
+        opt_verbose=1
         ;;
     *)
         usage
