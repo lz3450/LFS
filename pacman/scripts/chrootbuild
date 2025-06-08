@@ -37,6 +37,7 @@ HOST_DIRS=(
     "$PACMAN_REPO_DIR:$PACMAN_REPO_DIR"
     "$CHROOT_HOME_DIR/LFS:$CHROOT_HOME_DIR/LFS"
     "$CHROOT_HOME_DIR/makepkg/sources:$CHROOT_HOME_DIR/makepkg/sources"
+    "$CHROOT_HOME_DIR/chrootbuild/build:$CHROOT_HOME_DIR/makepkg/build"
     "$CHROOT_HOME_DIR/chrootbuild/log:$CHROOT_HOME_DIR/makepkg/log"
     "$CHROOT_HOME_DIR/chrootbuild/archive:$CHROOT_HOME_DIR/makepkg/archive"
     "$CHROOT_HOME_DIR/chrootbuild/makepkglogs:$CHROOT_HOME_DIR/makepkg/makepkglogs"
