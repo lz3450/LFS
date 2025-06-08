@@ -9,6 +9,9 @@ checking for a race-free mkdir -p... /usr/bin/mkdir -p
 checking for gawk... gawk
 checking whether make sets $(MAKE)... yes
 checking xargs -n works... yes
+checking whether UID '1000' is supported by ustar format... yes
+checking whether GID '1000' is supported by ustar format... yes
+checking how to create a ustar tar archive... gnutar
 checking whether ln -s works... yes
 checking for perl... /usr/bin/perl
 checking for tex... no
@@ -51,8 +54,8 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether the compiler supports GNU C... yes
 checking whether cc accepts -g... yes
-checking for cc option to enable C23 features... -std=gnu23
-checking whether cc -std=gnu23 understands -c and -o together... yes
+checking for cc option to enable C11 features... none needed
+checking whether cc understands -c and -o together... yes
 checking for aCC... no
 checking for CC... no
 checking for FCC... no
@@ -68,6 +71,7 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether the compiler supports GNU C++... yes
 checking whether c++ accepts -g... yes
+checking for c++ option to enable C++11 features... none needed
 checking for xlf95... no
 checking for f95... no
 checking for fort... no
@@ -115,10 +119,11 @@ checking for suffix of object files... o
 checking whether the compiler supports GNU Fortran 77... yes
 checking whether gfortran accepts -g... yes
 configure: will now look for GNU compilers
-configure: cc -std=gnu23 is already a GNU C compiler
+configure: cc is already a GNU C compiler
 configure: c++ is already a GNU C++ compiler
 configure: gfortran is already a GNU Fortran compiler
 configure: gfortran is already a GNU Fortran 77 compiler
+checking for ga68... no
 checking for gcj... no
 checking that generated files are newer than configure... done
 configure: creating ./config.status

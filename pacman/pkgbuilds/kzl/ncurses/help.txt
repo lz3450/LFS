@@ -114,6 +114,7 @@ Extensions:
   --enable-term-driver    enable terminal-driver
   --enable-const          compile with extra/non-standard const
   --enable-ext-colors     compile for 256-color support
+  --enable-rgb-color      compile for extended direct-color
   --enable-ext-mouse      compile for extended mouse-encoding
   --enable-ext-putwin     compile with extended putwin/screendump
   --enable-no-padding     compile with $NCURSES_NO_PADDING code

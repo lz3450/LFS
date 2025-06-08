@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g67
-pkgrel=6
+pkgrel=8
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -37,7 +37,7 @@ sha256sums=('SKIP')
 # Order of options matters
 # MAKEPKG_CFLAGS="-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"
 # MAKEPKG_CFLAGS="-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security"
-MAKEPKG_CFLAGS="-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
+MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3"
 MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"
 
 pkgver() {
@@ -54,7 +54,7 @@ prepare() {
       -e '/^#NPROC=/c\NPROC="$(nproc)"' \
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
       -e "/^#CFLAGS=/c\CFLAGS=\"$MAKEPKG_CFLAGS\"" \
-      -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
+      -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"' \
       -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS\"" \
       -e '/^#LTOFLAGS=/c\LTOFLAGS="-flto -ffat-lto-objects"' \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j $(nproc) -O"' \

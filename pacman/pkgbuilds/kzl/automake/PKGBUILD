@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=automake
-pkgver=1.17
-pkgrel=22
+pkgver=1.18
+pkgrel=2
 epoch=
 pkgdesc="A GNU tool for automatically creating Makefiles"
 arch=('any')
@@ -15,8 +15,8 @@ makedepends=(
 )
 # source=(git+https://git.savannah.gnu.org/git/automake.git#tag=v$pkgver)
 source=(https://ftp.gnu.org/gnu/automake/$pkgname-$pkgver.tar.xz{,.sig})
-validpgpkeys=('155D3FC500C834486D1EEA677FD9FCCB000BEEEE')
-sha256sums=('8920c1fc411e13b90bf704ef9db6f29d540e76d232cb3b2c9f4dc4cc599bd990'
+validpgpkeys=('17D3311B14BC0F248267BF020716748A30D155AD')
+sha256sums=('5bdccca96b007a7e344c24204b9b9ac12ecd17f5971931a9063bdee4887f4aaf'
             'SKIP')
 
 # prepare() {

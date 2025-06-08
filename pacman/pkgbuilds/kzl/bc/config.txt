@@ -33,6 +33,7 @@ checking for minix/config.h... no
 checking for stdarg.h... yes
 checking for stddef.h... yes
 checking for errno.h... yes
+checking for getopt.h... yes
 checking for limits.h... yes
 checking for lib.h... no
 checking whether it is safe to define __EXTENSIONS__... yes
@@ -54,6 +55,7 @@ checking for vprintf... yes
 checking for isgraph... yes
 checking for setvbuf... yes
 checking for fstat... yes
+checking for getopt_long... yes
 checking for strtol... yes
 checking for tparm in -lncurses... yes
 checking for readline in -lreadline... yes

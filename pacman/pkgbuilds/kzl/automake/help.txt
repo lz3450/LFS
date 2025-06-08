@@ -1,4 +1,4 @@
-Configuration of GNU Automake 1.17:
+Configuration of GNU Automake 1.18:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -32,6 +32,9 @@ Some influential environment variables:
   GNU_FCFLAGS GNU Fortran compiler flags
   GNU_F77     GNU Fortran 77 compiler
   GNU_FFLAGS  GNU Fortran 77 compiler flags
+  GNU_A68     GNU Algol 68 compiler
+  GNU_A68FLAGS
+              GNU Algol 68 compiler flags
   GNU_GCJ     GNU Java compiler
   GNU_GCJFLAGS
               GNU Java compiler flags

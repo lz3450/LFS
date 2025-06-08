@@ -81,7 +81,7 @@ checking for gcc option to support large files... none needed
 configure: autobuild project... GNU M4
 configure: autobuild revision... 1.4.20
 configure: autobuild hostname... UTDLAB2
-configure: autobuild timestamp... 20250516T231720Z
+configure: autobuild timestamp... 20250608T050236Z
 checking for timestamps of last git commit... touch skipped
 checking for unsigned long long int... yes
 checking for long long int... yes
@@ -268,7 +268,7 @@ checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
 checking for unreachable... no
 checking whether nullptr_t needs <stddef.h>... no
-checking whether <stddef.h> is idempotent... guessing no
+checking whether <stddef.h> is idempotent... guessing yes
 checking whether locale.h defines _locale_t... no
 checking whether locale.h conforms to POSIX:2001... yes
 checking whether struct lconv is properly defined... yes

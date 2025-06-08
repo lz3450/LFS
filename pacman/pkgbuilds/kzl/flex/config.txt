@@ -75,6 +75,9 @@ checking whether make sets $(MAKE)... yes
 checking whether make supports the include directive... yes (GNU style)
 checking whether make supports nested variables... yes
 checking xargs -n works... yes
+checking whether UID '1000' is supported by ustar format... yes
+checking whether GID '1000' is supported by ustar format... yes
+checking how to create a ustar tar archive... gnutar
 checking dependency style of gcc... gcc3
 checking whether NLS is requested... yes
 checking for msgfmt... /usr/bin/msgfmt

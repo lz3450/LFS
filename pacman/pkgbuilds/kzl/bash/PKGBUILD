@@ -2,14 +2,13 @@
 
 pkgname=bash
 pkgver=5.2.g39
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="The GNU Bourne-Again SHell"
 arch=('x86_64')
 url="https://www.gnu.org/software/bash/"
 license=('KZL')
 depends=(
-  bash-completion
   glibc
   ncurses
   readline
@@ -24,7 +23,7 @@ source=(
   bash.bash_logout
 )
 sha256sums=('SKIP'
-            'c41c92e50cf8c1d09918a20c4d51a33fd1e01f490e97b29b4ef01b966057acea'
+            'c9a014340a9973b4e59ce500f949491080565a8df6119506de452e89fddce923'
             'b02c0ac51db9f1a5a8ae76056280d41ace41f82cd69194e84ee7a721eae2b907'
             'e297955ec4e6060a539e2a028cb67a4f41d5632c3360415cd14bb7d0af7b030c'
             '3f45e0002bb378a19267655a90e7d6416dc55bf8abc112656f48cce2a20e5f01'

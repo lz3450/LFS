@@ -2,7 +2,7 @@
 
 pkgname=ed
 pkgver=1.21.1
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="A POSIX-compliant line-oriented text editor"
 arch=('x86_64')

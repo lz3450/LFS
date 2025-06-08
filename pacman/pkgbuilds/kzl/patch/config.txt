@@ -7,6 +7,9 @@ checking for gawk... gawk
 checking whether make sets $(MAKE)... yes
 checking whether make supports nested variables... yes
 checking xargs -n works... yes
+checking whether UID '1000' is supported by ustar format... yes
+checking whether GID '1000' is supported by ustar format... yes
+checking how to create a ustar tar archive... gnutar
 checking for gcc... gcc
 checking whether the C compiler works... yes
 checking for C compiler default output file name... a.out
@@ -199,9 +202,9 @@ checking whether UINT32_MAX < UINTMAX_MAX... yes
 checking whether UINT64_MAX == ULONG_MAX... yes
 checking for good max_align_t... yes
 checking whether NULL can be used in arbitrary expressions... yes
-checking for unreachable... no
+checking for unreachable in C... no
 checking whether nullptr_t needs <stddef.h>... no
-checking whether <stddef.h> is idempotent... guessing no
+checking whether <stddef.h> is idempotent... guessing yes
 checking whether locale.h defines locale_t... yes
 checking whether locale.h defines _locale_t... no
 checking whether locale.h conforms to POSIX:2001... yes
@@ -232,6 +235,9 @@ checking for tsearch... yes
 checking for sigset_t... yes
 checking for volatile sig_atomic_t... yes
 checking for sighandler_t... yes
+checking whether stdckdint.h can be included in C... yes
+checking checking for an ISO C23 compliant stdckdint.h in C... yes
+checking whether stdckdint.h can be included in C++... no
 checking whether fcloseall is declared... yes
 checking whether getw is declared... yes
 checking whether putw is declared... yes

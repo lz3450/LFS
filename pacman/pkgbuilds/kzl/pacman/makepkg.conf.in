@@ -42,8 +42,8 @@ NPROC="$(nproc)"
 
 #-- Compiler and Linker Flags
 CPPFLAGS=""
-CFLAGS="-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
-CXXFLAGS="$CFLAGS"
+CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wp,-D_FORTIFY_SOURCE=3"
+CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"
 LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs"
 LTOFLAGS="-flto -ffat-lto-objects"
 #-- Make Flags: change this for DistCC/SMP systems

@@ -167,8 +167,8 @@ CMake Warning at CMakeLists.txt:394 (message):
 -- Performing Test HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC - Success
 -- Looking for futimens
 -- Looking for futimens - found
--- Configuring done (29.6s)
--- Generating done (0.2s)
+-- Configuring done (6.9s)
+-- Generating done (0.1s)
 CMake Warning:
   Manually-specified variables were not used by the project:
 

@@ -169,8 +169,8 @@ CMake Deprecation Warning at build/_deps/googletest-src/googletest/CMakeLists.tx
 
  * GTest
 
--- Configuring done (32.9s)
--- Generating done (0.2s)
+-- Configuring done (8.3s)
+-- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/zlib/src/zlib-ng/build
 -- Cache values
 // Builds the googlemock subproject

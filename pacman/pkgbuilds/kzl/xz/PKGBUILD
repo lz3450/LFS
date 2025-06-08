@@ -2,7 +2,7 @@
 
 pkgname=xz
 pkgver=5.8.1
-pkgrel=6
+pkgrel=7
 epoch=
 pkgdesc="Library and command line tools for XZ and LZMA compressed files"
 arch=('x86_64')

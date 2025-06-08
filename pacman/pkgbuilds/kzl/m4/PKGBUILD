@@ -2,7 +2,7 @@
 
 pkgname=m4
 pkgver=1.4.20
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="An implementation of the traditional Unix macro processor"
 arch=('x86_64')

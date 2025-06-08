@@ -1,4 +1,4 @@
-Configuration of bc 1.08.1:
+Configuration of bc 1.08.2:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options

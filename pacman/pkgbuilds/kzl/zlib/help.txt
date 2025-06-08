@@ -142,8 +142,8 @@
 
  * GTest
 
--- Configuring done (27.8s)
--- Generating done (0.2s)
+-- Configuring done (7.0s)
+-- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/zlib/src/zlib-ng/tmp
 -- Cache values
 // Builds the googlemock subproject

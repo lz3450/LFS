@@ -161,8 +161,8 @@
 -- Performing Test HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC - Success
 -- Looking for futimens
 -- Looking for futimens - found
--- Configuring done (21.9s)
--- Generating done (0.2s)
+-- Configuring done (5.2s)
+-- Generating done (0.1s)
 -- Build files have been written to: /home/kzl/makepkg/build/xz/src/xz/tmp
 -- Cache values
 // Build liblzma as a shared library instead of static

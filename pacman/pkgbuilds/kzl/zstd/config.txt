@@ -65,8 +65,8 @@
 -- Looking for lzma_lzma_preset in /usr/lib/liblzma.so - found
 -- Found LibLZMA: /usr/lib/liblzma.so (found version "5.8.1")
 -- Found LibLZ4: /usr/include (found version "1.10.0")
--- Configuring done (8.9s)
--- Generating done (0.1s)
+-- Configuring done (2.2s)
+-- Generating done (0.0s)
 -- Build files have been written to: /home/kzl/makepkg/build/zstd/src/zstd/build/cmake/build
 -- Cache values
 // Path to a program.
