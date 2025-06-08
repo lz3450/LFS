@@ -70,5 +70,5 @@ package() {
   make DESTDIR="$pkgdir" install
 
   install -m755 -d "$pkgdir"/usr/lib/perl5/vendor_perl/$pkgver
-  echo "export PATH=\$PATH:/usr/bin/$_script_dirname:/usr/bin/$_site_dirname:/usr/bin/$_vendor_dirname" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/perl.sh
+  echo "export PATH=\"\$PATH:/usr/bin/$_script_dirname:/usr/bin/$_site_dirname:/usr/bin/$_vendor_dirname\"" | install -Dm644 /dev/stdin "$pkgdir"/etc/profile.d/perl.sh
 }
