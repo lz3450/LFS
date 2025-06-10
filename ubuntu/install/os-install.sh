@@ -12,7 +12,6 @@ mountpoint="/mnt"
 debootstrap_suite="noble"
 common_deb_pkgs=(
     ### general
-    sudo
     nano
     bash-completion
     zsh zsh-syntax-highlighting zsh-autosuggestions
@@ -34,11 +33,16 @@ common_deb_pkgs=(
     libgpgme-dev
     fakeroot
 )
+jammy_deb_pkgs=(
+    sudo
+)
 noble_deb_pkgs=(
+    sudo
     systemd-boot
     systemd-resolved
 )
 questing_deb_pkgs=(
+    sudo-rs
     systemd-boot-efi
     systemd-boot
     systemd-resolved
@@ -59,7 +63,7 @@ fi
 debootstrap_suite="$1"
 case "$debootstrap_suite" in
     jammy)
-        deb_pkgs=("${common_deb_pkgs[@]}")
+        deb_pkgs=("${common_deb_pkgs[@]} ${jammy_deb_pkgs[@]}")
         ;;
     noble)
         deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
