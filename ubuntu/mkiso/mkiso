@@ -1,6 +1,6 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
-# mkiso.sh
+# mkiso
 #
 
 set -e
@@ -38,8 +38,6 @@ VERSION="1.0"
 
 UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
 # UBUNTU_MIRROR="https://mirror.arizona.edu/ubuntu/"
-
-debootstrap_suite=""
 
 # deb package lists
 common_deb_pkgs=(
@@ -80,46 +78,47 @@ questing_deb_pkgs=(
     systemd-boot
     systemd-resolved
 )
+excluded_deb_pkgs=(
+    ubuntu-minimal
+    ubuntu-pro-client
+    ubuntu-pro-client-l10n
+)
 pacman_pkgs=(
     pacman
     linux
     debootstrap
 )
 
+deb_pkgs=()
+arg_debootstrap_suite=""
+
 ### functions
 debootstrap_rootfs() {
-    local -a _pkg_list=("$@")
-    local -a _pkg_exclude=(
-        "ubuntu-minimal"
-        "ubuntu-pro-client"
-        "ubuntu-pro-client-l10n"
-    )
-
     # debootstrap
     info "Creating the list of installed deb packages..."
     debootstrap \
-        --include="$(IFS=',' echo "${_pkg_list[*]}")" \
-        --exclude="$(IFS=',' echo "${_pkg_exclude[*]}")" \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
         --components=main,restricted,universe \
         --merged-usr \
         --print-debs \
-        "$debootstrap_suite" \
+        "$arg_debootstrap_suite" \
         "$ROOTFS_DIR"/tmp \
         "$UBUNTU_MIRROR" \
         > "$ISOFS_DIR"/deb_pkglist.txt 2> /dev/null || warn "Failed to creating a list of installed deb packages"
     info "Done (Creating the list of installed deb packages)"
 
-    info "Debootstrapping \"$ROOTFS_DIR/\": ${_pkg_list[*]}"
+    info "Debootstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
     debootstrap \
-        --include="$(IFS=',' echo "${_pkg_list[*]}")" \
-        --exclude="$(IFS=',' echo "${_pkg_exclude[*]}")" \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
         --components=main,restricted,universe \
         --merged-usr \
-        "$debootstrap_suite" \
+        "$arg_debootstrap_suite" \
         "$ROOTFS_DIR" \
         "$UBUNTU_MIRROR" \
         2>&1 | tee "$LOG_DIR"/debootstrap.log || error "Failed to debootstrap rootfs" 4
-    if [[ "$debootstrap_suite" == "noble" ]]; then
+    if [[ "$arg_debootstrap_suite" == "noble" ]]; then
         rmdir -v "$ROOTFS_DIR"/bin.usr-is-merged
         rmdir -v "$ROOTFS_DIR"/sbin.usr-is-merged
         rmdir -v "$ROOTFS_DIR"/lib.usr-is-merged
@@ -246,7 +245,7 @@ while (( $# > 0 )); do
         ;;
     -s|--suite)
         shift
-        debootstrap_suite="$1"
+        arg_debootstrap_suite="$1"
         ;;
     *)
         usage
@@ -256,8 +255,7 @@ while (( $# > 0 )); do
     shift
 done
 
-declare -a deb_pkgs
-case "$debootstrap_suite" in
+case "$arg_debootstrap_suite" in
     jammy)
         deb_pkgs=("${common_deb_pkgs[@]}")
         ;;
@@ -268,11 +266,11 @@ case "$debootstrap_suite" in
         deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}")
         ;;
     *)
-        error "Unknown debootstrap suite: $debootstrap_suite" 127
+        error "Unknown debootstrap suite: $arg_debootstrap_suite" 127
         ;;
 esac
 
-output_name="$ISO_NAME-$(date +%Y%m%d)-$debootstrap_suite"
+output_name="$ISO_NAME-$(date +%Y%m%d)-$arg_debootstrap_suite"
 rootfs_archive_name="$output_name.tar.zst"
 iso_image_name="$output_name.iso"
 
@@ -283,7 +281,7 @@ prologue
 create_work_dir
 
 make_rootfs
-debootstrap_rootfs "${deb_pkgs[@]}"
+debootstrap_rootfs
 pacstrap_rootfs "${pacman_pkgs[@]}"
 
 make_mutable_img
