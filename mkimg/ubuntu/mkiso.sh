@@ -89,7 +89,7 @@ pacman_pkgs=(
     debootstrap
 )
 
-deb_pkgs=()
+included_deb_pkgs=()
 arg_debootstrap_suite=""
 
 ### functions
@@ -97,7 +97,7 @@ debootstrap_rootfs() {
     # debootstrap
     info "Creating the list of installed deb packages..."
     debootstrap \
-        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+        --include="$(IFS=',' echo "${included_deb_pkgs[*]}")" \
         --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
         --components=main,restricted,universe \
         --merged-usr \
@@ -108,9 +108,9 @@ debootstrap_rootfs() {
         > "$ISOFS_DIR"/deb_pkglist.txt 2> /dev/null || warn "Failed to creating a list of installed deb packages"
     info "Done (Creating the list of installed deb packages)"
 
-    info "Debootstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
+    info "Debootstrapping \"$ROOTFS_DIR/\": ${included_deb_pkgs[*]}"
     debootstrap \
-        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+        --include="$(IFS=',' echo "${included_deb_pkgs[*]}")" \
         --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
         --components=main,restricted,universe \
         --merged-usr \
@@ -118,9 +118,13 @@ debootstrap_rootfs() {
         "$ROOTFS_DIR" \
         "$UBUNTU_MIRROR" \
         2>&1 | tee "$LOG_DIR"/debootstrap.log || error "Failed to debootstrap rootfs" 4
-    if [[ "$arg_debootstrap_suite" == "noble" ]]; then
+    if [[ -d "$ROOTFS_DIR/bin.usr-is-merged" ]]; then
         rmdir -v "$ROOTFS_DIR"/bin.usr-is-merged
+    fi
+    if [[ -d "$ROOTFS_DIR/sbin.usr-is-merged" ]]; then
         rmdir -v "$ROOTFS_DIR"/sbin.usr-is-merged
+    fi
+    if [[ -d "$ROOTFS_DIR/lib.usr-is-merged" ]]; then
         rmdir -v "$ROOTFS_DIR"/lib.usr-is-merged
     fi
     info "Done (Debootstrapping)"
@@ -257,13 +261,13 @@ done
 
 case "$arg_debootstrap_suite" in
     jammy)
-        deb_pkgs=("${common_deb_pkgs[@]}")
+        included_deb_pkgs=("${common_deb_pkgs[@]}")
         ;;
     noble)
-        deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
+        included_deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
         ;;
     questing)
-        deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}")
+        included_deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}")
         ;;
     *)
         error "Unknown debootstrap suite: $arg_debootstrap_suite" 127

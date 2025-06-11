@@ -71,6 +71,7 @@ create_work_dir() {
     if [[ -d "$WORK_DIR" ]]; then
         read -p "Working directory exists. Do you want to delete it? (Y/n) " answer
         if [[ -z "$answer" || "$answer" == "Y" || "$answer" == "y" ]]; then
+            libmkiso_clean
             rm -rf -- "$WORK_DIR"
         fi
     fi
@@ -207,14 +208,12 @@ cleanup_rootfs() {
 make_rootfs_archive() {
     local _name="$1"
     info "Creating rootfs archive $_name..."
-
     tar -vcf "$OUT_DIR/$_name" \
         --transform='s|^./||' \
-        --numeric-owner  \
+        --numeric-owner \
         --zstd -C "$ROOTFS_DIR" . \
         > "$LOG_DIR"/tar.log 2>&1
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$_name"
-
     info "Done (Creating rootfs archive)"
 }
 
