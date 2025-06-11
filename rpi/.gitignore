@@ -1,4 +1,0 @@
-mkimg/*.img
-kernel/*
-!kernel/*.sh
-!kernel/*config
