@@ -1,13 +1,21 @@
 # LFS
 
-## Commit Message
+## Directories
 
-(platform): subdirectory
+### Platforms
 
-## Info
+archlinux
+kzl-linux
+ubuntu
+rpi
+l4t
 
-Error message:
-> fatal: --bare and --origin origin options are incompatible.
+### Common tools
 
-Solution:
-Clone the repo directly into ~/makepkg/sources.
+bash
+mkimg
+pacman
+python
+
+### Dot files
+config
