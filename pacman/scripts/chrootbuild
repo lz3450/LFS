@@ -190,7 +190,7 @@ Chrootbuild options:
 EOF
 }
 
-clean() {
+cleanup() {
     info "Cleaning..."
 
     chroot_teardown
@@ -200,7 +200,7 @@ clean() {
 
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
-trap clean EXIT SIGINT SIGTERM SIGKILL
+trap cleanup EXIT SIGINT SIGTERM SIGKILL
 
 ################################################################################
 
@@ -257,6 +257,7 @@ prologue
 
 if (( $opt_backup > 0 )); then
     backup
+    cleanup
     epilogue
     exit
 fi
@@ -264,6 +265,7 @@ fi
 if (( $opt_clean > 0 )); then
     remove_work_dir
     if [[ -z "$arg_rootfs_tarball" ]]; then
+        cleanup
         epilogue
         exit
     fi
@@ -275,7 +277,7 @@ if (( $opt_debug > 0 )); then
 else
     run_build
 fi
-clean
+cleanup
 
 epilogue
 
