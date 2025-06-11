@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=libffi
-pkgver=3.4.8
-pkgrel=2
+pkgver=3.5.1
+pkgrel=1
 epoch=
 pkgdesc="A Portable Foreign Function Interface Library"
 arch=('x86_64')
@@ -17,7 +17,7 @@ source=(
   # git+https://github.com/libffi/libffi.git
   https://github.com/libffi/libffi/releases/download/v$pkgver/libffi-$pkgver.tar.gz
 )
-sha256sums=('bc9842a18898bfacb0ed1252c4febcc7e78fa139fd27fdc7a3e30d9d9356119b')
+sha256sums=('f99eb68a67c7d54866b7706af245e87ba060d419a062474b456d3bc8d4abdbd1')
 
 # pkgver() {
 #   cd $pkgname

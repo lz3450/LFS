@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ca-certificates
-pkgver=2.74
-pkgrel=11
+pkgver=2.76
+pkgrel=1
 epoch=
 pkgdesc="CA certificates"
 arch=('any')
@@ -23,8 +23,8 @@ source=(
   https://src.fedoraproject.org/rpms/ca-certificates/raw/rawhide/f/ca-certificates.spec
   40-update-ca-trust.hook
 )
-sha256sums=('620fd89c02acb0019f1899dab7907db5d20735904f5a9a0d3a8771a5857ac482'
-            '6dd3073fef4d4014d2ef42dd8fcc04be32cacff0e1fe7afebb21ac591b8eada4'
+sha256sums=('8944ec6b572b577daee4fc681a425881f841ec2660e4cb5f0eee727f84620697'
+            '5f5e3f0344d71021513c3c28027b5e79ddece987de5e46ce3b9ebb84f825e933'
             'd2a1579dae05fd16175fac27ef08b54731ecefdf414085c610179afcf62b096c'
             '71ee47d1bd6edd8a391e5fc47bd0d420fe1d92c14a10792490143bb6abaad2a0'
             '6c7b9287c41c171c64b358fc7331b8a9ae969fc2d00d997d88bcbf4da0de598a'

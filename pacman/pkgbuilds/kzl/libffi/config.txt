@@ -9,11 +9,14 @@ checking host system type... x86_64-pc-linux-gnu
 checking target system type... x86_64-pc-linux-gnu
 checking for gsed... sed
 checking for a BSD-compatible install... /usr/bin/install -c
+checking whether sleep supports fractional seconds... yes
+checking filesystem timestamp resolution... 0.01
 checking whether build environment is sane... yes
 checking for a race-free mkdir -p... /usr/bin/mkdir -p
 checking for gawk... gawk
 checking whether make sets $(MAKE)... yes
 checking whether make supports nested variables... yes
+checking xargs -n works... yes
 checking for gcc... gcc
 checking whether the C compiler works... yes
 checking for C compiler default output file name... a.out
@@ -51,10 +54,10 @@ checking for objdump... objdump
 checking how to recognize dependent libraries... pass_all
 checking for dlltool... no
 checking how to associate runtime and link libraries... printf %s\n
+checking for ranlib... ranlib
 checking for ar... ar
 checking for archiver @FILE support... @
 checking for strip... strip
-checking for ranlib... ranlib
 checking command to parse /usr/bin/nm -B output from gcc object... ok
 checking for sysroot... no
 checking for a working dd... /usr/bin/dd
@@ -105,7 +108,6 @@ checking CFLAGS for most reasonable warnings... -Wall
 checking whether to enable maintainer-specific portions of Makefiles... no
 checking for sys/memfd.h... no
 checking for memfd_create... yes
-checking for egrep... (cached) /usr/bin/grep -E
 checking for memcpy... yes
 checking for alloca.h... yes
 checking size of double... 8
@@ -116,7 +118,7 @@ checking assembler supports pc related relocs... yes
 checking whether compiler supports pointer authentication... no
 checking for _ prefix in compiled symbols... no
 checking toolchain supports unwind section type... yes
-checking whether C compiler accepts -fno-lto... yes
+checking whether the C compiler accepts -fno-lto... yes
 checking whether .eh_frame section should be read-only... yes
 checking for __attribute__((visibility("hidden")))... yes
 checking for shared libgcc... yes
