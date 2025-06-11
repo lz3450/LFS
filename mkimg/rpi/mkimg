@@ -69,16 +69,18 @@ jammy_deb_pkgs=(
     linux-firmware-raspi
     # ubuntu-raspi-settings
 )
-jammy_exclude_pkgs=(
+jammy_excluded_deb_pkgs=(
     ubuntu-advantage-tools
     ubuntu-minimal
+    ubuntu-pro-auto-attach
     ubuntu-pro-client
     ubuntu-pro-client-l10n
 )
 
-included_deb_pkgs=()
+deb_pkgs=()
 excluded_deb_pkgs=()
 mirror=""
+mirrors=()
 
 arg_suite=""
 arg_fs_type=""
@@ -86,7 +88,7 @@ declare -i base_only=0
 arg_base_img=""
 
 ### functions
-create_rootfs_dir() {
+create_work_dirs() {
     info "Creating root filesystem directory: $ROOTFS_DIR"
     if [[ -d "$ROOTFS_DIR" ]]; then
         read -p "Root filesystem directory already exists. Do you want to delete it? (Y/n) " answer
@@ -95,7 +97,9 @@ create_rootfs_dir() {
         fi
     fi
     mkdir -p -- "$ROOTFS_DIR"
-    info "Done (Creating root filesystem directory)"
+    info "Done (Created root filesystem directory)"
+
+    sudo -u ${SUDO_USER:-root} mkdir -p -- "$LOG_DIR"
 }
 
 create_img_file() {
@@ -113,14 +117,14 @@ create_img_file() {
         mkpart primary fat32 1s 524287s \
         mkpart primary "$arg_fs_type" 524288s 100% \
         print
-    info "Done (Creating image file)"
+    info "Done (Created image file)"
 }
 
 format_img() {
     info "Formatting image..."
     mkfs.fat -F 32 "${loop_device}p1"
     mkfs.ext4 "${loop_device}p2"
-    info "Done (Formatting image)"
+    info "Done (Formatted image)"
 }
 
 mount_img() {
@@ -129,28 +133,33 @@ mount_img() {
     mount "${loop_device}p2" "$ROOTFS_DIR"
     mkdir -p "$ROOTFS_DIR"/boot/firmware
     mount "${loop_device}p1" "$ROOTFS_DIR"/boot/firmware
-    info "Done (Mounting image)"
+    info "Done (Mounted image)"
 }
 
 debootstrap_rootfs() {
+    local _log_file="$LOG_DIR/debootstrap.log"
+    local _deb_pkglist="${arg_suite}_deb_pkglist.txt"
+
+    sudo -u ${SUDO_USER:-root} touch -- "$_log_file" "$_deb_pkglist"
+
     info "Creating the list of installed deb packages..."
     debootstrap \
         --print-debs \
         --arch=arm64 \
-        --include="$(IFS=',' echo "${included_deb_pkgs[*]}")" \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
         --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
         --components=main,restricted,universe \
         --merged-usr \
         "$arg_suite" \
         "$ROOTFS_DIR" \
         "$mirror" \
-        2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -u > "${arg_suite}_deb_pkglist.txt" || warn "Failed to create a list of installed deb packages"
-    info "Done (Creating the list of installed deb packages)"
+        2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -u > "$_deb_pkglist" || warn "Failed to create a list of installed deb packages"
+    info "Done (Created the list of installed deb packages)"
 
-    info "Debootstrapping \"$ROOTFS_DIR/\": ${included_deb_pkgs[*]}"
+    info "Debootstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
     debootstrap \
         --arch=arm64 \
-        --include="$(IFS=',' echo "${included_deb_pkgs[*]}")" \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
         --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
         --components=main,restricted,universe \
         --merged-usr \
@@ -158,22 +167,57 @@ debootstrap_rootfs() {
         "$arg_suite" \
         "$ROOTFS_DIR" \
         "$mirror" \
-        2>&1 | tee "$LOG_DIR"/debootstrap.log || error "Failed to debootstrap (stage 1) rootfs" 5
+        2>&1 | tee "$_log_file" || error "Failed to debootstrap (stage 1) rootfs" 5
     chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
     chroot_run "$ROOTFS_DIR" /debootstrap/debootstrap --second-stage || error "Failed to debootstrap (stage 2) rootfs" 7
-    info "Done (Configuring rootfs)"
+    info "Done (Configured rootfs)"
+}
+
+mmdebstrap_rootfs() {
+    local _log_file="$LOG_DIR/mmdebstrap.log"
+    sudo -u ${SUDO_USER:-root} touch -- "$_log_file"
+
+    info "Debootstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
+    mmdebstrap \
+        --variant=- \
+        --mode=root \
+        --format=directory \
+        --dpkgopt='path-exclude=/usr/share/doc/*' \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+        --architectures=arm64 \
+        "$arg_suite" \
+        "$ROOTFS_DIR" \
+        "${mirrors[@]}" \
+        2>&1 | tee "$_log_file" || error "Failed to mmdebstrap rootfs" 8
+    info "Done (Configured rootfs)"
+
+    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
+
+    info "Removing excluded packages: ${excluded_deb_pkgs[*]}"
+    chroot_run "$ROOTFS_DIR" apt-get remove -y --purge "${excluded_deb_pkgs[@]}" || warn "Failed to remove excluded packages"
+    info "Done (Removed excluded packages)"
+
+    info "Creating the list of installed deb packages..."
+    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "${arg_suite}_deb_pkglist.txt" || warn "Failed to create a list of installed deb packages"
+    info "Done (Created the list of installed deb packages)"
+
+    chroot_teardown
 }
 
 create_base_rootfs_tarball() {
+    local _log_file="$LOG_DIR/base_rootfs-tar.log"
     local _name="raspi-${arg_suite}-base-$TIMESTAMP.tar.zst"
+
+    sudo -u ${SUDO_USER:-root} touch -- "$_log_file"
+
     info "Creating base rootfs tarball..."
     tar -vcf "$SCRIPT_DIR/$_name" \
         --transform='s|^./||' \
         --numeric-owner \
         --zstd -C "$ROOTFS_DIR" . \
-        > "$LOG_DIR"/base_rootfs-tar.log 2>&1
+        2>&1 > "$_log_file"
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/$_name"
-    info "Done (Creating base rootfs tarball)"
+    info "Done (Created base rootfs tarball)"
 }
 
 cleanup() {
@@ -187,7 +231,7 @@ cleanup() {
     loop_teardown "$loop_device"
     rm -f -- "$IMG_FILE"
     rm -rf -- "$ROOTFS_DIR"
-    info "Done (Cleaning)"
+    info "Done (Cleaned)"
 
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
@@ -243,12 +287,12 @@ done
 
 case "$arg_suite" in
     debian)
-        included_deb_pkgs=("${common_deb_pkgs[@]}" "${bookworm_deb_pkgs[@]}")
+        deb_pkgs=("${common_deb_pkgs[@]}" "${bookworm_deb_pkgs[@]}")
         mirror="http://deb.debian.org/debian"
         ;;
     jammy)
-        included_deb_pkgs=("${common_deb_pkgs[@]}" "${jammy_deb_pkgs[@]}")
-        excluded_deb_pkgs=("${jammy_exclude_pkgs[@]}")
+        deb_pkgs=("${common_deb_pkgs[@]}" "${jammy_deb_pkgs[@]}")
+        excluded_deb_pkgs=("${jammy_excluded_deb_pkgs[@]}")
         mirror="http://ports.ubuntu.com"
         ;;
     *)
@@ -257,21 +301,27 @@ case "$arg_suite" in
         ;;
 esac
 
+mirrors=(
+    "deb $mirror $arg_suite main restricted universe multiverse"
+    "deb $mirror $arg_suite-updates main restricted universe multiverse"
+    "deb $mirror $arg_suite-security main restricted universe multiverse"
+)
+
 ################################################################################
 
 prologue
 
-mkdir -p "$LOG_DIR"
-
 if [[ -z "$arg_base_img" ]]; then
-    create_rootfs_dir
-    debootstrap_rootfs
+    create_work_dirs
+    # debootstrap_rootfs
+    mmdebstrap_rootfs
     create_base_rootfs_tarball
 elif [[ -f "$arg_base_img" ]]; then
         cp "$arg_base_img" "$IMG_FILE"
 else
     error "Base rootfs tar file does not exist: $arg_base_img" 4
 fi
+cleanup
 
 # create_img_file
 # info "Setting up loop device: $loop_device"
@@ -287,4 +337,8 @@ epilogue
 # 2: Unsupported distribution
 # 3: Unsupported filesystem type
 # 4: Base rootfs tar file does not exist
+# 5: Failed to debootstrap (stage 1) rootfs
+# 6: Failed to setup chroot environment
+# 7: Failed to debootstrap (stage 2) rootfs
+# 8: Failed to mmdebstrap rootfs
 # 127: Unknown option

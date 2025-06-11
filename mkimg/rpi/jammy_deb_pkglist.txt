@@ -1,4 +1,3 @@
-
 adduser
 apt
 apt-utils
@@ -20,7 +19,6 @@ coreutils
 cpio
 cpp
 cpp-11
-cron
 curl
 dash
 dbus
