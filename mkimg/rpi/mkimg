@@ -20,50 +20,89 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 ################################################################################
 
 ### libraries
-. "$SCRIPT_DIR"/lib/log.sh
-. "$SCRIPT_DIR"/lib/utils.sh
-. "$SCRIPT_DIR"/lib/chroot.sh
+. "$SCRIPT_DIR"/../scripts/lib/log.sh
+. "$SCRIPT_DIR"/../scripts/lib/utils.sh
+. "$SCRIPT_DIR"/../scripts/lib/loop.sh
+. "$SCRIPT_DIR"/../scripts/lib/chroot.sh
 
 
 ### constants and variables
 VERSION="1.0"
 
+TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
+LOG_DIR="$SCRIPT_DIR/log/$TIMESTAMP"
 IMG_FILE="/tmp/raspi.img"
+ROOTFS_DIR="/tmp/raspi"
 
+loop_device=""
 common_deb_pkgs=(
-    initramfs-tools
-    sudo
+    ### general
+    build-essential
     nano
-    wpasupplicant iw
-    wget curl
-    openssh-server
-    git
     bash-completion
     zsh
     zsh-syntax-highlighting
     zsh-autosuggestions
-    build-essential
+    ### disk
+    parted fdisk
+    smartmontools
+    ### filesystem
+    dosfstools
+    e2fsprogs
+    ### network
+    wpasupplicant
+    wget curl
+    openssh-server
+    git
+    ### kernel
+    initramfs-tools
+    ### pacman
+    libarchive-tools
+    zstd
+    libgpgme-dev
 )
-debian_deb_pkgs=(
+bookworm_deb_pkgs=(
     systemd-resolved
     systemd-timesyncd
 )
-ubuntu_deb_pkgs=(
+jammy_deb_pkgs=(
     linux-firmware-raspi
     # ubuntu-raspi-settings
 )
+jammy_exclude_pkgs=(
+    ubuntu-advantage-tools
+    ubuntu-minimal
+    ubuntu-pro-client
+    ubuntu-pro-client-l10n
+)
 
-arg_distro=""
+included_deb_pkgs=()
+excluded_deb_pkgs=()
+mirror=""
+
+arg_suite=""
 arg_fs_type=""
 declare -i base_only=0
 arg_base_img=""
 
 ### functions
+create_rootfs_dir() {
+    info "Creating root filesystem directory: $ROOTFS_DIR"
+    if [[ -d "$ROOTFS_DIR" ]]; then
+        read -p "Root filesystem directory already exists. Do you want to delete it? (Y/n) " answer
+        if [[ -z "$answer" || "$answer" == "Y" || "$answer" == "y" ]]; then
+            cleanup
+        fi
+    fi
+    mkdir -p -- "$ROOTFS_DIR"
+    info "Done (Creating root filesystem directory)"
+}
+
 create_img_file() {
-    info "Creating image..."
+    info "Creating image file..."
 
     if [[ -f "$IMG_FILE" ]]; then
-        rm -f "$IMG_FILE"
+        rm -vf -- "$IMG_FILE"
     fi
 
     fallocate -l 1536MiB "$IMG_FILE"
@@ -74,20 +113,97 @@ create_img_file() {
         mkpart primary fat32 1s 524287s \
         mkpart primary "$arg_fs_type" 524288s 100% \
         print
+    info "Done (Creating image file)"
 }
+
+format_img() {
+    info "Formatting image..."
+    mkfs.fat -F 32 "${loop_device}p1"
+    mkfs.ext4 "${loop_device}p2"
+    info "Done (Formatting image)"
+}
+
+mount_img() {
+    info "Mounting image to $ROOTFS_DIR..."
+    mkdir -p "$ROOTFS_DIR"
+    mount "${loop_device}p2" "$ROOTFS_DIR"
+    mkdir -p "$ROOTFS_DIR"/boot/firmware
+    mount "${loop_device}p1" "$ROOTFS_DIR"/boot/firmware
+    info "Done (Mounting image)"
+}
+
+debootstrap_rootfs() {
+    info "Creating the list of installed deb packages..."
+    debootstrap \
+        --print-debs \
+        --arch=arm64 \
+        --include="$(IFS=',' echo "${included_deb_pkgs[*]}")" \
+        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
+        --components=main,restricted,universe \
+        --merged-usr \
+        "$arg_suite" \
+        "$ROOTFS_DIR" \
+        "$mirror" \
+        2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -u > "${arg_suite}_deb_pkglist.txt" || warn "Failed to create a list of installed deb packages"
+    info "Done (Creating the list of installed deb packages)"
+
+    info "Debootstrapping \"$ROOTFS_DIR/\": ${included_deb_pkgs[*]}"
+    debootstrap \
+        --arch=arm64 \
+        --include="$(IFS=',' echo "${included_deb_pkgs[*]}")" \
+        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
+        --components=main,restricted,universe \
+        --merged-usr \
+        --foreign \
+        "$arg_suite" \
+        "$ROOTFS_DIR" \
+        "$mirror" \
+        2>&1 | tee "$LOG_DIR"/debootstrap.log || error "Failed to debootstrap (stage 1) rootfs" 5
+    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
+    chroot_run "$ROOTFS_DIR" /debootstrap/debootstrap --second-stage || error "Failed to debootstrap (stage 2) rootfs" 7
+    info "Done (Configuring rootfs)"
+}
+
+create_base_rootfs_tarball() {
+    local _name="raspi-${arg_suite}-base-$TIMESTAMP.tar.zst"
+    info "Creating base rootfs tarball..."
+    tar -vcf "$SCRIPT_DIR/$_name" \
+        --transform='s|^./||' \
+        --numeric-owner \
+        --zstd -C "$ROOTFS_DIR" . \
+        > "$LOG_DIR"/base_rootfs-tar.log 2>&1
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/$_name"
+    info "Done (Creating base rootfs tarball)"
+}
+
+cleanup() {
+    set +e
+
+    info "Cleaning..."
+    chroot_teardown
+    if [[ -n "$ROOTFS_DIR" && -d "$ROOTFS_DIR" ]]; then
+        mountpoint -q "$ROOTFS_DIR" && umount -R "$ROOTFS_DIR" 2> /dev/null
+    fi
+    loop_teardown "$loop_device"
+    rm -f -- "$IMG_FILE"
+    rm -rf -- "$ROOTFS_DIR"
+    info "Done (Cleaning)"
+
+    trap - EXIT SIGINT SIGTERM SIGKILL
+}
+trap cleanup EXIT SIGINT SIGTERM SIGKILL
 
 usage() {
     cat << EOF
 
 Usage: $SCRIPT_NAME -V | --version
 Usage: $SCRIPT_NAME -h | --help
-Usage: $SCRIPT_NAME -d | --distro <distro> -f | --fs-type <filesystem> [ -b | --base-only ]
-Usage: $SCRIPT_NAME -d | --distro <distro> -f | --fs-type <filesystem> [ -u | --use-base <base_image> ]
+Usage: $SCRIPT_NAME -s | --suite <suite> [ -b | --base-only ]
+Usage: $SCRIPT_NAME -s | --suite <suite> [ -u | --use-base <base_image> ]
 
     -V, --version                   print the script version number and exit
     -h, --help                      print this help message and exit
-    -d, --distro <distro>           specify the image distribution (debian, ubuntu)
-    -f, --fs-type <filesystem>      specify the image filesystem type (ext4, f2fs)
+    -s, --suite <suite>             specify the image suite (bookworm, jammy)
     -b, --base-only                 only create base image
     -u, --use-base <base_image>     use existing base image
 
@@ -106,13 +222,9 @@ while (( $# > 0 )); do
         usage
         exit 0
         ;;
-    -d | --distro)
+    -s | --suite)
         shift
-        arg_distro="$1"
-        ;;
-    -f | --fs-type)
-        shift
-        arg_fs_type="$1"
+        arg_suite="$1"
         ;;
     -b | --base-only)
         base_only=1
@@ -129,16 +241,19 @@ while (( $# > 0 )); do
     shift
 done
 
-case "$arg_distro" in
+case "$arg_suite" in
     debian)
-        # Debian specific settings can be added here
+        included_deb_pkgs=("${common_deb_pkgs[@]}" "${bookworm_deb_pkgs[@]}")
+        mirror="http://deb.debian.org/debian"
         ;;
-    ubuntu)
-        # Ubuntu specific settings can be added here
+    jammy)
+        included_deb_pkgs=("${common_deb_pkgs[@]}" "${jammy_deb_pkgs[@]}")
+        excluded_deb_pkgs=("${jammy_exclude_pkgs[@]}")
+        mirror="http://ports.ubuntu.com"
         ;;
     *)
         usage
-        error "Unsupported distribution \"$arg_distro\"." 2
+        error "Unsupported distribution \"$arg_suite\"." 2
         ;;
 esac
 
@@ -146,18 +261,30 @@ esac
 
 prologue
 
+mkdir -p "$LOG_DIR"
+
 if [[ -z "$arg_base_img" ]]; then
-    create_img_file
+    create_rootfs_dir
+    debootstrap_rootfs
+    create_base_rootfs_tarball
 elif [[ -f "$arg_base_img" ]]; then
         cp "$arg_base_img" "$IMG_FILE"
 else
-    error "Base image file does not exist: $arg_base_img" 4
+    error "Base rootfs tar file does not exist: $arg_base_img" 4
 fi
+
+# create_img_file
+# info "Setting up loop device: $loop_device"
+# loop_device="$(loop_get_unused)"
+# loop_setup "$loop_device" "$IMG_FILE"
+# info "Done (Setting up loop device: $loop_device)"
+# format_img
+# mount_img
 
 epilogue
 
 ### error code
 # 2: Unsupported distribution
 # 3: Unsupported filesystem type
-# 4: Base image file does not exist
+# 4: Base rootfs tar file does not exist
 # 127: Unknown option

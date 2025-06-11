@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # chroot.sh
 #
@@ -13,8 +14,9 @@ declare -i __CHROOT__=1
 ################################################################################
 
 ### libraries
-. "$(dirname ${BASH_SOURCE[0]})"/log.sh
-. "$(dirname ${BASH_SOURCE[0]})"/utils.sh
+LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
+. "$LIBDIR"/log.sh
+. "$LIBDIR"/utils.sh
 
 ### checks
 check_root

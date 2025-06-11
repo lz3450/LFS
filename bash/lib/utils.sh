@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # utils.sh
 #
@@ -13,7 +14,8 @@ declare -i __UTILS__=1
 ################################################################################
 
 ### libraries
-source "$(dirname ${BASH_SOURCE[0]})"/log.sh
+LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
+. "$LIBDIR"/log.sh
 
 ### functions
 check_root() {

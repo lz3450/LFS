@@ -443,6 +443,7 @@
         "TEXMFSYSVAR",
         "TEXMFVAR",
         "texmfver",
+        "timesyncd",
         "tinfo",
         "tlpdb",
         "tlperl",
