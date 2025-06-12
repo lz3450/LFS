@@ -141,8 +141,9 @@ _initialize_rootfs() {
 
 debootstrap_rootfs() {
     local _deb_pkglist="${arg_suite}_deb_pkglist.txt"
-    local _ls_R="${arg_suite}-ls_R.txt"
-    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkglist" "$_ls_R"
+    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkglist"
+    # local _ls_R="${arg_suite}-ls_R.txt"
+    # sudo -u "${SUDO_USER:-root}" touch -- "$_ls_R"
 
     # info "Creating the list of installed deb packages..."
     # debootstrap \
@@ -185,7 +186,7 @@ debootstrap_rootfs() {
             ;;
     esac
     chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkglist" || warn "Failed to create a list of installed deb packages"
-    chroot_run "$ROOTFS_DIR" ls -R / > "$_ls_R" || warn "Failed to get ls-R"
+    # chroot_run "$ROOTFS_DIR" ls -R / > "$_ls_R" || warn "Failed to get ls-R"
     _initialize_rootfs
     chroot_teardown
 
@@ -202,8 +203,9 @@ debootstrap_rootfs() {
 
 mmdebstrap_rootfs() {
     local _deb_pkglist="${arg_suite}_deb_pkglist.txt"
-    local _ls_R="${arg_suite}-ls_R.txt"
-    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkglist" "$_ls_R"
+    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkglist"
+    # local _ls_R="${arg_suite}-ls_R.txt"
+    # sudo -u "${SUDO_USER:-root}" touch -- "$_ls_R"
 
     info "mmdebstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
 
@@ -232,7 +234,7 @@ mmdebstrap_rootfs() {
     chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
     chroot_run "$ROOTFS_DIR" apt-get remove -y --purge "${excluded_deb_pkgs[@]}" || warn "Failed to remove excluded packages"
     chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkglist" || warn "Failed to create a list of installed deb packages"
-    chroot_run "$ROOTFS_DIR" ls -R / > "$_ls_R" || warn "Failed to get ls-R"
+    # chroot_run "$ROOTFS_DIR" ls -R / > "$_ls_R" || warn "Failed to get ls-R"
     _initialize_rootfs
     chroot_teardown
 
