@@ -1,3 +1,0 @@
-[submodule "mkimg/rpi/firmware"]
-	path = mkimg/rpi/firmware
-	url = https://github.com/raspberrypi/firmware.git

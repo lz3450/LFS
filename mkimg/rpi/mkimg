@@ -30,11 +30,13 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 VERSION="1.0"
 
 TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
-LOG_DIR="$SCRIPT_DIR/log/$TIMESTAMP"
-IMG_FILE="/tmp/raspi.img"
-ROOTFS_DIR="/tmp/raspi"
+WORK_DIR="/tmp/raspi"
+RASPBERRYPI_GPG_KEY="$WORK_DIR/raspberrypi.asc"
+IMG_FILE="$WORK_DIR/raspi.img"
+ROOTFS_DIR="$WORK_DIR/rootfs"
+FIRMWARE_DIR="$WORK_DIR/firmware"
+LOG_DIR="$WORK_DIR/log"
 
-loop_device=""
 common_deb_pkgs=(
     ### general
     build-essential
@@ -64,10 +66,20 @@ common_deb_pkgs=(
 bookworm_deb_pkgs=(
     systemd-resolved
     systemd-timesyncd
+    ### raspberry pi
+    raspberrypi-sys-mods
+    raspberrypi-archive-keyring
+    raspberrypi-bootloader
+    raspberrypi-kernel
+    raspi-config
+    raspi-gpio
+    rpi-eeprom
+    rpi-eeprom-images
+    rpiboot
 )
 jammy_deb_pkgs=(
     linux-firmware-raspi
-    # ubuntu-raspi-settings
+    ubuntu-raspi-settings
 )
 jammy_excluded_deb_pkgs=(
     ubuntu-advantage-tools
@@ -77,10 +89,12 @@ jammy_excluded_deb_pkgs=(
     ubuntu-pro-client-l10n
 )
 
+distro=""
 deb_pkgs=()
 excluded_deb_pkgs=()
 mirror=""
 mirrors=()
+loop_device=""
 
 arg_suite=""
 arg_fs_type=""
@@ -94,12 +108,105 @@ create_work_dirs() {
         read -p "Root filesystem directory already exists. Do you want to delete it? (Y/n) " answer
         if [[ -z "$answer" || "$answer" == "Y" || "$answer" == "y" ]]; then
             cleanup
+            trap cleanup EXIT SIGINT SIGTERM SIGKILL
         fi
     fi
     mkdir -p -- "$ROOTFS_DIR"
     info "Done (Created root filesystem directory)"
 
-    sudo -u ${SUDO_USER:-root} mkdir -p -- "$LOG_DIR"
+    mkdir -p -- "$LOG_DIR"
+}
+
+debootstrap_rootfs() {
+    local _deb_pkglist="${arg_suite}_deb_pkglist.txt"
+    touch -- "$_deb_pkglist"
+
+    info "Creating the list of installed deb packages..."
+    debootstrap \
+        --print-debs \
+        --arch=arm64 \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
+        --components=main,restricted,universe \
+        --merged-usr \
+        "$arg_suite" \
+        "$ROOTFS_DIR" \
+        "$mirror" \
+        2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -u > "$_deb_pkglist" || warn "Failed to create a list of installed deb packages"
+    info "Done (Created the list of installed deb packages)"
+
+    info "Debootstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
+    debootstrap \
+        --arch=arm64 \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
+        --components=main,restricted,universe \
+        --merged-usr \
+        --foreign \
+        "$arg_suite" \
+        "$ROOTFS_DIR" \
+        "$mirror" \
+        2>&1 | tee "$LOG_DIR/debootstrap.log" || error "Failed to debootstrap (stage 1) rootfs" 5
+    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
+    chroot_run "$ROOTFS_DIR" /debootstrap/debootstrap --second-stage || error "Failed to debootstrap (stage 2) rootfs" 7
+    info "Done (Configured rootfs)"
+}
+
+mmdebstrap_rootfs() {
+    info "Debootstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
+    mmdebstrap \
+        --variant=- \
+        --mode=root \
+        --format=directory \
+        --dpkgopt='path-exclude=/usr/share/doc/*' \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+        --architectures=arm64 \
+        "$arg_suite" \
+        "$ROOTFS_DIR" \
+        "${mirrors[@]}" \
+        2>&1 | tee "$LOG_DIR/mmdebstrap.log" || error "Failed to mmdebstrap rootfs" 8
+    info "Done (Configured rootfs)"
+
+    info "Copying sources.list..."
+    cp -vf -- "sources-$distro.list" "$ROOTFS_DIR"/etc/apt/sources.list
+    sed -i -e 's|@SUITE@|'"$arg_suite"'|g' "$ROOTFS_DIR"/etc/apt/sources.list
+    if [[ "$distro" == "debian" ]]; then
+        cp -vf -- raspi.list "$ROOTFS_DIR"/etc/apt/sources.list.d/
+        sed -i -e 's|@SUITE@|'"$arg_suite"'|g' "$ROOTFS_DIR"/etc/apt/sources.list.d/raspi.list
+        wget -qO - http://archive.raspberrypi.org/debian/raspberrypi.gpg.key | gpg --dearmor | tee "$ROOTFS_DIR"/etc/apt/trusted.gpg.d/raspberrypi.gpg > /dev/null
+    fi
+    info "Done (Copied sources.list)"
+
+    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
+
+    info "Removing excluded packages: ${excluded_deb_pkgs[*]}"
+    chroot_run "$ROOTFS_DIR" apt-get remove -y --purge "${excluded_deb_pkgs[@]}" || warn "Failed to remove excluded packages"
+    info "Done (Removed excluded packages)"
+
+    info "Creating the list of installed deb packages..."
+    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "${arg_suite}_deb_pkglist.txt" || warn "Failed to create a list of installed deb packages"
+    info "Done (Created the list of installed deb packages)"
+
+    info "Running initialize.sh..."
+    cp -vf -- "$SCRIPT_DIR/initialize.sh" "$ROOTFS_DIR"
+    chroot_run "$ROOTFS_DIR" "/initialize.sh" || error "Failed to run initialize.sh" 9
+    rm -vf -- "$ROOTFS_DIR/initialize.sh"
+    info "Done (Ran initialize.sh)"
+
+    chroot_teardown
+}
+
+create_base_rootfs_tarball() {
+    local _name="raspi-${arg_suite}-base-$TIMESTAMP.tar.zst"
+
+    info "Creating base rootfs tarball..."
+    tar -vcf "$SCRIPT_DIR/$_name" \
+        --transform='s|^./||' \
+        --numeric-owner \
+        --zstd -C "$ROOTFS_DIR" . \
+        2>&1 > "$LOG_DIR/base_rootfs-tar.log"
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/$_name"
+    info "Done (Created base rootfs tarball)"
 }
 
 create_img_file() {
@@ -136,102 +243,51 @@ mount_img() {
     info "Done (Mounted image)"
 }
 
-debootstrap_rootfs() {
-    local _log_file="$LOG_DIR/debootstrap.log"
-    local _deb_pkglist="${arg_suite}_deb_pkglist.txt"
+configure_img() {
+    info "Downloading RPi firmware..."
+    local _firmware_version=$(git ls-remote --tags https://github.com/raspberrypi/firmware.git | grep -oP '(?<=refs/tags/)1.\d{8}$' | sort -V | tail -n1)
+    wget -qO "$WORK_DIR/firmware.tar.gz" https://github.com/raspberrypi/firmware/archive/refs/tags/$_firmware_version.tar.gz
+    tar -xf "$WORK_DIR/firmware.tar.gz" -C "$FIRMWARE_DIR"
+    info "Done (Downloaded RPi firmware: $_firmware_version)"
 
-    sudo -u ${SUDO_USER:-root} touch -- "$_log_file" "$_deb_pkglist"
-
-    info "Creating the list of installed deb packages..."
-    debootstrap \
-        --print-debs \
-        --arch=arm64 \
-        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
-        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
-        --components=main,restricted,universe \
-        --merged-usr \
-        "$arg_suite" \
-        "$ROOTFS_DIR" \
-        "$mirror" \
-        2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -u > "$_deb_pkglist" || warn "Failed to create a list of installed deb packages"
-    info "Done (Created the list of installed deb packages)"
-
-    info "Debootstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
-    debootstrap \
-        --arch=arm64 \
-        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
-        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
-        --components=main,restricted,universe \
-        --merged-usr \
-        --foreign \
-        "$arg_suite" \
-        "$ROOTFS_DIR" \
-        "$mirror" \
-        2>&1 | tee "$_log_file" || error "Failed to debootstrap (stage 1) rootfs" 5
-    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
-    chroot_run "$ROOTFS_DIR" /debootstrap/debootstrap --second-stage || error "Failed to debootstrap (stage 2) rootfs" 7
-    info "Done (Configured rootfs)"
+    info "Copying RPi firmware to rootfs..."
+    mv "$FIRMWARE_DIR/boot" "$ROOTFS_DIR/boot/firmware"
+    mv "$FIRMWARE_DIR/modules" "$ROOTFS_DIR/usr/lib/modules"
+    local _kernel_version
+    local _kernel_suffix
+    for _kernel_version in $(ls "$ROOTFS_DIR/usr/lib/modules"); do
+        _kernel_version=$(echo "$_kernel_version" | grep -oP '\d+\.\d+\.\d+\K.*' | sed 's/^-v//;s/\+//')
+        case "$_kernel_version" in
+            8-16k)  _kernel_suffix="_2712" ;;
+            *)      _kernel_suffix="$_kernel_version" ;;
+        esac
+        cp -dr "$ROOTFS_DIR/boot/firmware/kernel$_kernel_suffix.img" "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version"
+        kernel_version_kvs+=("$_kernel_version:$_kernel_suffix")
+    done
+    info "Done (Copied RPi firmware)"
 }
 
-mmdebstrap_rootfs() {
-    local _log_file="$LOG_DIR/mmdebstrap.log"
-    sudo -u ${SUDO_USER:-root} touch -- "$_log_file"
-
-    info "Debootstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
-    mmdebstrap \
-        --variant=- \
-        --mode=root \
-        --format=directory \
-        --dpkgopt='path-exclude=/usr/share/doc/*' \
-        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
-        --architectures=arm64 \
-        "$arg_suite" \
-        "$ROOTFS_DIR" \
-        "${mirrors[@]}" \
-        2>&1 | tee "$_log_file" || error "Failed to mmdebstrap rootfs" 8
-    info "Done (Configured rootfs)"
-
-    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
-
-    info "Removing excluded packages: ${excluded_deb_pkgs[*]}"
-    chroot_run "$ROOTFS_DIR" apt-get remove -y --purge "${excluded_deb_pkgs[@]}" || warn "Failed to remove excluded packages"
-    info "Done (Removed excluded packages)"
-
-    info "Creating the list of installed deb packages..."
-    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "${arg_suite}_deb_pkglist.txt" || warn "Failed to create a list of installed deb packages"
-    info "Done (Created the list of installed deb packages)"
-
-    chroot_teardown
-}
-
-create_base_rootfs_tarball() {
-    local _log_file="$LOG_DIR/base_rootfs-tar.log"
-    local _name="raspi-${arg_suite}-base-$TIMESTAMP.tar.zst"
-
-    sudo -u ${SUDO_USER:-root} touch -- "$_log_file"
-
-    info "Creating base rootfs tarball..."
-    tar -vcf "$SCRIPT_DIR/$_name" \
-        --transform='s|^./||' \
-        --numeric-owner \
-        --zstd -C "$ROOTFS_DIR" . \
-        2>&1 > "$_log_file"
-    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/$_name"
-    info "Done (Created base rootfs tarball)"
-}
-
+# After each call to cleanup() before actual exit, ensure to re-establish the trap with: trap cleanup EXIT SIGINT SIGTERM SIGKILL
 cleanup() {
     set +e
+    trap - EXIT SIGINT SIGTERM SIGKILL
 
-    info "Cleaning..."
+    info "Unmounting work directories..."
     chroot_teardown
-    if [[ -n "$ROOTFS_DIR" && -d "$ROOTFS_DIR" ]]; then
-        mountpoint -q "$ROOTFS_DIR" && umount -R "$ROOTFS_DIR" 2> /dev/null
-    fi
+
+    # Unmounting loop device
+    mountpoint -q "$ROOTFS_DIR" && umount -R "$ROOTFS_DIR"
     loop_teardown "$loop_device"
+    info "Done (Unmounted work directories)"
+
+    info "Removing work directories..."
+    mount | grep -q "$ROOTFS_DIR"
+    if (( $? == 0 )); then
+        error "There are mount points under $WORK_DIR, please unmount it manually" 255
+    fi
     rm -f -- "$IMG_FILE"
     rm -rf -- "$ROOTFS_DIR"
-    info "Done (Cleaned)"
+    info "Done (Removed work directories)"
 
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
@@ -286,11 +342,13 @@ while (( $# > 0 )); do
 done
 
 case "$arg_suite" in
-    debian)
+    bookworm)
+        distro="debian"
         deb_pkgs=("${common_deb_pkgs[@]}" "${bookworm_deb_pkgs[@]}")
         mirror="http://deb.debian.org/debian"
         ;;
     jammy)
+        distro="ubuntu"
         deb_pkgs=("${common_deb_pkgs[@]}" "${jammy_deb_pkgs[@]}")
         excluded_deb_pkgs=("${jammy_excluded_deb_pkgs[@]}")
         mirror="http://ports.ubuntu.com"
@@ -306,6 +364,11 @@ mirrors=(
     "deb $mirror $arg_suite-updates main restricted universe multiverse"
     "deb $mirror $arg_suite-security main restricted universe multiverse"
 )
+
+if [[ "$distro" == "debian" ]]; then
+    wget -qO "$RASPBERRYPI_GPG_KEY" http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
+    mirrors+=("deb [signed-by=$RASPBERRYPI_GPG_KEY] http://archive.raspberrypi.com/debian/ $arg_suite main")
+fi
 
 ################################################################################
 
@@ -341,4 +404,6 @@ epilogue
 # 6: Failed to setup chroot environment
 # 7: Failed to debootstrap (stage 2) rootfs
 # 8: Failed to mmdebstrap rootfs
+# 9: Failed to run initialize.sh
 # 127: Unknown option
+# 255: Failed to remove work directories
