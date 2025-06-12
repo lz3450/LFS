@@ -26,6 +26,7 @@ CHROOT_PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
 
 chroot_active_mounts=()
 chroot_dir=""
+declare -i chroot_setup_done=0
 
 ### functions
 chroot_add_mount() {
@@ -87,6 +88,11 @@ _add_resolv_conf() {
 # when using `chroot_setup`, `chroot_teardown` must be call to clean up
 # for example, `trap chroot_teardown EXIT`
 chroot_setup() {
+    if (( chroot_setup_done )); then
+        info "chroot_setup has already been called. Skipping."
+        return
+    fi
+
     chroot_active_mounts=()
     chroot_dir="$1"
 
@@ -108,13 +114,18 @@ chroot_setup() {
     fi
 
     _add_resolv_conf
+
+    chroot_setup_done=1
 }
 
 chroot_teardown() {
+
     if (( ${#chroot_active_mounts[@]} )); then
         umount -v "${chroot_active_mounts[@]}"
     fi
     chroot_active_mounts=()
+
+    chroot_setup_done=0
 }
 
 chroot_run() {
