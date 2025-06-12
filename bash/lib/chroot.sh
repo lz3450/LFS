@@ -119,13 +119,21 @@ chroot_setup() {
 }
 
 chroot_teardown() {
-
-    if (( ${#chroot_active_mounts[@]} )); then
+    while (( $chroot_setup_done > 0 )); do
         umount -v "${chroot_active_mounts[@]}"
-    fi
-    chroot_active_mounts=()
-
-    chroot_setup_done=0
+        mount | grep -q "$chroot_dir"
+        if (( $? != 0 )); then
+            chroot_active_mounts=()
+            chroot_setup_done=0
+        else
+            read -p "Umount failed. Do you want to retry? (Y/n) " answer
+            if [[ "$answer" == "N" || "$answer" == "n" ]]; then
+                error "Failed to unmount chroot environment. Please unmount manually." 255
+            else
+                info "Retrying to unmount chroot environment..."
+            fi
+        fi
+    done
 }
 
 chroot_run() {
@@ -137,3 +145,4 @@ debug "${BASH_SOURCE[0]} sourced"
 
 ### error codes
 # 1: This script must be run as root
+# 255: Failed to unmount chroot environment
