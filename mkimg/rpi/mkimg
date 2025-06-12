@@ -63,10 +63,12 @@ common_deb_pkgs=(
     zstd
     libgpgme-dev
 )
+# Debian
 bookworm_deb_pkgs=(
     systemd-resolved
     systemd-timesyncd
 )
+bookworm_excluded_deb_pkgs=()
 raspi_deb_pkgs=(
     raspberrypi-sys-mods
     raspberrypi-archive-keyring
@@ -78,6 +80,7 @@ raspi_deb_pkgs=(
     rpi-eeprom-images
     rpiboot
 )
+# Ubuntu
 jammy_deb_pkgs=(
     linux-firmware-raspi
 )
@@ -139,6 +142,20 @@ _initialize_rootfs() {
     info "Done (Ran initialize.sh)"
 }
 
+_clean_rootfs() {
+    info "Cleaning up rootfs..."
+    rm -vrf "$ROOTFS_DIR"/dev/*
+    rm -vrf "$ROOTFS_DIR"/run/*
+    rm -vrf "$ROOTFS_DIR"/tmp/*
+    rm -vrf "$ROOTFS_DIR"/usr/share/doc/*
+    rm -vrf "$ROOTFS_DIR"/var/cache/apt/archives/*.deb
+    rm -vrf "$ROOTFS_DIR"/var/cache/ldconfig/*
+    rm -vrf "$ROOTFS_DIR"/var/lib/apt/lists/*
+    rm -vrf "$ROOTFS_DIR"/var/log/*
+    rm -vrf "$ROOTFS_DIR"/var/tmp/*
+    info "Done (Cleaned up rootfs)"
+}
+
 debootstrap_rootfs() {
     local _deb_pkglist="${arg_suite}_deb_pkglist.txt"
     sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkglist"
@@ -190,13 +207,7 @@ debootstrap_rootfs() {
     _initialize_rootfs
     chroot_teardown
 
-    rm -vrf "$ROOTFS_DIR"/dev/*
-    rm -vrf "$ROOTFS_DIR"/tmp/*
-    rm -vrf "$ROOTFS_DIR"/usr/share/doc/*
-    rm -vrf "$ROOTFS_DIR"/var/lib/apt/lists/*
-    rm -vrf "$ROOTFS_DIR"/var/log/*
-    rm -vrf "$ROOTFS_DIR"/var/cache/apt/archives/*.deb
-    rm -vrf "$ROOTFS_DIR"/var/tmp/*
+    _clean_rootfs
 
     info "Done (Debootstrapped rootfs)"
 }
@@ -232,11 +243,16 @@ mmdebstrap_rootfs() {
     _copy_sources_list
 
     chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
-    chroot_run "$ROOTFS_DIR" apt-get remove -y --purge "${excluded_deb_pkgs[@]}" || warn "Failed to remove excluded packages"
+    local _pkg
+    for _pkg in "${excluded_deb_pkgs[@]}"; do
+        chroot_run "$ROOTFS_DIR" apt-get remove -y --purge "$_pkg" || warn "Failed to remove package $_pkg"
+    done
     chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkglist" || warn "Failed to create a list of installed deb packages"
     # chroot_run "$ROOTFS_DIR" ls -R / > "$_ls_R" || warn "Failed to get ls-R"
     _initialize_rootfs
     chroot_teardown
+
+    _clean_rootfs
 
     info "Done (mmdebstrapped rootfs)"
 }
@@ -402,8 +418,8 @@ esac
 
 mirrors=(
     "deb $mirror $arg_suite main restricted universe multiverse"
-    "deb $mirror $arg_suite-updates main restricted universe multiverse"
-    "deb $mirror $arg_suite-security main restricted universe multiverse"
+    # "deb $mirror $arg_suite-updates main restricted universe multiverse"
+    # "deb $mirror $arg_suite-security main restricted universe multiverse"
 )
 
 if [[ "$distro" == "debian" ]]; then

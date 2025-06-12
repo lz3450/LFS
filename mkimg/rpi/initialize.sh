@@ -21,7 +21,7 @@ useradd -m -U -G sudo,adm -s /bin/zsh kzl
 echo -e 'raspi\nraspi' | passwd kzl
 
 # network
-tee /etc/systemd/network/ethernet.network << EOF
+cat > /etc/systemd/network/ethernet.network << EOF
 [Match]
 Name=en*
 Name=eth*
@@ -29,14 +29,14 @@ Name=eth*
 [Network]
 DHCP=yes
 EOF
-tee /etc/systemd/network/wifi.network << EOF
+cat > /etc/systemd/network/wifi.network << EOF
 [Match]
 Name=wlan*
 
 [Network]
 DHCP=yes
 EOF
-tee /etc/wpa_supplicant/wpa_supplicant.conf << EOF
+cat > /etc/wpa_supplicant/wpa_supplicant.conf << EOF
 network={
     ssid="LuckySKZLJ"
     psk=51d8558a663cf1d191b42cd88d542e3847ce4da204196fa016c30728bc67f6e3
@@ -54,6 +54,6 @@ systemctl enable wpa_supplicant@wlan0
 systemctl enable ssh
 
 # grml-zsh-config
-wget -O /root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+wget -O /root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc 2>&1 > /dev/null
 echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> /root/.zshrc
 echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> /root/.zshrc
