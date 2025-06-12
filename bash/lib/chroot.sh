@@ -119,7 +119,7 @@ chroot_teardown() {
 
 chroot_run() {
     # SHELL=/bin/bash LC_ALL=C PATH="$CHROOT_PATH" unshare --fork --pid chroot "$@"
-    SHELL=/bin/bash PATH="$CHROOT_PATH" unshare --fork --pid chroot "$@"
+    SHELL=/bin/bash PATH="$CHROOT_PATH" LC_ALL=C unshare --fork --pid chroot "$@"
 }
 
 debug "${BASH_SOURCE[0]} sourced"
