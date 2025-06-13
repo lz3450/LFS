@@ -20,7 +20,7 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
 
-### libraries
+### general libraries
 . "$SCRIPT_DIR"/lib/log.sh
 . "$SCRIPT_DIR"/lib/utils.sh
 # . "$SCRIPT_DIR"/lib/loop.sh
@@ -33,10 +33,16 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 check_root
 
 ### constants & variables
-VERSION="1.0"
+declare -r VERSION="1.0"
 
+variable="value"
+
+### options and arguments
 declare -i opt_verbose=0
 arg_input=""
+
+### domain specific libraries
+# . "$SCRIPT_DIR"/lib/mkiso.sh
 
 ### functions
 example_function() {
