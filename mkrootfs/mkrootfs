@@ -1,0 +1,206 @@
+#!/bin/bash
+#
+# mkrootfs
+#
+
+set -e
+set -u
+set -o pipefail
+# set -x
+
+umask 0022
+
+unset __DEBUG__
+__DEBUG__=1
+
+SCRIPT_NAME="$(basename "$0")"
+SCRIPT_PATH="$0"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+
+################################################################################
+
+### checks
+check_root
+
+### libraries
+. "$SCRIPT_DIR"/lib/log.sh
+. "$SCRIPT_DIR"/lib/utils.sh
+. "$SCRIPT_DIR"/lib/loop.sh
+. "$SCRIPT_DIR"/lib/chroot.sh
+
+### constants and variables
+declare -r TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
+
+declare -r WORK_DIR="/tmp/mkrootfs_$TIMESTAMP"
+declare -r ROOTFS_DIR="$WORK_DIR/rootfs"
+declare -r LOG_DIR="$WORK_DIR/log"
+
+declare -r PKGLIST_DIR="$SCRIPT_DIR/pkglist"
+
+declare -r DEBIAN_MIRROR="http://deb.debian.org/debian"
+declare -r UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
+# declare -r UBUNTU_MIRROR="https://mirror.arizona.edu/ubuntu/"
+declare -r UBUNTU_PORT_MIRROR="http://ports.ubuntu.com/ubuntu-ports/"
+
+distro=""
+ubuntu_mirror=""
+mirror=""
+mirrors=()
+
+deb_pkgs=()
+excluded_deb_pkgs=()
+
+### options and arguments
+arg_architecture="amd64"
+arg_suite="noble"
+
+### functions
+
+cleanup() {
+    set +e
+    info "Cleaning up..."
+
+    if [[ -d "$WORK_DIR" ]]; then
+        local _answer
+        read -p "Do you want to remove working directory $WORK_DIR? (y/N) " _answer
+        if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+            if (( chroot_setup_done > 0 )); then
+                chroot_teardown
+            fi
+            rm -rf --one-file-system -- "$WORK_DIR"
+        fi
+    fi
+
+    info "Done (Cleaned up)"
+
+    trap - EXIT SIGINT SIGTERM SIGKILL
+}
+trap cleanup EXIT SIGINT SIGTERM SIGKILL
+
+create_work_dirs() {
+    info "Create working directory: $WORK_DIR"
+    if [[ -d "$WORK_DIR" ]]; then
+        error "Working directory $WORK_DIR already exists" 1
+    fi
+    info "Done (Created root filesystem directory)"
+}
+
+_setup_sources_list() {
+    info "Setting up sources.list..."
+    cp -vf -- "$distro.sources" "$ROOTFS_DIR/etc/apt/sources.list.d/"
+    if [[ "$arg_architecture" == "amd64" ]]; then
+        cp -vf -- "$distro.sources" "$ROOTFS_DIR/etc/apt/sources.list.d/"
+    elif [[ "$arg_architecture" == "arm64" ]]; then
+    fi
+    info "Done (Set up sources.list)"
+}
+
+debootstrap_rootfs() {
+    local _deb_pkglist_file="$PKGLIST_DIR/${arg_suite}_deb_pkglist.txt"
+    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkglist_file"
+
+    info "Creating the list of deb packages to be installed..."
+    debootstrap \
+        --print-debs \
+        --arch "$arg_architecture" \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
+        --components=main,restricted,universe \
+        --merged-usr \
+        "$arg_suite" \
+        "$ROOTFS_DIR" \
+        "$mirror" \
+        2> /dev/null | sed 's/ /\n/g;/^$/d' | LC_ALL=C sort -n > "$_deb_pkglist_file" || warn "Failed to creating the list of deb packages to be installed"
+    info "Done (Created the list of installed deb packages)"
+
+    info "Debootstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
+    local _foreign=""
+    if [[ "$arg_architecture" != "$(dpkg --print-architecture)" ]]; then
+        _foreign="--foreign"
+    fi
+    debootstrap \
+        --arch "$arg_architecture" \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
+        --components=main,restricted,universe \
+        --merged-usr \
+        "$_foreign" \
+        "$arg_suite" \
+        "$ROOTFS_DIR" \
+        "$mirror" \
+        2>&1 | tee "$LOG_DIR"/debootstrap.log || error "Failed to debootstrap rootfs" 2
+
+    _setup_sources_list
+}
+
+usage() {
+    cat << EOF
+
+Usage: $SCRIPT_NAME -h | --help
+Usage: $SCRIPT_NAME [ -a | --architecture <arch> ] -s | --suite <suite>
+
+    -h, --help                      print this help message and exit
+    -a, --architecture <arch>       specify the image architecture (amd64, arm64)
+    -s, --suite <suite>             specify the distribution suite (bookworm, jammy, noble, questing)
+EOF
+}
+
+################################################################################
+
+while (( $# > 0 )); do
+    case "$1" in
+    -h | --help)
+        usage
+        exit 0
+        ;;
+    -a | --architecture)
+        shift
+        arg_architecture="$1"
+        ;;
+    -s | --suite)
+        shift
+        arg_suite="$1"
+        ;;
+    *)
+        usage
+        error "Unknown option: $1" 127
+        ;;
+    esac
+    shift
+done
+
+case "$arg_architecture" in
+    amd64)
+        ubuntu_mirror="$UBUNTU_MIRROR"
+        ;;
+    arm64)
+        ubuntu_mirror="$UBUNTU_PORT_MIRROR"
+        ;;
+    *)
+        usage
+        error "Unsupported architecture \"$arg_architecture\"." 2
+        ;;
+esac
+
+case "$arg_suite" in
+    bookworm)
+        distro="debian"
+        mirror="$DEBIAN_MIRROR"
+        ;;
+    jammy)
+        distro="ubuntu"
+        mirror="$ubuntu_mirror"
+        ;;
+    noble)
+        distro="ubuntu"
+        mirror="$ubuntu_mirror"
+        ;;
+    questing)
+        distro="ubuntu"
+        mirror="$ubuntu_mirror"
+        ;;
+    *)
+        usage
+        error "Unsupported distribution \"$arg_suite\"." 2
+        ;;
+esac
