@@ -1,5 +1,0 @@
-Types: deb
-URIs: http://us.archive.ubuntu.com/ubuntu/
-Suites: @SUITE@
-Components: main
-Signed-By: /etc/apt/trusted.gpg.d/raspberrypi.asc
