@@ -26,8 +26,7 @@ check_root
 # loop_get_unused
 # echo: loop device name
 loop_get_unused() {
-    local _loop=$(losetup -f)
-    echo "$_loop"
+    echo "$(losetup -f)"
 }
 
 # Setup loop device
@@ -46,7 +45,7 @@ loop_setup() {
 # loop_teardown <loop_device>
 # $1: loop device name
 loop_teardown() {
-    local _loop_device="$1"
+    local _loop_device="${1:-}"
     if [[ -z "$_loop_device" ]]; then
         return 0
     fi
