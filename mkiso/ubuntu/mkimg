@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# mkiso
+# mkimg
 #
 
 set -e
@@ -20,23 +20,18 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 ################################################################################
 
 ### libraries
-. "$SCRIPT_DIR"/lib/log.sh
-. "$SCRIPT_DIR"/lib/utils.sh
-. "$SCRIPT_DIR"/lib/chroot.sh
-
-### mkiso constants and variables
-DISTRO="ubuntu"
-ISO_NAME="Ubuntu-KZL"
-PACMAN_REPO_DIR="home/.repository/ubuntu"
-PACMAN_REPO_PATH="$PACMAN_REPO_DIR/ubuntu.db.tar.zst"
-declare -i no_update_rootfs=0
-mutable_image_type="f2fs"
-. "$SCRIPT_DIR"/lib/mkiso.sh
+. "$SCRIPT_DIR"/../scripts/lib/log.sh
+. "$SCRIPT_DIR"/../scripts/lib/utils.sh
+. "$SCRIPT_DIR"/../scripts/lib/chroot.sh
 
 ### constants & variables
 VERSION="1.0"
 
+DISTRO="ubuntu"
+ISO_NAME="Ubuntu-KZL"
 UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
+PACMAN_REPO_DIR="home/.repository/ubuntu"
+PACMAN_REPO_FILE="$PACMAN_REPO_DIR/ubuntu.db.tar.zst"
 # UBUNTU_MIRROR="https://mirror.arizona.edu/ubuntu/"
 
 # deb package lists
@@ -45,6 +40,8 @@ common_deb_pkgs=(
     nano
     bash-completion
     zsh
+    zsh-syntax-highlighting
+    zsh-autosuggestions
     ### disk
     parted fdisk
     smartmontools
@@ -69,6 +66,12 @@ common_deb_pkgs=(
     zstd
     libgpgme-dev
 )
+common_excluded_deb_pkgs=(
+    ubuntu-minimal
+    ubuntu-pro-client
+    ubuntu-pro-client-l10n
+)
+jammy_deb_pkgs=()
 noble_deb_pkgs=(
     systemd-boot
     systemd-resolved
@@ -78,39 +81,45 @@ questing_deb_pkgs=(
     systemd-boot
     systemd-resolved
 )
-excluded_deb_pkgs=(
-    ubuntu-minimal
-    ubuntu-pro-client
-    ubuntu-pro-client-l10n
-)
 pacman_pkgs=(
     pacman
     linux
     debootstrap
 )
 
-included_deb_pkgs=()
+deb_pkgs=()
+excluded_deb_pkgs=()
+
+### options and arguments
+declare -i opt_no_update_rootfs=0
+arg_no_update_rootfs="f2fs"
 arg_debootstrap_suite=""
+
+### domain specific libraries
+. "$SCRIPT_DIR"/../scripts/lib/mkiso.sh
 
 ### functions
 debootstrap_rootfs() {
+    local _deb_pkglist="${arg_debootstrap_suite}_deb_pkglist.txt"
+    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkglist"
+
     # debootstrap
     info "Creating the list of installed deb packages..."
     debootstrap \
-        --include="$(IFS=',' echo "${included_deb_pkgs[*]}")" \
+        --print-debs \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
         --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
         --components=main,restricted,universe \
         --merged-usr \
-        --print-debs \
         "$arg_debootstrap_suite" \
         "$ROOTFS_DIR"/tmp \
         "$UBUNTU_MIRROR" \
-        > "$ISOFS_DIR"/deb_pkglist.txt 2> /dev/null || warn "Failed to creating a list of installed deb packages"
+        2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -n > "$_deb_pkglist" || warn "Failed to creating a list of installed deb packages"
     info "Done (Creating the list of installed deb packages)"
 
-    info "Debootstrapping \"$ROOTFS_DIR/\": ${included_deb_pkgs[*]}"
+    info "Debootstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
     debootstrap \
-        --include="$(IFS=',' echo "${included_deb_pkgs[*]}")" \
+        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
         --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
         --components=main,restricted,universe \
         --merged-usr \
@@ -118,27 +127,47 @@ debootstrap_rootfs() {
         "$ROOTFS_DIR" \
         "$UBUNTU_MIRROR" \
         2>&1 | tee "$LOG_DIR"/debootstrap.log || error "Failed to debootstrap rootfs" 4
-    if [[ -d "$ROOTFS_DIR/bin.usr-is-merged" ]]; then
-        rmdir -v "$ROOTFS_DIR"/bin.usr-is-merged
-    fi
-    if [[ -d "$ROOTFS_DIR/sbin.usr-is-merged" ]]; then
-        rmdir -v "$ROOTFS_DIR"/sbin.usr-is-merged
-    fi
-    if [[ -d "$ROOTFS_DIR/lib.usr-is-merged" ]]; then
-        rmdir -v "$ROOTFS_DIR"/lib.usr-is-merged
-    fi
-    info "Done (Debootstrapping)"
 
-    info "Configuring rootfs..."
-    install -d -m 1777 -- "$ROOTFS_DIR"/tmp
-    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
-    chroot_run "$ROOTFS_DIR" systemctl enable systemd-networkd.service > "$LOG_DIR"/systemd-networkd.log 2>&1 || error "Failed to enable systemd-networkd" 6
-    chroot_run "$ROOTFS_DIR" apt modernize-sources -y
-    chroot_run "$ROOTFS_DIR" apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get autoremove --purge -y > "$LOG_DIR"/apt.log 2>&1 || error "Failed to run apt" 6
-    chroot_run "$ROOTFS_DIR" ldconfig
-    chroot_teardown
+    # hostname
+    echo "LiveOS" > "$ROOTFS_DIR"/etc/hostname
+    # environment
     echo 'PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin"' > "$ROOTFS_DIR"/etc/environment
-    info "Done (Configuring rootfs)"
+    # network
+    cp -vf -- "$SCRIPT_DIR"/config/ethernet.network "$ROOTFS_DIR"/etc/systemd/network/ethernet.network
+    cp -vf -- "$SCRIPT_DIR"/config/wifi.network "$ROOTFS_DIR"/etc/systemd/network/wifi.network
+    cp -vf -- "$SCRIPT_DIR"/config/wpa_supplicant.conf "$ROOTFS_DIR"/etc/wpa_supplicant/wpa_supplicant.conf
+    # ssh
+    cp -vf -- "$ROOTFS_DIR"/etc/ssh/sshd_config "$SCRIPT_DIR"/config/sshd_config
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR"/config/sshd_config
+    sed -i \
+        -e '/^X11Forwarding/c\#X11Forwarding yes' \
+        -e '/^#PermitRootLogin/c\PermitRootLogin yes' \
+        -e '/^#PermitEmptyPasswords/c\PermitEmptyPasswords yes' \
+        "$SCRIPT_DIR"/config/sshd_config
+    cp -vf -- "$SCRIPT_DIR"/config/sshd_config "$ROOTFS_DIR"/etc/ssh/sshd_config
+    # grml-zsh-config
+    wget -O "$ROOTFS_DIR"/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc 2>&1 > /dev/null
+    echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR"/root/.zshrc
+    echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR"/root/.zshrc
+
+    rm -vrf "$ROOTFS_DIR"/dev/*
+    rm -vrf "$ROOTFS_DIR"/run/*
+    rm -vrf "$ROOTFS_DIR"/tmp/*
+    rm -vrf "$ROOTFS_DIR"/usr/share/doc/*
+    rm -vrf "$ROOTFS_DIR"/var/cache/apt/archives/*.deb
+    rm -vrf "$ROOTFS_DIR"/var/cache/ldconfig/*
+    rm -vrf "$ROOTFS_DIR"/var/lib/apt/lists/*
+    rm -vrf "$ROOTFS_DIR"/var/log/*
+    rm -vrf "$ROOTFS_DIR"/var/tmp/*
+    rmdir --ignore-fail-on-non-empty -v "$ROOTFS_DIR"/bin.usr-is-merged
+    rmdir --ignore-fail-on-non-empty -v "$ROOTFS_DIR"/lib.usr-is-merged
+    rmdir --ignore-fail-on-non-empty -v "$ROOTFS_DIR"/sbin.usr-is-merged
+
+    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 6
+    chroot_run "$ROOTFS_DIR" systemctl enable systemd-networkd.service 2>&1 > "$LOG_DIR"/systemd-networkd.log || error "Failed to enable systemd-networkd" 6
+    chroot_teardown
+
+    info "Done (Debootstrapped)"
 }
 
 make_initramfs() {
@@ -207,22 +236,18 @@ configure_isofs() {
             ::/vmlinuz$_kernel_suffix \
             ::/initramfs$_kernel_suffix.img \
             "$ISOFS_DIR"/
-        info "Done (Copying kernel and initramfs to the ISO file system)"
+        info "Done (Copied kernel and initramfs to the ISO file system)"
     done
 }
 
-clean() {
+cleanup() {
     set +e
 
-    info "Cleaning..."
-    chroot_teardown
-    info "Done (Cleaning)"
-
-    libmkiso_clean
+    mkiso_clean
 
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
-trap clean EXIT SIGINT SIGTERM SIGKILL
+trap cleanup EXIT SIGINT SIGTERM SIGKILL
 
 usage() {
     cat <<EOF
@@ -245,7 +270,7 @@ while (( $# > 0 )); do
         exit 0
         ;;
     -n|--no-update-rootfs)
-        no_update_rootfs=1
+        opt_no_update_rootfs=1
         ;;
     -s|--suite)
         shift
@@ -259,15 +284,16 @@ while (( $# > 0 )); do
     shift
 done
 
+excluded_deb_pkgs=("${common_excluded_deb_pkgs[@]}")
 case "$arg_debootstrap_suite" in
     jammy)
-        included_deb_pkgs=("${common_deb_pkgs[@]}")
+        deb_pkgs=("${common_deb_pkgs[@]}")
         ;;
     noble)
-        included_deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
+        deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
         ;;
     questing)
-        included_deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}")
+        deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}")
         ;;
     *)
         error "Unknown debootstrap suite: $arg_debootstrap_suite" 127
@@ -282,7 +308,7 @@ iso_image_name="$output_name.iso"
 
 prologue
 
-create_work_dir
+create_work_dirs
 
 make_rootfs
 debootstrap_rootfs
@@ -303,6 +329,7 @@ make_rootfs_squashfs
 configure_isofs
 make_iso_image "$iso_image_name"
 
+cleanup
 epilogue
 
 ### error codes

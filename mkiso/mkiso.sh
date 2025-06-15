@@ -1,20 +1,19 @@
+#!/bin/bash
 #
 # mkiso.sh
 #
 
 ################################################################################
 
-if [[ -n "${__LIBMKISO__:-}" ]]; then
+if [[ -v __LIBMKISO__ ]]; then
     return
 fi
 
-declare -i __LIBMKISO__=1
+declare -r __LIBMKISO__=1
 
 ################################################################################
 
 ### checks
-check_root
-
 if [[ -z "$DISTRO" ]]; then
     error "DISTRO unbound" 2
 fi
@@ -27,30 +26,30 @@ if [[ -z "$PACMAN_REPO_DIR" ]]; then
     error "PACMAN_REPO_DIR unbound" 2
 fi
 
-if [[ -z "$PACMAN_REPO_PATH" ]]; then
-    error "PACMAN_REPO_PATH unbound" 2
+if [[ -z "$PACMAN_REPO_FILE" ]]; then
+    error "PACMAN_REPO_FILE unbound" 2
 fi
 
-if [[ -z "$no_update_rootfs" ]]; then
-    error "no_update_rootfs unbound" 2
+if [[ -z "$opt_no_update_rootfs" ]]; then
+    error "opt_no_update_rootfs unbound" 2
 fi
 
-if [[ -z "$mutable_image_type" ]]; then
-    error "mutable_image_type unbound" 2
+if [[ -z "$arg_mutable_image_type" ]]; then
+    error "arg_mutable_image_type unbound" 2
 fi
 
 ### libraries
-. "$(dirname ${BASH_SOURCE[0]})"/log.sh
-. "$(dirname ${BASH_SOURCE[0]})"/utils.sh
-. "$(dirname ${BASH_SOURCE[0]})"/chroot.sh
-. "$(dirname ${BASH_SOURCE[0]})"/pacman.sh
+. log.sh
+. utils.sh
+. chroot.sh
+. pacman.sh
 
 ### constants & variables
 WORK_DIR="/tmp/mkiso-$DISTRO"
-ROOTFS_DIR="$WORK_DIR"/rootfs
-ISOFS_DIR="$WORK_DIR"/iso
+ROOTFS_DIR="$WORK_DIR/rootfs"
+ISOFS_DIR="$WORK_DIR/iso"
 INSTALL_DIR="LiveOS"
-LOG_DIR="$WORK_DIR"/log
+LOG_DIR="$WORK_DIR/log"
 OUT_DIR="$SCRIPT_DIR"
 MUTABLE_IMG="$WORK_DIR/mutable.img"
 EFIBOOT_IMG="$WORK_DIR/efiboot.img"
@@ -66,7 +65,7 @@ DRACUT_ARGUMENTS=(
 FSTAB_ROW_FORMAT="%s\t\t%s\t\t%s\t%s\t\t%s %s\n"
 
 ### functions
-create_work_dir() {
+create_work_dirs() {
     info "Create working directory..."
     if [[ -d "$WORK_DIR" ]]; then
         read -p "Working directory exists. Do you want to delete it? (Y/n) " answer
@@ -76,20 +75,18 @@ create_work_dir() {
         fi
     fi
     mkdir -p -- "$WORK_DIR"
+    mkdir -p -- "$ROOTFS_DIR"
+    mkdir -p -- "$LOG_DIR"
+    mkdir -p -- "$ISOFS_DIR/$INSTALL_DIR"
+    # Write build date to file
+    echo "$(date '+%Y/%m/%d %H:%M:%S')" > "$ISOFS_DIR/build_time.txt"
     info "Done (Create working directory)"
 }
 
 make_rootfs() {
-    mkdir -p -- "$ROOTFS_DIR"
-    mkdir -p -- "$ISOFS_DIR/$INSTALL_DIR"
-    mkdir -p -- "$LOG_DIR"
-
-    # Write build date to file
-    echo "$(date '+%Y/%m/%d %H:%M:%S')" > "$ISOFS_DIR/build_time.txt"
-
     # Copy custom root file system files.
     if [[ -d "$SCRIPT_DIR/rootfs" ]]; then
-        if (( "$no_update_rootfs" == 0 )); then
+        if (( "$opt_no_update_rootfs" == 0 )); then
             info "Update custom rootfs files..."
             sudo -u ${SUDO_USER:-root} "$SCRIPT_DIR"/update-rootfs > "$LOG_DIR"/rootfs_update.log 2>&1 || error "Failed to update rootfs" 3
             info "Done (Update custom rootfs files)"
@@ -154,7 +151,7 @@ make_mutable_img() {
     info "Creating mutable image \"$MUTABLE_IMG\"..."
     rm -f -- "$MUTABLE_IMG"
     fallocate -l "$_size" "$MUTABLE_IMG"
-    mkfs -t "$mutable_image_type" -f -l MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
+    mkfs -t "$arg_mutable_image_type" -f -l MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
     info "Done (Creating mutable image)"
 }
 
@@ -162,12 +159,12 @@ setup_pacman_repo() {
     local _pkg_list=("$@")
 
     info "Setting up pacman repository to the ISO file system..."
-    mount -t "$mutable_image_type" -o loop "$MUTABLE_IMG" "$ROOTFS_DIR/home"
+    mount -t "$arg_mutable_image_type" -o loop "$MUTABLE_IMG" "$ROOTFS_DIR/home"
     mkdir -p -- "$ROOTFS_DIR/$PACMAN_REPO_DIR"
     for pkg in "${_pkg_list[@]}"; do
         local _pkg_file=$(get_pkg_file "$pkg" "/$PACMAN_REPO_DIR")
         cp -vf -- "/$PACMAN_REPO_DIR/$_pkg_file" "$ROOTFS_DIR/$PACMAN_REPO_DIR"
-        repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_PATH" "$ROOTFS_DIR/$PACMAN_REPO_DIR/$_pkg_file" \
+        repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_FILE" "$ROOTFS_DIR/$PACMAN_REPO_DIR/$_pkg_file" \
             > "$LOG_DIR"/pacman-repo-add.log 2>&1 \
             || error "Failed to set up pacman repository" 8
     done
@@ -295,7 +292,7 @@ make_rootfs_squashfs() {
     printf "$FSTAB_ROW_FORMAT" \
         "LABEL=MUTABLE" \
         "/home" \
-        "$mutable_image_type" \
+        "$arg_mutable_image_type" \
         "defaults" \
         "0" "2" >> "$ROOTFS_DIR"/etc/fstab
     # Create a squashfs image and place it in the ISO 9660 file system.
@@ -331,7 +328,7 @@ make_iso_image() {
     info "Done (Creating ISO image)"
 }
 
-libmkiso_clean() {
+mkiso_clean() {
     info "Cleaning (libmkiso)..."
     umount "$ROOTFS_DIR/home"
     chroot_teardown
