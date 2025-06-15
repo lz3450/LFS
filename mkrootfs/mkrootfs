@@ -43,20 +43,25 @@ declare -r UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
 # declare -r UBUNTU_MIRROR="https://mirror.arizona.edu/ubuntu/"
 declare -r UBUNTU_PORT_MIRROR="http://ports.ubuntu.com/ubuntu-ports/"
 
-common_deb_pkgs=(
+debian_included_deb_pkgs=(
+    locales
+    ca-certificates
+)
+debian_excluded_deb_pkgs=()
+ubuntu_included_deb_pkgs=()
+ubuntu_excluded_deb_pkgs=(
+    ubuntu-advantage-tools
+    ubuntu-minimal
+    ubuntu-pro-client
+    ubuntu-pro-client-l10n
+)
+additional_deb_pkgs=(
     bash-completion
     zsh zsh-autosuggestions zsh-syntax-highlighting
     nano
     openssh-server
     curl wget git
     # screen tmux
-)
-ubuntu_excluded_deb_pkgs=(
-    cron
-    ubuntu-advantage-tools
-    ubuntu-minimal
-    ubuntu-pro-client
-    ubuntu-pro-client-l10n
 )
 
 distro=""
@@ -66,7 +71,7 @@ ubuntu_mirror=""
 mirror=""
 mirrors=()
 
-deb_pkgs=()
+included_deb_pkgs=()
 excluded_deb_pkgs=()
 
 ### options and arguments
@@ -111,16 +116,25 @@ create_work_dirs() {
 }
 
 debootstrap_rootfs() {
-    local -r _deb_pkg_to_install="$PKGLIST_DIR/$arg_platform-$arg_suite-deb_to_install.txt"
+    local -r _deb_pkg_to_install="$PKGLIST_DIR/$arg_platform-$arg_suite-debootstrap-pkgs.txt"
     sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkg_to_install"
+
+    local _include=""
+    if (( ${#included_deb_pkgs[@]} > 0 )); then
+        _include="--include=$(IFS=','; echo "${included_deb_pkgs[*]}")"
+    fi
+
+    local _exclude=""
+    if (( ${#excluded_deb_pkgs[@]} > 0 )); then
+        _exclude="--exclude=$(IFS=','; echo "${excluded_deb_pkgs[*]}")"
+    fi
 
     info "Creating the list of deb packages to be installed..."
     debootstrap \
         --print-debs \
-        --arch "$architecture" \
-        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
-        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
-        --components=main,restricted,universe \
+        --arch="$architecture" \
+        $_include \
+        $_exclude \
         --merged-usr \
         "$arg_suite" \
         "$ROOTFS_DIR" \
@@ -128,24 +142,24 @@ debootstrap_rootfs() {
         2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -n  | sed '/^$/d' > "$_deb_pkg_to_install" || warn "Failed to creating the list of deb packages to be installed"
     info "Done (Created the list of installed deb packages)"
 
-    info "Debootstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
+    info "Debootstrapping \"$ROOTFS_DIR/\"..."
     local _foreign=""
     if [[ "$architecture" != "$(dpkg --print-architecture)" ]]; then
+        info "Using foreign architecture: $architecture"
         _foreign="--foreign"
     fi
     debootstrap \
-        --arch "$architecture" \
-        --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
-        --exclude="$(IFS=',' echo "${excluded_deb_pkgs[*]}")" \
-        --components=main,restricted,universe \
+        --arch="$architecture" \
+        $_include \
+        $_exclude \
         --merged-usr \
         $_foreign \
         "$arg_suite" \
         "$ROOTFS_DIR" \
         "$mirror" \
-        2>&1 | tee "$LOG_DIR"/debootstrap.log || error "Failed to debootstrap rootfs" 2
+        > "$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap rootfs" 2
     if [[ -n "$_foreign" ]]; then
-        chroot "$ROOTFS_DIR" /debootstrap/debootstrap --second-stage || error "Failed to debootstrap (stage 2) rootfs" 3
+        chroot "$ROOTFS_DIR" /debootstrap/debootstrap --second-stage >> "$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap (stage 2) rootfs" 3
     fi
     info "Done (Debootstrapped rootfs)"
 }
@@ -170,12 +184,12 @@ debootstrap_rootfs() {
 # }
 
 configure_rootfs() {
-    local -r _deb_pkg_installed="$PKGLIST_DIR/$arg_platform-$arg_suite-deb_installed.txt"
+    local -r _deb_pkg_installed="$PKGLIST_DIR/$arg_platform-$arg_suite-rootfs-pkgs.txt"
     sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkg_installed"
 
     info "Configuring rootfs..."
 
-    info "  Setting up sources.list..."
+    info "Setting up sources.list..."
     case "$arg_platform-$distro" in
         pc-debian|pc-ubuntu)
             sed "s|@SUITE@|$arg_suite|g" "$ETC_DIR/$distro.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/$distro.sources"
@@ -196,30 +210,33 @@ configure_rootfs() {
     if [[ -f "$ROOTFS_DIR/etc/apt/sources.list" ]]; then
         mv -v -- "$ROOTFS_DIR/etc/apt/sources.list" "$ROOTFS_DIR/etc/apt/sources.list.bak"
     fi
-    info "  Done (Set up sources.list)"
+    info "Done (Set up sources.list)"
 
-    info "  Running chroot configuration..."
+    info "Running chroot configuration..."
     chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
-    # run initialize.sh
-    cp -vf -- "$SCRIPT_DIR/initialize.sh" "$ROOTFS_DIR"
-    chroot_run "$ROOTFS_DIR" "/initialize.sh" || error "Failed to run initialize.sh" 3
-    rm -vf -- "$ROOTFS_DIR/initialize.sh"
+    # apt-get
+    chroot_run "$ROOTFS_DIR" apt-get update || error "Failed to run apt-get update" 3
+    chroot_run "$ROOTFS_DIR" apt-get upgrade -y || error "Failed to run apt-get upgrade" 3
+    chroot_run "$ROOTFS_DIR" apt-get install -y "${additional_deb_pkgs[@]}" || error "Failed to run apt-get install" 3
+    chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y || error "Failed to run apt-get autoremove" 3
+    chroot_run "$ROOTFS_DIR" dpkg-reconfigure locales || warn "Failed to run dpkg-reconfigure locales"
+    chroot_run "$ROOTFS_DIR" dpkg-reconfigure tzdata || warn "Failed to run dpkg-reconfigure tzdata"
     # get installed deb packages
     chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkg_installed" || warn "Failed to create a list of installed deb packages"
     chroot_teardown
-    info "  Done (Chroot configuration)"
+    info "Done (Chroot configuration)"
 
-    info "  Cleaning up rootfs..."
-    rm -vrf "$ROOTFS_DIR"/dev/*
-    rm -vrf "$ROOTFS_DIR"/run/*
-    rm -vrf "$ROOTFS_DIR"/tmp/*
-    rm -vrf "$ROOTFS_DIR"/usr/share/doc/*
-    rm -vrf "$ROOTFS_DIR"/var/cache/apt/archives/*.deb
-    rm -vrf "$ROOTFS_DIR"/var/cache/ldconfig/*
-    rm -vrf "$ROOTFS_DIR"/var/lib/apt/lists/*
-    rm -vrf "$ROOTFS_DIR"/var/log/*
-    rm -vrf "$ROOTFS_DIR"/var/tmp/*
-    info "  Done (Cleaned up rootfs)"
+    info "Cleaning up rootfs..."
+    rm -vrf "$ROOTFS_DIR"/dev/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
+    rm -vrf "$ROOTFS_DIR"/run/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
+    rm -vrf "$ROOTFS_DIR"/tmp/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
+    rm -vrf "$ROOTFS_DIR"/usr/share/doc/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
+    rm -vrf "$ROOTFS_DIR"/var/cache/apt/archives/*.deb >> "$LOG_DIR/clean_rootfs.log" 2>&1
+    rm -vrf "$ROOTFS_DIR"/var/cache/ldconfig/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
+    rm -vrf "$ROOTFS_DIR"/var/lib/apt/lists/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
+    rm -vrf "$ROOTFS_DIR"/var/log/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
+    rm -vrf "$ROOTFS_DIR"/var/tmp/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
+    info "Done (Cleaned up rootfs)"
 
     info "Done (Configured rootfs)"
 }
@@ -300,12 +317,13 @@ case "$arg_suite" in
     bookworm|trixie)
         distro="debian"
         mirror="$debian_mirror"
-        deb_pkgs=("${common_deb_pkgs[@]}")
+        included_deb_pkgs=("${common_deb_pkgs[@]}" "${debian_included_deb_pkgs[@]}")
+        excluded_deb_pkgs=("${debian_excluded_deb_pkgs[@]}")
         ;;
     jammy|noble|questing)
         distro="ubuntu"
         mirror="$ubuntu_mirror"
-        deb_pkgs=("${common_deb_pkgs[@]}")
+        included_deb_pkgs=("${common_deb_pkgs[@]}" "${ubuntu_included_deb_pkgs[@]}")
         excluded_deb_pkgs=("${ubuntu_excluded_deb_pkgs[@]}")
         ;;
     *)
