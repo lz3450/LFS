@@ -24,6 +24,7 @@ __DEBUG__=1
 . "$SCRIPT_DIR"/lib/utils.sh
 . "$SCRIPT_DIR"/lib/loop.sh
 . "$SCRIPT_DIR"/lib/chroot.sh
+. "$SCRIPT_DIR"/lib/dpkg.sh
 
 ### checks
 check_root
@@ -227,15 +228,7 @@ configure_rootfs() {
     info "Done (Chroot configuration)"
 
     info "Cleaning up rootfs..."
-    rm -vrf "$ROOTFS_DIR"/dev/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
-    rm -vrf "$ROOTFS_DIR"/run/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
-    rm -vrf "$ROOTFS_DIR"/tmp/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
-    rm -vrf "$ROOTFS_DIR"/usr/share/doc/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
-    rm -vrf "$ROOTFS_DIR"/var/cache/apt/archives/*.deb >> "$LOG_DIR/clean_rootfs.log" 2>&1
-    rm -vrf "$ROOTFS_DIR"/var/cache/ldconfig/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
-    rm -vrf "$ROOTFS_DIR"/var/lib/apt/lists/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
-    rm -vrf "$ROOTFS_DIR"/var/log/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
-    rm -vrf "$ROOTFS_DIR"/var/tmp/* >> "$LOG_DIR/clean_rootfs.log" 2>&1
+    dpkg_clean_rootfs > "$LOG_DIR/clean_rootfs.log" 2>&1
     info "Done (Cleaned up rootfs)"
 
     info "Done (Configured rootfs)"
@@ -251,7 +244,7 @@ create_rootfs_tarball() {
         --transform='s|^./||' \
         -cpf "$SCRIPT_DIR/$_name" \
         -C "$ROOTFS_DIR" . \
-        2>&1 > "$LOG_DIR/tar.log" || error "Failed to create base rootfs tarball" 4
+        > "$LOG_DIR/tar.log" 2>&1 || error "Failed to create base rootfs tarball" 4
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/$_name"
     info "Done (Created base rootfs tarball)"
 }
