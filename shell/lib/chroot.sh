@@ -115,35 +115,27 @@ chroot_setup() {
 }
 
 chroot_teardown() {
-    local -i _ret
+    local _mountpoints=()
 
-    while (( $chroot_setup_done > 0 )); do
+    while (( ${#chroot_active_mounts[@]} > 0 )); do
         local _mp
         for _mp in "${chroot_active_mounts[@]}"; do
             if mountpoint -q "$_mp"; then
                 info "Unmounting \"$_mp\"..."
-                umount -v "$_mp"
+                if umount -v -- "$_mp"; then
+                    info "Unmounted \"$_mp\"."
+                else
+                    _mountpoints+=("$_mp")
+                    warn "Failed to unmount \"$_mp\", retry later"
+                fi
             else
                 info "Mountpoint \"$_mp\" is not mounted, skipping"
             fi
         done
-        unset _mp
-
-        mount | grep -q "$chroot_dir" || local -i _ret=$?
-
-        if (( _ret != 0 )); then
-            chroot_active_mounts=()
-            chroot_setup_done=0
-            info "Unmounted chroot environment."
-        else
-            read -p "Umount failed. Do you want to retry? (Y/n) " answer
-            if [[ "$answer" == "N" || "$answer" == "n" ]]; then
-                error "Failed to unmount chroot environment. Please unmount manually." 255
-            else
-                info "Retrying to unmount chroot environment..."
-            fi
-        fi
+        chroot_active_mounts=("${_mountpoints[@]}")
+        _mountpoints=()
     done
+    chroot_setup_done=0
 }
 
 chroot_run() {

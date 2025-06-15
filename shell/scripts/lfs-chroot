@@ -18,13 +18,26 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ### libraries
 . "$SCRIPT_DIR"/lib/log.sh
+. "$SCRIPT_DIR"/lib/utils.sh
 . "$SCRIPT_DIR"/lib/chroot.sh
+
+### checks
+check_root
 
 ### constants & variables
 rootfs_dir="$1"
 shift
 
+if [[ ! -d "$rootfs_dir" ]]; then
+    error "Root filesystem directory '$rootfs_dir' does not exist." 2
+fi
+
 trap chroot_teardown EXIT SIGINT SIGTERM SIGKILL
-chroot_setup "$rootfs_dir"
-SHELL=/bin/bash LC_ALL=C PATH="$CHROOT_PATH" unshare --fork --pid chroot "$rootfs_dir" "$@"
+chroot_setup "$rootfs_dir" || error "Failed to set up chroot environment." 3
+chroot_run "$rootfs_dir" "$@"
 chroot_teardown
+
+### error codes
+# 1: must be run as root
+# 2: root filesystem directory does not exist
+# 3: failed to set up chroot environment
