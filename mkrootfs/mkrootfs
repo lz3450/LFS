@@ -36,7 +36,7 @@ declare -r WORK_DIR="/tmp/mkrootfs_$TIMESTAMP"
 declare -r ROOTFS_DIR="$WORK_DIR/rootfs"
 declare -r LOG_DIR="$WORK_DIR/log"
 
-declare -r ETC_DIR="$SCRIPT_DIR/etc"
+declare -r APT_CONFIG_DIR="$SCRIPT_DIR/config/apt"
 declare -r PKGLIST_DIR="$SCRIPT_DIR/pkglist"
 
 declare -r DEBIAN_MIRROR="http://deb.debian.org/debian"
@@ -193,16 +193,16 @@ configure_rootfs() {
     info "Setting up sources.list..."
     case "$arg_platform-$distro" in
         pc-debian|pc-ubuntu)
-            sed "s|@SUITE@|$arg_suite|g" "$ETC_DIR/$distro.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/$distro.sources"
+            sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/$distro.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/$distro.sources"
             ;;
         raspberrypi-debian)
-            sed "s|@SUITE@|$arg_suite|g" "$ETC_DIR/debian.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/debian.sources"
-            sed "s|@SUITE@|$arg_suite|g" "$ETC_DIR/raspi.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/raspi.sources"
+            sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/debian.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/debian.sources"
+            sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/raspi.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/raspi.sources"
             wget -qO "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key" http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
             ;;
         raspberrypi-ubuntu)
             mkdir -p -- "$ROOTFS_DIR/etc/apt/sources.list.d"
-            sed "s|@SUITE@|$arg_suite|g" "$ETC_DIR/ubuntu-ports.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/ubuntu-ports.sources"
+            sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/ubuntu-ports.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/ubuntu-ports.sources"
             ;;
         *)
             error "Unsupported platform-distro pair: $arg_platform-$distro" 1
