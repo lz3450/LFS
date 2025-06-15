@@ -16,13 +16,9 @@ declare -r __LIBCHROOT__="chroot.sh"
 ### libraries
 LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR"/log.sh
-. "$LIBDIR"/utils.sh
-
-### checks
-check_root
 
 ### constants & variables
-CHROOT_PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+CHROOT_PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin"
 
 chroot_active_mounts=()
 chroot_dir=""
@@ -99,7 +95,7 @@ chroot_setup() {
     if ! mountpoint -q "$chroot_dir"; then
         info "\"$chroot_dir\" is not a mountpoint. This may have undesirable side effects."
         info "Bind mounting \"$chroot_dir\" to itself."
-        chroot_add_mount --bind "$chroot_dir" "$chroot_dir"
+        chroot_add_mount --bind --make-private "$chroot_dir" "$chroot_dir"
     fi
 
     chroot_add_mount -t sysfs -o ro,nosuid,nodev,noexec sys "$chroot_dir/sys"
@@ -119,12 +115,26 @@ chroot_setup() {
 }
 
 chroot_teardown() {
+    local -i _ret
+
     while (( $chroot_setup_done > 0 )); do
-        umount -v "${chroot_active_mounts[@]}"
-        mount | grep -q "$chroot_dir"
-        if (( $? != 0 )); then
+        local _mp
+        for _mp in "${chroot_active_mounts[@]}"; do
+            if mountpoint -q "$_mp"; then
+                info "Unmounting \"$_mp\"..."
+                umount -v "$_mp"
+            else
+                info "Mountpoint \"$_mp\" is not mounted, skipping"
+            fi
+        done
+        unset _mp
+
+        mount | grep -q "$chroot_dir" || local -i _ret=$?
+
+        if (( _ret != 0 )); then
             chroot_active_mounts=()
             chroot_setup_done=0
+            info "Unmounted chroot environment."
         else
             read -p "Umount failed. Do you want to retry? (Y/n) " answer
             if [[ "$answer" == "N" || "$answer" == "n" ]]; then
@@ -144,5 +154,4 @@ chroot_run() {
 debug "${BASH_SOURCE[0]} sourced"
 
 ### error codes
-# 1: This script must be run as root
 # 255: Failed to unmount chroot environment
