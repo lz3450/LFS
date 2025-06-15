@@ -1,0 +1,306 @@
+#!/bin/bash
+#
+# mkimg.sh
+#
+
+set -e
+set -u
+set -o pipefail
+# set -x
+
+umask 0022
+
+SCRIPT_NAME="$(basename "$0")"
+SCRIPT_PATH="$0"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+
+################################################################################
+
+unset __DEBUG__
+__DEBUG__=1
+
+### libraries
+. "$SCRIPT_DIR"/../scripts/lib/log.sh
+. "$SCRIPT_DIR"/../scripts/lib/utils.sh
+. "$SCRIPT_DIR"/../scripts/lib/loop.sh
+. "$SCRIPT_DIR"/../scripts/lib/chroot.sh
+
+### checks
+check_root
+
+### constants and variables
+declare -r TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
+
+declare -r WORK_DIR="/tmp/raspi_$TIMESTAMP"
+declare -r ROOTFS_DIR="$WORK_DIR/rootfs"
+declare -r FIRMWARE_DIR="$WORK_DIR/firmware"
+declare -r LOG_DIR="$WORK_DIR/log"
+
+declare -r CONFIG_DIR="$SCRIPT_DIR/config"
+declare -r PKGLIST_DIR="$SCRIPT_DIR/pkglist"
+
+declare -r IMG_FILE="$WORK_DIR/raspi_$TIMESTAMP.img"
+declare -r RASPBERRYPI_GPG_KEY="$WORK_DIR/raspberrypi.gpg.key"
+
+common_deb_pkgs=(
+    ### general
+    sudo
+    ### disk
+    parted
+    ### network
+    wpasupplicant iw
+    ### kernel
+    initramfs-tools
+)
+bookworm_deb_pkgs=(
+    systemd-resolved
+    systemd-timesyncd
+)
+jammy_deb_pkgs=(
+    linux-firmware-raspi
+    ubuntu-raspi-settings
+)
+
+loop_device=""
+deb_pkgs=()
+
+### options and arguments
+arg_rootfs_tarball=""
+
+### functions
+
+cleanup() {
+    set +e
+    trap - EXIT SIGINT SIGTERM SIGKILL
+
+    info "Cleaning up..."
+    if [[ -d "$WORK_DIR" ]]; then
+        rm -rf -- "$WORK_DIR"
+        info "Done (Removed working directory: $WORK_DIR)"
+    else
+        info "No working directory to remove"
+    fi
+
+    trap - EXIT SIGINT SIGTERM SIGKILL
+}
+trap cleanup EXIT SIGINT SIGTERM SIGKILL
+
+create_work_dirs() {
+    local _answer
+
+    info "Create working directory: $WORK_DIR"
+    if [[ -d "$WORK_DIR" ]]; then
+        warn "Working directory $WORK_DIR already exists"
+        read -p "Do you want to remove it? (y/N) " _answer
+        if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+            if (( chroot_setup_done > 0 )); then
+                chroot_teardown
+            fi
+            rm -rf --one-file-system -- "$WORK_DIR"
+        fi
+    fi
+    mkdir -vp -- "$WORK_DIR"
+    mkdir -vp -- "$ROOTFS_DIR"
+    mkdir -vp -- "$LOG_DIR"
+    if [[ ! -d "$PKGLIST_DIR" ]]; then
+        mkdir -vp -- "$PKGLIST_DIR"
+        chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
+    fi
+    info "Done (Created root filesystem directory)"
+}
+
+create_img_file() {
+    info "Creating image..."
+
+    if [[ -f "$IMG_FILE" ]]; then
+        rm -vf "$IMG_FILE"
+    fi
+
+    fallocate -l 1024MiB "$IMG_FILE"
+
+    parted -s "$IMG_FILE" \
+        mktable msdos \
+        unit s \
+        mkpart primary fat32 1s 524287s \
+        mkpart primary ext4 524288s 100% \
+        print
+}
+
+setup_loop() {
+    info "Setting up loop device for image: $IMG_FILE"
+    loop_device="$(losetup -f)"
+    if [[ -z "$loop_device" ]]; then
+        error "No unused loop device found" 1
+    fi
+    losetup -P "$loop_device" "$IMG_FILE" || error "Failed to setup loop device" 2
+    info "Use loop device \"$loop_device\""
+    info "Done (Setting up loop device: $loop_device)"
+}
+
+format_img() {
+    info "Formatting image..."
+    if [[ -z "$loop_device" ]]; then
+        error "Loop device is not set" 3
+    fi
+
+    mkfs.fat -F32 "${loop_device}p1"
+    mkfs.ext4 "${loop_device}p2"
+    info "Done (Formatted image)"
+}
+
+mount_img() {
+    info "Mounting loop device..."
+
+    mkdir -p "$ROOTFS_DIR"
+    mount "${loop_device}p2" "$ROOTFS_DIR"
+    mkdir -p "$ROOTFS_DIR"/boot/firmware
+    mount "${loop_device}p1" "$ROOTFS_DIR"/boot/firmware
+
+    info "Done (Mounted loop device)"
+}
+
+bootstrap_rootfs() {
+    info "Bootstrapping root filesystem..."
+    tar -v \
+        --zstd \
+        --xattrs --acls \
+        --numeric-owner \
+        -xpf "$arg_rootfs_tarball" \
+        -C "$ROOTFS_DIR" \
+        > "$LOG_DIR/tar.log" 2>&1
+    info "Done (Bootstrapped root filesystem)"
+}
+
+configure_img() {
+    info "Downloading RPi firmware..."
+    local _firmware_version=$(git ls-remote --tags https://github.com/raspberrypi/firmware.git | grep -oP '(?<=refs/tags/)1.\d{8}$' | sort -V | tail -n1)
+    wget -qO "$WORK_DIR/firmware.tar.gz" https://github.com/raspberrypi/firmware/archive/refs/tags/$_firmware_version.tar.gz
+    tar -xf "$WORK_DIR/firmware.tar.gz" -C "$FIRMWARE_DIR"
+    info "Done (Downloaded RPi firmware: $_firmware_version)"
+
+    info "Copying RPi firmware to rootfs..."
+    mv "$FIRMWARE_DIR/boot" "$ROOTFS_DIR/boot/firmware"
+    mv "$FIRMWARE_DIR/modules" "$ROOTFS_DIR/usr/lib/modules"
+    local _kernel_version
+    local _kernel_suffix
+    for _kernel_version in $(ls "$ROOTFS_DIR/usr/lib/modules"); do
+        _kernel_version=$(echo "$_kernel_version" | grep -oP '\d+\.\d+\.\d+\K.*' | sed 's/^-v//;s/\+//')
+        case "$_kernel_version" in
+            8-16k)  _kernel_suffix="_2712" ;;
+            *)      _kernel_suffix="$_kernel_version" ;;
+        esac
+        cp -dr "$ROOTFS_DIR/boot/firmware/kernel$_kernel_suffix.img" "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version"
+        kernel_version_kvs+=("$_kernel_version:$_kernel_suffix")
+    done
+    info "Done (Copied RPi firmware)"
+
+    info "Copying miscellaneous config files..."
+    # hostname
+    cp "$CONFIG_DIR/hostname" "$ROOTFS_DIR/etc/hostname"
+    # network
+    cp "$CONFIG_DIR/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
+    cp "$CONFIG_DIR/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
+    cp "$CONFIG_DIR/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
+    ln -s wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-wlan0.conf"
+    # grml-zsh-config for root
+    wget -O "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc > /dev/null 2>&1
+    echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
+    echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR/root/.zshrc"
+    info "Done (Copied miscellaneous config files)"
+
+    info "Running chroot configuration..."
+    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
+    chroot_run "$ROOTFS_DIR" apt-get update || error "Failed to run apt-get update" 3
+    chroot_run "$ROOTFS_DIR" apt-get upgrade -y || error "Failed to run apt-get upgrade" 3
+    chroot_run "$ROOTFS_DIR" apt-get install -y "${deb_pkgs[@]}" || error "Failed to install packages" 3
+    chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y || error "Failed to run apt-get autoremove" 3
+    chroot_teardown
+    info "Done (Chroot configuration)"
+
+}
+
+usage() {
+    cat << EOF
+
+Usage: $SCRIPT_NAME -V | --version
+Usage: $SCRIPT_NAME -h | --help
+Usage: $SCRIPT_NAME -s | --suite <suite>  -r | --rootfs-tarball <tarball>
+
+    -h, --help                          print this help message and exit
+    -s, --suite <suite>                 specify the image suite (bookworm, jammy)
+    -r, --rootfs-tarball <tarball>      specify the root filesystem tarball to use
+
+EOF
+}
+
+################################################################################
+
+while (( $# > 0 )); do
+    case "$1" in
+    -h | --help)
+        usage
+        exit 0
+        ;;
+    -s | --suite)
+        shift
+        arg_suite="$1"
+        ;;
+    -r | --rootfs-tarball)
+        shift
+        arg_rootfs_tarball="$1"
+        ;;
+    *)
+        usage
+        error "Unknown option: $1" 128
+        ;;
+    esac
+    shift
+done
+
+case "$arg_suite" in
+    bookworm)
+        distro="debian"
+        deb_pkgs=("${common_deb_pkgs[@]}" "${bookworm_deb_pkgs[@]}")
+        mirror="http://deb.debian.org/debian"
+        ;;
+    jammy)
+        distro="ubuntu"
+        deb_pkgs=("${common_deb_pkgs[@]}" "${jammy_deb_pkgs[@]}")
+        excluded_deb_pkgs=("${jammy_excluded_deb_pkgs[@]}")
+        mirror="http://ports.ubuntu.com"
+        ;;
+    *)
+        usage
+        error "Unsupported distribution \"$arg_suite\"." 2
+        ;;
+esac
+
+mirrors=(
+    "deb $mirror $arg_suite main restricted universe multiverse"
+    # "deb $mirror $arg_suite-updates main restricted universe multiverse"
+    # "deb $mirror $arg_suite-security main restricted universe multiverse"
+)
+
+if [[ "$distro" == "debian" ]]; then
+    wget -qO "$RASPBERRYPI_GPG_KEY" http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
+    mirrors+=("deb [signed-by=$RASPBERRYPI_GPG_KEY] http://archive.raspberrypi.com/debian/ $arg_suite main")
+fi
+
+################################################################################
+
+prologue
+
+create_work_dirs
+create_img_file
+setup_loop
+format_img
+mount_img
+bootstrap_rootfs
+configure_img
+
+epilogue
+
+### error code
+# 1: general error
+# 128: Unknown option
+# 255: Failed to remove work directories

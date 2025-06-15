@@ -1,1 +1,0 @@
-console=serial0,115200 console=tty1 root=PARTUUID=%ROOTPARTUUID% rootfstype=%FS_TYPE% fsck.repair=yes rootwait splash plymouth.ignore-serial-consoles cpufreq.default_governor=ondemand cfg80211.ieee80211_regdom=US
