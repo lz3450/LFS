@@ -11,8 +11,8 @@ set -u
 umask 0022
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$0"
-# SCRIPT_PATH="$(realpath "$0")"
+SCRIPT_PATH="$(realpath "$0")"
+# SCRIPT_PATH="$(readlink -f "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
