@@ -1,1 +1,1 @@
-../../bash/dpkg.sh
+../../shell/lib/dpkg.sh

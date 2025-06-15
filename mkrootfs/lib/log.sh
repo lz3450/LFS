@@ -1,1 +1,1 @@
-../../bash/log.sh
+../../shell/lib/log.sh

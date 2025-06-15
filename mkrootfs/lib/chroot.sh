@@ -1,1 +1,1 @@
-../../bash/chroot.sh
+../../shell/lib/chroot.sh

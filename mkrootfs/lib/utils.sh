@@ -1,1 +1,1 @@
-../../bash/utils.sh
+../../shell/lib/utils.sh
