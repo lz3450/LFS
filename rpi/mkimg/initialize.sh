@@ -3,11 +3,7 @@
 # initialize.sh
 #
 
-apt-get update
-apt-get upgrade -y
-apt-get install -y \
-    systemd-networkd \
-    systemd-resolved
+################################################################################
 
 update-initramfs -c -k all
 

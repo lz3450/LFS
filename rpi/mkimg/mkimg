@@ -1,7 +1,10 @@
 #!/bin/bash
 #
-# mkimg.sh
+# mkimg
 #
+# https://cdimage.ubuntu.com/releases/
+#
+
 
 set -e
 set -u
@@ -11,7 +14,7 @@ set -o pipefail
 umask 0022
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$0"
+SCRIPT_PATH="$(realpath "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
@@ -20,10 +23,11 @@ unset __DEBUG__
 __DEBUG__=1
 
 ### libraries
-. "$SCRIPT_DIR"/../scripts/lib/log.sh
-. "$SCRIPT_DIR"/../scripts/lib/utils.sh
-. "$SCRIPT_DIR"/../scripts/lib/loop.sh
-. "$SCRIPT_DIR"/../scripts/lib/chroot.sh
+. "$SCRIPT_DIR"/lib/log.sh
+. "$SCRIPT_DIR"/lib/utils.sh
+. "$SCRIPT_DIR"/lib/loop.sh
+. "$SCRIPT_DIR"/lib/chroot.sh
+. "$SCRIPT_DIR"/lib/dpkg.sh
 
 ### checks
 check_root
@@ -33,13 +37,12 @@ declare -r TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
 
 declare -r WORK_DIR="/tmp/raspi_$TIMESTAMP"
 declare -r ROOTFS_DIR="$WORK_DIR/rootfs"
-declare -r FIRMWARE_DIR="$WORK_DIR/firmware"
 declare -r LOG_DIR="$WORK_DIR/log"
 
 declare -r CONFIG_DIR="$SCRIPT_DIR/config"
 declare -r PKGLIST_DIR="$SCRIPT_DIR/pkglist"
 
-declare -r IMG_FILE="$WORK_DIR/raspi_$TIMESTAMP.img"
+declare -r IMG_FILE="$WORK_DIR/raspi.img"
 declare -r RASPBERRYPI_GPG_KEY="$WORK_DIR/raspberrypi.gpg.key"
 
 common_deb_pkgs=(
@@ -48,7 +51,7 @@ common_deb_pkgs=(
     ### disk
     parted
     ### network
-    wpasupplicant iw
+    iw wpasupplicant
     ### kernel
     initramfs-tools
 )
@@ -57,7 +60,7 @@ bookworm_deb_pkgs=(
     systemd-timesyncd
 )
 jammy_deb_pkgs=(
-    linux-firmware-raspi
+    linux-firmware-raspi2
     ubuntu-raspi-settings
 )
 
@@ -66,19 +69,24 @@ deb_pkgs=()
 
 ### options and arguments
 arg_rootfs_tarball=""
+arg_chroot_image=""
+arg_chroot_command=()
 
 ### functions
-
 cleanup() {
     set +e
     trap - EXIT SIGINT SIGTERM SIGKILL
 
     info "Cleaning up..."
-    if [[ -d "$WORK_DIR" ]]; then
-        rm -rf -- "$WORK_DIR"
-        info "Done (Removed working directory: $WORK_DIR)"
-    else
-        info "No working directory to remove"
+    chroot_teardown
+    loop_teardown "$loop_device"
+
+    local _answer
+    read -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
+    if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+        info "Removing working directory: $WORK_DIR"
+        rmdir -v -- "$ROOTFS_DIR" && rm -rf --one-file-system -- "$WORK_DIR"
+        info "Done (Removed working directory)"
     fi
 
     trap - EXIT SIGINT SIGTERM SIGKILL
@@ -86,18 +94,9 @@ cleanup() {
 trap cleanup EXIT SIGINT SIGTERM SIGKILL
 
 create_work_dirs() {
-    local _answer
-
     info "Create working directory: $WORK_DIR"
     if [[ -d "$WORK_DIR" ]]; then
-        warn "Working directory $WORK_DIR already exists"
-        read -p "Do you want to remove it? (y/N) " _answer
-        if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
-            if (( chroot_setup_done > 0 )); then
-                chroot_teardown
-            fi
-            rm -rf --one-file-system -- "$WORK_DIR"
-        fi
+        error "Working directory $WORK_DIR already exists" 1
     fi
     mkdir -vp -- "$WORK_DIR"
     mkdir -vp -- "$ROOTFS_DIR"
@@ -116,35 +115,42 @@ create_img_file() {
         rm -vf "$IMG_FILE"
     fi
 
-    fallocate -l 1024MiB "$IMG_FILE"
+    fallocate -l 1536MiB "$IMG_FILE"
 
     parted -s "$IMG_FILE" \
         mktable msdos \
         unit s \
         mkpart primary fat32 1s 524287s \
         mkpart primary ext4 524288s 100% \
-        print
+        print \
+        > "$LOG_DIR/parted.log" || error "Failed to create partitions in image file" 1
+    info "Done (Created image file: $IMG_FILE)"
 }
 
 setup_loop() {
-    info "Setting up loop device for image: $IMG_FILE"
-    loop_device="$(losetup -f)"
-    if [[ -z "$loop_device" ]]; then
-        error "No unused loop device found" 1
+    local _img_file="$1"
+
+    info "Setting up loop device for image: $_img_file"
+    if [[ ! -f "$_img_file" ]]; then
+        error "Image file does not exist: $_img_file" 2
     fi
-    losetup -P "$loop_device" "$IMG_FILE" || error "Failed to setup loop device" 2
-    info "Use loop device \"$loop_device\""
-    info "Done (Setting up loop device: $loop_device)"
+
+    loop_device="$(loop_get_device)"
+    if [[ -z "$loop_device" ]]; then
+        error "No unused loop device found" 2
+    fi
+    loop_partitioned_setup "$loop_device" "$_img_file" || error "Failed to setup loop device" 2
+    info "Done (Setup loop device: $loop_device)"
 }
 
 format_img() {
     info "Formatting image..."
     if [[ -z "$loop_device" ]]; then
-        error "Loop device is not set" 3
+        error "Loop device is not set" 2
     fi
 
-    mkfs.fat -F32 "${loop_device}p1"
-    mkfs.ext4 "${loop_device}p2"
+    mkfs.fat -F 32 -n "BOOT" "${loop_device}p1"
+    mkfs.ext4 -L "ROOT" "${loop_device}p2"
     info "Done (Formatted image)"
 }
 
@@ -167,20 +173,58 @@ bootstrap_rootfs() {
         --numeric-owner \
         -xpf "$arg_rootfs_tarball" \
         -C "$ROOTFS_DIR" \
-        > "$LOG_DIR/tar.log" 2>&1
+        > "$LOG_DIR/tar.log"
     info "Done (Bootstrapped root filesystem)"
 }
 
 configure_img() {
+    local _deb_pkgs_installed="$PKGLIST_DIR/${arg_suite}-rootfs-pkgs.txt"
+    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkgs_installed"
+
+    info "Running chroot configuration..."
+    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
+    # apt-get
+    chroot_run "$ROOTFS_DIR" apt-get update || error "Failed to run apt-get update" 3
+    chroot_run "$ROOTFS_DIR" apt-get upgrade -y || error "Failed to run apt-get upgrade" 3
+    chroot_run "$ROOTFS_DIR" apt-get install --no-install-recommends -y "${deb_pkgs[@]}" || error "Failed to install packages" 3
+    chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y || error "Failed to run apt-get autoremove" 3
+    # get installed deb packages
+    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkgs_installed" || warn "Failed to create a list of installed deb packages"
+    # run initialize.sh
+    cp -v -- "$SCRIPT_DIR/initialize.sh" "$ROOTFS_DIR/initialize.sh"
+    chroot_run "$ROOTFS_DIR" "/initialize.sh" > "$LOG_DIR/initialize.log" || error "Failed to run initialize.sh" 3
+    rm -vf -- "$ROOTFS_DIR/initialize.sh"
+    chroot_teardown
+    info "Done (Chroot configuration)"
+
+    info "Copying miscellaneous config files..."
+    # hostname
+    cp "$CONFIG_DIR/hostname" "$ROOTFS_DIR/etc/hostname"
+    # network
+    cp "$CONFIG_DIR/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
+    cp "$CONFIG_DIR/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
+    cp "$CONFIG_DIR/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
+    ln -s wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-wlan0.conf"
+    # grml-zsh-config for root
+    wget -O "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc > "$LOG_DIR/grml-zsh-config.log" 2>&1
+    echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
+    echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR/root/.zshrc"
+    info "Done (Copied miscellaneous config files)"
+
+    info "Cleaning up rootfs..."
+    dpkg_clean_rootfs "$ROOTFS_DIR" > "$LOG_DIR/clean_rootfs.log"
+    info "Done (Cleaned up rootfs)"
+
     info "Downloading RPi firmware..."
     local _firmware_version=$(git ls-remote --tags https://github.com/raspberrypi/firmware.git | grep -oP '(?<=refs/tags/)1.\d{8}$' | sort -V | tail -n1)
+    local _firmware_dir="$WORK_DIR/firmware-$_firmware_version"
     wget -qO "$WORK_DIR/firmware.tar.gz" https://github.com/raspberrypi/firmware/archive/refs/tags/$_firmware_version.tar.gz
-    tar -xf "$WORK_DIR/firmware.tar.gz" -C "$FIRMWARE_DIR"
+    tar -xf "$WORK_DIR/firmware.tar.gz" -C "$WORK_DIR"
     info "Done (Downloaded RPi firmware: $_firmware_version)"
 
     info "Copying RPi firmware to rootfs..."
-    mv "$FIRMWARE_DIR/boot" "$ROOTFS_DIR/boot/firmware"
-    mv "$FIRMWARE_DIR/modules" "$ROOTFS_DIR/usr/lib/modules"
+    mv -- "$_firmware_dir"/boot/* "$ROOTFS_DIR/boot/firmware/"
+    mv -- "$_firmware_dir"/modules "$ROOTFS_DIR/usr/lib/"
     local _kernel_version
     local _kernel_suffix
     for _kernel_version in $(ls "$ROOTFS_DIR/usr/lib/modules"); do
@@ -194,29 +238,27 @@ configure_img() {
     done
     info "Done (Copied RPi firmware)"
 
-    info "Copying miscellaneous config files..."
-    # hostname
-    cp "$CONFIG_DIR/hostname" "$ROOTFS_DIR/etc/hostname"
-    # network
-    cp "$CONFIG_DIR/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
-    cp "$CONFIG_DIR/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
-    cp "$CONFIG_DIR/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
-    ln -s wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-wlan0.conf"
-    # grml-zsh-config for root
-    wget -O "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc > /dev/null 2>&1
-    echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
-    echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR/root/.zshrc"
-    info "Done (Copied miscellaneous config files)"
-
-    info "Running chroot configuration..."
-    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
-    chroot_run "$ROOTFS_DIR" apt-get update || error "Failed to run apt-get update" 3
-    chroot_run "$ROOTFS_DIR" apt-get upgrade -y || error "Failed to run apt-get upgrade" 3
-    chroot_run "$ROOTFS_DIR" apt-get install -y "${deb_pkgs[@]}" || error "Failed to install packages" 3
-    chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y || error "Failed to run apt-get autoremove" 3
-    chroot_teardown
-    info "Done (Chroot configuration)"
-
+    info "Copying boot configuration files..."
+    # copy configuration files
+    cp -f "$CONFIG_DIR/config.txt" "$ROOTFS_DIR/boot/firmware/config.txt"
+    cp -f "$CONFIG_DIR/cmdline-$distro.txt" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
+    cp -f "$CONFIG_DIR/fstab" "$ROOTFS_DIR/etc/fstab"
+    # get PARTUUIDs of the partitions
+    local _boot_partuuid=$(blkid -s PARTUUID | grep ${loop_device}p1 | sed -e 's#.*=\"\(.*\)\"#\1#')
+    local _root_partuuid=$(blkid -s PARTUUID | grep ${loop_device}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
+    if [ -z "$_boot_partuuid" ]; then
+        error "Cannot find PARTUUID of BOOT partition!" 4
+    fi
+    info "BOOT PARTUUID: $_boot_partuuid"
+    if [ -z "$_root_partuuid" ]; then
+        error "Cannot find PARTUUID of ROOT partition!" 4
+    fi
+    info "ROOT PARTUUID: $_root_partuuid"
+    # set PARTUUIDs in fstab and cmdline.txt
+    sed -i "s|%BOOTPARTUUID%|$_boot_partuuid|" "$ROOTFS_DIR/etc/fstab"
+    sed -i "s|%ROOTPARTUUID%|$_root_partuuid|" "$ROOTFS_DIR/etc/fstab"
+    sed -i "s|%ROOTPARTUUID%|$_root_partuuid|" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
+    info "Done (Copied boot configuration files)"
 }
 
 usage() {
@@ -225,10 +267,12 @@ usage() {
 Usage: $SCRIPT_NAME -V | --version
 Usage: $SCRIPT_NAME -h | --help
 Usage: $SCRIPT_NAME -s | --suite <suite>  -r | --rootfs-tarball <tarball>
+Usage: $SCRIPT_NAME -c | --chroot <image> [<command>]
 
     -h, --help                          print this help message and exit
     -s, --suite <suite>                 specify the image suite (bookworm, jammy)
     -r, --rootfs-tarball <tarball>      specify the root filesystem tarball to use
+    -c, --chroot <image> [<command>]    chroot into the image file and run the command
 
 EOF
 }
@@ -249,6 +293,13 @@ while (( $# > 0 )); do
         shift
         arg_rootfs_tarball="$1"
         ;;
+    -c | --chroot)
+        shift
+        arg_chroot_image="$1"
+        shift
+        arg_chroot_command=("$@")
+        break
+        ;;
     *)
         usage
         error "Unknown option: $1" 128
@@ -257,33 +308,21 @@ while (( $# > 0 )); do
     shift
 done
 
-case "$arg_suite" in
-    bookworm)
-        distro="debian"
-        deb_pkgs=("${common_deb_pkgs[@]}" "${bookworm_deb_pkgs[@]}")
-        mirror="http://deb.debian.org/debian"
-        ;;
-    jammy)
-        distro="ubuntu"
-        deb_pkgs=("${common_deb_pkgs[@]}" "${jammy_deb_pkgs[@]}")
-        excluded_deb_pkgs=("${jammy_excluded_deb_pkgs[@]}")
-        mirror="http://ports.ubuntu.com"
-        ;;
-    *)
-        usage
-        error "Unsupported distribution \"$arg_suite\"." 2
-        ;;
-esac
-
-mirrors=(
-    "deb $mirror $arg_suite main restricted universe multiverse"
-    # "deb $mirror $arg_suite-updates main restricted universe multiverse"
-    # "deb $mirror $arg_suite-security main restricted universe multiverse"
-)
-
-if [[ "$distro" == "debian" ]]; then
-    wget -qO "$RASPBERRYPI_GPG_KEY" http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
-    mirrors+=("deb [signed-by=$RASPBERRYPI_GPG_KEY] http://archive.raspberrypi.com/debian/ $arg_suite main")
+if [[ -z "$arg_chroot_image" ]]; then
+    case "$arg_suite" in
+        bookworm)
+            distro="debian"
+            deb_pkgs=("${common_deb_pkgs[@]}" "${bookworm_deb_pkgs[@]}")
+            ;;
+        jammy)
+            distro="ubuntu"
+            deb_pkgs=("${common_deb_pkgs[@]}" "${jammy_deb_pkgs[@]}")
+            ;;
+        *)
+            usage
+            error "Unsupported distribution \"$arg_suite\"." 2
+            ;;
+    esac
 fi
 
 ################################################################################
@@ -291,16 +330,34 @@ fi
 prologue
 
 create_work_dirs
-create_img_file
-setup_loop
-format_img
-mount_img
-bootstrap_rootfs
-configure_img
+
+if [[ -n "$arg_chroot_image" ]]; then
+    info "Chroot into image $arg_chroot_image, all previous arguments will be ignored"
+    setup_loop "$arg_chroot_image"
+    mount_img
+    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
+    chroot_run "$ROOTFS_DIR" "${arg_chroot_command[@]}"
+    chroot_teardown
+else
+    create_img_file
+    setup_loop "$IMG_FILE"
+    format_img
+    mount_img
+    bootstrap_rootfs
+    configure_img
+    info "Successfully created Raspberry Pi image: $IMG_FILE"
+    cp -vf -- "$IMG_FILE" "$SCRIPT_DIR/raspi-$arg_suite-$TIMESTAMP.img"
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/raspi-$arg_suite-$TIMESTAMP.img"
+fi
+
+cleanup
 
 epilogue
 
 ### error code
 # 1: general error
+# 2: loop device
+# 3: chroot environment
+# 4: partition
 # 128: Unknown option
 # 255: Failed to remove work directories
