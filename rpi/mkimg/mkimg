@@ -75,7 +75,8 @@ arg_chroot_command=()
 ### functions
 cleanup() {
     set +e
-    trap - EXIT SIGINT SIGTERM SIGKILL
+
+    sync
 
     info "Cleaning up..."
     chroot_teardown
@@ -233,12 +234,12 @@ configure_img() {
 
     info "Copying miscellaneous config files..."
     # hostname
-    cp "$CONFIG_DIR/hostname" "$ROOTFS_DIR/etc/hostname"
+    cp -vf -- "$CONFIG_DIR/hostname" "$ROOTFS_DIR/etc/hostname"
     # network
-    cp "$CONFIG_DIR/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
-    cp "$CONFIG_DIR/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
-    cp "$CONFIG_DIR/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
-    ln -s wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-wlan0.conf"
+    cp -vf -- "$CONFIG_DIR/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
+    cp -vf -- "$CONFIG_DIR/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
+    cp -vf -- "$CONFIG_DIR/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
+    ln -sf wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-wlan0.conf"
     # grml-zsh-config for root
     wget -O "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc > "$LOG_DIR/grml-zsh-config.log" 2>&1
     echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
@@ -251,9 +252,9 @@ configure_img() {
 
     info "Copying boot configuration files..."
     # copy configuration files
-    cp -f "$CONFIG_DIR/config.txt" "$ROOTFS_DIR/boot/firmware/config.txt"
-    cp -f "$CONFIG_DIR/cmdline-$distro.txt" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
-    cp -f "$CONFIG_DIR/fstab" "$ROOTFS_DIR/etc/fstab"
+    cp -vf -- "$CONFIG_DIR/config.txt" "$ROOTFS_DIR/boot/firmware/config.txt"
+    cp -vf -- "$CONFIG_DIR/cmdline-$distro.txt" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
+    cp -vf -- "$CONFIG_DIR/fstab" "$ROOTFS_DIR/etc/fstab"
     # get PARTUUIDs of the partitions
     local _boot_partuuid=$(blkid -s PARTUUID | grep ${loop_device}p1 | sed -e 's#.*=\"\(.*\)\"#\1#')
     local _root_partuuid=$(blkid -s PARTUUID | grep ${loop_device}p2 | sed -e 's#.*=\"\(.*\)\"#\1#')
@@ -270,6 +271,8 @@ configure_img() {
     sed -i "s|%ROOTPARTUUID%|$_root_partuuid|" "$ROOTFS_DIR/etc/fstab"
     sed -i "s|%ROOTPARTUUID%|$_root_partuuid|" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
     info "Done (Copied boot configuration files)"
+
+    sync
 }
 
 usage() {
