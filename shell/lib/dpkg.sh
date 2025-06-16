@@ -14,17 +14,25 @@ declare -r __LIBDPKG__="dpkg.sh"
 ################################################################################
 
 ### libraries
-. log.sh
+LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
+. "$LIBDIR/log.sh"
 
 ### functions
 dpkg_clean_rootfs() {
-    rm -vrf "$ROOTFS_DIR"/dev/*
-    rm -vrf "$ROOTFS_DIR"/run/*
-    rm -vrf "$ROOTFS_DIR"/tmp/*
-    rm -vrf "$ROOTFS_DIR"/usr/share/doc/*
-    rm -vrf "$ROOTFS_DIR"/var/cache/apt/archives/*.deb
-    rm -vrf "$ROOTFS_DIR"/var/cache/ldconfig/*
-    rm -vrf "$ROOTFS_DIR"/var/lib/apt/lists/*
-    rm -vrf "$ROOTFS_DIR"/var/log/*
-    rm -vrf "$ROOTFS_DIR"/var/tmp/*
+    local _rootfs_dir="$1"
+    if [[ ! -d "$_rootfs_dir" ]]; then
+        error "Root filesystem directory is not specified" 1
+    fi
+    rm -vrf "$_rootfs_dir"/dev/*
+    rm -vrf "$_rootfs_dir"/run/*
+    rm -vrf "$_rootfs_dir"/tmp/*
+    rm -vrf "$_rootfs_dir"/usr/share/doc/*
+    rm -vrf "$_rootfs_dir"/var/cache/apt/archives/*.deb
+    rm -vrf "$_rootfs_dir"/var/cache/ldconfig/*
+    rm -vrf "$_rootfs_dir"/var/lib/apt/lists/*
+    rm -vrf "$_rootfs_dir"/var/log/*
+    rm -vrf "$_rootfs_dir"/var/tmp/*
 }
+
+### error codes
+# 1: general error
