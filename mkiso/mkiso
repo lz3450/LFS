@@ -1,0 +1,206 @@
+#!/bin/bash
+#
+# mkiso
+#
+
+set -e
+set -o pipefail
+set -u
+# set -x
+
+umask 0022
+
+SCRIPT_NAME="$(basename "$0")"
+SCRIPT_PATH="$(realpath "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+
+################################################################################
+
+unset __DEBUG__
+__DEBUG__=1
+
+### general libraries
+. "$SCRIPT_DIR"/lib/log.sh
+. "$SCRIPT_DIR"/lib/utils.sh
+. "$SCRIPT_DIR"/lib/chroot.sh
+. "$SCRIPT_DIR"/lib/loop.sh
+
+### checks
+check_root
+
+### constants & variables
+declare -r TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
+
+declare -r WORK_DIR="/tmp/mkiso_$TIMESTAMP"
+declare -r ROOTFS_DIR="$WORK_DIR/rootfs"
+declare -r ISOFS_DIR="$WORK_DIR/iso"
+declare -r ROOTFS_IMG_DIR="$ISOFS_DIR/LiveOS"
+declare -r LOG_DIR="$WORK_DIR/log"
+
+declare -r PKGLIST_DIR="$SCRIPT_DIR/pkglist"
+
+declare -r MUTABLE_IMG="$WORK_DIR/mutable.img"
+declare -r EFIBOOT_IMG="$WORK_DIR/efiboot.img"
+
+declare -r ISO_LABEL="LIVEOS"
+declare -r ISO_PUBLISHER="LFS <https://github.com/lz3450/LFS>"
+declare -r ISO_APPLICATION="$ISO_NAME Live/Rescue ISO Image"
+
+declare -r UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
+declare -r PACMAN_REPO_DIR="home/.repository/ubuntu"
+declare -r PACMAN_REPO_FILE="$PACMAN_REPO_DIR/ubuntu.db.tar.zst"
+
+distro=""
+
+
+### options and arguments
+arg_suite=""
+arg_rootfs_tarball=""
+
+### functions
+cleanup() {
+    set +e
+
+    info "Cleaning up..."
+    # chroot_teardown
+    # loop_teardown "$loop_device"
+    # read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
+    # if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+    #     info "Removing working directory: $WORK_DIR"
+    #     rm -rf --one-file-system -- "$WORK_DIR"
+    #     info "Done (Removed working directory)"
+    # fi
+    info "Done (Cleaned up)"
+
+    trap - EXIT SIGINT SIGTERM SIGKILL
+}
+trap cleanup EXIT SIGINT SIGTERM SIGKILL
+
+create_work_dirs() {
+    info "Create working directory: $WORK_DIR"
+    if [[ -d "$WORK_DIR" ]]; then
+        error "Working directory $WORK_DIR already exists" 1
+    fi
+    mkdir -vp -- "$WORK_DIR"
+    mkdir -vp -- "$ROOTFS_DIR"
+    mkdir -vp -- "$LOG_DIR"
+    mkdir -vp -- "$ROOTFS_IMG_DIR"
+    if [[ ! -d "$PKGLIST_DIR" ]]; then
+        mkdir -vp -- "$PKGLIST_DIR"
+        chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
+    fi
+    info "Done (Created root filesystem directory)"
+}
+
+bootstrap_rootfs() {
+    info "Bootstrapping root filesystem..."
+    tar -v \
+        --zstd \
+        --xattrs --acls \
+        --numeric-owner \
+        -xpf "$arg_rootfs_tarball" \
+        -C "$ROOTFS_DIR" \
+        > "$LOG_DIR/tar.log"
+    info "Done (Bootstrapped root filesystem)"
+
+    info "Install pacman packages: ${_pkg_list[*]}"
+    # pacstrap -c -G -M -- "$ROOTFS_DIR" "${_pkg_list[@]}" >"$LOG_DIR"/pacstrap.log 2>&1 || error "Failed to pacstrap packages" 5
+
+    local _pacman_config
+    local _pacman_tmp_conf_file="pacman_$TIMESTAMP.conf"
+
+    if [[ -f "/usr/bin/pacman" ]]; then
+        _pacman_tmp_conf_file="/etc/pacman.conf"
+    elif [[ -f "/opt/bin/pacman" ]]; then
+        _pacman_tmp_conf_file="/opt/etc/pacman.conf"
+    else
+        error "Failed to find \`pacman\`" 127
+    fi
+    sed 's/^DownloadUser/#&/' "$_pacman_config" > "$_pacman_tmp_conf_file"
+
+    # TODO: check if necessary
+    install -d -m 0755 -- "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman,log}
+
+    info "Done (Installed pacman packages)"
+
+}
+
+usage() {
+    cat << EOF
+
+Usage: $SCRIPT_NAME -V | --version
+Usage: $SCRIPT_NAME -h | --help
+Usage: $SCRIPT_NAME [-v | --verbose ] -i | --input <arg>
+
+    -h, --help                      print this help message and exit
+    -s, --suite <suite>             set iso suite (jammy, noble, questing, kzl)
+
+EOF
+}
+
+################################################################################
+
+while (( $# > 0 )); do
+    case "$1" in
+    -h | --help)
+        usage
+        exit
+        ;;
+    -s | --suite)
+        shift
+        arg_suite="$1"
+        ;;
+    -r | --rootfs-tarball)
+        shift
+        arg_rootfs_tarball="$1"
+        ;;
+    *)
+        usage
+        error "Unknown option: $1" 128
+        ;;
+    esac
+    shift
+done
+
+case "$arg_suite" in
+    jammy)
+        deb_pkgs=("${common_deb_pkgs[@]}")
+        distro="ubuntu"
+        iso_name="Ubuntu ($arg_suite)"
+        ;;
+    noble)
+        deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
+        distro="ubuntu"
+        iso_name="Ubuntu ($arg_suite)"
+        ;;
+    questing)
+        deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}")
+        distro="ubuntu"
+        iso_name="Ubuntu ($arg_suite)"
+        ;;
+    kzl)
+        distro="kzl-linux"
+        iso_name="KZL Linux"
+        ;;
+    *)
+        error "Unknown suite: $arg_suite" 128
+        ;;
+esac
+
+################################################################################
+
+prologue
+
+create_work_dirs
+bootstrap_rootfs
+
+cleanup
+
+epilogue
+
+### error codes
+# 1: general error
+# 2-126: specific error codes
+# 127: command not found
+# 128: unknown option or invalid argument
+# 255: must be run as root
