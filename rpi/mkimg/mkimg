@@ -76,8 +76,6 @@ arg_chroot_command=()
 cleanup() {
     set +e
 
-    sync
-
     info "Cleaning up..."
     chroot_teardown
     loop_teardown "$loop_device"
