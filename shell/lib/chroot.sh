@@ -134,6 +134,7 @@ chroot_teardown() {
         done
         chroot_active_mounts=("${_mountpoints[@]}")
         _mountpoints=()
+        sleep 3
     done
     chroot_setup_done=0
 }

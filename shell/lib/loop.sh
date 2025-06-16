@@ -63,6 +63,7 @@ loop_teardown() {
         done
         _loop_mountpoints=("${_mountpoints[@]}")
         _mountpoints=()
+        sleep 3
     done
 
     info "Detaching loop device: $_loop_device"
