@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 # updpkgsums
 #
@@ -13,7 +13,7 @@ set -o pipefail
 umask 0022
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_PATH="$(realpath "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
@@ -39,7 +39,7 @@ EOF
 ################################################################################
 
 if [[ ! -f "$PKGBUILD_FILE" ]]; then
-   error 'PKGBUILD does not exist.' 2
+   error "PKGBUILD does not exist" 2
 fi
 
 if [[ -f "/usr/share/makepkg/util/schema.sh" ]]; then
@@ -47,22 +47,22 @@ if [[ -f "/usr/share/makepkg/util/schema.sh" ]]; then
 elif [[ -f "/opt/share/makepkg/util/schema.sh" ]]; then
     . /opt/share/makepkg/util/schema.sh
 else
-    error '<libmakepkgdir>/util/schema.sh NOT found' 3
+    error '<libmakepkgdir>/util/schema.sh not found' 3
 fi
 
 info "Getting known hash algorithms..."
 sumtypes=$(IFS='|'; echo "${known_hash_algos[*]}")
-info "Done (Getting known hash algorithms)"
+info "Done (Got known hash algorithms)"
 
 info "Running \`makepkg -g\`..."
 newsums=$(makepkg -g)
 if (( $? )); then
     error "\`makepkg -g\` failed" 4
 fi
-info "Done (Running \`makepkg -g\`)"
+info "Done (Ran \`makepkg -g\`)"
 
 if [[ -z $newsums ]]; then
-    error "PKGBUILD does not contain sources to update" 5
+    error "No sources to update checksums" 5
 fi
 
 awk -v sumtypes="$sumtypes" -v newsums="$newsums" '
@@ -81,12 +81,13 @@ awk -v sumtypes="$sumtypes" -v newsums="$newsums" '
 trap 'rm -rf "$NEW_PKGBUILD_FILE"' EXIT
 
 if ! cat -- "$NEW_PKGBUILD_FILE" > "$PKGBUILD_FILE"; then
-    error "Failed to update $PKGBUILD_FILE. The file has not been modified." 6
+    error "Failed to update $PKGBUILD_FILE" 6
 fi
 
 ### error codes
+# 1: general error
 # 2: PKGBUILD does not exist
 # 3: schema.sh NOT found
-# 4: makepkg -g error
-# 5: PKGBUILD does not contain sources to update
-# 6: Failed to write new PKGBUILD
+# 4: `makepkg -g` error
+# 5: no sources to update checksums
+# 6: failed to update PKGBUILD

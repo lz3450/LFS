@@ -1,6 +1,6 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
-# updaterepo.sh
+# updaterepo
 #
 
 set -e
@@ -11,7 +11,7 @@ set -o pipefail
 umask 0022
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(readlink -f "$0")"
+SCRIPT_PATH="$(realpath "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
@@ -25,6 +25,7 @@ REPO_ROOT="/home/.repository"
 PACKAGE_DIR="$HOME/makepkg/packages"
 ARCHIVE_DIR="$HOME/makepkg/archive"
 
+### options and arguments
 arg_repo=""
 declare -i opt_replace=0
 declare -i opt_clear=0
@@ -79,7 +80,7 @@ while (( $# > 0 )); do
             opt_clear=1
             ;;
         *)
-            error "Unknown option \"$1\"" 127
+            error "Unknown option \"$1\"" 128
             ;;
     esac
     shift
@@ -95,14 +96,14 @@ case "$arg_repo" in
         repo_path="$repo_dir/ubuntu.db.$EXTENSION"
         ;;
     *)
-        error "Unknown repo name \"$arg_repo\"" 127
+        error "Unknown repo name \"$arg_repo\"" 128
         ;;
 esac
 
 if [[ -d "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$arg_repo/" ]]; then
     readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$arg_repo/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
 else
-    error "Cannot find pkgbuilds directory for \"$arg_repo\"." 126
+    error "Failed to find pkgbuilds directory for \"$arg_repo\"." 2
 fi
 
 ### clear
@@ -160,7 +161,5 @@ if [[ -z $(find "$PACKAGE_DIR" -empty) ]]; then
 fi
 
 ### error codes
-# 2: Unknown repo
-# 3: Multiple packages with the same name are found
-# 126: Cannot find pkgbuilds directory
-# 127: Unknown option
+# 2: failed to find pkgbuilds directory
+# 128: unknown option or invalid argument

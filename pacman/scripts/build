@@ -1,6 +1,6 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
-# build.sh
+# build
 #
 
 set -e
@@ -11,7 +11,7 @@ set -o pipefail
 umask 0022
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$0"
+SCRIPT_PATH="$(realpath "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
@@ -27,6 +27,7 @@ LOG_DIR="$HOME"/makepkg/log
 
 . "$SCRIPT_DIR"/pkglists.sh
 
+### options and arguments
 arg_repo=""
 arg_single_package=""
 declare -i opt_stage
@@ -57,28 +58,17 @@ prepare() {
     info "Done"
 }
 
-_get_pkgbuilds_dir() {
+_get_pkg_dir() {
     local _pkgbase="$1"
     local _pkgbuilds_dir
     readarray -t _pkgbuilds_dir < <(find "${repo_pkgbuilds_dirs[@]}" -mindepth 1 -maxdepth 1 -type d -name "$_pkgbase" -print)
 
     if (( ${#_pkgbuilds_dir[@]} != 1 )); then
-        error "PKGBUILD directory not found for \"$_pkgbase\"" 7
+        error "Failed to find package directory for \"$_pkgbase\"" 2
     fi
 
     info "Package directory: ${_pkgbuilds_dir[0]}"
     echo "${_pkgbuilds_dir[0]}"
-}
-
-_install_dependencies() {
-    if [[ "$arg_repo" == "kzl" ]]; then
-        return
-    fi
-    if [[ -f "install-dependencies.sh" ]]; then
-        info "Installing dependencies..."
-        ./install-dependencies.sh >> "$_log" 2>&1
-        info "Done"
-    fi
 }
 
 build() {
@@ -100,7 +90,7 @@ build() {
         mv "$_log" "${_log/.log/.old.log}"
     fi
 
-    cd $(_get_pkgbuilds_dir "$_pkgbase")
+    cd $(_get_pkg_dir "$_pkgbase")
 
     # run install-dependencies.sh if exists
     if [[ -f "install-dependencies.sh" ]]; then
@@ -120,16 +110,16 @@ build() {
         elif (( $_updated == 0 )); then
             info "  No update for PKGBUILD"
         elif (( $_updated == 1 )); then
-            info "  Package \"$_pkgbase\" is updated to new version"
+            info "  Successfully updated package \"$_pkgbase\" to new version"
         elif (( $_updated == 2 )); then
-            error "  PKGBUILD does not exist" 5
+            error "  PKGBUILD does not exist" 2
         elif (( $_updated == 3 )); then
             warn "  PKGUPDATE does not exist"
             _cleanbuild='-C'
         elif (( $_updated >= 4 )); then
-            error "  Cannot update the PKGBUILD (error code: $_updated)" 5
+            error "  Failed to update the PKGBUILD (error code: $_updated)" 3
         else
-            error "  Unknown \`updatepkg\` result" 5
+            error "  Unknown \`updatepkg\` result" 3
         fi
 
         if (( $opt_updated_only > 0 )) && (( $_updated == 0 || $_updated == 255 )); then
@@ -236,7 +226,7 @@ while (( $# > 0 )); do
         ;;
     *)
         usage
-        error "Unknown option: \"$1\"" 255
+        error "Unknown option: \"$1\"" 128
         ;;
     esac
     shift
@@ -252,18 +242,18 @@ case "$arg_repo" in
     questing)
         ;;
     *)
-        error "Unknown repo name \"$arg_repo\"" 3
+        error "Unknown repo name \"$arg_repo\"" 128
         ;;
 esac
 repo_pkgbuilds_dirs+=("$LFS_PACMAN_ROOT_DIR/pkgbuilds/$arg_repo")
 
 if (( $opt_updatepkg == 0 )) && (( $opt_updated_only == 1 )); then
-    error "Cannot use --updated-only together with --no-updatepkg" 6
+    error "Cannot use --updated-only together with --no-updatepkg" 128
 fi
 
 if [[ -n "$arg_single_package" ]]; then
     if [[ -n "$opt_stage" ]]; then
-        error "Cannot use -s | --stage together with -p | --package" 2
+        error "Cannot use -s | --stage together with -p | --package" 128
     fi
 else
     stage=${stage:-1}
@@ -284,7 +274,7 @@ else
                     pkgs=("${kzl_stage3_pkgs[@]}")
                     ;;
                 *)
-                    error "Unknown stage \"$opt_stage\"" 4
+                    error "Unknown stage \"$opt_stage\"" 128
                     ;;
             esac
             ;;
@@ -297,7 +287,7 @@ else
                     pkgs=("${jammy_stage2_pkgs[@]}")
                     ;;
                 *)
-                    error "Unknown stage \"$opt_stage\"" 4
+                    error "Unknown stage \"$opt_stage\"" 128
                     ;;
             esac
             ;;
@@ -307,12 +297,12 @@ else
                     pkgs=("${noble_stage1_pkgs[@]}")
                     ;;
                 *)
-                    error "Unknown stage \"$opt_stage\"" 4
+                    error "Unknown stage \"$opt_stage\"" 128
                     ;;
             esac
             ;;
         *)
-            error "Unknown repo name \"$arg_repo\" or the repo does not support stages" 3
+            error "Unknown repo name \"$arg_repo\" or the repo does not support stages" 128
             ;;
     esac
 fi
@@ -345,10 +335,7 @@ fi
 epilogue
 
 ### error codes
-# 2: cannot use -s | --stage together with -p | --package
-# 3: unknown repo name
-# 4: unknown stage
-# 5: cannot update the PKGBUILD
-# 6: cannot use --updated-only together with --no-updatepkg
-# 7: PKGBUILD directory not found
-# 255: unknown option
+# 1: general error
+# 2: package directory
+# 3: updatepkg
+# 128: unknown option or invalid argument

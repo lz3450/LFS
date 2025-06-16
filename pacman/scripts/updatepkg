@@ -11,7 +11,7 @@ set -o pipefail
 umask 0022
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$0"
+SCRIPT_PATH="$(realpath "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
@@ -25,10 +25,11 @@ PKGBUILDDIR="$(pwd)"
 # PGP_KEY_SERVER="hkps://keys.openpgp.org"
 # PGP_KEY_SERVER="hkps://pgp.mit.edu"
 
-syncdeps='-d'
-cleanbuild='-C'
-declare -i increase=0
-declare -i increase_only=0
+### constants & variables
+opt_syncdeps='-d'
+opt_cleanbuild='-C'
+declare -i opt_increase=0
+declare -i opt_increase_only=0
 
 ### functions
 have_function() {
@@ -62,21 +63,21 @@ while (( $# > 0 )); do
         exit 0
         ;;
     -s|--syncdeps)
-        syncdeps='-sr'
+        opt_syncdeps='-sr'
         ;;
     -n|--no-cleanbuild)
-        cleanbuild=''
+        opt_cleanbuild=''
         ;;
     -i|--increase-pkgrel)
-        increase=1
+        opt_increase=1
         ;;
     -I|--increase-pkgrel-only)
-        increase=1
-        increase_only=1
+        opt_increase=1
+        opt_increase_only=1
         ;;
     *)
         usage
-        error "Unknown option: \"$1\"" 255
+        error "Unknown option: \"$1\"" 128
         ;;
     esac
     shift
@@ -86,7 +87,7 @@ done
 
 # PKGBUILD
 if [[ ! -f "PKGBUILD" ]]; then
-   error 'PKGBUILD does not exist.' 2
+   error "PKGBUILD does not exist" 2
 fi
 . PKGBUILD
 current_version=$(grep -oP 'pkgver=\K.+$' PKGBUILD | sed 's/\.g.*//')
@@ -96,19 +97,19 @@ info "Current pkgrel is $current_pkgrel"
 
 # PKGUPDATE
 if [[ ! -f "PKGUPDATE" ]]; then
-    error "PKGUPDATE does not exist." 3
+    error "PKGUPDATE does not exist" 3
 fi
 unset new_version srcdir build_system pre_update post_update
 . PKGUPDATE || :
 if [[ -z "$new_version" ]]; then
-    error 'Cannot get new version' 5
+    error 'Cannot get new version' 4
 fi
 info "New pkgver is $new_version"
 
 # update `pkgver` and `pkgrel`
 result=$(vercmp $new_version $current_version)
 pkgbuild_path="$(realpath PKGBUILD)"
-if (( $result == 1 )); then
+if (( result == 1 )); then
     info "PKGBUILD updated: $current_version => $new_version"
     sed -i \
         -e "/^pkgver=/c\\pkgver=$new_version" \
@@ -116,24 +117,24 @@ if (( $result == 1 )); then
         "$pkgbuild_path"
     pkgver=$new_version
     info "Running \`updpkgsums\`..."
-    updpkgsums || error "\`updpkgsums\` error" 7
+    updpkgsums || error "\`updpkgsums\` error" 4
     info "Done (Running \`updpkgsums\`)"
     # force cleanbuild
-    cleanbuild='-C'
-elif (( $result == 0 )); then
+    opt_cleanbuild='-C'
+elif (( result == 0 )); then
     info "No update for PKGBUILD"
-    if (( $increase > 0 )); then
+    if (( opt_increase > 0 )); then
         new_pkgrel=$(($current_pkgrel + 1))
         sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" "$pkgbuild_path"
         info "New pkgrel is $new_pkgrel"
-        if (( $increase_only > 0 )); then
+        if (( opt_increase_only > 0 )); then
             exit $result
         fi
     fi
-elif (( $result == -1 )); then
+elif (( result == -1 )); then
     warn "Current version is newer"
 else
-    error "Unknown \`vercmp\` result" 8
+    error "Unknown \`vercmp\` result" 4
 fi
 
 # makepkg.conf
@@ -142,13 +143,13 @@ if [[ -f "/etc/makepkg.conf" ]]; then
 elif [[ -f "/opt/etc/makepkg.conf" ]]; then
     . /opt/etc/makepkg.conf
 else
-    error 'makepkg.conf NOT found' 4
+    error "makepkg.conf NOT found" 4
 fi
 
 # run pre_update
 if have_function 'pre_update'; then
     info "Running pre_update()..."
-    pre_update || error "\`pre_update\` error" 6
+    pre_update || error "\`pre_update\` error" 4
     info "Done (Running pre_update())"
 fi
 
@@ -157,12 +158,12 @@ cd "$PKGBUILDDIR"
 if (( ${#validpgpkeys[@]} )); then
     if ! gpg --list-keys --with-colons "${validpgpkeys[@]}" > /dev/null 2>&1; then
         # gpg --keyserver "$PGP_KEY_SERVER" --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
-        gpg --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 13
+        gpg --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 4
     fi
 fi
 
 info "Running \`makepkg -o\`..."
-makepkg "$cleanbuild" "$syncdeps" -o --noconfirm || error "\`makepkg -o\` error" 9
+makepkg "$opt_cleanbuild" "$opt_syncdeps" -o --noconfirm || error "\`makepkg -o\` error" 5
 info "Done (Running \`makepkg -o\`)"
 
 # get build options
@@ -170,39 +171,39 @@ info "Getting build options..."
 cd "$BUILDDIR/$pkgname/src"
 if [[ "$build_system" == "autoconf" || "$build_system" == "meson" || "$build_system" == "cmake" ]]; then
     if [[ ! -d "$srcdir" ]]; then
-        error "Cannot find source directory: $srcdir" 11
+        error "Cannot find source directory: $srcdir" 5
     fi
 
     cd "./$srcdir"
     case "$build_system" in
         autoconf)
             if [[ ! -f "configure" ]]; then
-                error 'Cannot find `configure` script' 12
+                error 'Cannot find `configure` script' 5
             fi
-            ./configure --help=recursive > "$PKGBUILDDIR"/help.txt || error "\`./configure --help=recursive\` error" 12
+            ./configure --help=recursive > "$PKGBUILDDIR"/help.txt || error "\`./configure --help=recursive\` error" 5
             ;;
         meson)
             if [[ ! -f "meson.build" ]]; then
-                error 'Cannot find `meson.build` script' 12
+                error 'Cannot find `meson.build` script' 5
             fi
-            meson configure | sed -e '/^WARNING/d' > "$PKGBUILDDIR"/help.txt || error "\`meson configure\` error" 12
+            meson configure | sed -e '/^WARNING/d' > "$PKGBUILDDIR"/help.txt || error "\`meson configure\` error" 5
             if [[ -d "subprojects" ]]; then
-                meson setup tmp || error "\`meson setup\` error" 12
+                meson setup tmp || error "\`meson setup\` error" 5
                 meson subprojects foreach meson configure | sed -e '/^WARNING/d' -e '/\x1B/d' \
-                    >> "$PKGBUILDDIR"/help.txt || error "\`meson subprojects foreach meson configure\` error" 12
+                    >> "$PKGBUILDDIR"/help.txt || error "\`meson subprojects foreach meson configure\` error" 5
                 rm -rf tmp
             fi
             ;;
         cmake)
             if [[ ! -f "CMakeLists.txt" ]]; then
-                error 'Cannot find `CMakeLists.txt`' 12
+                error 'Cannot find `CMakeLists.txt`' 5
             fi
-            cmake -LAH -S . -B tmp -D CMAKE_BUILD_TYPE=Release > "$PKGBUILDDIR"/help.txt || error "\`cmake -LAH\` error" 12
+            cmake -LAH -S . -B tmp -D CMAKE_BUILD_TYPE=Release > "$PKGBUILDDIR"/help.txt || error "\`cmake -LAH\` error" 5
             rm -rf tmp
             ;;
         *)
             # should not reach here
-            error "Unknown build_system: $build_system" 12
+            error "Unknown build_system: $build_system" 5
             ;;
     esac
 else
@@ -214,27 +215,23 @@ info "Done (Getting build options)"
 cd "$PKGBUILDDIR"
 if have_function 'post_update'; then
     info "Running post_update()..."
-    post_update || error "\`post_update\` error" 14
+    post_update || error "\`post_update\` error" 4
     info "Done (Running post_update())"
 fi
 
 info "Update PKGBUILD finished successfully"
 
-### error codes
-# 255: current version is newer
+### status codes
+# -1(255): current version is newer
 # 0: no update
 # 1: updated
+
+### error codes
 # 2: PKGBUILD does not exist
 # 3: PKGUPDATE does not exist
-# 4: makepkg.conf NOT found
-# 5: cannot get new version
-# 6: pre_update error
-# 7: updpkgsums error
-# 8: unknown vercmp result
-# 9: makepkg error
-# 10: build_system is not defined
-# 11: cannot find source directory
-# 12: build_system errors
-# 13: gpg --recv-keys error
-# 14: post_update error
+# 4: failed to update PKGBUILD
+# 5: failed to get gpg key
+# 6: failed to get build options
+# 128: unknown option or invalid argument
+
 exit $result
