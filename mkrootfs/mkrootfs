@@ -82,19 +82,17 @@ arg_suite="noble"
 ### functions
 cleanup() {
     set +e
+
     info "Cleaning up..."
+    chroot_teardown
 
-    if [[ -d "$WORK_DIR" ]]; then
-        local _answer
-        read -p "Do you want to remove working directory $WORK_DIR? (y/N) " _answer
-        if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
-            if (( chroot_setup_done > 0 )); then
-                chroot_teardown
-            fi
-            rm -rf --one-file-system -- "$WORK_DIR"
-        fi
+    local _answer
+    read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
+    if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+        info "Removing working directory: $WORK_DIR"
+        rm -rf --one-file-system -- "$WORK_DIR"
+        info "Done (Removed working directory)"
     fi
-
     info "Done (Cleaned up)"
 
     trap - EXIT SIGINT SIGTERM SIGKILL
