@@ -149,8 +149,8 @@ format_img() {
         error "Loop device is not set" 2
     fi
 
-    mkfs.fat -F 32 -n "BOOT" "${loop_device}p1"
-    mkfs.ext4 -L "ROOT" "${loop_device}p2"
+    mkfs.fat -F 32 -n "BOOT" "${loop_device}p1" > "$LOG_DIR/mkfs.fat.log" || error "Failed to format BOOT partition" 2
+    mkfs.ext4 -L "ROOT" "${loop_device}p2" > "$LOG_DIR/mkfs.ext4.log" || error "Failed to format ROOT partition" 2
     info "Done (Formatted image)"
 }
 
@@ -181,21 +181,55 @@ configure_img() {
     local _deb_pkgs_installed="$PKGLIST_DIR/${arg_suite}-rootfs-pkgs.txt"
     sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkgs_installed"
 
+    info "Downloading RPi firmware..."
+    local _firmware_version=$(git ls-remote --tags https://github.com/raspberrypi/firmware.git | grep -oP '(?<=refs/tags/)1.\d{8}$' | sort -V | tail -n1)
+    local _firmware_dir="$WORK_DIR/firmware-$_firmware_version"
+    wget -qO "$WORK_DIR/firmware.tar.gz" https://github.com/raspberrypi/firmware/archive/refs/tags/$_firmware_version.tar.gz
+    tar -xf "$WORK_DIR/firmware.tar.gz" -C "$WORK_DIR"
+    info "Done (Downloaded RPi firmware: $_firmware_version)"
+
+    info "Copying RPi firmware to rootfs..."
+    mv -- "$_firmware_dir"/boot/* "$ROOTFS_DIR/boot/firmware/"
+    mv -- "$_firmware_dir"/modules "$ROOTFS_DIR/usr/lib/"
+    local _kernel_version
+    local _kv
+    local _kernel_suffix
+    local -a _kernel_version_suffix=()
+    for _kernel_version in $(ls "$ROOTFS_DIR/usr/lib/modules"); do
+        _kv=$(echo "$_kernel_version" | grep -oP '\d+\.\d+\.\d+\K.*' | sed 's/^-v//;s/\+//')
+        case "$_kv" in
+            8-16k)  _kernel_suffix="_2712" ;;
+            *)      _kernel_suffix="$_kv" ;;
+        esac
+        cp -vdr "$ROOTFS_DIR/boot/firmware/kernel$_kernel_suffix.img" "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version"
+        _kernel_version_suffix+=("$_kernel_version:$_kernel_suffix")
+    done
+    info "Done (Copied RPi firmware)"
+
     info "Running chroot configuration..."
     chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
     # apt-get
-    chroot_run "$ROOTFS_DIR" apt-get update || error "Failed to run apt-get update" 3
-    chroot_run "$ROOTFS_DIR" apt-get upgrade -y || error "Failed to run apt-get upgrade" 3
-    chroot_run "$ROOTFS_DIR" apt-get install --no-install-recommends -y "${deb_pkgs[@]}" || error "Failed to install packages" 3
-    chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y || error "Failed to run apt-get autoremove" 3
+    chroot_run "$ROOTFS_DIR" apt-get update > "$LOG_DIR/apt-get-update.log" || error "Failed to run apt-get update" 3
+    chroot_run "$ROOTFS_DIR" apt-get upgrade -y > "$LOG_DIR/apt-get-upgrade.log" || error "Failed to run apt-get upgrade" 3
+    chroot_run "$ROOTFS_DIR" apt-get install --no-install-recommends -y "${deb_pkgs[@]}" > "$LOG_DIR/apt-get-install.log" || error "Failed to install packages" 3
+    chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y > "$LOG_DIR/apt-get-autoremove.log" || error "Failed to run apt-get autoremove" 3
     # get installed deb packages
     chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkgs_installed" || warn "Failed to create a list of installed deb packages"
     # run initialize.sh
     cp -v -- "$SCRIPT_DIR/initialize.sh" "$ROOTFS_DIR/initialize.sh"
     chroot_run "$ROOTFS_DIR" "/initialize.sh" > "$LOG_DIR/initialize.log" || error "Failed to run initialize.sh" 3
     rm -vf -- "$ROOTFS_DIR/initialize.sh"
-    chroot_teardown
+    chroot_teardown || error "Failed to teardown chroot environment" 3
     info "Done (Chroot configuration)"
+
+    info "Copying initramfs..."
+    local _kvs
+    for _kvs in "${_kernel_version_suffix[@]}"; do
+        _kernel_version=${_kvs%%:*}
+        _kernel_suffix=${_kvs##*:}
+        cp -dr "$ROOTFS_DIR/boot/initrd.img-$_kernel_version" "$ROOTFS_DIR/boot/firmware/initramfs$_kernel_suffix"
+    done
+    info "Done (Copied initramfs)"
 
     info "Copying miscellaneous config files..."
     # hostname
@@ -214,29 +248,6 @@ configure_img() {
     info "Cleaning up rootfs..."
     dpkg_clean_rootfs "$ROOTFS_DIR" > "$LOG_DIR/clean_rootfs.log"
     info "Done (Cleaned up rootfs)"
-
-    info "Downloading RPi firmware..."
-    local _firmware_version=$(git ls-remote --tags https://github.com/raspberrypi/firmware.git | grep -oP '(?<=refs/tags/)1.\d{8}$' | sort -V | tail -n1)
-    local _firmware_dir="$WORK_DIR/firmware-$_firmware_version"
-    wget -qO "$WORK_DIR/firmware.tar.gz" https://github.com/raspberrypi/firmware/archive/refs/tags/$_firmware_version.tar.gz
-    tar -xf "$WORK_DIR/firmware.tar.gz" -C "$WORK_DIR"
-    info "Done (Downloaded RPi firmware: $_firmware_version)"
-
-    info "Copying RPi firmware to rootfs..."
-    mv -- "$_firmware_dir"/boot/* "$ROOTFS_DIR/boot/firmware/"
-    mv -- "$_firmware_dir"/modules "$ROOTFS_DIR/usr/lib/"
-    local _kernel_version
-    local _kernel_suffix
-    for _kernel_version in $(ls "$ROOTFS_DIR/usr/lib/modules"); do
-        _kernel_version=$(echo "$_kernel_version" | grep -oP '\d+\.\d+\.\d+\K.*' | sed 's/^-v//;s/\+//')
-        case "$_kernel_version" in
-            8-16k)  _kernel_suffix="_2712" ;;
-            *)      _kernel_suffix="$_kernel_version" ;;
-        esac
-        cp -dr "$ROOTFS_DIR/boot/firmware/kernel$_kernel_suffix.img" "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version"
-        kernel_version_kvs+=("$_kernel_version:$_kernel_suffix")
-    done
-    info "Done (Copied RPi firmware)"
 
     info "Copying boot configuration files..."
     # copy configuration files
