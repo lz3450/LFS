@@ -106,7 +106,6 @@ libkmod2
 libkrb5-3
 libkrb5support0
 libldap-2.5-0
-libldap-common
 liblocale-gettext-perl
 liblz4-1
 liblzma5
@@ -141,7 +140,6 @@ libpython3.10-stdlib
 libreadline8
 librtmp1
 libsasl2-2
-libsasl2-modules
 libsasl2-modules-db
 libseccomp2
 libselinux1
@@ -167,14 +165,7 @@ libudev1
 libunistring2
 libuuid1
 libwrap0
-libx11-6
-libx11-data
-libxau6
-libxcb1
-libxdmcp6
-libxext6
 libxml2
-libxmuu1
 libxtables12
 libxxhash0
 libyaml-0-2
@@ -191,7 +182,6 @@ mount
 nano
 ncurses-base
 ncurses-bin
-ncurses-term
 netbase
 netcat-openbsd
 netplan.io
@@ -201,17 +191,14 @@ openssh-server
 openssh-sftp-server
 openssl
 passwd
-patch
 perl
 perl-base
 perl-modules-5.34
 procps
-publicsuffix
 python-apt-common
 python3
 python3-apt
 python3-dbus
-python3-distro
 python3-gi
 python3-minimal
 python3-netifaces
@@ -224,7 +211,6 @@ rsyslog
 sed
 sensible-utils
 shared-mime-info
-ssh-import-id
 sudo
 systemd
 systemd-sysv
@@ -241,7 +227,6 @@ vim-common
 vim-tiny
 wget
 whiptail
-xauth
 xdg-user-dirs
 xkb-data
 xxd

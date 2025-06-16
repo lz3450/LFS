@@ -185,8 +185,8 @@ debootstrap_rootfs() {
 # }
 
 configure_rootfs() {
-    local -r _deb_pkg_installed="$PKGLIST_DIR/$arg_platform-$arg_suite-rootfs-pkgs.txt"
-    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkg_installed"
+    local -r _deb_pkgs_installed="$PKGLIST_DIR/$arg_platform-$arg_suite-rootfs-pkgs.txt"
+    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkgs_installed"
 
     info "Configuring rootfs..."
 
@@ -218,17 +218,17 @@ configure_rootfs() {
     # apt-get
     chroot_run "$ROOTFS_DIR" apt-get update || error "Failed to run apt-get update" 3
     chroot_run "$ROOTFS_DIR" apt-get upgrade -y || error "Failed to run apt-get upgrade" 3
-    chroot_run "$ROOTFS_DIR" apt-get install -y "${additional_deb_pkgs[@]}" || error "Failed to run apt-get install" 3
+    chroot_run "$ROOTFS_DIR" apt-get install --no-install-recommends -y "${additional_deb_pkgs[@]}" || error "Failed to run apt-get install" 3
     chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y || error "Failed to run apt-get autoremove" 3
     chroot_run "$ROOTFS_DIR" dpkg-reconfigure locales || warn "Failed to run dpkg-reconfigure locales"
     chroot_run "$ROOTFS_DIR" dpkg-reconfigure tzdata || warn "Failed to run dpkg-reconfigure tzdata"
     # get installed deb packages
-    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkg_installed" || warn "Failed to create a list of installed deb packages"
+    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkgs_installed" || warn "Failed to create a list of installed deb packages"
     chroot_teardown
     info "Done (Chroot configuration)"
 
     info "Cleaning up rootfs..."
-    dpkg_clean_rootfs > "$LOG_DIR/clean_rootfs.log" 2>&1
+    dpkg_clean_rootfs "$ROOTFS_DIR" > "$LOG_DIR/clean_rootfs.log" 2>&1
     info "Done (Cleaned up rootfs)"
 
     info "Done (Configured rootfs)"
@@ -334,6 +334,9 @@ debootstrap_rootfs
 # mmdebstrap_rootfs
 configure_rootfs
 create_rootfs_tarball
+
+info "Successfully created rootfs tarball"
+
 cleanup
 
 epilogue
