@@ -124,9 +124,10 @@ pacstrap_rootfs() {
     sed -i 's/^DownloadUser/#&/' "$_tmp_conf_file"
     _pacman_config="$_tmp_conf_file"
 
-    install -d -m 0755 -- "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman,log} "$ROOTFS_DIR"/{dev,run,etc/pacman.d}
-    install -d -m 1777 -- "$ROOTFS_DIR"/tmp
-    install -d -m 0555 -- "$ROOTFS_DIR"/{sys,proc}
+    mkdir -vp -m 0755 -- "$ROOTFS_DIR"/{dev,run,etc/pacman.d}
+    mkdir -vp -m 0755 -- "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman,log}
+    mkdir -vp -m 1777 -- "$ROOTFS_DIR"/tmp
+    mkdir -vp -m 0555 -- "$ROOTFS_DIR"/{sys,proc}
     chroot_setup "$ROOTFS_DIR" || error "Failed to install pacman packages" 5
     unshare --fork --pid \
         pacman -Sy \

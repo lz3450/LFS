@@ -52,6 +52,8 @@ declare -r PACMAN_REPO_FILE="$PACMAN_REPO_DIR/ubuntu.db.tar.zst"
 
 distro=""
 
+pacman_pkgs=(
+)
 
 ### options and arguments
 arg_suite=""
@@ -106,23 +108,50 @@ bootstrap_rootfs() {
     info "Install pacman packages: ${_pkg_list[*]}"
     # pacstrap -c -G -M -- "$ROOTFS_DIR" "${_pkg_list[@]}" >"$LOG_DIR"/pacstrap.log 2>&1 || error "Failed to pacstrap packages" 5
 
+    local _pacman
     local _pacman_config
     local _pacman_tmp_conf_file="pacman_$TIMESTAMP.conf"
 
     if [[ -f "/usr/bin/pacman" ]]; then
+        _pacman="/usr/bin/pacman"
         _pacman_tmp_conf_file="/etc/pacman.conf"
     elif [[ -f "/opt/bin/pacman" ]]; then
+        _pacman="/opt/bin/pacman"
         _pacman_tmp_conf_file="/opt/etc/pacman.conf"
     else
         error "Failed to find \`pacman\`" 127
     fi
     sed 's/^DownloadUser/#&/' "$_pacman_config" > "$_pacman_tmp_conf_file"
 
-    # TODO: check if necessary
-    install -d -m 0755 -- "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman,log}
-
+    # TODO: check necessity
+    # mkdir -vp -- "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman}
+    chroot_setup "$ROOTFS_DIR" || error "Failed to install pacman packages" 5
+    chroot_run "$_pacman" -Sy \
+        -r "$ROOTFS_DIR" \
+        --cachedir "/$PACMAN_REPO_DIR" \
+        --config "$_pacman_tmp_conf_file" \
+        --disable-sandbox \
+        --noconfirm \
+        "${pacman_pkgs[@]}" \
+        2>&1 | tee "$LOG_DIR"/pacman.log || error "Failed to install pacman packages" 5
+    chroot_teardown || error "Failed to install pacman packages" 5
     info "Done (Installed pacman packages)"
 
+    info "Creating a list of installed pacman packages..."
+    "$_pacman" -Q --sysroot "$ROOTFS_DIR" > "$ISOFS_DIR"/pacman_pkglist.txt || warn "Failed to creating a list of installed pacman packages"
+    if [[ -f "$ISOFS_DIR/pacman_pkglist.txt" ]]; then
+        cp -vf -- "$ISOFS_DIR/pacman_pkglist.txt" "$PKGLIST_DIR/pacman_pkglist.txt"
+        chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR/pacman_pkglist.txt"
+    fi
+    info "Done (Created a list of installed pacman packages)"
+}
+
+make_mutable_img() {
+    info "Creating mutable image \"$MUTABLE_IMG\"..."
+    rm -f -- "$MUTABLE_IMG"
+    fallocate -l 1GiB "$MUTABLE_IMG"
+    mkfs.f2fs -f -l MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
+    info "Done (Created mutable image)"
 }
 
 usage() {
