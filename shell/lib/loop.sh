@@ -46,6 +46,8 @@ loop_teardown() {
         return
     fi
 
+    sync
+
     local _loop_mountpoints=()
     local _mountpoints=()
     readarray -t _loop_mountpoints < <(mount | grep "$_loop_device" | cut -d ' ' -f 3 | tac)
