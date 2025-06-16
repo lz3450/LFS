@@ -45,6 +45,25 @@ arg_input=""
 # . "$SCRIPT_DIR"/lib/mkiso.sh
 
 ### functions
+cleanup() {
+    set +e
+
+    info "Cleaning up..."
+    # chroot_teardown
+    # loop_teardown "$loop_device"
+    # read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
+    # if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+    #     info "Removing working directory: $WORK_DIR"
+    #     rm -rf --one-file-system -- "$WORK_DIR"
+    #     info "Done (Removed working directory)"
+    # fi
+    info "Done (Cleaned up)"
+
+    trap - EXIT SIGINT SIGTERM SIGKILL
+}
+trap cleanup EXIT SIGINT SIGTERM SIGKILL
+# trap "trap - SIGTERM && kill -- -$$" EXIT SIGINT SIGTERM SIGKILL
+
 example_function() {
     info "example_function"
 
@@ -52,14 +71,6 @@ example_function() {
 
     echo "$arg_input"
 }
-
-clean() {
-    info "clean"
-
-    trap - EXIT SIGINT SIGTERM SIGKILL
-}
-trap clean EXIT SIGINT SIGTERM SIGKILL
-# trap "trap - SIGTERM && kill -- -$$" EXIT SIGINT SIGTERM SIGKILL
 
 usage() {
     cat << EOF
@@ -114,6 +125,7 @@ while (( $# > 0 )); do
         ;;
     -h | --help)
         usage
+        exit
         ;;
     -i | --input)
         shift
@@ -136,7 +148,8 @@ done
 prologue
 
 example_function
-clean
+
+cleanup
 
 epilogue
 
