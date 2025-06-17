@@ -121,10 +121,7 @@ chroot_teardown() {
         local _mp
         for _mp in "${chroot_active_mounts[@]}"; do
             if mountpoint -q "$_mp"; then
-                info "Unmounting \"$_mp\"..."
-                if umount -v -- "$_mp"; then
-                    info "Unmounted \"$_mp\"."
-                else
+                if ! umount -v -- "$_mp"; then
                     _mountpoints+=("$_mp")
                     warn "Failed to unmount \"$_mp\", retry later"
                 fi

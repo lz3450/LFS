@@ -34,6 +34,9 @@ check_root
 
 ### constants & variables
 declare -r VERSION="1.0"
+declare -r TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
+
+declare -r WORK_DIR="/tmp/template_$TIMESTAMP"
 
 variable="value"
 
@@ -48,21 +51,35 @@ arg_input=""
 cleanup() {
     set +e
 
+    if [[ -d "$WORK_DIR" ]]; then
     info "Cleaning up..."
-    # chroot_teardown
-    # loop_teardown "$loop_device"
-    # read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
-    # if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
-    #     info "Removing working directory: $WORK_DIR"
-    #     rm -rf --one-file-system -- "$WORK_DIR"
-    #     info "Done (Removed working directory)"
-    # fi
-    info "Done (Cleaned up)"
+
+        chroot_teardown
+        loop_teardown "$loop_device"
+
+        local _answer
+        read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
+        if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+            info "Removing working directory: $WORK_DIR"
+            rm -rf --one-file-system -- "$WORK_DIR"
+            info "Done (Removed working directory)"
+        fi
+        info "Done (Cleaned up)"
+    fi
 
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
 trap cleanup EXIT SIGINT SIGTERM SIGKILL
 # trap "trap - SIGTERM && kill -- -$$" EXIT SIGINT SIGTERM SIGKILL
+
+create_work_dirs() {
+    info "Create working directory: $WORK_DIR"
+    if [[ -d "$WORK_DIR" ]]; then
+        error "Working directory $WORK_DIR already exists" 1
+    fi
+    mkdir -vp -- "$WORK_DIR"
+    info "Done (Created root filesystem directory)"
+}
 
 example_function() {
     info "example_function"
