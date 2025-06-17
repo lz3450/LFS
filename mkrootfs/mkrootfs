@@ -79,6 +79,8 @@ included_deb_pkgs=()
 excluded_deb_pkgs=()
 pacman_pkgs=()
 
+tarball_file=""
+
 ### options and arguments
 arg_platform="pc"
 arg_suite="noble"
@@ -105,8 +107,8 @@ cleanup() {
 }
 trap cleanup EXIT SIGINT SIGTERM SIGKILL
 
-create_work_dirs() {
-    info "Create working directory: $WORK_DIR"
+make_work_dirs() {
+    info "Making working directory: $WORK_DIR"
     if [[ -d "$WORK_DIR" ]]; then
         error "Working directory $WORK_DIR already exists" 1
     fi
@@ -117,7 +119,7 @@ create_work_dirs() {
         mkdir -p -- "$PKGLIST_DIR"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
     fi
-    info "Done (Created root filesystem directory)"
+    info "Done (Made root filesystem directory)"
 }
 
 _debootstrap_rootfs() {
@@ -134,7 +136,7 @@ _debootstrap_rootfs() {
         _exclude="--exclude=$(IFS=','; echo "${excluded_deb_pkgs[*]}")"
     fi
 
-    info "Creating the list of deb packages to be installed..."
+    info "Making the list of deb packages to be installed..."
     debootstrap \
         --print-debs \
         --arch="$architecture" \
@@ -145,7 +147,7 @@ _debootstrap_rootfs() {
         "$ROOTFS_DIR" \
         "$mirror" \
         2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -n  | sed '/^$/d' > "$_deb_pkg_to_install" || warn "Failed to creating the list of deb packages to be installed"
-    info "Done (Created the list of installed deb packages)"
+    info "Done (Made the list of installed deb packages)"
 
     info "Debootstrapping \"$ROOTFS_DIR/\"..."
     local _foreign=""
@@ -212,8 +214,6 @@ _deb_configure_rootfs() {
     local -r _deb_pkgs_installed="$PKGLIST_DIR/$arg_platform-$arg_suite-rootfs-pkgs.txt"
     sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkgs_installed"
 
-    info "Configuring rootfs..."
-
     info "Setting up sources.list..."
     case "$arg_platform-$distro" in
         pc-debian|pc-ubuntu)
@@ -247,7 +247,7 @@ _deb_configure_rootfs() {
     chroot_run "$ROOTFS_DIR" dpkg-reconfigure locales || warn "Failed to run dpkg-reconfigure locales"
     chroot_run "$ROOTFS_DIR" dpkg-reconfigure tzdata || warn "Failed to run dpkg-reconfigure tzdata"
     # get installed deb packages
-    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkgs_installed" || warn "Failed to create a list of installed deb packages"
+    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkgs_installed" || warn "Failed to get the list of installed deb packages"
     chroot_teardown
     info "Done (Chroot configuration)"
 
@@ -257,8 +257,6 @@ _deb_configure_rootfs() {
     rm -vrf -- "$ROOTFS_DIR"/lib.usr-is-merged
     rm -vrf -- "$ROOTFS_DIR"/sbin.usr-is-merged
     info "Done (Cleaned up rootfs)"
-
-    info "Done (Configured rootfs)"
 }
 
 _pacman_configure_rootfs() {
@@ -275,19 +273,18 @@ configure_rootfs() {
     fi
 }
 
-create_rootfs_tarball() {
-    local -r _name="rootfs-$arg_platform-$distro-$arg_suite-$TIMESTAMP.tar.zst"
-    info "Creating base rootfs tarball..."
+make_rootfs_tarball() {
+    info "Making base rootfs tarball..."
     tar -v \
         --zstd \
         --xattrs --acls \
         --numeric-owner \
         --transform='s|^./||' \
-        -cpf "$SCRIPT_DIR/$_name" \
+        -cpf "$SCRIPT_DIR/$tarball_file" \
         -C "$ROOTFS_DIR" . \
-        > "$LOG_DIR/tar.log" 2>&1 || error "Failed to create base rootfs tarball" 4
-    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/$_name"
-    info "Done (Created base rootfs tarball)"
+        > "$LOG_DIR/tar.log" 2>&1 || error "Failed to make base rootfs tarball" 4
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/$tarball_file"
+    info "Done (Made base rootfs tarball)"
 }
 
 usage() {
@@ -370,16 +367,18 @@ case "$arg_suite" in
         ;;
 esac
 
+tarball_file="rootfs-$arg_platform-$distro-$arg_suite-$TIMESTAMP.tar.zst"
+
 ################################################################################
 
 prologue
 
-create_work_dirs
+make_work_dirs
 bootstrap_rootfs
 configure_rootfs
-create_rootfs_tarball
+make_rootfs_tarball
 
-info "Successfully created rootfs tarball"
+log_cyan "Successfully made rootfs tarball: $tarball_file"
 
 cleanup
 
