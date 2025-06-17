@@ -27,7 +27,6 @@ __DEBUG__=1
 . "$SCRIPT_DIR"/lib/utils.sh
 . "$SCRIPT_DIR"/lib/loop.sh
 . "$SCRIPT_DIR"/lib/chroot.sh
-. "$SCRIPT_DIR"/lib/dpkg.sh
 
 ### checks
 check_root
@@ -246,7 +245,7 @@ configure_img() {
     info "Done (Copied miscellaneous config files)"
 
     info "Cleaning up rootfs..."
-    dpkg_clean_rootfs "$ROOTFS_DIR" > "$LOG_DIR/clean_rootfs.log"
+    clean_rootfs "$ROOTFS_DIR" > "$LOG_DIR/clean_rootfs.log"
     info "Done (Cleaned up rootfs)"
 
     info "Copying boot configuration files..."
