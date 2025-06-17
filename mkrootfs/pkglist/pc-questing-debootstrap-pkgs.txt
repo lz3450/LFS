@@ -1,6 +1,5 @@
 adduser
 apt
-apt-utils
 base-files
 base-passwd
 bash
@@ -109,7 +108,6 @@ libnetplan1
 libnettle8t64
 libnewt0.52
 libnpth0t64
-libnsl2
 libnss-systemd
 libp11-kit0
 libpam-cap
