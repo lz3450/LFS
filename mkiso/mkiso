@@ -122,6 +122,15 @@ cleanup() {
         info "Cleaning up..."
         chroot_teardown
 
+        sync
+        local _mq
+        for _mq in "home" "boot/efi" "boot"; do
+            _mq="$ROOTFS_DIR/$_mq"
+            if mountpoint -q -- "$_mq"; then
+                umount -v -- "$_mq" || warn "Failed to unmount \"$_mq\", please unmount manually"
+            fi
+        done
+
         local _answer
         read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
         if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
@@ -150,35 +159,6 @@ make_work_dirs() {
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
     fi
     info "Done (Made root filesystem directory)"
-}
-
-make_imgs() {
-    info "Making mutable image \"$MUTABLE_IMG\"..."
-    rm -vf -- "$MUTABLE_IMG"
-    fallocate -l 1GiB "$MUTABLE_IMG"
-    # mkfs.ext4 -L "MUTABLE" "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable-img.log 2>&1
-    mkfs.f2fs -f -l MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
-    info "Done (Made mutable image)"
-
-    info "Making EFI boot image \"$EFIBOOT_IMG\"..."
-    # Calculate the required FAT image size in bytes
-    # local _imgsize=$(du -bc \
-    #     "$ROOTFS_DIR/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
-    #     "$SCRIPT_DIR/efiboot/loader.conf" \
-    #     "$SCRIPT_DIR/efiboot/kzl-linux.conf" \
-    #     "$ROOTFS_DIR/boot/vmlinuz" \
-    #     "$ROOTFS_DIR/boot/initramfs.img" \
-    #     2>/dev/null | awk 'END { print $1 }')
-    # info "Required FAT image size $_imgsize bytes"
-    # Convert from bytes to KiB and round up to the next full MiB with an additional MiB for reserved sectors.
-    # local _imgsize="$(awk 'function ceil(x){return int(x)+(x>int(x))} function byte_to_kib(x){return x/1024} function mib_to_kib(x){return x*1024} END {print mib_to_kib(ceil((byte_to_kib($1)+1024)/1024))}' \
-    #     <<< "$_imgsize")"
-    # info "Required FAT image size $_imgsize KiB"
-
-    local -i _imgsize=262144
-    rm -vf -- "$EFIBOOT_IMG"
-    mkfs.fat -C -F 32 -n "ISO_EFI" "$EFIBOOT_IMG" "$_imgsize" > "$LOG_DIR"/mkfs-efiboot-img.log 2>&1
-    info "Done (Made EFI boot image)"
 }
 
 bootstrap_rootfs() {
@@ -245,7 +225,37 @@ bootstrap_rootfs() {
         cp -vf -- "$ISOFS_DIR/$_pacman_pkglist" "$PKGLIST_DIR/$_pacman_pkglist"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR/$_pacman_pkglist"
     fi
+    delete_all_contents "$ROOTFS_DIR/boot/efi/"
     info "Done (Installed pacman packages)"
+}
+
+make_imgs() {
+    info "Making mutable image \"$MUTABLE_IMG\"..."
+    rm -vf -- "$MUTABLE_IMG"
+    fallocate -l 1GiB "$MUTABLE_IMG"
+    # mkfs.ext4 -L "MUTABLE" "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable-img.log 2>&1
+    mkfs.f2fs -f -l MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
+    info "Done (Made mutable image)"
+
+    info "Making EFI boot image \"$EFIBOOT_IMG\"..."
+    # Calculate the required FAT image size in bytes
+    # local _imgsize=$(du -bc \
+    #     "$ROOTFS_DIR/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
+    #     "$SCRIPT_DIR/efiboot/loader.conf" \
+    #     "$SCRIPT_DIR/efiboot/kzl-linux.conf" \
+    #     "$ROOTFS_DIR/boot/vmlinuz" \
+    #     "$ROOTFS_DIR/boot/initramfs.img" \
+    #     2>/dev/null | awk 'END { print $1 }')
+    # info "Required FAT image size $_imgsize bytes"
+    # Convert from bytes to KiB and round up to the next full MiB with an additional MiB for reserved sectors.
+    # local _imgsize="$(awk 'function ceil(x){return int(x)+(x>int(x))} function byte_to_kib(x){return x/1024} function mib_to_kib(x){return x*1024} END {print mib_to_kib(ceil((byte_to_kib($1)+1024)/1024))}' \
+    #     <<< "$_imgsize")"
+    # info "Required FAT image size $_imgsize KiB"
+
+    local -i _imgsize=262144
+    rm -vf -- "$EFIBOOT_IMG"
+    mkfs.fat -C -F 32 -n "ISO_EFI" "$EFIBOOT_IMG" "$_imgsize" > "$LOG_DIR"/mkfs-efiboot-img.log 2>&1
+    info "Done (Made EFI boot image)"
 }
 
 mount_imgs() {
@@ -301,15 +311,12 @@ configure_rootfs() {
     info "Configuring root filesystem..."
     # hostname
     echo "LiveOS" > "$ROOTFS_DIR"/etc/hostname
-    # shadow
-    sed -i \
-        -e 's/^root:[^:]*:/root::/' \
-        -e '/^root/s|/bin/bash|/bin/zsh|' \
-        "$ROOTFS_DIR"/etc/shadow
-    # issue
-    echo "$iso_name Live OS \n (\s \m \r) \t \l" > "$ROOTFS_DIR"/etc/issue
-    # motd
-    echo "Welcome to $iso_name live OS!" > "$ROOTFS_DIR"/etc/motd
+    # shadow and passwd
+    sed -i -e 's/^root:[^:]*:/root::/' "$ROOTFS_DIR"/etc/shadow
+    sed -i -e '/^root/s|/bin/bash|/bin/zsh|' "$ROOTFS_DIR"/etc/passwd
+    # issue and motd
+    printf '%s Live OS \\n (\\s \\m \\r) \\t \\l\n\n' "$iso_name" > "$ROOTFS_DIR"/etc/issue
+    printf 'Welcome to %s live OS!\n\n' "$iso_name" > "$ROOTFS_DIR"/etc/motd
     # environment
     local _path="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
     if [[ "$distro" == "ubuntu" ]]; then

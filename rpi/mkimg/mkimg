@@ -134,7 +134,7 @@ setup_loop() {
     local _img_file="$1"
 
     info "Setting up loop device for image: $_img_file"
-    if [[ ! -f "$_img_file" ]]; then
+    if [[ ! -f "$_img_file" && ! -b "$_img_file" ]]; then
         error "Image file does not exist: $_img_file" 2
     fi
 
@@ -322,11 +322,11 @@ while (( $# > 0 )); do
     shift
 done
 
-if [[ ! -f "$arg_rootfs_tarball" ]]; then
-    error "Root filesystem tarball not found: $arg_rootfs_tarball" 1
-fi
-
 if [[ -z "$arg_chroot_image" ]]; then
+    if [[ ! -f "$arg_rootfs_tarball" ]]; then
+        error "Root filesystem tarball not found: $arg_rootfs_tarball" 1
+    fi
+
     case "$arg_suite" in
         bookworm)
             distro="debian"
@@ -341,9 +341,10 @@ if [[ -z "$arg_chroot_image" ]]; then
             error "Unsupported distribution \"$arg_suite\"." 2
             ;;
     esac
+
+    img_file="raspi-$arg_suite-$TIMESTAMP.img"
 fi
 
-img_file="raspi-$arg_suite-$TIMESTAMP.img"
 
 ################################################################################
 
