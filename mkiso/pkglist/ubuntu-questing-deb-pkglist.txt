@@ -147,6 +147,7 @@ libkmod2
 libkrb5-3
 libkrb5support0
 libksba8
+liblastlog2-2
 libldap-common
 libldap2
 liblocale-gettext-perl

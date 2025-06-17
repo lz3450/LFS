@@ -105,9 +105,10 @@ kzl_pacman_pkgs=(
 )
 
 distro=""
-iso_file=""
 deb_pkgs=()
 pacman_pkgs=()
+
+iso_file=""
 
 ### options and arguments
 arg_suite=""
@@ -135,8 +136,8 @@ cleanup() {
 }
 trap cleanup EXIT SIGINT SIGTERM SIGKILL
 
-create_work_dirs() {
-    info "Create working directory: $WORK_DIR"
+make_work_dirs() {
+    info "Making working directory: $WORK_DIR"
     if [[ -d "$WORK_DIR" ]]; then
         error "Working directory $WORK_DIR already exists" 1
     fi
@@ -148,7 +149,7 @@ create_work_dirs() {
         mkdir -vp -- "$PKGLIST_DIR"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
     fi
-    info "Done (Created root filesystem directory)"
+    info "Done (Made root filesystem directory)"
 }
 
 make_imgs() {
@@ -250,19 +251,17 @@ bootstrap_rootfs() {
 mount_imgs() {
     info "Mounting mutable image \"$MUTABLE_IMG\" to \"$ROOTFS_DIR/home\"..."
     mount -v -t f2fs -o loop -- "$MUTABLE_IMG" "$ROOTFS_DIR/home"
+    mountpoint -q -- "$ROOTFS_DIR/home" || error "MUTABLE directory not mounted: $ROOTFS_DIR/home" 4
     info "Done (Mounted mutable image)"
 
+    local _efi_dir="$ROOTFS_DIR/boot"
     if [[ "$distro" == "ubuntu" ]]; then
-        info "Mounting EFI boot image \"$EFIBOOT_IMG\" to \"$ROOTFS_DIR/boot/efi\"..."
-        mount -v -t vfat -o loop -- "$EFIBOOT_IMG" "$ROOTFS_DIR/boot/efi" || error "Failed to mount EFI boot image" 4
-        info "Done (Mounted EFI boot image)"
-    elif [[ "$distro" == "kzl-linux" ]]; then
-        info "Mounting EFI boot image \"$EFIBOOT_IMG\" to \"$ROOTFS_DIR/boot\"..."
-        mount -v -t vfat -o loop -- "$EFIBOOT_IMG" "$ROOTFS_DIR/boot" || error "Failed to mount EFI boot image" 4
-        info "Done (Mounted EFI boot image)"
-    else
-        error "Unknown distro: $distro" 128
+        _efi_dir="$ROOTFS_DIR/boot/efi"
     fi
+    info "Mounting EFI boot image \"$EFIBOOT_IMG\" to \"$_efi_dir\"..."
+    mount -v -t vfat -o loop -- "$EFIBOOT_IMG" "$_efi_dir" || error "Failed to mount EFI boot image" 4
+    mountpoint -q -- "$_efi_dir" || error "EFI directory not mounted: $_efi_dir" 4
+    info "Done (Mounted EFI boot image)"
 }
 
 _make_initramfs_for_kernel() {
@@ -270,7 +269,7 @@ _make_initramfs_for_kernel() {
     local _kernel_image="$2"
     local _kmoddir="$3"
 
-    info "Create initramfs for kernel version: $_kernel_version"
+    info "Making initramfs for kernel $_kernel_version"
     dracut --kver "$_kernel_version" \
         --force \
         --add 'dmsquash-live overlayfs livenet pollcdrom' \
@@ -285,7 +284,7 @@ _make_initramfs_for_kernel() {
         --kernel-image "$_kernel_image" \
         --kmoddir "$_kmoddir" \
         "$ROOTFS_DIR/boot/initramfs-$_kernel_version.img" > "$LOG_DIR"/dracut-$_kernel_version.log 2>&1
-    info "Done (Create initramfs for kernel version: $_kernel_version)"
+    info "Done (Made initramfs for kernel $_kernel_version)"
 }
 
 _get_kernel_suffix() {
@@ -302,16 +301,21 @@ configure_rootfs() {
     info "Configuring root filesystem..."
     # hostname
     echo "LiveOS" > "$ROOTFS_DIR"/etc/hostname
+    # shadow
+    sed -i \
+        -e 's/^root:[^:]*:/root::/' \
+        -e '/^root/s|/bin/bash|/bin/zsh|' \
+        "$ROOTFS_DIR"/etc/shadow
+    # issue
+    echo "$iso_name Live OS \n (\s \m \r) \t \l" > "$ROOTFS_DIR"/etc/issue
     # motd
     echo "Welcome to $iso_name live OS!" > "$ROOTFS_DIR"/etc/motd
     # environment
+    local _path="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
     if [[ "$distro" == "ubuntu" ]]; then
-        echo 'PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin"' > "$ROOTFS_DIR"/etc/environment
-    elif [[ "$distro" == "kzl-linux" ]]; then
-        echo 'PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"' > "$ROOTFS_DIR"/etc/environment
-    else
-        error "Unknown distro: $distro" 128
+        _path="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin"
     fi
+    echo "PATH=\"$_path\"" > "$ROOTFS_DIR"/etc/environment
     # fstab
     cp -vf -- "$CONFIG_DIR/fstab" "$ROOTFS_DIR/etc/fstab"
     # network
@@ -328,15 +332,13 @@ configure_rootfs() {
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$CONFIG_DIR/sshd_config"
     # systemd
     chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment for configuring rootfs" 5
-    chroot_run "$ROOTFS_DIR" systemctl enable systemd-networkd
-    chroot_run "$ROOTFS_DIR" systemctl enable systemd-resolved
+    chroot_run "$ROOTFS_DIR" systemctl enable systemd-networkd.service
+    chroot_run "$ROOTFS_DIR" systemctl enable systemd-resolved.service
+    local _ssh_service="sshd.service"
     if [[ "$distro" == "ubuntu" ]]; then
-        chroot_run "$ROOTFS_DIR" systemctl enable ssh
-    elif [[ "$distro" == "kzl-linux" ]]; then
-        chroot_run "$ROOTFS_DIR" systemctl enable sshd
-    else
-        error "Unknown distro: $distro" 128
+        _ssh_service="ssh.service"
     fi
+    chroot_run "$ROOTFS_DIR" systemctl enable "$_ssh_service"
     chroot_teardown || error "Failed to teardown chroot environment for configuring rootfs" 5
     # grml-zsh-config
     wget -O "$ROOTFS_DIR"/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc 2>&1 > /dev/null
@@ -368,9 +370,11 @@ configure_rootfs() {
     info "Done (Made initramfs)"
 
     info "Setting up systemd-boot for UEFI booting..."
-    local _efi_dir
-    local _entry_conf=()
-    local _default_entry
+    local _efi_dir="$ROOTFS_DIR/boot"
+    local _entry_conf=(
+            "kzl.conf"
+    )
+    local _default_entry="kzl.conf"
     if [[ "$distro" == "ubuntu" ]]; then
         _efi_dir="$ROOTFS_DIR/boot/efi"
         _entry_conf=(
@@ -378,14 +382,6 @@ configure_rootfs() {
             "ubuntu.conf"
         )
         _default_entry="ubuntu-kzl.conf"
-    elif [[ "$distro" == "kzl-linux" ]]; then
-        _efi_dir="$ROOTFS_DIR/boot"
-        _entry_conf=(
-            "kzl.conf"
-        )
-        _default_entry="kzl.conf"
-    else
-        error "Unknown distro: $distro" 128
     fi
 
     mkdir -vp -- "$_efi_dir/EFI/BOOT"
@@ -413,21 +409,19 @@ configure_rootfs() {
 }
 
 umount_imgs() {
-    info "Unmounting mutable image \"$MUTABLE_IMG\" from \"$ROOTFS_DIR/home\"..."
-    umount -v -- "$ROOTFS_DIR/home" || error "Failed to unmount mutable image" 3
+    info "Unmounting MUTABLE image \"$MUTABLE_IMG\" from \"$ROOTFS_DIR/home\"..."
+    umount -v -- "$ROOTFS_DIR/home" || error "Failed to unmount mutable image" 4
+    mountpoint -q -- "$ROOTFS_DIR/home" && error "MUTABLE image is still mounted" 4
     info "Done (Unmounted mutable image)"
 
+    local _efi_dir="$ROOTFS_DIR/boot"
     if [[ "$distro" == "ubuntu" ]]; then
-        info "Unmounting EFI boot image \"$EFIBOOT_IMG\" from \"$ROOTFS_DIR/boot/efi\"..."
-        umount -v -- "$ROOTFS_DIR/boot/efi" || error "Failed to unmount EFI boot image" 3
-        info "Done (Unmounted EFI boot image)"
-    elif [[ "$distro" == "kzl-linux" ]]; then
-        info "Unmounting EFI boot image \"$EFIBOOT_IMG\" from \"$ROOTFS_DIR/boot\"..."
-        umount -v -- "$ROOTFS_DIR/boot" || error "Failed to unmount EFI boot image" 3
-        info "Done (Unmounted EFI boot image)"
-    else
-        error "Unknown distro: $distro" 128
+        _efi_dir="$ROOTFS_DIR/boot/efi"
     fi
+    info "Unmounting EFI boot image \"$EFIBOOT_IMG\" from \"$_efi_dir\"..."
+    umount -v -- "$_efi_dir" || error "Failed to unmount EFI boot image" 4
+    mountpoint -q -- "$_efi_dir" && error "EFI image is still mounted" 4
+    info "Done (Unmounted EFI boot image)"
 }
 
 make_rootfs_ro_img() {
@@ -438,7 +432,7 @@ make_rootfs_ro_img() {
 }
 
 make_iso_image() {
-    info "Creating ISO image..."
+    info "Making ISO image..."
     xorriso \
         -as mkisofs \
         -iso-level 3 \
@@ -458,7 +452,7 @@ make_iso_image() {
         -output "$OUT_DIR/$iso_file" \
         "$ISOFS_DIR/" > "$LOG_DIR"/xorriso.log 2>&1 || error "Failed to create ISO image" 7
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$iso_file"
-    info "Done (Creating ISO image)"
+    info "Done (Made ISO image)"
 }
 
 usage() {
@@ -537,7 +531,7 @@ iso_file="$distro-$arg_suite-$TIMESTAMP-$ISO_LABEL.iso"
 
 prologue
 
-create_work_dirs
+make_work_dirs
 make_imgs
 bootstrap_rootfs
 
@@ -551,7 +545,7 @@ make_rootfs_ro_img
 # configure_isofs
 make_iso_image
 
-info "Successfully created ISO image: $iso_file"
+log_cyan "Successfully made ISO: $iso_file"
 
 cleanup
 
