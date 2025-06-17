@@ -66,6 +66,8 @@ jammy_deb_pkgs=(
 loop_device=""
 deb_pkgs=()
 
+img_file=""
+
 ### options and arguments
 arg_rootfs_tarball=""
 arg_chroot_image=""
@@ -94,8 +96,8 @@ cleanup() {
 }
 trap cleanup EXIT SIGINT SIGTERM SIGKILL
 
-create_work_dirs() {
-    info "Create working directory: $WORK_DIR"
+make_work_dirs() {
+    info "Making working directory: $WORK_DIR"
     if [[ -d "$WORK_DIR" ]]; then
         error "Working directory $WORK_DIR already exists" 1
     fi
@@ -106,11 +108,11 @@ create_work_dirs() {
         mkdir -vp -- "$PKGLIST_DIR"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
     fi
-    info "Done (Created root filesystem directory)"
+    info "Done (Made root filesystem directory)"
 }
 
-create_img_file() {
-    info "Creating image..."
+make_img_file() {
+    info "Making image..."
 
     if [[ -f "$IMG_FILE" ]]; then
         rm -vf "$IMG_FILE"
@@ -124,8 +126,8 @@ create_img_file() {
         mkpart primary fat32 1s 524287s \
         mkpart primary ext4 524288s 100% \
         print \
-        > "$LOG_DIR/parted.log" || error "Failed to create partitions in image file" 1
-    info "Done (Created image file: $IMG_FILE)"
+        > "$LOG_DIR/parted.log" || error "Failed to make partitions in image file" 1
+    info "Done (Made image file: $IMG_FILE)"
 }
 
 setup_loop() {
@@ -186,7 +188,7 @@ bootstrap_rootfs() {
     chroot_run "$ROOTFS_DIR" apt-get upgrade -y > "$LOG_DIR/apt-get-upgrade.log" || error "Failed to run apt-get upgrade" 3
     chroot_run "$ROOTFS_DIR" apt-get install --no-install-recommends -y "${deb_pkgs[@]}" > "$LOG_DIR/apt-get-install.log" || error "Failed to install packages" 3
     chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y > "$LOG_DIR/apt-get-autoremove.log" || error "Failed to run apt-get autoremove" 3
-    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkgs_installed" || warn "Failed to create a list of installed deb packages"
+    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkgs_installed" || warn "Failed to get the list of installed deb packages"
     chroot_teardown || error "Failed to teardown chroot environment" 3
     info "Done (Installed deb packages)"
 }
@@ -345,11 +347,13 @@ if [[ -z "$arg_chroot_image" ]]; then
     esac
 fi
 
+img_file="raspi-$arg_suite-$TIMESTAMP.img"
+
 ################################################################################
 
 prologue
 
-create_work_dirs
+make_work_dirs
 
 if [[ -n "$arg_chroot_image" ]]; then
     info "Chroot into image $arg_chroot_image, all previous arguments will be ignored"
@@ -359,15 +363,15 @@ if [[ -n "$arg_chroot_image" ]]; then
     chroot_run "$ROOTFS_DIR" "${arg_chroot_command[@]}"
     chroot_teardown
 else
-    create_img_file
+    make_img_file
     setup_loop "$IMG_FILE"
     format_img
     mount_img
     bootstrap_rootfs
     configure_img
-    info "Successfully created Raspberry Pi image: $IMG_FILE"
-    cp -vf -- "$IMG_FILE" "$SCRIPT_DIR/raspi-$arg_suite-$TIMESTAMP.img"
-    chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/raspi-$arg_suite-$TIMESTAMP.img"
+    mv -v -- "$IMG_FILE" "$SCRIPT_DIR/$img_file"
+    log_cyan "Successfully made Raspberry Pi image: $img_file"
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/$img_file"
 fi
 
 cleanup
