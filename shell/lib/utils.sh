@@ -24,24 +24,28 @@ check_root() {
     fi
 }
 
-delete_dir() {
+# Delete recursively all files and directories under $1, including $1 itself
+delete_all() {
     local _dir="$1"
     if [[ -d "$_dir" ]]; then
         find "$_dir" -delete
     fi
 }
-delete_all() {
+# Delete all contents inside $1, but not $1 itself
+delete_all_contents() {
     local _dir="$1"
     if [[ -d "$_dir" ]]; then
         find "$_dir" -mindepth 1 -delete
     fi
 }
+# Delete only regular files directly inside $1, and not subdirectories or their contents
 delete_direct_files() {
     local _dir="$1"
     if [[ -d "$_dir" ]]; then
         find "$_dir" -maxdepth 1 -type f -delete
     fi
 }
+# Delete recursively all regular files under $1, including those in subdirectories
 delete_all_files() {
     local _dir="$1"
     if [[ -d "$_dir" ]]; then
@@ -56,6 +60,28 @@ dir_empty() {
     else
         return 0
     fi
+}
+
+clean_rootfs() {
+    local _rootfs_dir="$1"
+    if [[ ! -d "$_rootfs_dir" ]]; then
+        error "Root filesystem directory is not a directory" 1
+    fi
+    # general
+    delete_all_contents "$_rootfs_dir"/dev/
+    delete_all_contents "$_rootfs_dir"/run/
+    delete_all_contents "$_rootfs_dir"/tmp/
+    delete_all_contents "$_rootfs_dir"/usr/share/doc/
+    delete_all_contents "$_rootfs_dir"/var/cache/ldconfig/
+    delete_all_contents "$_rootfs_dir"/var/log/
+    delete_all_contents "$_rootfs_dir"/var/tmp/
+    # apt
+    delete_all_contents "$_rootfs_dir"/var/cache/apt/archives/
+    delete_all_contents "$_rootfs_dir"/var/lib/apt/lists/
+    # pacman
+    delete_all_contents "$_rootfs_dir"/var/lib/pacman/
+    delete_all_contents "$_rootfs_dir"/var/cache/pacman/
+    find "$_rootfs_dir" -type f \( -name '*.pacnew' -o -name '*.pacsave' \) -delete
 }
 
 debug "${BASH_SOURCE[0]} sourced"
