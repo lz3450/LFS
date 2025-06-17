@@ -151,7 +151,6 @@ format_img() {
     if [[ -z "$loop_device" ]]; then
         error "Loop device is not set" 2
     fi
-
     mkfs.fat -F 32 -n "BOOT" "${loop_device}p1" > "$LOG_DIR/mkfs.fat.log" || error "Failed to format BOOT partition" 2
     mkfs.ext4 -L "ROOT" "${loop_device}p2" > "$LOG_DIR/mkfs.ext4.log" || error "Failed to format ROOT partition" 2
     info "Done (Formatted image)"
@@ -159,12 +158,9 @@ format_img() {
 
 mount_img() {
     info "Mounting loop device..."
-
-    mkdir -p "$ROOTFS_DIR"
     mount "${loop_device}p2" "$ROOTFS_DIR"
-    mkdir -p "$ROOTFS_DIR"/boot/firmware
+    mkdir -vp -- "$ROOTFS_DIR"/boot/firmware
     mount "${loop_device}p1" "$ROOTFS_DIR"/boot/firmware
-
     info "Done (Mounted loop device)"
 }
 
