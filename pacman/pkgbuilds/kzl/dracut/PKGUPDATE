@@ -4,5 +4,5 @@ build_system=
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/dracut-ng"
-    cat Makefile.inc configure > "$PKGBUILDDIR"/help.txt
+    cat configure > "$PKGBUILDDIR"/help.txt
 }

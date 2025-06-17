@@ -1,0 +1,1 @@
+../../ubuntu/dracut/install-dependencies.sh
