@@ -75,18 +75,20 @@ arg_chroot_command=()
 cleanup() {
     set +e
 
-    info "Cleaning up..."
-    chroot_teardown
-    loop_teardown "$loop_device"
+    if [[ -d "$WORK_DIR" ]]; then
+        info "Cleaning up..."
+        chroot_teardown
+        loop_teardown "$loop_device"
 
-    local _answer
-    read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
-    if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
-        info "Removing working directory: $WORK_DIR"
-        rmdir -v -- "$ROOTFS_DIR" && rm -rf --one-file-system -- "$WORK_DIR"
-        info "Done (Removed working directory)"
+        local _answer
+        read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
+        if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+            info "Removing working directory: $WORK_DIR"
+            rmdir -v -- "$ROOTFS_DIR" && rm -rf --one-file-system -- "$WORK_DIR"
+            info "Done (Removed working directory)"
+        fi
+        info "Done (Cleaned up)"
     fi
-    info "Done (Cleaned up)"
 
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
@@ -165,7 +167,10 @@ mount_img() {
 }
 
 bootstrap_rootfs() {
-    info "Bootstrapping root filesystem..."
+    local _deb_pkgs_installed="$PKGLIST_DIR/${arg_suite}-rootfs-pkgs.txt"
+    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkgs_installed"
+
+    info "Extracting root filesystem..."
     tar -v \
         --zstd \
         --xattrs --acls \
@@ -173,13 +178,20 @@ bootstrap_rootfs() {
         -xpf "$arg_rootfs_tarball" \
         -C "$ROOTFS_DIR" \
         > "$LOG_DIR/tar.log"
-    info "Done (Bootstrapped root filesystem)"
+    info "Done (Extracted root filesystem)"
+
+    info "Install deb packages: ${deb_pkgs[*]}"
+    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
+    chroot_run "$ROOTFS_DIR" apt-get update > "$LOG_DIR/apt-get-update.log" || error "Failed to run apt-get update" 3
+    chroot_run "$ROOTFS_DIR" apt-get upgrade -y > "$LOG_DIR/apt-get-upgrade.log" || error "Failed to run apt-get upgrade" 3
+    chroot_run "$ROOTFS_DIR" apt-get install --no-install-recommends -y "${deb_pkgs[@]}" > "$LOG_DIR/apt-get-install.log" || error "Failed to install packages" 3
+    chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y > "$LOG_DIR/apt-get-autoremove.log" || error "Failed to run apt-get autoremove" 3
+    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkgs_installed" || warn "Failed to create a list of installed deb packages"
+    chroot_teardown || error "Failed to teardown chroot environment" 3
+    info "Done (Installed deb packages)"
 }
 
 configure_img() {
-    local _deb_pkgs_installed="$PKGLIST_DIR/${arg_suite}-rootfs-pkgs.txt"
-    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkgs_installed"
-
     info "Downloading RPi firmware..."
     local _firmware_version=$(git ls-remote --tags https://github.com/raspberrypi/firmware.git | grep -oP '(?<=refs/tags/)1.\d{8}$' | sort -V | tail -n1)
     local _firmware_dir="$WORK_DIR/firmware-$_firmware_version"
@@ -205,21 +217,13 @@ configure_img() {
     done
     info "Done (Copied RPi firmware)"
 
-    info "Running chroot configuration..."
+    info "Running initialize.sh..."
     chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
-    # apt-get
-    chroot_run "$ROOTFS_DIR" apt-get update > "$LOG_DIR/apt-get-update.log" || error "Failed to run apt-get update" 3
-    chroot_run "$ROOTFS_DIR" apt-get upgrade -y > "$LOG_DIR/apt-get-upgrade.log" || error "Failed to run apt-get upgrade" 3
-    chroot_run "$ROOTFS_DIR" apt-get install --no-install-recommends -y "${deb_pkgs[@]}" > "$LOG_DIR/apt-get-install.log" || error "Failed to install packages" 3
-    chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y > "$LOG_DIR/apt-get-autoremove.log" || error "Failed to run apt-get autoremove" 3
-    # get installed deb packages
-    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkgs_installed" || warn "Failed to create a list of installed deb packages"
-    # run initialize.sh
     cp -v -- "$SCRIPT_DIR/initialize.sh" "$ROOTFS_DIR/initialize.sh"
     chroot_run "$ROOTFS_DIR" "/initialize.sh" > "$LOG_DIR/initialize.log" || error "Failed to run initialize.sh" 3
     rm -vf -- "$ROOTFS_DIR/initialize.sh"
     chroot_teardown || error "Failed to teardown chroot environment" 3
-    info "Done (Chroot configuration)"
+    info "Done (Ran initialize.sh)"
 
     info "Copying initramfs..."
     local _kvs
@@ -319,6 +323,10 @@ while (( $# > 0 )); do
     esac
     shift
 done
+
+if [[ ! -f "$arg_rootfs_tarball" ]]; then
+    error "Root filesystem tarball not found: $arg_rootfs_tarball" 1
+fi
 
 if [[ -z "$arg_chroot_image" ]]; then
     case "$arg_suite" in
