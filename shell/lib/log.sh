@@ -13,6 +13,11 @@ declare -r __LIBLOG__="log.sh"
 
 ################################################################################
 
+### checks
+if [[ -z "$SCRIPT_NAME" ]]; then
+    echo "SCRIPT_NAME is not set. Please set it before sourcing this script" >&2
+fi
+
 ### functions
 # Show a DEBUG message
 # $1: message string
@@ -20,53 +25,51 @@ debug() {
     if [[ -z "${__DEBUG__:-}" ]]; then
         return
     fi
-    local _msg="$1"
-    printf '\033[0;34m[%s] DEBUG: %s\033[0m\n' "$SCRIPT_NAME" "$_msg" >&2
+    printf '\033[0;34m[%s] DEBUG: %s\033[0m\n' "${2:-"$SCRIPT_NAME"}" "$1" >&2
 }
 
 # Show an INFO message
 # $1: message string
 info() {
-    local _msg="$1"
-    printf '\033[0;32m[%s] INFO: %s\033[0m\n' "$SCRIPT_NAME" "$_msg" >&2
+    printf '\033[0;32m[%s] INFO: %s\033[0m\n' "${2:-"$SCRIPT_NAME"}" "$1" >&2
 }
 
 # Show a WARNING message
 # $1: message string
 warn() {
-    local _msg="$1"
-    printf '\033[0;33m[%s] WARNING: %s\033[0m\n' "$SCRIPT_NAME" "$_msg" >&2
+    printf '\033[0;33m[%s] WARNING: %s\033[0m\n' "${2:-"$SCRIPT_NAME"}" "$1" >&2
 }
 
 # Show an ERROR message then exit with status
 # $1: message string
 # $2: exit code number (with 0 does not exit)
 error() {
-    local _msg="$1"
-    local _error="${2:-0}"
-    printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "$SCRIPT_NAME" "$_msg" >&2
-    if (( "$_error" > 0 )); then
+    local -i _error="${2:-0}"
+    printf '\033[0;31m[%s] ERROR: %s\033[0m\n' "${3:-"$SCRIPT_NAME"}" "$1" >&2
+    if (( _error > 0 )); then
         exit "$_error"
     fi
 }
 
 log_red() {
-    printf "\033[1;31m[%s] %s\033[0m\n" "$SCRIPT_NAME" "$1"
+    printf "\033[1;31m[%s] %s\033[0m\n" "${2:-"$SCRIPT_NAME"}" "$1" >&2
 }
 log_green() {
-    printf "\033[1;32m[%s] %s\033[0m\n" "$SCRIPT_NAME" "$1"
+    printf "\033[1;32m[%s] %s\033[0m\n" "${2:-"$SCRIPT_NAME"}" "$1" >&2
 }
 log_yellow() {
-    printf "\033[1;33m[%s] %s\033[0m\n" "$SCRIPT_NAME" "$1"
+    printf "\033[1;33m[%s] %s\033[0m\n" "${2:-"$SCRIPT_NAME"}" "$1" >&2
 }
 log_blue() {
-    printf "\033[1;34m[%s] %s\033[0m\n" "$SCRIPT_NAME" "$1"
+    printf "\033[1;34m[%s] %s\033[0m\n" "${2:-"$SCRIPT_NAME"}" "$1" >&2
 }
 log_magenta() {
-    printf "\033[1;35m[%s] %s\033[0m\n" "$SCRIPT_NAME" "$1"
+    local _src=${1:-"$SCRIPT_NAME"}
+    printf "\033[1;35m[%s] %s\033[0m\n" "${2:-"$SCRIPT_NAME"}" "$1" >&2
 }
 log_cyan() {
-    printf "\033[1;36m[%s] %s\033[0m\n" "$SCRIPT_NAME" "$1"
+    local _src=${1:-"$SCRIPT_NAME"}
+    printf "\033[1;36m[%s] %s\033[0m\n" "${2:-"$SCRIPT_NAME"}" "$1" >&2
 }
 
 prologue() {

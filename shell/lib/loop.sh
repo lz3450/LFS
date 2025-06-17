@@ -18,6 +18,16 @@ LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR"/log.sh
 
 ### functions
+_loop_info () {
+    info "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
+_loop_warn() {
+    warn "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
+_loop_error() {
+    error "${1:-}" "${2:-}" "${BASH_SOURCE[0]##*/}"
+}
+
 # Get first unused loop device
 # loop_get_device
 # echo: loop device name
@@ -32,9 +42,9 @@ loop_get_device() {
 loop_partitioned_setup() {
     local _loop_device="$1"
     local _img="$2"
-    info "Setting up loop device for image: $_img"
-    losetup -P "$_loop_device" "$_img" || error "Failed to setup loop device: $_loop_device" 1
-    info "Done (Setting up loop device)"
+    _loop_info "Setting up loop device for image: $_img"
+    losetup -P "$_loop_device" "$_img" || _loop_error "Failed to setup loop device: $_loop_device" 1
+    _loop_info "Done (Setting up loop device)"
 }
 
 # detach loop device
@@ -55,12 +65,9 @@ loop_teardown() {
     while (( ${#_loop_mountpoints[@]} > 0 )); do
         local _mp
         for _mp in "${_loop_mountpoints[@]}"; do
-            info "Unmounting \"$_mp\"..."
-            if umount -v -- "$_mp"; then
-                info "Unmounted \"$_mp\"."
-            else
+            if ! umount -v -- "$_mp"; then
                 _mountpoints+=("$_mp")
-                warn "Failed to unmount \"$_mp\", retry later"
+                _loop_warn "Failed to unmount \"$_mp\", retry later"
             fi
         done
         _loop_mountpoints=("${_mountpoints[@]}")
@@ -68,9 +75,9 @@ loop_teardown() {
         sleep 3
     done
 
-    info "Detaching loop device: $_loop_device"
-    losetup -d "$_loop_device" || error "Failed to detach loop device: $_loop_device" 2
-    info "Done (Detaching loop device)"
+    _loop_info "Detaching loop device: $_loop_device"
+    losetup -d "$_loop_device" || _loop_error "Failed to detach loop device: $_loop_device" 2
+    _loop_info "Done (Detaching loop device)"
 }
 
 debug "${BASH_SOURCE[0]} sourced"

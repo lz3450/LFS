@@ -18,9 +18,19 @@ LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR"/log.sh
 
 ### functions
+_utils_info () {
+    info "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
+_utils_warn() {
+    warn "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
+_utils_error() {
+    error "${1:-}" "${2:-}" "${BASH_SOURCE[0]##*/}"
+}
+
 check_root() {
     if [[ $EUID -ne 0 ]]; then
-        error "This script must be run as root" 255
+        _utils_error "This script must be run as root" 255
     fi
 }
 
@@ -65,8 +75,10 @@ dir_empty() {
 clean_rootfs() {
     local _rootfs_dir="$1"
     if [[ ! -d "$_rootfs_dir" ]]; then
-        error "Root filesystem directory is not a directory" 1
+        _utils_error "Root filesystem directory is not a directory" 1
     fi
+
+    _utils_info "Cleaning rootfs..."
     # general
     delete_all_contents "$_rootfs_dir"/dev/
     delete_all_contents "$_rootfs_dir"/run/
@@ -82,6 +94,7 @@ clean_rootfs() {
     delete_all_contents "$_rootfs_dir"/var/lib/pacman/
     delete_all_contents "$_rootfs_dir"/var/cache/pacman/
     find "$_rootfs_dir" -type f \( -name '*.pacnew' -o -name '*.pacsave' \) -delete
+    _utils_info "Done (Cleaned rootfs)"
 }
 
 debug "${BASH_SOURCE[0]} sourced"
