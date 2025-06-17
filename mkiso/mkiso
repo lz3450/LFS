@@ -36,6 +36,7 @@ declare -r WORK_DIR="/tmp/mkiso_$TIMESTAMP"
 declare -r ROOTFS_DIR="$WORK_DIR/rootfs"
 declare -r ISOFS_DIR="$WORK_DIR/iso"
 declare -r ROOTFS_IMG_DIR="$ISOFS_DIR/LiveOS"
+declare -r ROOTFS_RO_IMG="$ROOTFS_IMG_DIR/squashfs.img"
 declare -r LOG_DIR="$WORK_DIR/log"
 
 declare -r CONFIG_DIR="$SCRIPT_DIR/config"
@@ -429,61 +430,11 @@ umount_imgs() {
     fi
 }
 
-make_rootfs_squashfs() {
-    local _image_path="$ISOFS_DIR/$ROOTFS_IMG_DIR/squashfs.img"
-
+make_rootfs_ro_img() {
     info "Making rootfs SquashFS/EROFS image, this may take some time..."
-    # make a squashfs/erofs image and place it in the ISO 9660 file system
-    mkdir -p -- "$ISOFS_DIR/$ROOTFS_IMG_DIR"
     # mksquashfs "$ROOTFS_DIR" "$_image_path" -b 1M -comp zstd -noappend
-    mkfs.erofs -- "$_image_path" "$ROOTFS_DIR"
+    mkfs.erofs -- "$ROOTFS_RO_IMG" "$ROOTFS_DIR"
     info "Done (Made rootfs SquashFS/EROFS image)"
-}
-
-_ubuntu_configure_isofs() {
-    local -a _efi_files=(
-        "EFI/BOOT/BOOTx64.EFI"
-        "loader/loader.conf"
-        "loader/entries/ubuntu-kzl.conf"
-        "loader/entries/ubuntu.conf"
-    )
-
-    info "Setting up systemd-boot for ISO file system..."
-
-    mkdir -vp -- "$ISOFS_DIR"/EFI/BOOT
-    mkdir -vp -- "$ISOFS_DIR"/loader/entries
-
-    local _file
-    for _file in "${_efi_files[@]}"; do
-        mcopy -i "$EFIBOOT_IMG" \
-            "::/$_file" \
-            "$ISOFS_DIR/$_file"
-    done
-    info "Done (Set up systemd-boot for ISO file system)"
-
-    for kernel_version in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
-        local _kernel_suffix="$(_get_kernel_suffix "$kernel_version")"
-        info "Copying kernel ($kernel_version) and initramfs to the ISO file system..."
-        mcopy -i "$EFIBOOT_IMG" \
-            ::/vmlinuz$_kernel_suffix \
-            ::/initramfs$_kernel_suffix.img \
-            "$ISOFS_DIR"/
-        info "Done (Copied kernel and initramfs to the ISO file system)"
-    done
-}
-
-_kzl_configure_isofs() {
-    error "Not implemented yet for KZL Linux" 1
-}
-
-configure_isofs() {
-    if [[ "$distro" == "ubuntu" ]]; then
-        _ubuntu_configure_isofs
-    elif [[ "$distro" == "kzl-linux" ]]; then
-        _kzl_configure_isofs
-    else
-        error "Unknown distro: $distro" 128
-    fi
 }
 
 make_iso_image() {
@@ -595,7 +546,7 @@ configure_rootfs
 umount_imgs
 
 clean_rootfs "$ROOTFS_DIR"
-make_rootfs_squashfs
+make_rootfs_ro_img
 
 # configure_isofs
 make_iso_image
