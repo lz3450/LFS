@@ -230,7 +230,6 @@ info "Update PKGBUILD finished successfully"
 # 2: PKGBUILD does not exist
 # 3: PKGUPDATE does not exist
 # 4: failed to update PKGBUILD
-# 5: failed to get gpg key
 # 6: failed to get build options
 # 128: unknown option or invalid argument
 
