@@ -1,15 +1,37 @@
-#	$OpenBSD: sshd_config,v 1.104 2021/07/02 05:11:21 dtucker Exp $
 
 # This is the sshd server system-wide configuration file.  See
 # sshd_config(5) for more information.
 
-# This sshd was compiled with PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# This sshd was compiled with PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 
 # The strategy used for options in the default sshd_config shipped with
 # OpenSSH is to specify options with their default value where
 # possible, but leave them commented.  Uncommented options override the
 # default value.
+#
+# In general, the first uncommented definition of an option takes precedence.
+# For options that accept multiple values, like 'Port', subsequent definitions
+# are appended to the configuration.
+#
+# Note that the above implies that configuration options from snippets in
+# /etc/ssh/sshd_config.d/*.conf take precedence over those defined in this
+# file. In addition, configuration snippet files are processed in lexical
+# order, so options defined in files with names that sort earlier take
+# precedence.
+#
+# Such configuration snippets may be present in default installations of
+# Ubuntu.
+Include /etc/ssh/sshd_config.d/*.conf
 
+# When systemd socket activation is used (the default), the socket
+# configuration must be re-generated after changing Port, AddressFamily, or
+# ListenAddress.
+#
+# For changes to take effect, run:
+#
+#   systemctl daemon-reload
+#   systemctl restart ssh.socket
+#
 #Port 22
 #AddressFamily any
 #ListenAddress 0.0.0.0
@@ -36,9 +58,8 @@ PermitRootLogin yes
 
 #PubkeyAuthentication yes
 
-# The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
-# but this is overridden so installations will only check .ssh/authorized_keys
-AuthorizedKeysFile	.ssh/authorized_keys
+# Expect .ssh/authorized_keys2 to be disregarded by default in future.
+#AuthorizedKeysFile	.ssh/authorized_keys .ssh/authorized_keys2
 
 #AuthorizedPrincipalsFile none
 
@@ -57,7 +78,8 @@ AuthorizedKeysFile	.ssh/authorized_keys
 #PasswordAuthentication yes
 PermitEmptyPasswords yes
 
-# Change to no to disable s/key passwords
+# Change to yes to enable challenge-response passwords (beware issues with
+# some PAM modules and threads)
 KbdInteractiveAuthentication no
 
 # Kerberos options
@@ -69,13 +91,15 @@ KbdInteractiveAuthentication no
 # GSSAPI options
 #GSSAPIAuthentication no
 #GSSAPICleanupCredentials yes
+#GSSAPIStrictAcceptorCheck yes
+#GSSAPIKeyExchange no
 
 # Set this to 'yes' to enable PAM authentication, account processing,
 # and session processing. If this is enabled, PAM authentication will
 # be allowed through the KbdInteractiveAuthentication and
 # PasswordAuthentication.  Depending on your PAM configuration,
 # PAM authentication via KbdInteractiveAuthentication may bypass
-# the setting of "PermitRootLogin prohibit-password".
+PermitRootLogin yes
 # If you just want the PAM account and session checks to run without
 # PAM authentication, then enable this but set PasswordAuthentication
 # and KbdInteractiveAuthentication to 'no'.
@@ -84,7 +108,7 @@ UsePAM yes
 #AllowAgentForwarding yes
 #AllowTcpForwarding yes
 #GatewayPorts no
-#X11Forwarding no
+#X11Forwarding yes
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes
@@ -105,12 +129,15 @@ PrintMotd no
 # no default banner path
 #Banner none
 
+# Allow client to pass locale environment variables
+AcceptEnv LANG LC_*
+
 # override default of no subsystems
-Subsystem	sftp	/usr/libexec/ssh/sftp-server
+Subsystem	sftp	/usr/lib/openssh/sftp-server
 
 # Example of overriding settings on a per-user basis
 #Match User anoncvs
-#	X11Forwarding no
+#X11Forwarding yes
 #	AllowTcpForwarding no
 #	PermitTTY no
 #	ForceCommand cvs server

@@ -24,6 +24,7 @@ __DEBUG__=1
 . "$SCRIPT_DIR"/lib/utils.sh
 . "$SCRIPT_DIR"/lib/chroot.sh
 . "$SCRIPT_DIR"/lib/loop.sh
+. "$SCRIPT_DIR"/lib/pacman.sh
 
 ### checks
 check_root
@@ -37,23 +38,75 @@ declare -r ISOFS_DIR="$WORK_DIR/iso"
 declare -r ROOTFS_IMG_DIR="$ISOFS_DIR/LiveOS"
 declare -r LOG_DIR="$WORK_DIR/log"
 
+declare -r CONFIG_DIR="$SCRIPT_DIR/config"
 declare -r PKGLIST_DIR="$SCRIPT_DIR/pkglist"
+declare -r OUT_DIR="$SCRIPT_DIR"
 
 declare -r MUTABLE_IMG="$WORK_DIR/mutable.img"
 declare -r EFIBOOT_IMG="$WORK_DIR/efiboot.img"
 
 declare -r ISO_LABEL="LIVEOS"
-declare -r ISO_PUBLISHER="LFS <https://github.com/lz3450/LFS>"
-declare -r ISO_APPLICATION="$ISO_NAME Live/Rescue ISO Image"
+declare -r ISO_PUBLISHER="<https://github.com/lz3450/LFS>"
+declare -r ISO_APPLICATION="Live/Rescue ISO Image"
 
 declare -r UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
 declare -r PACMAN_REPO_DIR="home/.repository/ubuntu"
 declare -r PACMAN_REPO_FILE="$PACMAN_REPO_DIR/ubuntu.db.tar.zst"
 
-distro=""
-
-pacman_pkgs=(
+common_deb_pkgs=(
+    ### general
+    nano
+    bash-completion
+    zsh
+    zsh-syntax-highlighting
+    zsh-autosuggestions
+    ### disk
+    parted fdisk
+    smartmontools
+    ### filesystem
+    dosfstools
+    e2fsprogs
+    xfsprogs
+    f2fs-tools
+    btrfs-progs
+    # bcachefs-tools
+    ### network
+    iw wpasupplicant
+    wget curl
+    openssh-server
+    git
+    ### kernel
+    linux-image-generic
+    # dracut
+    initramfs-tools
+    ### pacman
+    libarchive-tools
+    zstd
+    libgpgme-dev
 )
+jammy_deb_pkgs=()
+noble_deb_pkgs=(
+    systemd-boot
+    systemd-resolved
+)
+questing_deb_pkgs=(
+    systemd-boot-efi
+    systemd-boot
+    systemd-resolved
+)
+ubuntu_pacman_pkgs=(
+    pacman
+    linux
+    debootstrap
+)
+kzl_pacman_pkgs=(
+    zsh
+)
+
+distro=""
+iso_file=""
+deb_pkgs=()
+pacman_pkgs=()
 
 ### options and arguments
 arg_suite=""
@@ -63,16 +116,19 @@ arg_rootfs_tarball=""
 cleanup() {
     set +e
 
-    info "Cleaning up..."
-    # chroot_teardown
-    # loop_teardown "$loop_device"
-    # read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
-    # if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
-    #     info "Removing working directory: $WORK_DIR"
-    #     rm -rf --one-file-system -- "$WORK_DIR"
-    #     info "Done (Removed working directory)"
-    # fi
-    info "Done (Cleaned up)"
+    if [[ -d "$WORK_DIR" ]]; then
+        info "Cleaning up..."
+        chroot_teardown
+
+        local _answer
+        read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
+        if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+            info "Removing working directory: $WORK_DIR"
+            rm -rf --one-file-system -- "$WORK_DIR"
+            info "Done (Removed working directory)"
+        fi
+        info "Done (Cleaned up)"
+    fi
 
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
@@ -94,8 +150,40 @@ create_work_dirs() {
     info "Done (Created root filesystem directory)"
 }
 
+make_imgs() {
+    info "Making mutable image \"$MUTABLE_IMG\"..."
+    rm -vf -- "$MUTABLE_IMG"
+    fallocate -l 1GiB "$MUTABLE_IMG"
+    # mkfs.ext4 -L "MUTABLE" "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable-img.log 2>&1
+    mkfs.f2fs -f -l MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
+    info "Done (Made mutable image)"
+
+    info "Making EFI boot image \"$EFIBOOT_IMG\"..."
+    # Calculate the required FAT image size in bytes
+    # local _imgsize=$(du -bc \
+    #     "$ROOTFS_DIR/usr/lib/systemd/boot/efi/systemd-bootx64.efi" \
+    #     "$SCRIPT_DIR/efiboot/loader.conf" \
+    #     "$SCRIPT_DIR/efiboot/kzl-linux.conf" \
+    #     "$ROOTFS_DIR/boot/vmlinuz" \
+    #     "$ROOTFS_DIR/boot/initramfs.img" \
+    #     2>/dev/null | awk 'END { print $1 }')
+    # info "Required FAT image size $_imgsize bytes"
+    # Convert from bytes to KiB and round up to the next full MiB with an additional MiB for reserved sectors.
+    # local _imgsize="$(awk 'function ceil(x){return int(x)+(x>int(x))} function byte_to_kib(x){return x/1024} function mib_to_kib(x){return x*1024} END {print mib_to_kib(ceil((byte_to_kib($1)+1024)/1024))}' \
+    #     <<< "$_imgsize")"
+    # info "Required FAT image size $_imgsize KiB"
+
+    local -i _imgsize=262144
+    rm -vf -- "$EFIBOOT_IMG"
+    mkfs.fat -C -F 32 -n "ISO_EFI" "$EFIBOOT_IMG" "$_imgsize" > "$LOG_DIR"/mkfs-efiboot-img.log 2>&1
+    info "Done (Made EFI boot image)"
+}
+
 bootstrap_rootfs() {
-    info "Bootstrapping root filesystem..."
+    local _deb_pkglist="$distro-$arg_suite-deb-pkglist.txt"
+    local _pacman_pkglist="$distro-$arg_suite-pacman-pkglist.txt"
+    ###
+    info "Extracting root filesystem..."
     tar -v \
         --zstd \
         --xattrs --acls \
@@ -103,55 +191,323 @@ bootstrap_rootfs() {
         -xpf "$arg_rootfs_tarball" \
         -C "$ROOTFS_DIR" \
         > "$LOG_DIR/tar.log"
-    info "Done (Bootstrapped root filesystem)"
+    info "Done (Extracted root filesystem)"
 
-    info "Install pacman packages: ${_pkg_list[*]}"
-    # pacstrap -c -G -M -- "$ROOTFS_DIR" "${_pkg_list[@]}" >"$LOG_DIR"/pacstrap.log 2>&1 || error "Failed to pacstrap packages" 5
+    ###
+    if [[ "$distro" == "ubuntu" ]]; then
+        info "Install deb packages: ${deb_pkgs[*]}"
+        chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment for installing deb packages" 2
+        chroot_run "$ROOTFS_DIR" apt-get update > "$LOG_DIR/apt-get-update.log" || error "Failed to run apt-get update" 2
+        chroot_run "$ROOTFS_DIR" apt-get upgrade -y > "$LOG_DIR/apt-get-upgrade.log" || error "Failed to run apt-get upgrade" 2
+        chroot_run "$ROOTFS_DIR" apt-get install --no-install-recommends -y "${deb_pkgs[@]}" > "$LOG_DIR/apt-get-install.log" || error "Failed to install packages" 2
+        chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y > "$LOG_DIR/apt-get-autoremove.log" || error "Failed to run apt-get autoremove" 2
+        chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$ISOFS_DIR/$_deb_pkglist" || warn "Failed to create a list of installed deb packages"
+        if [[ -f "$ISOFS_DIR/$_deb_pkglist" ]]; then
+            cp -vf -- "$ISOFS_DIR/$_deb_pkglist" "$PKGLIST_DIR/$_deb_pkglist"
+            chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR/$_deb_pkglist"
+        fi
+        chroot_teardown || error "Failed to teardown chroot environment for installing deb packages" 2
+        info "Done (Installed deb packages)"
+    fi
 
+    ###
+    info "Install pacman packages: ${pacman_pkgs[*]}"
+    # pacstrap -c -G -M -- "$ROOTFS_DIR" "${pacman_pkgs[@]}" >"$LOG_DIR"/pacstrap.log 2>&1 || error "Failed to pacstrap packages" 5
     local _pacman
     local _pacman_config
-    local _pacman_tmp_conf_file="pacman_$TIMESTAMP.conf"
-
+    local _pacman_tmp_conf_file="$WORK_DIR/pacman_$TIMESTAMP.conf"
     if [[ -f "/usr/bin/pacman" ]]; then
         _pacman="/usr/bin/pacman"
-        _pacman_tmp_conf_file="/etc/pacman.conf"
+        _pacman_config="/etc/pacman.conf"
     elif [[ -f "/opt/bin/pacman" ]]; then
         _pacman="/opt/bin/pacman"
-        _pacman_tmp_conf_file="/opt/etc/pacman.conf"
+        _pacman_config="/opt/etc/pacman.conf"
     else
         error "Failed to find \`pacman\`" 127
     fi
     sed 's/^DownloadUser/#&/' "$_pacman_config" > "$_pacman_tmp_conf_file"
-
-    # TODO: check necessity
-    # mkdir -vp -- "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman}
-    chroot_setup "$ROOTFS_DIR" || error "Failed to install pacman packages" 5
-    chroot_run "$_pacman" -Sy \
+    if [[ "$distro" == "ubuntu" ]]; then
+        mkdir -v -m 0755 -p "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman}
+    fi
+    "$_pacman" -Sy \
         -r "$ROOTFS_DIR" \
         --cachedir "/$PACMAN_REPO_DIR" \
         --config "$_pacman_tmp_conf_file" \
         --disable-sandbox \
         --noconfirm \
         "${pacman_pkgs[@]}" \
-        2>&1 | tee "$LOG_DIR"/pacman.log || error "Failed to install pacman packages" 5
-    chroot_teardown || error "Failed to install pacman packages" 5
-    info "Done (Installed pacman packages)"
+    | tee "$LOG_DIR"/pacman.log || error "Failed to install pacman packages" 3
 
-    info "Creating a list of installed pacman packages..."
-    "$_pacman" -Q --sysroot "$ROOTFS_DIR" > "$ISOFS_DIR"/pacman_pkglist.txt || warn "Failed to creating a list of installed pacman packages"
-    if [[ -f "$ISOFS_DIR/pacman_pkglist.txt" ]]; then
-        cp -vf -- "$ISOFS_DIR/pacman_pkglist.txt" "$PKGLIST_DIR/pacman_pkglist.txt"
-        chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR/pacman_pkglist.txt"
+    "$_pacman" -Q --sysroot "$ROOTFS_DIR" > "$ISOFS_DIR/$_pacman_pkglist" || warn "Failed to creating a list of installed pacman packages"
+    if [[ -f "$ISOFS_DIR/$_pacman_pkglist" ]]; then
+        cp -vf -- "$ISOFS_DIR/$_pacman_pkglist" "$PKGLIST_DIR/$_pacman_pkglist"
+        chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR/$_pacman_pkglist"
     fi
-    info "Done (Created a list of installed pacman packages)"
+    info "Done (Installed pacman packages)"
 }
 
-make_mutable_img() {
-    info "Creating mutable image \"$MUTABLE_IMG\"..."
-    rm -f -- "$MUTABLE_IMG"
-    fallocate -l 1GiB "$MUTABLE_IMG"
-    mkfs.f2fs -f -l MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
-    info "Done (Created mutable image)"
+mount_imgs() {
+    info "Mounting mutable image \"$MUTABLE_IMG\" to \"$ROOTFS_DIR/home\"..."
+    mount -v -t f2fs -o loop -- "$MUTABLE_IMG" "$ROOTFS_DIR/home"
+    info "Done (Mounted mutable image)"
+
+    if [[ "$distro" == "ubuntu" ]]; then
+        info "Mounting EFI boot image \"$EFIBOOT_IMG\" to \"$ROOTFS_DIR/boot/efi\"..."
+        mount -v -t vfat -o loop -- "$EFIBOOT_IMG" "$ROOTFS_DIR/boot/efi" || error "Failed to mount EFI boot image" 4
+        info "Done (Mounted EFI boot image)"
+    elif [[ "$distro" == "kzl-linux" ]]; then
+        info "Mounting EFI boot image \"$EFIBOOT_IMG\" to \"$ROOTFS_DIR/boot\"..."
+        mount -v -t vfat -o loop -- "$EFIBOOT_IMG" "$ROOTFS_DIR/boot" || error "Failed to mount EFI boot image" 4
+        info "Done (Mounted EFI boot image)"
+    else
+        error "Unknown distro: $distro" 128
+    fi
+}
+
+_make_initramfs_for_kernel() {
+    local _kernel_version="$1"
+    local _kernel_image="$2"
+    local _kmoddir="$3"
+
+    info "Create initramfs for kernel version: $_kernel_version"
+    dracut --kver "$_kernel_version" \
+        --force \
+        --add 'dmsquash-live overlayfs livenet pollcdrom' \
+        --omit 'multipath' \
+        --strip \
+        --nolvmconf \
+        --nomdadmconf \
+        --verbose \
+        --no-hostonly \
+        --no-hostonly-cmdline \
+        --zstd \
+        --kernel-image "$_kernel_image" \
+        --kmoddir "$_kmoddir" \
+        "$ROOTFS_DIR/boot/initramfs-$_kernel_version.img" > "$LOG_DIR"/dracut-$_kernel_version.log 2>&1
+    info "Done (Create initramfs for kernel version: $_kernel_version)"
+}
+
+_get_kernel_suffix() {
+    local _kernel_version="$1"
+    case "-${_kernel_version##*-}" in
+        -generic) echo "" ;;
+        -KZL) echo "-KZL" ;;
+        *) echo ""; warn "Unknown kernel version: $_kernel_version" ;;
+    esac
+}
+
+configure_rootfs() {
+    ### 1. general
+    info "Configuring root filesystem..."
+    # hostname
+    echo "LiveOS" > "$ROOTFS_DIR"/etc/hostname
+    # motd
+    echo "Welcome to $iso_name live OS!" > "$ROOTFS_DIR"/etc/motd
+    # environment
+    if [[ "$distro" == "ubuntu" ]]; then
+        echo 'PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin"' > "$ROOTFS_DIR"/etc/environment
+    elif [[ "$distro" == "kzl-linux" ]]; then
+        echo 'PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"' > "$ROOTFS_DIR"/etc/environment
+    else
+        error "Unknown distro: $distro" 128
+    fi
+    # fstab
+    cp -vf -- "$CONFIG_DIR/fstab" "$ROOTFS_DIR/etc/fstab"
+    # network
+    cp -vf -- "$CONFIG_DIR/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
+    cp -vf -- "$CONFIG_DIR/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
+    cp -vf -- "$CONFIG_DIR/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
+    # ssh
+    sed -i \
+        -e '/X11Forwarding/c\#X11Forwarding yes' \
+        -e '/PermitRootLogin/c\PermitRootLogin yes' \
+        -e '/PermitEmptyPasswords/c\PermitEmptyPasswords yes' \
+        "$ROOTFS_DIR/etc/ssh/sshd_config"
+    cp -vf -- "$ROOTFS_DIR/etc/ssh/sshd_config" "$CONFIG_DIR"
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$CONFIG_DIR/sshd_config"
+    # systemd
+    chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment for configuring rootfs" 5
+    chroot_run "$ROOTFS_DIR" systemctl enable systemd-networkd
+    chroot_run "$ROOTFS_DIR" systemctl enable systemd-resolved
+    if [[ "$distro" == "ubuntu" ]]; then
+        chroot_run "$ROOTFS_DIR" systemctl enable ssh
+    elif [[ "$distro" == "kzl-linux" ]]; then
+        chroot_run "$ROOTFS_DIR" systemctl enable sshd
+    else
+        error "Unknown distro: $distro" 128
+    fi
+    chroot_teardown || error "Failed to teardown chroot environment for configuring rootfs" 5
+    # grml-zsh-config
+    wget -O "$ROOTFS_DIR"/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc 2>&1 > /dev/null
+    echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR"/root/.zshrc
+    echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR"/root/.zshrc
+
+    info "Done (Configured root filesystem)"
+
+    ### 2. pacman repository
+    info "Setting up pacman repository to the ISO file system..."
+    mkdir -vp -- "$ROOTFS_DIR/$PACMAN_REPO_DIR"
+    local _pkg
+    for _pkg in "${pacman_pkgs[@]}"; do
+        local _pkg_file=$(get_pkg_file "$_pkg" "/$PACMAN_REPO_DIR")
+        cp -vf -- "/$PACMAN_REPO_DIR/$_pkg_file" "$ROOTFS_DIR/$PACMAN_REPO_DIR"
+        repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_FILE" "$ROOTFS_DIR/$PACMAN_REPO_DIR/$_pkg_file" \
+            > "$LOG_DIR"/pacman-repo-add.log 2>&1 || error "Failed to set up pacman repository" 6
+    done
+    info "Done (Set up pacman repository)"
+
+    ### 3. efi bootloader
+    info "Making initramfs for all installed kernels..."
+    for kernel_version in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
+        _make_initramfs_for_kernel \
+            "$kernel_version" \
+            "$ROOTFS_DIR/boot/vmlinuz-$kernel_version" \
+            "$ROOTFS_DIR/lib/modules/$kernel_version"
+    done
+    info "Done (Made initramfs)"
+
+    info "Setting up systemd-boot for UEFI booting..."
+    local _efi_dir
+    local _entry_conf=()
+    local _default_entry
+    if [[ "$distro" == "ubuntu" ]]; then
+        _efi_dir="$ROOTFS_DIR/boot/efi"
+        _entry_conf=(
+            "ubuntu-kzl.conf"
+            "ubuntu.conf"
+        )
+        _default_entry="ubuntu-kzl.conf"
+    elif [[ "$distro" == "kzl-linux" ]]; then
+        _efi_dir="$ROOTFS_DIR/boot"
+        _entry_conf=(
+            "kzl.conf"
+        )
+        _default_entry="kzl.conf"
+    else
+        error "Unknown distro: $distro" 128
+    fi
+
+    mkdir -vp -- "$_efi_dir/EFI/BOOT"
+    mkdir -vp -- "$_efi_dir/loader/entries"
+
+    local _entry
+    for _entry in "${_entry_conf[@]}"; do
+        sed "s|%ISOLABEL%|$ISO_LABEL|g" "$CONFIG_DIR/$_entry" > "$_efi_dir/loader/entries/$_entry"
+    done
+
+    cp -vf -- "$ROOTFS_DIR/usr/lib/systemd/boot/efi/systemd-bootx64.efi" "$_efi_dir/EFI/BOOT/BOOTx64.EFI"
+    sed "s|@DEFAULTENTRY@|$_default_entry|g" "$CONFIG_DIR/loader.conf" > "$_efi_dir/loader/loader.conf"
+
+    if [[ "$distro" == "ubuntu" ]]; then
+        local _kv
+        for _kv in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
+            local _kernel_suffix="$(_get_kernel_suffix "$_kv")"
+            info "Copying kernel ($_kv) and initramfs to EFI file system..."
+            cp -vf -- "$ROOTFS_DIR"/boot/vmlinuz-$_kv "$_efi_dir/vmlinuz$_kernel_suffix"
+            cp -vf -- "$ROOTFS_DIR"/boot/initramfs-$_kv.img "$_efi_dir/initramfs$_kernel_suffix.img"
+            info "Done (Copied kernel and initramfs to EFI file system)"
+        done
+    fi
+    info "Done (Set up systemd-boot for UEFI booting)"
+}
+
+umount_imgs() {
+    info "Unmounting mutable image \"$MUTABLE_IMG\" from \"$ROOTFS_DIR/home\"..."
+    umount -v -- "$ROOTFS_DIR/home" || error "Failed to unmount mutable image" 3
+    info "Done (Unmounted mutable image)"
+
+    if [[ "$distro" == "ubuntu" ]]; then
+        info "Unmounting EFI boot image \"$EFIBOOT_IMG\" from \"$ROOTFS_DIR/boot/efi\"..."
+        umount -v -- "$ROOTFS_DIR/boot/efi" || error "Failed to unmount EFI boot image" 3
+        info "Done (Unmounted EFI boot image)"
+    elif [[ "$distro" == "kzl-linux" ]]; then
+        info "Unmounting EFI boot image \"$EFIBOOT_IMG\" from \"$ROOTFS_DIR/boot\"..."
+        umount -v -- "$ROOTFS_DIR/boot" || error "Failed to unmount EFI boot image" 3
+        info "Done (Unmounted EFI boot image)"
+    else
+        error "Unknown distro: $distro" 128
+    fi
+}
+
+make_rootfs_squashfs() {
+    local _image_path="$ISOFS_DIR/$ROOTFS_IMG_DIR/squashfs.img"
+
+    info "Making rootfs SquashFS/EROFS image, this may take some time..."
+    # make a squashfs/erofs image and place it in the ISO 9660 file system
+    mkdir -p -- "$ISOFS_DIR/$ROOTFS_IMG_DIR"
+    # mksquashfs "$ROOTFS_DIR" "$_image_path" -b 1M -comp zstd -noappend
+    mkfs.erofs -- "$_image_path" "$ROOTFS_DIR"
+    info "Done (Made rootfs SquashFS/EROFS image)"
+}
+
+_ubuntu_configure_isofs() {
+    local -a _efi_files=(
+        "EFI/BOOT/BOOTx64.EFI"
+        "loader/loader.conf"
+        "loader/entries/ubuntu-kzl.conf"
+        "loader/entries/ubuntu.conf"
+    )
+
+    info "Setting up systemd-boot for ISO file system..."
+
+    mkdir -vp -- "$ISOFS_DIR"/EFI/BOOT
+    mkdir -vp -- "$ISOFS_DIR"/loader/entries
+
+    local _file
+    for _file in "${_efi_files[@]}"; do
+        mcopy -i "$EFIBOOT_IMG" \
+            "::/$_file" \
+            "$ISOFS_DIR/$_file"
+    done
+    info "Done (Set up systemd-boot for ISO file system)"
+
+    for kernel_version in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
+        local _kernel_suffix="$(_get_kernel_suffix "$kernel_version")"
+        info "Copying kernel ($kernel_version) and initramfs to the ISO file system..."
+        mcopy -i "$EFIBOOT_IMG" \
+            ::/vmlinuz$_kernel_suffix \
+            ::/initramfs$_kernel_suffix.img \
+            "$ISOFS_DIR"/
+        info "Done (Copied kernel and initramfs to the ISO file system)"
+    done
+}
+
+_kzl_configure_isofs() {
+    error "Not implemented yet for KZL Linux" 1
+}
+
+configure_isofs() {
+    if [[ "$distro" == "ubuntu" ]]; then
+        _ubuntu_configure_isofs
+    elif [[ "$distro" == "kzl-linux" ]]; then
+        _kzl_configure_isofs
+    else
+        error "Unknown distro: $distro" 128
+    fi
+}
+
+make_iso_image() {
+    info "Creating ISO image..."
+    xorriso \
+        -as mkisofs \
+        -iso-level 3 \
+        -joliet \
+        -joliet-long \
+        -full-iso9660-filenames \
+        -rational-rock \
+        -volid "$ISO_LABEL" \
+        -publisher "$iso_name $ISO_PUBLISHER" \
+        -appid "$iso_name $ISO_APPLICATION" \
+        -preparer "prepared by kzl" \
+        -partition_offset 16 \
+        -append_partition 2 'C12A7328-F81F-11D2-BA4B-00A0C93EC93B' "$EFIBOOT_IMG" \
+        -append_partition 3 '0FC63DAF-8483-4772-8E79-3D69D8477DE4' "$MUTABLE_IMG" \
+        -appended_part_as_gpt \
+        -no-pad \
+        -output "$OUT_DIR/$iso_file" \
+        "$ISOFS_DIR/" > "$LOG_DIR"/xorriso.log 2>&1 || error "Failed to create ISO image" 7
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$iso_file"
+    info "Done (Creating ISO image)"
 }
 
 usage() {
@@ -191,37 +547,60 @@ while (( $# > 0 )); do
     shift
 done
 
+if [[ ! -f "$arg_rootfs_tarball" ]]; then
+    error "Root filesystem tarball not found: $arg_rootfs_tarball" 1
+fi
+
 case "$arg_suite" in
     jammy)
-        deb_pkgs=("${common_deb_pkgs[@]}")
         distro="ubuntu"
         iso_name="Ubuntu ($arg_suite)"
+        deb_pkgs=("${common_deb_pkgs[@]}")
+        pacman_pkgs=("${ubuntu_pacman_pkgs[@]}")
         ;;
     noble)
-        deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
         distro="ubuntu"
-        iso_name="Ubuntu ($arg_suite)"
+        iso_name="Ubuntu-$arg_suite"
+        deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}")
+        pacman_pkgs=("${ubuntu_pacman_pkgs[@]}")
         ;;
     questing)
-        deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}")
         distro="ubuntu"
-        iso_name="Ubuntu ($arg_suite)"
+        iso_name="Ubuntu-$arg_suite"
+        deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}")
+        pacman_pkgs=("${ubuntu_pacman_pkgs[@]}")
         ;;
     kzl)
         distro="kzl-linux"
-        iso_name="KZL Linux"
+        iso_name="KZL-Linux"
+        pacman_pkgs=("${kzl_pacman_pkgs[@]}")
         ;;
     *)
         error "Unknown suite: $arg_suite" 128
         ;;
 esac
 
+iso_file="$distro-$arg_suite-$TIMESTAMP-$ISO_LABEL.iso"
+
 ################################################################################
 
 prologue
 
 create_work_dirs
+make_imgs
 bootstrap_rootfs
+
+mount_imgs
+configure_rootfs
+umount_imgs
+
+clean_rootfs "$ROOTFS_DIR"
+make_rootfs_squashfs
+
+# configure_isofs
+make_iso_image
+
+info "Successfully created ISO image: $iso_file"
 
 cleanup
 
@@ -229,7 +608,12 @@ epilogue
 
 ### error codes
 # 1: general error
-# 2-126: specific error codes
+# 2: deb packages
+# 3: pacman packages
+# 4: image mounting/unmounting
+# 5: rootfs general configuration
+# 6: pacman repository setup
+# 7: ISO image creation
 # 127: command not found
 # 128: unknown option or invalid argument
 # 255: must be run as root
