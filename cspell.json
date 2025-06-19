@@ -492,6 +492,7 @@
         "useshrplib",
         "usethreads",
         "USRLIBDIR",
+        "ustreamer",
         "uuidd",
         "VALGRIND",
         "validpgpkeys",
