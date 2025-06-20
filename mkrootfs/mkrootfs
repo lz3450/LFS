@@ -48,7 +48,9 @@ debian_included_deb_pkgs=(
     locales
     ca-certificates
 )
-debian_excluded_deb_pkgs=()
+debian_excluded_deb_pkgs=(
+    ifupdown
+)
 ubuntu_included_deb_pkgs=()
 ubuntu_excluded_deb_pkgs=(
     ubuntu-advantage-tools

@@ -31,7 +31,6 @@ gpgv
 grep
 gzip
 hostname
-ifupdown
 init
 init-system-helpers
 iproute2
