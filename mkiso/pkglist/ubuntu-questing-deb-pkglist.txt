@@ -43,7 +43,6 @@ ethtool
 f2fs-tools
 fdisk
 findutils
-gcc-14-base
 gcc-15-base
 gir1.2-girepository-2.0
 gir1.2-glib-2.0
