@@ -9,6 +9,8 @@ bash-completion
 binutils
 binutils-aarch64-linux-gnu
 binutils-common
+bluez
+bluez-firmware
 bsdutils
 ca-certificates
 coreutils
@@ -96,6 +98,7 @@ libdevmapper1.02.1
 libdrm-common
 libdrm2
 libduktape207
+libdw1
 libedit2
 libelf1
 liberror-perl
