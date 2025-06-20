@@ -6,7 +6,7 @@
 ################################################################################
 
 echo -e 'raspi\nraspi' | passwd
-useradd -m -U -G sudo,adm -s /bin/zsh kzl
+useradd -m -U -G adm,dialout,sudo,audio,video -s /bin/zsh kzl
 echo -e 'raspi\nraspi' | passwd kzl
 
 systemctl disable wpa_supplicant.service
