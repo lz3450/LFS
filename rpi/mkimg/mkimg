@@ -48,8 +48,6 @@ common_deb_pkgs=(
     ### general
     sudo
     file
-    firmware-brcm80211
-    firmware-realtek
     ### disk
     parted
     ### network
@@ -63,6 +61,11 @@ common_deb_pkgs=(
 bookworm_deb_pkgs=(
     systemd-resolved
     systemd-timesyncd
+    bluez
+    # firmware
+    firmware-brcm80211
+    firmware-realtek
+    bluez-firmware
     # raspi
     raspberrypi-archive-keyring
     raspberrypi-sys-mods
