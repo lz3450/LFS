@@ -1,6 +1,7 @@
 {
     "version": "0.2",
     "ignorePaths": [
+        "**/pkglist/*.txt",
         "*jammy.txt",
         "*noble.txt",
         "config.txt",
@@ -387,6 +388,7 @@
         "relocs",
         "relro",
         "resolv",
+        "rfkill",
         "rhash",
         "rhashrc",
         "rootfs",
@@ -394,6 +396,7 @@
         "rootsbindir",
         "rpath",
         "rpiboot",
+        "rpicam",
         "rtlddir",
         "rtlib",
         "RTTI",
