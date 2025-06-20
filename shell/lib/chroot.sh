@@ -33,7 +33,7 @@ _chroot_warn() {
 }
 
 chroot_add_mount() {
-    mount -v "$@"
+    mount -v "$@" >&2
     chroot_active_mounts=(${@: -1} "${chroot_active_mounts[@]}")
 }
 

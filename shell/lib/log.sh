@@ -73,12 +73,12 @@ log_cyan() {
 }
 
 prologue() {
-    echo -e "\033[1;30m"
-    echo -e "****************************************************************"
-    echo -e "* $SCRIPT_NAME"
-    echo -e "****************************************************************"
-    echo -e "[$SCRIPT_NAME]: Start time - $(date)"
-    echo -e "\033[0m"
+    echo -e "\033[1;30m" >&2
+    echo -e "****************************************************************" >&2
+    echo -e "* $SCRIPT_NAME" >&2
+    echo -e "****************************************************************" >&2
+    echo -e "[$SCRIPT_NAME]: Start time - $(date)" >&2
+    echo -e "\033[0m" >&2
 
     __start_time__=$(date +%s)
 }
@@ -87,13 +87,13 @@ epilogue() {
     __end_time__=$(date +%s)
     __total_time__=$(($__end_time__ - $__start_time__))
 
-    echo -e "\033[1;30m"
-    echo -e "****************************************************************"
-    echo -e "* Execution time Information"
-    echo -e "****************************************************************"
-    echo -e "[$SCRIPT_NAME]: End time - $(date)"
-    echo -e "[$SCRIPT_NAME]: Total time - $(date -d@$__total_time__ -u +%H:%M:%S)"
-    echo -e "\033[0m"
+    echo -e "\033[1;30m" >&2
+    echo -e "****************************************************************" >&2
+    echo -e "* Execution time Information" >&2
+    echo -e "****************************************************************" >&2
+    echo -e "[$SCRIPT_NAME]: End time - $(date)" >&2
+    echo -e "[$SCRIPT_NAME]: Total time - $(date -d@$__total_time__ -u +%H:%M:%S)" >&2
+    echo -e "\033[0m" >&2
 }
 
 debug "${BASH_SOURCE[0]} sourced"
