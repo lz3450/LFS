@@ -1,5 +1,0 @@
-Types: deb
-URIs: https://archive.raspberrypi.com/debian/
-Suites: @SUITE@
-Components: main
-Signed-By: /etc/apt/trusted.gpg.d/raspberrypi.gpg.key

@@ -43,6 +43,7 @@ declare -r UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
 # declare -r UBUNTU_MIRROR="https://mirror.arizona.edu/ubuntu/"
 declare -r UBUNTU_PORT_MIRROR="http://ports.ubuntu.com/ubuntu-ports/"
 
+# distro specific package lists
 debian_included_deb_pkgs=(
     locales
     ca-certificates
@@ -69,11 +70,9 @@ kzl_pacman_pkgs=(
 )
 
 distro=""
-architecture=""
-debian_mirror=""
 ubuntu_mirror=""
-mirror=""
-mirrors=()
+deb_mirror=""
+deb_mirrors=()
 
 included_deb_pkgs=()
 excluded_deb_pkgs=()
@@ -82,8 +81,8 @@ pacman_pkgs=()
 tarball_file=""
 
 ### options and arguments
-arg_platform="pc"
-arg_suite="noble"
+arg_arch=""
+arg_suite=""
 
 ### functions
 cleanup() {
@@ -123,7 +122,7 @@ make_work_dirs() {
 }
 
 _debootstrap_rootfs() {
-    local -r _deb_pkg_to_install="$PKGLIST_DIR/$arg_platform-$arg_suite-debootstrap-pkgs.txt"
+    local -r _deb_pkg_to_install="$PKGLIST_DIR/$arg_arch-$arg_suite-debootstrap-pkgs.txt"
     sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkg_to_install"
 
     local _include=""
@@ -139,31 +138,31 @@ _debootstrap_rootfs() {
     info "Making the list of deb packages to be installed..."
     debootstrap \
         --print-debs \
-        --arch="$architecture" \
+        --arch="$arg_arch" \
         $_include \
         $_exclude \
         --merged-usr \
         "$arg_suite" \
         "$ROOTFS_DIR" \
-        "$mirror" \
+        "$deb_mirror" \
         2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -n  | sed '/^$/d' > "$_deb_pkg_to_install" || warn "Failed to creating the list of deb packages to be installed"
     info "Done (Made the list of installed deb packages)"
 
     info "Debootstrapping \"$ROOTFS_DIR/\"..."
     local _foreign=""
-    if [[ "$architecture" != "$(dpkg --print-architecture)" ]]; then
-        info "Using foreign architecture: $architecture"
+    if [[ "$arg_arch" != "$(dpkg --print-architecture)" ]]; then
+        info "Using foreign architecture: $arg_arch"
         _foreign="--foreign"
     fi
     debootstrap \
-        --arch="$architecture" \
+        --arch="$arg_arch" \
         $_include \
         $_exclude \
         --merged-usr \
         $_foreign \
         "$arg_suite" \
         "$ROOTFS_DIR" \
-        "$mirror" \
+        "$deb_mirror" \
         > "$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap rootfs" 2
     if [[ -n "$_foreign" ]]; then
         chroot "$ROOTFS_DIR" /debootstrap/debootstrap --second-stage >> "$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap (stage 2) rootfs" 3
@@ -185,13 +184,13 @@ _debootstrap_rootfs() {
 #         --architectures=arm64 \
 #         "$arg_suite" \
 #         "$ROOTFS_DIR" \
-#         "${mirrors[@]}" \
+#         "${deb_mirrors[@]}" \
 #         2>&1 | tee "$LOG_DIR/mmdebstrap.log" || error "Failed to mmdebstrap rootfs" 8
 #     info "Done (mmdebstrapped rootfs)"
 # }
 
 # _pacstrap_rootfs() {
-#     local -r _pkg_list="$PKGLIST_DIR/$arg_platform-pacstrap-pkgs.txt"
+#     local -r _pkg_list="$PKGLIST_DIR/$arg_arch-pacstrap-pkgs.txt"
 #     sudo -u "${SUDO_USER:-root}" touch -- "$_pkg_list"
 
 #     mkdir -v -m 0755 -p "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman,log} "$ROOTFS_DIR"/{dev,run,etc/pacman.d}
@@ -211,29 +210,18 @@ bootstrap_rootfs() {
 }
 
 _deb_configure_rootfs() {
-    local -r _deb_pkgs_installed="$PKGLIST_DIR/$arg_platform-$arg_suite-rootfs-pkgs.txt"
+    local -r _deb_pkgs_installed="$PKGLIST_DIR/$arg_arch-$arg_suite-rootfs-pkgs.txt"
     sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkgs_installed"
 
     info "Setting up sources.list..."
-    case "$arg_platform-$distro" in
-        pc-debian|pc-ubuntu)
-            sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/$distro.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/$distro.sources"
-            ;;
-        raspberrypi-debian)
-            sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/debian.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/debian.sources"
-            sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/raspi.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/raspi.sources"
-            wget -qO "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key" http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
-            ;;
-        raspberrypi-ubuntu)
-            mkdir -p -- "$ROOTFS_DIR/etc/apt/sources.list.d"
-            sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/ubuntu-ports.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/ubuntu-ports.sources"
-            ;;
-        *)
-            error "Unsupported platform-distro pair: $arg_platform-$distro" 1
-            ;;
-    esac
     if [[ -f "$ROOTFS_DIR/etc/apt/sources.list" ]]; then
         mv -v -- "$ROOTFS_DIR/etc/apt/sources.list" "$ROOTFS_DIR/etc/apt/sources.list.bak"
+    fi
+    mkdir -vp -- "$ROOTFS_DIR/etc/apt/sources.list.d"
+    if [[ "$arg_arch" != "amd64" && "$distro" == "ubuntu" ]]; then
+        sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/ubuntu-ports.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/ubuntu-ports.sources"
+    else
+        sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/$distro.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/$distro.sources"
     fi
     info "Done (Set up sources.list)"
 
@@ -291,15 +279,13 @@ usage() {
     cat << EOF
 
 Usage: $SCRIPT_NAME -h | --help
-Usage: $SCRIPT_NAME [ -p | --platform <platform> ] -s | --suite <suite>
+Usage: $SCRIPT_NAME  -a | --arch <architecture>  -s | --suite <suite>
 
     -h, --help                      print this help message and exit
-    -p, --platform <platform>       specify the platform
-                                    supported platforms: pc, raspberrypi
-                                    default: pc
+    -a, --arch <architecture>       specify the platform
+                                    supported platforms: amd64, arm64
     -s, --suite <suite>             specify the distribution suite
-                                    supported suites: bookworm, trixie, jammy, noble, questing
-                                    default: noble
+                                    supported suites: bookworm, trixie, jammy, noble, questing, kzl
 EOF
 }
 
@@ -311,9 +297,9 @@ while (( $# > 0 )); do
         usage
         exit 0
         ;;
-    -p | --platform)
+    -a | --arch)
         shift
-        arg_platform="$1"
+        arg_arch="$1"
         ;;
     -s | --suite)
         shift
@@ -327,33 +313,29 @@ while (( $# > 0 )); do
     shift
 done
 
-case "$arg_platform" in
-    pc)
-        architecture="amd64"
-        debian_mirror="$DEBIAN_MIRROR"
+case "$arg_arch" in
+    amd64)
         ubuntu_mirror="$UBUNTU_MIRROR"
         ;;
-    raspberrypi)
-        architecture="arm64"
-        debian_mirror="$DEBIAN_MIRROR"
+    arm64)
         ubuntu_mirror="$UBUNTU_PORT_MIRROR"
         ;;
     *)
         usage
-        error "Unsupported platform \"$arg_platform\"." 1
+        error "Unsupported platform \"$arg_arch\"." 1
         ;;
 esac
 
 case "$arg_suite" in
     bookworm|trixie)
         distro="debian"
-        mirror="$debian_mirror"
+        deb_mirror="$DEBIAN_MIRROR"
         included_deb_pkgs=("${common_deb_pkgs[@]}" "${debian_included_deb_pkgs[@]}")
         excluded_deb_pkgs=("${debian_excluded_deb_pkgs[@]}")
         ;;
     jammy|noble|questing)
         distro="ubuntu"
-        mirror="$ubuntu_mirror"
+        deb_mirror="$ubuntu_mirror"
         included_deb_pkgs=("${common_deb_pkgs[@]}" "${ubuntu_included_deb_pkgs[@]}")
         excluded_deb_pkgs=("${ubuntu_excluded_deb_pkgs[@]}")
         ;;
@@ -367,7 +349,7 @@ case "$arg_suite" in
         ;;
 esac
 
-tarball_file="rootfs-$arg_platform-$distro-$arg_suite-$TIMESTAMP.tar.zst"
+tarball_file="rootfs-$arg_arch-$distro-$arg_suite-$TIMESTAMP.tar.zst"
 
 ################################################################################
 

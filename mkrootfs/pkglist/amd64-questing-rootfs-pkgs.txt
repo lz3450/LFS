@@ -33,7 +33,6 @@ e2fsprogs
 eject
 ethtool
 findutils
-gcc-14-base
 gcc-15-base
 gir1.2-girepository-2.0
 gir1.2-glib-2.0
@@ -109,6 +108,7 @@ libkeyutils1
 libkmod2
 libkrb5-3
 libkrb5support0
+liblastlog2-2
 libldap-common
 libldap2
 liblocale-gettext-perl
