@@ -5,13 +5,13 @@
 
 ################################################################################
 
-update-initramfs -c -k all
-
 echo -e 'raspi\nraspi' | passwd
 useradd -m -U -G sudo,adm -s /bin/zsh kzl
 echo -e 'raspi\nraspi' | passwd kzl
 
-systemctl enable systemd-networkd
-systemctl enable systemd-resolved
-systemctl enable wpa_supplicant@wlan0
-systemctl enable ssh
+systemctl disable wpa_supplicant.service
+systemctl disable NetworkManager.service
+systemctl enable systemd-networkd.service
+systemctl enable systemd-resolved.service
+systemctl enable wpa_supplicant@wlan0.service
+systemctl enable ssh.service

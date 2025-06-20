@@ -47,16 +47,32 @@ declare -r RASPBERRYPI_GPG_KEY="$WORK_DIR/raspberrypi.gpg.key"
 common_deb_pkgs=(
     ### general
     sudo
+    file
+    firmware-brcm80211
+    firmware-realtek
     ### disk
     parted
     ### network
     iw wpasupplicant
+    rfkill
     ### kernel
-    initramfs-tools
+    # initramfs-tools
+    ### firmware
+
 )
 bookworm_deb_pkgs=(
     systemd-resolved
     systemd-timesyncd
+    # raspi
+    raspberrypi-archive-keyring
+    raspberrypi-sys-mods
+    raspberrypi-net-mods
+    raspi-config
+    raspi-firmware
+    raspi-gpio
+    raspi-utils
+    rpi-eeprom
+    # rpicam-apps-lite
 )
 jammy_deb_pkgs=(
     linux-firmware-raspi2
@@ -86,7 +102,7 @@ cleanup() {
         read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
         if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
             info "Removing working directory: $WORK_DIR"
-            rmdir -v -- "$ROOTFS_DIR" && rm -rf --one-file-system -- "$WORK_DIR"
+            rmdir -v -- "$ROOTFS_DIR" && rm -rf --one-file-system -- "$WORK_DIR" >&2
             info "Done (Removed working directory)"
         fi
         info "Done (Cleaned up)"
@@ -101,11 +117,11 @@ make_work_dirs() {
     if [[ -d "$WORK_DIR" ]]; then
         error "Working directory $WORK_DIR already exists" 1
     fi
-    mkdir -vp -- "$WORK_DIR"
-    mkdir -vp -- "$ROOTFS_DIR"
-    mkdir -vp -- "$LOG_DIR"
+    mkdir -vp -- "$WORK_DIR" >&2
+    mkdir -vp -- "$ROOTFS_DIR" >&2
+    mkdir -vp -- "$LOG_DIR" >&2
     if [[ ! -d "$PKGLIST_DIR" ]]; then
-        mkdir -vp -- "$PKGLIST_DIR"
+        mkdir -vp -- "$PKGLIST_DIR" >&2
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
     fi
     info "Done (Made root filesystem directory)"
@@ -178,6 +194,15 @@ bootstrap_rootfs() {
         > "$LOG_DIR/tar.log"
     info "Done (Extracted root filesystem)"
 
+    if [[ "$distro" == "debian" ]]; then
+        info "Setting up initial sources.list..."
+        mkdir -p -- "$ROOTFS_DIR/etc/apt/sources.list.d"
+        sed "s|@SUITE@|$arg_suite|g" "$CONFIG_DIR/raspi.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/raspi.sources"
+        # raspberrypi-archive-stable.gpg will be overwritten by deb package raspberrypi-archive-keyring
+        wget -qO "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key" http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
+        info "Done (Set up initial sources.list)"
+    fi
+
     info "Install deb packages: ${deb_pkgs[*]}"
     chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
     chroot_run "$ROOTFS_DIR" apt-get update > "$LOG_DIR/apt-get-update.log" || error "Failed to run apt-get update" 3
@@ -187,6 +212,13 @@ bootstrap_rootfs() {
     chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkgs_installed" || warn "Failed to get the list of installed deb packages"
     chroot_teardown || error "Failed to teardown chroot environment" 3
     info "Done (Installed deb packages)"
+
+    if [[ "$distro" == "debian" ]]; then
+        info "Setting up sources.list..."
+        rm -vf -- "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key"
+        sed -i -e '/^Signed-By/d' -e '/^#Signed-By/s/^#//' "$ROOTFS_DIR/etc/apt/sources.list.d/raspi.sources"
+        info "Done (Set up sources.list)"
+    fi
 }
 
 configure_img() {
@@ -197,7 +229,7 @@ configure_img() {
     tar -xf "$WORK_DIR/firmware.tar.gz" -C "$WORK_DIR"
     info "Done (Downloaded RPi firmware: $_firmware_version)"
 
-    info "Copying RPi firmware to rootfs..."
+    info "Copying kernel images in raspberrypi/firmware to rootfs..."
     mv -- "$_firmware_dir"/boot/* "$ROOTFS_DIR/boot/firmware/"
     mv -- "$_firmware_dir"/modules "$ROOTFS_DIR/usr/lib/"
     local _kernel_version
@@ -210,36 +242,45 @@ configure_img() {
             8-16k)  _kernel_suffix="_2712" ;;
             *)      _kernel_suffix="$_kv" ;;
         esac
-        cp -vdr "$ROOTFS_DIR/boot/firmware/kernel$_kernel_suffix.img" "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version"
+        cp -vdr -- "$ROOTFS_DIR/boot/firmware/kernel$_kernel_suffix.img" "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version"
         _kernel_version_suffix+=("$_kernel_version:$_kernel_suffix")
     done
-    info "Done (Copied RPi firmware)"
+    info "Done (Copied kernel images)"
 
     info "Running initialize.sh..."
-    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
     cp -v -- "$SCRIPT_DIR/initialize.sh" "$ROOTFS_DIR/initialize.sh"
+    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
+    # chroot_run "$ROOTFS_DIR" update-initramfs -c -k all
     chroot_run "$ROOTFS_DIR" "/initialize.sh" > "$LOG_DIR/initialize.log" || error "Failed to run initialize.sh" 3
-    rm -vf -- "$ROOTFS_DIR/initialize.sh"
     chroot_teardown || error "Failed to teardown chroot environment" 3
+    rm -vf -- "$ROOTFS_DIR/initialize.sh"
     info "Done (Ran initialize.sh)"
 
-    info "Copying initramfs..."
-    local _kvs
-    for _kvs in "${_kernel_version_suffix[@]}"; do
-        _kernel_version=${_kvs%%:*}
-        _kernel_suffix=${_kvs##*:}
-        cp -dr "$ROOTFS_DIR/boot/initrd.img-$_kernel_version" "$ROOTFS_DIR/boot/firmware/initramfs$_kernel_suffix"
-    done
-    info "Done (Copied initramfs)"
+    # info "Copying initramfs..."
+    # local _kvs
+    # for _kvs in "${_kernel_version_suffix[@]}"; do
+    #     _kernel_version=${_kvs%%:*}
+    #     _kernel_suffix=${_kvs##*:}
+    #     cp -dr "$ROOTFS_DIR/boot/initrd.img-$_kernel_version" "$ROOTFS_DIR/boot/firmware/initramfs$_kernel_suffix"
+    # done
+    # info "Done (Copied initramfs)"
 
     info "Copying miscellaneous config files..."
     # hostname
-    cp -vf -- "$CONFIG_DIR/hostname" "$ROOTFS_DIR/etc/hostname"
+    echo "RPi" > "$ROOTFS_DIR/etc/hostname"
+    # environment
+    echo "PATH=\"/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin\"" > "$ROOTFS_DIR/etc/environment"
+    cp -vf -- "$CONFIG_DIR/profile" "$ROOTFS_DIR/etc/profile"
+    # passwd
+    sed -i '/^root/s|/bin/bash|/bin/zsh|' "$ROOTFS_DIR"/etc/passwd
     # network
     cp -vf -- "$CONFIG_DIR/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
     cp -vf -- "$CONFIG_DIR/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
     cp -vf -- "$CONFIG_DIR/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
     ln -sf wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-wlan0.conf"
+    # rfkill
+    sed -i 's/^options[[:space:]]\+rfkill[[:space:]]\+default_state=0$/options rfkill default_state=1/' \
+        "$ROOTFS_DIR/etc/modprobe.d/rfkill_default.conf"
     # grml-zsh-config for root
     wget -O "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc > "$LOG_DIR/grml-zsh-config.log" 2>&1
     echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
@@ -267,9 +308,9 @@ configure_img() {
     fi
     info "ROOT PARTUUID: $_root_partuuid"
     # set PARTUUIDs in fstab and cmdline.txt
-    sed -i "s|%BOOTPARTUUID%|$_boot_partuuid|" "$ROOTFS_DIR/etc/fstab"
-    sed -i "s|%ROOTPARTUUID%|$_root_partuuid|" "$ROOTFS_DIR/etc/fstab"
-    sed -i "s|%ROOTPARTUUID%|$_root_partuuid|" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
+    sed -i "s|@BOOTPARTUUID@|$_boot_partuuid|" "$ROOTFS_DIR/etc/fstab"
+    sed -i "s|@ROOTPARTUUID@|$_root_partuuid|" "$ROOTFS_DIR/etc/fstab"
+    sed -i "s|@ROOTPARTUUID@|$_root_partuuid|" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
     info "Done (Copied boot configuration files)"
 
     sync
