@@ -27,6 +27,7 @@ dmsetup
 dpkg
 e2fsprogs
 eject
+file
 findutils
 gcc-12-base
 gir1.2-glib-2.0
@@ -114,6 +115,8 @@ libldap-2.5-0
 liblocale-gettext-perl
 liblz4-1
 liblzma5
+libmagic-mgc
+libmagic1
 libmd0
 libmnl0
 libmount1
@@ -221,6 +224,7 @@ python3-yaml
 python3.10
 python3.10-minimal
 readline-common
+rfkill
 rsyslog
 sed
 sensible-utils
