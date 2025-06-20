@@ -58,7 +58,7 @@ common_deb_pkgs=(
     ### firmware
 
 )
-bookworm_deb_pkgs=(
+debian_deb_pkgs=(
     systemd-resolved
     systemd-timesyncd
     bluez
@@ -77,7 +77,7 @@ bookworm_deb_pkgs=(
     rpi-eeprom
     # rpicam-apps-lite
 )
-jammy_deb_pkgs=(
+ubuntu_deb_pkgs=(
     linux-firmware-raspi2
     ubuntu-raspi-settings
 )
@@ -330,7 +330,7 @@ Usage: $SCRIPT_NAME -s | --suite <suite>  -r | --rootfs-tarball <tarball>
 Usage: $SCRIPT_NAME -c | --chroot <image> [<command>]
 
     -h, --help                          print this help message and exit
-    -s, --suite <suite>                 specify the image suite (bookworm, jammy)
+    -s, --suite <suite>                 specify the image suite (bookworm, trixie, jammy)
     -r, --rootfs-tarball <tarball>      specify the root filesystem tarball to use
     -c, --chroot <image> [<command>]    chroot into the image file and run the command
 
@@ -374,13 +374,13 @@ if [[ -z "$arg_chroot_image" ]]; then
     fi
 
     case "$arg_suite" in
-        bookworm)
+        bookworm|trixie)
             distro="debian"
-            deb_pkgs=("${common_deb_pkgs[@]}" "${bookworm_deb_pkgs[@]}")
+            deb_pkgs=("${common_deb_pkgs[@]}" "${debian_deb_pkgs[@]}")
             ;;
         jammy)
             distro="ubuntu"
-            deb_pkgs=("${common_deb_pkgs[@]}" "${jammy_deb_pkgs[@]}")
+            deb_pkgs=("${common_deb_pkgs[@]}" "${ubuntu_deb_pkgs[@]}")
             ;;
         *)
             usage
