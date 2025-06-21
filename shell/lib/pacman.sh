@@ -12,12 +12,37 @@ declare -r __LIBPACMAN__=""
 
 ################################################################################
 
+### libraries
+LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
+. "$LIBDIR"/log.sh
+. "$LIBDIR"/utils.sh
+. "$LIBDIR"/chroot.sh
+
+### checks
+
 ### constants & variables
+if [[ -f "/usr/bin/pacman" ]]; then
+    PACMAN="/usr/bin/pacman"
+    PACMAN_CONFIG="/etc/pacman.conf"
+elif [[ -f "/opt/bin/pacman" ]]; then
+    PACMAN="/opt/bin/pacman"
+    PACMAN_CONFIG="/opt/etc/pacman.conf"
+else
+    error "Failed to find \`pacman\`" 127
+fi
+
 EXTENSION="tar.zst"
 #                 epoch:                         pkgver-pkgrel-                    arch.pkg.tar.zst
 PKGNAME_REGEX="\([0-9]+:\)?\([0-9a-zA-Z]+\(\.\|\+\)?\)+-[0-9]+-\(x86_64\|aarch64\|any\).pkg.$EXTENSION"
 
 ### functions
+_pacman_info () {
+    info "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
+_pacman_error() {
+    error "${1:-}" "${2:-}" "${BASH_SOURCE[0]##*/}"
+}
+
 pacman_get_pkg_file() {
     local _pkg="$1"
     local _dir="$2"
@@ -50,6 +75,32 @@ pacman_get_pkgnames() {
         *) _pkgnames=("$1") ;;
     esac
     echo "${_pkgnames[@]}"
+}
+
+pacman_bootstrap() {
+    local _rootfs_dir="$1"
+    local -n _pacman_pkgs="$2"
+
+    _pacman_info "Installing pacman packages: $(IFS=','; echo "${_pacman_pkgs[*]}")"
+    mkdir -v -m 0755 -p "$_rootfs_dir"/var/{cache/pacman/pkg,lib/pacman,log} "$_rootfs_dir"/{dev,run,etc/pacman.d}
+    mkdir -v -m 1777 -p "$_rootfs_dir"/tmp
+    mkdir -v -m 0555 -p "$_rootfs_dir"/{sys,proc}
+
+    local _pacman_tmp_conf_file=$(mktemp pacman.XXX.conf)
+    sed 's/^DownloadUser/#&/' "$PACMAN_CONFIG" > "$_pacman_tmp_conf_file"
+    "$PACMAN" -Sy \
+        -r "$_rootfs_dir" \
+        --cachedir "/$PACMAN_REPO_DIR" \
+        --config "$_pacman_tmp_conf_file" \
+        --disable-sandbox \
+        --noconfirm \
+        "${_pacman_pkgs[@]}"
+    _pacman_info "Done (Installed pacman packages)"
+}
+
+pacman_get_installed_pkgs() {
+    local _rootfs_dir="$1"
+    "$PACMAN" -Q --sysroot "$_rootfs_dir"
 }
 
 debug "${BASH_SOURCE[0]} sourced"
