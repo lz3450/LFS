@@ -146,7 +146,6 @@ libtirpc3t64
 libudev1
 libunistring5
 libuuid1
-libxml2
 libxml2-16
 libxtables12
 libxxhash0
