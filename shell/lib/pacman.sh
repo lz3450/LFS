@@ -18,7 +18,7 @@ EXTENSION="tar.zst"
 PKGNAME_REGEX="\([0-9]+:\)?\([0-9a-zA-Z]+\(\.\|\+\)?\)+-[0-9]+-\(x86_64\|aarch64\|any\).pkg.$EXTENSION"
 
 ### functions
-get_pkg_file() {
+pacman_get_pkg_file() {
     local _pkg="$1"
     local _dir="$2"
     #               pkgname-
@@ -28,9 +28,9 @@ get_pkg_file() {
     fi
 }
 
-# get_pkgbase <pkgname>
+# pacman_get_pkgbase <pkgname>
 # $1: pkgname
-get_pkgbase() {
+pacman_get_pkgbase() {
     local _pkgbase
     case "$1" in
         device-mapper) _pkgbase=lvm2 ;;
@@ -40,9 +40,9 @@ get_pkgbase() {
     echo "$_pkgbase"
 }
 
-# get_pkgnames <pkgbase>
+# pacman_get_pkgnames <pkgbase>
 # $1: pkgbase
-get_pkgnames() {
+pacman_get_pkgnames() {
     local -a _pkgnames
     case "$1" in
         linux) _pkgnames=("linux" "linux-headers") ;;
