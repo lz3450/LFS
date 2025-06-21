@@ -24,9 +24,6 @@ _loop_info () {
 _loop_warn() {
     warn "${1:-}" "${BASH_SOURCE[0]##*/}"
 }
-_loop_error() {
-    error "${1:-}" "${2:-}" "${BASH_SOURCE[0]##*/}"
-}
 
 # Get first unused loop device
 # loop_get_device
@@ -43,7 +40,7 @@ loop_partitioned_setup() {
     local _loop_device="$1"
     local _img="$2"
     _loop_info "Setting up loop device for image: $_img"
-    losetup -P "$_loop_device" "$_img" || _loop_error "Failed to setup loop device: $_loop_device" 1
+    losetup -P "$_loop_device" "$_img"
     _loop_info "Done (Setting up loop device)"
 }
 
@@ -76,12 +73,8 @@ loop_teardown() {
     done
 
     _loop_info "Detaching loop device: $_loop_device"
-    losetup -d "$_loop_device" || _loop_error "Failed to detach loop device: $_loop_device" 2
+    losetup -d "$_loop_device"
     _loop_info "Done (Detaching loop device)"
 }
 
 debug "${BASH_SOURCE[0]} sourced"
-
-### error codes
-# 1: setup
-# 2: teardown

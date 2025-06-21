@@ -156,6 +156,3 @@ chroot_run() {
 }
 
 debug "${BASH_SOURCE[0]} sourced"
-
-### error codes
-# 255: Failed to unmount chroot environment
