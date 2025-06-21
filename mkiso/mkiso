@@ -188,33 +188,10 @@ bootstrap_rootfs() {
     fi
 
     ###
-    info "Install pacman packages: ${pacman_pkgs[*]}"
-    local _pacman
-    local _pacman_config
-    local _pacman_tmp_conf_file="$WORK_DIR/pacman_$TIMESTAMP.conf"
-    if [[ -f "/usr/bin/pacman" ]]; then
-        _pacman="/usr/bin/pacman"
-        _pacman_config="/etc/pacman.conf"
-    elif [[ -f "/opt/bin/pacman" ]]; then
-        _pacman="/opt/bin/pacman"
-        _pacman_config="/opt/etc/pacman.conf"
-    else
-        error "Failed to find \`pacman\`" 127
-    fi
-    sed 's/^DownloadUser/#&/' "$_pacman_config" > "$_pacman_tmp_conf_file"
-    if [[ "$distro" == "ubuntu" ]]; then
-        mkdir -v -m 0755 -p "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman}
-    fi
-    "$_pacman" -Sy \
-        -r "$ROOTFS_DIR" \
-        --cachedir "/$PACMAN_REPO_DIR" \
-        --config "$_pacman_tmp_conf_file" \
-        --disable-sandbox \
-        --noconfirm \
-        "${pacman_pkgs[@]}" \
-    | tee "$LOG_DIR"/pacman.log
+    info "Install pacman packages..."
+    pacman_bootstrap "$ROOTFS_DIR" pacman_pkgs | tee "$LOG_DIR"/pacman.log
 
-    "$_pacman" -Q --sysroot "$ROOTFS_DIR" > "$ISOFS_DIR/$_pacman_pkglist"
+    pacman_get_installed_pkgs "$ROOTFS_DIR" > "$ISOFS_DIR/$_pacman_pkglist"
     if [[ -f "$ISOFS_DIR/$_pacman_pkglist" ]]; then
         cp -vf -- "$ISOFS_DIR/$_pacman_pkglist" "$PKGLIST_DIR/$_pacman_pkglist"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR/$_pacman_pkglist"
@@ -355,7 +332,7 @@ EOF
     mkdir -vp -- "$ROOTFS_DIR/$PACMAN_REPO_DIR"
     local _pkg
     for _pkg in "${pacman_pkgs[@]}"; do
-        local _pkg_file=$(get_pkg_file "$_pkg" "/$PACMAN_REPO_DIR")
+        local _pkg_file=$(pacman_get_pkg_file "$_pkg" "/$PACMAN_REPO_DIR")
         cp -vf -- "/$PACMAN_REPO_DIR/$_pkg_file" "$ROOTFS_DIR/$PACMAN_REPO_DIR"
         repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_FILE" "$ROOTFS_DIR/$PACMAN_REPO_DIR/$_pkg_file" \
             > "$LOG_DIR"/pacman-repo-add.log 2>&1
