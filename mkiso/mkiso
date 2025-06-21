@@ -91,8 +91,8 @@ noble_deb_pkgs=(
     systemd-resolved
 )
 questing_deb_pkgs=(
-    systemd-boot-efi
     systemd-boot
+    systemd-boot-efi
     systemd-resolved
 )
 ubuntu_pacman_pkgs=(
