@@ -358,6 +358,7 @@ checking for gethostname... yes
 checking for getitimer... yes
 checking for getloadavg... yes
 checking for getlogin... yes
+checking for getlogin_r... yes
 checking for getpeername... yes
 checking for getpgid... yes
 checking for getpid... yes
@@ -556,6 +557,8 @@ checking for sendto... yes
 checking for setsockopt... yes
 checking for socket... yes
 checking for setgroups... yes
+checking whether MAXLOGNAME is declared... no
+checking whether UT_NAMESIZE is declared... yes
 checking for openpty... yes
 checking for library containing login_tty... none required
 checking for forkpty... yes

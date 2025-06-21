@@ -1,11 +1,11 @@
 # Sample TOML configuration file for building Rust.
 #
 # To configure bootstrap, run `./configure` or `./x.py setup`.
-# See https://rustc-dev-guide.rust-lang.org/building/how-to-build-and-run.html#create-a-configtoml for more information.
+# See https://rustc-dev-guide.rust-lang.org/building/how-to-build-and-run.html#create-a-bootstraptoml for more information.
 #
 # All options are commented out by default in this file, and they're commented
 # out with their default values. The build system by default looks for
-# `config.toml` in the current directory of a build for build configuration, but
+# `bootstrap.toml` in the current directory of a build for build configuration, but
 # a custom configuration file can also be specified with `--config` to the build
 # system.
 
@@ -16,7 +16,7 @@
 # Use different pre-set defaults than the global defaults.
 #
 # See `src/bootstrap/defaults` for more information.
-# Note that this has no default value (x.py uses the defaults in `config.example.toml`).
+# Note that this has no default value (x.py uses the defaults in `bootstrap.example.toml`).
 #profile = <none>
 
 # Keeps track of major changes made to this configuration.
@@ -28,8 +28,9 @@
 #  - A new option
 #  - A change in the default values
 #
-# If `change-id` does not match the version that is currently running,
-# `x.py` will inform you about the changes made on bootstrap.
+# If the change-id does not match the version currently in use, x.py will 
+# display the changes made to the bootstrap.
+# To suppress these warnings, you can set change-id = "ignore".
 #change-id = <latest change id in src/bootstrap/src/utils/change_tracker.rs>
 
 # =============================================================================
@@ -164,6 +165,16 @@
 #build-config = {}
 
 # =============================================================================
+# Tweaking how GCC is compiled
+# =============================================================================
+[gcc]
+# Download GCC from CI instead of building it locally.
+# Note that this will attempt to download GCC even if there are local
+# modifications to the `src/gcc` submodule.
+# Currently, this is only supported for the `x86_64-unknown-linux-gnu` target.
+# download-ci-gcc = false
+
+# =============================================================================
 # General build configuration options
 # =============================================================================
 [build]
@@ -188,6 +199,17 @@
 
 # The default stage to use for the `bench` subcommand
 #bench-stage = 2
+
+# A descriptive string to be appended to version output (e.g., `rustc --version`),
+# which is also used in places like debuginfo `DW_AT_producer`. This may be useful for
+# supplementary build information, like distro-specific package versions.
+#
+# The Rust compiler will differentiate between versions of itself, including
+# based on this string, which means that if you wish to be compatible with
+# upstream Rust you need to set this to "". However, note that if you set this to "" but
+# are not actually compatible -- for example if you've backported patches that change
+# behavior -- this may lead to miscompilations or other bugs.
+#description = ""
 
 # Build triple for the pre-compiled snapshot compiler. If `rustc` is set, this must match its host
 # triple (see `rustc --version --verbose`; cross-compiling the rust build system itself is NOT
@@ -325,7 +347,7 @@
 # Enable a build of the extended Rust tool set which is not only the compiler
 # but also tools such as Cargo. This will also produce "combined installers"
 # which are used to install Rust and Cargo together.
-# The `tools` (check `config.example.toml` to see its default value) option specifies
+# The `tools` (check `bootstrap.example.toml` to see its default value) option specifies
 # which tools should be built if `extended = true`.
 #
 # This is disabled by default.
@@ -424,6 +446,10 @@
 # Set to `true` to use the first `ccache` in PATH, or set an absolute path to use
 # a specific version.
 #ccache = false
+
+# List of paths to exclude from the build and test processes.
+# For example, exclude = ["tests/ui", "src/tools/tidy"].
+#exclude = []
 
 # =============================================================================
 # General install configuration options
@@ -608,22 +634,12 @@
 
 # The "channel" for the Rust build to produce. The stable/beta channels only
 # allow using stable features, whereas the nightly and dev channels allow using
-# nightly features
+# nightly features.
 #
-# If using tarball sources, default value for `channel` is taken from the `src/ci/channel` file;
-# otherwise, it's "dev".
-#channel = if "is a tarball source" { content of `src/ci/channel` file } else { "dev" }
-
-# A descriptive string to be appended to `rustc --version` output, which is
-# also used in places like debuginfo `DW_AT_producer`. This may be useful for
-# supplementary build information, like distro-specific package versions.
+# You can set the channel to "auto-detect" to load the channel name from `src/ci/channel`.
 #
-# The Rust compiler will differentiate between versions of itself, including
-# based on this string, which means that if you wish to be compatible with
-# upstream Rust you need to set this to "". However, note that if you are not
-# actually compatible -- for example if you've backported patches that change
-# behavior -- this may lead to miscompilations or other bugs.
-#description = ""
+# If using tarball sources, default value is "auto-detect", otherwise, it's "dev".
+#channel = if "is a tarball source" { "auto-detect" } else { "dev" }
 
 # The root location of the musl installation directory. The library directory
 # will also need to contain libunwind.a for an unwinding implementation. Note
@@ -729,7 +745,8 @@
 #remap-debuginfo = false
 
 # Link the compiler and LLVM against `jemalloc` instead of the default libc allocator.
-# This option is only tested on Linux and OSX.
+# This option is only tested on Linux and OSX. It can also be configured per-target in the
+# [target.<tuple>] section.
 #jemalloc = false
 
 # Run tests in various test suites with the "nll compare mode" in addition to
@@ -792,12 +809,12 @@
 # C compiler to be used to compile C code. Note that the
 # default value is platform specific, and if not specified it may also depend on
 # what platform is crossing to what platform.
-# See `src/bootstrap/cc_detect.rs` for details.
+# See `src/bootstrap/src/utils/cc_detect.rs` for details.
 #cc = "cc" (path)
 
 # C++ compiler to be used to compile C++ code (e.g. LLVM and our LLVM shims).
 # This is only used for host targets.
-# See `src/bootstrap/cc_detect.rs` for details.
+# See `src/bootstrap/src/utils/cc_detect.rs` for details.
 #cxx = "c++" (path)
 
 # Archiver to be used to assemble static libraries compiled from C/C++ code.
@@ -926,6 +943,10 @@
 # Setting this to `false` generates slower code, but removes the requirement for a C toolchain in
 # order to run `x check`.
 #optimized-compiler-builtins = build.optimized-compiler-builtins (bool)
+
+# Link the compiler and LLVM against `jemalloc` instead of the default libc allocator.
+# This overrides the global `rust.jemalloc` option. See that option for more info.
+#jemalloc = rust.jemalloc (bool)
 
 # =============================================================================
 # Distribution options

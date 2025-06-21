@@ -1,5 +1,5 @@
--- The C compiler identification is Clang 20.1.4
--- The CXX compiler identification is Clang 20.1.4
+-- The C compiler identification is Clang 20.1.6
+-- The CXX compiler identification is Clang 20.1.6
 -- The ASM compiler identification is Clang with GNU-like command-line
 -- Found assembler: /opt/bin/clang
 -- Detecting C compiler ABI info
@@ -205,14 +205,14 @@
 -- Looking for logf128
 -- Looking for logf128 - not found
 -- Targeting X86
--- LLD version: 20.1.6
+-- LLD version: 20.1.7
 -- Looking for sys/resource.h
 -- Looking for sys/resource.h - found
 -- Looking for dlfcn.h
 -- Looking for dlfcn.h - found
 -- Looking for dladdr
 -- Looking for dladdr - found
--- Clang version: 20.1.6
+-- Clang version: 20.1.7
 -- Looking for include file sys/inotify.h
 -- Looking for include file sys/inotify.h - found
 -- Performing Test HAVE_LINKER_FLAG_LONG_PLT

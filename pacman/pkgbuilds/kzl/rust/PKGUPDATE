@@ -6,5 +6,5 @@ build_system=
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$srcdir"
     ./configure --help > "$PKGBUILDDIR"/help.txt
-    cp -v config.example.toml "$PKGBUILDDIR"/
+    cp -v -- bootstrap.example.toml "$PKGBUILDDIR"/
 }

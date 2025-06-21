@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=llvm-project
-pkgver=20.1.6
+pkgver=20.1.7
 pkgrel=1
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
@@ -11,7 +11,7 @@ license=('KZL')
 source=(
   git+https://github.com/llvm/llvm-project.git#tag=llvmorg-$pkgver
 )
-sha256sums=('ce90699eb79f788031e5bc40629c8226f27a3786fc2c9174652c38f8683a3762')
+sha256sums=('79cfde7b151f2a9810a4de23e1ce9e2c1100bafe1ec4e200ef6f598834860a17')
 
 # https://releases.llvm.org/20.1.0/docs/CMake.html
 

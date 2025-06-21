@@ -1,15 +1,15 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=python
-pkgver=3.13.3
-pkgrel=4
+pkgver=3.13.5
+pkgrel=1
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
 url="https://www.python.org/"
 license=('KZL')
 source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
-sha256sums=('b382e0a97ca580b5139b0cc3e454a3364252106c6b5aeca4100f0c83e7df4c93')
+sha256sums=('d1239f0dda2c5b231f093fc81a88b01dd34d596628cbca848dad034720f57950')
 
 build() {
   cd cpython

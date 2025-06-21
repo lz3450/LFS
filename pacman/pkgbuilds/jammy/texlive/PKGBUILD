@@ -22,7 +22,7 @@ source=(
   $pkgname.install
 )
 # noextract=(texlive-$_texmfver-texmf.tar.xz)
-sha256sums=('1e9fea07932be25e47b56ed219cc2d7f4f591bb2655bb686a70781b3c566253f'
+sha256sums=('8b64357f843a946d02f7f0c1dd3504ee4944a43eda8b21de3ba8c3a9088ea02c'
             'SKIP'
             '6969990f00e03a802f08806a055b817b8e0c80f967ab34ff9047fc1dc8fc0253'
             '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')

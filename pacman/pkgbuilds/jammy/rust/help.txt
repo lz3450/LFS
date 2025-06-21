@@ -115,10 +115,12 @@ Options
 	--musl-root-mipsel=VAL         mipsel-unknown-linux-musl install directory
 	--musl-root-mips64=VAL         mips64-unknown-linux-muslabi64 install directory
 	--musl-root-mips64el=VAL       mips64el-unknown-linux-muslabi64 install directory
+	--musl-root-powerpc64=VAL      powerpc64-unknown-linux-musl install directory
 	--musl-root-powerpc64le=VAL    powerpc64le-unknown-linux-musl install directory
 	--musl-root-riscv32gc=VAL      riscv32gc-unknown-linux-musl install directory
 	--musl-root-riscv64gc=VAL      riscv64gc-unknown-linux-musl install directory
 	--musl-root-loongarch64=VAL    loongarch64-unknown-linux-musl install directory
+	--musl-root-wali-wasm32=VAL    wasm32-wali-linux-musl install directory
 	--qemu-armhf-rootfs=VAL        rootfs in qemu testing, you probably don't want to use this
 	--qemu-aarch64-rootfs=VAL      rootfs in qemu testing, you probably don't want to use this
 	--qemu-riscv64-rootfs=VAL      rootfs in qemu testing, you probably don't want to use this
@@ -146,8 +148,8 @@ Options
 	--set=VAL                      set arbitrary key/value pairs in TOML configuration
 
 This configure script is a thin configuration shim over the true
-configuration system, `config.toml`. You can explore the comments
-in `config.example.toml` next to this configure script to see
+configuration system, `bootstrap.toml`. You can explore the comments
+in `bootstrap.example.toml` next to this configure script to see
 more information about what each option is. Additionally you can
 pass `--set` as an argument to set arbitrary key/value pairs
 in the TOML configuration if desired
