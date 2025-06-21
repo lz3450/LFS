@@ -224,7 +224,7 @@ bootstrap_rootfs() {
     fi
 }
 
-configure_img() {
+configure_rootfs() {
     info "Downloading RPi firmware..."
     local _firmware_version=$(git ls-remote --tags https://github.com/raspberrypi/firmware.git | grep -oP '(?<=refs/tags/)1.\d{8}$' | sort -V | tail -n1)
     local _firmware_dir="$WORK_DIR/firmware-$_firmware_version"
@@ -411,7 +411,7 @@ else
     format_img
     mount_img
     bootstrap_rootfs
-    configure_img
+    configure_rootfs
     mv -v -- "$IMG_FILE" "$SCRIPT_DIR/$img_file"
     log_cyan "Successfully made Raspberry Pi image: $img_file"
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/$img_file"
