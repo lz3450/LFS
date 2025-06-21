@@ -214,7 +214,6 @@ libunistring5
 liburcu8t64
 libuuid1
 libwrap0
-libxml2
 libxml2-16
 libxtables12
 libxxhash0
