@@ -46,3 +46,5 @@ _warn() {
 _error() {
     error "${1:-}" "${2:-}" "${BASH_SOURCE[0]##*/}"
 }
+
+debug "${BASH_SOURCE[0]} sourced"
