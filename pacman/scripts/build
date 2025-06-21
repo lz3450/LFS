@@ -21,11 +21,7 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 . "$SCRIPT_DIR"/lib/pacman.sh
 
 ### constants & variables
-VERSION="1.0"
-
 LOG_DIR="$HOME"/makepkg/log
-
-. "$SCRIPT_DIR"/pkglists.sh
 
 ### options and arguments
 arg_repo=""
@@ -39,23 +35,26 @@ declare -i opt_no_check=0
 
 repo_pkgbuilds_dirs=()
 
+### domain specific libraries
+. "$SCRIPT_DIR"/pkglists.sh
+
 ### functions
 prepare() {
     local _log="$LOG_DIR/prepare.log"
 
     mkdir -p -- "$LOG_DIR"
 
-    info "Removing pacman cache and database..."
+    info "Cleaning pacman cache and database..."
     sudo pacman -Scc --noconfirm
-    info "Done"
+    info "Done (Cleaned pacman cache and database)"
 
-    info "Updating pacman database..."
+    info "Updating repo..."
     updaterepo -r "$arg_repo" 2>&1 | tee -a "$_log"
-    info "Done"
+    info "Done (Updated repo)"
 
     info "Synchronizing package databases..."
     sudo pacman -Syy --noconfirm
-    info "Done"
+    info "Done (Synchronized package databases)"
 }
 
 _get_pkg_dir() {
@@ -96,7 +95,7 @@ build() {
     if [[ -f "install-dependencies.sh" ]]; then
         info "Running install-dependencies.sh..."
         ./install-dependencies.sh >> "$_log" 2>&1
-        info "Done"
+        info "Done (install-dependencies.sh)"
     fi
 
     # update pkgbuild
@@ -124,13 +123,13 @@ build() {
 
         if (( $opt_updated_only > 0 )) && (( $_updated == 0 || $_updated == 255 )); then
             # Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)
-            info "Skip"
+            info "Skip building"
             return
         fi
         if (( $_updated == 0 )); then
             updatepkg -I >> "$_log" 2>&1
         fi
-        info "Done"
+        info "Done (PKGBUILD updated)"
     fi
 
     info "Building package..."
@@ -142,19 +141,19 @@ build() {
     fi
 
     makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm >> "$_log" 2>&1
-    info "Done"
+    info "Done (Built package)"
 
     info "Getting package configuration log..."
         sed -n '/^  -> Configuring...$/,/^  -> Compiling...$/{/^  -> Configuring...$/b;/^  -> Compiling...$/b;p}' "$_log" > config.txt
         if [[ ! -s "config.txt" ]]; then
             rm config.txt
         fi
-    info "Done"
+    info "Done (Got package configuration log)"
 
     info "Updating repo..."
     updaterepo -r "$arg_repo" >> "$_log" 2>&1
     sudo pacman -Sy 2>&1 | tee -a "$_log"
-    info "Done"
+    info "Done (Updated repo)"
 
     if (( $opt_install > 0 )); then
         info "Installing package..."
@@ -163,19 +162,17 @@ build() {
         sudo pacman -S --noconfirm ${_pkgnames[@]} 2>&1 | tee -a "$_log"
         echo "Package Contents:" >> "$_log" 2>&1
         pacman -Ql "${_pkgnames[@]}" >> "$_log" 2>&1
-        info "Done"
+        info "Done (Installed package)"
     fi
 }
 
 usage() {
     cat << EOF
 
-Usage: $SCRIPT_NAME -V | --version
 Usage: $SCRIPT_NAME -h | --help
 Usage: $SCRIPT_NAME [ --no-updatepkg | --updated-only ] [ --no-check ] [ --no-clean ] -r <repo>  -s <stage> | -p <pkgname> [ --install ]
 Usage: $SCRIPT_NAME [ -n | -u ] [ --no-check ] [ --no-clean ] -r <repo> -s <stage> | -p <pkgname> [ -i ]
 
-    -V, --version               display version information and exit
     -h, --help                  display this help message and exit
     -r, --repo                  target repository (kzl, jammy, noble, ...)
     -s, --stage                 target stage (0, 1(default), 2, 3; some repo are not using this)
@@ -212,7 +209,7 @@ while (( $# > 0 )); do
     -n|--no-updatepkg)
         opt_updatepkg=0
         ;;
-    -u|--build-only-updated)
+    -u|--updated-only)
         opt_updated_only=1
         ;;
     --no-clean)
