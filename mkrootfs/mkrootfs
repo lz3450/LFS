@@ -24,6 +24,7 @@ __DEBUG__=1
 . "$SCRIPT_DIR"/lib/utils.sh
 . "$SCRIPT_DIR"/lib/loop.sh
 . "$SCRIPT_DIR"/lib/chroot.sh
+. "$SCRIPT_DIR"/lib/deb.sh
 
 ### checks
 check_root
@@ -91,17 +92,17 @@ cleanup() {
     set +e
 
     if [[ -d "$WORK_DIR" ]]; then
-        info "Cleaning up..."
+        log_magenta "Cleaning up..."
         chroot_teardown
 
         local _answer
         read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
         if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
-            info "Removing working directory: $WORK_DIR"
+            log_magenta "Removing working directory: $WORK_DIR"
             rm -rf --one-file-system -- "$WORK_DIR"
-            info "Done (Removed working directory)"
+            log_magenta "Done (Removed working directory)"
         fi
-        info "Done (Cleaned up)"
+        log_magenta "Done (Cleaned up)"
     fi
 
     trap - EXIT SIGINT SIGTERM SIGKILL
@@ -148,7 +149,7 @@ _debootstrap_rootfs() {
         "$arg_suite" \
         "$ROOTFS_DIR" \
         "$deb_mirror" \
-        2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -n  | sed '/^$/d' > "$_deb_pkg_to_install" || warn "Failed to creating the list of deb packages to be installed"
+        2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -n  | sed '/^$/d' > "$_deb_pkg_to_install"
     info "Done (Made the list of installed deb packages)"
 
     info "Debootstrapping \"$ROOTFS_DIR/\"..."
@@ -172,7 +173,7 @@ _debootstrap_rootfs() {
     fi
     info "Done (Debootstrapped rootfs)"
 
-    info "Setting up sources.list..."
+    info "Configuring rootfs..."
     if [[ -f "$ROOTFS_DIR/etc/apt/sources.list" ]]; then
         mv -v -- "$ROOTFS_DIR/etc/apt/sources.list" "$ROOTFS_DIR/etc/apt/sources.list.bak"
     fi
@@ -182,21 +183,11 @@ _debootstrap_rootfs() {
     else
         sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/$distro.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/$distro.sources"
     fi
-    info "Done (Set up sources.list)"
 
-    info "Running chroot configuration..."
-    chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment" 3
-    # apt-get
-    chroot_run "$ROOTFS_DIR" apt-get update || error "Failed to run apt-get update" 3
-    chroot_run "$ROOTFS_DIR" apt-get upgrade -y || error "Failed to run apt-get upgrade" 3
-    chroot_run "$ROOTFS_DIR" apt-get install --no-install-recommends -y "${additional_deb_pkgs[@]}" || error "Failed to run apt-get install" 3
-    chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y || error "Failed to run apt-get autoremove" 3
-    chroot_run "$ROOTFS_DIR" dpkg-reconfigure locales || warn "Failed to run dpkg-reconfigure locales"
-    chroot_run "$ROOTFS_DIR" dpkg-reconfigure tzdata || warn "Failed to run dpkg-reconfigure tzdata"
-    # get installed deb packages
-    chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$_deb_pkgs_installed" || warn "Failed to get the list of installed deb packages"
-    chroot_teardown
-    info "Done (Chroot configuration)"
+    deb_apt "$ROOTFS_DIR" additional_deb_pkgs > "$LOG_DIR/apt.log"
+    deb_set_locale "$ROOTFS_DIR"
+    deb_get_installed_pkgs "$ROOTFS_DIR" > "$_deb_pkgs_installed"
+    info "Done (Configured rootfs)"
 
     info "Cleaning up rootfs..."
     clean_rootfs "$ROOTFS_DIR" > "$LOG_DIR/clean_rootfs.log"
