@@ -25,6 +25,7 @@ __DEBUG__=1
 . "$SCRIPT_DIR"/lib/chroot.sh
 . "$SCRIPT_DIR"/lib/loop.sh
 . "$SCRIPT_DIR"/lib/pacman.sh
+. "$SCRIPT_DIR"/lib/deb.sh
 
 ### checks
 check_root
@@ -119,7 +120,7 @@ cleanup() {
     set +e
 
     if [[ -d "$WORK_DIR" ]]; then
-        info "Cleaning up..."
+        log_magenta "Cleaning up..."
         chroot_teardown
 
         sync
@@ -134,11 +135,11 @@ cleanup() {
         local _answer
         read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
         if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
-            info "Removing working directory: $WORK_DIR"
+            log_magenta "Removing working directory: $WORK_DIR"
             rm -rf --one-file-system -- "$WORK_DIR"
-            info "Done (Removed working directory)"
+            log_magenta "Done (Removed working directory)"
         fi
-        info "Done (Cleaned up)"
+        log_magenta "Done (Cleaned up)"
     fi
 
     trap - EXIT SIGINT SIGTERM SIGKILL
@@ -175,26 +176,19 @@ bootstrap_rootfs() {
         > "$LOG_DIR/tar.log"
     info "Done (Extracted root filesystem)"
 
-    ###
     if [[ "$distro" == "ubuntu" ]]; then
-        info "Install deb packages: ${deb_pkgs[*]}"
-        chroot_setup "$ROOTFS_DIR" || error "Failed to setup chroot environment for installing deb packages" 2
-        chroot_run "$ROOTFS_DIR" apt-get update > "$LOG_DIR/apt-get-update.log" || error "Failed to run apt-get update" 2
-        chroot_run "$ROOTFS_DIR" apt-get upgrade -y > "$LOG_DIR/apt-get-upgrade.log" || error "Failed to run apt-get upgrade" 2
-        chroot_run "$ROOTFS_DIR" apt-get install --no-install-recommends -y "${deb_pkgs[@]}" > "$LOG_DIR/apt-get-install.log" || error "Failed to install packages" 2
-        chroot_run "$ROOTFS_DIR" apt-get autoremove --purge -y > "$LOG_DIR/apt-get-autoremove.log" || error "Failed to run apt-get autoremove" 2
-        chroot_run "$ROOTFS_DIR" dpkg-query -W -f='${Package}\n' > "$ISOFS_DIR/$_deb_pkglist" || warn "Failed to create a list of installed deb packages"
+        info "Install deb packages..."
+        deb_apt "$ROOTFS_DIR" deb_pkgs > "$LOG_DIR/apt.log"
+        deb_get_installed_pkgs "$ROOTFS_DIR" > "$ISOFS_DIR/$_deb_pkglist"
         if [[ -f "$ISOFS_DIR/$_deb_pkglist" ]]; then
             cp -vf -- "$ISOFS_DIR/$_deb_pkglist" "$PKGLIST_DIR/$_deb_pkglist"
             chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR/$_deb_pkglist"
         fi
-        chroot_teardown || error "Failed to teardown chroot environment for installing deb packages" 2
         info "Done (Installed deb packages)"
     fi
 
     ###
     info "Install pacman packages: ${pacman_pkgs[*]}"
-    # pacstrap -c -G -M -- "$ROOTFS_DIR" "${pacman_pkgs[@]}" >"$LOG_DIR"/pacstrap.log 2>&1 || error "Failed to pacstrap packages" 5
     local _pacman
     local _pacman_config
     local _pacman_tmp_conf_file="$WORK_DIR/pacman_$TIMESTAMP.conf"
@@ -218,9 +212,9 @@ bootstrap_rootfs() {
         --disable-sandbox \
         --noconfirm \
         "${pacman_pkgs[@]}" \
-    | tee "$LOG_DIR"/pacman.log || error "Failed to install pacman packages" 3
+    | tee "$LOG_DIR"/pacman.log
 
-    "$_pacman" -Q --sysroot "$ROOTFS_DIR" > "$ISOFS_DIR/$_pacman_pkglist" || warn "Failed to creating a list of installed pacman packages"
+    "$_pacman" -Q --sysroot "$ROOTFS_DIR" > "$ISOFS_DIR/$_pacman_pkglist"
     if [[ -f "$ISOFS_DIR/$_pacman_pkglist" ]]; then
         cp -vf -- "$ISOFS_DIR/$_pacman_pkglist" "$PKGLIST_DIR/$_pacman_pkglist"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR/$_pacman_pkglist"
@@ -261,7 +255,7 @@ make_imgs() {
 mount_imgs() {
     info "Mounting mutable image \"$MUTABLE_IMG\" to \"$ROOTFS_DIR/home\"..."
     mount -v -t f2fs -o loop -- "$MUTABLE_IMG" "$ROOTFS_DIR/home"
-    mountpoint -q -- "$ROOTFS_DIR/home" || error "MUTABLE directory not mounted: $ROOTFS_DIR/home" 4
+    mountpoint -q -- "$ROOTFS_DIR/home" || error "MUTABLE directory not mounted: $ROOTFS_DIR/home" 2
     info "Done (Mounted mutable image)"
 
     local _efi_dir="$ROOTFS_DIR/boot"
@@ -269,8 +263,8 @@ mount_imgs() {
         _efi_dir="$ROOTFS_DIR/boot/efi"
     fi
     info "Mounting EFI boot image \"$EFIBOOT_IMG\" to \"$_efi_dir\"..."
-    mount -v -t vfat -o loop -- "$EFIBOOT_IMG" "$_efi_dir" || error "Failed to mount EFI boot image" 4
-    mountpoint -q -- "$_efi_dir" || error "EFI directory not mounted: $_efi_dir" 4
+    mount -v -t vfat -o loop -- "$EFIBOOT_IMG" "$_efi_dir"
+    mountpoint -q -- "$_efi_dir" || error "EFI directory not mounted: $_efi_dir" 2
     info "Done (Mounted EFI boot image)"
 }
 
@@ -312,8 +306,8 @@ configure_rootfs() {
     # hostname
     echo "LiveOS" > "$ROOTFS_DIR"/etc/hostname
     # shadow and passwd
-    sed -i -e 's/^root:[^:]*:/root::/' "$ROOTFS_DIR"/etc/shadow
-    sed -i -e '/^root/s|/bin/bash|/bin/zsh|' "$ROOTFS_DIR"/etc/passwd
+    sed -i 's/^root:[^:]*:/root::/' "$ROOTFS_DIR"/etc/shadow
+    sed -i '/^root/s|/bin/bash|/bin/zsh|' "$ROOTFS_DIR"/etc/passwd
     # issue and motd
     printf '%s Live OS \\n (\\s \\m \\r) \\t \\l\n\n' "$iso_name" > "$ROOTFS_DIR"/etc/issue
     printf 'Welcome to %s live OS!\n\n' "$iso_name" > "$ROOTFS_DIR"/etc/motd
@@ -338,15 +332,17 @@ configure_rootfs() {
     cp -vf -- "$ROOTFS_DIR/etc/ssh/sshd_config" "$CONFIG_DIR"
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$CONFIG_DIR/sshd_config"
     # systemd
-    chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment for configuring rootfs" 5
-    chroot_run "$ROOTFS_DIR" systemctl enable systemd-networkd.service
-    chroot_run "$ROOTFS_DIR" systemctl enable systemd-resolved.service
     local _ssh_service="sshd.service"
     if [[ "$distro" == "ubuntu" ]]; then
         _ssh_service="ssh.service"
     fi
-    chroot_run "$ROOTFS_DIR" systemctl enable "$_ssh_service"
-    chroot_teardown || error "Failed to teardown chroot environment for configuring rootfs" 5
+    chroot_setup "$ROOTFS_DIR"
+    chroot_run "$ROOTFS_DIR" /bin/bash -e -u -o pipefail -s <<EOF
+systemctl enable systemd-networkd.service
+systemctl enable systemd-resolved.service
+systemctl enable $_ssh_service
+EOF
+    chroot_teardown
     # grml-zsh-config
     wget -O "$ROOTFS_DIR"/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc 2>&1 > /dev/null
     echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR"/root/.zshrc
@@ -362,7 +358,7 @@ configure_rootfs() {
         local _pkg_file=$(get_pkg_file "$_pkg" "/$PACMAN_REPO_DIR")
         cp -vf -- "/$PACMAN_REPO_DIR/$_pkg_file" "$ROOTFS_DIR/$PACMAN_REPO_DIR"
         repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_FILE" "$ROOTFS_DIR/$PACMAN_REPO_DIR/$_pkg_file" \
-            > "$LOG_DIR"/pacman-repo-add.log 2>&1 || error "Failed to set up pacman repository" 6
+            > "$LOG_DIR"/pacman-repo-add.log 2>&1
     done
     info "Done (Set up pacman repository)"
 
@@ -417,8 +413,8 @@ configure_rootfs() {
 
 umount_imgs() {
     info "Unmounting MUTABLE image \"$MUTABLE_IMG\" from \"$ROOTFS_DIR/home\"..."
-    umount -v -- "$ROOTFS_DIR/home" || error "Failed to unmount mutable image" 4
-    mountpoint -q -- "$ROOTFS_DIR/home" && error "MUTABLE image is still mounted" 4
+    umount -v -- "$ROOTFS_DIR/home"
+    mountpoint -q -- "$ROOTFS_DIR/home" && error "MUTABLE image is still mounted" 2
     info "Done (Unmounted mutable image)"
 
     local _efi_dir="$ROOTFS_DIR/boot"
@@ -426,8 +422,8 @@ umount_imgs() {
         _efi_dir="$ROOTFS_DIR/boot/efi"
     fi
     info "Unmounting EFI boot image \"$EFIBOOT_IMG\" from \"$_efi_dir\"..."
-    umount -v -- "$_efi_dir" || error "Failed to unmount EFI boot image" 4
-    mountpoint -q -- "$_efi_dir" && error "EFI image is still mounted" 4
+    umount -v -- "$_efi_dir"
+    mountpoint -q -- "$_efi_dir" && error "EFI image is still mounted" 2
     info "Done (Unmounted EFI boot image)"
 }
 
@@ -457,7 +453,7 @@ make_iso_image() {
         -appended_part_as_gpt \
         -no-pad \
         -output "$OUT_DIR/$iso_file" \
-        "$ISOFS_DIR/" > "$LOG_DIR"/xorriso.log 2>&1 || error "Failed to create ISO image" 7
+        "$ISOFS_DIR/" > "$LOG_DIR"/xorriso.log 2>&1
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$iso_file"
     info "Done (Made ISO image)"
 }
@@ -560,12 +556,7 @@ epilogue
 
 ### error codes
 # 1: general error
-# 2: deb packages
-# 3: pacman packages
-# 4: image mounting/unmounting
-# 5: rootfs general configuration
-# 6: pacman repository setup
-# 7: ISO image creation
+# 2: image mounting/unmounting
 # 127: command not found
 # 128: unknown option or invalid argument
 # 255: must be run as root
