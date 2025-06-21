@@ -125,7 +125,8 @@ make_work_dirs() {
 
 _debootstrap_rootfs() {
     local -r _deb_pkg_to_install="$PKGLIST_DIR/$arg_arch-$arg_suite-debootstrap-pkgs.txt"
-    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkg_to_install"
+    local -r _deb_pkgs_installed="$PKGLIST_DIR/$arg_arch-$arg_suite-rootfs-pkgs.txt"
+    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkg_to_install" "$_deb_pkgs_installed"
 
     local _include=""
     if (( ${#included_deb_pkgs[@]} > 0 )); then
@@ -170,50 +171,6 @@ _debootstrap_rootfs() {
         chroot "$ROOTFS_DIR" /debootstrap/debootstrap --second-stage >> "$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap (stage 2) rootfs" 3
     fi
     info "Done (Debootstrapped rootfs)"
-}
-
-# _mmdebstrap_rootfs() {
-#     local _deb_pkglist="${arg_suite}_deb_pkglist.txt"
-#     sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkglist"
-
-#     info "mmdebstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
-#     mmdebstrap \
-#         --variant=- \
-#         --mode=root \
-#         --format=directory \
-#         --dpkgopt='path-exclude=/usr/share/doc/*' \
-#         --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
-#         --architectures=arm64 \
-#         "$arg_suite" \
-#         "$ROOTFS_DIR" \
-#         "${deb_mirrors[@]}" \
-#         2>&1 | tee "$LOG_DIR/mmdebstrap.log" || error "Failed to mmdebstrap rootfs" 8
-#     info "Done (mmdebstrapped rootfs)"
-# }
-
-# _pacstrap_rootfs() {
-#     local -r _pkg_list="$PKGLIST_DIR/$arg_arch-pacstrap-pkgs.txt"
-#     sudo -u "${SUDO_USER:-root}" touch -- "$_pkg_list"
-
-#     mkdir -v -m 0755 -p "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman,log} "$ROOTFS_DIR"/{dev,run,etc/pacman.d}
-#     mkdir -v -m 1777 -p "$ROOTFS_DIR"/tmp
-#     mkdir -v -m 0555 -p "$ROOTFS_DIR"/{sys,proc}
-# }
-
-bootstrap_rootfs() {
-    if [[ "$distro" == "debian" || "$distro" == "ubuntu" ]]; then
-        _debootstrap_rootfs
-        # _mmdebstrap_rootfs
-    elif [[ "$distro" == "kzl-linux" ]]; then
-        _pacstrap_rootfs
-    else
-        error "Unsupported distribution: $distro" 1
-    fi
-}
-
-_deb_configure_rootfs() {
-    local -r _deb_pkgs_installed="$PKGLIST_DIR/$arg_arch-$arg_suite-rootfs-pkgs.txt"
-    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkgs_installed"
 
     info "Setting up sources.list..."
     if [[ -f "$ROOTFS_DIR/etc/apt/sources.list" ]]; then
@@ -249,15 +206,42 @@ _deb_configure_rootfs() {
     info "Done (Cleaned up rootfs)"
 }
 
-_pacman_configure_rootfs() {
+_mmdebstrap_rootfs() {
+    # local _deb_pkglist="${arg_suite}_deb_pkglist.txt"
+    # sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkglist"
+
+    # info "mmdebstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
+    # mmdebstrap \
+    #     --variant=- \
+    #     --mode=root \
+    #     --format=directory \
+    #     --dpkgopt='path-exclude=/usr/share/doc/*' \
+    #     --include="$(IFS=',' echo "${deb_pkgs[*]}")" \
+    #     --architectures=arm64 \
+    #     "$arg_suite" \
+    #     "$ROOTFS_DIR" \
+    #     "${deb_mirrors[@]}" \
+    #     2>&1 | tee "$LOG_DIR/mmdebstrap.log" || error "Failed to mmdebstrap rootfs" 8
+    # info "Done (mmdebstrapped rootfs)"
     error "Not implemented yet" 1
 }
 
-configure_rootfs() {
+_pacstrap_rootfs() {
+    # local -r _pkg_list="$PKGLIST_DIR/$arg_arch-pacstrap-pkgs.txt"
+    # sudo -u "${SUDO_USER:-root}" touch -- "$_pkg_list"
+
+    # mkdir -v -m 0755 -p "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman,log} "$ROOTFS_DIR"/{dev,run,etc/pacman.d}
+    # mkdir -v -m 1777 -p "$ROOTFS_DIR"/tmp
+    # mkdir -v -m 0555 -p "$ROOTFS_DIR"/{sys,proc}
+    error "Not implemented yet" 1
+}
+
+bootstrap_rootfs() {
     if [[ "$distro" == "debian" || "$distro" == "ubuntu" ]]; then
-        _deb_configure_rootfs
+        _debootstrap_rootfs
+        # _mmdebstrap_rootfs
     elif [[ "$distro" == "kzl-linux" ]]; then
-        _pacman_configure_rootfs
+        _pacstrap_rootfs
     else
         error "Unsupported distribution: $distro" 1
     fi
@@ -359,7 +343,6 @@ prologue
 
 make_work_dirs
 bootstrap_rootfs
-configure_rootfs
 make_rootfs_tarball
 
 log_cyan "Successfully made rootfs tarball: $tarball_file"
