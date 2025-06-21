@@ -5,11 +5,11 @@
 
 ################################################################################
 
-if [[ -v __LIBMKROOTFS__ ]]; then
+if [[ -v __LIBTEMPLATE__ ]]; then
     return
 fi
 
-declare -r __LIBMKROOTFS__="libtemplate.sh"
+declare -r __LIBTEMPLATE__="libtemplate.sh"
 
 ################################################################################
 
@@ -28,9 +28,21 @@ if [[ -z "$required" ]]; then
 fi
 
 ### libraries
-. log.sh
-. utils.sh
-# . chroot.sh
-# . loop.sh
+LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
+. "$LIBDIR"/log.sh
+. "$LIBDIR"/utils.sh
+# . "$LIBDIR"/chroot.sh
+# . "$LIBDIR"/loop.sh
+# . "$LIBDIR"/pacman.sh
+# . "$LIBDIR"/deb.sh
 
 ### functions
+_info () {
+    info "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
+_warn() {
+    warn "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
+_error() {
+    error "${1:-}" "${2:-}" "${BASH_SOURCE[0]##*/}"
+}
