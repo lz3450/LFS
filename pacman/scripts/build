@@ -72,7 +72,7 @@ _get_pkg_dir() {
 
 build() {
     local _pkgname="$1"
-    local _pkgbase=$(get_pkgbase "$_pkgname")
+    local _pkgbase=$(pacman_get_pkgbase "$_pkgname")
     local _log
     local -i _updated=0
     local _cleanbuild='-C'
@@ -157,7 +157,7 @@ build() {
 
     if (( $opt_install > 0 )); then
         info "Installing package..."
-        local -a _pkgnames=($(get_pkgnames "$_pkgname"))
+        local -a _pkgnames=($(pacman_get_pkgnames "$_pkgname"))
         # sudo pacman -Sddy --noconfirm --overwrite "*" "${_pkgnames[@]}" --config $pacman_conf >> "$_log" 2>&1
         sudo pacman -S --noconfirm ${_pkgnames[@]} 2>&1 | tee -a "$_log"
         echo "Package Contents:" >> "$_log" 2>&1

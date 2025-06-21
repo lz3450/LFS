@@ -33,7 +33,7 @@ declare -i opt_clear=0
 ### functions
 update() {
     local _pkg="$1"
-    local _pkg_file="$(get_pkg_file "$_pkg" "$PACKAGE_DIR")"
+    local _pkg_file="$(pacman_get_pkg_file "$_pkg" "$PACKAGE_DIR")"
 
     mkdir -p -- "$ARCHIVE_DIR"
 
@@ -151,7 +151,7 @@ fi
 
 for pkgbase in "${pkgs[@]}"; do
     info "Updating $pkgbase..."
-    for pkgname in $(get_pkgnames "$pkgbase"); do
+    for pkgname in $(pacman_get_pkgnames "$pkgbase"); do
         update "$pkgname"
     done
 done
