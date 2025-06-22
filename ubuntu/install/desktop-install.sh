@@ -13,6 +13,7 @@ fi
 common_deb_pkgs=(
   ### depends
   fonts-dejavu-core
+  gdm3
   gnome-shell
   gnome-shell-extension-appindicator
   gnome-shell-extension-desktop-icons-ng

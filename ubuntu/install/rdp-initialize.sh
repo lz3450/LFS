@@ -7,7 +7,7 @@ set -e
 
 . /etc/os-release
 
-CERT_DIR=$HOME/.config/gnome-remote-desktop/certificates
+CERT_DIR="$HOME"/.config/gnome-remote-desktop/certificates
 KEY="$CERT_DIR"/grd-tls.key
 CSR="$CERT_DIR"/grd-tls.csr
 CRT="$CERT_DIR"/grd-tls.crt
@@ -16,8 +16,7 @@ sudo nano /etc/gdm3/custom.conf
 if [[ $UBUNTU_CODENAME == "noble" ]]; then
     sudo systemctl disable gnome-remote-desktop.service
 fi
-systemctl --user enable gnome-remote-desktop.service
-systemctl --user start gnome-remote-desktop.service
+systemctl --user enable --now gnome-remote-desktop.service
 
 if [[ ! -d  "$CERT_DIR" ]]; then
     mkdir -p "$CERT_DIR"
@@ -33,7 +32,9 @@ grdctl rdp disable-view-only
 
 ./../scripts/unlock_remote_desktop.sh
 read -r -s -p "Enter rdp username: " username
+echo
 read -r -s -p "Enter rdp password: " password
+echo
 grdctl rdp set-credentials "$username" "$password"
 grdctl status --show-credentials
 
