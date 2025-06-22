@@ -314,7 +314,7 @@ configure_rootfs() {
         _ssh_service="ssh.service"
     fi
     chroot_setup "$ROOTFS_DIR"
-    chroot_run "$ROOTFS_DIR" /bin/bash -e -u -o pipefail -s <<EOF
+    chroot_run "$ROOTFS_DIR" /bin/bash -e -u -o pipefail -s << EOF
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
 systemctl enable $_ssh_service
@@ -322,8 +322,8 @@ EOF
     chroot_teardown
     # grml-zsh-config
     wget -O "$ROOTFS_DIR"/root/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc 2>&1 > /dev/null
-    echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR"/root/.zshrc
-    echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR"/root/.zshrc
+    echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR"/root/.zshrc
+    echo '. /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR"/root/.zshrc
 
     info "Done (Configured root filesystem)"
 
