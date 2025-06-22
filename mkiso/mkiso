@@ -203,7 +203,7 @@ bootstrap_rootfs() {
 make_imgs() {
     info "Making mutable image \"$MUTABLE_IMG\"..."
     rm -vf -- "$MUTABLE_IMG"
-    fallocate -l 1GiB "$MUTABLE_IMG"
+    fallocate -l 256MiB "$MUTABLE_IMG"
     # mkfs.ext4 -L "MUTABLE" "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable-img.log 2>&1
     mkfs.f2fs -f -l MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
     info "Done (Made mutable image)"
@@ -286,8 +286,21 @@ configure_rootfs() {
     sed -i 's/^root:[^:]*:/root::/' "$ROOTFS_DIR"/etc/shadow
     sed -i '/^root/s|/bin/bash|/bin/zsh|' "$ROOTFS_DIR"/etc/passwd
     # issue and motd
-    printf '%s Live OS \\n (\\s \\m \\r) \\t \\l\n\n' "$iso_name" > "$ROOTFS_DIR"/etc/issue
-    printf 'Welcome to %s live OS!\n\n' "$iso_name" > "$ROOTFS_DIR"/etc/motd
+    cat > "$ROOTFS_DIR"/etc/issue << EOF
+$iso_name Live OS \n (\s \m \r) \t \l
+
+EOF
+    mkdir -vp -- "$ROOTFS_DIR"/etc/issue.d
+    cat > "$ROOTFS_DIR"/etc/issue.d/00-ip.issue << EOF
+
+IPv4 address: \4
+IPv6 address: \6
+
+EOF
+    cat > "$ROOTFS_DIR"/etc/motd << EOF
+Welcome to $iso_name Live OS!
+
+EOF
     # environment
     local _path="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
     if [[ "$distro" == "ubuntu" ]]; then
