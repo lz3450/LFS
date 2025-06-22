@@ -151,7 +151,7 @@ configure_rootfs() {
     cp -vf -- "$CONFIG_DIR/wpa_supplicant.conf" "$arg_rootfs_dir/etc/wpa_supplicant/wpa_supplicant.conf"
     ln -sf wpa_supplicant.conf "$arg_rootfs_dir/etc/wpa_supplicant/wpa_supplicant-wlan0.conf"
     # grml-zsh-config for root
-    wget -O "$arg_rootfs_dir/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc > "$LOG_DIR/grml-zsh-config.log" 2>&1
+    wget -qO "$arg_rootfs_dir/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
     echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$arg_rootfs_dir/root/.zshrc"
     echo '. /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$arg_rootfs_dir/root/.zshrc"
     # fstab
