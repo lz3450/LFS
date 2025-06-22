@@ -189,7 +189,7 @@ bootstrap_rootfs() {
 
     ###
     info "Install pacman packages..."
-    pacman_bootstrap "$ROOTFS_DIR" pacman_pkgs | tee "$LOG_DIR"/pacman.log
+    pacman_bootstrap "$ROOTFS_DIR" "/$PACMAN_REPO_DIR" pacman_pkgs | tee "$LOG_DIR"/pacman.log
 
     pacman_get_installed_pkgs "$ROOTFS_DIR" > "$ISOFS_DIR/$_pacman_pkglist"
     if [[ -f "$ISOFS_DIR/$_pacman_pkglist" ]]; then
