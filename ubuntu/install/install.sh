@@ -172,7 +172,7 @@ EOF
     cat > "$arg_rootfs_dir"/boot/efi/loader/loader.conf << EOF
 timeout 3
 console-mode max
-default ubuntu.conf
+default kzl.conf
 EOF
     cat > "$arg_rootfs_dir"/boot/efi/loader/entries/ubuntu.conf << EOF
 title   Ubuntu
