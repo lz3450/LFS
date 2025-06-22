@@ -28,7 +28,7 @@ NEW_PKGBUILD_FILE="PKGBUILD.updpkgsums"
 
 ### functions
 usage() {
-    cat <<EOF
+    cat << EOF
 
 Update checksums of a PKGBUILD file
 

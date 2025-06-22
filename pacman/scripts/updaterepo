@@ -45,7 +45,7 @@ update() {
 }
 
 usage() {
-    cat <<EOF
+    cat << EOF
 
 updaterepo
 
