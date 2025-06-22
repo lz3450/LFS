@@ -24,6 +24,7 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 . "$SCRIPT_DIR"/lib/utils.sh
 . "$SCRIPT_DIR"/lib/chroot.sh
 . "$SCRIPT_DIR"/lib/deb.sh
+. "$SCRIPT_DIR"/lib/pacman.sh
 
 ### checks
 check_root
