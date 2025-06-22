@@ -35,6 +35,7 @@ fi
 trap chroot_teardown EXIT SIGINT SIGTERM SIGKILL
 chroot_setup "$rootfs_dir"
 chroot_run "$rootfs_dir" "$@"
+trap - EXIT SIGINT SIGTERM SIGKILL
 chroot_teardown
 
 ### error codes
