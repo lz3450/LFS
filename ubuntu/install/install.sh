@@ -206,7 +206,7 @@ bootctl install --esp-path=/boot/efi
 EOF
     chmod +x "$arg_rootfs_dir"/root/initialize.sh
     chroot_setup "$arg_rootfs_dir"
-    chroot_run "$arg_rootfs_dir" /root/initialize.sh > "$log_dir/initialize.log"
+    chroot_run "$arg_rootfs_dir" /root/initialize.sh
     chroot_teardown
 }
 
@@ -272,7 +272,7 @@ bootstrap_rootfs
 make_swap
 configure_rootfs
 
-log_cyan "Successfully installed Ubuntu $debootstrap_suite at $mountpoint"
+log_cyan "Successfully installed Ubuntu $arg_suite at $arg_rootfs_dir"
 
 cleanup
 epilogue
