@@ -79,7 +79,8 @@ pacman_get_pkgnames() {
 
 pacman_bootstrap() {
     local _rootfs_dir="$1"
-    local -n _pacman_pkgs="$2"
+    local _cache_dir="$2"
+    local -n _pacman_pkgs="$3"
 
     _pacman_info "Installing pacman packages: $(IFS=','; echo "${_pacman_pkgs[*]}")"
     mkdir -v -m 0755 -p "$_rootfs_dir"/var/{cache/pacman/pkg,lib/pacman,log} "$_rootfs_dir"/{dev,run,etc/pacman.d}
@@ -90,7 +91,7 @@ pacman_bootstrap() {
     sed 's/^DownloadUser/#&/' "$PACMAN_CONFIG" > "$_pacman_tmp_conf_file"
     "$PACMAN" -Sy \
         -r "$_rootfs_dir" \
-        --cachedir "/$PACMAN_REPO_DIR" \
+        --cachedir "$_cache_dir" \
         --config "$_pacman_tmp_conf_file" \
         --disable-sandbox \
         --noconfirm \
