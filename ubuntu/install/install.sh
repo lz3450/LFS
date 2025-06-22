@@ -82,8 +82,9 @@ deb_pkgs=()
 cleanup() {
     set +e
 
-    info "Cleaning up..."
+    log_magenta "Cleaning up..."
     chroot_teardown
+    log_magenta "Done (Cleaned up)"
 
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
