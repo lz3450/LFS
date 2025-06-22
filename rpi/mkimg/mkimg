@@ -296,9 +296,7 @@ configure_rootfs() {
     # copy configuration files
     cp -vf -- "$CONFIG_DIR/config.txt" "$ROOTFS_DIR/boot/firmware/config.txt"
     cp -vf -- "$CONFIG_DIR/cmdline-$distro.txt" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
-    cp -vf -- "$CONFIG_DIR/fstab" "$ROOTFS_DIR/etc/fstab"
     # get PARTUUIDs of the partitions
-          f9c45477-02
     local _b_partuuid=$(findmnt -n -o PARTUUID --source "${loop_device}p1")
     local _r_partuuid=$(findmnt -n -o PARTUUID --source "${loop_device}p2")
     if [ -z "$_b_partuuid" ]; then
