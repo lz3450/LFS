@@ -14,10 +14,28 @@ apt-get update
 apt-get upgrade -y
 
 ### microsoft
-curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | install -o root -g root -m 644 /dev/stdin /etc/apt/trusted.gpg.d/microsoft.gpg
-echo "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main" | tee /etc/apt/sources.list.d/microsoft-edge.list
-echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" | tee /etc/apt/sources.list.d/vscode.list
+cat > /etc/apt/sources.list.d/vscode.sources <<EOF
+Types: deb
+URIs: https://packages.microsoft.com/repos/code/
+Suites: stable
+Components: main
+Architectures: amd64,arm64,armhf
+Signed-By: /usr/share/keyrings/microsoft.gpg
+EOF
+cat > /etc/apt/sources.list.d/vscode.sources <<EOF
+Types: deb
+URIs: https://packages.microsoft.com/repos/edge/
+Suites: stable
+Components: main
+Architectures: amd64
+Signed-By: /usr/share/keyrings/microsoft.gpg
+EOF
+
+curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | install -o root -g root -m 644 /dev/stdin /usr/share/keyrings/microsoft.gpg
 
 apt-get update
-apt-get install -s microsoft-edge-stable code | grep "^Inst" | awk '{print $2}' | sort -n > log/microsoft-pkgs.txt
-apt-get install -y microsoft-edge-stable code
+apt-get install --no-install-recommends -s microsoft-edge-stable code | grep "^Inst" | awk '{print $2}' | sort -n > log/$UBUNTU_CODENAME/microsoft_to_install_pkgs.txt
+apt-get install --no-install-recommends -y microsoft-edge-stable code
+
+. /etc/os-release
+dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > log/$UBUNTU_CODENAME/microsoft_installed_pkgs.txt
