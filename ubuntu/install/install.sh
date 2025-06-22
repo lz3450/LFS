@@ -157,7 +157,7 @@ configure_rootfs() {
     # fstab
     local _root_______________________partuuid=$(findmnt -n -o PARTUUID --target "$arg_rootfs_dir")
     local _boot_______________________partuuid=$(findmnt -n -o PARTUUID --target "$arg_rootfs_dir/boot/efi")
-    cat "$arg_rootfs_dir"/etc/fstab << EOF
+    cat > "$arg_rootfs_dir"/etc/fstab << EOF
 # Static information about the filesystems.
 # See fstab(5) for details.
 
@@ -169,22 +169,22 @@ PARTUUID=$_boot_______________________partuuid      /boot/efi       vfat        
 
 EOF
     # systemd-boot
-    cat "$arg_rootfs_dir"/boot/efi/loader/loader.conf << EOF
+    cat > "$arg_rootfs_dir"/boot/efi/loader/loader.conf << EOF
 timeout 3
 console-mode max
 default ubuntu.conf
 EOF
-    cat "$arg_rootfs_dir"/boot/efi/loader/entries/ubuntu.conf << EOF
+    cat > "$arg_rootfs_dir"/boot/efi/loader/entries/ubuntu.conf << EOF
 title   Ubuntu
 linux   vmlinuz
 initrd  initrd.img
-options root=PARTUUID=$_root_partuuid rw rootwait
+options root=PARTUUID=$_root_______________________partuuid rw rootwait
 EOF
-    cat "$arg_rootfs_dir"/boot/efi/loader/entries/kzl.conf << EOF
+    cat > "$arg_rootfs_dir"/boot/efi/loader/entries/kzl.conf << EOF
 title   Ubuntu-KZL
 linux   vmlinuz-KZL
 #initrd  initrd-KZL.img
-options root=PARTUUID=$_root_partuuid rw rootwait
+options root=PARTUUID=$_root_______________________partuuid rw rootwait
 EOF
     # initialize.sh
     cat > "$arg_rootfs_dir"/root/initialize.sh << EOF
