@@ -31,7 +31,7 @@ deb_apt() {
     local -n _deb_pkgs="$2"
 
     _deb_info "Install deb packages: $(IFS=','; echo "${_deb_pkgs[*]}")"
-    chroot_setup "$ROOTFS_DIR"
+    chroot_setup "$_rootfs_dir"
     chroot_run "$_rootfs_dir" /bin/bash -e -u -o pipefail -s << EOF
 apt-get update
 apt-get upgrade -y
@@ -47,7 +47,7 @@ deb_set_locale() {
     local _rootfs_dir="$1"
 
     _deb_info "Setting locale..."
-    chroot_setup "$ROOTFS_DIR"
+    chroot_setup "$_rootfs_dir"
     chroot_run "$_rootfs_dir" /bin/bash -e -u -o pipefail -s << EOF
 dpkg-reconfigure locales
 dpkg-reconfigure tzdata
