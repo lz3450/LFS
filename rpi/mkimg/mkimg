@@ -311,7 +311,7 @@ configure_rootfs() {
     cat > "$ROOTFS_DIR/etc/fstab" << EOF
 PARTUUID=$_r_partuuid       /                   ext4        defaults                0 1
 PARTUUID=$_b_partuuid       /boot/firmware      vfat        defaults,noatime        0 2
-/swapfile                   none                swap        defaults                0 0
+#/swapfile                   none                swap        defaults                0 0
 EOF
     sed -i "s|@ROOTPARTUUID@|$_r_partuuid|" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
     info "Done (Copied boot configuration files)"
