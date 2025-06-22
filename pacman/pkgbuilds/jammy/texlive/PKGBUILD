@@ -143,7 +143,7 @@ package() {
   ### texmf
   cp -vr "$srcdir"/installer/texmf-dist "$pkgdir/$PREFIX"
   mkdir -vp "$pkgdir/$PREFIX/share/texmf-local/web2c"
-  cat > "$pkgdir/$PREFIX/share/texmf-local/web2c/texmf.cnf" <<EOF
+  cat > "$pkgdir/$PREFIX/share/texmf-local/web2c/texmf.cnf" << EOF
 TEXMFROOT = \$SELFAUTODIR
 TEXMFLOCAL = \$TEXMFROOT/share/texmf-local
 TEXMFHOME = ~/.texlive/texmf-dist
