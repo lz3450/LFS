@@ -284,8 +284,8 @@ configure_rootfs() {
     fi
     # grml-zsh-config for root
     wget -O "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc > "$LOG_DIR/grml-zsh-config.log" 2>&1
-    echo 'source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
-    echo 'source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR/root/.zshrc"
+    echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
+    echo '. /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR/root/.zshrc"
     info "Done (Copied miscellaneous config files)"
 
     info "Cleaning up rootfs..."
