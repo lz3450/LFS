@@ -164,7 +164,7 @@ configure_rootfs() {
 # <device> <target> <type> <options> <dump> <pass>
 
 PARTUUID=$_root_______________________partuuid      /               f2fs            defaults                0 1
-PARTUUID=$_boot_______________________partuuid      /boot/efi       vfat            defaults,umask=0077     0 2
+PARTUUID=$_boot_______________________partuuid      /boot/efi       vfat            defaults,umask=0177     0 2
 /swapfile                                           none            swap            defaults                0 0
 
 EOF
