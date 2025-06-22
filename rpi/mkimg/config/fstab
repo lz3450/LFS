@@ -1,3 +1,0 @@
-PARTUUID=@ROOTPARTUUID@         /                   ext4        defaults                0 1
-PARTUUID=@BOOTPARTUUID@         /boot/firmware      vfat        defaults,noatime        0 2
-#/swapfile                    none                swap        defaults                0 0
