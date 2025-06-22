@@ -103,7 +103,7 @@ bootstrap_rootfs() {
     info "Done (Extracted root filesystem)"
 
     info "Install deb packages..."
-    deb_apt "$arg_rootfs_dir" additional_deb_pkgs > "$log_dir/apt.log"
+    deb_apt "$arg_rootfs_dir" deb_pkgs > "$log_dir/apt.log"
     deb_set_locale "$arg_rootfs_dir"
     deb_get_installed_pkgs "$arg_rootfs_dir" | sed -e '/^linux-image-.+/d' -e '/^linux-modules-.+/d' -e 's/:amd64//g' > "$log_dir/installed_deb_pkgs.txt"
     info "Done (Installed deb packages)"
