@@ -54,9 +54,9 @@ package_linux() {
 
   make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 O=build modules_install
 
-  install -dm755 "$pkgdir"/boot/efi/
-  install -Dm755 "build/$_image_name" "$pkgdir/boot/vmlinuz-$pkgver-KZL"
-  install -Dm755 "build/$_image_name" "$pkgdir/boot/efi/vmlinuz-KZL"
+  install -dm600 "$pkgdir"/boot/efi/
+  install -Dm600 "build/$_image_name" "$pkgdir/boot/vmlinuz-$pkgver-KZL"
+  install -Dm600 "build/$_image_name" "$pkgdir/boot/efi/vmlinuz-KZL"
   install -Dm644 "$srcdir/config" "$pkgdir/boot/config-$pkgver-KZL"
 
   ln -vsf --no-dereference "/usr/src/linux-headers-$_kernelrelease" "$pkgdir/usr/lib/modules/$_kernelrelease/source"
