@@ -89,13 +89,16 @@ pacman_bootstrap() {
 
     local _pacman_tmp_conf_file=$(mktemp -p /tmp pacman.XXX.conf)
     sed 's/^DownloadUser/#&/' "$PACMAN_CONFIG" > "$_pacman_tmp_conf_file"
-    "$PACMAN" -Sy \
+    chroot_setup "$_rootfs_dir"
+    unshare --fork --pid \
+        "$PACMAN" -Sy \
         -r "$_rootfs_dir" \
         --cachedir "$_cache_dir" \
         --config "$_pacman_tmp_conf_file" \
         --disable-sandbox \
         --noconfirm \
         "${_pacman_pkgs[@]}"
+    chroot_teardown
     _pacman_info "Done (Installed pacman packages)"
 }
 
