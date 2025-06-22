@@ -5,11 +5,6 @@
 
 set -e
 
-if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root"
-    exit 255
-fi
-
 # disable automount
 gsettings set org.gnome.desktop.media-handling automount false
 
