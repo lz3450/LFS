@@ -87,7 +87,7 @@ pacman_bootstrap() {
     mkdir -v -m 1777 -p "$_rootfs_dir"/tmp
     mkdir -v -m 0555 -p "$_rootfs_dir"/{sys,proc}
 
-    local _pacman_tmp_conf_file=$(mktemp pacman.XXX.conf)
+    local _pacman_tmp_conf_file=$(mktemp -p /tmp pacman.XXX.conf)
     sed 's/^DownloadUser/#&/' "$PACMAN_CONFIG" > "$_pacman_tmp_conf_file"
     "$PACMAN" -Sy \
         -r "$_rootfs_dir" \
