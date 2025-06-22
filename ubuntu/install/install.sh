@@ -262,7 +262,7 @@ case "$arg_suite" in
         ;;
 esac
 
-log_dir="$SCRIPT_DIR/logs/$arg_suite"
+log_dir="$SCRIPT_DIR/log/$arg_suite"
 
 ################################################################################
 
