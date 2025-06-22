@@ -127,6 +127,10 @@ chroot_setup() {
 chroot_teardown() {
     local _mountpoints=()
 
+    if (( chroot_setup_done == 0 )); then
+        return
+    fi
+
     _chroot_info "Tearing down chroot environment in \"$chroot_dir\""
 
     while (( ${#chroot_active_mounts[@]} > 0 )); do
