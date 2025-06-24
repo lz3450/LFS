@@ -18,6 +18,12 @@ depends=(
 source=(git+https://github.com/linux-pam/linux-pam.git#tag=v$pkgver)
 sha256sums=('66ba7e8d6f8d1b985432a07180280e5bbc8c84bfc43fab7b1e071c26a04e2bde')
 
+prepare() {
+  cd linux-pam
+
+  echo 'PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin"' >> modules/pam_env/environment
+}
+
 build() {
   cd linux-pam
 
@@ -54,4 +60,5 @@ package() {
   cd linux-pam
 
   meson install -C build --destdir "$pkgdir"
+
 }

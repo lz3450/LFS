@@ -1,11 +1,12 @@
 #%PAM-1.0
 
 auth        sufficient      pam_rootok.so
-# Uncomment the following line to implicitly trust users in the "wheel" group.
-auth        sufficient      pam_wheel.so    trust use_uid
-# Uncomment the following line to require a user to be in the "wheel" group.
-auth        required        pam_wheel.so    use_uid
+# Uncomment this to force users to be a member of group wheel before they can use `su'
+auth        required        pam_wheel.so
+# Uncomment this to let wheel members be able to `su' without a password
+auth        sufficient      pam_wheel.so    trust
 auth        required        pam_unix.so
 account     required        pam_unix.so
 password    include         system-auth
+session     required        pam_env.so readenv=1
 session     required        pam_unix.so

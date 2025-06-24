@@ -1,3 +1,8 @@
 new_version=$(git ls-remote --tags https://github.com/linux-pam/linux-pam.git | grep -oP 'refs/tags/v\K[0-9]\.[0-9]\.[0-9]' | sort -V | tail -n1)
 srcdir="linux-pam"
 build_system=meson
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$srcdir"
+    cp -v modules/pam_env/environment "$PKGBUILDDIR"
+}
