@@ -2,7 +2,7 @@
 
 pkgname=rust
 pkgver=1.87.0
-pkgrel=1
+pkgrel=3
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')
@@ -71,7 +71,7 @@ build() {
   msg2 "Configuring..."
   ./configure \
     "${_options[@]}"
-  cat config.toml
+  cat bootstrap.toml
 
   msg2 "Compiling..."
   RUST_BACKTRACE=full ./x.py -j "$(nproc)" build
