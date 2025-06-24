@@ -219,7 +219,7 @@ if have_function 'post_update'; then
     info "Done (Running post_update())"
 fi
 
-info "Update PKGBUILD finished successfully"
+info "Successfully updated PKGBUILD"
 
 ### status codes
 # -1(255): current version is newer
