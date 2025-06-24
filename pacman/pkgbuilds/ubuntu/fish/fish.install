@@ -1,0 +1,10 @@
+post_install() {
+  if ! grep -qe '^/opt/bin/fish$' etc/shells
+  then
+    echo '/opt/bin/fish' >> etc/shells
+  fi
+}
+
+pre_remove() {
+  sed -i -E '/^\/opt\/bin\/fish$/d' etc/shells
+}

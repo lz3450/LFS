@@ -1,0 +1,45 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=fish
+pkgver=4.0.2
+pkgrel=1
+epoch=
+pkgdesc="A smart and user-friendly command line shell"
+arch=('x86_64')
+url="https://fishshell.com/"
+license=('KZL')
+backup=(
+  etc/fish/config.fish
+)
+install=$pkgname.install
+source=(
+  git+https://github.com/fish-shell/fish-shell.git#tag=$pkgver
+)
+sha256sums=('ce4c82cf6e544ef57386d8400e43da87302c40b2ab4830264f845f083c4b0ddd')
+
+build() {
+  cd fish-shell
+
+  msg2 "Configuring..."
+  cmake -LAH -S . -B build \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX="/$PREFIX" \
+    -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
+    -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
+    -D BUILD_DOCS=OFF
+
+  msg2 "Compiling..."
+  cmake --build build
+}
+
+check() {
+  cd fish-shell
+
+  cmake --build build --target test
+}
+
+package() {
+  cd fish-shell
+
+  DESTDIR="$pkgdir" cmake --build build --target install
+}

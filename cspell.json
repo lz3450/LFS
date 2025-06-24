@@ -224,6 +224,7 @@
         "libmkiso",
         "LIBMKROOTFS",
         "libmpfr",
+        "libncurses",
         "libnl",
         "LIBPACMAN",
         "libpam",
