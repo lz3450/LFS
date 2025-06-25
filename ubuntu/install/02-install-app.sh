@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# install-app.sh
+# 02-install-app.sh
 #
 
 set -e

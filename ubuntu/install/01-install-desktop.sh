@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# desktop-install.sh
+# 01-install-desktop.sh
 #
 
 set -e

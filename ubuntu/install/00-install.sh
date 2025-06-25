@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# install.sh
+# 00-install.sh
 #
 
 set -e

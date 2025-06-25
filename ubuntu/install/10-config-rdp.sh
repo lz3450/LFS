@@ -1,9 +1,14 @@
 #!/bin/bash
 #
-# rdp-initialize.sh
+# 10-config-rdb.sh
 #
 
 set -e
+
+if (( EUID < 1000 )); then
+    echo "This script should be run as user"
+    exit 255
+fi
 
 . /etc/os-release
 
