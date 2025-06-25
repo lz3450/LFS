@@ -37,16 +37,13 @@ UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
 
 common_deb_pkgs=(
     ### general
-    nano
-    bash-completion
-    zsh zsh-autosuggestions zsh-syntax-highlighting
+    sudo
     build-essential
     ### disk
     parted
     ### network
     iw wpasupplicant
-    openssh-server
-    curl wget git
+    rfkill
     ### kernel
     linux-image-generic
     # dracut

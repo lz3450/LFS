@@ -42,7 +42,6 @@ common_deb_pkgs=(
   ### network
   network-manager
   network-manager-config-connectivity-ubuntu
-  rfkill
   ### sound
   alsa-base
   alsa-utils

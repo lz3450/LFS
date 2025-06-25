@@ -19,6 +19,7 @@ apt-get upgrade -y
 utils_deb_pkgs=(
     landscape-client
     tmux
+    # screen
 )
 
 apt-get update
