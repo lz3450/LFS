@@ -16,9 +16,6 @@ TO_INSTALL_PKGLIST_FILE="$LOG_DIR/desktop_to_install_pkgs.txt"
 INSTALLED_PKGLIST_FILE="$LOG_DIR/desktop_installed_pkgs.txt"
 MANUAL_INSTALLED_PKGLIST_FILE="$LOG_DIR/desktop_manual_installed_pkgs.txt"
 
-common_deb_pkgs=(
-  tmux
-)
 jammy_deb_pkgs=(
   ### ubuntu-minimal-desktop depends
   gdm3
@@ -28,6 +25,8 @@ jammy_deb_pkgs=(
   gnome-shell-extension-appindicator
   gnome-shell-extension-desktop-icons-ng
   gnome-shell-extension-ubuntu-dock
+  ubuntu-session
+  ubuntu-settings
   ### gnome
   eog
   evince
@@ -41,8 +40,6 @@ jammy_deb_pkgs=(
   gsettings-ubuntu-schemas
   seahorse
   ### ubuntu
-  ubuntu-session
-  ubuntu-settings
   yaru-theme-gtk
   yaru-theme-icon
   yaru-theme-sound
@@ -54,18 +51,14 @@ jammy_deb_pkgs=(
   ### sound
   alsa-base
   alsa-utils
-  pulseaudio
   ### fonts
-  fonts-noto-cjk
-  fonts-noto-color-emoji
-  fonts-opensymbol
   fonts-ubuntu
-  ### other
+  ### utils
   file
   fwupd
-  landscape-client
   pciutils
   psmisc
+  usbutils
 )
 noble_deb_pkgs=(
 )
