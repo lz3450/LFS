@@ -76,9 +76,6 @@ questing_deb_pkgs=(
   papers
   ### network
   nm-connection-editor
-  ### utils
-  unzip
-  zip
 )
 deb_pkgs=()
 
@@ -95,12 +92,11 @@ touch -- "$TO_INSTALL_PKGLIST_FILE" "$INSTALLED_PKGLIST_FILE" "$MANUAL_INSTALLED
 chown -R ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$LOG_DIR"
 
 # install packages
-# apt-get update
-# apt-get upgrade -y
+apt-get update
+apt-get upgrade -y
 apt-get install --no-install-recommends -s "${deb_pkgs[@]}" | grep "^Inst" | awk '{print $2}' | LC_ALL=C sort -n > "$TO_INSTALL_PKGLIST_FILE"
-# apt-get install --no-install-recommends -y "${deb_pkgs[@]}"
-# apt-get autoremove --purge -y
-
+apt-get install --no-install-recommends -y "${deb_pkgs[@]}"
+apt-get autoremove --purge -y
 dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > "$INSTALLED_PKGLIST_FILE"
 apt-mark showmanual > "$MANUAL_INSTALLED_PKGLIST_FILE"
 

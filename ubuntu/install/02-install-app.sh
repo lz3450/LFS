@@ -51,3 +51,5 @@ apt-get install --no-install-recommends -s microsoft-edge-stable code | grep "^I
 apt-get install --no-install-recommends -y microsoft-edge-stable code
 dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > log/$UBUNTU_CODENAME/microsoft_installed_pkgs.txt
 rm -vf -- /etc/apt/sources.list.d/microsoft-edge.list
+
+echo "Successfully installed utils and applications for Ubuntu $UBUNTU_CODENAME"

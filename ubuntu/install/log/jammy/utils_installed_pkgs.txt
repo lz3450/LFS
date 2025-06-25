@@ -27,7 +27,6 @@ busybox-initramfs
 bzip2
 ca-certificates
 cheese-common
-code
 colord
 colord-data
 console-setup
@@ -73,7 +72,6 @@ findutils
 fontconfig
 fontconfig-config
 fonts-dejavu-core
-fonts-liberation
 fonts-ubuntu
 fonts-urw-base35
 fuse3
@@ -695,7 +693,6 @@ libvorbisfile3
 libvpx7
 libvte-2.91-0
 libvte-2.91-common
-libvulkan1
 libwacom-common
 libwacom9
 libwavpack1
@@ -784,7 +781,6 @@ lto-disabled-list
 make
 mawk
 media-types
-microsoft-edge-stable
 mount
 mutter-common
 nano
@@ -916,7 +912,6 @@ x11-xserver-utils
 xdg-dbus-proxy
 xdg-desktop-portal
 xdg-user-dirs
-xdg-utils
 xkb-data
 xserver-common
 xwayland

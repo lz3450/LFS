@@ -32,9 +32,6 @@ evince
 fakeroot
 file
 findutils
-fonts-noto-cjk
-fonts-noto-color-emoji
-fonts-opensymbol
 fonts-ubuntu
 fwupd
 gcc-12-base
@@ -71,7 +68,6 @@ iw
 kbd
 keyboard-configuration
 kmod
-landscape-client
 less
 libacl1
 libapparmor1
@@ -211,7 +207,6 @@ pciutils
 perl-base
 procps
 psmisc
-pulseaudio
 python-apt-common
 python3
 python3-apt
@@ -236,13 +231,13 @@ systemd-sysv
 systemd-timesyncd
 sysvinit-utils
 tar
-tmux
 tzdata
 ubuntu-keyring
 ubuntu-session
 ubuntu-settings
 ucf
 udev
+usbutils
 usrmerge
 util-linux
 vim-common
