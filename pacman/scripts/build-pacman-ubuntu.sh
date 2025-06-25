@@ -8,9 +8,6 @@ BUILDDIR="/tmp"
 PKGBUILDDIR="$SCRIPT_DIR/../pkgbuilds/ubuntu/pacman"
 
 PREFIX="opt"
-msg2() {
-  echo "  --> $1"
-}
 
 ################################################################################
 
@@ -22,8 +19,8 @@ sudo apt-get upgrade -y
 export pkgname
 export pkgdir="/tmp/pacman/install"
 
-rm -rf "$BUILDDIR"/pacman
-mkdir -p "$BUILDDIR"/pacman
+rm -rf -- "$BUILDDIR"/pacman
+mkdir -p -- "$BUILDDIR"/pacman
 cd "$BUILDDIR"
 git clone https://gitlab.archlinux.org/pacman/pacman.git
 
