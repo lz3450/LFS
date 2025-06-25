@@ -1,6 +1,7 @@
 accountsservice
 adduser
 adwaita-icon-theme
+amd64-microcode
 apt
 apt-utils
 base-files
@@ -14,11 +15,13 @@ binutils-x86-64-linux-gnu
 bsdutils
 bubblewrap
 build-essential
+busybox-initramfs
 bzip2
 ca-certificates
 console-setup
 console-setup-linux
 coreutils
+cpio
 cpp
 cpp-11
 cron
@@ -167,13 +170,20 @@ humanity-icon-theme
 hunspell-en-us
 init
 init-system-helpers
+initramfs-tools
+initramfs-tools-bin
+initramfs-tools-core
+intel-microcode
 iproute2
 iputils-ping
 isc-dhcp-client
 isc-dhcp-common
 iso-codes
+iucode-tool
+iw
 kbd
 keyboard-configuration
+klibc-utils
 kmod
 landscape-client
 landscape-common
@@ -183,17 +193,16 @@ libabsl20210324
 libaccountsservice0
 libacl1
 libadwaita-1-0
-libalgorithm-diff-perl
-libalgorithm-diff-xs-perl
-libalgorithm-merge-perl
 libapparmor1
 libapt-pkg6.0
+libarchive-tools
 libarchive13
 libargon2-1
 libasan6
 libasound2
 libasound2-data
 libaspell15
+libassuan-dev
 libassuan0
 libasyncns0
 libatasmart4
@@ -227,7 +236,6 @@ libbsd0
 libbz2-1.0
 libc-bin
 libc-dev-bin
-libc-devtools
 libc6
 libc6-dev
 libcaca0
@@ -305,7 +313,6 @@ libfastjson4
 libfdisk1
 libffi8
 libfido2-1
-libfile-fcntllock-perl
 libflac8
 libfontconfig1
 libfontenc1
@@ -325,7 +332,6 @@ libgck-1-0
 libgcr-base-3-1
 libgcr-ui-3-1
 libgcrypt20
-libgd3
 libgdata-common
 libgdata22
 libgdbm-compat4
@@ -359,7 +365,9 @@ libgnutls30
 libgoa-1.0-0b
 libgoa-1.0-common
 libgomp1
+libgpg-error-dev
 libgpg-error0
+libgpgme-dev
 libgpgme11
 libgpm2
 libgraphene-1.0-0
@@ -417,6 +425,7 @@ libjson-glib-1.0-0
 libjson-glib-1.0-common
 libk5crypto3
 libkeyutils1
+libklibc
 libkmod2
 libkrb5-3
 libkrb5support0
@@ -452,6 +461,9 @@ libnetplan0
 libnettle8
 libnewt0.52
 libnghttp2-14
+libnl-3-200
+libnl-genl-3-200
+libnl-route-3-200
 libnm0
 libnma-common
 libnma0
@@ -483,6 +495,7 @@ libparted2
 libpciaccess0
 libpcre2-8-0
 libpcre3
+libpcsclite1
 libpeas-1.0-0
 libpeas-common
 libperl5.34
@@ -664,7 +677,13 @@ libxxf86vm1
 libxxhash0
 libyaml-0-2
 libzstd1
+linux-base
+linux-firmware
+linux-image-5.15.0-142-generic
+linux-image-generic
 linux-libc-dev
+linux-modules-5.15.0-142-generic
+linux-modules-extra-5.15.0-142-generic
 locales
 login
 logrotate
@@ -675,8 +694,6 @@ lshw
 lsof
 lto-disabled-list
 make
-manpages
-manpages-dev
 mawk
 media-types
 mount
@@ -755,6 +772,7 @@ shared-mime-info
 sound-theme-freedesktop
 sudo
 systemd
+systemd-hwe-hwdb
 systemd-sysv
 systemd-timesyncd
 sysvinit-utils
@@ -782,6 +800,8 @@ vim-common
 vim-tiny
 wget
 whiptail
+wireless-regdb
+wpasupplicant
 x11-common
 x11-xkb-utils
 x11-xserver-utils
@@ -803,3 +823,4 @@ zsh
 zsh-autosuggestions
 zsh-common
 zsh-syntax-highlighting
+zstd

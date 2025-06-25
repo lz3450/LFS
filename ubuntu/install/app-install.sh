@@ -10,19 +10,21 @@ if [[ $EUID -ne 0 ]]; then
     exit 255
 fi
 
+. /etc/os-release
+
 apt-get update
 apt-get upgrade -y
 
-### microsoft
-cat > /etc/apt/sources.list.d/vscode.sources <<EOF
+### source list
+cat > /etc/apt/sources.list.d/vscode.sources << EOF
 Types: deb
 URIs: https://packages.microsoft.com/repos/code/
 Suites: stable
 Components: main
-Architectures: amd64,arm64,armhf
+Architectures: amd64
 Signed-By: /usr/share/keyrings/microsoft.gpg
 EOF
-cat > /etc/apt/sources.list.d/vscode.sources <<EOF
+cat > /etc/apt/sources.list.d/edge.sources << EOF
 Types: deb
 URIs: https://packages.microsoft.com/repos/edge/
 Suites: stable
@@ -37,5 +39,4 @@ apt-get update
 apt-get install --no-install-recommends -s microsoft-edge-stable code | grep "^Inst" | awk '{print $2}' | sort -n > log/$UBUNTU_CODENAME/microsoft_to_install_pkgs.txt
 apt-get install --no-install-recommends -y microsoft-edge-stable code
 
-. /etc/os-release
 dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > log/$UBUNTU_CODENAME/microsoft_installed_pkgs.txt

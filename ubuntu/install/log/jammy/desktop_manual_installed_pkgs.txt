@@ -25,6 +25,7 @@ dmsetup
 dpkg
 e2fsprogs
 eject
+fakeroot
 findutils
 fonts-dejavu-core
 fonts-freefont-ttf
@@ -56,11 +57,13 @@ gzip
 hostname
 init
 init-system-helpers
+initramfs-tools
 iproute2
 iputils-ping
 isc-dhcp-client
 isc-dhcp-common
 iso-codes
+iw
 kbd
 keyboard-configuration
 kmod
@@ -69,6 +72,7 @@ less
 libacl1
 libapparmor1
 libapt-pkg6.0
+libarchive-tools
 libargon2-1
 libatm1
 libattr1
@@ -106,6 +110,7 @@ libglib2.0-data
 libgmp10
 libgnutls30
 libgpg-error0
+libgpgme-dev
 libgssapi-krb5-2
 libhogweed6
 libicu70
@@ -174,6 +179,7 @@ libxtables12
 libxxhash0
 libyaml-0-2
 libzstd1
+linux-image-generic
 locales
 login
 logrotate
@@ -193,6 +199,7 @@ netplan.io
 networkd-dispatcher
 openssh-server
 openssl
+parted
 passwd
 perl-base
 procps
@@ -233,6 +240,7 @@ vim-common
 vim-tiny
 wget
 whiptail
+wpasupplicant
 xdg-user-dirs
 xkb-data
 xxd
@@ -244,3 +252,4 @@ zlib1g
 zsh
 zsh-autosuggestions
 zsh-syntax-highlighting
+zstd

@@ -8,13 +8,14 @@ dconf-gsettings-backend
 dconf-service
 desktop-file-utils
 dictionaries-common
-dmidecode
 emacsen-common
 evolution-data-server
 evolution-data-server-common
 fdisk
 file-roller
 fontconfig
+fontconfig-config
+fonts-dejavu-core
 fonts-freefont-ttf
 fonts-noto-cjk
 fonts-noto-color-emoji
@@ -110,7 +111,6 @@ libaa1
 libabsl20210324
 libaccountsservice0
 libadwaita-1-0
-libarchive13
 libasound2
 libasound2-data
 libaspell15
@@ -150,6 +150,7 @@ libdatrie1
 libdbusmenu-glib4
 libdconf1
 libdee-1.0-4
+libdeflate0
 libdrm2
 libdrm-amdgpu1
 libdrm-common
@@ -179,10 +180,12 @@ libexif12
 libexiv2-27
 libfdisk1
 libflac8
+libfontconfig1
 libfontenc1
 libfreerdp2-2
 libfreerdp-client2-2
 libfreerdp-server2-2
+libfreetype6
 libfuse3-3
 libfwupd2
 libfwupdplugin5
@@ -216,7 +219,6 @@ libgnome-bluetooth-3.0-13
 libgnome-desktop-3-19
 libgoa-1.0-0b
 libgoa-1.0-common
-libgpgme11
 libgpm2
 libgraphene-1.0-0
 libgraphite2-3
@@ -256,7 +258,10 @@ libinput10
 libinput-bin
 libjack-jackd2-0
 libjavascriptcoregtk-4.0-18
+libjbig0
 libjcat1
+libjpeg8
+libjpeg-turbo8
 libjson-glib-1.0-0
 libjson-glib-1.0-common
 liblcms2-2
@@ -288,7 +293,6 @@ libpangocairo-1.0-0
 libpangoft2-1.0-0
 libpangomm-1.4-1v5
 libpangoxft-1.0-0
-libparted2
 libparted-fs-resize0
 libpciaccess0
 libpeas-1.0-0
@@ -298,6 +302,7 @@ libpipewire-0.3-0
 libpipewire-0.3-modules
 libpixman-1-0
 libplist3
+libpng16-16
 libpolkit-agent-1-0
 libpolkit-gobject-1-0
 libpoppler118
@@ -337,6 +342,7 @@ libtdb1
 libthai0
 libthai-data
 libtheora0
+libtiff5
 libtotem-plparser18
 libtotem-plparser-common
 libtracker-sparql-3.0-0
@@ -375,13 +381,18 @@ libwayland-cursor0
 libwayland-egl1
 libwayland-server0
 libwebkit2gtk-4.0-37
+libwebp7
 libwebpdemux2
 libwebpmux3
 libwebrtc-audio-processing1
 libwinpr2-2
 libwoff1
+libx11-6
+libx11-data
 libx11-xcb1
+libxau6
 libxaw7
+libxcb1
 libxcb-dri2-0
 libxcb-dri3-0
 libxcb-glx0
@@ -398,6 +409,7 @@ libxcomposite1
 libxcursor1
 libxcvt0
 libxdamage1
+libxdmcp6
 libxext6
 libxfixes3
 libxfont2
@@ -411,6 +423,7 @@ libxkbregistry0
 libxmlb2
 libxmu6
 libxmuu1
+libxpm4
 libxrandr2
 libxrender1
 libxshmfence1
@@ -425,7 +438,6 @@ nautilus
 nautilus-data
 p11-kit
 p11-kit-modules
-parted
 pinentry-gnome3
 pipewire
 pipewire-bin

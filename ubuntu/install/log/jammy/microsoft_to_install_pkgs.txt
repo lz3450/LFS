@@ -1,0 +1,5 @@
+code
+fonts-liberation
+libvulkan1
+microsoft-edge-stable
+xdg-utils
