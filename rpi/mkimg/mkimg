@@ -49,6 +49,7 @@ common_deb_pkgs=(
     ### general
     sudo
     file
+    build-essential
     ### disk
     parted
     ### network
