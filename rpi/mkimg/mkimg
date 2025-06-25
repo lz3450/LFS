@@ -56,18 +56,16 @@ common_deb_pkgs=(
     rfkill
     ### kernel
     # initramfs-tools
-    ### firmware
-
 )
 debian_deb_pkgs=(
     systemd-resolved
     systemd-timesyncd
     bluez
-    # firmware
+    ### firmware
     firmware-brcm80211
     firmware-realtek
     bluez-firmware
-    # raspi
+    ### raspi
     raspberrypi-archive-keyring
     raspberrypi-sys-mods
     raspberrypi-net-mods
