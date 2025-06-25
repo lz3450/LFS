@@ -65,7 +65,6 @@ additional_deb_pkgs=(
     nano
     openssh-server
     curl wget git
-    # screen tmux
 )
 kzl_pacman_pkgs=(
     base
