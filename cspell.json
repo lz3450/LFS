@@ -1,9 +1,8 @@
 {
     "version": "0.2",
     "ignorePaths": [
+        "**/log/**/*.txt",
         "**/pkglist/*.txt",
-        "*jammy.txt",
-        "*noble.txt",
         "config.txt",
         "config",
         "driver-help.txt",
