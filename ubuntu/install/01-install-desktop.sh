@@ -16,7 +16,7 @@ TO_INSTALL_PKGLIST_FILE="$LOG_DIR/desktop_to_install_pkgs.txt"
 INSTALLED_PKGLIST_FILE="$LOG_DIR/desktop_installed_pkgs.txt"
 MANUAL_INSTALLED_PKGLIST_FILE="$LOG_DIR/desktop_manual_installed_pkgs.txt"
 
-jammy_deb_pkgs=(
+common_deb_pkgs=(
   ### ubuntu-minimal-desktop depends
   gdm3
   gnome-control-center
@@ -29,24 +29,19 @@ jammy_deb_pkgs=(
   ubuntu-settings
   ### gnome
   eog
-  evince
-  gedit
-  gnome-bluetooth
   gnome-calculator
   gnome-power-manager
-  gnome-startup-applications
   gnome-system-monitor
   gnome-terminal
-  gsettings-ubuntu-schemas
   seahorse
   ### ubuntu
+  gsettings-ubuntu-schemas
   yaru-theme-gtk
   yaru-theme-icon
   yaru-theme-sound
   ### network
   network-manager
   network-manager-config-connectivity-ubuntu
-  network-manager-gnome
   rfkill
   ### sound
   alsa-base
@@ -60,9 +55,30 @@ jammy_deb_pkgs=(
   psmisc
   usbutils
 )
+jammy_deb_pkgs=(
+  ### gnome
+  evince
+  gedit
+  gnome-bluetooth
+  gnome-startup-applications
+  ### network
+  network-manager-gnome
+)
 noble_deb_pkgs=(
 )
 questing_deb_pkgs=(
+  ### ubuntu-minimal-desktop depends
+  gnome-shell-extension-ubuntu-tiling-assistant
+  ### gnome
+  gnome-bluetooth-sendto
+  gnome-remote-desktop
+  gnome-text-editor
+  papers
+  ### network
+  nm-connection-editor
+  ### utils
+  unzip
+  zip
 )
 deb_pkgs=()
 
@@ -79,11 +95,11 @@ touch -- "$TO_INSTALL_PKGLIST_FILE" "$INSTALLED_PKGLIST_FILE" "$MANUAL_INSTALLED
 chown -R ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$LOG_DIR"
 
 # install packages
-apt-get update
-apt-get upgrade -y
+# apt-get update
+# apt-get upgrade -y
 apt-get install --no-install-recommends -s "${deb_pkgs[@]}" | grep "^Inst" | awk '{print $2}' | LC_ALL=C sort -n > "$TO_INSTALL_PKGLIST_FILE"
-apt-get install --no-install-recommends -y "${deb_pkgs[@]}"
-apt-get autoremove --purge -y
+# apt-get install --no-install-recommends -y "${deb_pkgs[@]}"
+# apt-get autoremove --purge -y
 
 dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > "$INSTALLED_PKGLIST_FILE"
 apt-mark showmanual > "$MANUAL_INSTALLED_PKGLIST_FILE"
