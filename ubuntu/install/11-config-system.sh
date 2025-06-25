@@ -12,8 +12,6 @@ fi
 
 . /etc/os-release
 
-# disable automount
-
 if [[ "$UBUNTU_CODENAME" == "jammy" ]]; then
     tee /etc/netplan/00-default.yaml << EOF
 network:
@@ -32,3 +30,5 @@ else
     echo "Unsupported Ubuntu suite: $UBUNTU_CODENAME"
     exit 1
 fi
+
+echo "Successfully configured system settings for Ubuntu $UBUNTU_CODENAME"

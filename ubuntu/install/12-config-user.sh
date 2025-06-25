@@ -11,3 +11,5 @@ if (( EUID < 1000 )); then
 fi
 
 gsettings set org.gnome.desktop.media-handling automount false
+
+echo "Successfully configured user settings for Ubuntu $UBUNTU_CODENAME"
