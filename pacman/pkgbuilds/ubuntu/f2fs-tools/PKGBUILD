@@ -1,0 +1,37 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=f2fs-tools
+pkgver=1.16.0
+pkgrel=4
+epoch=
+pkgdesc="Tools for Flash-Friendly File System (F2FS)"
+arch=('x86_64')
+url="https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git"
+license=('KZL')
+source=(
+  git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git#tag=v$pkgver
+)
+sha256sums=('SKIP')
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname
+
+  msg2 "Configuring..."
+  ./configure \
+    --prefix="/$PREFIX"
+
+  msg2 "Compiling..."
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+}
