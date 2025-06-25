@@ -24,7 +24,7 @@ Components: main
 Architectures: amd64
 Signed-By: /usr/share/keyrings/microsoft.gpg
 EOF
-cat > /etc/apt/sources.list.d/edge.sources << EOF
+cat > /etc/apt/sources.list.d/microsoft-edge.sources << EOF
 Types: deb
 URIs: https://packages.microsoft.com/repos/edge/
 Suites: stable
@@ -36,7 +36,9 @@ EOF
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | install -o root -g root -m 644 /dev/stdin /usr/share/keyrings/microsoft.gpg
 
 apt-get update
-apt-get install --no-install-recommends -s microsoft-edge-stable code | grep "^Inst" | awk '{print $2}' | sort -n > log/$UBUNTU_CODENAME/microsoft_to_install_pkgs.txt
+apt-get install --no-install-recommends -s microsoft-edge-stable code | grep "^Inst" | awk '{print $2}' | LC_ALL=C sort -n > log/$UBUNTU_CODENAME/microsoft_to_install_pkgs.txt
 apt-get install --no-install-recommends -y microsoft-edge-stable code
+
+rm -vf -- /etc/apt/sources.list.d/microsoft-edge.list
 
 dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > log/$UBUNTU_CODENAME/microsoft_installed_pkgs.txt
