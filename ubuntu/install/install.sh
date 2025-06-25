@@ -169,6 +169,7 @@ PARTUUID=$_boot_______________________partuuid      /boot/efi       vfat        
 
 EOF
     # systemd-boot
+    mkdir -vp -- "$arg_rootfs_dir"/boot/efi/loader/entries
     cat > "$arg_rootfs_dir"/boot/efi/loader/loader.conf << EOF
 timeout 3
 console-mode max
