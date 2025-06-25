@@ -23,7 +23,6 @@ EOF
     chmod 600 /etc/netplan/00-default.yaml
     netplan apply
     systemctl disable --now systemd-networkd.service
-    systemctl disable --now systemd-resolved.service
     systemctl restart NetworkManager.service
 elif [[ "$UBUNTU_CODENAME" == "noble" ]]; then
     :
