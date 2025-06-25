@@ -31,7 +31,7 @@ grdctl rdp enable
 grdctl rdp disable-view-only
 
 ./../scripts/unlock_remote_desktop.sh
-read -r -s -p "Enter rdp username: " username
+read -r -p "Enter rdp username: " username
 echo
 read -r -s -p "Enter rdp password: " password
 echo
