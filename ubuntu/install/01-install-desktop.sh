@@ -46,6 +46,7 @@ common_deb_pkgs=(
   alsa-base
   alsa-utils
   ### fonts
+  fonts-noto-cjk
   fonts-ubuntu
   ### utils
   file
