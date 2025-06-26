@@ -1,0 +1,1 @@
+../../ubuntu/install/12-config-user.sh
