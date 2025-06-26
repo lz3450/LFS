@@ -89,7 +89,6 @@ esac
 # log files
 mkdir -vp -- "$LOG_DIR"
 touch -- "$TO_INSTALL_PKGLIST_FILE" "$INSTALLED_PKGLIST_FILE" "$MANUAL_INSTALLED_PKGLIST_FILE"
-chown -R ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$LOG_DIR"
 
 # install packages
 apt-get update
@@ -100,4 +99,5 @@ apt-get autoremove --purge -y
 dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > "$INSTALLED_PKGLIST_FILE"
 apt-mark showmanual > "$MANUAL_INSTALLED_PKGLIST_FILE"
 
+chown -R ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$LOG_DIR"
 echo "Successfully installed desktop packages for Ubuntu $UBUNTU_CODENAME"
