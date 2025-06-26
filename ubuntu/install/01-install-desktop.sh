@@ -96,7 +96,7 @@ apt-get upgrade -y
 apt-get install --no-install-recommends -s "${deb_pkgs[@]}" | grep "^Inst" | awk '{print $2}' | LC_ALL=C sort -n > "$TO_INSTALL_PKGLIST_FILE"
 apt-get install --no-install-recommends -y "${deb_pkgs[@]}"
 apt-get autoremove --purge -y
-dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > "$INSTALLED_PKGLIST_FILE"
+dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' -e 's/:arm64//g' > "$INSTALLED_PKGLIST_FILE"
 apt-mark showmanual > "$MANUAL_INSTALLED_PKGLIST_FILE"
 
 chown -R ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$LOG_DIR"

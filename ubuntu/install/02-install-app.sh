@@ -24,7 +24,7 @@ apt-get update
 apt-get upgrade -y
 apt-get install --no-install-recommends -s "${utils_deb_pkgs[@]}" | grep "^Inst" | awk '{print $2}' | LC_ALL=C sort -n > "$LOG_DIR/utils_to_install_pkgs.txt"
 apt-get install --no-install-recommends -y "${utils_deb_pkgs[@]}"
-dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > "$LOG_DIR/utils_installed_pkgs.txt"
+dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' -e 's/:arm64//g' > "$LOG_DIR/utils_installed_pkgs.txt"
 
 ### microsoft
 cat > /etc/apt/sources.list.d/vscode.sources << EOF
@@ -49,7 +49,7 @@ curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | install
 apt-get update
 apt-get install --no-install-recommends -s microsoft-edge-stable code | grep "^Inst" | awk '{print $2}' | LC_ALL=C sort -n > "$LOG_DIR/microsoft_to_install_pkgs.txt"
 apt-get install --no-install-recommends -y microsoft-edge-stable code
-dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' > "$LOG_DIR/microsoft_installed_pkgs.txt"
+dpkg --get-selections | awk '{print $1}' | sed -e 's/:amd64//g' -e 's/:arm64//g' > "$LOG_DIR/microsoft_installed_pkgs.txt"
 rm -vf -- /etc/apt/sources.list.d/microsoft-edge.list
 
 chown -R ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$LOG_DIR"
