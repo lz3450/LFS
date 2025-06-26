@@ -25,7 +25,8 @@ EOF
 elif [[ "$UBUNTU_CODENAME" == "noble" ]]; then
     :
 elif [[ "$UBUNTU_CODENAME" == "questing" ]]; then
-    :
+    systemctl disable --now systemd-networkd.service
+    systemctl restart NetworkManager.service
 else
     echo "Unsupported Ubuntu suite: $UBUNTU_CODENAME"
     exit 1
