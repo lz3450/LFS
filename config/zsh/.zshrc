@@ -244,6 +244,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias aptupdate="sudo apt update && sudo apt upgrade"
 alias aptinstall="sudo apt install --no-install-recommends"
+alias aptremove="sudo apt remove --purge --auto-remove"
 if [[ -f "/opt/bin/python3" ]]; then
     alias pipwheel="/opt/bin/python3 -m pip wheel --wheel-dir ~/wheels --no-binary :all:"
     alias pipinstall="/opt/bin/python3 -m pip install --user -U --no-index --find-links ~/wheels"
