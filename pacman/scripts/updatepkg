@@ -11,7 +11,7 @@ set -o pipefail
 umask 0022
 
 SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(realpath "$0")"
+SCRIPT_PATH="$(realpath --no-symlinks "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
@@ -31,6 +31,7 @@ unset new_version srcdir build_system pre_update post_update
 
 ### constants & variables
 declare -r PKGBUILDDIR="$(pwd)"
+declare -r PKGBUILD_FILE_PATH="$(realpath PKGBUILD)"
 # PGP_KEY_SERVER="hkps://keyserver.ubuntu.com"
 # PGP_KEY_SERVER="hkps://keys.openpgp.org"
 # PGP_KEY_SERVER="hkps://pgp.mit.edu"
@@ -51,7 +52,7 @@ update_pkgbuild() {
     sed -i \
         -e "/^pkgver=/c\\pkgver=$new_version" \
         -e "/^pkgrel=/c\\pkgrel=1" \
-        PKGBUILD
+        "$PKGBUILD_FILE_PATH"
     info "Running \`updpkgsums\`..."
     updpkgsums || error "\`updpkgsums\` error" 4
     info "Done (Running \`updpkgsums\`)"
@@ -61,7 +62,7 @@ update_pkgbuild() {
 
 update_pkgrel() {
     info "pkgrel increased: $CURRENT_PKGREL => $NEW_PKGREL"
-    sed -i "/^pkgrel=/c\\pkgrel=$NEW_PKGREL" PKGBUILD
+    sed -i "/^pkgrel=/c\\pkgrel=$NEW_PKGREL" "$PKGBUILD_FILE_PATH"
 }
 
 usage() {
@@ -112,7 +113,6 @@ done
 
 ################################################################################
 
-# PKGBUILD
 info "Current version: $CURRENT_VERSION-$CURRENT_PKGREL"
 
 if (( opt_increase_only > 0 )); then
