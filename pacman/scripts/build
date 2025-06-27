@@ -275,20 +275,19 @@ else
                     ;;
             esac
             ;;
-        jammy)
+        jammy|noble|questing)
             case "$opt_stage" in
-                1)
-                    pkgs=("${jammy_stage1_pkgs[@]}")
+                0)
+                    pkgs=("${ubuntu_stage0_pkgs[@]}")
                     ;;
-                *)
-                    error "Unknown stage \"$opt_stage\"" 128
-                    ;;
-            esac
-            ;;
-        noble)
-            case "$opt_stage" in
                 1)
-                    pkgs=("${noble_stage1_pkgs[@]}")
+                    pkgs=("${ubuntu_stage1_pkgs[@]}")
+                    ;;
+                2)
+                    if (( opt_updated_only <= 0 )); then
+                        warn "Better with --updated-only option"
+                    fi
+                    pkgs=("${ubuntu_stage2_pkgs[@]}")
                     ;;
                 *)
                     error "Unknown stage \"$opt_stage\"" 128

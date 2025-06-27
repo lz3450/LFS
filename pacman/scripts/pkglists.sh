@@ -384,7 +384,16 @@ kzl_stage3_pkgs=(
     # libtorrent-rasterbar qbittorrent
 )
 
-jammy_stage1_pkgs=(
+ubuntu_stage0_pkgs=(
+    pacman
+)
+
+ubuntu_stage1_pkgs=(
+    llvm-project
+    llvm-project
+)
+
+ubuntu_stage2_pkgs=(
     pacman
     llvm-project
     python
@@ -397,11 +406,4 @@ jammy_stage1_pkgs=(
     f2fs-tools
     erofs-utils
     fish
-)
-
-noble_stage1_pkgs=(
-    debootstrap
-    dracut
-    erofs-utils
-    kexec-tools
 )
