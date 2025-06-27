@@ -140,7 +140,7 @@ build() {
         _clean=''
     fi
 
-    makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm >> "$_log" 2>&1
+    makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm >> "$_log" 2>&1 || error "Failed to build package \"$_pkgbase\"" 1
     info "Done (Built package)"
 
     info "Getting package configuration log..."
