@@ -280,9 +280,6 @@ else
                 1)
                     pkgs=("${jammy_stage1_pkgs[@]}")
                     ;;
-                2)
-                    pkgs=("${jammy_stage2_pkgs[@]}")
-                    ;;
                 *)
                     error "Unknown stage \"$opt_stage\"" 128
                     ;;

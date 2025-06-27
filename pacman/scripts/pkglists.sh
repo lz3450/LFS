@@ -385,16 +385,18 @@ kzl_stage3_pkgs=(
 )
 
 jammy_stage1_pkgs=(
+    pacman
     llvm-project
     python
+    rust
     ksmbd-tools
     texlive
-    # kexec-tools
-)
-
-jammy_stage2_pkgs=(
-    llvm-project
-    rust
+    kexec-tools
+    debootstrap
+    dracut
+    f2fs-tools
+    erofs-utils
+    fish
 )
 
 noble_stage1_pkgs=(
