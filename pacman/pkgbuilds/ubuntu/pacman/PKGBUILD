@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g67
-pkgrel=10
+pkgver=7.0.0.g69
+pkgrel=8
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -23,11 +23,15 @@ sha256sums=('SKIP')
 
 # Compare the output of `gcc -march=native -Q --help=target` in the host system and the build system
 # Order of options matters
-# MAKEPKG_CFLAGS="-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=haswell -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -mabm -maes -mrtm"
-# MAKEPKG_CFLAGS="-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security"
-MAKEPKG_CFLAGS="-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
-MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now"
 RPATH_FLAGS="-Wl,-rpath=/$PREFIX/lib"
+MAKEPKG_CFLAGS='-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security'
+MAKEPKG_CXXFLAGS='$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS'
+MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs $RPATH_FLAGS"
+MAKEPKG_LTOFLAGS='-flto=auto -ffat-lto-objects'
+
+if (( $(awk '/MemTotal/ {print $2}' /proc/meminfo) < 16 * 1024 * 1024 )); then
+  MAKEPKG_CFLAGS="${MAKEPKG_CFLAGS/ -pipe/}"
+fi
 
 pkgver() {
   cd $pkgname
@@ -38,14 +42,22 @@ pkgver() {
 prepare() {
   cd $pkgname
 
+  . /etc/os-release
+  if [[ "$UBUNTU_CODENAME" == "jammy" ]]; then
+    sed -i \
+        -e 's| --origin=origin||g' \
+        scripts/libmakepkg/source/git.sh.in
+    MAKEPKG_LDFLAGS="${MAKEPKG_LDFLAGS/ -Wl,-z,pack-relative-relocs/}"
+  fi
+
   sed -i \
       -e '/^CHOST=/a\\n\PREFIX="opt"' \
       -e '/^#NPROC=/c\NPROC="$(nproc)"' \
       -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
       -e "/^#CFLAGS=/c\CFLAGS=\"$MAKEPKG_CFLAGS\"" \
-      -e '/^#CXXFLAGS=/c\CXXFLAGS="$CFLAGS"' \
-      -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS $RPATH_FLAGS\"" \
-      -e '/^#LTOFLAGS=/c\LTOFLAGS="-flto -ffat-lto-objects"' \
+      -e "/^#CXXFLAGS=/c\CXXFLAGS=\"$MAKEPKG_CXXFLAGS\"" \
+      -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS\"" \
+      -e "/^#LTOFLAGS=/c\LTOFLAGS=\"$MAKEPKG_LTOFLAGS\"" \
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j $(nproc) -O"' \
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="$DEBUG_CFLAGS"' \

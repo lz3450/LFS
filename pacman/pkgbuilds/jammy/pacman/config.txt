@@ -1,5 +1,5 @@
 The Meson build system
-Version: 1.8.0
+Version: 1.8.2
 Source dir: /home/kzl/makepkg/build/pacman/src/pacman
 Build dir: /home/kzl/makepkg/build/pacman/src/pacman/build
 Build type: native build
@@ -114,11 +114,9 @@ pacman 7.0.0
     doxygen        : disabled
     file-seccomp   : enabled
     gpgme          : enabled
-    ldconfig       : /usr/bin/ldconfig
     libdir         : lib
     pkg-ext        : .pkg.tar.zst
     prefix         : /opt
-    scriptlet-shell: /usr/bin/bash
     src-ext        : .src.tar.zst
     sysconfdir     : etc
     use-git-version: false
