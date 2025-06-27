@@ -18,22 +18,50 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ### libraries
 . "$SCRIPT_DIR"/lib/log.sh
+if [[ -f "/etc/makepkg.conf" ]]; then
+    . /etc/makepkg.conf
+elif [[ -f "/opt/etc/makepkg.conf" ]]; then
+    . /opt/etc/makepkg.conf
+else
+    error "makepkg.conf NOT found" 4
+fi
+. PKGBUILD || error "Failed get package information from PKGBUILD" 2
+unset new_version srcdir build_system pre_update post_update
+. PKGUPDATE || error "Failed to get new version from PKGUPDATE" 3
 
 ### constants & variables
-PKGBUILDDIR="$(pwd)"
+declare -r PKGBUILDDIR="$(pwd)"
 # PGP_KEY_SERVER="hkps://keyserver.ubuntu.com"
 # PGP_KEY_SERVER="hkps://keys.openpgp.org"
 # PGP_KEY_SERVER="hkps://pgp.mit.edu"
+declare -r CURRENT_VERSION=$(grep -oP 'pkgver=\K.+$' PKGBUILD | sed 's/\.g.*//')
+declare -r -i CURRENT_PKGREL=$(grep -oP 'pkgrel=\K\d+$' PKGBUILD)
+declare -r -i NEW_PKGREL=$(($CURRENT_PKGREL + 1))
 
-### constants & variables
+### options and arguments
 opt_syncdeps='-d'
 opt_cleanbuild='-C'
 declare -i opt_increase=0
 declare -i opt_increase_only=0
 
 ### functions
-have_function() {
-	declare -f "$1" > /dev/null
+
+update_pkgbuild() {
+    info "PKGBUILD updated: $CURRENT_VERSION-$CURRENT_PKGREL => $NEW_VERSION-1"
+    sed -i \
+        -e "/^pkgver=/c\\pkgver=$new_version" \
+        -e "/^pkgrel=/c\\pkgrel=1" \
+        PKGBUILD
+    info "Running \`updpkgsums\`..."
+    updpkgsums || error "\`updpkgsums\` error" 4
+    info "Done (Running \`updpkgsums\`)"
+    # force cleanbuild
+    opt_cleanbuild='-C'
+}
+
+update_pkgrel() {
+    info "pkgrel increased: $CURRENT_PKGREL => $NEW_PKGREL"
+    sed -i "/^pkgrel=/c\\pkgrel=$NEW_PKGREL" PKGBUILD
 }
 
 usage() {
@@ -49,7 +77,7 @@ Usage: $SCRIPT_NAME -I
     -s, --syncdeps              Install missing dependencies with pacman (default: no install)
     -n, --no-cleanbuild         Do not remove "\$srcdir/" dir before updating PKGBUILD (default: remove)
     -i, --increase-pkgrel       Increase "\$pkgrel" by 1 (default: no increase)
-    -I, --increase-pkgrel-only  Increase "\$pkgrel" by 1 only (implies \`-i\`; default: no increase)
+    -I, --increase-pkgrel-only  Increase "\$pkgrel" by 1 and exit
 
 EOF
 }
@@ -72,7 +100,6 @@ while (( $# > 0 )); do
         opt_increase=1
         ;;
     -I|--increase-pkgrel-only)
-        opt_increase=1
         opt_increase_only=1
         ;;
     *)
@@ -86,68 +113,31 @@ done
 ################################################################################
 
 # PKGBUILD
-if [[ ! -f "PKGBUILD" ]]; then
-   error "PKGBUILD does not exist" 2
-fi
-. PKGBUILD
-current_version=$(grep -oP 'pkgver=\K.+$' PKGBUILD | sed 's/\.g.*//')
-info "Current pkgver is $current_version"
-current_pkgrel=$(grep -oP 'pkgrel=\K\d+$' PKGBUILD)
-info "Current pkgrel is $current_pkgrel"
+info "Current version: $CURRENT_VERSION-$CURRENT_PKGREL"
 
-# PKGUPDATE
-if [[ ! -f "PKGUPDATE" ]]; then
-    error "PKGUPDATE does not exist" 3
+if (( opt_increase_only > 0 )); then
+    update_pkgrel
+    info "Successfully increased pkgrel"
+    exit 0
 fi
-unset new_version srcdir build_system pre_update post_update
-. PKGUPDATE || :
-if [[ -z "$new_version" ]]; then
-    error 'Cannot get new version' 4
-fi
-info "New pkgver is $new_version"
 
 # update `pkgver` and `pkgrel`
-result=$(vercmp $new_version $current_version)
-pkgbuild_path="$(realpath PKGBUILD)"
+result=$(vercmp $new_version $CURRENT_VERSION)
 if (( result == 1 )); then
-    info "PKGBUILD updated: $current_version => $new_version"
-    sed -i \
-        -e "/^pkgver=/c\\pkgver=$new_version" \
-        -e "/^pkgrel=/c\\pkgrel=1" \
-        "$pkgbuild_path"
-    pkgver=$new_version
-    info "Running \`updpkgsums\`..."
-    updpkgsums || error "\`updpkgsums\` error" 4
-    info "Done (Running \`updpkgsums\`)"
-    # force cleanbuild
-    opt_cleanbuild='-C'
+    update_pkgbuild
 elif (( result == 0 )); then
     info "No update for PKGBUILD"
     if (( opt_increase > 0 )); then
-        new_pkgrel=$(($current_pkgrel + 1))
-        sed -i "/^pkgrel=/s/$current_pkgrel/$new_pkgrel/" "$pkgbuild_path"
-        info "New pkgrel is $new_pkgrel"
-        if (( opt_increase_only > 0 )); then
-            exit $result
-        fi
+        update_pkgrel
     fi
 elif (( result == -1 )); then
-    warn "Current version is newer"
+    error "Current version is newer" 255
 else
     error "Unknown \`vercmp\` result" 4
 fi
 
-# makepkg.conf
-if [[ -f "/etc/makepkg.conf" ]]; then
-    . /etc/makepkg.conf
-elif [[ -f "/opt/etc/makepkg.conf" ]]; then
-    . /opt/etc/makepkg.conf
-else
-    error "makepkg.conf NOT found" 4
-fi
-
 # run pre_update
-if have_function 'pre_update'; then
+if declare -F 'pre_update' > /dev/null; then
     info "Running pre_update()..."
     pre_update || error "\`pre_update\` error" 4
     info "Done (Running pre_update())"
@@ -213,7 +203,7 @@ info "Done (Getting build options)"
 
 # run post_update
 cd "$PKGBUILDDIR"
-if have_function 'post_update'; then
+if declare -F 'post_update' > /dev/null; then
     info "Running post_update()..."
     post_update || error "\`post_update\` error" 4
     info "Done (Running post_update())"
@@ -227,8 +217,8 @@ info "Successfully updated PKGBUILD"
 # 1: updated
 
 ### error codes
-# 2: PKGBUILD does not exist
-# 3: PKGUPDATE does not exist
+# 2: PKGBUILD errors
+# 3: PKGUPDATE errors
 # 4: failed to update PKGBUILD
 # 5: failed to get build options
 # 128: unknown option or invalid argument

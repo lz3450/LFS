@@ -105,7 +105,7 @@ build() {
         _cleanbuild='-e'
 
         if (( $_updated == 255 )); then
-            warn "  Current version is newer"
+            error "  Current version is newer" 3
         elif (( $_updated == 0 )); then
             info "  No update for PKGBUILD"
         elif (( $_updated == 1 )); then
@@ -121,7 +121,7 @@ build() {
             error "  Unknown \`updatepkg\` result" 3
         fi
 
-        if (( $opt_updated_only > 0 )) && (( $_updated == 0 || $_updated == 255 )); then
+        if (( $opt_updated_only > 0 && $_updated == 0 )) && pacman -Q "$_pkgname" ;then
             # Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)
             info "Skip building"
             return
