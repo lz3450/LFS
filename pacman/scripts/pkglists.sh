@@ -399,11 +399,11 @@ ubuntu_stage2_pkgs=(
     python
     rust
     ksmbd-tools
-    texlive
     kexec-tools
     debootstrap
     dracut
     f2fs-tools
     erofs-utils
     fish
+    texlive
 )
