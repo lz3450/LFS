@@ -77,11 +77,11 @@ checking whether to build static libraries... yes
 checking for ldconfig... /usr/sbin/ldconfig
 checking for blkid_probe_all in -lblkid... yes
 checking for main in -llzo2... no
-checking for main in -llz4... yes
+checking for main in -llz4... no
 checking for getcon in -lselinux... yes
 checking for uuid_clear in -luuid... yes
 checking for clock_gettime in -lwinpthread... no
-checking for attr/xattr.h... yes
+checking for attr/xattr.h... no
 checking for blkid/blkid.h... yes
 checking for byteswap.h... yes
 checking for fcntl.h... yes
@@ -104,7 +104,7 @@ checking for selinux/selinux.h... yes
 checking for sparse/sparse.h... no
 checking for stdlib.h... (cached) yes
 checking for string.h... (cached) yes
-checking for sys/acl.h... yes
+checking for sys/acl.h... no
 checking for sys/ioctl.h... yes
 checking for sys/mount.h... yes
 checking for sys/stat.h... (cached) yes

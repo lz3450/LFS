@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=rust
-pkgver=1.87.0
-pkgrel=3
+pkgver=1.88.0
+pkgrel=16
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')
@@ -15,7 +15,7 @@ source=(
   # git+https://github.com/rust-lang/rust.git#branch=stable
   git+https://github.com/rust-lang/rust.git#tag=$pkgver
 )
-sha256sums=('c11710299fd1f2089b8844726a19aabe3a66878a0636e9cb17d9fcf19f8145b9')
+sha256sums=('f1aaab9f9c483c3d3c412ace462c8a19503720ecec2df0e38924bf6d9f472012')
 
 pkgver() {
   cd $pkgname
@@ -29,43 +29,55 @@ build() {
   local _target="$(clang -print-target-triple)"
   local _change_id=$(grep -oP 'change_id: \K\d+' src/bootstrap/src/utils/change_tracker.rs | sort -n | tail -n1)
   local -a _options=(
-    ################
-    # stage2
-    ################
-    # --enable-local-rust
-    # --local-rust-root=/"$PREFIX"
-    ################
-    --enable-llvm-link-shared
+    --disable-debug
+    --disable-docs
+    --disable-compiler-docs
+    --disable-optimize-tests
+    --disable-verbose-tests
+    --disable-local-rust
     --enable-rpath
-    --enable-sanitizers
-    --enable-profiler
+    --disable-codegen-tests
+    --disable-ninja
+    --disable-locked-deps
+    --disable-vendor
+    --disable-sanitizers
+    --disable-dist-src
+    --disable-cargo-native-static
+    --disable-profiler
+    --disable-full-tools
+    --disable-lld
+    --disable-llvm-bitcode-linker
+    --disable-control-flow-guard
+    --disable-patch-binaries-for-nix
+    --enable-new-symbol-mangling
     "--prefix=/$PREFIX"
-    "--sysconfdir=etc"
+    "--sysconfdir=/etc"
     "--llvm-root=/$PREFIX"
     "--llvm-config=/$PREFIX/bin/llvm-config"
     "--llvm-filecheck=/$PREFIX/bin/FileCheck"
     "--python=/$PREFIX/bin/python3"
-    "--release-channel=stable"
+    "--release-channel=\"auto-detect\""
     "--release-description=KZL $(date '+%Y/%m/%d %T %z')"
-    "--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src,wasm-component-ld"
+    "--enable-manage-submodules"
+    "--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,src,wasm-component-ld"
     "--build=$_target"
     "--host=$_target"
     "--target=$_target"
     --enable-option-checking
     --enable-verbose-configure
     "--set=change-id=$_change_id"
-    "--set=rust.frame-pointers=true"
-    "--set=rust.backtrace-on-ice=true"
+    "--set=llvm.download-ci-llvm=false"
+    "--set=build.compiletest-use-stage0-libtest=false"
+    "--set=rust.download-rustc=false"
+    "--set=rust.use-lld=true"
+    "--set=rust.llvm-tools=false"
+    "--set=rust.llvm-bitcode-linker=false"
     "--set=rust.remap-debuginfo=true"
     "--set=rust.jemalloc=true"
     "--set=target.$_target.cc=/$PREFIX/bin/clang"
     "--set=target.$_target.cxx=/$PREFIX/bin/clang++"
     "--set=target.$_target.ar=/$PREFIX/bin/llvm-ar"
     "--set=target.$_target.ranlib=/$PREFIX/bin/llvm-ranlib"
-    "--set=target.$_target.linker=/$PREFIX/bin/clang"
-    "--set=build.lldb=/$PREFIX/bin/lldb"
-    "--set=rust.lld=true"
-    "--set=rust.use-lld=true"
   )
 
   msg2 "Configuring..."
@@ -88,6 +100,11 @@ package() {
 
   DESTDIR="$pkgdir" ./x.py -j "$(nproc)" install
 
-  rm -f "$pkgdir"/$PREFIX/lib/rustlib/{components,install.log,manifest-*,rust-installer-version,uninstall.sh}
-  rm -rf "$pkgdir"/$PREFIX/share/doc
+  rm -vf "$pkgdir/$PREFIX"/lib/rustlib/{components,install.log,manifest-*,rust-installer-version,uninstall.sh}
+  rm -vrf "$pkgdir/$PREFIX"/share/doc
+
+  # zsh completions
+  install -dm755 "$pkgdir"/usr/share
+  mv -v "$pkgdir/$PREFIX/share/zsh" "$pkgdir/usr/share/zsh"
+  mv -v "$pkgdir/usr/share/zsh/site-functions" "$pkgdir/usr/share/zsh/vendor-completions"
 }

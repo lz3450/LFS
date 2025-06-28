@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=kexec-tools
-pkgver=2.0.30.g9
-pkgrel=6
+pkgver=2.0.31.g9
+pkgrel=2
 epoch=
 pkgdesc="Userspace portion of Kexec"
 arch=('x86_64')
@@ -28,9 +28,11 @@ prepare() {
 build() {
   cd $pkgname
 
+  msg2 "Configuring..."
   ./configure \
-    --prefix=/usr
+    --prefix="/$PREFIX"
 
+  msg2 "Compiling..."
   make
 }
 

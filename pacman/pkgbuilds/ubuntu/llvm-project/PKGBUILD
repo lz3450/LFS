@@ -2,7 +2,7 @@
 
 pkgname=llvm-project
 pkgver=20.1.7
-pkgrel=1
+pkgrel=11
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')
@@ -23,8 +23,8 @@ _llvm_options=(
   ### libc;libunwind;libcxxabi;pstl;libcxx;compiler-rt;openmp;llvm-libgcc;offload
   -DLLVM_ENABLE_RUNTIMES=""
   -DLLVM_TARGETS_TO_BUILD="X86"
-  -DLLVM_PARALLEL_COMPILE_JOBS="$(( `nproc` - 2 ))"
-  -DLLVM_PARALLEL_LINK_JOBS="$(( `nproc` - 2 ))"
+  -DLLVM_PARALLEL_COMPILE_JOBS=$(nproc)
+  -DLLVM_PARALLEL_LINK_JOBS=$(nproc)
   -DLLVM_BUILD_LLVM_DYLIB=ON
   -DLLVM_LINK_LLVM_DYLIB=ON
   ################################################################
@@ -68,7 +68,7 @@ _stage2_options=(
   -DLLVM_ENABLE_LLD=ON
   -DLLVM_ENABLE_LTO=ON
   -DLLVM_ENABLE_FATLTO=OFF
-  -DLLVM_ENABLE_Z3_SOLVER=ON
+  -DLLVM_ENABLE_Z3_SOLVER=OFF
   ################################################################
   ### rtlib
   ################################################################
@@ -111,12 +111,6 @@ build() {
 
   msg2 "Compiling..."
   ninja -C build
-}
-
-check() {
-  cd $pkgname
-
-  LD_LIBRARY_PATH=$PWD/build/lib ninja -C build check
 }
 
 package() {

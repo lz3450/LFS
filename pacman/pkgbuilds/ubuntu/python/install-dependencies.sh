@@ -13,4 +13,4 @@ pkgs=(
 )
 
 sudo apt-get update
-sudo apt-get install -y "${pkgs[@]}"
+sudo apt-get install --no-install-recommends -y "${pkgs[@]}"

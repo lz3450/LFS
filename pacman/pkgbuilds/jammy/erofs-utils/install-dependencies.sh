@@ -1,0 +1,1 @@
+../../ubuntu/erofs-utils/install-dependencies.sh

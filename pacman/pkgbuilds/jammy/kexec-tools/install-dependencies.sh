@@ -1,0 +1,1 @@
+../../ubuntu/kexec-tools/install-dependencies.sh

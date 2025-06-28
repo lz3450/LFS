@@ -9,7 +9,7 @@
 -- Rust Target: x86_64-unknown-linux-gnu
 -- Determining required link libraries for target x86_64-unknown-linux-gnu
 -- Required static libs for target x86_64-unknown-linux-gnu: gcc_s;util;rt;pthread;m;dl;c
--- Found Rust: /opt/bin/rustc (found version "1.86.0") 
+-- Found Rust: /opt/bin/rustc (found version "1.88.0") 
 -- The following features have been enabled:
 
  * gettext, translate messages with gettext

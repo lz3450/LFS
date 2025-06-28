@@ -1,15 +1,15 @@
--- The C compiler identification is GNU 11.4.0
--- The CXX compiler identification is GNU 11.4.0
--- The ASM compiler identification is GNU
--- Found assembler: /usr/bin/cc
+-- The C compiler identification is Clang 20.1.7
+-- The CXX compiler identification is Clang 20.1.7
+-- The ASM compiler identification is Clang with GNU-like command-line
+-- Found assembler: /opt/bin/clang
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
--- Check for working C compiler: /usr/bin/cc - skipped
+-- Check for working C compiler: /opt/bin/clang - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Check for working CXX compiler: /opt/bin/clang++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
 -- bolt project is disabled
@@ -27,6 +27,10 @@
 -- pstl project is disabled
 -- flang project is disabled
 -- Found Python3: /usr/bin/python3.10 (found suitable version "3.10.12", minimum required is "3.0") found components: Interpreter 
+-- Performing Test LLVM_LIBSTDCXX_MIN
+-- Performing Test LLVM_LIBSTDCXX_MIN - Success
+-- Performing Test LLVM_LIBSTDCXX_SOFT_ERROR
+-- Performing Test LLVM_LIBSTDCXX_SOFT_ERROR - Success
 -- Looking for __GLIBC__
 -- Looking for __GLIBC__ - found
 -- Looking for valgrind/valgrind.h
@@ -75,7 +79,7 @@
 -- backtrace facility detected in default set of libraries
 -- Found Backtrace: /usr/include  
 -- Performing Test C_SUPPORTS_WERROR_UNGUARDED_AVAILABILITY_NEW
--- Performing Test C_SUPPORTS_WERROR_UNGUARDED_AVAILABILITY_NEW - Failed
+-- Performing Test C_SUPPORTS_WERROR_UNGUARDED_AVAILABILITY_NEW - Success
 -- Looking for __register_frame
 -- Looking for __register_frame - found
 -- Looking for __deregister_frame
@@ -150,10 +154,12 @@
 -- Ninja version: 1.11.1.git.kitware.jobserver-1
 -- Could NOT find OCaml (missing: OCAMLFIND OCAML_VERSION OCAML_STDLIB_PATH) 
 -- OCaml bindings disabled.
--- Found Python module pygments
--- Found Python module pygments.lexers.c_cpp
+-- Could NOT find Python module pygments
+-- Could NOT find Python module pygments.lexers.c_cpp
 -- Found Python module yaml
 -- LLVM default target triple: x86_64-unknown-linux-gnu
+-- Performing Test CXX_SUPPORTS_CUSTOM_LINKER
+-- Performing Test CXX_SUPPORTS_CUSTOM_LINKER - Success
 -- Performing Test C_SUPPORTS_FPIC
 -- Performing Test C_SUPPORTS_FPIC - Success
 -- Performing Test CXX_SUPPORTS_FPIC
@@ -166,31 +172,37 @@
 -- Performing Test SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG
 -- Performing Test SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG - Success
 -- Performing Test C_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG
--- Performing Test C_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG - Failed
+-- Performing Test C_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG - Success
 -- Performing Test CXX_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG
--- Performing Test CXX_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG - Failed
+-- Performing Test CXX_SUPPORTS_CXX98_COMPAT_EXTRA_SEMI_FLAG - Success
 -- Performing Test CXX_SUPPORTS_SUGGEST_OVERRIDE_FLAG
 -- Performing Test CXX_SUPPORTS_SUGGEST_OVERRIDE_FLAG - Success
 -- Performing Test CXX_WSUGGEST_OVERRIDE_ALLOWS_ONLY_FINAL
 -- Performing Test CXX_WSUGGEST_OVERRIDE_ALLOWS_ONLY_FINAL - Success
 -- Performing Test C_WCOMMENT_ALLOWS_LINE_WRAP
--- Performing Test C_WCOMMENT_ALLOWS_LINE_WRAP - Failed
+-- Performing Test C_WCOMMENT_ALLOWS_LINE_WRAP - Success
+-- Performing Test C_SUPPORTS_MISLEADING_INDENTATION_FLAG
+-- Performing Test C_SUPPORTS_MISLEADING_INDENTATION_FLAG - Success
+-- Performing Test CXX_SUPPORTS_MISLEADING_INDENTATION_FLAG
+-- Performing Test CXX_SUPPORTS_MISLEADING_INDENTATION_FLAG - Success
 -- Performing Test C_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG
--- Performing Test C_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG - Failed
+-- Performing Test C_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG - Success
 -- Performing Test CXX_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG
 -- Performing Test CXX_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG - Success
 -- Performing Test LINKER_SUPPORTS_COLOR_DIAGNOSTICS
--- Performing Test LINKER_SUPPORTS_COLOR_DIAGNOSTICS - Failed
+-- Performing Test LINKER_SUPPORTS_COLOR_DIAGNOSTICS - Success
 -- Looking for os_signpost_interval_begin
 -- Looking for os_signpost_interval_begin - not found
--- Linker detection: GNU ld
+-- Linker detection: LLD
 -- Performing Test HAS_WERROR_GLOBAL_CTORS
--- Performing Test HAS_WERROR_GLOBAL_CTORS - Failed
+-- Performing Test HAS_WERROR_GLOBAL_CTORS - Success
+-- Performing Test LLVM_HAS_NOGLOBAL_CTOR_MUTEX
+-- Performing Test LLVM_HAS_NOGLOBAL_CTOR_MUTEX - Success
 -- Looking for __x86_64__
 -- Looking for __x86_64__ - found
 -- Found Git: /usr/bin/git (found version "2.34.1") 
 -- Looking for logf128
--- Looking for logf128 - found
+-- Looking for logf128 - not found
 -- Targeting X86
 -- LLD version: 20.1.7
 -- Looking for sys/resource.h
@@ -203,7 +215,7 @@
 -- Looking for include file sys/inotify.h
 -- Looking for include file sys/inotify.h - found
 -- Performing Test HAVE_LINKER_FLAG_LONG_PLT
--- Performing Test HAVE_LINKER_FLAG_LONG_PLT - Failed
+-- Performing Test HAVE_LINKER_FLAG_LONG_PLT - Success
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/kzl/makepkg/build/llvm-project/src/llvm-project/tmp
@@ -443,19 +455,19 @@ CLANG_VENDOR:STRING=
 CLANG_VENDOR_UTI:STRING=org.llvm.clang
 
 // Path to a program.
-CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
+CMAKE_ADDR2LINE:FILEPATH=/opt/bin/llvm-addr2line
 
 // Path to a program.
-CMAKE_AR:FILEPATH=/usr/bin/ar
+CMAKE_AR:FILEPATH=/opt/bin/llvm-ar
 
 // ASM compiler
-CMAKE_ASM_COMPILER:FILEPATH=/usr/bin/cc
+CMAKE_ASM_COMPILER:FILEPATH=/opt/bin/clang
 
-// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_ASM_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar
+// LLVM archiver
+CMAKE_ASM_COMPILER_AR:FILEPATH=/opt/bin/llvm-ar
 
-// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_ASM_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib
+// Generate index for LLVM archive
+CMAKE_ASM_COMPILER_RANLIB:FILEPATH=/opt/bin/llvm-ranlib
 
 // Flags used by the ASM compiler during all build types.
 CMAKE_ASM_FLAGS:STRING=
@@ -482,16 +494,16 @@ CMAKE_CXX_ARCHIVE_CREATE:STRING=<CMAKE_AR> Dqc <TARGET> <LINK_FLAGS> <OBJECTS>
 CMAKE_CXX_ARCHIVE_FINISH:STRING=<CMAKE_RANLIB> -D <TARGET>
 
 // CXX compiler
-CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
+CMAKE_CXX_COMPILER:STRING=/opt/bin/clang++
 
-// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-11
+// LLVM archiver
+CMAKE_CXX_COMPILER_AR:FILEPATH=/opt/bin/llvm-ar
 
-// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-11
+// Generate index for LLVM archive
+CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/opt/bin/llvm-ranlib
 
 // Flags used by the CXX compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer
+CMAKE_CXX_FLAGS:STRING=-march=native -O3 -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -Wp,-D_GLIBCXX_ASSERTIONS
 
 // Flags used by the CXX compiler during DEBUG builds.
 CMAKE_CXX_FLAGS_DEBUG:STRING=-g
@@ -515,16 +527,16 @@ CMAKE_C_ARCHIVE_CREATE:STRING=<CMAKE_AR> Dqc <TARGET> <LINK_FLAGS> <OBJECTS>
 CMAKE_C_ARCHIVE_FINISH:STRING=<CMAKE_RANLIB> -D <TARGET>
 
 // C compiler
-CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
+CMAKE_C_COMPILER:STRING=/opt/bin/clang
 
-// A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-11
+// LLVM archiver
+CMAKE_C_COMPILER_AR:FILEPATH=/opt/bin/llvm-ar
 
-// A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler
-CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-11
+// Generate index for LLVM archive
+CMAKE_C_COMPILER_RANLIB:FILEPATH=/opt/bin/llvm-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer
+CMAKE_C_FLAGS:STRING=-march=native -O3 -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -539,7 +551,7 @@ CMAKE_C_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 // Path to a program.
-CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
+CMAKE_DLLTOOL:FILEPATH=/opt/bin/llvm-dlltool
 
 // Flags used by the linker during all build types.
 CMAKE_EXE_LINKER_FLAGS:STRING=
@@ -611,7 +623,7 @@ CMAKE_INSTALL_SHAREDSTATEDIR:PATH=com
 CMAKE_INSTALL_SYSCONFDIR:PATH=etc
 
 // Path to a program.
-CMAKE_LINKER:FILEPATH=/usr/bin/ld
+CMAKE_LINKER:FILEPATH=/opt/bin/ld.lld
 
 // Program used to build from build.ninja files.
 CMAKE_MAKE_PROGRAM:FILEPATH=/home/kzl/.local/bin/ninja
@@ -632,19 +644,19 @@ CMAKE_MODULE_LINKER_FLAGS_RELEASE:STRING=
 CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 // Path to a program.
-CMAKE_NM:FILEPATH=/usr/bin/nm
+CMAKE_NM:FILEPATH=/opt/bin/llvm-nm
 
 // Path to a program.
-CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
+CMAKE_OBJCOPY:FILEPATH=/opt/bin/llvm-objcopy
 
 // Path to a program.
-CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
+CMAKE_OBJDUMP:FILEPATH=/opt/bin/llvm-objdump
 
 // Path to a program.
-CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
+CMAKE_RANLIB:FILEPATH=/opt/bin/llvm-ranlib
 
 // Path to a program.
-CMAKE_READELF:FILEPATH=/usr/bin/readelf
+CMAKE_READELF:FILEPATH=/opt/bin/llvm-readelf
 
 // Flags used by the linker during the creation of shared libraries during all build types.
 CMAKE_SHARED_LINKER_FLAGS:STRING=
@@ -683,7 +695,7 @@ CMAKE_STATIC_LINKER_FLAGS_RELEASE:STRING=
 CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 // Path to a program.
-CMAKE_STRIP:FILEPATH=/usr/bin/strip
+CMAKE_STRIP:FILEPATH=/opt/bin/llvm-strip
 
 // If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
@@ -791,7 +803,7 @@ LIBXML2_INCLUDE_DIR:PATH=/usr/include/libxml2
 LIBXML2_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libxml2.so
 
 // Path to a program.
-LIBXML2_XMLLINT_EXECUTABLE:FILEPATH=/usr/bin/xmllint
+LIBXML2_XMLLINT_EXECUTABLE:FILEPATH=LIBXML2_XMLLINT_EXECUTABLE-NOTFOUND
 
 // Default URL where lldb bug reports are to be submitted.
 LLDB_BUG_REPORT_URL:STRING=https://github.com/llvm/llvm-project/issues/
@@ -966,7 +978,7 @@ LLVM_ENABLE_LIBPFM:BOOL=ON
 LLVM_ENABLE_LIBXML2:STRING=ON
 
 // Use lld as C and C++ linker.
-LLVM_ENABLE_LLD:BOOL=OFF
+LLVM_ENABLE_LLD:BOOL=ON
 
 // Set to on to link all LLVM executables against LLVM libc, assuming it is accessible by the host compiler.
 LLVM_ENABLE_LLVM_LIBC:BOOL=OFF
@@ -975,7 +987,7 @@ LLVM_ENABLE_LLVM_LIBC:BOOL=OFF
 LLVM_ENABLE_LOCAL_SUBMODULE_VISIBILITY:BOOL=ON
 
 // Build LLVM with LTO. May be specified as Thin or Full to use a particular kind of LTO
-LLVM_ENABLE_LTO:STRING=OFF
+LLVM_ENABLE_LTO:STRING=ON
 
 // Compile with C++ modules enabled.
 LLVM_ENABLE_MODULES:BOOL=OFF
@@ -1228,10 +1240,10 @@ LLVM_OPTIMIZED_TABLEGEN:BOOL=OFF
 LLVM_OPTIMIZE_SANITIZED_BUILDS:BOOL=ON
 
 // Define the maximum number of concurrent compilation jobs (Ninja only).
-LLVM_PARALLEL_COMPILE_JOBS:STRING=14
+LLVM_PARALLEL_COMPILE_JOBS:STRING=8
 
 // Define the maximum number of concurrent link jobs (Ninja only).
-LLVM_PARALLEL_LINK_JOBS:STRING=14
+LLVM_PARALLEL_LINK_JOBS:STRING=8
 
 // Define the maximum number of concurrent tablegen jobs (Ninja only).
 LLVM_PARALLEL_TABLEGEN_JOBS:STRING=
@@ -1692,11 +1704,11 @@ PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
 // Enable IEEE binary128 as default long double format on PowerPC Linux.
 PPC_LINUX_DEFAULT_IEEELONGDOUBLE:BOOL=OFF
 
-// Found python module 'pygments'
-PY_PYGMENTS_FOUND:BOOL=ON
+// Failed to find python module 'pygments'
+PY_PYGMENTS_FOUND:BOOL=OFF
 
-// Found python module 'pygments.lexers.c_cpp'
-PY_PYGMENTS_LEXERS_C_CPP_FOUND:BOOL=ON
+// Failed to find python module 'pygments.lexers.c_cpp'
+PY_PYGMENTS_LEXERS_C_CPP_FOUND:BOOL=OFF
 
 // Found python module 'yaml'
 PY_YAML_FOUND:BOOL=ON

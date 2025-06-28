@@ -2,14 +2,14 @@
 
 pkgname=dracut
 pkgver=107
-pkgrel=7
+pkgrel=10
 epoch=
 pkgdesc="An event driven initramfs infrastructure"
 arch=('x86_64')
 url="https://github.com/dracut-ng/dracut-ng"
 license=('KZL')
 backup=(
-  etc/dracut.conf
+  "$PREFIX/etc/dracut.conf"
 )
 source=(
   git+$url.git#tag=$pkgver
@@ -27,7 +27,7 @@ build() {
 
   msg2 "Configuring..."
   ./configure \
-    --prefix=/usr \
+    --prefix="/$PREFIX" \
     --disable-documentation
 
   msg2 "Compiling..."

@@ -1,0 +1,27 @@
+Configuration of kexec-tools 2.0.31.git:
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-objdir=<dir>     select directory for object files
+  --with-gamecube         enable gamecube support
+  --without-zlib          disable zlib support
+  --without-lzma          disable lzma support
+  --without-zstd          disable zstd support
+  --without-xen           disable extended xen support
+  --with-booke            build for booke
+
+Some influential environment variables:
+  CC          C compiler command
+  CFLAGS      C compiler flags
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
+  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+              you have headers in a nonstandard directory <include dir>
+  CPP         C preprocessor
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
+
+Report bugs to the package provider.

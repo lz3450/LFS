@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g69
-pkgrel=8
+pkgrel=9
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -125,7 +125,7 @@ package() {
 
   meson install -C build --destdir "$pkgdir"
 
-  mv -v "$pkgdir/$PREFIX/share/zsh" "$pkgdir/usr/share/"
+  mv -v "$pkgdir/$PREFIX/share/zsh" "$pkgdir/usr/share/zsh"
   mv -v "$pkgdir/usr/share/zsh/site-functions" "$pkgdir/usr/share/zsh/vendor-completions"
   rm -v "$pkgdir/usr/share/bash-completion/completions/makepkg"
 }

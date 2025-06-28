@@ -9,7 +9,7 @@
 -- Rust Target: x86_64-unknown-linux-gnu
 -- Determining required link libraries for target x86_64-unknown-linux-gnu
 -- Required static libs for target x86_64-unknown-linux-gnu: gcc_s;util;rt;pthread;m;dl;c
--- Found Rust: /opt/bin/rustc (found version "1.86.0") 
+-- Found Rust: /opt/bin/rustc (found version "1.88.0") 
 -- The following features have been enabled:
 
  * gettext, translate messages with gettext
@@ -61,7 +61,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-11
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-11
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto -ffat-lto-objects
+CMAKE_C_FLAGS:STRING=-march=native -O2 -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -flto=auto -ffat-lto-objects
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -79,7 +79,7 @@ CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
 
 // Flags used by the linker during all build types.
-CMAKE_EXE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-rpath=/opt/lib -flto -ffat-lto-objects
+CMAKE_EXE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-rpath=/opt/lib -flto=auto -ffat-lto-objects
 
 // Flags used by the linker during DEBUG builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
@@ -154,7 +154,7 @@ CMAKE_LINKER:FILEPATH=/usr/bin/ld
 CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/gmake
 
 // Flags used by the linker during the creation of modules during all build types.
-CMAKE_MODULE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-rpath=/opt/lib -flto -ffat-lto-objects
+CMAKE_MODULE_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-rpath=/opt/lib -flto=auto -ffat-lto-objects
 
 // Flags used by the linker during the creation of modules during DEBUG builds.
 CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
@@ -184,7 +184,7 @@ CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
 CMAKE_READELF:FILEPATH=/usr/bin/readelf
 
 // Flags used by the linker during the creation of shared libraries during all build types.
-CMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-rpath=/opt/lib -flto -ffat-lto-objects
+CMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-rpath=/opt/lib -flto=auto -ffat-lto-objects
 
 // Flags used by the linker during the creation of shared libraries during DEBUG builds.
 CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
