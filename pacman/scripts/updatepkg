@@ -144,15 +144,15 @@ if declare -F 'pre_update' > /dev/null; then
 fi
 
 # receive key id
-cd "$PKGBUILDDIR"
 if (( ${#validpgpkeys[@]} )); then
     if ! gpg --list-keys --with-colons "${validpgpkeys[@]}" > /dev/null 2>&1; then
-        # gpg --keyserver "$PGP_KEY_SERVER" --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 11
+        # gpg --keyserver "$PGP_KEY_SERVER" --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 4
         gpg --recv-keys "${validpgpkeys[@]}" || error "\`gpg --recv-keys\` error" 4
     fi
 fi
 
 info "Running \`makepkg -o\`..."
+cd "$PKGBUILDDIR"
 makepkg "$opt_cleanbuild" "$opt_syncdeps" -o --noconfirm || error "\`makepkg -o\` error" 5
 info "Done (Running \`makepkg -o\`)"
 
