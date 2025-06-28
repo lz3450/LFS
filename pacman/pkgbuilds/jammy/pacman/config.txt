@@ -51,8 +51,10 @@ Configuring config.h using configuration
 Configuring edit-script.sh using configuration
 Program edit-script.sh found: YES (/usr/bin/bash /home/kzl/makepkg/build/pacman/src/pacman/build/scripts/edit-script.sh)
 Configuring libmakepkg.pc using configuration
-Program msgfmt found: NO
-lib/libalpm/po/meson.build:1: WARNING: Gettext not found, all translation (po) targets will be ignored.
+Program msgfmt found: YES (/usr/bin/msgfmt)
+Program msginit found: YES (/usr/bin/msginit)
+Program msgmerge found: YES (/usr/bin/msgmerge)
+Program xgettext found: YES (/usr/bin/xgettext)
 Program asciidoc skipped: feature doc disabled
 Program a2x skipped: feature doc disabled
 Configuring makepkg using configuration
@@ -100,7 +102,7 @@ Message: pacman 7.0.0
       Use OpenSSL              : true
       Use nettle               : false
     
-Build targets in project: 113
+Build targets in project: 249
 
 pacman 7.0.0
 

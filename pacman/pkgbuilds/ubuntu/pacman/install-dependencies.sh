@@ -7,6 +7,7 @@ sudo apt-get install --no-install-recommends -y \
     fakechroot \
     fakeroot \
     file \
+    gettext \
     libarchive-dev \
     libarchive-tools \
     libcurl4-openssl-dev \
