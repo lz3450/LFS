@@ -4,7 +4,7 @@ build_system=
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$pkgname"
-    make O=build nconfig
+    make O=build nconfig || return 1
 
     # gcc 13.3.0 to 11.4.0
     # cp -v build/.config "$PKGBUILDDIR"/config
@@ -19,6 +19,8 @@ post_update() {
         -e '/CONFIG_RUSTC_LLVM_VERSION/d' \
         -e '/CONFIG_CC_HAS_ASM_GOTO_OUTPUT/d' \
         -e '/CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT/d' \
+        -e '/CONFIG_GCC_ASM_GOTO_OUTPUT_BROKEN/d' \
+        -e '/CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES/d' \
         -e '/CONFIG_PAHOLE_VERSION/d' \
         -e '/CONFIG_CC_HAS_MIN_FUNCTION_ALIGNMENT/d' \
         -e '/CONFIG_CC_HAS_SANE_FUNCTION_ALIGNMENT/d' \
