@@ -245,14 +245,24 @@ configure_rootfs() {
     done
     info "Done (Copied kernel images)"
 
-    info "Running initialize.sh..."
-    cp -v -- "$SCRIPT_DIR/initialize.sh" "$ROOTFS_DIR/initialize.sh"
+    info "Initializing rootfs..."
     chroot_setup "$ROOTFS_DIR"
     # chroot_run "$ROOTFS_DIR" update-initramfs -c -k all
-    chroot_run "$ROOTFS_DIR" "/initialize.sh" > "$LOG_DIR/initialize.log"
+    chroot_run "$ROOTFS_DIR" /bin/bash -e -u -o pipefail -s > "$LOG_DIR/initialize.log" << EOF
+useradd -m -U -G adm,dialout,sudo,audio,video -s /bin/zsh kzl
+echo "root:raspi" | chpasswd
+echo "kzl:raspi" | chpasswd
+
+systemctl disable wpa_supplicant.service
+systemctl disable NetworkManager.service
+systemctl enable systemd-networkd.service
+systemctl enable systemd-resolved.service
+systemctl enable wpa_supplicant@wlan0.service
+systemctl enable ssh.service
+EOF
     chroot_teardown
     rm -vf -- "$ROOTFS_DIR/initialize.sh"
-    info "Done (Ran initialize.sh)"
+    info "Done (Initialized rootfs)"
 
     # info "Copying initramfs..."
     # local _kvs
