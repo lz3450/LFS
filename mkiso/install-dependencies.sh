@@ -2,8 +2,10 @@
 
 sudo apt-get update
 sudo apt-get install -y \
-    erofs-utils \
+    dosfstools \
     isomd5sum \
-    mtools \
-    squashfs-tools \
     xorriso
+sudo pacman -Sy --noconfirm \
+    dracut \
+    erofs-utils \
+    f2fs-tools
