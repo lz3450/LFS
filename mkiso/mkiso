@@ -451,12 +451,12 @@ make_iso_image() {
 usage() {
     cat << EOF
 
-Usage: $SCRIPT_NAME -V | --version
 Usage: $SCRIPT_NAME -h | --help
-Usage: $SCRIPT_NAME [-v | --verbose ] -i | --input <arg>
+Usage: $SCRIPT_NAME -s | --suite <suite> -r | --rootfs-tarball <tarball>
 
     -h, --help                      print this help message and exit
     -s, --suite <suite>             set iso suite (jammy, noble, questing, kzl)
+    -r, --rootfs-tarball <tarball>  set root filesystem tarball path
 
 EOF
 }
