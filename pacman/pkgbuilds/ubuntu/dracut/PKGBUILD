@@ -2,7 +2,7 @@
 
 pkgname=dracut
 pkgver=107
-pkgrel=10
+pkgrel=12
 epoch=
 pkgdesc="An event driven initramfs infrastructure"
 arch=('x86_64')
@@ -27,7 +27,7 @@ build() {
 
   msg2 "Configuring..."
   ./configure \
-    --prefix="/$PREFIX" \
+    --prefix=/usr \
     --disable-documentation
 
   msg2 "Compiling..."
