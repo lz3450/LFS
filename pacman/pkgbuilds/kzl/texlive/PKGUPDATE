@@ -1,19 +1,20 @@
-new_version=$(git ls-remote --tags https://github.com/TeX-Live/texlive-source.git | grep -oP 'refs/tags/(build-)?svn\K\d+(\.\d+)?' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://github.com/TeX-Live/texlive-source.git | grep -oP 'refs/tags/svn\K\d+' | sort -V | tail -n1)
 srcdir="$pkgname-source"
 build_system=autoconf
 
 pre_update() {
-    ### update `_texliveyear`
-    local _latex_year=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive | grep -oP '\d{4}(?=-\d{2}-\d{2})' | tail -n1)
-    test -n "$_latex_year" || return 1
-    echo "Latest TeX Live year: $_latex_year"
-    sed -i -e "s|^_texliveyear=[0-9]\{4\}$|_texliveyear=$_latex_year|" PKGBUILD
+    local _pkgbuild_file_path=$(realpath PKGBUILD)
+    ### update `texliveyear`
+    local _year=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive | grep -oP '\d{4}(?=-\d{2}-\d{2})' | tail -n1)
+    test -n "$_year" || return 1
+    echo "Latest TeX Live year: $_year"
+    sed -i -e "s|^texliveyear=[0-9]\{4\}$|texliveyear=$_year|" "$_pkgbuild_file_path"
 
-    ### update `_texmfver`
-    local _texmf_version=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_latex_year/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
-    test -n "$_texmf_version" || return 1
-    echo "Latest texmf version: $_texmf_version"
-    sed -i -e "s|^_texmfver=[0-9]\{8\}$|_texmfver=$_texmf_version|" PKGBUILD
+    ### update `texlivedate`
+    local _date=$(curl -L -A 'Mozilla/5.0' --stderr - http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$_year/ | grep -oP '(?<=texlive-)\d{8}(?=-texmf.tar)' | head -n1)
+    test -n "$_date" || return 1
+    echo "Latest texmf version: $_date"
+    sed -i -e "s|^texlivedate=[0-9]\{8\}$|texlivedate=$_date|" "$_pkgbuild_file_path"
 
     ### force update `tlpdb`
     rm -vf "$SRCDEST"/texlive.tlpdb
