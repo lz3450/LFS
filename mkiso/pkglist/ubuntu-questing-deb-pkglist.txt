@@ -34,6 +34,7 @@ dirmngr
 distro-info
 distro-info-data
 dmidecode
+dmsetup
 dosfstools
 dpkg
 dracut-install
@@ -102,6 +103,7 @@ libcbor0.10
 libcom-err2
 libcrypt-dev
 libcrypt1
+libcryptsetup12
 libcurl3t64-gnutls
 libcurl4t64
 libdb5.3t64
@@ -221,11 +223,10 @@ libyaml-0-2
 libzstd1
 linux-base
 linux-firmware
-linux-image-6.14.0-15-generic
+linux-image-6.15.0-3-generic
 linux-image-generic
 linux-libc-dev
-linux-modules-6.14.0-15-generic
-linux-modules-extra-6.14.0-15-generic
+linux-modules-6.15.0-3-generic
 locales
 login
 login.defs
@@ -284,6 +285,7 @@ systemd
 systemd-boot
 systemd-boot-efi
 systemd-boot-tools
+systemd-cryptsetup
 systemd-hwe-hwdb
 systemd-resolved
 systemd-sysv
@@ -298,7 +300,6 @@ vim-common
 vim-tiny
 wget
 whiptail
-wireless-regdb
 wpasupplicant
 xdg-user-dirs
 xfsprogs
