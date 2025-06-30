@@ -157,7 +157,9 @@ for pkgbase in "${pkgs[@]}"; do
 done
 
 if [[ -z $(find "$PACKAGE_DIR" -empty) ]]; then
-   warn "$PACKAGE_DIR is not empty, please check"
+    warn "$PACKAGE_DIR is not empty, please check"
+else
+    log_cyan "Successfully updated repository \"$arg_repo\""
 fi
 
 ### error codes

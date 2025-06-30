@@ -209,7 +209,7 @@ if declare -F 'post_update' > /dev/null; then
     info "Done (Running post_update())"
 fi
 
-info "Successfully updated PKGBUILD"
+log_cyan "Successfully updated PKGBUILD"
 
 ### status codes
 # -1(255): current version is newer
