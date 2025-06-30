@@ -407,3 +407,11 @@ ubuntu_stage2_pkgs=(
     fish
     texlive
 )
+
+questing_stage0_pkgs=(
+    pacman
+)
+
+questing_stage1_pkgs=(
+    ksmbd-tools
+)
