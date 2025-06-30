@@ -1,19 +1,18 @@
 The Meson build system
-Version: 1.7.0
+Version: 1.8.2
 Source dir: /home/kzl/makepkg/build/ksmbd-tools/src/ksmbd-tools
 Build dir: /home/kzl/makepkg/build/ksmbd-tools/src/ksmbd-tools/build
 Build type: native build
 Project name: ksmbd-tools
 Project version: 3.5.3
 C compiler for the host machine: cc (gcc 14.3.0 "cc (Ubuntu 14.3.0-1ubuntu1) 14.3.0")
-C linker for the host machine: cc ld.bfd 2.44
+C linker for the host machine: cc ld.bfd 2.44.50.20250616
 Host machine cpu family: x86_64
 Host machine cpu: x86_64
 Found pkg-config: YES (/usr/bin/pkg-config) 1.8.1
-Run-time dependency glib-2.0 found: YES 2.84.2
+Run-time dependency glib-2.0 found: YES 2.84.3
 Run-time dependency libnl-genl-3.0 found: YES 3.7.0
-Did not find CMake 'cmake'
-Found CMake: NO
+Found CMake: /usr/bin/cmake (3.31.6)
 Run-time dependency systemd found: NO (tried pkgconfig and cmake)
 Dependency krb5 skipped: feature krb5 disabled
 Library pthread found: YES
@@ -36,4 +35,4 @@ ksmbd-tools 3.5.3
     rundir              : /run
     systemdsystemunitdir: /usr/lib/systemd/system
 
-Found ninja-1.12.1 at /usr/bin/ninja
+Found ninja-1.11.1.git.kitware.jobserver-1 at /home/kzl/.local/bin/ninja
