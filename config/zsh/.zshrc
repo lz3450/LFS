@@ -251,6 +251,6 @@ if [[ -f "/opt/bin/python3" ]]; then
     alias pipuninstall="/opt/bin/python3 -m pip uninstall -y"
 else
     alias pipwheel="python3 -m pip wheel --wheel-dir ~/wheels --no-binary :all:"
-    alias pipinstall="python3 -m pip install --user -U --no-index --find-links ~/wheels"
+    alias pipinstall="python3 -m pip install --break-system-packages --user -U --no-index --find-links ~/wheels"
     alias pipuninstall="python3 -m pip uninstall -y"
 fi
