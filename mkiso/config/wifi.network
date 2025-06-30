@@ -1,5 +1,1 @@
-[Match]
-Name=wl*
-
-[Network]
-DHCP=yes
+../../config/network/wifi.network

@@ -41,7 +41,6 @@ dracut-install
 e2fsprogs
 eject
 ethtool
-f2fs-tools
 fdisk
 findutils
 gcc-15-base

@@ -69,7 +69,6 @@ common_deb_pkgs=(
     dosfstools
     e2fsprogs
     xfsprogs
-    f2fs-tools
     btrfs-progs
     # bcachefs-tools
     ### network
@@ -204,8 +203,7 @@ make_imgs() {
     info "Making mutable image \"$MUTABLE_IMG\"..."
     rm -vf -- "$MUTABLE_IMG"
     fallocate -l 256MiB "$MUTABLE_IMG"
-    # mkfs.ext4 -L "MUTABLE" "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable-img.log 2>&1
-    mkfs.f2fs -f -l MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
+    mkfs.ext4 -L MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
     info "Done (Made mutable image)"
 
     info "Making EFI boot image \"$EFIBOOT_IMG\"..."
@@ -231,7 +229,7 @@ make_imgs() {
 
 mount_imgs() {
     info "Mounting mutable image \"$MUTABLE_IMG\" to \"$ROOTFS_DIR/home\"..."
-    mount -v -t f2fs -o loop -- "$MUTABLE_IMG" "$ROOTFS_DIR/home"
+    mount -v -t ext4 -o loop -- "$MUTABLE_IMG" "$ROOTFS_DIR/home"
     mountpoint -q -- "$ROOTFS_DIR/home" || error "MUTABLE directory not mounted: $ROOTFS_DIR/home" 2
     info "Done (Mounted mutable image)"
 
@@ -308,7 +306,9 @@ EOF
     fi
     echo "PATH=\"$_path\"" > "$ROOTFS_DIR"/etc/environment
     # fstab
-    cp -vf -- "$CONFIG_DIR/fstab" "$ROOTFS_DIR/etc/fstab"
+    cat > "$ROOTFS_DIR"/etc/fstab << EOF
+LABEL=MUTABLE       /home       ext4        defaults        0 2
+EOF
     # network
     cp -vf -- "$CONFIG_DIR/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
     cp -vf -- "$CONFIG_DIR/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
@@ -363,30 +363,49 @@ EOF
     info "Done (Made initramfs)"
 
     info "Setting up systemd-boot for UEFI booting..."
-    local _efi_dir="$ROOTFS_DIR/boot"
-    local _entry_conf=(
-            "kzl.conf"
-    )
-    local _default_entry="kzl.conf"
-    if [[ "$distro" == "ubuntu" ]]; then
+    if [[ "$distro" == "kzl-linux" ]]; then
+        local _efi_dir="$ROOTFS_DIR/boot"
+        local _default_entry="kzl-linux.conf"
+
+        mkdir -vp -- "$_efi_dir/loader/entries"
+        cat > "$_efi_dir/loader/entries/kzl-linux.conf" << EOF
+title	KZL-Linux
+linux	/vmlinuz
+initrd  /initramfs.img
+options	root=live:CDLABEL=$ISO_LABEL rd.live.overlay.overlayfs rd.live.image rd.shell
+EOF
+    elif [[ "$distro" == "ubuntu" ]]; then
         _efi_dir="$ROOTFS_DIR/boot/efi"
         _entry_conf=(
             "ubuntu-kzl.conf"
             "ubuntu.conf"
         )
         _default_entry="ubuntu-kzl.conf"
+
+        mkdir -vp -- "$_efi_dir/loader/entries"
+        cat > "$_efi_dir/loader/entries/ubuntu-kzl.conf" << EOF
+title	Ubuntu-KZL
+linux	/vmlinuz-KZL
+initrd  /initramfs-KZL.img
+options	root=live:CDLABEL=$ISO_LABEL rd.live.overlay.overlayfs rd.live.image rd.shell
+EOF
+        cat > "$_efi_dir/loader/entries/ubuntu.conf" << EOF
+title	Ubuntu
+linux	/vmlinuz
+initrd  /initramfs.img
+options	root=live:CDLABEL=$ISO_LABEL rd.live.overlay.overlayfs rd.live.image rd.shell
+EOF
+    else
+        error "Unsupported distro: $distro" 1
     fi
 
     mkdir -vp -- "$_efi_dir/EFI/BOOT"
-    mkdir -vp -- "$_efi_dir/loader/entries"
-
-    local _entry
-    for _entry in "${_entry_conf[@]}"; do
-        sed "s|%ISOLABEL%|$ISO_LABEL|g" "$CONFIG_DIR/$_entry" > "$_efi_dir/loader/entries/$_entry"
-    done
-
     cp -vf -- "$ROOTFS_DIR/usr/lib/systemd/boot/efi/systemd-bootx64.efi" "$_efi_dir/EFI/BOOT/BOOTx64.EFI"
-    sed "s|@DEFAULTENTRY@|$_default_entry|g" "$CONFIG_DIR/loader.conf" > "$_efi_dir/loader/loader.conf"
+    cat > "$_efi_dir/loader/loader.conf" << EOF
+timeout 30
+console-mode max
+default $_default_entry
+EOF
 
     if [[ "$distro" == "ubuntu" ]]; then
         local _kv
