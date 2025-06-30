@@ -306,7 +306,6 @@ kzl_stage3_pkgs=(
     # File system utils
     ################
     dosfstools
-    f2fs-tools
     parted
 
     ################
@@ -402,7 +401,6 @@ ubuntu_stage2_pkgs=(
     kexec-tools
     debootstrap
     dracut
-    f2fs-tools
     erofs-utils
     fish
     texlive
