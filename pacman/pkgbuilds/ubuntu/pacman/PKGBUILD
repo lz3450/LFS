@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g69
-pkgrel=11
+pkgrel=12
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -48,6 +48,10 @@ prepare() {
         -e 's|--origin=origin --mirror|--depth 10 --no-single-branch --mirror|' \
         scripts/libmakepkg/source/git.sh.in
     MAKEPKG_LDFLAGS="${MAKEPKG_LDFLAGS/ -Wl,-z,pack-relative-relocs/}"
+  else
+    sed -i \
+        -e 's|--origin=origin --mirror|--depth 10 --no-single-branch --origin=origin --mirror|' \
+        scripts/libmakepkg/source/git.sh.in
   fi
 
   sed -i \
