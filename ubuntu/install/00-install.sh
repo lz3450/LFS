@@ -117,7 +117,7 @@ bootstrap_rootfs() {
     info "Done (Cleaned up rootfs)"
 }
 
-make_swap() {
+make_swapfile() {
     info "Creating swap file..."
     fallocate -l 16G "$arg_rootfs_dir/swapfile"
     chmod 600 "$arg_rootfs_dir/swapfile"
@@ -125,11 +125,20 @@ make_swap() {
     info "Done (Created swap file)"
 }
 
-_get_partuuid() {
-    local _dir="$1"
-    local _partuuid
-    _partuuid=$(blkid -s PARTUUID "$_dir" | sed 's|.+=\"\(.*\)\"|\1|')
-    echo "$_partuuid"
+make_swap_partition() {
+    info "Creating swap partition..."
+    local _swap_size=16G
+    local _swap_partuuid
+    local _swap_device
+
+    # create swap partition
+    _swap_partuuid=$(_get_partuuid "$arg_rootfs_dir")
+    _swap_device=$(findmnt -n -o SOURCE --target "$arg_rootfs_dir")
+
+    # format swap partition
+    mkswap -U "$_swap_partuuid" "$_swap_device"
+
+    info "Done (Created swap partition with PARTUUID=$_swap_partuuid)"
 }
 
 configure_rootfs() {
@@ -152,17 +161,23 @@ configure_rootfs() {
     echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$arg_rootfs_dir/root/.zshrc"
     echo '. /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$arg_rootfs_dir/root/.zshrc"
     # fstab
-    local _root_______________________partuuid=$(findmnt -n -o PARTUUID --target "$arg_rootfs_dir")
-    local _boot_______________________partuuid=$(findmnt -n -o PARTUUID --target "$arg_rootfs_dir/boot/efi")
+    local _root______________________partuuid=$(findmnt -n -o PARTUUID --target "$arg_rootfs_dir")
+    local _boot______________________partuuid=$(findmnt -n -o PARTUUID --target "$arg_rootfs_dir/boot/efi")
     cat > "$arg_rootfs_dir"/etc/fstab << EOF
 # Static information about the filesystems.
 # See fstab(5) for details.
 
 # <device> <target> <type> <options> <dump> <pass>
 
-PARTUUID=$_root_______________________partuuid      /               f2fs            defaults                0 1
-PARTUUID=$_boot_______________________partuuid      /boot/efi       vfat            defaults,umask=0177     0 2
-/swapfile                                           none            swap            defaults                0 0
+PARTUUID=$_root______________________partuuid       /               btrfs       rw,noatime,compress=zstd,subvol=@                   0 1
+PARTUUID=$_root______________________partuuid       /home           btrfs       rw,noatime,compress=zstd,subvol=@home               0 1
+PARTUUID=$_root______________________partuuid       /var            btrfs       rw,noatime,compress=zstd,subvol=@var                0 1
+PARTUUID=$_root______________________partuuid       /var/log        btrfs       rw,noatime,compress=zstd,subvol=@log                0 1
+PARTUUID=$_root______________________partuuid       /var/cache      btrfs       rw,noatime,compress=no,nodatacow,subvol=@cache      0 1
+PARTUUID=$_root______________________partuuid       /.snapshots     btrfs       rw,noatime,compress=zstd,subvol=@snapshots          0 1
+PARTUUID=$_boot______________________partuuid       /boot/efi       vfat        rw,noatime,umask=0177                               0 2
+tmpfs                                               /tmp            tmpfs       rw,nosuid,nodev,mode=1777                           0 0
+#PARTUUID=                                          none            swap        defaults                                            0 0
 
 EOF
     # systemd-boot
@@ -176,13 +191,13 @@ EOF
 title   Ubuntu
 linux   vmlinuz
 initrd  initrd.img
-options root=PARTUUID=$_root_______________________partuuid rw rootwait
+options root=PARTUUID=$_root______________________partuuid rw rootwait
 EOF
     cat > "$arg_rootfs_dir"/boot/efi/loader/entries/kzl.conf << EOF
 title   Ubuntu-KZL
 linux   vmlinuz-KZL
 #initrd  initrd-KZL.img
-options root=PARTUUID=$_root_______________________partuuid rw rootwait
+options root=PARTUUID=$_root______________________partuuid rw rootwait
 EOF
     # initialize.sh
     cat > "$arg_rootfs_dir"/root/initialize.sh << EOF
@@ -267,7 +282,6 @@ log_dir="$SCRIPT_DIR/log/$arg_suite"
 prologue
 mkdir -vp -- "$log_dir"
 bootstrap_rootfs
-make_swap
 configure_rootfs
 
 log_cyan "Successfully installed Ubuntu $arg_suite at $arg_rootfs_dir"
