@@ -84,15 +84,13 @@ clean_rootfs() {
     delete_all_contents "$_rootfs_dir"/run/
     delete_all_contents "$_rootfs_dir"/tmp/
     delete_all_contents "$_rootfs_dir"/usr/share/doc/
-    delete_all_contents "$_rootfs_dir"/var/cache/ldconfig/
+    delete_all_contents "$_rootfs_dir"/var/cache/
     delete_all_contents "$_rootfs_dir"/var/log/
     delete_all_contents "$_rootfs_dir"/var/tmp/
     # apt
-    delete_all_contents "$_rootfs_dir"/var/cache/apt/archives/
     delete_all_contents "$_rootfs_dir"/var/lib/apt/lists/
     # pacman
     delete_all_contents "$_rootfs_dir"/var/lib/pacman/
-    delete_all_contents "$_rootfs_dir"/var/cache/pacman/
     find "$_rootfs_dir" -type f \( -name '*.pacnew' -o -name '*.pacsave' \) -delete
     _utils_info "Done (Cleaned rootfs)"
 }
