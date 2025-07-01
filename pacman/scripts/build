@@ -325,20 +325,20 @@ prepare
 if [[ -n "$arg_single_package" ]]; then
     # Build a single package
     log_magenta "Building $arg_single_package ($(date +%H:%M:%S))..."
-    __pkg_start_time__=$(date +%s)
+    __pkg_start_time__=$SECONDS
     build "$arg_single_package"
-    __pkg_end_time__=$(date +%s)
-    __pkg_total_time__=$(($__pkg_end_time__ - $__pkg_start_time__))
-    log_cyan "Finished $arg_single_package: $(date -d "@$__pkg_total_time__" +%H:%M:%S) ($(date +%H:%M:%S))"
+    __pkg_end_time__=$SECONDS
+    __pkg_total_time__=$((__pkg_end_time__ - __pkg_start_time__))
+    log_cyan "Finished $arg_single_package: $(date -u -d "@$__pkg_total_time__" +%H:%M:%S) ($(date +%H:%M:%S))"
 else
     log_blue "Building stage $opt_stage ($(date +%H:%M:%S))..."
     for p in ${pkgs[@]}; do
         log_magenta "Building $p ($(date +%H:%M:%S))..."
-        __pkg_start_time__=$(date +%s)
+        __pkg_start_time__=$SECONDS
         build "$p"
-        __pkg_end_time__=$(date +%s)
-        __pkg_total_time__=$(($__pkg_end_time__ - $__pkg_start_time__))
-        log_cyan "Finished $p: $(date -d "@$__pkg_total_time__" +%H:%M:%S) ($(date +%H:%M:%S))"
+        __pkg_end_time__=$SECONDS
+        __pkg_total_time__=$((__pkg_end_time__ - __pkg_start_time__))
+        log_cyan "Finished $p: $(date -u -d "@$__pkg_total_time__" +%H:%M:%S) ($(date +%H:%M:%S))"
     done
 fi
 
