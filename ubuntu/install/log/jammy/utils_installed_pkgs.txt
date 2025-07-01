@@ -21,6 +21,7 @@ binutils-x86-64-linux-gnu
 bluez
 bluez-obexd
 bsdutils
+btrfs-progs
 bubblewrap
 build-essential
 busybox-initramfs
@@ -72,6 +73,7 @@ findutils
 fontconfig
 fontconfig-config
 fonts-dejavu-core
+fonts-noto-cjk
 fonts-ubuntu
 fonts-urw-base35
 fuse3
@@ -763,11 +765,11 @@ libyaml-0-2
 libzstd1
 linux-base
 linux-firmware
-linux-image-5.15.0-142-generic
+linux-image-5.15.0-143-generic
 linux-image-generic
 linux-libc-dev
-linux-modules-5.15.0-142-generic
-linux-modules-extra-5.15.0-142-generic
+linux-modules-5.15.0-143-generic
+linux-modules-extra-5.15.0-143-generic
 linux-sound-base
 locales
 login

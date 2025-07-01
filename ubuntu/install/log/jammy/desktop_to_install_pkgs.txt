@@ -30,6 +30,7 @@ file-roller
 fontconfig
 fontconfig-config
 fonts-dejavu-core
+fonts-noto-cjk
 fonts-ubuntu
 fonts-urw-base35
 fuse3
@@ -325,7 +326,6 @@ libldb2
 libllvm15
 liblmdb0
 libltdl7
-liblzo2-2
 libmagic-mgc
 libmagic1
 libmanette-0.2-0
@@ -540,7 +540,6 @@ python3-defer
 python3-gi-cairo
 python3-ldb
 python3-talloc
-rfkill
 samba-libs
 seahorse
 session-migration

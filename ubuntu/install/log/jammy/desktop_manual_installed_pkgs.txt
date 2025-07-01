@@ -8,6 +8,7 @@ base-passwd
 bash
 bash-completion
 bsdutils
+btrfs-progs
 build-essential
 ca-certificates
 console-setup
@@ -32,6 +33,7 @@ evince
 fakeroot
 file
 findutils
+fonts-noto-cjk
 fonts-ubuntu
 fwupd
 gcc-12-base
