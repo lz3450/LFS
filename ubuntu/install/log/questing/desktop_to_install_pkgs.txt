@@ -25,6 +25,7 @@ fontconfig
 fontconfig-config
 fonts-dejavu-core
 fonts-dejavu-mono
+fonts-noto-cjk
 fonts-ubuntu
 fuse3
 fwupd
@@ -164,7 +165,6 @@ libcolorhug2
 libcpdb-frontend2t64
 libcpdb2t64
 libcrack2
-libcryptsetup12
 libcue2
 libcups2t64
 libdatrie1
@@ -319,7 +319,6 @@ liblmdb0
 liblsof0
 libltdl7
 liblua5.4-0
-liblzo2-2
 libmagic-mgc
 libmagic1t64
 libmbim-glib4

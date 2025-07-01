@@ -7,6 +7,8 @@ base-passwd
 bash
 bash-completion
 bsdutils
+btrfs-compsize
+btrfs-progs
 build-essential
 ca-certificates
 chrony
@@ -31,6 +33,7 @@ dhcpcd-base
 diffutils
 distro-info
 distro-info-data
+dmsetup
 dpkg
 e2fsprogs
 eject
@@ -39,6 +42,7 @@ ethtool
 fakeroot
 file
 findutils
+fonts-noto-cjk
 fonts-ubuntu
 fwupd
 gcc-15-base
@@ -97,9 +101,11 @@ libcap2
 libcap2-bin
 libcom-err2
 libcrypt1
+libcryptsetup12
 libdb5.3t64
 libdbus-1-3
 libdebconfclient0
+libdevmapper1.02.1
 libedit2
 libelf1t64
 libestr0
@@ -138,7 +144,6 @@ libncursesw6
 libnetplan1
 libnettle8t64
 libnewt0.52
-libnpth0t64
 libnss-systemd
 libp11-kit0
 libpam-cap
@@ -231,6 +236,7 @@ python3-yaml
 python3.13
 python3.13-minimal
 readline-common
+rfkill
 rsyslog
 seahorse
 sed
@@ -240,6 +246,7 @@ sudo
 systemd
 systemd-boot
 systemd-boot-efi
+systemd-cryptsetup
 systemd-hwe-hwdb
 systemd-resolved
 systemd-sysv

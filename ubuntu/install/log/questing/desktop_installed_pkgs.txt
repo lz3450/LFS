@@ -22,6 +22,8 @@ binutils-x86-64-linux-gnu
 bluez
 bluez-obexd
 bsdutils
+btrfs-compsize
+btrfs-progs
 bubblewrap
 build-essential
 busybox-initramfs
@@ -63,6 +65,7 @@ dirmngr
 distro-info
 distro-info-data
 dmidecode
+dmsetup
 dpkg
 dpkg-dev
 dracut-install
@@ -79,6 +82,7 @@ fontconfig
 fontconfig-config
 fonts-dejavu-core
 fonts-dejavu-mono
+fonts-noto-cjk
 fonts-ubuntu
 fuse3
 fwupd
@@ -599,6 +603,7 @@ libqrtr-glib0
 libquadmath0
 libraw1394-11
 libreadline8t64
+libreiserfscore0t64
 librest-1.0-0
 libroc0.4
 librsvg2-2
@@ -774,11 +779,10 @@ libyaml-0-2
 libzstd1
 linux-base
 linux-firmware
-linux-image-6.14.0-15-generic
+linux-image-6.15.0-3-generic
 linux-image-generic
 linux-libc-dev
-linux-modules-6.14.0-15-generic
-linux-modules-extra-6.14.0-15-generic
+linux-modules-6.15.0-3-generic
 linux-sound-base
 locales
 login
@@ -863,6 +867,7 @@ python3-yaml
 python3.13
 python3.13-minimal
 readline-common
+rfkill
 rpcsvc-proto
 rsyslog
 samba-libs
@@ -878,6 +883,7 @@ systemd
 systemd-boot
 systemd-boot-efi
 systemd-boot-tools
+systemd-cryptsetup
 systemd-hwe-hwdb
 systemd-resolved
 systemd-sysv
@@ -905,7 +911,6 @@ webp-pixbuf-loader
 wget
 whiptail
 whoopsie-preferences
-wireless-regdb
 wireplumber
 wpasupplicant
 x11-common

@@ -11,6 +11,7 @@ binutils-gold
 binutils-gold-x86-64-linux-gnu
 binutils-x86-64-linux-gnu
 bsdutils
+btrfs-progs
 build-essential
 busybox-initramfs
 bzip2
@@ -44,6 +45,7 @@ dirmngr
 distro-info
 distro-info-data
 dmidecode
+dmsetup
 dpkg
 dpkg-dev
 dracut-install
@@ -123,6 +125,7 @@ libcc1-0
 libcom-err2
 libcrypt-dev
 libcrypt1
+libcryptsetup12
 libctf-nobfd0
 libctf0
 libcurl3t64-gnutls
@@ -182,6 +185,7 @@ liblocale-gettext-perl
 liblsan0
 liblz4-1
 liblzma5
+liblzo2-2
 libmd0
 libmnl0
 libmount1
@@ -216,6 +220,7 @@ libpython3.13-minimal
 libpython3.13-stdlib
 libquadmath0
 libreadline8t64
+libreiserfscore0t64
 librtmp1
 libsasl2-2
 libsasl2-modules-db
@@ -255,11 +260,10 @@ libyaml-0-2
 libzstd1
 linux-base
 linux-firmware
-linux-image-6.14.0-15-generic
+linux-image-6.15.0-3-generic
 linux-image-generic
 linux-libc-dev
-linux-modules-6.14.0-15-generic
-linux-modules-extra-6.14.0-15-generic
+linux-modules-6.15.0-3-generic
 locales
 login
 login.defs
@@ -310,6 +314,7 @@ python3-yaml
 python3.13
 python3.13-minimal
 readline-common
+rfkill
 rpcsvc-proto
 rsyslog
 sed
@@ -320,6 +325,7 @@ systemd
 systemd-boot
 systemd-boot-efi
 systemd-boot-tools
+systemd-cryptsetup
 systemd-hwe-hwdb
 systemd-resolved
 systemd-sysv
@@ -334,7 +340,6 @@ vim-common
 vim-tiny
 wget
 whiptail
-wireless-regdb
 wpasupplicant
 xdg-user-dirs
 xkb-data
