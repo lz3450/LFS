@@ -30,10 +30,30 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 check_root
 
 ### constants & variables
-CONFIG_DIR="$SCRIPT_DIR"/config
+declare -r CONFIG_DIR="$SCRIPT_DIR"/config
 
-UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
+declare -r UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
 # UBUNTU_MIRROR="https://mirror.arizona.edu/ubuntu/"
+declare -r BTRFS_SUBVOLS=(
+    @home
+    @var
+    @log
+    @cache
+)
+declare -r -A BTRFS_SUBVOL_MOUNTS=(
+    ["@home"]="home"
+    ["@var"]="var"
+    ["@log"]="var/log"
+    ["@cache"]="var/cache"
+)
+declare -r BTRFS_OPT="rw,noatime"
+declare -r BTRFS_ROOT_MOUNT_OPTION="$BTRFS_OPT,compress=zstd"
+declare -r -A BTRFS_SUBVOL_MOUNT_OPTIONS=(
+    ["@home"]="$BTRFS_OPT,subvol=@home"
+    ["@var"]="$BTRFS_OPT,subvol=@var"
+    ["@log"]="$BTRFS_OPT,subvol=@log"
+    ["@cache"]="$BTRFS_OPT,subvol=@cache"
+)
 
 common_deb_pkgs=(
     ### general
@@ -41,6 +61,7 @@ common_deb_pkgs=(
     build-essential
     ### disk
     parted
+    btrfs-progs
     ### network
     iw wpasupplicant
     rfkill
@@ -74,6 +95,9 @@ arg_suite=""
 arg_rootfs_tarball=""
 
 log_dir=""
+efi_dev=""
+btrfs_dev=""
+swap_dev=""
 deb_pkgs=()
 
 ### functions
@@ -87,6 +111,86 @@ cleanup() {
     trap - EXIT SIGINT SIGTERM SIGKILL
 }
 trap cleanup EXIT SIGINT SIGTERM SIGKILL
+
+create_btrfs_subvols() {
+    info "Creating btrfs subvolumes..."
+    btrfs_dev=$(findmnt -n -o SOURCE --target "$arg_rootfs_dir")
+    info "BTRFS device: $btrfs_dev"
+    # @
+    btrfs subvolume create "$arg_rootfs_dir"/@
+    btrfs subvolume set-default "$arg_rootfs_dir"/@
+    # other subvolumes
+    local _subvol
+    for _subvol in "${BTRFS_SUBVOLS[@]}"; do
+        btrfs subvolume create "$arg_rootfs_dir"/"$_subvol"
+    done
+    chattr +C -- "$arg_rootfs_dir"/@cache
+    btrfs subvolume list "$arg_rootfs_dir"
+    # mount @
+    umount -v -- "$arg_rootfs_dir"
+    mount -v -o $BTRFS_ROOT_MOUNT_OPTION,subvol=@ -- "$btrfs_dev" "$arg_rootfs_dir"
+    info "Done (Created btrfs subvolumes)"
+}
+
+mount_rootfs() {
+    info "Mounting btrfs device..."
+    local _subvol
+    for _subvol in "${BTRFS_SUBVOLS[@]}"; do
+        if [[ -d "$arg_rootfs_dir/${BTRFS_SUBVOL_MOUNTS[$_subvol]}" ]]; then
+            error "Mount point $arg_rootfs_dir/${BTRFS_SUBVOL_MOUNTS[$_subvol]} is not empty" 1
+        fi
+        mkdir -vp -- "$arg_rootfs_dir/${BTRFS_SUBVOL_MOUNTS[$_subvol]}"
+        mount -v -o "${BTRFS_SUBVOL_MOUNT_OPTIONS[$_subvol]}" -- "$btrfs_dev" "$arg_rootfs_dir/${BTRFS_SUBVOL_MOUNTS[$_subvol]}"
+    done
+    info "Done (Mounted btrfs)"
+
+    info "Mounting efi partition..."
+    if [[ -d "$arg_rootfs_dir/boot/efi" ]]; then
+        error "EFI partition mount point $arg_rootfs_dir/boot/efi exists" 1
+    fi
+    mkdir -vp -- "$arg_rootfs_dir/boot/efi"
+    chmod 0600 -- "$arg_rootfs_dir/boot/efi"
+
+    local _answer="N"
+    local _efi_dev
+    while [[ "$_answer" != "Y" && "$_answer" != "y" ]]; do
+        read -p "EFI partition device (e.g. /dev/sda1): " _efi_dev
+        if [[ ! -b "$_efi_dev" ]]; then
+            warn "Invalid EFI partition device: $_efi_dev, retry"
+            continue
+        fi
+        read -p "Mount EFI partition $_efi_dev on $arg_rootfs_dir/boot/efi? (Y/n) " _answer
+    done
+    efi_dev="$_efi_dev"
+    mkfs.fat -F 32 "$efi_dev"
+    mount -v -o rw,noatime,umask=0177 -- "$efi_dev" "$arg_rootfs_dir/boot/efi"
+    info "Done (Mounted efi partition $efi_dev at $arg_rootfs_dir/boot/efi)"
+}
+
+make_swapfile() {
+    info "Creating swap file..."
+    fallocate -l 16G "$arg_rootfs_dir/swapfile"
+    chmod 600 "$arg_rootfs_dir/swapfile"
+    mkswap "$arg_rootfs_dir/swapfile"
+    info "Done (Created swap file)"
+}
+
+make_swap_partition() {
+    info "Creating swap partition..."
+    local _swap_dev
+    local _answer="N"
+    while [[ "$_answer" != "Y" && "$_answer" != "y" ]]; do
+        read -p 'Device for swap partition (e.g. /dev/sda3): ' _swap_dev
+        if [[ ! -b "$_swap_dev" ]]; then
+            warn "Invalid swap partition device: $_swap_dev, retry"
+            continue
+        fi
+        read -p "Create swap partition on $_swap_dev? (Y/n) " _answer
+    done
+    swap_dev="$_swap_dev"
+    mkswap "$swap_dev"
+    info "Done (Created swap partition on $swap_dev)"
+}
 
 bootstrap_rootfs() {
     info "Extracting root filesystem..."
@@ -117,30 +221,6 @@ bootstrap_rootfs() {
     info "Done (Cleaned up rootfs)"
 }
 
-make_swapfile() {
-    info "Creating swap file..."
-    fallocate -l 16G "$arg_rootfs_dir/swapfile"
-    chmod 600 "$arg_rootfs_dir/swapfile"
-    mkswap "$arg_rootfs_dir/swapfile"
-    info "Done (Created swap file)"
-}
-
-make_swap_partition() {
-    info "Creating swap partition..."
-    local _swap_size=16G
-    local _swap_partuuid
-    local _swap_device
-
-    # create swap partition
-    _swap_partuuid=$(_get_partuuid "$arg_rootfs_dir")
-    _swap_device=$(findmnt -n -o SOURCE --target "$arg_rootfs_dir")
-
-    # format swap partition
-    mkswap -U "$_swap_partuuid" "$_swap_device"
-
-    info "Done (Created swap partition with PARTUUID=$_swap_partuuid)"
-}
-
 configure_rootfs() {
     info "Configuring rootfs..."
     local _hostname
@@ -161,23 +241,23 @@ configure_rootfs() {
     echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$arg_rootfs_dir/root/.zshrc"
     echo '. /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$arg_rootfs_dir/root/.zshrc"
     # fstab
-    local _root______________________partuuid=$(findmnt -n -o PARTUUID --target "$arg_rootfs_dir")
-    local _boot______________________partuuid=$(findmnt -n -o PARTUUID --target "$arg_rootfs_dir/boot/efi")
+    local _root______________________partuuid=$(blkid -s PARTUUID -o value "$btrfs_dev")
+    local _boot______________________partuuid=$(blkid -s PARTUUID -o value "$efi_dev")
+    local _swap______________________partuuid=$(blkid -s PARTUUID -o value "$swap_dev")
     cat > "$arg_rootfs_dir"/etc/fstab << EOF
 # Static information about the filesystems.
 # See fstab(5) for details.
 
 # <device> <target> <type> <options> <dump> <pass>
 
-PARTUUID=$_root______________________partuuid       /               btrfs       rw,noatime,compress=zstd,subvol=@                   0 1
-PARTUUID=$_root______________________partuuid       /home           btrfs       rw,noatime,compress=zstd,subvol=@home               0 1
-PARTUUID=$_root______________________partuuid       /var            btrfs       rw,noatime,compress=zstd,subvol=@var                0 1
-PARTUUID=$_root______________________partuuid       /var/log        btrfs       rw,noatime,compress=zstd,subvol=@log                0 1
-PARTUUID=$_root______________________partuuid       /var/cache      btrfs       rw,noatime,compress=no,nodatacow,subvol=@cache      0 1
-PARTUUID=$_root______________________partuuid       /.snapshots     btrfs       rw,noatime,compress=zstd,subvol=@snapshots          0 1
-PARTUUID=$_boot______________________partuuid       /boot/efi       vfat        rw,noatime,umask=0177                               0 2
-tmpfs                                               /tmp            tmpfs       rw,nosuid,nodev,mode=1777                           0 0
-#PARTUUID=                                          none            swap        defaults                                            0 0
+PARTUUID=$_root______________________partuuid       /               btrfs       $BTRFS_ROOT_MOUNT_OPTION,subvol=@       0 1
+PARTUUID=$_root______________________partuuid       /home           btrfs       $BTRFS_OPT,subvol=@home                 0 1
+PARTUUID=$_root______________________partuuid       /var            btrfs       $BTRFS_OPT,subvol=@var                  0 1
+PARTUUID=$_root______________________partuuid       /var/log        btrfs       $BTRFS_OPT,subvol=@log                  0 1
+PARTUUID=$_root______________________partuuid       /var/cache      btrfs       $BTRFS_OPT,subvol=@cache                0 1
+PARTUUID=$_boot______________________partuuid       /boot/efi       vfat        rw,noatime,umask=0177                   0 2
+tmpfs                                               /tmp            tmpfs       rw,nosuid,nodev,mode=1777               0 0
+PARTUUID=$_swap______________________partuuid       none            swap        defaults                                0 0
 
 EOF
     # systemd-boot
@@ -230,8 +310,9 @@ Usage: $SCRIPT_NAME -h | --help
 Usage: $SCRIPT_NAME [-v | --verbose ] -i | --input <arg>
 
     -h, --help                      print this help message and exit
+    -r, --rootfs-dir <dir>          set rootfs directory (default: /mnt)
     -s, --suite <suite>             set iso suite (jammy, noble, questing)
-    -r, --rootfs-tarball <file>     set rootfs tarball
+    -t, --rootfs-tarball <file>     set rootfs tarball
 
 EOF
 }
@@ -244,11 +325,15 @@ while (( $# > 0 )); do
         usage
         exit
         ;;
+    -r | --rootfs-dir)
+        shift
+        arg_rootfs_dir="$1"
+        ;;
     -s | --suite)
         shift
         arg_suite="$1"
         ;;
-    -r | --rootfs-tarball)
+    -t | --rootfs-tarball)
         shift
         arg_rootfs_tarball="$1"
         ;;
@@ -281,6 +366,9 @@ log_dir="$SCRIPT_DIR/log/$arg_suite"
 
 prologue
 mkdir -vp -- "$log_dir"
+create_btrfs_subvols
+mount_rootfs
+make_swap_partition
 bootstrap_rootfs
 configure_rootfs
 
