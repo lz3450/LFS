@@ -389,7 +389,6 @@ ubuntu_stage0_pkgs=(
 
 ubuntu_stage1_pkgs=(
     llvm-project
-    llvm-project
 )
 
 ubuntu_stage2_pkgs=(
