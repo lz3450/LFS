@@ -80,6 +80,7 @@ common_deb_pkgs=(
     linux-image-generic
     # dracut
     initramfs-tools
+    efibootmgr
     ### pacman
     libarchive-tools
     zstd
