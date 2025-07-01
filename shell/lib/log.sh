@@ -18,6 +18,11 @@ if [[ -z "$SCRIPT_NAME" ]]; then
     echo "SCRIPT_NAME is not set. Please set it before sourcing this script" >&2
 fi
 
+### constants and variables
+declare -i __start_time__
+declare -i __end_time__
+declare -i __total_time__
+
 ### functions
 # Show a DEBUG message
 # $1: message string
@@ -80,19 +85,19 @@ prologue() {
     echo -e "[$SCRIPT_NAME]: Start time - $(date)" >&2
     echo -e "\033[0m" >&2
 
-    __start_time__=$(date +%s)
+    __start_time__=$SECONDS
 }
 
 epilogue() {
-    __end_time__=$(date +%s)
-    __total_time__=$(($__end_time__ - $__start_time__))
+    __end_time__=$SECONDS
+    __total_time__=$((__end_time__ - __start_time__))
 
     echo -e "\033[1;30m" >&2
     echo -e "****************************************************************" >&2
     echo -e "* Execution time Information" >&2
     echo -e "****************************************************************" >&2
     echo -e "[$SCRIPT_NAME]: End time - $(date)" >&2
-    echo -e "[$SCRIPT_NAME]: Total time - $(date -d@$__total_time__ -u +%H:%M:%S)" >&2
+    echo -e "[$SCRIPT_NAME]: Total time - $(date -u -d @$__total_time__ +%H:%M:%S)" >&2
     echo -e "\033[0m" >&2
 }
 
