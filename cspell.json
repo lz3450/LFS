@@ -108,6 +108,7 @@
         "eeprom",
         "efiboot",
         "efibootimg",
+        "efibootmgr",
         "efiuuid",
         "efivarfs",
         "efivars",
