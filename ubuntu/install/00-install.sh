@@ -250,15 +250,14 @@ configure_rootfs() {
 
 # <device> <target> <type> <options> <dump> <pass>
 
-PARTUUID=$_root______________________partuuid       /               btrfs       $BTRFS_ROOT_MOUNT_OPTION,subvol=@       0 1
-PARTUUID=$_root______________________partuuid       /home           btrfs       $BTRFS_OPT,subvol=@home                 0 1
-PARTUUID=$_root______________________partuuid       /var            btrfs       $BTRFS_OPT,subvol=@var                  0 1
-PARTUUID=$_root______________________partuuid       /var/log        btrfs       $BTRFS_OPT,subvol=@log                  0 1
-PARTUUID=$_root______________________partuuid       /var/cache      btrfs       $BTRFS_OPT,subvol=@cache                0 1
-PARTUUID=$_boot______________________partuuid       /boot/efi       vfat        rw,noatime,umask=0177                   0 2
-tmpfs                                               /tmp            tmpfs       rw,nosuid,nodev,mode=1777               0 0
-PARTUUID=$_swap______________________partuuid       none            swap        defaults                                0 0
-
+PARTUUID=$_root______________________partuuid       /                   btrfs       $BTRFS_ROOT_MOUNT_OPTION,subvol=@       0 1
+PARTUUID=$_root______________________partuuid       /home               btrfs       $BTRFS_OPT,subvol=@home                 0 1
+PARTUUID=$_root______________________partuuid       /var                btrfs       $BTRFS_OPT,subvol=@var                  0 1
+PARTUUID=$_root______________________partuuid       /var/log            btrfs       $BTRFS_OPT,subvol=@log                  0 1
+PARTUUID=$_root______________________partuuid       /var/cache          btrfs       $BTRFS_OPT,subvol=@cache                0 1
+PARTUUID=$_boot______________________partuuid       /boot/efi           vfat        rw,noatime,umask=0177                   0 2
+tmpfs                                               /tmp                tmpfs       rw,nosuid,nodev,mode=1777               0 0
+PARTUUID=$_swap______________________partuuid       none                swap        defaults                                0 0
 EOF
     # systemd-boot
     mkdir -vp -- "$arg_rootfs_dir"/boot/efi/loader/entries

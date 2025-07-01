@@ -49,5 +49,7 @@ apt-get update
 apt-get --no-install-recommends -s install "${pkgs[@]}" | grep "^Inst" | awk '{print $2}' | LC_ALL=C sort -n > "$LOG_DIR/docker_to_install_pkgs.txt"
 apt-get --no-install-recommends -y install "${pkgs[@]}"
 
+usermod -aG docker ${SUDO_USER}
+
 chown -R ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$LOG_DIR"
 echo "Successfully installed docker for Ubuntu $UBUNTU_CODENAME"
