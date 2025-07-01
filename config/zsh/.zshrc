@@ -255,3 +255,4 @@ else
     alias pipinstall="python3 -m pip install --break-system-packages --user -U --no-index --find-links ~/wheels"
     alias pipuninstall="python3 -m pip uninstall -y"
 fi
+alias now="date +%Y%m%d_%H%M%S"
