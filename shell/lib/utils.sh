@@ -63,13 +63,10 @@ delete_all_files() {
     fi
 }
 
+# Check if a directory is empty (no files or subdirectories)
 dir_empty() {
     local _dir="$1"
-    if [[ -d "$_dir" ]]; then
-       [[ -z $(ls -A "$_dir") ]]
-    else
-        return 0
-    fi
+    [[ -d "$_dir" ]] && [[ -z "$(find "$_dir" -mindepth 1 -print -quit)" ]]
 }
 
 clean_rootfs() {
