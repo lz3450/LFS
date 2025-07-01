@@ -65,12 +65,12 @@ prepare() {
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j $(nproc) -O"' \
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="$DEBUG_CFLAGS"' \
-      -e '/^#BUILDDIR=/c\BUILDDIR="$HOME/makepkg/build"' \
+      -e '/^#BUILDDIR=/c\BUILDDIR="/var/cache/makepkg/build"' \
       -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
-      -e '/^#PKGDEST=/c\PKGDEST="$HOME/makepkg/packages"' \
-      -e '/^#SRCDEST=/c\SRCDEST="$HOME/makepkg/sources"' \
-      -e '/^#SRCPKGDEST=/c\SRCPKGDEST="$HOME/makepkg/srcpackages"' \
-      -e '/^#LOGDEST=/c\LOGDEST="$HOME/makepkg/makepkglogs"' \
+      -e '/^#PKGDEST=/c\PKGDEST="/var/cache/makepkg/packages"' \
+      -e '/^#SRCDEST=/c\SRCDEST="/var/cache/makepkg/sources"' \
+      -e '/^#SRCPKGDEST=/c\SRCPKGDEST="/var/cache/makepkg/srcpackages"' \
+      -e '/^#LOGDEST=/c\LOGDEST="/var/cache/makepkg/makepkglogs"' \
       -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
       -e '/^OPTIONS=/s/libtool/!libtool/' \
       -e '/^OPTIONS=/s/!lto/lto/' \

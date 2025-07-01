@@ -42,7 +42,9 @@ repo_pkgbuilds_dirs=()
 prepare() {
     local _log="$LOG_DIR/prepare.log"
 
-    mkdir -p -- "$LOG_DIR"
+    sudo mkdir -vp /var/cache/makepkg/log
+    sudo chown "${SUDO_UID}:${SUDO_GID}" -R /var/cache/makepkg
+    ln -sf /var/cache/makepkg "$HOME/makepkg"
 
     info "Cleaning pacman cache and database..."
     sudo pacman -Scc --noconfirm
