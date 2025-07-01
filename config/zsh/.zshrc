@@ -242,6 +242,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias lfs="cd ~/LFS"
 alias aptupdate="sudo apt update && sudo apt upgrade --no-install-recommends"
 alias aptinstall="sudo apt install --no-install-recommends"
 alias aptremove="sudo apt remove --purge --auto-remove"
