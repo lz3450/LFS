@@ -39,6 +39,7 @@ dosfstools
 dpkg
 dracut-install
 e2fsprogs
+efibootmgr
 eject
 ethtool
 fdisk
@@ -110,6 +111,8 @@ libdbus-1-3
 libdebconfclient0
 libdevmapper1.02.1
 libedit2
+libefiboot1t64
+libefivar1t64
 libelf1t64
 liberror-perl
 libestr0
