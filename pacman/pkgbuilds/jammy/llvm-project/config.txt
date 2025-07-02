@@ -218,7 +218,7 @@
 -- Performing Test HAVE_LINKER_FLAG_LONG_PLT - Success
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/kzl/makepkg/build/llvm-project/src/llvm-project/build
+-- Build files have been written to: /var/cache/makepkg/build/llvm-project/src/llvm-project/build
 -- Cache values
 // Default URL where bug reports are to be submitted.
 BUG_REPORT_URL:STRING=https://github.com/llvm/llvm-project/issues/
@@ -1071,10 +1071,10 @@ LLVM_EXTERNALIZE_DEBUGINFO:BOOL=OFF
 LLVM_EXTERNAL_BOLT_SOURCE_DIR:PATH=
 
 // 
-LLVM_EXTERNAL_CLANG_SOURCE_DIR:PATH=/home/kzl/makepkg/build/llvm-project/src/llvm-project/llvm/../clang
+LLVM_EXTERNAL_CLANG_SOURCE_DIR:PATH=/var/cache/makepkg/build/llvm-project/src/llvm-project/llvm/../clang
 
 // 
-LLVM_EXTERNAL_CLANG_TOOLS_EXTRA_SOURCE_DIR:PATH=/home/kzl/makepkg/build/llvm-project/src/llvm-project/llvm/../clang-tools-extra
+LLVM_EXTERNAL_CLANG_TOOLS_EXTRA_SOURCE_DIR:PATH=/var/cache/makepkg/build/llvm-project/src/llvm-project/llvm/../clang-tools-extra
 
 // Path to compiler-rt source directory
 LLVM_EXTERNAL_COMPILER_RT_SOURCE_DIR:PATH=
@@ -1104,7 +1104,7 @@ LLVM_EXTERNAL_LIBUNWIND_SOURCE_DIR:PATH=
 LLVM_EXTERNAL_LLDB_SOURCE_DIR:PATH=
 
 // 
-LLVM_EXTERNAL_LLD_SOURCE_DIR:PATH=/home/kzl/makepkg/build/llvm-project/src/llvm-project/llvm/../lld
+LLVM_EXTERNAL_LLD_SOURCE_DIR:PATH=/var/cache/makepkg/build/llvm-project/src/llvm-project/llvm/../lld
 
 // Path to mlir source directory
 LLVM_EXTERNAL_MLIR_SOURCE_DIR:PATH=
@@ -1276,10 +1276,10 @@ LLVM_TARGET_TRIPLE_ENV:STRING=
 LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN:BOOL=OFF
 
 // Set ThinLTO cache path. This can be used when building LLVM from several different directiories.
-LLVM_THINLTO_CACHE_PATH:STRING=/home/kzl/makepkg/build/llvm-project/src/llvm-project/build/lto.cache
+LLVM_THINLTO_CACHE_PATH:STRING=/var/cache/makepkg/build/llvm-project/src/llvm-project/build/lto.cache
 
 // Directory containing third party software used by LLVM (e.g. googletest)
-LLVM_THIRD_PARTY_DIR:STRING=/home/kzl/makepkg/build/llvm-project/src/llvm-project/llvm/../third-party
+LLVM_THIRD_PARTY_DIR:STRING=/var/cache/makepkg/build/llvm-project/src/llvm-project/llvm/../third-party
 
 // Path for binary subdirectory (defaults to 'bin')
 LLVM_TOOLS_INSTALL_DIR:STRING=bin

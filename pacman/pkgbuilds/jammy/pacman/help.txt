@@ -1,6 +1,6 @@
 
 Core properties:
-  Source dir /home/kzl/makepkg/build/pacman/src/pacman
+  Source dir /var/cache/makepkg/build/pacman/src/pacman
 
 Main project options:
   
@@ -42,18 +42,18 @@ Main project options:
   
   Base options                   Default Value                    Possible Values                  Description                                                  
   --------------                 -------------                    ---------------                  -----------                                                  
-  b_colorout                     always                           [auto, always, never]            Use colored output                                           
-  b_pgo                          off                              [off, generate, use]             Use profile guided optimization                              
   b_asneeded                     true                             [True, False]                    Use -Wl,--as-needed when linking                             
-  b_ndebug                       false                            [true, false, if-release]        Disable asserts                                              
-  b_pie                          false                            [True, False]                    Build executables as position independent                    
   b_lundef                       true                             [True, False]                    Use -Wl,--no-undefined when linking                          
-  b_staticpic                    true                             [True, False]                    Build static libraries as position independent               
-  b_lto_threads                  0                                []                               Use multiple threads for Link Time Optimization              
-  b_pch                          true                             [True, False]                    Use precompiled headers                                      
   b_coverage                     false                            [True, False]                    Enable coverage tracking.                                    
   b_lto                          false                            [True, False]                    Use link time optimization                                   
+  b_colorout                     always                           [auto, always, never]            Use colored output                                           
+  b_staticpic                    true                             [True, False]                    Build static libraries as position independent               
+  b_pie                          false                            [True, False]                    Build executables as position independent                    
+  b_ndebug                       false                            [true, false, if-release]        Disable asserts                                              
   b_sanitize                     []                                                                Code sanitizer to use                                        
+  b_lto_threads                  0                                []                               Use multiple threads for Link Time Optimization              
+  b_pgo                          off                              [off, generate, use]             Use profile guided optimization                              
+  b_pch                          true                             [True, False]                    Use precompiled headers                                      
   
   pkgconfig module options       Default Value                    Possible Values                  Description                                                  
   --------------------------     -------------                    ---------------                  -----------                                                  

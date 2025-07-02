@@ -2,7 +2,7 @@
 
 pkgname=rust
 pkgver=1.88.0
-pkgrel=16
+pkgrel=17
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')

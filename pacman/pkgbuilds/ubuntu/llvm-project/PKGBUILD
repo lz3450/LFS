@@ -2,7 +2,7 @@
 
 pkgname=llvm-project
 pkgver=20.1.7
-pkgrel=11
+pkgrel=14
 epoch=
 pkgdesc="Collection of modular and reusable compiler and toolchain technologies"
 arch=('x86_64')

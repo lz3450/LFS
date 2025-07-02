@@ -1,7 +1,7 @@
 The Meson build system
 Version: 1.8.2
-Source dir: /home/kzl/makepkg/build/pacman/src/pacman
-Build dir: /home/kzl/makepkg/build/pacman/src/pacman/build
+Source dir: /var/cache/makepkg/build/pacman/src/pacman
+Build dir: /var/cache/makepkg/build/pacman/src/pacman/build
 Build type: native build
 Project name: pacman
 Project version: 7.0.0
@@ -49,7 +49,7 @@ Checking for type "ssize_t" : YES
 Checking for type "int64_t" : YES 
 Configuring config.h using configuration
 Configuring edit-script.sh using configuration
-Program edit-script.sh found: YES (/usr/bin/bash /home/kzl/makepkg/build/pacman/src/pacman/build/scripts/edit-script.sh)
+Program edit-script.sh found: YES (/usr/bin/bash /var/cache/makepkg/build/pacman/src/pacman/build/scripts/edit-script.sh)
 Configuring libmakepkg.pc using configuration
 Program msgfmt found: YES (/usr/bin/msgfmt)
 Program msginit found: YES (/usr/bin/msginit)

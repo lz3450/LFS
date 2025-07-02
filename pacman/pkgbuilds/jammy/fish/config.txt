@@ -34,7 +34,7 @@ CMake Warning:
     CMAKE_CXX_FLAGS
 
 
--- Build files have been written to: /home/kzl/makepkg/build/fish/src/fish-shell/build
+-- Build files have been written to: /var/cache/makepkg/build/fish/src/fish-shell/build
 -- Cache values
 // build documentation (requires Sphinx)
 BUILD_DOCS:BOOL=OFF
