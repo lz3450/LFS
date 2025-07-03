@@ -204,7 +204,7 @@ make_imgs() {
     info "Making mutable image \"$MUTABLE_IMG\"..."
     rm -vf -- "$MUTABLE_IMG"
     fallocate -l 256MiB "$MUTABLE_IMG"
-    mkfs.ext4 -L MUTABLE "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
+    mkfs.ext4 -L HOME "$MUTABLE_IMG" > "$LOG_DIR"/mkfs-mutable.log 2>&1
     info "Done (Made mutable image)"
 
     info "Making EFI boot image \"$EFIBOOT_IMG\"..."
@@ -231,7 +231,7 @@ make_imgs() {
 mount_imgs() {
     info "Mounting mutable image \"$MUTABLE_IMG\" to \"$ROOTFS_DIR/home\"..."
     mount -v -t ext4 -o loop -- "$MUTABLE_IMG" "$ROOTFS_DIR/home"
-    mountpoint -q -- "$ROOTFS_DIR/home" || error "MUTABLE directory not mounted: $ROOTFS_DIR/home" 2
+    mountpoint -q -- "$ROOTFS_DIR/home" || error "MUTABLE image not mounted" 2
     info "Done (Mounted mutable image)"
 
     local _efi_dir="$ROOTFS_DIR/boot"
@@ -308,7 +308,7 @@ EOF
     echo "PATH=\"$_path\"" > "$ROOTFS_DIR"/etc/environment
     # fstab
     cat > "$ROOTFS_DIR"/etc/fstab << EOF
-LABEL=MUTABLE       /home       ext4        defaults        0 2
+LABEL=HOME      /home       ext4        defaults        0 2
 EOF
     # network
     cp -vf -- "$CONFIG_DIR/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
@@ -458,10 +458,9 @@ make_iso_image() {
         -appid "$iso_name $ISO_APPLICATION" \
         -preparer "prepared by kzl" \
         -partition_offset 16 \
-        -append_partition 2 'C12A7328-F81F-11D2-BA4B-00A0C93EC93B' "$EFIBOOT_IMG" \
-        -append_partition 3 '0FC63DAF-8483-4772-8E79-3D69D8477DE4' "$MUTABLE_IMG" \
+        -append_partition 2 C12A7328-F81F-11D2-BA4B-00A0C93EC93B "$EFIBOOT_IMG" \
+        -append_partition 3 0FC63DAF-8483-4772-8E79-3D69D8477DE4 "$MUTABLE_IMG" \
         -appended_part_as_gpt \
-        -no-pad \
         -output "$OUT_DIR/$iso_file" \
         "$ISOFS_DIR/" > "$LOG_DIR"/xorriso.log 2>&1
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$OUT_DIR/$iso_file"
