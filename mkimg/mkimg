@@ -22,11 +22,11 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 unset __DEBUG__
 __DEBUG__=1
 
-### libraries
+### general libraries
 . "$SCRIPT_DIR"/lib/log.sh
 . "$SCRIPT_DIR"/lib/utils.sh
-. "$SCRIPT_DIR"/lib/loop.sh
 . "$SCRIPT_DIR"/lib/chroot.sh
+. "$SCRIPT_DIR"/lib/loop.sh
 . "$SCRIPT_DIR"/lib/deb.sh
 
 ### checks
@@ -120,11 +120,11 @@ make_work_dirs() {
     if [[ -d "$WORK_DIR" ]]; then
         error "Working directory $WORK_DIR already exists" 1
     fi
-    mkdir -vp -- "$WORK_DIR" >&2
-    mkdir -vp -- "$ROOTFS_DIR" >&2
-    mkdir -vp -- "$LOG_DIR" >&2
+    mkdir -vp -- "$WORK_DIR"
+    mkdir -vp -- "$ROOTFS_DIR"
+    mkdir -vp -- "$LOG_DIR"
     if [[ ! -d "$PKGLIST_DIR" ]]; then
-        mkdir -vp -- "$PKGLIST_DIR" >&2
+        mkdir -vp -- "$PKGLIST_DIR"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
     fi
     info "Done (Made root filesystem directory)"
@@ -200,7 +200,14 @@ bootstrap_rootfs() {
     if [[ "$distro" == "debian" ]]; then
         info "Setting up initial sources.list..."
         mkdir -p -- "$ROOTFS_DIR/etc/apt/sources.list.d"
-        sed "s|@SUITE@|$arg_suite|g" "$CONFIG_DIR/raspi.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/raspi.sources"
+        cat > "$ROOTFS_DIR/etc/apt/sources.list.d/raspi.sources" << EOF
+Types: deb
+URIs: https://archive.raspberrypi.com/debian/
+Suites: $arg_suite
+Components: main
+Signed-By: /etc/apt/trusted.gpg.d/raspberrypi.gpg.key
+#Signed-By: /etc/apt/trusted.gpg.d/raspberrypi-archive-stable.gpg
+EOF
         # raspberrypi-archive-stable.gpg will be overwritten by deb package raspberrypi-archive-keyring
         wget -qO "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key" http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
         info "Done (Set up initial sources.list)"
@@ -304,7 +311,6 @@ EOF
     info "Copying boot configuration files..."
     # copy configuration files
     cp -vf -- "$CONFIG_DIR/config.txt" "$ROOTFS_DIR/boot/firmware/config.txt"
-    cp -vf -- "$CONFIG_DIR/cmdline-$distro.txt" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
     # get PARTUUIDs of the partitions
     local _b_partuuid=$(findmnt -n -o PARTUUID --source "${loop_device}p1")
     local _r_partuuid=$(findmnt -n -o PARTUUID --source "${loop_device}p2")
@@ -322,7 +328,12 @@ PARTUUID=$_r_partuuid       /                   ext4        defaults            
 PARTUUID=$_b_partuuid       /boot/firmware      vfat        defaults,noatime        0 2
 #/swapfile                   none                swap        defaults                0 0
 EOF
-    sed -i "s|@ROOTPARTUUID@|$_r_partuuid|" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
+    cat > "$ROOTFS_DIR/boot/firmware/cmdline.txt" << EOF
+console=serial0,115200 console=tty1 root=PARTUUID=$_r_partuuid rootfstype=ext4 fsck.repair=yes rootwait quiet init=/usr/lib/raspberrypi-sys-mods/firstboot
+EOF
+    if [[ "$distro" == "ubuntu" ]]; then
+        sed -i -E 's| init=.*||' "$ROOTFS_DIR/boot/firmware/cmdline.txt"
+    fi
     info "Done (Copied boot configuration files)"
 
     sync

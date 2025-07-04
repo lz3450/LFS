@@ -30,7 +30,7 @@ __DEBUG__=1
 ### checks
 check_root
 
-### constants & variables
+### constants and variables
 declare -r TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
 
 declare -r WORK_DIR="/tmp/mkiso_$TIMESTAMP"

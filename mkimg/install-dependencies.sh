@@ -7,5 +7,4 @@ sudo apt-get install -y \
     xorriso
 sudo pacman -Sy --noconfirm \
     dracut \
-    erofs-utils \
-    f2fs-tools
+    erofs-utils
