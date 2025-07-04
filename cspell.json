@@ -418,6 +418,7 @@
         "rhash",
         "rhashrc",
         "rootfs",
+        "rootfstype",
         "ROOTPARTUUID",
         "rootsbindir",
         "rpath",
