@@ -1,8 +1,10 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 sudo apt-get update
 sudo apt-get install -y \
-    qemu-user-static
-sudo pacman -Syu --noconfirm \
-    debootstrap
-
+    dosfstools \
+    isomd5sum \
+    xorriso
+sudo pacman -Sy --noconfirm \
+    dracut \
+    erofs-utils

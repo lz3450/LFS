@@ -1,0 +1,287 @@
+#!/bin/bash
+#
+# mkrootfs.install
+#
+
+declare -r __DEBUG__=1
+
+set -e
+set -o pipefail
+set -u
+# set -x
+
+umask 0022
+
+SCRIPT_NAME="$(basename "$0")"
+SCRIPT_PATH="$(realpath --no-symlinks "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+
+################################################################################
+
+### bash utils
+. "$SCRIPT_DIR"/lib/log.sh
+. "$SCRIPT_DIR"/lib/utils.sh
+
+### options and arguments
+arg_platform="pc"
+arg_device="loop"
+arg_filesystem_type="btrfs"
+arg_suite="jammy"
+arg_rootfs_tarball=""
+
+### variables
+distro=""
+install_lib=""
+declare -i img_size
+loop_device=""
+rootfs_type="ext4"
+
+################################################################################
+
+usage() {
+    cat << EOF
+
+Usage:
+    $SCRIPT_NAME -h | --help
+    $SCRIPT_NAME [-p <platform>] [-d <device>] [-f <rootfs-type>] [-s <suite>] -t <rootfs-tarball>
+
+    -h, --help                      print this help message and exit
+    -p, --platform <platform>       set platform (default: pc)
+                                    supported platforms: pc, rpi
+    -d, --device <device>           set device to install to (default: loop)
+    -f, --rootfs-type <type>        set rootfs type (default: ext4)
+                                    supported types: ext4, btrfs
+                                    if platform is rpi, only ext4 is supported, -f is ignored
+    -s, --suite <suite>             set iso suite (jammy, noble, questing, bookworm)
+    -t, --rootfs-tarball <file>     set rootfs tarball
+
+EOF
+}
+
+while (( $# > 0 )); do
+    case "$1" in
+    -h | --help)
+        usage
+        exit
+        ;;
+    -p | --platform)
+        shift
+        arg_platform="$1"
+        ;;
+    -d | --device)
+        shift
+        arg_device="$1"
+        ;;
+    -f | --rootfs-type)
+        shift
+        arg_rootfs_type="$1"
+        ;;
+    -s | --suite)
+        shift
+        arg_suite="$1"
+        ;;
+    -t | --rootfs-tarball)
+        shift
+        arg_rootfs_tarball="$1"
+        ;;
+    esac
+    shift
+done
+
+### checks
+check_root
+
+case "$arg_rootfs_type" in
+    ext4|btrfs)
+        ;;
+    *)
+        error "Unsupported filesystem type \"$arg_rootfs_type\"" 128
+        ;;
+esac
+
+case "$arg_platform" in
+    pc)
+        install_lib="install-pc.sh"
+        img_size=4GiB
+        rootfs_type="$arg_rootfs_type"
+        ;;
+    rpi)
+        install_lib="install-rpi.sh"
+        img_size=1536MiB
+        rootfs_type="ext4"
+        ;;
+    *)
+        error "Unknown platform \"$arg_platform\"" 128
+        ;;
+esac
+
+if [[ "$arg_device" == "loop"  && ! -b "$arg_device" ]]; then
+    error "$arg_device is not a valid block device to install" 128
+fi
+
+case "$arg_suite" in
+    jammy|noble|questing)
+        distro="ubuntu"
+        ;;
+    bookworm)
+        distro="debian"
+        ;;
+    kzl)
+        distro="kzl-linux"
+        ;;
+    *)
+        error "Unsupported suite \"$arg_suite\"" 128
+        ;;
+esac
+
+if [[ ! -f "$arg_rootfs_tarball" ]]; then
+    error "Rootfs tarball \"$arg_rootfs_tarball\" does not exist or is not specified" 128
+fi
+
+################################################################################
+
+### constants
+declare -r TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
+
+declare -r WORK_DIR="/tmp/install_$TIMESTAMP"
+declare -r ROOTFS_DIR="$WORK_DIR/rootfs"
+declare -r LOG_DIR="$SCRIPT_DIR/log"
+
+declare -r CONFIG_DIR="$SCRIPT_DIR/config"
+declare -r PKGLIST_DIR="$SCRIPT_DIR/pkglist"
+
+declare -r UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
+# UBUNTU_MIRROR="https://mirror.arizona.edu/ubuntu/"
+declare -r MOUNT_OPT="rw,noatime"
+
+### libraries
+. "$SCRIPT_DIR/lib/$install_lib"
+. "$SCRIPT_DIR/lib/loop.sh"
+
+### functions
+cleanup() {
+    trap - EXIT SIGINT SIGTERM SIGKILL
+    set +e
+
+    info "Perform platform specific cleanup..."
+    cleanup_platform_specific
+
+    info "Cleaning up..."
+    loop_teardown "$loop_device"
+
+    local _answer="N"
+    read -t 60 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
+    if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+        rmdir -v -- "$ROOTFS_DIR" && rm -rf --one-file-system -- "$WORK_DIR"
+    fi
+
+    log_magenta "Done"
+
+}
+trap cleanup EXIT SIGINT SIGTERM SIGKILL
+
+make_work_dirs() {
+    info "Making working directory: $WORK_DIR"
+    if [[ -d "$WORK_DIR" ]]; then
+        error "Working directory $WORK_DIR already exists" 1
+    fi
+    mkdir -vp -- "$WORK_DIR"
+    mkdir -vp -- "$ROOTFS_DIR"
+    mkdir -vp -- "$LOG_DIR"
+    if [[ ! -d "$PKGLIST_DIR" ]]; then
+        mkdir -vp -- "$PKGLIST_DIR"
+        chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
+    fi
+}
+
+setup_loopdev() {
+    info "Setting up loop device for installation on PC..."
+    if [[ "$arg_device" == "loop" ]]; then
+        fallocate -l "$img_size" "$IMG_FILE"
+    fi
+    loop_device="$(loop_get_device)"
+    if [[ -z "$loop_device" ]]; then
+        error "No unused loop device found" 2
+    fi
+    debug "loop device: $loop_device"
+    if [[ "$arg_device" == "loop" ]]; then
+        loop_partitioned_setup "$loop_device" "$IMG_FILE"
+    else
+        loop_partitioned_setup "$loop_device" "$arg_device"
+    fi
+}
+
+extract_rootfs_tarball() {
+    info "Extracting root filesystem tarball: $arg_rootfs_tarball"
+    tar -v \
+        --zstd \
+        --xattrs --acls \
+        --numeric-owner \
+        -xpf "$arg_rootfs_tarball" \
+        -C "$ROOTFS_DIR" \
+        > "$LOG_DIR/tar.log"
+}
+
+install_deb_pkgs() {
+    local _deb_pkgs_installed="$PKGLIST_DIR/$arg_platform-$arg_suite-deb-pkgs.txt"
+    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkgs_installed"
+
+    info "Installing deb packages..."
+    deb_set_locale "$ROOTFS_DIR"
+    deb_apt "$ROOTFS_DIR" deb_pkgs > "$LOG_DIR/deb_apt.log"
+    deb_get_installed_pkgs "$ROOTFS_DIR" | sed -e '/^linux-image-.+/d' -e '/^linux-modules-.+/d' -e 's/:amd64//g' > "$_deb_pkgs_installed"
+}
+
+common_configure_rootfs() {
+    info "Configuring rootfs..."
+    local _hostname
+    # hostname
+    read -p 'hostname: ' _hostname
+    echo "$_hostname" > "$ROOTFS_DIR/etc/hostname"
+    # environment
+    echo "PATH=\"/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin\"" > "$ROOTFS_DIR/etc/environment"
+    # passwd
+    sed -i '/^root/s|/bin/bash|/bin/zsh|' "$ROOTFS_DIR"/etc/passwd
+    # network
+    cp -vf -- "$CONFIG_DIR/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
+    cp -vf -- "$CONFIG_DIR/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
+    cp -vf -- "$CONFIG_DIR/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
+    local _wl_dev=$(ip -o link show | awk -F': ' '{print $2}' | grep 'wl.*')
+    if [[ -n "$_wl_dev" ]]; then
+        ln -sf wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-$_wl_dev.conf"
+    fi
+    # grml-zsh-config for root
+    wget -qO "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+    echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
+    echo '. /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR/root/.zshrc"
+}
+
+################################################################################
+
+prologue
+
+make_work_dirs
+setup_loopdev
+prepare_rootfs
+
+extract_rootfs_tarball
+pre_install_pkgs
+if [[ "$arg_suite" != "kzl" ]]; then
+    install_deb_pkgs
+fi
+install_pacman_pkgs
+post_install_pkgs
+install_deb_pkgs
+
+configure_rootfs_common
+configure_rootfs_platform_specific
+
+log_cyan "Successfully installed $distro $arg_suite on $ROOTFS_DIR"
+
+cleanup
+epilogue
+
+### error codes
+# 1: general error
+# 127: command not found
+# 128: unknown option or invalid argument

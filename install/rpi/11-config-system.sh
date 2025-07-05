@@ -1,1 +1,0 @@
-../../ubuntu/install/11-config-system.sh

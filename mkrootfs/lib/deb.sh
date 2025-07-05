@@ -1,1 +1,1 @@
-../../shell/lib/deb.sh
+../../bash/lib/deb.sh

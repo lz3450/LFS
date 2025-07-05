@@ -1,1 +1,0 @@
-../../ubuntu/install/10-config-rdp.sh
