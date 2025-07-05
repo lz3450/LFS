@@ -193,8 +193,8 @@ make_work_dirs() {
 }
 
 debootstrap_rootfs() {
-    local -r _deb_pkg_to_install="$PKGLIST_DIR/$arg_arch-$arg_suite-debootstrap-pkgs.txt"
-    local -r _deb_pkgs_installed="$PKGLIST_DIR/$arg_arch-$arg_suite-rootfs-pkgs.txt"
+    local -r _deb_pkg_to_install="$PKGLIST_DIR/$arg_arch-$arg_suite-bootstrap-to-install-pkgs.txt"
+    local -r _deb_pkgs_installed="$PKGLIST_DIR/$arg_arch-$arg_suite-bootstrap-installed-pkgs.txt"
     sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkg_to_install" "$_deb_pkgs_installed"
 
     local _include=""
