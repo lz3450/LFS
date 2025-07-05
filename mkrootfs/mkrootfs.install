@@ -101,12 +101,12 @@ esac
 
 case "$arg_platform" in
     pc)
-        install_lib="install-pc.sh"
+        install_lib="install.pc.sh"
         img_size=4GiB
         rootfs_type="$arg_rootfs_type"
         ;;
     rpi)
-        install_lib="install-rpi.sh"
+        install_lib="install.rpi.sh"
         img_size=1536MiB
         rootfs_type="ext4"
         ;;
