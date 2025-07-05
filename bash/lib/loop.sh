@@ -13,9 +13,9 @@ declare -r __LIBLOOP__="loop.sh"
 
 ################################################################################
 
-### libraries
+### bash utils
 LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
-. "$LIBDIR"/log.sh
+. "$LIBDIR/log.sh"
 
 ### functions
 _loop_info () {
