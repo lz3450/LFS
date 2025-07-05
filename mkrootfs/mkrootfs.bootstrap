@@ -3,6 +3,8 @@
 # mkrootfs.bootstrap
 #
 
+declare -r __DEBUG__=1
+
 set -e
 set -u
 set -o pipefail
@@ -16,33 +18,23 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
 
-unset __DEBUG__
-__DEBUG__=1
-
-### libraries
+### bash utils
 . "$SCRIPT_DIR"/lib/log.sh
 . "$SCRIPT_DIR"/lib/utils.sh
-. "$SCRIPT_DIR"/lib/loop.sh
-. "$SCRIPT_DIR"/lib/chroot.sh
-. "$SCRIPT_DIR"/lib/deb.sh
 
-### checks
-check_root
+### options and arguments
+arg_arch=""
+arg_suite=""
 
-### constants and variables
-declare -r TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
+### variables
+distro=""
+ubuntu_mirror=""
+deb_mirror=""
+deb_mirrors=()
 
-declare -r WORK_DIR="/tmp/mkrootfs_$TIMESTAMP"
-declare -r ROOTFS_DIR="$WORK_DIR/rootfs"
-declare -r LOG_DIR="$WORK_DIR/log"
-
-declare -r APT_CONFIG_DIR="$SCRIPT_DIR/config/apt"
-declare -r PKGLIST_DIR="$SCRIPT_DIR/pkglist"
-
-declare -r DEBIAN_MIRROR="http://deb.debian.org/debian"
-declare -r UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
-# declare -r UBUNTU_MIRROR="https://mirror.arizona.edu/ubuntu/"
-declare -r UBUNTU_PORT_MIRROR="http://ports.ubuntu.com/ubuntu-ports/"
+included_deb_pkgs=()
+excluded_deb_pkgs=()
+pacman_pkgs=()
 
 # distro specific package lists
 debian_included_deb_pkgs=(
@@ -71,23 +63,103 @@ kzl_pacman_pkgs=(
     linux
 )
 
-distro=""
-ubuntu_mirror=""
-deb_mirror=""
-deb_mirrors=()
+################################################################################
 
-included_deb_pkgs=()
-excluded_deb_pkgs=()
-pacman_pkgs=()
+usage() {
+    cat << EOF
 
-tarball_file=""
+Usage: $SCRIPT_NAME -h | --help
+Usage: $SCRIPT_NAME  -a | --arch <architecture>  -s | --suite <suite>
 
-### options and arguments
-arg_arch=""
-arg_suite=""
+    -h, --help                      print this help message and exit
+    -a, --arch <architecture>       specify the platform
+                                    supported platforms: amd64, arm64
+    -s, --suite <suite>             specify the distribution suite
+                                    supported suites: bookworm, trixie, jammy, noble, questing, kzl
+EOF
+}
+
+while (( $# > 0 )); do
+    case "$1" in
+    -h | --help)
+        usage
+        exit 0
+        ;;
+    -a | --arch)
+        shift
+        arg_arch="$1"
+        ;;
+    -s | --suite)
+        shift
+        arg_suite="$1"
+        ;;
+    *)
+        usage
+        error "Unknown option: $1" 128
+        ;;
+    esac
+    shift
+done
+
+### checks
+check_root
+
+case "$arg_arch" in
+    amd64)
+        ubuntu_mirror=http://us.archive.ubuntu.com/ubuntu/
+        # ubuntu_mirror="https://mirror.arizona.edu/ubuntu/"
+        ;;
+    arm64)
+        ubuntu_mirror=http://ports.ubuntu.com/ubuntu-ports/
+        ;;
+    *)
+        error "Unsupported architecture \"$arg_arch\"." 128
+        ;;
+esac
+
+case "$arg_suite" in
+    bookworm|trixie)
+        distro=debian
+        deb_mirror=http://deb.debian.org/debian
+        included_deb_pkgs=("${common_deb_pkgs[@]}" "${debian_included_deb_pkgs[@]}")
+        excluded_deb_pkgs=("${debian_excluded_deb_pkgs[@]}")
+        ;;
+    jammy|noble|questing)
+        distro=ubuntu
+        deb_mirror="$ubuntu_mirror"
+        included_deb_pkgs=("${common_deb_pkgs[@]}" "${ubuntu_included_deb_pkgs[@]}")
+        excluded_deb_pkgs=("${ubuntu_excluded_deb_pkgs[@]}")
+        ;;
+    kzl)
+        distro=kzl-linux
+        pacman_pkgs=("${kzl_pacman_pkgs[@]}")
+        ;;
+    *)
+        error "Unsupported distribution \"$arg_suite\"." 1
+        ;;
+esac
+
+################################################################################
+
+### constants
+declare -r TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
+
+declare -r WORK_DIR="/tmp/mkrootfs_$TIMESTAMP"
+declare -r ROOTFS_DIR="$WORK_DIR/rootfs"
+declare -r LOG_DIR="$WORK_DIR/log"
+
+declare -r APT_CONFIG_DIR="$SCRIPT_DIR/config/apt"
+declare -r PKGLIST_DIR="$SCRIPT_DIR/pkglist"
+
+declare -r TARBALL_FILE="$SCRIPT_DIR/tarballs/rootfs-$arg_arch-$distro-$arg_suite-$TIMESTAMP.tar.zst"
+
+### libraries
+. "$SCRIPT_DIR/lib/chroot.sh"
+. "$SCRIPT_DIR/lib/deb.sh"
 
 ### functions
 cleanup() {
+    trap - EXIT SIGINT SIGTERM SIGKILL
     set +e
 
     if [[ -d "$WORK_DIR" ]]; then
@@ -95,16 +167,14 @@ cleanup() {
         chroot_teardown
 
         local _answer
-        read -t 10 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
+        read -t 60 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
         if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
             log_magenta "Removing working directory: $WORK_DIR"
-            rmdir -v -- "$ROOTFS_DIR" && rm -rf --one-file-system -- "$WORK_DIR"
-            log_magenta "Done (Removed working directory)"
+            rm -rf --one-file-system -- "$WORK_DIR"
         fi
-        log_magenta "Done (Cleaned up)"
+        log_magenta "Done"
     fi
 
-    trap - EXIT SIGINT SIGTERM SIGKILL
 }
 trap cleanup EXIT SIGINT SIGTERM SIGKILL
 
@@ -120,10 +190,9 @@ make_work_dirs() {
         mkdir -p -- "$PKGLIST_DIR"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
     fi
-    info "Done (Made root filesystem directory)"
 }
 
-_debootstrap_rootfs() {
+debootstrap_rootfs() {
     local -r _deb_pkg_to_install="$PKGLIST_DIR/$arg_arch-$arg_suite-debootstrap-pkgs.txt"
     local -r _deb_pkgs_installed="$PKGLIST_DIR/$arg_arch-$arg_suite-rootfs-pkgs.txt"
     sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkg_to_install" "$_deb_pkgs_installed"
@@ -149,7 +218,6 @@ _debootstrap_rootfs() {
         "$ROOTFS_DIR" \
         "$deb_mirror" \
         2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -n  | sed '/^$/d' > "$_deb_pkg_to_install"
-    info "Done (Made the list of installed deb packages)"
 
     info "Debootstrapping \"$ROOTFS_DIR/\"..."
     local _foreign=""
@@ -170,7 +238,6 @@ _debootstrap_rootfs() {
     if [[ -n "$_foreign" ]]; then
         chroot "$ROOTFS_DIR" /debootstrap/debootstrap --second-stage >> "$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap (stage 2) rootfs" 3
     fi
-    info "Done (Debootstrapped rootfs)"
 
     info "Configuring rootfs..."
     if [[ -f "$ROOTFS_DIR/etc/apt/sources.list" ]]; then
@@ -186,17 +253,15 @@ _debootstrap_rootfs() {
     deb_apt "$ROOTFS_DIR" additional_deb_pkgs > "$LOG_DIR/apt.log"
     deb_set_locale "$ROOTFS_DIR"
     deb_get_installed_pkgs "$ROOTFS_DIR" > "$_deb_pkgs_installed"
-    info "Done (Configured rootfs)"
 
     info "Cleaning up rootfs..."
     clean_rootfs "$ROOTFS_DIR" > "$LOG_DIR/clean_rootfs.log"
     rm -vrf -- "$ROOTFS_DIR"/bin.usr-is-merged
     rm -vrf -- "$ROOTFS_DIR"/lib.usr-is-merged
     rm -vrf -- "$ROOTFS_DIR"/sbin.usr-is-merged
-    info "Done (Cleaned up rootfs)"
 }
 
-_mmdebstrap_rootfs() {
+mmdebstrap_rootfs() {
     # local _deb_pkglist="${arg_suite}_deb_pkglist.txt"
     # sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkglist"
 
@@ -216,7 +281,7 @@ _mmdebstrap_rootfs() {
     error "Not implemented yet" 1
 }
 
-_pacstrap_rootfs() {
+pacstrap_rootfs() {
     # local -r _pkg_list="$PKGLIST_DIR/$arg_arch-pacstrap-pkgs.txt"
     # sudo -u "${SUDO_USER:-root}" touch -- "$_pkg_list"
 
@@ -226,17 +291,6 @@ _pacstrap_rootfs() {
     error "Not implemented yet" 1
 }
 
-bootstrap_rootfs() {
-    if [[ "$distro" == "debian" || "$distro" == "ubuntu" ]]; then
-        _debootstrap_rootfs
-        # _mmdebstrap_rootfs
-    elif [[ "$distro" == "kzl-linux" ]]; then
-        _pacstrap_rootfs
-    else
-        error "Unsupported distribution: $distro" 1
-    fi
-}
-
 make_rootfs_tarball() {
     info "Making base rootfs tarball..."
     tar -v \
@@ -244,98 +298,25 @@ make_rootfs_tarball() {
         --xattrs --acls \
         --numeric-owner \
         --transform='s|^./||' \
-        -cpf "$SCRIPT_DIR/$tarball_file" \
+        -cpf "$TARBALL_FILE" \
         -C "$ROOTFS_DIR" . \
-        > "$LOG_DIR/tar.log" 2>&1 || error "Failed to make base rootfs tarball" 4
-    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/$tarball_file"
-    info "Done (Made base rootfs tarball)"
+        > "$LOG_DIR/tar.log"
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$TARBALL_FILE"
 }
-
-usage() {
-    cat << EOF
-
-Usage: $SCRIPT_NAME -h | --help
-Usage: $SCRIPT_NAME  -a | --arch <architecture>  -s | --suite <suite>
-
-    -h, --help                      print this help message and exit
-    -a, --arch <architecture>       specify the platform
-                                    supported platforms: amd64, arm64
-    -s, --suite <suite>             specify the distribution suite
-                                    supported suites: bookworm, trixie, jammy, noble, questing, kzl
-EOF
-}
-
-################################################################################
-
-while (( $# > 0 )); do
-    case "$1" in
-    -h | --help)
-        usage
-        exit 0
-        ;;
-    -a | --arch)
-        shift
-        arg_arch="$1"
-        ;;
-    -s | --suite)
-        shift
-        arg_suite="$1"
-        ;;
-    *)
-        usage
-        error "Unknown option: $1" 128
-        ;;
-    esac
-    shift
-done
-
-case "$arg_arch" in
-    amd64)
-        ubuntu_mirror="$UBUNTU_MIRROR"
-        ;;
-    arm64)
-        ubuntu_mirror="$UBUNTU_PORT_MIRROR"
-        ;;
-    *)
-        usage
-        error "Unsupported platform \"$arg_arch\"." 1
-        ;;
-esac
-
-case "$arg_suite" in
-    bookworm|trixie)
-        distro="debian"
-        deb_mirror="$DEBIAN_MIRROR"
-        included_deb_pkgs=("${common_deb_pkgs[@]}" "${debian_included_deb_pkgs[@]}")
-        excluded_deb_pkgs=("${debian_excluded_deb_pkgs[@]}")
-        ;;
-    jammy|noble|questing)
-        distro="ubuntu"
-        deb_mirror="$ubuntu_mirror"
-        included_deb_pkgs=("${common_deb_pkgs[@]}" "${ubuntu_included_deb_pkgs[@]}")
-        excluded_deb_pkgs=("${ubuntu_excluded_deb_pkgs[@]}")
-        ;;
-    kzl)
-        distro="kzl-linux"
-        pacman_pkgs=("${kzl_pacman_pkgs[@]}")
-        ;;
-    *)
-        usage
-        error "Unsupported distribution \"$arg_suite\"." 1
-        ;;
-esac
-
-tarball_file="rootfs-$arg_arch-$distro-$arg_suite-$TIMESTAMP.tar.zst"
 
 ################################################################################
 
 prologue
 
 make_work_dirs
-bootstrap_rootfs
+if [[ "$distro" == "kzl-linux" ]]; then
+    pacstrap_rootfs
+else
+    debootstrap_rootfs
+fi
 make_rootfs_tarball
 
-log_cyan "Successfully made rootfs tarball: $tarball_file"
+log_cyan "Successfully made rootfs tarball: $TARBALL_FILE"
 
 cleanup
 
@@ -345,6 +326,5 @@ epilogue
 # 1: general error
 # 2: debootstrap error
 # 3: chroot error
-# 4: tar error
 # 128: unknown option
 # 255: must be run as root
