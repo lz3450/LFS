@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# mkrootfs
+# mkrootfs.bootstrap
 #
 
 set -e
