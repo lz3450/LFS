@@ -12,19 +12,15 @@ set -o pipefail
 
 umask 0022
 
-SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(realpath --no-symlinks "$0")"
-SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+declare -r SCRIPT_NAME="$(basename "$0")"
+declare -r SCRIPT_PATH="$(realpath --no-symlinks "$0")"
+declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
 
 ### bash utils
 . "$SCRIPT_DIR"/lib/log.sh
 . "$SCRIPT_DIR"/lib/utils.sh
-
-### options and arguments
-arg_arch=""
-arg_suite=""
 
 ### variables
 distro=""
@@ -293,14 +289,12 @@ pacstrap_rootfs() {
 
 make_rootfs_tarball() {
     info "Making base rootfs tarball..."
-    tar -v \
-        --zstd \
+    tar --zstd \
         --xattrs --acls \
         --numeric-owner \
         --transform='s|^./||' \
         -cpf "$TARBALL_FILE" \
-        -C "$ROOTFS_DIR" . \
-        > "$LOG_DIR/tar.log"
+        -C "$ROOTFS_DIR" .
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$TARBALL_FILE"
 }
 

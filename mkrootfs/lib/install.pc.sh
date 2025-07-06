@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# install-pc.sh
+# install.pc.sh
 #
 
 ################################################################################
@@ -9,19 +9,78 @@ if [[ -v __INSTALL_PC__ ]]; then
     return
 fi
 
-declare -r __INSTALL_PC__="install-pc.sh"
+declare -r __INSTALL_PC__="install.pc.sh"
 
 ################################################################################
 
-### constants
-declare -r BTRFS_SUBVOLS=(
+### constants and variables (before argument processing)
+declare -ar COMMON_DEB_PKGS=(
+    ### general
+    sudo
+    file
+    build-essential
+    ### disk
+    parted
+    btrfs-progs
+    ### network
+    iw wpasupplicant
+    rfkill
+    ### kernel
+    linux-image-generic
+    # dracut
+    initramfs-tools
+    ### pacman
+    libarchive-tools
+    zstd
+    libgpgme-dev
+    fakeroot
+)
+declare -ar JAMMY_DEB_PKGS=()
+declare -ar NOBLE_DEB_PKGS=(
+    systemd-boot
+    systemd-resolved
+)
+declare -ar QUESTING_DEB_PKGS=(
+    systemd-boot
+    systemd-boot-efi
+    systemd-resolved
+)
+declare -ar UBUNTU_PACMAN_PKGS=(
+    pacman
+    linux
+)
+
+deb_pkgs=("${COMMON_DEB_PKGS[@]}")
+pacman_pkgs=("${UBUNTU_PACMAN_PKGS[@]}")
+
+################################################################################
+
+case "$arg_suite" in
+    jammy)
+        deb_pkgs+=("${JAMMY_DEB_PKGS[@]}")
+        ;;
+    noble)
+        deb_pkgs+=("${NOBLE_DEB_PKGS[@]}")
+        ;;
+    questing)
+        deb_pkgs+=("${QUESTING_DEB_PKGS[@]}")
+        ;;
+    *)
+        error "Unsupported suite \"$arg_suite\"" 128
+        ;;
+esac
+
+################################################################################
+
+### constants and variables (after argument processing)
+declare -ar BTRFS_SUBVOLS=(
     @home
     @var
     @log
     @cache
     @snapshots
 )
-declare -r -A BTRFS_SUBVOL_TARGET_DIR=(
+declare -Ar BTRFS_SUBVOL_TARGET_DIR=(
     ["@home"]="home"
     ["@var"]="var"
     ["@log"]="var/log"
@@ -29,7 +88,7 @@ declare -r -A BTRFS_SUBVOL_TARGET_DIR=(
     ["@snapshots"]="/.snapshots"
 )
 declare -r BTRFS_DEFAULT_MOUNT_OPT="$MOUNT_OPT,compress=zstd"
-declare -r -A BTRFS_SUBVOL_MOUNT_OPT=(
+declare -Ar BTRFS_SUBVOL_MOUNT_OPT=(
     ["@home"]="$MOUNT_OPT,subvol=@home"
     ["@var"]="$MOUNT_OPT,subvol=@var"
     ["@log"]="$MOUNT_OPT,subvol=@log"
@@ -43,17 +102,17 @@ LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 
 ### functions
 prepare_rootfs() {
-    # exec 3>&1
-    # exec > "$LOG_DIR/{FUNCNAME[0]}.log"
-    info "Preparing root filesystem on $loop_device..."
+    exec 3>&1
+    exec > "$LOG_DIR/${FUNCNAME[0]}.log"
 
     # mkpart
     if [[ "$arg_device" == "loop" ]]; then
         parted -s "$loop_device" \
             mklabel gpt \
-            mkpart BOOT 2048s 1048575s \
-            mkpart RECOVERY 1048576s 5242879s \
-            mkpart ROOT 5242580s 100% \
+            unit s \
+            mkpart BOOT fat32 2048 1048575 \
+            mkpart RECOVERY ext4 1048576 5242879 \
+            mkpart ROOT "$rootfs_type" 5242880 100% \
             set 1 esp on \
             print
     else
@@ -62,18 +121,19 @@ prepare_rootfs() {
         local _root_end=$(( (_size - 67108864) / 2048 * 2048 ))
         parted -s "$loop_device" \
             mklabel gpt \
-            mkpart BOOT 2048s 1048575s \
-            mkpart RECOVERY 1048576s 5242879s \
-            mkpart ROOT 5242580s $(( _root_end - 1 )) \
-            mkpart SWAP $_root_end 100% \
+            unit s \
+            mkpart BOOT fat32 2048 1048575 \
+            mkpart RECOVERY ext4 1048576 5242879 \
+            mkpart ROOT "$rootfs_type" 5242880 $(( _root_end - 1 )) \
+            mkpart SWAP linux-swap "$_root_end" 100% \
             set 1 esp on \
             print
     fi
 
     # mkfs
-    mkfs.fat -F 32 -n "BOOT" -- "${loop_device}p1"
-    mkfs.ext4 -L "RECOVERY" -- "${loop_device}p2"
-    "mkfs.$rootfs_type" -L "ROOT" -- "${loop_device}p3"
+    mkfs.fat -F 32 -n BOOT -- "${loop_device}p1"
+    mkfs.ext4 -L RECOVERY -- "${loop_device}p2"
+    "mkfs.$rootfs_type" -L ROOT -- "${loop_device}p3"
 
     # mount
     mount -o "$MOUNT_OPT" -- "${loop_device}p3" "$ROOTFS_DIR"
@@ -103,27 +163,10 @@ prepare_rootfs() {
             mount -v -o "${BTRFS_SUBVOL_MOUNT_OPT[$_subvol]}" -- "${loop_device}p3" "$ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]}"
         done
     fi
-    mkdir -vp -- "$ROOTFS_DIR"/boot/efi
-    mount -o "$MOUNT_OPT,umask=0177" -- "${loop_device}p1" "$ROOTFS_DIR"/boot/efi
+    mkdir -vp -- "$ROOTFS_DIR/boot/efi"
+    mount -o "$MOUNT_OPT,umask=0177" -- "${loop_device}p1" "$ROOTFS_DIR/boot/efi"
 
-    # exec 1>&3 3>&-
-}
-
-pre_install_pkgs() {
-    :
-}
-
-install_pacman_pkgs() {
-    local _pacman_pkgs_installed="$PKGLIST_DIR/$arg_platform-$arg_suite-pacman-pkgs.txt"
-    sudo -u "${SUDO_USER:-root}" touch -- "$_pacman_pkgs_installed"
-
-    info "Install pacman packages..."
-    pacman_bootstrap "$ROOTFS_DIR" "$ROOTFS_DIR/home/.repository/$distro" pacman_pkgs
-    pacman_get_installed_pkgs "$ROOTFS_DIR" > "$_pacman_pkgs_installed"
-}
-
-post_install_pkgs() {
-    :
+    exec 1>&3 3>&-
 }
 
 configure_rootfs_platform_specific() {
@@ -194,7 +237,7 @@ EOF
     chroot_setup "$ROOTFS_DIR"
     chroot_run "$ROOTFS_DIR" /root/initialize.sh
     local _answer="N"
-    read -p "Do you want to configure rootfs manually? (Y/n)" _answer
+    read -p "Do you want to configure rootfs manually? (Y/n) " _answer
     if [[ "$_answer" == "Y" && "$_answer" == "y" ]]; then
         chroot_run "$ROOTFS_DIR" /bin/zsh
     fi
