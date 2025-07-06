@@ -82,8 +82,7 @@ pacman_get_pkgnames() {
 
 pacman_bootstrap() {
     local _rootfs_dir="$1"
-    local _cache_dir="$2"
-    local -n _pacman_pkgs="$3"
+    local -n _pacman_pkgs="$2"
 
     _pacman_debug "Installing pacman packages: $(IFS=','; echo "${_pacman_pkgs[*]}")"
     mkdir -v -m 0755 -p "$_rootfs_dir"/var/{cache/pacman/pkg,lib/pacman,log} "$_rootfs_dir"/{dev,run,etc/pacman.d}
@@ -96,12 +95,12 @@ pacman_bootstrap() {
     unshare --fork --pid \
         "$PACMAN" -Sy \
         -r "$_rootfs_dir" \
-        --cachedir "$_cache_dir" \
         --config "$_pacman_tmp_conf_file" \
         --disable-sandbox \
         --noconfirm \
         "${_pacman_pkgs[@]}"
     chroot_teardown
+    _pacman_debug "Done"
 }
 
 pacman_get_installed_pkgs() {

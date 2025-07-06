@@ -43,7 +43,7 @@ loop_partitioned_setup() {
     local _loop_device="$1"
     local _img="$2"
     losetup -P "$_loop_device" "$_img"
-    _loop_debug "Set up loop device for image: $_img"
+    _loop_debug "$_loop_device -> $_img"
 }
 
 # detach loop device
@@ -75,7 +75,7 @@ loop_teardown() {
     done
 
     losetup -d "$_loop_device"
-    _loop_debug "Detaching loop device: $_loop_device"
+    _loop_debug "$_loop_device detached"
 }
 
 debug "${BASH_SOURCE[0]} sourced"

@@ -125,7 +125,7 @@ chroot_setup() {
 
     chroot_setup_done=1
 
-    _chroot_debug "Done (Setup chroot environment)"
+    _chroot_debug "Done"
 }
 
 chroot_teardown() {
@@ -155,7 +155,7 @@ chroot_teardown() {
     done
     chroot_setup_done=0
 
-    _chroot_debug "Done (Tear down chroot environment)"
+    _chroot_debug "Done"
 }
 
 chroot_run() {

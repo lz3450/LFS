@@ -42,6 +42,7 @@ apt-get install --no-install-recommends -y ${_deb_pkgs[@]}
 apt-get autoremove --purge -y
 EOF
     chroot_teardown
+    _deb_debug "Done"
 }
 
 # $1: rootfs_dir: the rootfs directory

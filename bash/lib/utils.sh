@@ -18,6 +18,9 @@ LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR"/log.sh
 
 ### functions
+_utils_debug() {
+    debug "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
 _utils_info () {
     info "${1:-}" "${BASH_SOURCE[0]##*/}"
 }
@@ -75,7 +78,7 @@ clean_rootfs() {
         _utils_error "Root filesystem directory is not a directory" 1
     fi
 
-    _utils_info "Cleaning rootfs..."
+    _utils_debug "Cleaning rootfs..."
     # general
     delete_all_contents "$_rootfs_dir"/dev/
     delete_all_contents "$_rootfs_dir"/run/
@@ -89,7 +92,7 @@ clean_rootfs() {
     # pacman
     delete_all_contents "$_rootfs_dir"/var/lib/pacman/
     find "$_rootfs_dir" -type f \( -name '*.pacnew' -o -name '*.pacsave' \) -delete
-    _utils_info "Done (Cleaned rootfs)"
+    _utils_debug "Done"
 }
 
 debug "${BASH_SOURCE[0]} sourced"
