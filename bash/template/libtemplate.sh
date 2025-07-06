@@ -13,9 +13,6 @@ declare -r __LIBTEMPLATE__="libtemplate.sh"
 
 ################################################################################
 
-### checks
-check_root
-
 ## optional variables
 if [[ -z "$optional" ]]; then
     info "optional unbound, using empty list"
@@ -37,6 +34,9 @@ LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 # . "$LIBDIR"/deb.sh
 
 ### functions
+_debug() {
+    debug "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
 _info () {
     info "${1:-}" "${BASH_SOURCE[0]##*/}"
 }
