@@ -36,6 +36,9 @@ EXTENSION="tar.zst"
 PKGNAME_REGEX="\([0-9]+:\)?\([0-9a-zA-Z]+\(\.\|\+\)?\)+-[0-9]+-\(x86_64\|aarch64\|any\).pkg.$EXTENSION"
 
 ### functions
+_pacman_debug() {
+    debug "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
 _pacman_info () {
     info "${1:-}" "${BASH_SOURCE[0]##*/}"
 }
@@ -82,7 +85,7 @@ pacman_bootstrap() {
     local _cache_dir="$2"
     local -n _pacman_pkgs="$3"
 
-    _pacman_info "Installing pacman packages: $(IFS=','; echo "${_pacman_pkgs[*]}")"
+    _pacman_debug "Installing pacman packages: $(IFS=','; echo "${_pacman_pkgs[*]}")"
     mkdir -v -m 0755 -p "$_rootfs_dir"/var/{cache/pacman/pkg,lib/pacman,log} "$_rootfs_dir"/{dev,run,etc/pacman.d}
     mkdir -v -m 1777 -p "$_rootfs_dir"/tmp
     mkdir -v -m 0555 -p "$_rootfs_dir"/{sys,proc}
@@ -99,7 +102,6 @@ pacman_bootstrap() {
         --noconfirm \
         "${_pacman_pkgs[@]}"
     chroot_teardown
-    _pacman_info "Done (Installed pacman packages)"
 }
 
 pacman_get_installed_pkgs() {

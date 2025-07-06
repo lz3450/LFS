@@ -18,6 +18,9 @@ LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR/log.sh"
 
 ### functions
+_loop_debug() {
+    debug "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
 _loop_info () {
     info "${1:-}" "${BASH_SOURCE[0]##*/}"
 }
@@ -39,9 +42,8 @@ loop_get_device() {
 loop_partitioned_setup() {
     local _loop_device="$1"
     local _img="$2"
-    _loop_info "Setting up loop device for image: $_img"
     losetup -P "$_loop_device" "$_img"
-    _loop_info "Done (Setting up loop device)"
+    _loop_debug "Set up loop device for image: $_img"
 }
 
 # detach loop device
@@ -72,9 +74,8 @@ loop_teardown() {
         sleep 3
     done
 
-    _loop_info "Detaching loop device: $_loop_device"
     losetup -d "$_loop_device"
-    _loop_info "Done (Detaching loop device)"
+    _loop_debug "Detaching loop device: $_loop_device"
 }
 
 debug "${BASH_SOURCE[0]} sourced"

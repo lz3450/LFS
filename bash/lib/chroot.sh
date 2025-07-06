@@ -5,11 +5,11 @@
 
 ################################################################################
 
-if [[ -v __LIBCHROOT__ ]]; then
+if [[ -v __CHROOT__ ]]; then
     return
 fi
 
-declare -r __LIBCHROOT__="chroot.sh"
+declare -r __CHROOT__="chroot.sh"
 
 ################################################################################
 
@@ -25,6 +25,9 @@ chroot_dir=""
 declare -i chroot_setup_done=0
 
 ### functions
+_chroot_debug() {
+    debug "${1:-}" "${BASH_SOURCE[0]##*/}"
+}
 _chroot_info () {
     info "${1:-}" "${BASH_SOURCE[0]##*/}"
 }
@@ -33,7 +36,7 @@ _chroot_warn() {
 }
 
 chroot_add_mount() {
-    mount -v "$@" >&2
+    mount "$@" >&2
     chroot_active_mounts=(${@: -1} "${chroot_active_mounts[@]}")
 }
 
@@ -99,10 +102,11 @@ chroot_setup() {
     chroot_active_mounts=()
     chroot_dir="$1"
 
-    _chroot_info "Setting up chroot environment in \"$chroot_dir\""
+    _chroot_debug "Setting up chroot environment in \"$chroot_dir\""
 
     if ! mountpoint -q "$chroot_dir"; then
-        _chroot_info "\"$chroot_dir\" is not a mountpoint. This may have undesirable side effects. Bind mounting \"$chroot_dir\" to itself"
+        # if chroot_dir is not a mountpoint, there may be undesirable side effects.
+        # bind mounting chroot_dir to itself
         chroot_add_mount --bind --make-private "$chroot_dir" "$chroot_dir"
     fi
 
@@ -121,7 +125,7 @@ chroot_setup() {
 
     chroot_setup_done=1
 
-    _chroot_info "Done (Setup chroot environment)"
+    _chroot_debug "Done (Setup chroot environment)"
 }
 
 chroot_teardown() {
@@ -131,18 +135,18 @@ chroot_teardown() {
         return
     fi
 
-    _chroot_info "Tearing down chroot environment in \"$chroot_dir\""
+    _chroot_debug "Tearing down chroot environment in \"$chroot_dir\""
 
     while (( ${#chroot_active_mounts[@]} > 0 )); do
         local _mp
         for _mp in "${chroot_active_mounts[@]}"; do
             if mountpoint -q "$_mp"; then
-                if ! umount -v -- "$_mp"; then
+                if ! umount -- "$_mp"; then
                     _mountpoints+=("$_mp")
                     _chroot_warn "Failed to unmount \"$_mp\", retry later"
                 fi
             else
-                _chroot_info "Mountpoint \"$_mp\" is not mounted, skipping"
+                _chroot_debug "Mountpoint \"$_mp\" is not mounted, skipping"
             fi
         done
         chroot_active_mounts=("${_mountpoints[@]}")
@@ -151,7 +155,7 @@ chroot_teardown() {
     done
     chroot_setup_done=0
 
-    _chroot_info "Done (Tear down chroot environment)"
+    _chroot_debug "Done (Tear down chroot environment)"
 }
 
 chroot_run() {
