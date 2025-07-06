@@ -1,1 +1,1 @@
-../../../shell/lib/pacman.sh
+../../../bash/lib/pacman.sh
