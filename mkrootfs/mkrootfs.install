@@ -344,7 +344,7 @@ if declare -F 'post_configure_rootfs' > '/dev/null'; then
 fi
 
 if [[ "$arg_device" == "loop" ]]; then
-    mv -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+    cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
     log_cyan "Successfully installed ${distro^} ${arg_suite^} on $SCRIPT_DIR/images/$IMG_FILE_NAME"
 else
