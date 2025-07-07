@@ -29,7 +29,7 @@ _deb_info () {
 
 # $1: rootfs_dir: the rootfs directory
 # $2: deb_pkgs: an array of Debian packages to install
-deb_apt() {
+deb_apt_install() {
     local _rootfs_dir="$1"
     local -n _deb_pkgs="$2"
 
