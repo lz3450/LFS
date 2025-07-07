@@ -162,14 +162,14 @@ prepare_rootfs() {
         unit s \
         mkpart BOOT fat32 2048 524287 \
         mkpart "$ISO_LABEL" ext4 524288 4718591 \
-        mkpart HOME ext4 4718592 100% \
+        mkpart RECOVERY ext4 4718592 100% \
         set 1 esp on \
         print
 
     # mkfs
     mkfs.fat -F 32 -n BOOT -- "${loop_device}p1"
-    mkfs.ext4 -L "$ISO_LABEL" -- "${loop_device}p2" 2>&1
-    mkfs.ext4 -L HOME -- "${loop_device}p3" 2>&1
+    mkfs.ext4 -L "$ISO_LABEL" -- "${loop_device}p2"
+    mkfs.ext4 -L RECOVERY -- "${loop_device}p3"
 
     # mount
     mkdir -p -- "$ISOFS_DIR"
@@ -180,7 +180,7 @@ prepare_rootfs() {
 
 post_install_pkgs() {
     delete_all_contents "$ROOTFS_DIR/boot/efi/"
-    delete_all_contents "$ROOTFS_DIR/home"
+    delete_all_contents "$ROOTFS_DIR/home/"
 
 
     mount -o "$MOUNT_OPT,umask=0177" -- "${loop_device}p1" "$ROOTFS_DIR/$efi_dir"
@@ -246,8 +246,8 @@ Welcome to $ISO_NAME Live OS!
 EOF
     # fstab
     cat > "$ROOTFS_DIR"/etc/fstab << EOF
-LABEL=BOOT      /boot/efi   vfat        $MOUNT_OPT,umask=0177       0 2
-LABEL=HOME      /home       ext4        $MOUNT_OPT,nofail           0 2
+LABEL=BOOT          /boot/efi   vfat        $MOUNT_OPT,umask=0177                               0 2
+LABEL=RECOVERY      /home       ext4        $MOUNT_OPT,nofail,x-systemd.device-timeout=30s      0 2
 EOF
     # ssh
     sed -i \
@@ -344,7 +344,7 @@ _make_iso_image() {
         -preparer "prepared by kzl" \
         -partition_offset 16 \
         -append_partition 2 C12A7328-F81F-11D2-BA4B-00A0C93EC93B "$WORK_DIR/efiboot.img" \
-        -append_partition 3 0FC63DAF-8483-4772-8E79-3D69D8477DE4 "$WORK_DIR/home.img" \
+        -append_partition 3 0FC63DAF-8483-4772-8E79-3D69D8477DE4 "$WORK_DIR/recovery.img" \
         -appended_part_as_gpt \
         -output "$SCRIPT_DIR/images/$ISO_FILE_NAME" \
         "$ISOFS_DIR"
@@ -358,9 +358,9 @@ post_configure_rootfs() {
     sync
 
     umount -v -- "$ROOTFS_DIR/$efi_dir"
-    mountpoint -q -- "$ROOTFS_DIR/$efi_dir" && error "/$efi_dir is still mounted" 2
+    mountpoint -q -- "$ROOTFS_DIR/$efi_dir" && error "EFI partition is still mounted" 2
     umount -v -- "$ROOTFS_DIR/home"
-    mountpoint -q -- "$ROOTFS_DIR/home" && error "/home is still mounted" 2
+    mountpoint -q -- "$ROOTFS_DIR/home" && error "RECOVERY partition is still mounted" 2
 
     clean_rootfs "$ROOTFS_DIR"
     _make_rootfs_ro_rootfs_img
@@ -370,7 +370,7 @@ post_configure_rootfs() {
         read -r -p "Do you want to create a bootable ISO image? [y/N] " _answer
         if [[ "$_answer" =~ ^[Yy]$ ]]; then
             dd if="${loop_device}p1" of="$WORK_DIR/efiboot.img" bs=1M status=progress
-            dd if="${loop_device}p3" of="$WORK_DIR/home.img" bs=1M status=progress
+            dd if="${loop_device}p3" of="$WORK_DIR/recovery.img" bs=1M status=progress
             _make_iso_image
         fi
     fi
