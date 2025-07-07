@@ -37,16 +37,21 @@ usage() {
 
 Usage:
     $SCRIPT_NAME -h | --help
-    $SCRIPT_NAME [-p <platform>] [-d <device>] [-f <rootfs-type>] [-s <suite>] -t <rootfs-tarball>
+    $SCRIPT_NAME [-p <platform>] [-f <rootfs-type>] [-s <suite>] [-d <device>] -t <rootfs-tarball>
 
     -h, --help                      print this help message and exit
     -p, --platform <platform>       set platform (default: pc)
                                     supported platforms: pc, liveos, rpi
-    -d, --device <device>           set device to install to (default: loop)
+
     -f, --rootfs-type <type>        set rootfs type (default: ext4)
                                     supported types: ext4, btrfs
                                     if platform is liveos or rpi, only ext4 is supported, -f will be ignored
-    -s, --suite <suite>             set suite to install (jammy, noble, questing, bookworm)
+
+    -s, --suite <suite>             set suite to install (default: jammy)
+                                    supported suites: jammy, noble, questing, bookworm, trixie, kzl
+
+    -d, --device <device>           set device to install to (default: loop)
+
     -t, --rootfs-tarball <file>     set rootfs tarball
 
 EOF
@@ -128,7 +133,7 @@ case "$arg_suite" in
     jammy|noble|questing)
         distro="ubuntu"
         ;;
-    bookworm)
+    bookworm|trixie)
         distro="debian"
         ;;
     kzl)
@@ -142,7 +147,7 @@ esac
 readonly distro
 
 if [[ "$arg_platform" == "liveos" && "$distro" != "ubuntu" ]]; then
-    error "$distro LiveOS image has not been implemented yet" 128
+    error "${distro^} LiveOS has not been implemented yet" 128
 fi
 
 if [[ ! -f "$arg_rootfs_tarball" ]]; then
@@ -341,9 +346,9 @@ fi
 if [[ "$arg_device" == "loop" ]]; then
     mv -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
-    log_cyan "Successfully installed $distro $arg_suite on $SCRIPT_DIR/images/$IMG_FILE_NAME"
+    log_cyan "Successfully installed ${distro^} ${arg_suite^} on $SCRIPT_DIR/images/$IMG_FILE_NAME"
 else
-    log_cyan "Successfully installed $distro $arg_suite on $ROOTFS_DIR"
+    log_cyan "Successfully installed ${distro^} ${arg_suite^} on $ROOTFS_DIR"
 fi
 
 cleanup
