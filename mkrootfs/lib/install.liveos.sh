@@ -368,9 +368,13 @@ post_configure_rootfs() {
     _make_rootfs_ro_rootfs_img
 
     if [[ "$arg_device" == "loop" ]]; then
-        dd if="${loop_device}p1" of="$WORK_DIR/efiboot.img" bs=1M status=progress
-        dd if="${loop_device}p3" of="$WORK_DIR/home.img" bs=1M status=progress
-        _make_iso_image
+        local _answer
+        read -r -p "Do you want to create a bootable ISO image? [y/N] " _answer
+        if [[ "$_answer" =~ ^[Yy]$ ]]; then
+            dd if="${loop_device}p1" of="$WORK_DIR/efiboot.img" bs=1M status=progress
+            dd if="${loop_device}p3" of="$WORK_DIR/home.img" bs=1M status=progress
+            _make_iso_image
+        fi
     fi
 }
 

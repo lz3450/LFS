@@ -136,16 +136,17 @@ _prompt_for_partition_number() {
     local _partition_number
     local _dev
 
-    local _answer='N'
+    local _answer
     while true; do
-        read -p "Partition number for $_prompt_name: " _partition_number
+        read -r -p "Partition number for $_prompt_name: " _partition_number
         _dev="${loop_device}p${_partition_number:-}"
         if [[ ! -b "$_dev" ]]; then
             warn "Invalid partition number: $_partition_number, retry"
             continue
         fi
-        read -p "Make $_prompt_name partition on $_dev? (Y/n) " _answer
-        if [[ "$_answer" != "N" && "$_answer" != "n" ]]; then
+        read -r -p "Make $_prompt_name partition on $_dev? [Y/n] " _answer
+        _answer=${_answer:-y}
+        if [[ "$_answer" =~ ^[Yy]$ ]]; then
             break
         fi
     done
@@ -192,13 +193,15 @@ prepare_rootfs() {
         # rootfs partition
         _prompt_for_partition_number rootfs
         # swap partition
-        read -p 'Make swap partition (Y/n): ' _answer
-        if [[ "$_answer" != "N" && "$_answer" != "n" ]]; then
+        read -r -p 'Make swap partition [Y/n]: ' _answer
+        _answer=${_answer:-y}
+        if [[ "$_answer" =~ ^[Yy]$ ]]; then
             _prompt_for_partition_number swap
         fi
         # recovery partition
-        read -p 'Make recovery partition (Y/n): ' _answer
-        if [[ "$_answer" != "N" && "$_answer" != "n" ]]; then
+        read -r -p 'Make recovery partition [Y/n]: ' _answer
+        _answer=${_answer:-y}
+        if [[ "$_answer" =~ ^[Yy]$ ]]; then
             _prompt_for_partition_number recovery
         fi
 
@@ -326,8 +329,9 @@ EOF
     chroot_run "$ROOTFS_DIR" /root/initialize.sh
 
     local _answer
-    read -p "Do you want to configure rootfs manually? (Y/n) " _answer
-    if [[ "$_answer" != "N" && "$_answer" != "n" ]]; then
+    read -r -p "Do you want to configure rootfs manually? [Y/n] " _answer
+    _answer=${_answer:-y}
+    if [[ "$_answer" =~ ^[Yy]$ ]]; then
         chroot_run "$ROOTFS_DIR" /bin/zsh
     fi
     chroot_teardown
