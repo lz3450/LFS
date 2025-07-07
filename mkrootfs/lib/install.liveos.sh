@@ -61,8 +61,6 @@ declare -ar UBUNTU_PACMAN_PKGS=(
     pacman
     linux
     debootstrap
-    dracut
-    erofs-utils
 )
 declare -ar KZL_PACMAN_PKGS=(
     linux
