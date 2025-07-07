@@ -284,8 +284,8 @@ install_pacman_pkgs() {
 configure_rootfs_common() {
     info "Configuring rootfs..."
     # hostname
-    if [[ -n "${HOSTNAME:-}" ]]; then
-        echo "$HOSTNAME" > "$ROOTFS_DIR/etc/hostname"
+    if [[ "${arg_platform}" == 'liveos' ]]; then
+        echo "LiveOS" > "$ROOTFS_DIR/etc/hostname"
     else
         local _hostname
         read -r -p 'hostname: ' _hostname

@@ -134,7 +134,6 @@ readonly -A efi_boot_entries
 ################################################################################
 
 ### constants and variables (after argument processing)
-declare -r HOSTNAME="LiveOS"
 declare -r ISO_NAME="${distro^}-$arg_suite"
 declare -r ISO_PUBLISHER="<https://github.com/lz3450/LFS>"
 declare -r ISO_APPLICATION="Live/Rescue ISO Image"
@@ -247,7 +246,8 @@ Welcome to $ISO_NAME Live OS!
 EOF
     # fstab
     cat > "$ROOTFS_DIR"/etc/fstab << EOF
-LABEL=HOME      /home       ext4        $MOUNT_OPT,nofail       0 2
+LABEL=BOOT      /boot/efi   vfat        $MOUNT_OPT,umask=0177       0 2
+LABEL=HOME      /home       ext4        $MOUNT_OPT,nofail           0 2
 EOF
     # ssh
     sed -i \
