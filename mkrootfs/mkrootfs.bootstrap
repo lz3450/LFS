@@ -266,7 +266,7 @@ debootstrap_rootfs() {
         sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/$distro.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/$distro.sources"
     fi
 
-    deb_apt "$ROOTFS_DIR" ADDITIONAL_DEB_PKGS
+    deb_apt_install "$ROOTFS_DIR" ADDITIONAL_DEB_PKGS
     deb_set_locale "$ROOTFS_DIR"
     deb_get_installed_pkgs "$ROOTFS_DIR" > "$_deb_pkgs_installed"
 
