@@ -180,7 +180,7 @@ loop_device=""
 
 ### functions
 cleanup() {
-    local _signal="${1:-EXIT}"
+    local _signal="$1"
     set +e
 
     sync
@@ -199,16 +199,11 @@ cleanup() {
 
     trap - EXIT
     case "$_signal" in
-    EXIT)
-        ;;
     SIGINT)
         error "Interrupted by user" 1
         ;;
     SIGTERM)
         error "Terminated by signal" 1
-        ;;
-    *)
-        error "Exiting due to unknown signal: $_signal" 1
         ;;
     esac
 
