@@ -169,7 +169,7 @@ declare -r TARBALL_FILE="$SCRIPT_DIR/tarballs/rootfs-$arg_arch-$distro-$arg_suit
 
 ### functions
 cleanup() {
-    local _signal="$1"
+    local _signal="${1:-}"
     set +e
 
     log_magenta "Cleaning up..."

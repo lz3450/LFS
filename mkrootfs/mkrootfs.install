@@ -180,7 +180,7 @@ loop_device=""
 
 ### functions
 cleanup() {
-    local _signal="$1"
+    local _signal="${1:-}"
     set +e
 
     sync
