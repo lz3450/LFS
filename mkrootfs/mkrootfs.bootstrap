@@ -74,8 +74,10 @@ Usage: $SCRIPT_NAME -h | --help
 Usage: $SCRIPT_NAME  -a | --arch <architecture>  -s | --suite <suite>
 
     -h, --help                      print this help message and exit
+
     -a, --arch <architecture>       specify the architecture (default: amd64)
                                     supported architectures: amd64, arm64
+
     -s, --suite <suite>             specify the distribution suite (default: jammy)
                                     supported suites: bookworm, trixie, jammy, noble, questing, kzl
 EOF
