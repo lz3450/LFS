@@ -15,6 +15,7 @@ umask 0022
 declare -r SCRIPT_NAME="$(basename "$0")"
 declare -r SCRIPT_PATH="$(realpath --no-symlinks "$0")"
 declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+declare -ar SCRIPT_INVOCATION=("$@")
 
 ################################################################################
 
@@ -315,7 +316,7 @@ configure_rootfs_common() {
 prologue
 
 make_work_dirs
-echo "$@" > "$LOG_DIR/command.log"
+echo "${SCRIPT_INVOCATION[@]}" > "$LOG_DIR/command.log"
 touch -- "$WORK_DIR/$arg_platform"
 
 setup_loopdev

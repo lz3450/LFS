@@ -96,14 +96,59 @@ declare -Ar BTRFS_SUBVOL_MOUNT_OPT=(
     ["@snapshots"]="$MOUNT_OPT,subvol=@snapshots"
 )
 
+declare -A partition_device_map=(
+    [efi]=""
+    [rootfs]=""
+    [swap]=""
+    [recovery]=""
+)
+
 ### libraries
 LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR/chroot.sh"
 
 ### functions
+_prompt_for_partition_number() {
+    local _partition_name="$1"
+
+    local _prompt_name
+    case "$_partition_name" in
+        efi)
+            _prompt_name="EFI"
+            ;;
+        rootfs)
+            _prompt_name="root filesystem"
+            ;;
+        swap|recovery)
+            _prompt_name="$_partition_name"
+            ;;
+        *)
+            error "Unknown partition name: $_partition_name" 1
+            ;;
+    esac
+
+    local _partition_number
+    local _dev
+
+    local _answer='N'
+    while true; do
+        read -p "Partition number for $_prompt_name: " _partition_number
+        _dev="${loop_device}p${_partition_number:-}"
+        if [[ ! -b "$_dev" ]]; then
+            warn "Invalid partition number: $_partition_number, retry"
+            continue
+        fi
+        read -p "Make $_prompt_name partition on $_dev? (Y/n) " _answer
+        if [[ "$_answer" != "N" && "$_answer" != "n" ]]; then
+            break
+        fi
+    done
+    partition_device_map[$_partition_name]="$_dev"
+}
+
 prepare_rootfs() {
-    exec 3>&1
-    exec > "$LOG_DIR/${FUNCNAME[0]}.log"
+    # exec 3>&1
+    # exec >> "$LOG_DIR/${FUNCNAME[0]}.log"
 
     # mkpart
     if [[ "$arg_device" == "loop" ]]; then
@@ -111,32 +156,63 @@ prepare_rootfs() {
             mklabel gpt \
             unit s \
             mkpart BOOT fat32 2048 1048575 \
-            mkpart RECOVERY ext4 1048576 5242879 \
-            mkpart ROOT "$rootfs_type" 5242880 100% \
+            mkpart ROOT "$rootfs_type" 1048576 100% \
             set 1 esp on \
             print
+        partition_device_map[efi]="${loop_device}p1"
+        partition_device_map[rootfs]="${loop_device}p2"
+    # else
+    #     local _size=$(blockdev --getsz "$loop_device")
+    #     # 32GiB swap partition
+    #     local _root_end=$(( (_size - 67108864) / 2048 * 2048 ))
+    #     parted -s "$loop_device" \
+    #         mklabel gpt \
+    #         unit s \
+    #         mkpart BOOT fat32 2048 1048575 \
+    #         mkpart RECOVERY ext4 1048576 5242879 \
+    #         mkpart ROOT "$rootfs_type" 5242880 $(( _root_end - 1 )) \
+    #         mkpart SWAP linux-swap "$_root_end" 100% \
+    #         set 1 esp on \
+    #         print
+    # fi
     else
-        local _size=$(blockdev --getsz "$loop_device")
-        # 32GiB swap partition
-        local _root_end=$(( (_size - 67108864) / 2048 * 2048 ))
-        parted -s "$loop_device" \
-            mklabel gpt \
-            unit s \
-            mkpart BOOT fat32 2048 1048575 \
-            mkpart RECOVERY ext4 1048576 5242879 \
-            mkpart ROOT "$rootfs_type" 5242880 $(( _root_end - 1 )) \
-            mkpart SWAP linux-swap "$_root_end" 100% \
-            set 1 esp on \
-            print
+        # exec 1>&3
+
+        log_magenta "Please partition $arg_device"
+        parted "$loop_device"
+
+        local _answer
+        _prompt_for_partition_number efi
+        # rootfs partition
+        _prompt_for_partition_number rootfs
+        # swap partition
+        read -p 'Make swap partition (Y/n): ' _answer
+        if [[ "$_answer" != "N" && "$_answer" != "n" ]]; then
+            _prompt_for_partition_number swap
+        fi
+        # recovery partition
+        read -p 'Make recovery partition (Y/n): ' _answer
+        if [[ "$_answer" != "N" && "$_answer" != "n" ]]; then
+            _prompt_for_partition_number recovery
+        fi
+
+        # exec 3>&1
+        # exec >> "$LOG_DIR/${FUNCNAME[0]}.log"
     fi
+    readonly partition_device_map
 
     # mkfs
-    mkfs.fat -F 32 -n BOOT -- "${loop_device}p1"
-    mkfs.ext4 -L RECOVERY -- "${loop_device}p2"
-    "mkfs.$rootfs_type" -L ROOT -- "${loop_device}p3"
+    mkfs.fat -F 32 -n BOOT -- "${partition_device_map[efi]}"
+    "mkfs.$rootfs_type" -f -L ROOT -- "${partition_device_map[rootfs]}"
+    if [[ -n "${partition_device_map[swap]}" ]]; then
+        mkswap -L SWAP -- "${partition_device_map[swap]}"
+    fi
+    if [[ -n "${partition_device_map[recovery]}" ]]; then
+        mkfs.ext4 -F -L RECOVERY -- "${partition_device_map[recovery]}"
+    fi
 
     # mount
-    mount -o "$MOUNT_OPT" -- "${loop_device}p3" "$ROOTFS_DIR"
+    mount -o "$MOUNT_OPT" -- "${partition_device_map[rootfs]}" "$ROOTFS_DIR"
     if [[ "$rootfs_type" == "btrfs" ]]; then
         debug "Creating btrfs subvolumes on $ROOTFS_DIR..."
         # @
@@ -144,7 +220,7 @@ prepare_rootfs() {
         btrfs subvolume set-default "$ROOTFS_DIR/@"
         # other subvolumes
         local _subvol
-        for _subvol in "${INSTALL_BTRFS_SUBVOLS[@]}"; do
+        for _subvol in "${BTRFS_SUBVOLS[@]}"; do
             btrfs subvolume create "$ROOTFS_DIR/$_subvol"
         done
         chattr +C -- "$ROOTFS_DIR/@cache"
@@ -153,27 +229,30 @@ prepare_rootfs() {
         debug "Mounting btrfs subvolumes on $ROOTFS_DIR..."
         # mount @
         umount -v -- "$ROOTFS_DIR"
-        mount -v -o $BTRFS_DEFAULT_MOUNT_OPT,subvol=@ -- "${loop_device}p3" "$ROOTFS_DIR"
+        mount -v -o $BTRFS_DEFAULT_MOUNT_OPT,subvol=@ -- "${partition_device_map[rootfs]}" "$ROOTFS_DIR"
         local _subvol
         for _subvol in "${BTRFS_SUBVOLS[@]}"; do
             if [[ -d "$ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]}" ]]; then
                 error "Mount target directory $ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]} already exists" 1
             fi
             mkdir -vp -- "$ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]}"
-            mount -v -o "${BTRFS_SUBVOL_MOUNT_OPT[$_subvol]}" -- "${loop_device}p3" "$ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]}"
+            mount -v -o "${BTRFS_SUBVOL_MOUNT_OPT[$_subvol]}" -- "${partition_device_map[rootfs]}" "$ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]}"
         done
     fi
-    mkdir -vp -- "$ROOTFS_DIR/boot/efi"
-    mount -o "$MOUNT_OPT,umask=0177" -- "${loop_device}p1" "$ROOTFS_DIR/boot/efi"
+    mkdir -p -- "$ROOTFS_DIR/boot/efi"
+    mount -o "$MOUNT_OPT,umask=0177" -- "${partition_device_map[efi]}" "$ROOTFS_DIR/boot/efi"
 
-    exec 1>&3 3>&-
+    # exec 1>&3 3>&-
 }
 
 configure_rootfs_platform_specific() {
     # fstab
-    local _root______________________partuuid=$(blkid -s PARTUUID -o value "${loop_device}p3")
-    local _boot______________________partuuid=$(blkid -s PARTUUID -o value "${loop_device}p1")
-    local _swap______________________partuuid=$(blkid -s PARTUUID -o value "${loop_device}p4")
+    local _root______________________partuuid=$(blkid -s PARTUUID -o value "${partition_device_map[rootfs]}")
+    local _boot______________________partuuid=$(blkid -s PARTUUID -o value "${partition_device_map[efi]}")
+    local _swap______________________partuuid=""
+    if [[ -n "${partition_device_map[swap]}" ]]; then
+        _swap______________________partuuid=$(blkid -s PARTUUID -o value "${partition_device_map[swap]}")
+    fi
     cat > "$ROOTFS_DIR"/etc/fstab << EOF
 # Static information about the filesystems.
 # See fstab(5) for details.
@@ -188,7 +267,7 @@ PARTUUID=$_root______________________partuuid       /var/cache          btrfs   
 PARTUUID=$_root______________________partuuid       /.snapshots         btrfs       $MOUNT_OPT,subvol=@snapshots            0 1
 PARTUUID=$_boot______________________partuuid       /boot/efi           vfat        $MOUNT_OPT,umask=0177                   0 2
 tmpfs                                               /tmp                tmpfs       rw,nosuid,nodev,mode=1777               0 0
-PARTUUID=$_swap______________________partuuid       none                swap        defaults                                0 0
+#PARTUUID=$_swap______________________partuuid       none                swap        defaults                                0 0
 EOF
     # systemd-boot
     mkdir -vp -- "$ROOTFS_DIR"/boot/efi/loader/entries
@@ -208,12 +287,6 @@ title   Ubuntu-KZL
 linux   vmlinuz-KZL
 #initrd  initrd-KZL.img
 options root=PARTUUID=$_root______________________partuuid rw rootwait
-EOF
-    cat > "$ROOTFS_DIR"/boot/efi/loader/entries/recovery.conf << EOF
-title   Recovery
-linux   vmlinuz-LiveOS
-initrd  initrd-LiveOS.img
-options root=PARTUUID=$_root______________________partuuid rd.live.overlay.overlayfs rd.live.image rd.shell
 EOF
     # initialize.sh
     cat > "$ROOTFS_DIR"/root/initialize.sh << EOF
@@ -236,9 +309,10 @@ EOF
     chmod +x "$ROOTFS_DIR"/root/initialize.sh
     chroot_setup "$ROOTFS_DIR"
     chroot_run "$ROOTFS_DIR" /root/initialize.sh
-    local _answer="N"
+
+    local _answer
     read -p "Do you want to configure rootfs manually? (Y/n) " _answer
-    if [[ "$_answer" == "Y" && "$_answer" == "y" ]]; then
+    if [[ "$_answer" != "N" && "$_answer" != "n" ]]; then
         chroot_run "$ROOTFS_DIR" /bin/zsh
     fi
     chroot_teardown
