@@ -62,12 +62,14 @@ declare -ar UBUNTU_PACMAN_PKGS=(
     linux
     debootstrap
 )
+declare -ar KZL_PACMAN_PKGS=(
+    base
+    linux
+)
 
 deb_pkgs=("${COMMON_DEB_PKGS[@]}")
-pacman_pkgs=("${UBUNTU_PACMAN_PKGS[@]}")
+pacman_pkgs=()
 
-efi_dir="boot/efi"
-default_efi_entry="ubuntu-kzl.conf"
 declare -r KZL_LINUX_CONF=$(cat << EOF
 title   KZL Linux
 linux   /vmlinuz
@@ -89,13 +91,19 @@ initrd  /initramfs.img
 options root=live:CDLABEL=$ISO_LABEL rd.live.overlay.overlayfs rd.live.image rd.shell
 EOF
 )
-declare -A efi_boot_entries=(
-    ["ubuntu-kzl.conf"]="$UBUNTU_KZL_CONF"
-    ["ubuntu.conf"]="$UBUNTU_CONF"
-)
+efi_dir=""
+default_efi_entry=""
+declare -A efi_boot_entries=()
 
 ################################################################################
 
+pacman_pkgs=("${UBUNTU_PACMAN_PKGS[@]}")
+efi_dir="boot/efi"
+default_efi_entry="ubuntu-kzl.conf"
+efi_boot_entries=(
+    ["ubuntu-kzl.conf"]="$UBUNTU_KZL_CONF"
+    ["ubuntu.conf"]="$UBUNTU_CONF"
+)
 case "$arg_suite" in
     jammy)
         deb_pkgs+=("${JAMMY_DEB_PKGS[@]}")
@@ -107,6 +115,7 @@ case "$arg_suite" in
         deb_pkgs+=("${QUESTING_DEB_PKGS[@]}")
         ;;
     kzl)
+        pacman_pkgs=("${KZL_PACMAN_PKGS[@]}")
         efi_dir="boot"
         default_efi_entry="kzl-linux.conf"
         efi_boot_entries=(
