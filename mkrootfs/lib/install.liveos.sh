@@ -63,7 +63,6 @@ declare -ar UBUNTU_PACMAN_PKGS=(
     debootstrap
 )
 declare -ar KZL_PACMAN_PKGS=(
-    base
     linux
 )
 
@@ -97,7 +96,7 @@ declare -A efi_boot_entries=()
 
 ################################################################################
 
-pacman_pkgs=("${UBUNTU_PACMAN_PKGS[@]}")
+pacman_pkgs+=("${UBUNTU_PACMAN_PKGS[@]}")
 efi_dir="boot/efi"
 default_efi_entry="ubuntu-kzl.conf"
 efi_boot_entries=(
