@@ -294,6 +294,15 @@ linux   vmlinuz-KZL
 #initrd  initrd-KZL.img
 options root=PARTUUID=$_root______________________partuuid rw rootwait
 EOF
+    if [[ -n "${partition_device_map[recovery]}" ]]; then
+        cat > "$ROOTFS_DIR"/boot/efi/loader/entries/recovery.conf << EOF
+title   Recovery
+linux   vmlinuz-LiveOS
+initrd  initramfs-LiveOS.img
+options root=live:CDLABEL=RECOVERY rd.live.overlay.overlayfs rd.live.image rd.shell
+EOF
+    log_magenta "Please set up the recovery partition manually"
+    fi
     # initialize.sh
     cat > "$ROOTFS_DIR"/root/initialize.sh << EOF
 #!/bin/bash
