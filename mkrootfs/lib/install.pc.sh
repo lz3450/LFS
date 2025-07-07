@@ -2,6 +2,8 @@
 #
 # install.pc.sh
 #
+# TODO: add kzl-linux support
+#
 
 ################################################################################
 
@@ -49,12 +51,16 @@ declare -ar UBUNTU_PACMAN_PKGS=(
     pacman
     linux
 )
+declare -ar KZL_PACMAN_PKGS=(
+    linux
+)
 
 deb_pkgs=("${COMMON_DEB_PKGS[@]}")
-pacman_pkgs=("${UBUNTU_PACMAN_PKGS[@]}")
+pacman_pkgs=()
 
 ################################################################################
 
+pacman_pkgs+=("${UBUNTU_PACMAN_PKGS[@]}")
 case "$arg_suite" in
     jammy)
         deb_pkgs+=("${JAMMY_DEB_PKGS[@]}")
