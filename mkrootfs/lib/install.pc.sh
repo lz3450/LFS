@@ -254,6 +254,23 @@ prepare_rootfs() {
     # exec 1>&3 3>&-
 }
 
+post_bootstrap_rootfs() {
+    chroot_setup "$ROOTFS_DIR"
+    local _answer
+    read -r -p "Do you want to configure rootfs manually (post bootstrap)? [y/N] " _answer
+    if [[ "$_answer" =~ ^[Yy]$ ]]; then
+        chroot_run "$ROOTFS_DIR" /bin/zsh
+    fi
+}
+
+post_install_pkgs() {
+    local _answer
+    read -r -p "Do you want to configure rootfs manually (post pkg installation)? [y/N] " _answer
+    if [[ "$_answer" =~ ^[Yy]$ ]]; then
+        chroot_run "$ROOTFS_DIR" /bin/zsh
+    fi
+}
+
 configure_rootfs_platform_specific() {
     # fstab
     local _root______________________partuuid=$(blkid -s PARTUUID -o value "${partition_device_map[rootfs]}")
@@ -325,16 +342,15 @@ systemctl enable systemd-resolved.service
 bootctl install --esp-path=/boot/efi
 EOF
     chmod +x "$ROOTFS_DIR"/root/initialize.sh
-    chroot_setup "$ROOTFS_DIR"
     chroot_run "$ROOTFS_DIR" /root/initialize.sh
+}
 
+post_configure_rootfs() {
     local _answer
-    read -r -p "Do you want to configure rootfs manually? [Y/n] " _answer
-    _answer=${_answer:-y}
+    read -r -p "Do you want to configure rootfs manually (post configuration)? [y/N] " _answer
     if [[ "$_answer" =~ ^[Yy]$ ]]; then
         chroot_run "$ROOTFS_DIR" /bin/zsh
     fi
-    chroot_teardown
 }
 
 cleanup_platform_specific() {
