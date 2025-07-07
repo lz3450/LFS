@@ -349,6 +349,7 @@ _make_iso_image() {
         -output "$SCRIPT_DIR/images/$ISO_FILE_NAME" \
         "$ISOFS_DIR"
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/images/$ISO_FILE_NAME"
+    log_cyan "Successfully made ${distro^} ${arg_suite^} LiveOS ISO image: $SCRIPT_DIR/images/$ISO_FILE_NAME"
 }
 
 post_configure_rootfs() {
@@ -361,13 +362,14 @@ post_configure_rootfs() {
     umount -v -- "$ROOTFS_DIR/home"
     mountpoint -q -- "$ROOTFS_DIR/home" && error "/home is still mounted" 2
 
-    dd if="${loop_device}p1" of="$WORK_DIR/efiboot.img" bs=1M status=progress
-    dd if="${loop_device}p3" of="$WORK_DIR/home.img" bs=1M status=progress
-
     clean_rootfs "$ROOTFS_DIR"
-
     _make_rootfs_ro_rootfs_img
-    _make_iso_image
+
+    if [[ "$arg_device" == "loop" ]]; then
+        dd if="${loop_device}p1" of="$WORK_DIR/efiboot.img" bs=1M status=progress
+        dd if="${loop_device}p3" of="$WORK_DIR/home.img" bs=1M status=progress
+        _make_iso_image
+    fi
 }
 
 cleanup_platform_specific() {
