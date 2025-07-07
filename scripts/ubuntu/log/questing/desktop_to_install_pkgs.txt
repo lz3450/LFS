@@ -20,7 +20,6 @@ dictionaries-common
 emacsen-common
 eog
 evolution-data-server-common
-file
 fontconfig
 fontconfig-config
 fonts-dejavu-core
@@ -319,8 +318,6 @@ liblmdb0
 liblsof0
 libltdl7
 liblua5.4-0
-libmagic-mgc
-libmagic1t64
 libmbim-glib4
 libmbim-proxy
 libmm-glib0

@@ -7,7 +7,6 @@ base-passwd
 bash
 bash-completion
 bsdutils
-btrfs-compsize
 btrfs-progs
 build-essential
 ca-certificates

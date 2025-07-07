@@ -23,7 +23,6 @@ binutils-x86-64-linux-gnu
 bluez
 bluez-obexd
 bsdutils
-btrfs-compsize
 btrfs-progs
 bubblewrap
 build-essential
