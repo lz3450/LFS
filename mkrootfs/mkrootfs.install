@@ -264,7 +264,7 @@ install_deb_pkgs() {
     sudo -u "${SUDO_USER:-root}" touch -- "$INSTALLED_DEB_PKGLIST_FILE"
 
     info "Installing deb packages..."
-    deb_apt "$ROOTFS_DIR" deb_pkgs >> "$LOG_DIR/${FUNCNAME[0]}.log"
+    deb_apt_install "$ROOTFS_DIR" deb_pkgs >> "$LOG_DIR/${FUNCNAME[0]}.log"
     deb_get_installed_pkgs "$ROOTFS_DIR" | sed -e '/^linux-image-.+/d' -e '/^linux-modules-.+/d' -e 's/:amd64//g' > "$INSTALLED_DEB_PKGLIST_FILE"
 }
 
