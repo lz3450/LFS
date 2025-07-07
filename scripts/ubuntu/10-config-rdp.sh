@@ -35,7 +35,7 @@ grdctl rdp set-tls-key "$KEY"
 grdctl rdp enable
 grdctl rdp disable-view-only
 
-./../scripts/unlock_remote_desktop.sh
+./unlock_remote_desktop.sh
 read -r -p "Enter rdp username: " username
 echo
 read -r -s -p "Enter rdp password: " password
