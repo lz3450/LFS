@@ -55,6 +55,8 @@ loop_teardown() {
         return
     fi
 
+    _loop_debug "Detaching loop device $_loop_device"
+
     sync
 
     local _loop_mountpoints=()
@@ -75,7 +77,8 @@ loop_teardown() {
     done
 
     losetup -d "$_loop_device"
-    _loop_debug "$_loop_device detached"
+
+    _loop_debug "Done"
 }
 
 debug "${BASH_SOURCE[0]} sourced"
