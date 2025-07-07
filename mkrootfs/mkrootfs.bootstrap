@@ -2,6 +2,9 @@
 #
 # mkrootfs.bootstrap
 #
+# TODO: add kzl-linux support
+# TODO: implement mmdebstrap
+#
 
 declare -r __DEBUG__=1
 
@@ -15,6 +18,7 @@ umask 0022
 declare -r SCRIPT_NAME="$(basename "$0")"
 declare -r SCRIPT_PATH="$(realpath --no-symlinks "$0")"
 declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+declare -ar SCRIPT_INVOCATION=("$@")
 
 ################################################################################
 
@@ -22,7 +26,36 @@ declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 . "$SCRIPT_DIR"/lib/log.sh
 . "$SCRIPT_DIR"/lib/utils.sh
 
-### variables
+### options and arguments
+arg_arch="amd64"
+arg_suite="jammy"
+
+### constants and variables
+declare -ar DEBIAN_INCLUDED_DEB_PKGS=(
+    locales
+    ca-certificates
+)
+declare -ar DEBIAN_EXCLUDED_DEB_PKGS=(
+    ifupdown
+)
+declare -ar UBUNTU_INCLUDED_DEB_PKGS=()
+declare -ar UBUNTU_EXCLUDED_DEB_PKGS=(
+    ubuntu-advantage-tools
+    ubuntu-minimal
+    ubuntu-pro-client
+    ubuntu-pro-client-l10n
+)
+declare -ar ADDITIONAL_DEB_PKGS=(
+    bash-completion
+    zsh zsh-autosuggestions zsh-syntax-highlighting
+    nano
+    openssh-server
+    curl wget git
+)
+declare -ar PACMAN_PKGS=(
+    base
+)
+
 distro=""
 ubuntu_mirror=""
 deb_mirror=""
@@ -31,33 +64,6 @@ deb_mirrors=()
 included_deb_pkgs=()
 excluded_deb_pkgs=()
 pacman_pkgs=()
-
-# distro specific package lists
-debian_included_deb_pkgs=(
-    locales
-    ca-certificates
-)
-debian_excluded_deb_pkgs=(
-    ifupdown
-)
-ubuntu_included_deb_pkgs=()
-ubuntu_excluded_deb_pkgs=(
-    ubuntu-advantage-tools
-    ubuntu-minimal
-    ubuntu-pro-client
-    ubuntu-pro-client-l10n
-)
-additional_deb_pkgs=(
-    bash-completion
-    zsh zsh-autosuggestions zsh-syntax-highlighting
-    nano
-    openssh-server
-    curl wget git
-)
-kzl_pacman_pkgs=(
-    base
-    linux
-)
 
 ################################################################################
 
@@ -68,9 +74,9 @@ Usage: $SCRIPT_NAME -h | --help
 Usage: $SCRIPT_NAME  -a | --arch <architecture>  -s | --suite <suite>
 
     -h, --help                      print this help message and exit
-    -a, --arch <architecture>       specify the platform
-                                    supported platforms: amd64, arm64
-    -s, --suite <suite>             specify the distribution suite
+    -a, --arch <architecture>       specify the architecture (default: amd64)
+                                    supported architectures: amd64, arm64
+    -s, --suite <suite>             specify the distribution suite (default: jammy)
                                     supported suites: bookworm, trixie, jammy, noble, questing, kzl
 EOF
 }
@@ -96,6 +102,8 @@ while (( $# > 0 )); do
     esac
     shift
 done
+readonly arg_arch
+readonly arg_suite
 
 ### checks
 check_root
@@ -112,28 +120,34 @@ case "$arg_arch" in
         error "Unsupported architecture \"$arg_arch\"." 128
         ;;
 esac
+readonly ubuntu_mirror
 
 case "$arg_suite" in
     bookworm|trixie)
         distro=debian
         deb_mirror=http://deb.debian.org/debian
-        included_deb_pkgs=("${common_deb_pkgs[@]}" "${debian_included_deb_pkgs[@]}")
-        excluded_deb_pkgs=("${debian_excluded_deb_pkgs[@]}")
+        included_deb_pkgs=("${DEBIAN_INCLUDED_DEB_PKGS[@]}")
+        excluded_deb_pkgs=("${DEBIAN_EXCLUDED_DEB_PKGS[@]}")
         ;;
     jammy|noble|questing)
         distro=ubuntu
         deb_mirror="$ubuntu_mirror"
-        included_deb_pkgs=("${common_deb_pkgs[@]}" "${ubuntu_included_deb_pkgs[@]}")
-        excluded_deb_pkgs=("${ubuntu_excluded_deb_pkgs[@]}")
+        included_deb_pkgs=("${UBUNTU_INCLUDED_DEB_PKGS[@]}")
+        excluded_deb_pkgs=("${UBUNTU_EXCLUDED_DEB_PKGS[@]}")
         ;;
     kzl)
         distro=kzl-linux
-        pacman_pkgs=("${kzl_pacman_pkgs[@]}")
+        pacman_pkgs+=("${PACMAN_PKGS[@]}")
         ;;
     *)
         error "Unsupported distribution \"$arg_suite\"." 1
         ;;
 esac
+readonly distro
+readonly deb_mirror
+readonly included_deb_pkgs
+readonly excluded_deb_pkgs
+readonly pacman_pkgs
 
 ################################################################################
 
@@ -155,30 +169,36 @@ declare -r TARBALL_FILE="$SCRIPT_DIR/tarballs/rootfs-$arg_arch-$distro-$arg_suit
 
 ### functions
 cleanup() {
-    trap - EXIT SIGINT SIGTERM SIGKILL
+    local _signal="$1"
     set +e
 
-    if [[ -d "$WORK_DIR" ]]; then
-        log_magenta "Cleaning up..."
-        chroot_teardown
+    log_magenta "Cleaning up..."
+    chroot_teardown
 
-        local _answer
-        read -t 60 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
-        if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
-            log_magenta "Removing working directory: $WORK_DIR"
-            rm -rf --one-file-system -- "$WORK_DIR"
-        fi
-        log_magenta "Done"
+    local _answer
+    read -t 60 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
+    if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+        log_magenta "Removing working directory: $WORK_DIR"
+        rm -rf --one-file-system -- "$WORK_DIR"
     fi
+    log_magenta "Done"
 
+    trap - EXIT
+    case "$_signal" in
+    SIGINT)
+        error "Interrupted by user" 1
+        ;;
+    SIGTERM)
+        error "Terminated by signal" 1
+        ;;
+    esac
 }
-trap cleanup EXIT SIGINT SIGTERM SIGKILL
+trap 'cleanup EXIT' EXIT
+trap 'cleanup SIGINT' SIGINT
+trap 'cleanup SIGTERM' SIGTERM
 
 make_work_dirs() {
     info "Making working directory: $WORK_DIR"
-    if [[ -d "$WORK_DIR" ]]; then
-        error "Working directory $WORK_DIR already exists" 1
-    fi
     mkdir -p -- "$WORK_DIR"
     mkdir -p -- "$ROOTFS_DIR"
     mkdir -p -- "$LOG_DIR"
@@ -246,7 +266,7 @@ debootstrap_rootfs() {
         sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/$distro.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/$distro.sources"
     fi
 
-    deb_apt "$ROOTFS_DIR" additional_deb_pkgs > "$LOG_DIR/apt.log"
+    deb_apt "$ROOTFS_DIR" ADDITIONAL_DEB_PKGS
     deb_set_locale "$ROOTFS_DIR"
     deb_get_installed_pkgs "$ROOTFS_DIR" > "$_deb_pkgs_installed"
 
