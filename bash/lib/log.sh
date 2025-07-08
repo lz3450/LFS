@@ -27,7 +27,7 @@ declare -i __total_time__
 # Show a DEBUG message
 # $1: message string
 debug() {
-    if [[ -z "${__DEBUG__:-}" ]]; then
+    if [[ -z "${__DEBUG__:-}" ]] || (( __DEBUG__ == 0 )); then
         return
     fi
     printf '\033[0;34m[%s] DEBUG: %s\033[0m\n' "${2:-"$SCRIPT_NAME"}" "$1" >&2
