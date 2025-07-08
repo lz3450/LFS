@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # pacman.sh
 #
@@ -14,11 +15,9 @@ declare -r __LIBPACMAN__=""
 
 ### libraries
 LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
-. "$LIBDIR"/log.sh
-. "$LIBDIR"/utils.sh
-. "$LIBDIR"/chroot.sh
-
-### checks
+. "$LIBDIR/log.sh"
+. "$LIBDIR/utils.sh"
+. "$LIBDIR/chroot.sh"
 
 ### constants & variables
 if [[ -f "/usr/bin/pacman" ]]; then
@@ -91,6 +90,7 @@ pacman_bootstrap() {
 
     local _pacman_tmp_conf_file=$(mktemp -p /tmp pacman.XXX.conf)
     sed 's/^DownloadUser/#&/' "$PACMAN_CONFIG" > "$_pacman_tmp_conf_file"
+
     chroot_setup "$_rootfs_dir"
     pacman -Syy
     unshare --fork --pid \
