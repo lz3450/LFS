@@ -20,8 +20,8 @@ LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 ### constants & variables
 CHROOT_PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin"
 
-chroot_active_mounts=()
 chroot_dir=""
+chroot_active_mounts=()
 declare -i chroot_setup_times=0
 
 ### functions
@@ -57,18 +57,18 @@ _resolve_link() {
 }
 
 _add_resolv_conf() {
-    local _src=$(_resolve_link "/etc/resolv.conf")
-    local _dest=$(_resolve_link "$chroot_dir/etc/resolv.conf" "$chroot_dir")
+    local _source=$(_resolve_link "/etc/resolv.conf")
+    local _target=$(_resolve_link "$chroot_dir/etc/resolv.conf" "$chroot_dir")
 
     # If we don't have a source resolv.conf file, there's nothing useful we can do.
-    if [[ ! -e $_src ]]; then
+    if [[ ! -e $_source ]]; then
         return
     fi
 
-    if [[ ! -e $_dest ]]; then
+    if [[ ! -e $_target ]]; then
         # There are two reasons the destination might not exist:
         #
-        #   1. There may be no resolv.conf in the chroot.  In this case, $_dest won't exist,
+        #   1. There may be no resolv.conf in the chroot.  In this case, $_target won't exist,
         #      and it will be equal to $1/etc/resolv.conf.  In this case, we'll just exit.
         #      The chroot environment must not be concerned with DNS resolution.
         #
@@ -78,15 +78,15 @@ _add_resolv_conf() {
         #      creating a dummy file at the target, so that we have something to bind to.
 
         # Case 1.
-        if [[ "$_dest" = "$chroot_dir/etc/resolv.conf" ]]; then
+        if [[ "$_target" = "$chroot_dir/etc/resolv.conf" ]]; then
             return
         fi
 
         # Case 2.
-        install -D -m 644 /dev/null "$_dest"
+        install -D -m 644 /dev/null "$_target"
     fi
 
-    chroot_add_mount --bind "$_src" "$_dest"
+    chroot_add_mount --bind "$_source" "$_target"
 }
 
 # chroot_setup <chroot_dir>
@@ -100,7 +100,6 @@ chroot_setup() {
         return
     fi
 
-    chroot_active_mounts=()
     chroot_dir="$1"
 
     _chroot_debug "Setting up chroot environment in \"$chroot_dir\""
@@ -108,19 +107,18 @@ chroot_setup() {
     if ! mountpoint -q "$chroot_dir"; then
         # if chroot_dir is not a mountpoint, there may be undesirable side effects.
         # bind mounting chroot_dir to itself
-        chroot_add_mount --bind --make-private "$chroot_dir" "$chroot_dir"
+        chroot_add_mount --rbind "$chroot_dir" "$chroot_dir"
     fi
+    mount --make-private "$chroot_dir"
 
-    chroot_add_mount -t sysfs -o ro,nosuid,nodev,noexec sys "$chroot_dir/sys"
-    chroot_add_mount -t proc -o nosuid,nodev,noexec proc "$chroot_dir/proc"
-    chroot_add_mount -t devtmpfs -o nosuid,mode=755 udev "$chroot_dir/dev"
-    chroot_add_mount -t devpts -o nosuid,noexec,gid=5,mode=620,ptmxmode=000 devpts "$chroot_dir/dev/pts"
-    chroot_add_mount -t tmpfs -o nosuid,nodev,noexec,mode=755 run "$chroot_dir/run"
-    chroot_add_mount -t tmpfs -o nosuid,nodev shm "$chroot_dir/dev/shm"
-    chroot_add_mount -t tmpfs -o nosuid,nodev,mode=1777 tmp "$chroot_dir/tmp"
-    if [[ -d "$chroot_dir/sys/firmware/efi/efivars" ]]; then
-        chroot_add_mount -t efivarfs -o nosuid,nodev,noexec efivarfs "$chroot_dir/sys/firmware/efi/efivars"
-    fi
+    chroot_add_mount -t sysfs       -o ro,nosuid,nodev,noexec                       sysfs       "$chroot_dir/sys"
+    chroot_add_mount -t proc        -o rw,nosuid,nodev,noexec                       proc        "$chroot_dir/proc"
+    chroot_add_mount -t devtmpfs    -o rw,inode64                                   devtmpfs    "$chroot_dir/dev"
+    chroot_add_mount -t devpts      -o rw,nosuid,noexec,gid=5,mode=620,ptmxmode=000 devpts      "$chroot_dir/dev/pts"
+    chroot_add_mount -t tmpfs       -o rw,nosuid,nodev,mode=755,inode64             tmpfs       "$chroot_dir/run"
+    chroot_add_mount -t tmpfs       -o rw,nosuid,nodev,inode64                      tmpfs       "$chroot_dir/dev/shm"
+    chroot_add_mount -t tmpfs       -o rw,nosuid,nodev,inode64                      tmpfs       "$chroot_dir/tmp"
+    chroot_add_mount -t efivarfs    -o rw,nosuid,nodev,noexec                       efivarfs    "$chroot_dir/sys/firmware/efi/efivars"
 
     _add_resolv_conf
 
@@ -146,8 +144,8 @@ chroot_teardown() {
     while (( ${#chroot_active_mounts[@]} > 0 )); do
         local _mp
         for _mp in "${chroot_active_mounts[@]}"; do
-            if mountpoint -q "$_mp"; then
-                if ! umount -- "$_mp"; then
+            if mountpoint -q "$_mp" >&2; then
+                if ! umount -R -- "$_mp"; then
                     _mountpoints+=("$_mp")
                     _chroot_warn "Failed to unmount \"$_mp\", retry later"
                 fi
@@ -170,7 +168,6 @@ chroot_teardown_force() {
 }
 
 chroot_run() {
-    # SHELL=/bin/bash LC_ALL=C PATH="$CHROOT_PATH" unshare --fork --pid chroot "$@"
     SHELL=/bin/bash PATH="$CHROOT_PATH" LC_ALL=C unshare --fork --pid chroot "$@"
 }
 
