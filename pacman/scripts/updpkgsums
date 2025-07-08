@@ -5,6 +5,8 @@
 # https://gitlab.archlinux.org/pacman/pacman-contrib/-/raw/master/src/updpkgsums.sh.in
 #
 
+declare -r __DEBUG__=0
+
 set -e
 # set -u
 set -o pipefail
@@ -13,7 +15,7 @@ set -o pipefail
 umask 0022
 
 declare -r SCRIPT_NAME="$(basename "$0")"
-declare -r SCRIPT_PATH="$(realpath "$0")"
+declare -r SCRIPT_PATH="$(realpath --no-symlinks "$0")"
 declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 declare -ar SCRIPT_INVOCATION=("$@")
 

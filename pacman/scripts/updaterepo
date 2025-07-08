@@ -3,6 +3,8 @@
 # updaterepo
 #
 
+declare -r __DEBUG__=0
+
 set -e
 set -u
 set -o pipefail
@@ -10,39 +12,29 @@ set -o pipefail
 
 umask 0022
 
-SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(realpath "$0")"
-SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+declare -r SCRIPT_NAME="$(basename "$0")"
+declare -r SCRIPT_PATH="$(realpath --no-symlinks "$0")"
+declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+declare -ar SCRIPT_INVOCATION=("$@")
 
 ################################################################################
 
-### libraries
+### bash utils
 . "$SCRIPT_DIR"/lib/log.sh
-. "$SCRIPT_DIR"/lib/pacman.sh
-
-### constants & variables
-REPO_ROOT="/home/.repository"
-PACKAGE_DIR="$HOME/makepkg/packages"
-ARCHIVE_DIR="$HOME/makepkg/archive"
+. "$SCRIPT_DIR"/lib/utils.sh
 
 ### options and arguments
 arg_repo=""
 declare -i opt_replace=0
 declare -i opt_clear=0
 
-### functions
-update() {
-    local _pkg="$1"
-    local _pkg_file="$(pacman_get_pkg_file "$_pkg" "$PACKAGE_DIR")"
+### constants and variables
+REPO_ROOT="/home/.repository"
 
-    mkdir -p -- "$ARCHIVE_DIR"
+repo_dir=""
+repo_path=""
 
-    if [[ -f "$PACKAGE_DIR/$_pkg_file" ]]; then
-        sudo cp -f -- "$PACKAGE_DIR/$_pkg_file" "$repo_dir"
-        mv -- "$PACKAGE_DIR/$_pkg_file" "$ARCHIVE_DIR"
-        sudo repo-add -R "$repo_path" "$repo_dir/$_pkg_file"
-    fi
-}
+################################################################################
 
 usage() {
     cat << EOF
@@ -60,8 +52,6 @@ Usage: $SCRIPT_NAME -c | --clear -r | --repo <kzl|jammy|noble>
 
 EOF
 }
-
-################################################################################
 
 while (( $# > 0 )); do
     case "$1" in
@@ -85,20 +75,25 @@ while (( $# > 0 )); do
     esac
     shift
 done
+readonly arg_repo
+readonly opt_replace
+readonly opt_clear
 
 case "$arg_repo" in
     kzl)
         repo_dir="$REPO_ROOT/$arg_repo"
-        repo_path="$repo_dir/$arg_repo.db.$EXTENSION"
+        repo_path="$repo_dir/$arg_repo.db"
         ;;
     jammy|noble|questing)
         repo_dir="$REPO_ROOT/ubuntu"
-        repo_path="$repo_dir/ubuntu.db.$EXTENSION"
+        repo_path="$repo_dir/ubuntu.db"
         ;;
     *)
         error "Unknown repo name \"$arg_repo\"" 128
         ;;
 esac
+readonly repo_dir
+readonly repo_path
 
 if [[ -d "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$arg_repo/" ]]; then
     readarray -t pkgs < <(find "$LFS_PACMAN_ROOT_DIR/pkgbuilds/$arg_repo/" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | LC_ALL=C sort -n)
@@ -106,10 +101,36 @@ else
     error "Failed to find pkgbuilds directory for \"$arg_repo\"." 2
 fi
 
+################################################################################
+
+### libraries
+. "$SCRIPT_DIR"/lib/pacman.sh
+
+### constants and variables
+PACKAGE_DIR="$HOME/makepkg/packages"
+ARCHIVE_DIR="$HOME/makepkg/archive"
+
+### functions
+update() {
+    local _pkg="$1"
+    local _pkg_file="$(pacman_get_pkg_file "$_pkg" "$PACKAGE_DIR")"
+
+    mkdir -p -- "$ARCHIVE_DIR"
+
+    if [[ -f "$PACKAGE_DIR/$_pkg_file" ]]; then
+        info "Updating $pkgname..."
+        sudo cp -f -- "$PACKAGE_DIR/$_pkg_file" "$repo_dir"
+        mv -- "$PACKAGE_DIR/$_pkg_file" "$ARCHIVE_DIR"
+        sudo repo-add -R "$repo_path.$EXTENSION" "$repo_dir/$_pkg_file"
+    fi
+}
+
+################################################################################
+
 ### clear
 if (( $opt_clear > 0 )); then
     while true; do
-        read -p "Do you want to clear the repository \"$arg_repo\"? " yn
+        read -r -p "Do you want to clear the repository \"$arg_repo\"? " yn
         case "$yn" in
             [Yy]*)
                 sudo rm -vrf -- "$repo_dir"
@@ -141,16 +162,12 @@ if (( $opt_replace > 0 )); then
     sudo find "$repo_dir" -mindepth 1 -delete
 fi
 
-if [[ ! -f "$repo_path" ]]; then
-    info "Creating empty repo: $arg_repo.db.$EXTENSION..."
-    sudo repo-add "$repo_path"
-    info "Done"
+if [[ ! -f "$repo_path.$EXTENSION" ]]; then
+    info "Creating empty repo $arg_repo.db.$EXTENSION..."
+    sudo repo-add "$repo_path.$EXTENSION"
 fi
 
-################################################################################
-
 for pkgbase in "${pkgs[@]}"; do
-    info "Updating $pkgbase..."
     for pkgname in $(pacman_get_pkgnames "$pkgbase"); do
         update "$pkgname"
     done
@@ -163,5 +180,6 @@ else
 fi
 
 ### error codes
+# 1: general error
 # 2: failed to find pkgbuilds directory
 # 128: unknown option or invalid argument

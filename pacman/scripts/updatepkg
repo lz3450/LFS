@@ -3,6 +3,8 @@
 # updatepkg
 #
 
+declare -r __DEBUG__=0
+
 set -e
 set -o pipefail
 # set -u
