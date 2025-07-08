@@ -109,12 +109,14 @@ declare -A partition_device_map=(
     [recovery]=""
 )
 
+loop_device=""
+
 ### libraries
 LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR/chroot.sh"
 
 ### functions
-_prompt_for_partition_number() {
+_prompt_for_partition_path() {
     local _partition_name="$1"
 
     local _prompt_name
@@ -133,24 +135,22 @@ _prompt_for_partition_number() {
             ;;
     esac
 
-    local _partition_number
-    local _dev
+    local _partition_path
 
     local _answer
     while true; do
-        read -r -p "Partition number for $_prompt_name: " _partition_number
-        _dev="${loop_device}p${_partition_number:-}"
-        if [[ ! -b "$_dev" ]]; then
-            warn "Invalid partition number: $_partition_number, retry"
+        read -r -p "Partition path for $_prompt_name: " _partition_path
+        if [[ ! -b "$_partition_path" ]]; then
+            warn "Invalid partition path: $_partition_path, retry"
             continue
         fi
-        read -r -p "Make $_prompt_name partition on $_dev? [Y/n] " _answer
+        read -r -p "Make $_prompt_name partition on $_partition_path? [Y/n] " _answer
         _answer=${_answer:-y}
         if [[ "$_answer" =~ ^[Yy]$ ]]; then
             break
         fi
     done
-    partition_device_map[$_partition_name]="$_dev"
+    partition_device_map[$_partition_name]="$_partition_path"
 }
 
 prepare_rootfs() {
@@ -158,14 +158,21 @@ prepare_rootfs() {
     # exec >> "$LOG_DIR/${FUNCNAME[0]}.log"
 
     # mkpart
-    if [[ "$arg_device" == "loop" ]]; then
-        parted -s "$loop_device" \
+    if (( opt_loop > 0 )); then
+        info "Setting up loop device for installation for PC..."
+        fallocate -l 8GiB "$IMG_FILE"
+        parted -s "$IMG_FILE" \
             mklabel gpt \
             unit s \
             mkpart BOOT fat32 2048 1048575 \
             mkpart ROOT "$rootfs_type" 1048576 100% \
             set 1 esp on \
             print
+
+        loop_device="$(loop_get_device)"
+        readonly loop_device
+        loop_partitioned_setup "$loop_device" "$IMG_FILE"
+
         partition_device_map[efi]="${loop_device}p1"
         partition_device_map[rootfs]="${loop_device}p2"
     # else
@@ -185,24 +192,24 @@ prepare_rootfs() {
     else
         # exec 1>&3
 
-        log_magenta "Please partition $arg_device"
-        parted "$loop_device"
+        log_magenta "Please partition manually"
+        parted
 
         local _answer
-        _prompt_for_partition_number efi
+        _prompt_for_partition_path efi
         # rootfs partition
-        _prompt_for_partition_number rootfs
+        _prompt_for_partition_path rootfs
         # swap partition
         read -r -p 'Make swap partition [Y/n]: ' _answer
         _answer=${_answer:-y}
         if [[ "$_answer" =~ ^[Yy]$ ]]; then
-            _prompt_for_partition_number swap
+            _prompt_for_partition_path swap
         fi
         # recovery partition
         read -r -p 'Make recovery partition [Y/n]: ' _answer
         _answer=${_answer:-y}
         if [[ "$_answer" =~ ^[Yy]$ ]]; then
-            _prompt_for_partition_number recovery
+            _prompt_for_partition_path recovery
         fi
 
         # exec 3>&1
@@ -351,11 +358,22 @@ post_configure_rootfs() {
     if [[ "$_answer" =~ ^[Yy]$ ]]; then
         chroot_run "$ROOTFS_DIR" /bin/zsh
     fi
+
+    if (( $opt_loop > 0 )); then
+        cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+        chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+        log_cyan "Successfully installed ${distro^} ${arg_suite^} on $SCRIPT_DIR/images/$IMG_FILE_NAME"
+    else
+        log_cyan "Successfully installed ${distro^} ${arg_suite^} on ${partition_device_map[rootfs]}"
+    fi
 }
 
 cleanup_platform_specific() {
     set +e
     chroot_teardown
+    if (( opt_loop > 0 )); then
+        loop_teardown "$loop_device"
+    fi
 }
 
 debug "${BASH_SOURCE[0]} sourced"

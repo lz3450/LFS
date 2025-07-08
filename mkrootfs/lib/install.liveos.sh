@@ -146,6 +146,8 @@ declare -r PACMAN_REPO_DIR="home/.repository/ubuntu"
 declare -r PACMAN_REPO_FILE="$PACMAN_REPO_DIR/ubuntu.db.tar.zst"
 declare -r ISO_FILE_NAME="liveos-$arg_suite-$TIMESTAMP.iso"
 
+loop_device=""
+
 ### libraries
 LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR/chroot.sh"
@@ -157,7 +159,10 @@ prepare_rootfs() {
     exec > "$LOG_DIR/${FUNCNAME[0]}.log"
 
     # mkpart
-    parted -s "$loop_device" \
+    info "Setting up loop device for installation for LiveOS..."
+    fallocate -l 2560MiB "$IMG_FILE"
+
+    parted -s "$IMG_FILE" \
         mklabel gpt \
         unit s \
         mkpart BOOT fat32 2048 524287 \
@@ -165,6 +170,10 @@ prepare_rootfs() {
         mkpart RECOVERY ext4 4718592 100% \
         set 1 esp on \
         print
+
+    loop_device="$(loop_get_device)"
+    readonly loop_device
+    loop_partitioned_setup "$loop_device" "$IMG_FILE"
 
     # mkfs
     mkfs.fat -F 32 -n BOOT -- "${loop_device}p1"
@@ -181,7 +190,6 @@ prepare_rootfs() {
 post_install_pkgs() {
     delete_all_contents "$ROOTFS_DIR/boot/efi/"
     delete_all_contents "$ROOTFS_DIR/home/"
-
 
     mount -o "$MOUNT_OPT,umask=0177" -- "${loop_device}p1" "$ROOTFS_DIR/$efi_dir"
     mountpoint -q -- "$ROOTFS_DIR/$efi_dir" || error "/$efi_dir not mounted" 2
@@ -331,6 +339,8 @@ _make_rootfs_ro_rootfs_img() {
 
 _make_iso_image() {
     info "Making ISO image..."
+    dd if="${loop_device}p1" of="$WORK_DIR/efiboot.img" bs=1M status=progress
+    dd if="${loop_device}p3" of="$WORK_DIR/recovery.img" bs=1M status=progress
     xorriso \
         -as mkisofs \
         -iso-level 3 \
@@ -365,18 +375,19 @@ post_configure_rootfs() {
     clean_rootfs "$ROOTFS_DIR"
     _make_rootfs_ro_rootfs_img
 
-    if [[ "$arg_device" == "loop" ]]; then
-        local _answer
-        read -r -p "Do you want to create a bootable ISO image? [y/N] " _answer
-        if [[ "$_answer" =~ ^[Yy]$ ]]; then
-            dd if="${loop_device}p1" of="$WORK_DIR/efiboot.img" bs=1M status=progress
-            dd if="${loop_device}p3" of="$WORK_DIR/recovery.img" bs=1M status=progress
-            _make_iso_image
-        fi
+    cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+    log_cyan "Successfully installed ${distro^} ${arg_suite^} LiveOS on $SCRIPT_DIR/images/$IMG_FILE_NAME"
+
+    local _answer
+    read -r -p "Do you want to create a bootable ISO image? [y/N] " _answer
+    if [[ "$_answer" =~ ^[Yy]$ ]]; then
+        _make_iso_image
     fi
 }
 
 cleanup_platform_specific() {
     set +e
     chroot_teardown
+    loop_teardown "$loop_device"
 }

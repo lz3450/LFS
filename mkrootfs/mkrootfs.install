@@ -25,7 +25,7 @@ declare -ar SCRIPT_INVOCATION=("$@")
 
 ### options and arguments
 arg_platform="pc"
-arg_device="loop"
+declare -i opt_loop=0
 arg_rootfs_type="btrfs"
 arg_suite="jammy"
 arg_rootfs_tarball=""
@@ -50,7 +50,8 @@ Usage:
     -s, --suite <suite>             set suite to install (default: jammy)
                                     supported suites: jammy, noble, questing, bookworm, trixie, kzl
 
-    -d, --device <device>           set device to install to (default: loop)
+    -l, --loop                      install to loop device
+                                    only applicable for platform pc, liveos and rpi use loop device by default
 
     -t, --rootfs-tarball <file>     set rootfs tarball
 
@@ -67,10 +68,6 @@ while (( $# > 0 )); do
         shift
         arg_platform="$1"
         ;;
-    -d | --device)
-        shift
-        arg_device="$1"
-        ;;
     -f | --rootfs-type)
         shift
         arg_rootfs_type="$1"
@@ -78,6 +75,9 @@ while (( $# > 0 )); do
     -s | --suite)
         shift
         arg_suite="$1"
+        ;;
+    -l | --loop)
+        opt_loop=1
         ;;
     -t | --rootfs-tarball)
         shift
@@ -87,7 +87,6 @@ while (( $# > 0 )); do
     shift
 done
 readonly arg_platform
-readonly arg_device
 readonly arg_rootfs_type
 readonly arg_suite
 readonly arg_rootfs_tarball
@@ -106,15 +105,17 @@ esac
 case "$arg_platform" in
     pc)
         install_lib="install.pc.sh"
-        img_size=8192
         rootfs_type="$arg_rootfs_type"
         ;;
     liveos)
         install_lib="install.liveos.sh"
-        img_size=2560
+        opt_loop=1
+        rootfs_type=ext4
         ;;
     rpi)
         install_lib="install.rpi.sh"
+        opt_loop=1
+        rootfs_type=ext4
         img_size=1536
         ;;
     *)
@@ -122,12 +123,7 @@ case "$arg_platform" in
         ;;
 esac
 readonly install_lib
-readonly img_size
 readonly rootfs_type
-
-if [[ "$arg_device" != "loop"  && ! -b "$arg_device" ]]; then
-    error "$arg_device is not a valid block device to install" 128
-fi
 
 case "$arg_suite" in
     jammy|noble|questing)
@@ -166,8 +162,10 @@ declare -r LOG_DIR="$WORK_DIR/log"
 declare -r CONFIG_DIR="$SCRIPT_DIR/config"
 declare -r PKGLIST_DIR="$SCRIPT_DIR/pkglist"
 
+# used when using loop device
 declare -r IMG_FILE_NAME="installed-rootfs-$arg_platform-$arg_suite-$TIMESTAMP.img"
 declare -r IMG_FILE="$WORK_DIR/$IMG_FILE_NAME"
+
 declare -r INSTALLED_DEB_PKGLIST_FILE="$PKGLIST_DIR/$arg_platform-$arg_suite-deb-pkgs.txt"
 declare -r INSTALLED_PACMAN_PKGLIST_FILE="$PKGLIST_DIR/$arg_platform-$arg_suite-pacman-pkgs.txt"
 
@@ -192,7 +190,6 @@ cleanup() {
 
     log_magenta "Cleaning up..."
     cleanup_platform_specific
-    loop_teardown "$loop_device"
 
     local _answer
     read -r -t 60 -p "Do you want to remove the working directory $WORK_DIR? [y/N] " _answer
@@ -225,24 +222,6 @@ make_work_dirs() {
     if [[ ! -d "$PKGLIST_DIR" ]]; then
         mkdir -- "$PKGLIST_DIR"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
-    fi
-}
-
-setup_loopdev() {
-    info "Setting up loop device for installation on PC..."
-    if [[ "$arg_device" == "loop" ]]; then
-        fallocate -l "${img_size}MiB" "$IMG_FILE"
-    fi
-    loop_device="$(loop_get_device)"
-    readonly loop_device
-    if [[ -z "$loop_device" ]]; then
-        error "No unused loop device found" 2
-    fi
-    debug "loop device: $loop_device"
-    if [[ "$arg_device" == "loop" ]]; then
-        loop_partitioned_setup "$loop_device" "$IMG_FILE"
-    else
-        loop_partitioned_setup "$loop_device" "$arg_device"
     fi
 }
 
@@ -319,7 +298,6 @@ make_work_dirs
 echo "${SCRIPT_INVOCATION[@]}" > "$LOG_DIR/command.log"
 touch -- "$WORK_DIR/$arg_platform"
 
-setup_loopdev
 prepare_rootfs
 extract_rootfs_tarball
 if declare -F 'post_bootstrap_rootfs' > '/dev/null'; then
@@ -341,14 +319,6 @@ configure_rootfs_platform_specific
 if declare -F 'post_configure_rootfs' > '/dev/null'; then
     info "Running post-configuration hook..."
     post_configure_rootfs
-fi
-
-if [[ "$arg_device" == "loop" ]]; then
-    cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
-    chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
-    log_cyan "Successfully installed ${distro^} ${arg_suite^} on $SCRIPT_DIR/images/$IMG_FILE_NAME"
-else
-    log_cyan "Successfully installed ${distro^} ${arg_suite^} on $ROOTFS_DIR"
 fi
 
 cleanup
