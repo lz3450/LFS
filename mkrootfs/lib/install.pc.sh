@@ -285,15 +285,15 @@ configure_rootfs_platform_specific() {
 
 # <device> <target> <type> <options> <dump> <pass>
 
-PARTUUID=$_root______________________partuuid       /                   btrfs       $BTRFS_DEFAULT_MOUNT_OPT,subvol=@       0 1
-PARTUUID=$_root______________________partuuid       /home               btrfs       $MOUNT_OPT,subvol=@home                 0 1
-PARTUUID=$_root______________________partuuid       /var                btrfs       $MOUNT_OPT,subvol=@var                  0 1
-PARTUUID=$_root______________________partuuid       /var/log            btrfs       $MOUNT_OPT,subvol=@log                  0 1
-PARTUUID=$_root______________________partuuid       /var/cache          btrfs       $MOUNT_OPT,subvol=@cache                0 1
-PARTUUID=$_root______________________partuuid       /.snapshots         btrfs       $MOUNT_OPT,subvol=@snapshots            0 1
-PARTUUID=$_boot______________________partuuid       /boot/efi           vfat        $MOUNT_OPT,umask=0177                   0 2
-tmpfs                                               /tmp                tmpfs       rw,nosuid,nodev,mode=1777               0 0
-#PARTUUID=$_swap______________________partuuid       none                swap        defaults                                0 0
+PARTUUID=$_root______________________partuuid       /                   btrfs       $BTRFS_DEFAULT_MOUNT_OPT,subvol=@                   0 1
+PARTUUID=$_root______________________partuuid       /home               btrfs       $MOUNT_OPT,subvol=@home                             0 1
+PARTUUID=$_root______________________partuuid       /var                btrfs       $MOUNT_OPT,subvol=@var                              0 1
+PARTUUID=$_root______________________partuuid       /var/log            btrfs       $MOUNT_OPT,subvol=@log                              0 1
+PARTUUID=$_root______________________partuuid       /var/cache          btrfs       $MOUNT_OPT,subvol=@cache                            0 1
+PARTUUID=$_root______________________partuuid       /.snapshots         btrfs       $MOUNT_OPT,subvol=@snapshots                        0 1
+PARTUUID=$_boot______________________partuuid       /boot/efi           vfat        rw,nodev,nosuid,noexec,fmask=0177,dmask=0077        0 2
+tmpfs                                               /tmp                tmpfs       rw,nodev,nosuid,mode=1777                           0 0
+PARTUUID=$_swap______________________partuuid       none                swap        defaults                                            0 0
 EOF
     # systemd-boot
     mkdir -vp -- "$ROOTFS_DIR"/boot/efi/loader/entries
