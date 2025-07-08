@@ -2,8 +2,8 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=6.12.35
-pkgrel=3
+pkgver=6.12.36
+pkgrel=6
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -13,11 +13,9 @@ options=(!strip)
 source=(
   git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
   config
-  update-kernel.sh
 )
 sha256sums=('SKIP'
-            '2ddcac9ea4380e65ebe111aa1cb6e160c4cde02138c1bde6dcc5158034a443b5'
-            '5d9b124f6106ffc1a44957b1185cf8b078b51ac1151b8f9a8cdc27e8e9f8c5f8')
+            '77ba247bfb9e04b6d02d92b6103315d905b6b819895f31b245f68aee2715a741')
 
 export LOCALVERSION="-KZL"
 export KBUILD_BUILD_HOST="Ubuntu"
@@ -55,14 +53,30 @@ package_linux() {
   make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 O=build modules_install
 
   install -dm600 "$pkgdir"/boot/efi/
-  install -Dm600 "build/$_image_name" "$pkgdir/boot/vmlinuz-$pkgver-KZL"
-  install -Dm600 "build/$_image_name" "$pkgdir/boot/efi/vmlinuz-KZL"
-  install -Dm644 "$srcdir/config" "$pkgdir/boot/config-$pkgver-KZL"
+  install -Dm644 "build/$_image_name" "$pkgdir/boot/vmlinuz-$pkgver$LOCALVERSION"
+  install -Dm644 "build/$_image_name" "$pkgdir/boot/efi/vmlinuz$LOCALVERSION"
+  install -Dm644 "$srcdir/config" "$pkgdir/boot/config-$pkgver$LOCALVERSION"
 
   ln -vsf --no-dereference "/usr/src/linux-headers-$_kernelrelease" "$pkgdir/usr/lib/modules/$_kernelrelease/source"
   ln -vsf --no-dereference "/usr/src/linux-headers-$_kernelrelease/build" "$pkgdir/usr/lib/modules/$_kernelrelease/build"
 
-  sed "s/@pkgver@/$pkgver/g" "$srcdir"/update-kernel.sh | install -Dm755 /dev/stdin "$pkgdir"/boot/update-kernel.sh
+  install -Dm755 /dev/stdin "$pkgdir"/boot/update-kernel.sh << EOF
+#!/bin/bash
+#
+# update-kernel.sh
+#
+
+if [[ \$EUID -ne 0 ]]; then
+    echo "This script must be run as root."
+    exit 1
+fi
+
+update-initramfs -k all -c
+
+cp -v -- /boot/initrd.img /boot/efi/initrd.img
+cp -v -- /boot/vmlinuz /boot/efi/vmlinuz
+cp -v -- /boot/initrd.img-$pkgver$LOCALVERSION /boot/efi/initrd$LOCALVERSION.img
+EOF
 }
 
 package_linux-headers() {
