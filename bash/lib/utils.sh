@@ -41,28 +41,28 @@ check_root() {
 delete_all() {
     local _dir="$1"
     if [[ -d "$_dir" ]]; then
-        find "$_dir" -delete
+        find "$_dir" -print -delete
     fi
 }
 # Delete all contents inside $1, but not $1 itself
 delete_all_contents() {
     local _dir="$1"
     if [[ -d "$_dir" ]]; then
-        find "$_dir" -mindepth 1 -delete
+        find "$_dir" -mindepth 1 -print -delete
     fi
 }
 # Delete only regular files directly inside $1, and not subdirectories or their contents
 delete_direct_files() {
     local _dir="$1"
     if [[ -d "$_dir" ]]; then
-        find "$_dir" -maxdepth 1 -type f -delete
+        find "$_dir" -maxdepth 1 -type f -print -delete
     fi
 }
 # Delete recursively all regular files under $1, including those in subdirectories
 delete_all_files() {
     local _dir="$1"
     if [[ -d "$_dir" ]]; then
-        find "$_dir" -type f -delete
+        find "$_dir" -type f -print -delete
     fi
 }
 
