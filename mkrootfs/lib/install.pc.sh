@@ -370,7 +370,7 @@ post_configure_rootfs() {
 
 cleanup_platform_specific() {
     set +e
-    chroot_teardown
+    chroot_teardown_force
     if (( opt_loop > 0 )); then
         loop_teardown "$loop_device"
     fi

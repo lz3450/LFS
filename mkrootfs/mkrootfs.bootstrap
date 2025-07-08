@@ -170,35 +170,6 @@ declare -r TARBALL_FILE="$SCRIPT_DIR/tarballs/rootfs-$arg_arch-$distro-$arg_suit
 . "$SCRIPT_DIR/lib/deb.sh"
 
 ### functions
-cleanup() {
-    local _signal="${1:-}"
-    set +e
-
-    log_magenta "Cleaning up..."
-    chroot_teardown
-
-    local _answer
-    read -t 60 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
-    if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
-        log_magenta "Removing working directory: $WORK_DIR"
-        rm -rf --one-file-system -- "$WORK_DIR"
-    fi
-    log_magenta "Done"
-
-    trap - EXIT
-    case "$_signal" in
-    SIGINT)
-        error "Interrupted by user" 1
-        ;;
-    SIGTERM)
-        error "Terminated by signal" 1
-        ;;
-    esac
-}
-trap 'cleanup EXIT' EXIT
-trap 'cleanup SIGINT' SIGINT
-trap 'cleanup SIGTERM' SIGTERM
-
 make_work_dirs() {
     info "Making working directory: $WORK_DIR"
     mkdir -p -- "$WORK_DIR"
@@ -320,6 +291,35 @@ make_rootfs_tarball() {
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$TARBALL_FILE"
 }
 
+cleanup() {
+    local _signal="${1:-}"
+    set +e
+
+    log_magenta "Cleaning up..."
+    chroot_teardown_force
+
+    local _answer
+    read -t 60 -p "Do you want to remove the working directory $WORK_DIR? (y/N) " _answer
+    if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+        log_magenta "Removing working directory: $WORK_DIR"
+        rm -rf --one-file-system -- "$WORK_DIR"
+    fi
+    log_magenta "Done"
+
+    trap - EXIT
+    case "$_signal" in
+    SIGINT)
+        error "Interrupted by user" 1
+        ;;
+    SIGTERM)
+        error "Terminated by signal" 1
+        ;;
+    esac
+}
+trap 'cleanup EXIT' EXIT
+trap 'cleanup SIGINT' SIGINT
+trap 'cleanup SIGTERM' SIGTERM
+
 ################################################################################
 
 prologue
@@ -335,7 +335,6 @@ make_rootfs_tarball
 log_cyan "Successfully made rootfs tarball: $TARBALL_FILE"
 
 cleanup
-
 epilogue
 
 ### error codes

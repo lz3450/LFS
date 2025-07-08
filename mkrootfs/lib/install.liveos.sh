@@ -388,6 +388,6 @@ post_configure_rootfs() {
 
 cleanup_platform_specific() {
     set +e
-    chroot_teardown
+    chroot_teardown_force
     loop_teardown "$loop_device"
 }

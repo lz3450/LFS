@@ -67,7 +67,7 @@ configure_rootfs_platform_specific() {
 
 cleanup_platform_specific() {
     set +e
-    chroot_teardown
+    chroot_teardown_force
     loop_teardown "$loop_device"
 }
 
