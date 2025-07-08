@@ -12,14 +12,17 @@ set -o pipefail
 
 umask 0022
 
-SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(realpath "$0")"
-SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+declare -r SCRIPT_NAME="$(basename "$0")"
+declare -r SCRIPT_PATH="$(realpath "$0")"
+declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+declare -ar SCRIPT_INVOCATION=("$@")
 
 ################################################################################
 
-### libraries
+### bash utils
 . "$SCRIPT_DIR"/lib/log.sh
+
+################################################################################\
 
 ### constants & variables
 PKGBUILDDIR="$(pwd)"
@@ -50,16 +53,13 @@ else
     error '<libmakepkgdir>/util/schema.sh not found' 3
 fi
 
-info "Getting known hash algorithms..."
 sumtypes=$(IFS='|'; echo "${known_hash_algos[*]}")
-info "Done (Got known hash algorithms)"
 
 info "Running \`makepkg -g\`..."
 newsums=$(makepkg -g)
 if (( $? )); then
     error "\`makepkg -g\` failed" 4
 fi
-info "Done (Ran \`makepkg -g\`)"
 
 if [[ -z $newsums ]]; then
     error "No sources to update checksums" 5
