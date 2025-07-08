@@ -22,7 +22,7 @@ CHROOT_PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/b
 
 chroot_active_mounts=()
 chroot_dir=""
-declare -i chroot_setup_done=0
+declare -i chroot_setup_times=0
 
 ### functions
 _chroot_debug() {
@@ -94,8 +94,9 @@ _add_resolv_conf() {
 # when using `chroot_setup`, `chroot_teardown` must be call to clean up
 # for example, `trap chroot_teardown EXIT`
 chroot_setup() {
-    if (( chroot_setup_done > 0 )); then
-        _chroot_info "chroot_setup has already been called. Skipping"
+    if (( chroot_setup_times > 0 )); then
+        chroot_setup_times=$(( chroot_setup_times + 1 ))
+        _chroot_debug "chroot_setup_times=$chroot_setup_times"
         return
     fi
 
@@ -123,7 +124,7 @@ chroot_setup() {
 
     _add_resolv_conf
 
-    chroot_setup_done=1
+    chroot_setup_times=1
 
     _chroot_debug "Done"
 }
@@ -131,7 +132,12 @@ chroot_setup() {
 chroot_teardown() {
     local _mountpoints=()
 
-    if (( chroot_setup_done == 0 )); then
+    if (( chroot_setup_times == 0 )); then
+        _chroot_debug "Nothing to tear down in $chroot_dir"
+        return
+    elif (( chroot_setup_times > 1 )); then
+        chroot_setup_times=$(( chroot_setup_times - 1 ))
+        _chroot_debug "chroot_setup_times=$chroot_setup_times"
         return
     fi
 
@@ -153,9 +159,14 @@ chroot_teardown() {
         _mountpoints=()
         sleep 3
     done
-    chroot_setup_done=0
+    chroot_setup_times=0
 
     _chroot_debug "Done"
+}
+
+chroot_teardown_force() {
+    chroot_setup_times=1
+    chroot_teardown
 }
 
 chroot_run() {
