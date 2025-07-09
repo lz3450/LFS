@@ -279,6 +279,7 @@ post_install_pkgs() {
 }
 
 configure_rootfs_platform_specific() {
+    ### 1. general
     # fstab
     local _root______________________partuuid=$(blkid -s PARTUUID -o value "${partition_device_map[rootfs]}")
     local _boot______________________partuuid=$(blkid -s PARTUUID -o value "${partition_device_map[efi]}")
@@ -298,11 +299,11 @@ PARTUUID=$_root______________________partuuid       /var                btrfs   
 PARTUUID=$_root______________________partuuid       /var/log            btrfs       $MOUNT_OPT,subvol=@log                              0 1
 PARTUUID=$_root______________________partuuid       /var/cache          btrfs       $MOUNT_OPT,subvol=@cache                            0 1
 PARTUUID=$_root______________________partuuid       /.snapshots         btrfs       $MOUNT_OPT,subvol=@snapshots                        0 1
-PARTUUID=$_boot______________________partuuid       /boot/efi           vfat        rw,nodev,nosuid,noexec,fmask=0177,dmask=0077        0 2
+PARTUUID=$_boot______________________partuuid       /boot/efi           vfat        $EFI_PARTITION_MOUNT_________________OPTIONS        0 2
 tmpfs                                               /tmp                tmpfs       rw,nodev,nosuid,mode=1777                           0 0
 PARTUUID=$_swap______________________partuuid       none                swap        defaults                                            0 0
 EOF
-    # systemd-boot
+    ### 2. efi bootloader
     mkdir -vp -- "$ROOTFS_DIR"/boot/efi/loader/entries
     cat > "$ROOTFS_DIR"/boot/efi/loader/loader.conf << EOF
 timeout 3
@@ -330,7 +331,12 @@ options root=live:CDLABEL=RECOVERY rd.live.overlay.overlayfs rd.live.image rd.sh
 EOF
     log_magenta "Please set up the recovery partition manually"
     fi
-    # initialize.sh
+
+    ### 3. initialize.sh
+    local _ssh_service="sshd.service"
+    if [[ "$distro" == "ubuntu" ]]; then
+        _ssh_service="ssh.service"
+    fi
     cat > "$ROOTFS_DIR"/root/initialize.sh << EOF
 #!/bin/bash
 
@@ -343,13 +349,19 @@ useradd -m -U -G adm,sudo -s /bin/zsh kzl
 echo "Setting kzl password..."
 passwd kzl
 
+bootctl install --esp-path=/boot/efi --no-variables
+
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
-
-bootctl install --esp-path=/boot/efi
+systemctl enable $_ssh_service
 EOF
     chmod +x "$ROOTFS_DIR"/root/initialize.sh
     chroot_run "$ROOTFS_DIR" /root/initialize.sh
+
+    ### 4. pacman repository
+    if [[ "$distro" == "kzl-linux" ]]; then
+        :
+    fi
 }
 
 post_configure_rootfs() {

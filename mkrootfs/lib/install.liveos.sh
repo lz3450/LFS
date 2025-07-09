@@ -160,14 +160,14 @@ prepare_rootfs() {
 
     # mkpart
     info "Setting up loop device for installation for LiveOS..."
-    fallocate -l 2560MiB "$IMG_FILE"
+    fallocate -l 3072MiB "$IMG_FILE"
 
     parted -s "$IMG_FILE" \
         mklabel gpt \
         unit s \
-        mkpart BOOT fat32 2048 524287 \
-        mkpart "$ISO_LABEL" ext4 524288 4718591 \
-        mkpart RECOVERY ext4 4718592 100% \
+        mkpart BOOT fat32 2048 1048575 \
+        mkpart "$ISO_LABEL" ext4 1048576 5242879 \
+        mkpart RECOVERY ext4 5242880 100% \
         set 1 esp on \
         print
 
@@ -182,20 +182,18 @@ prepare_rootfs() {
 
     # mount
     mkdir -p -- "$ISOFS_DIR"
-    mount -o "$MOUNT_OPT" -- "${loop_device}p2" "$ISOFS_DIR"
+    mount -v -o "$MOUNT_OPT" -- "${loop_device}p2" "$ISOFS_DIR"
 
     exec 1>&3 3>&-
 }
 
+post_bootstrap_rootfs() {
+    mkdir -p -m 600 -- "$ROOTFS_DIR/$efi_dir"
+    mount -v -o "$EFI_PARTITION_MOUNT_________________OPTIONS" -- "${loop_device}p1" "$ROOTFS_DIR/$efi_dir"
+    mount -v -o "$MOUNT_OPT" -- "${loop_device}p3" "$ROOTFS_DIR/home"
+}
+
 post_install_pkgs() {
-    delete_all_contents "$ROOTFS_DIR/boot/efi/"
-    delete_all_contents "$ROOTFS_DIR/home/"
-
-    mount -o "$MOUNT_OPT,umask=0177" -- "${loop_device}p1" "$ROOTFS_DIR/$efi_dir"
-    mountpoint -q -- "$ROOTFS_DIR/$efi_dir" || error "/$efi_dir not mounted" 2
-    mount -o "$MOUNT_OPT" -- "${loop_device}p3" "$ROOTFS_DIR/home"
-    mountpoint -q -- "$ROOTFS_DIR/home" || error "/home not mounted" 2
-
     touch -- "$ISOFS_DIR/$TIMESTAMP"
     cp -vf -- "$INSTALLED_DEB_PKGLIST_FILE" "$ISOFS_DIR/deb_pkgs.txt"
     cp -vf -- "$INSTALLED_PACMAN_PKGLIST_FILE" "$ISOFS_DIR/pacman_pkgs.txt"
@@ -206,28 +204,38 @@ _make_initramfs_for_kernel() {
     local _kernel_image="$2"
     local _kmoddir="$3"
 
+    if [[ ! -f "$_kernel_image" ]]; then
+        error "Kernel image $_kernel_image does not exist" 1
+    fi
+
+    if [[ ! -d "$_kmoddir" ]]; then
+        error "Kernel modules directory $_kmoddir does not exist" 1
+    fi
+
     debug "Making initramfs for kernel $_kernel_version"
     dracut --kver "$_kernel_version" \
         --force \
         --add 'dmsquash-live overlayfs livenet pollcdrom' \
         --omit 'multipath' \
+        --kmoddir "$_kmoddir" \
         --strip \
-        --nolvmconf \
         --nomdadmconf \
-        --verbose \
+        --nolvmconf \
+        --quiet \
         --no-hostonly \
         --no-hostonly-cmdline \
+        --no-hostonly-default-device \
+        --hostonly-i18n \
         --zstd \
         --kernel-image "$_kernel_image" \
-        --kmoddir "$_kmoddir" \
         "$ROOTFS_DIR/boot/initramfs-$_kernel_version.img" > "$LOG_DIR"/dracut-$_kernel_version.log 2>&1
 }
 
 _get_kernel_suffix() {
     local _kernel_version="$1"
-    case "-${_kernel_version##*-}" in
-        -generic) echo "" ;;
-        -KZL) echo "-KZL" ;;
+    case "$distro-${_kernel_version##*-}" in
+        ubuntu-generic) echo "" ;;
+        ubuntu-KZL) echo "-KZL" ;;
         *) echo ""; warn "Unknown kernel version: $_kernel_version" ;;
     esac
 }
@@ -252,11 +260,6 @@ EOF
 Welcome to $ISO_NAME Live OS!
 
 EOF
-    # fstab
-    cat > "$ROOTFS_DIR"/etc/fstab << EOF
-LABEL=BOOT          /boot/efi   vfat        $MOUNT_OPT,umask=0177                               0 2
-LABEL=RECOVERY      /home       ext4        $MOUNT_OPT,nofail,x-systemd.device-timeout=30s      0 2
-EOF
     # ssh
     sed -i \
         -e '/X11Forwarding/c\#X11Forwarding yes' \
@@ -266,20 +269,56 @@ EOF
     mkdir -p -- "$CONFIG_DIR/liveos"
     cp -vf -- "$ROOTFS_DIR/etc/ssh/sshd_config" "$CONFIG_DIR/liveos/sshd_config"
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$CONFIG_DIR/liveos/sshd_config"
-    # systemd
+    # fstab
+    cat > "$ROOTFS_DIR"/etc/fstab << EOF
+LABEL=BOOT          /boot/efi   vfat        $EFI_PARTITION_MOUNT_________________OPTIONS        0 2
+LABEL=RECOVERY      /home       ext4        $MOUNT_OPT,nofail,x-systemd.device-timeout=30s      0 2
+EOF
+
+    ### 2. efi bootloader
+    info "Setting up systemd-boot for UEFI booting..."
+    mkdir -p -- "$ROOTFS_DIR/$efi_dir/loader/entries"
+    local _entry
+    for _entry in "${!efi_boot_entries[@]}"; do
+        echo "${efi_boot_entries[$_entry]}" > "$ROOTFS_DIR/$efi_dir/loader/entries/$_entry"
+    done
+
+    cat > "$ROOTFS_DIR/$efi_dir/loader/loader.conf" << EOF
+timeout 30
+console-mode max
+default $default_efi_entry
+EOF
+    info "Making initramfs for all installed kernels..."
+    local _kernel_version
+    for _kernel_version in $(ls "$ROOTFS_DIR/usr/lib/modules"); do
+        _make_initramfs_for_kernel \
+            "$_kernel_version" \
+            "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version" \
+            "$ROOTFS_DIR/lib/modules/$_kernel_version"
+    done
+
+    local _kv
+    for _kv in $(ls "$ROOTFS_DIR/usr/lib/modules"); do
+        local _kernel_suffix="$(_get_kernel_suffix "$_kv")"
+        debug "Copying kernel and initramfs ($_kv) to EFI file system..."
+        cp -vf -- "$ROOTFS_DIR/boot/initramfs-$_kv.img" "$ROOTFS_DIR/$efi_dir/initramfs$_kernel_suffix.img"
+    done
+
+    ### 3. initialize.sh
     local _ssh_service="sshd.service"
     if [[ "$distro" == "ubuntu" ]]; then
         _ssh_service="ssh.service"
     fi
     chroot_setup "$ROOTFS_DIR"
-    chroot_run "$ROOTFS_DIR" /bin/bash -e -u -o pipefail -s << EOF
+    chroot_run "$ROOTFS_DIR" /bin/bash +e -u -o pipefail -s << EOF
+bootctl install --esp-path=/boot/efi --no-variables
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
 systemctl enable $_ssh_service
 EOF
     chroot_teardown
 
-    ### 2. pacman repository
+    ### 4. pacman repository
     info "Setting up pacman repository for LiveOS..."
     mkdir -p -- "$ROOTFS_DIR/$PACMAN_REPO_DIR"
     local _pkg
@@ -290,51 +329,17 @@ EOF
         cp -f -- "/$PACMAN_REPO_DIR/$_pkg_file" "$ROOTFS_DIR/$PACMAN_REPO_DIR"
         repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_FILE" "$ROOTFS_DIR/$PACMAN_REPO_DIR/$_pkg_file" > /dev/null
     done
-
-    ### 3. efi bootloader
-    info "Making initramfs for all installed kernels..."
-    local _kernel_version
-    for _kernel_version in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
-        _make_initramfs_for_kernel \
-            "$_kernel_version" \
-            "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version" \
-            "$ROOTFS_DIR/lib/modules/$_kernel_version"
-    done
-
-    info "Setting up systemd-boot for UEFI booting..."
-    mkdir -p -- "$ROOTFS_DIR/$efi_dir/loader/entries"
-    local _entry
-    for _entry in "${!efi_boot_entries[@]}"; do
-        echo "${efi_boot_entries[$_entry]}" > "$ROOTFS_DIR/$efi_dir/loader/entries/$_entry"
-    done
-
-    mkdir -p -- "$ROOTFS_DIR/$efi_dir/EFI/BOOT"
-    cp -f -- "$ROOTFS_DIR/usr/lib/systemd/boot/efi/systemd-bootx64.efi" "$ROOTFS_DIR/$efi_dir/EFI/BOOT/BOOTx64.EFI"
-    cat > "$ROOTFS_DIR/$efi_dir/loader/loader.conf" << EOF
-timeout 30
-console-mode max
-default $default_efi_entry
-EOF
-
-    if [[ "$distro" != "kzl-linux" ]]; then
-        local _kv
-        for _kv in $(ls "$ROOTFS_DIR"/usr/lib/modules); do
-            local _kernel_suffix="$(_get_kernel_suffix "$_kv")"
-            debug "Copying kernel and initramfs ($_kv) to EFI file system..."
-            cp -f -- "$ROOTFS_DIR"/boot/vmlinuz-$_kv "$ROOTFS_DIR/$efi_dir/vmlinuz$_kernel_suffix"
-            cp -f -- "$ROOTFS_DIR"/boot/initramfs-$_kv.img "$ROOTFS_DIR/$efi_dir/initramfs$_kernel_suffix.img"
-        done
-    fi
 }
 
 _make_rootfs_ro_rootfs_img() {
     info "Making rootfs SquashFS/EROFS image, this may take some time..."
-    local _rootfs_img_file="$SCRIPT_DIR/images/${ISO_FILE_NAME%.iso}-$RO_ROOTFS_IMG_FILE_NAME"
     # mksquashfs "$ROOTFS_DIR" "$_rootfs_img_file" -b 1M -comp zstd -noappend
-    mkfs.erofs -- "$_rootfs_img_file" "$ROOTFS_DIR"
-    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$_rootfs_img_file"
     mkdir -vp -- "$RO_ROOTFS_IMG_DIR"
-    cp -vf -- "$_rootfs_img_file" "$RO_ROOTFS_IMG_DIR/$RO_ROOTFS_IMG_FILE_NAME"
+    mkfs.erofs -- "$RO_ROOTFS_IMG_DIR/$RO_ROOTFS_IMG_FILE_NAME" "$ROOTFS_DIR"
+
+    local _rootfs_img_file="$SCRIPT_DIR/images/${ISO_FILE_NAME%.iso}-$RO_ROOTFS_IMG_FILE_NAME"
+    cp -vf -- "$RO_ROOTFS_IMG_DIR/$RO_ROOTFS_IMG_FILE_NAME" "$_rootfs_img_file"
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$_rootfs_img_file"
 }
 
 _make_iso_image() {
@@ -363,16 +368,13 @@ _make_iso_image() {
 }
 
 post_configure_rootfs() {
-    cp -a -- "$ROOTFS_DIR/$efi_dir/EFI" "$ISOFS_DIR/"
-
-    sync
-
+    debug "Cleaning up root filesystem..."
     umount -v -- "$ROOTFS_DIR/$efi_dir"
-    mountpoint -q -- "$ROOTFS_DIR/$efi_dir" && error "EFI partition is still mounted" 2
     umount -v -- "$ROOTFS_DIR/home"
-    mountpoint -q -- "$ROOTFS_DIR/home" && error "RECOVERY partition is still mounted" 2
+    delete_all_contents "$ROOTFS_DIR/boot/efi/"
+    delete_all_contents "$ROOTFS_DIR/home/"
+    clean_rootfs "$ROOTFS_DIR" >> "$LOG_DIR/${FUNCNAME[0]}.log"
 
-    clean_rootfs "$ROOTFS_DIR"
     _make_rootfs_ro_rootfs_img
 
     cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
@@ -388,6 +390,7 @@ post_configure_rootfs() {
 
 cleanup_platform_specific() {
     set +e
+    sync
     chroot_teardown_force
     loop_teardown "$loop_device"
 }

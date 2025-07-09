@@ -172,6 +172,7 @@ declare -r INSTALLED_PACMAN_PKGLIST_FILE="$PKGLIST_DIR/$arg_platform-$arg_suite-
 declare -r UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
 # UBUNTU_MIRROR="https://mirror.arizona.edu/ubuntu/"
 declare -r MOUNT_OPT="rw,noatime"
+declare -r EFI_PARTITION_MOUNT_________________OPTIONS="rw,nosuid,nodev,noexec,fmask=0177,dmask=0177"
 
 loop_device=""
 
@@ -182,38 +183,6 @@ loop_device=""
 . "$SCRIPT_DIR/lib/pacman.sh"
 
 ### functions
-cleanup() {
-    local _signal="${1:-}"
-    set +e
-
-    sync
-
-    log_magenta "Cleaning up..."
-    cleanup_platform_specific
-
-    local _answer
-    read -r -t 60 -p "Do you want to remove the working directory $WORK_DIR? [y/N] " _answer
-    if [[ "$_answer" =~ ^[Yy]$ ]]; then
-        rm -rf --one-file-system -- "$WORK_DIR"
-    fi
-
-    log_magenta "Done"
-
-    trap - EXIT
-    case "$_signal" in
-    SIGINT)
-        error "Interrupted by user" 1
-        ;;
-    SIGTERM)
-        error "Terminated by signal" 1
-        ;;
-    esac
-
-}
-trap 'cleanup EXIT' EXIT
-trap 'cleanup SIGINT' SIGINT
-trap 'cleanup SIGTERM' SIGTERM
-
 make_work_dirs() {
     info "Making working directory: $WORK_DIR"
     mkdir -- "$WORK_DIR"
@@ -225,8 +194,8 @@ make_work_dirs() {
     fi
 }
 
-extract_rootfs_tarball() {
-    info "Extracting root filesystem tarball: $arg_rootfs_tarball"
+bootstrap_rootfs() {
+    info "Bootstrapping root filesystem using $arg_rootfs_tarball"
     tar --zstd \
         --xattrs --acls \
         --numeric-owner \
@@ -290,6 +259,41 @@ configure_rootfs_common() {
     echo '. /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR/root/.zshrc"
 }
 
+cleanup() {
+    local _signal="${1:-}"
+    set +e
+
+    sync
+
+    log_magenta "Cleaning up..."
+    cleanup_platform_specific
+
+    local _answer
+    read -r -p "Do you want to remove the working directory $WORK_DIR? [Y/n] " _answer
+    _answer="${_answer:-y}"
+    if [[ "$_answer" =~ ^[Yy]$ ]]; then
+        echo >&2
+        log_magenta "Removing working directory: $WORK_DIR"
+        rm -rf --one-file-system -- "$WORK_DIR"
+    fi
+
+    log_magenta "Done"
+
+    trap - EXIT
+    case "$_signal" in
+    SIGINT)
+        error "Interrupted by user" 1
+        ;;
+    SIGTERM)
+        error "Terminated by signal" 1
+        ;;
+    esac
+
+}
+trap 'cleanup EXIT' EXIT
+trap 'cleanup SIGINT' SIGINT
+trap 'cleanup SIGTERM' SIGTERM
+
 ################################################################################
 
 prologue
@@ -299,7 +303,7 @@ echo "${SCRIPT_INVOCATION[@]}" > "$LOG_DIR/command.log"
 touch -- "$WORK_DIR/$arg_platform"
 
 prepare_rootfs
-extract_rootfs_tarball
+bootstrap_rootfs
 if declare -F 'post_bootstrap_rootfs' > '/dev/null'; then
     info "Running post-bootstrap hook..."
     post_bootstrap_rootfs
