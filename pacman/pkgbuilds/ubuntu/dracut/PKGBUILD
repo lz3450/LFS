@@ -2,7 +2,7 @@
 
 pkgname=dracut
 pkgver=107
-pkgrel=13
+pkgrel=14
 epoch=
 pkgdesc="An event driven initramfs infrastructure"
 arch=('x86_64')
@@ -38,4 +38,6 @@ package() {
   cd dracut-ng
 
   make DESTDIR="$pkgdir" install
+
+  install -dm755 "$pkgdir"/etc/dracut.conf.d
 }
