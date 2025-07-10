@@ -91,7 +91,7 @@ declare -Ar BTRFS_SUBVOL_TARGET_DIR=(
     ["@var"]="var"
     ["@log"]="var/log"
     ["@cache"]="var/cache"
-    ["@snapshots"]="/.snapshots"
+    ["@snapshots"]=".snapshots"
 )
 declare -r BTRFS_DEFAULT_MOUNT_OPT="$MOUNT_OPT,compress=zstd"
 declare -Ar BTRFS_SUBVOL_MOUNT_OPT=(
@@ -159,8 +159,8 @@ prepare_rootfs() {
 
     # mkpart
     if (( opt_loop > 0 )); then
-        info "Setting up loop device for installation for PC..."
-        fallocate -l 8GiB "$IMG_FILE"
+        info "Setting up loop device for installation on PC..."
+        fallocate -l 6GiB "$IMG_FILE"
         parted -s "$IMG_FILE" \
             mklabel gpt \
             unit s \
@@ -244,25 +244,24 @@ prepare_rootfs() {
 
         debug "Mounting btrfs subvolumes on $ROOTFS_DIR..."
         # mount @
-        umount -v -- "$ROOTFS_DIR"
-        mount -v -o $BTRFS_DEFAULT_MOUNT_OPT,subvol=@ -- "${partition_device_map[rootfs]}" "$ROOTFS_DIR"
+        umount -v "$ROOTFS_DIR"
+        mount -v -o $BTRFS_DEFAULT_MOUNT_OPT,subvol=@ "${partition_device_map[rootfs]}" "$ROOTFS_DIR"
         local _subvol
         for _subvol in "${BTRFS_SUBVOLS[@]}"; do
             if [[ -d "$ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]}" ]]; then
                 error "Mount target directory $ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]} already exists" 1
             fi
-            mkdir -vp -- "$ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]}"
-            mount -v -o "${BTRFS_SUBVOL_MOUNT_OPT[$_subvol]}" -- "${partition_device_map[rootfs]}" "$ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]}"
+            mkdir -p "$ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]}"
+            mount -v -o "${BTRFS_SUBVOL_MOUNT_OPT[$_subvol]}" "${partition_device_map[rootfs]}" "$ROOTFS_DIR/${BTRFS_SUBVOL_TARGET_DIR[$_subvol]}"
         done
     fi
     mkdir -p -- "$ROOTFS_DIR/boot/efi"
-    mount -o "$MOUNT_OPT,umask=0177" -- "${partition_device_map[efi]}" "$ROOTFS_DIR/boot/efi"
+    mount -o "$EFI_PARTITION_MOUNT_________________OPTIONS" "${partition_device_map[efi]}" "$ROOTFS_DIR/boot/efi"
 
     # exec 1>&3 3>&-
 }
 
 post_bootstrap_rootfs() {
-    chroot_setup "$ROOTFS_DIR"
     local _answer
     read -r -p "Do you want to configure rootfs manually (post bootstrap)? [y/N] " _answer
     if [[ "$_answer" =~ ^[Yy]$ ]]; then
@@ -382,7 +381,6 @@ post_configure_rootfs() {
 
 cleanup_platform_specific() {
     set +e
-    chroot_teardown_force
     if (( opt_loop > 0 )); then
         loop_teardown "$loop_device"
     fi

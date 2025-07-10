@@ -181,16 +181,16 @@ prepare_rootfs() {
     mkfs.ext4 -L RECOVERY -- "${loop_device}p3"
 
     # mount
-    mkdir -p -- "$ISOFS_DIR"
-    mount -v -o "$MOUNT_OPT" -- "${loop_device}p2" "$ISOFS_DIR"
+    mkdir -p "$ISOFS_DIR"
+    mount -v "${loop_device}p2" "$ISOFS_DIR"
 
     exec 1>&3 3>&-
 }
 
 post_bootstrap_rootfs() {
-    mkdir -p -m 600 -- "$ROOTFS_DIR/$efi_dir"
-    mount -v -o "$EFI_PARTITION_MOUNT_________________OPTIONS" -- "${loop_device}p1" "$ROOTFS_DIR/$efi_dir"
-    mount -v -o "$MOUNT_OPT" -- "${loop_device}p3" "$ROOTFS_DIR/home"
+    mkdir -p -m 600 "$ROOTFS_DIR/$efi_dir"
+    mount -v -o "$EFI_PARTITION_MOUNT_________________OPTIONS" "${loop_device}p1" "$ROOTFS_DIR/$efi_dir"
+    mount -v -o "$MOUNT_OPT" "${loop_device}p3" "$ROOTFS_DIR/home"
 }
 
 post_install_pkgs() {
@@ -309,14 +309,12 @@ EOF
     if [[ "$distro" == "ubuntu" ]]; then
         _ssh_service="ssh.service"
     fi
-    chroot_setup "$ROOTFS_DIR"
     chroot_run "$ROOTFS_DIR" /bin/bash +e -u -o pipefail -s << EOF
 bootctl install --esp-path=/boot/efi --no-variables
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
 systemctl enable $_ssh_service
 EOF
-    chroot_teardown
 
     ### 4. pacman repository
     info "Setting up pacman repository for LiveOS..."
@@ -333,13 +331,18 @@ EOF
 
 _make_rootfs_ro_rootfs_img() {
     info "Making rootfs SquashFS/EROFS image, this may take some time..."
+    local _rootfs_img_file="$SCRIPT_DIR/images/${ISO_FILE_NAME%.iso}-$RO_ROOTFS_IMG_FILE_NAME"
     # mksquashfs "$ROOTFS_DIR" "$_rootfs_img_file" -b 1M -comp zstd -noappend
     mkdir -vp -- "$RO_ROOTFS_IMG_DIR"
-    mkfs.erofs -- "$RO_ROOTFS_IMG_DIR/$RO_ROOTFS_IMG_FILE_NAME" "$ROOTFS_DIR"
-
-    local _rootfs_img_file="$SCRIPT_DIR/images/${ISO_FILE_NAME%.iso}-$RO_ROOTFS_IMG_FILE_NAME"
-    cp -vf -- "$RO_ROOTFS_IMG_DIR/$RO_ROOTFS_IMG_FILE_NAME" "$_rootfs_img_file"
+    mkfs.erofs -- "$_rootfs_img_file" "$ROOTFS_DIR"
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$_rootfs_img_file"
+    cp -vf -- "$_rootfs_img_file" "$RO_ROOTFS_IMG_DIR/$RO_ROOTFS_IMG_FILE_NAME"
+    sync
+    hash_source=$(sha256sum "$_rootfs_img_file" | awk '{print $1}')
+    hash_target=$(sha256sum "$RO_ROOTFS_IMG_DIR/$RO_ROOTFS_IMG_FILE_NAME" | awk '{print $1}')
+    if [[ "$hash_source" != "$hash_target" ]]; then
+        warn "Read-only rootfs image corrupted"
+    fi
 }
 
 _make_iso_image() {
@@ -391,6 +394,5 @@ post_configure_rootfs() {
 cleanup_platform_specific() {
     set +e
     sync
-    chroot_teardown_force
     loop_teardown "$loop_device"
 }
