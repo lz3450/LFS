@@ -18,7 +18,7 @@ LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR"/log.sh
 
 ### constants & variables
-CHROOT_PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin"
+declare -r CHROOT_PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin"
 
 chroot_dir=""
 chroot_active_mounts=()
@@ -35,7 +35,7 @@ _chroot_warn() {
     warn "${1:-}" "${BASH_SOURCE[0]##*/}"
 }
 
-chroot_add_mount() {
+_chroot_mount() {
     mount "$@" >&2
     chroot_active_mounts=(${@: -1} "${chroot_active_mounts[@]}")
 }
@@ -46,8 +46,6 @@ _resolve_link() {
 
     while [[ -L "$_target" ]]; do
         _target=$(readlink -m "$_target")
-        # If a root was given, make sure the target is under it.
-        # Make sure to strip any leading slash from target first.
         if [[ -n "$_rootfs" && "$_target" != "$_rootfs"* ]]; then
             _target="${_rootfs%/}/${_target#/}"
         fi
@@ -56,37 +54,19 @@ _resolve_link() {
     echo "$_target"
 }
 
-_add_resolv_conf() {
-    local _source=$(_resolve_link "/etc/resolv.conf")
+_mount_resolv_conf() {
+    local _source=$(_resolve_link /etc/resolv.conf)
     local _target=$(_resolve_link "$chroot_dir/etc/resolv.conf" "$chroot_dir")
 
-    # If we don't have a source resolv.conf file, there's nothing useful we can do.
+    # /etc/resolv.conf does not exist in the host system, nothing to do
     if [[ ! -e $_source ]]; then
         return
     fi
 
-    if [[ ! -e $_target ]]; then
-        # There are two reasons the destination might not exist:
-        #
-        #   1. There may be no resolv.conf in the chroot.  In this case, $_target won't exist,
-        #      and it will be equal to $1/etc/resolv.conf.  In this case, we'll just exit.
-        #      The chroot environment must not be concerned with DNS resolution.
-        #
-        #   2. $1/etc/resolv.conf is (or resolves to) a broken link.  The environment
-        #      clearly intends to handle DNS resolution, but something's wrong.  Maybe it
-        #      normally creates the target at boot time.  We'll (try to) take care of it by
-        #      creating a dummy file at the target, so that we have something to bind to.
-
-        # Case 1.
-        if [[ "$_target" = "$chroot_dir/etc/resolv.conf" ]]; then
-            return
-        fi
-
-        # Case 2.
-        install -D -m 644 /dev/null "$_target"
+    if [[ ! -e "$_target" && -L "$chroot_dir/etc/resolv.conf" ]]; then
+        install -Dm644 /dev/null "$_target"
+        _chroot_mount -v -c --bind "$_source" "$_target"
     fi
-
-    chroot_add_mount --bind "$_source" "$_target"
 }
 
 # chroot_setup <chroot_dir>
@@ -104,23 +84,16 @@ chroot_setup() {
 
     _chroot_debug "Setting up chroot environment in \"$chroot_dir\""
 
-    if ! mountpoint -q "$chroot_dir"; then
-        # if chroot_dir is not a mountpoint, there may be undesirable side effects.
-        # bind mounting chroot_dir to itself
-        chroot_add_mount --rbind "$chroot_dir" "$chroot_dir"
-    fi
-    mount --make-private "$chroot_dir"
+    _chroot_mount -t proc       -o rw,nosuid,nodev,noexec                       proc        "$chroot_dir/proc"
+    _chroot_mount -t sysfs      -o ro,nosuid,nodev,noexec                       sysfs       "$chroot_dir/sys"
+    _chroot_mount -t efivarfs   -o rw,nosuid,nodev,noexec                       efivarfs    "$chroot_dir/sys/firmware/efi/efivars"
+    _chroot_mount -t devtmpfs   -o rw                                           devtmpfs    "$chroot_dir/dev"
+    _chroot_mount -t devpts     -o rw,nosuid,noexec,gid=5,mode=620,ptmxmode=000 devpts      "$chroot_dir/dev/pts"
+    _chroot_mount -t tmpfs      -o rw,nosuid,nodev                              tmpfs       "$chroot_dir/dev/shm"
+    _chroot_mount -t tmpfs      -o rw,nosuid,nodev,mode=755                     tmpfs       "$chroot_dir/run"
+    _chroot_mount -t tmpfs      -o rw,nosuid,nodev,mode=1777                    tmpfs       "$chroot_dir/tmp"
 
-    chroot_add_mount -t sysfs       -o ro,nosuid,nodev,noexec                       sysfs       "$chroot_dir/sys"
-    chroot_add_mount -t proc        -o rw,nosuid,nodev,noexec                       proc        "$chroot_dir/proc"
-    chroot_add_mount -t devtmpfs    -o rw,inode64                                   devtmpfs    "$chroot_dir/dev"
-    chroot_add_mount -t devpts      -o rw,nosuid,noexec,gid=5,mode=620,ptmxmode=000 devpts      "$chroot_dir/dev/pts"
-    chroot_add_mount -t tmpfs       -o rw,nosuid,nodev,mode=755,inode64             tmpfs       "$chroot_dir/run"
-    chroot_add_mount -t tmpfs       -o rw,nosuid,nodev,inode64                      tmpfs       "$chroot_dir/dev/shm"
-    chroot_add_mount -t tmpfs       -o rw,nosuid,nodev,inode64                      tmpfs       "$chroot_dir/tmp"
-    chroot_add_mount -t efivarfs    -o rw,nosuid,nodev,noexec                       efivarfs    "$chroot_dir/sys/firmware/efi/efivars"
-
-    _add_resolv_conf
+    _mount_resolv_conf
 
     chroot_setup_times=1
 
@@ -145,7 +118,7 @@ chroot_teardown() {
         local _mp
         for _mp in "${chroot_active_mounts[@]}"; do
             if mountpoint -q "$_mp" >&2; then
-                if ! umount -R -- "$_mp"; then
+                if ! umount "$_mp"; then
                     _mountpoints+=("$_mp")
                     _chroot_warn "Failed to unmount \"$_mp\", retry later"
                 fi
@@ -168,6 +141,10 @@ chroot_teardown_force() {
 }
 
 chroot_run() {
+    SHELL=/bin/bash PATH="$CHROOT_PATH" LC_ALL=C chroot "$@"
+}
+
+chroot_pid_unshare_run() {
     SHELL=/bin/bash PATH="$CHROOT_PATH" LC_ALL=C unshare --fork --pid chroot "$@"
 }
 

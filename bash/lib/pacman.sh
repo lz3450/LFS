@@ -5,11 +5,11 @@
 
 ################################################################################
 
-if [[ -v __LIBPACMAN__ ]]; then
+if [[ -v __PACMAN__ ]]; then
     return
 fi
 
-declare -r __LIBPACMAN__=""
+declare -r __PACMAN__="pacman.sh"
 
 ################################################################################
 
@@ -17,22 +17,21 @@ declare -r __LIBPACMAN__=""
 LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR/log.sh"
 . "$LIBDIR/utils.sh"
-. "$LIBDIR/chroot.sh"
 
 ### constants & variables
 if [[ -f "/usr/bin/pacman" ]]; then
-    PACMAN="/usr/bin/pacman"
-    PACMAN_CONFIG="/etc/pacman.conf"
+    declare -r PACMAN="/usr/bin/pacman"
+    declare -r PACMAN_CONFIG="/etc/pacman.conf"
 elif [[ -f "/opt/bin/pacman" ]]; then
-    PACMAN="/opt/bin/pacman"
-    PACMAN_CONFIG="/opt/etc/pacman.conf"
+    declare -r PACMAN="/opt/bin/pacman"
+    declare -r PACMAN_CONFIG="/opt/etc/pacman.conf"
 else
     error "Failed to find \`pacman\`" 127
 fi
 
-EXTENSION="tar.zst"
+declare -r EXTENSION="tar.zst"
 #                 epoch:                         pkgver-pkgrel-                    arch.pkg.tar.zst
-PKGNAME_REGEX="\([0-9]+:\)?\([0-9a-zA-Z]+\(\.\|\+\)?\)+-[0-9]+-\(x86_64\|aarch64\|any\).pkg.$EXTENSION"
+declare -r PKGNAME_REGEX="\([0-9]+:\)?\([0-9a-zA-Z]+\(\.\|\+\)?\)+-[0-9]+-\(x86_64\|aarch64\|any\).pkg.$EXTENSION"
 
 ### functions
 _pacman_debug() {
@@ -91,7 +90,6 @@ pacman_bootstrap() {
     local _pacman_tmp_conf_file=$(mktemp -p /tmp pacman.XXX.conf)
     sed 's/^DownloadUser/#&/' "$PACMAN_CONFIG" > "$_pacman_tmp_conf_file"
 
-    chroot_setup "$_rootfs_dir"
     pacman -Syy
     unshare --fork --pid \
         "$PACMAN" -Sy \
@@ -100,7 +98,6 @@ pacman_bootstrap() {
         --disable-sandbox \
         --noconfirm \
         "${_pacman_pkgs[@]}"
-    chroot_teardown
     _pacman_debug "Done"
 }
 

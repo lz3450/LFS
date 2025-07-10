@@ -5,11 +5,11 @@
 
 ################################################################################
 
-if [[ -v __LIBUTILS___ ]]; then
+if [[ -v __UTILS___ ]]; then
     return
 fi
 
-declare -r __LIBUTILS___="utils.sh"
+declare -r __UTILS___="utils.sh"
 
 ################################################################################
 
@@ -80,7 +80,6 @@ clean_rootfs() {
 
     _utils_debug "Cleaning rootfs..."
     # general
-    delete_all_contents "$_rootfs_dir"/dev/
     delete_all_contents "$_rootfs_dir"/run/
     delete_all_contents "$_rootfs_dir"/tmp/
     delete_all_contents "$_rootfs_dir"/usr/share/doc/
@@ -92,6 +91,10 @@ clean_rootfs() {
     # pacman
     delete_all_contents "$_rootfs_dir"/var/lib/pacman/
     find "$_rootfs_dir" -type f \( -name '*.pacnew' -o -name '*.pacsave' \) -delete
+    # check if the directory is empty
+    if ! dir_empty "$_rootfs_dir"/dev/; then
+        _utils_warn "/dev is not empty"
+    fi
     _utils_debug "Done"
 }
 
