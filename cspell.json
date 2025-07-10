@@ -148,6 +148,7 @@
         "gdbsupport",
         "gedit",
         "getaddrinfo",
+        "getent",
         "getsz",
         "GLIBCXX",
         "gnulib",
