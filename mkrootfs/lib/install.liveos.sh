@@ -271,8 +271,8 @@ EOF
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$CONFIG_DIR/liveos/sshd_config"
     # fstab
     cat > "$ROOTFS_DIR"/etc/fstab << EOF
-LABEL=BOOT          /boot/efi   vfat        $EFI_PARTITION_MOUNT_________________OPTIONS        0 2
-LABEL=RECOVERY      /home       ext4        $MOUNT_OPT,nofail,x-systemd.device-timeout=30s      0 2
+LABEL=BOOT          /boot/efi       vfat        $EFI_PARTITION_MOUNT_________________OPTIONS,nofail,x-systemd.device-timeout=30s    0 2
+LABEL=RECOVERY      /home           ext4        $MOUNT_OPT,nofail,x-systemd.device-timeout=30s                                      0 2
 EOF
 
     ### 2. efi bootloader
