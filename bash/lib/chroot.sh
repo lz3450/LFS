@@ -103,6 +103,11 @@ chroot_setup() {
 chroot_teardown() {
     local _mountpoints=()
 
+    if [[ -z "$chroot_dir" ]] || (( ${#chroot_active_mounts[@]} == 0 )); then
+        _chroot_debug "chroot_dir is not set, nothing to tear down"
+        return
+    fi
+
     if (( chroot_setup_times == 0 )); then
         _chroot_debug "Nothing to tear down in $chroot_dir"
         return
