@@ -19,16 +19,17 @@ declare -ar SCRIPT_CMDLINE=("$0" "$@")
 
 ################################################################################
 
-### bash utils
-. "$SCRIPT_DIR"/lib/log.sh
-. "$SCRIPT_DIR"/lib/utils.sh
-
 ### options and arguments
 arg_platform="pc"
 declare -i opt_loop=0
 arg_rootfs_type="btrfs"
 arg_suite="jammy"
 arg_rootfs_tarball=""
+
+### Place the library as far back as possible
+### bash utils
+. "$SCRIPT_DIR"/lib/log.sh
+. "$SCRIPT_DIR"/lib/utils.sh
 
 ################################################################################
 
