@@ -1,5 +1,5 @@
--- The C compiler identification is Clang 20.1.7
--- The CXX compiler identification is Clang 20.1.7
+-- The C compiler identification is Clang 20.1.8
+-- The CXX compiler identification is Clang 20.1.8
 -- The ASM compiler identification is Clang with GNU-like command-line
 -- Found assembler: /opt/bin/clang
 -- Detecting C compiler ABI info
@@ -204,14 +204,14 @@
 -- Looking for logf128
 -- Looking for logf128 - not found
 -- Targeting X86
--- LLD version: 20.1.7
+-- LLD version: 20.1.8
 -- Looking for sys/resource.h
 -- Looking for sys/resource.h - found
 -- Looking for dlfcn.h
 -- Looking for dlfcn.h - found
 -- Looking for dladdr
 -- Looking for dladdr - found
--- Clang version: 20.1.7
+-- Clang version: 20.1.8
 -- Looking for include file sys/inotify.h
 -- Looking for include file sys/inotify.h - found
 -- Performing Test HAVE_LINKER_FLAG_LONG_PLT
@@ -503,7 +503,7 @@ CMAKE_CXX_COMPILER_AR:FILEPATH=/opt/bin/llvm-ar
 CMAKE_CXX_COMPILER_RANLIB:FILEPATH=/opt/bin/llvm-ranlib
 
 // Flags used by the CXX compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=-march=native -O3 -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -Wp,-D_GLIBCXX_ASSERTIONS
+CMAKE_CXX_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -Wp,-D_GLIBCXX_ASSERTIONS
 
 // Flags used by the CXX compiler during DEBUG builds.
 CMAKE_CXX_FLAGS_DEBUG:STRING=-g
@@ -536,7 +536,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/opt/bin/llvm-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/opt/bin/llvm-ranlib
 
 // Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=-march=native -O3 -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security
+CMAKE_C_FLAGS:STRING=-march=native -O3 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security
 
 // Flags used by the C compiler during DEBUG builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -1240,10 +1240,10 @@ LLVM_OPTIMIZED_TABLEGEN:BOOL=OFF
 LLVM_OPTIMIZE_SANITIZED_BUILDS:BOOL=ON
 
 // Define the maximum number of concurrent compilation jobs (Ninja only).
-LLVM_PARALLEL_COMPILE_JOBS:STRING=8
+LLVM_PARALLEL_COMPILE_JOBS:STRING=16
 
 // Define the maximum number of concurrent link jobs (Ninja only).
-LLVM_PARALLEL_LINK_JOBS:STRING=8
+LLVM_PARALLEL_LINK_JOBS:STRING=16
 
 // Define the maximum number of concurrent tablegen jobs (Ninja only).
 LLVM_PARALLEL_TABLEGEN_JOBS:STRING=

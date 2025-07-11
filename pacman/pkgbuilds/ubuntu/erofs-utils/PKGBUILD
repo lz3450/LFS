@@ -2,7 +2,7 @@
 
 pkgname=erofs-utils
 pkgver=1.8.9
-pkgrel=11
+pkgrel=12
 epoch=
 pkgdesc="Userspace utilities for linux-erofs file system"
 arch=('x86_64')

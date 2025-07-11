@@ -2,7 +2,7 @@ pkgname=texlive
 pkgver=75246
 texliveyear=2025
 texlivedate=20250308
-pkgrel=5
+pkgrel=7
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -16,7 +16,7 @@ source=(
   $pkgname.install
 )
 sha256sums=('SKIP'
-            'ebea8fc751f65b58fe2034a6614e7dfd29c0234dfaa733555623e8461e862133'
+            '267b117ae49594b3fa7b5282c2be06473828fab66dd007ae9e3b5857824da8cf'
             'SKIP'
             '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')
 
@@ -34,7 +34,7 @@ stage1_pkgs=(
   scheme-infraonly
   scheme-minimal
   dehyph-exptl
-  # hyphen-afrikaans
+  hyphen-afrikaans
 )
 stage2_pkgs=(
   scheme-basic
