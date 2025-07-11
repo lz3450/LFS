@@ -22,7 +22,7 @@ declare -ar SCRIPT_CMDLINE=("$0" "$@")
 ### options and arguments
 arg_repo=""
 arg_single_package=""
-declare -i opt_stage
+arg_stage=""
 declare -i opt_updatepkg=1
 declare -i opt_updated_only=0
 declare -i opt_install=0
@@ -49,7 +49,7 @@ Usage: $SCRIPT_NAME [ -n | -u ] [ --no-check ] [ --no-clean ] -r <repo> -s <stag
 
     -h, --help                  display this help message and exit
     -r, --repo                  target repository (kzl, jammy, noble, ...)
-    -s, --stage                 target stage (0, 1(default), 2, 3; some repo are not using this)
+    -s, --stage                 target stage (0, 1, 2(default), 3; some repo are not using this)
     -p, --package               build single package
     -n, --no-updatepkg          do not update the PKGBUILD before building
     -u, --updated-only          build the package only if the PKGBUILD is updated
@@ -69,29 +69,36 @@ while (( $# > 0 )); do
     -r|--repo)
         shift
         arg_repo="$1"
+        readonly arg_repo
         ;;
     -s|--stage)
         shift
-        opt_stage="$1"
+        arg_stage="$1"
         ;;
     -p|--package)
         shift
         arg_single_package="$1"
+        readonly arg_single_package
         ;;
     -n|--no-updatepkg)
         opt_updatepkg=0
+        readonly opt_updatepkg
         ;;
     -u|--updated-only)
         opt_updated_only=1
+        readonly opt_updated_only
         ;;
     --no-clean)
         opt_no_clean=1
+        readonly opt_no_clean
         ;;
     --no-check)
         opt_no_check=1
+        readonly opt_no_check
         ;;
     -i|--install)
         opt_install=1
+        readonly opt_install
         ;;
     *)
         usage
@@ -121,14 +128,16 @@ if (( $opt_updatepkg == 0 )) && (( $opt_updated_only == 1 )); then
 fi
 
 if [[ -n "$arg_single_package" ]]; then
-    if [[ -n "$opt_stage" ]]; then
+    if [[ -n "$arg_stage" ]]; then
         error "Cannot use -s | --stage together with -p | --package" 128
     fi
 else
-    stage=${stage:-1}
+    # default arg_stage
+    arg_stage="${arg_stage:-2}"
+    readonly arg_stage
     case "$arg_repo" in
         kzl)
-            case "$opt_stage" in
+            case "$arg_stage" in
                 0)
                     # updaterepo --clear -r "$arg_repo"
                     pkgs=("${kzl_stage0_pkgs[@]}")
@@ -143,12 +152,12 @@ else
                     pkgs=("${kzl_stage3_pkgs[@]}")
                     ;;
                 *)
-                    error "Unknown stage \"$opt_stage\"" 128
+                    error "Unknown stage \"$arg_stage\"" 128
                     ;;
             esac
             ;;
         jammy|noble)
-            case "$opt_stage" in
+            case "$arg_stage" in
                 0)
                     pkgs=("${ubuntu_stage0_pkgs[@]}")
                     ;;
@@ -162,12 +171,12 @@ else
                     pkgs=("${ubuntu_stage2_pkgs[@]}")
                     ;;
                 *)
-                    error "Unknown stage \"$opt_stage\"" 128
+                    error "Unknown stage \"$arg_stage\"" 128
                     ;;
             esac
             ;;
         questing)
-            case "$opt_stage" in
+            case "$arg_stage" in
                 0)
                     pkgs=("${questing_stage0_pkgs[@]}")
                     ;;
@@ -175,7 +184,7 @@ else
                     pkgs=("${questing_stage1_pkgs[@]}")
                     ;;
                 *)
-                    error "Unknown stage \"$opt_stage\"" 128
+                    error "Unknown stage \"$arg_stage\"" 128
                     ;;
             esac
             ;;
@@ -233,8 +242,8 @@ build() {
     local _clean='--clean'
     local _no_check='--nocheck'
 
-    if [[ -n "$opt_stage" ]]; then
-        _log="$LOG_DIR/stage$opt_stage.$_pkgbase.log"
+    if [[ -n "$arg_stage" ]]; then
+        _log="$LOG_DIR/stage$arg_stage.$_pkgbase.log"
     else
         _log="$LOG_DIR/package.$_pkgbase.log"
     fi
@@ -248,13 +257,13 @@ build() {
     # run install-dependencies.sh if exists
     if [[ -f "install-dependencies.sh" ]]; then
         info "Running install-dependencies.sh..."
-        ./install-dependencies.sh >> "$_log" 2>&1
+        ./install-dependencies.sh >> "$_log"
     fi
 
     # update pkgbuild
     if (( $opt_updatepkg > 0 )); then
         info "Updating PKGBUILD..."
-        updatepkg --syncdeps || _updated=$?
+        updatepkg --syncdeps >> "$_log" || _updated=$?
         _cleanbuild='-e'
 
         if (( $_updated == 255 )); then
@@ -328,7 +337,7 @@ if [[ -n "$arg_single_package" ]]; then
     __pkg_total_time__=$((__pkg_end_time__ - __pkg_start_time__))
     log_cyan "Finished $arg_single_package: $(date -u -d "@$__pkg_total_time__" +%H:%M:%S) ($(date +%H:%M:%S))"
 else
-    log_blue "Building stage $opt_stage ($(date +%H:%M:%S))..."
+    log_blue "Building stage $arg_stage ($(date +%H:%M:%S))..."
     for p in ${pkgs[@]}; do
         log_magenta "Building $p ($(date +%H:%M:%S))..."
         __pkg_start_time__=$SECONDS
