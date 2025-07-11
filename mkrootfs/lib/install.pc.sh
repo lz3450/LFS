@@ -299,7 +299,6 @@ PARTUUID=$_root______________________partuuid       /var/log            btrfs   
 PARTUUID=$_root______________________partuuid       /var/cache          btrfs       $MOUNT_OPT,subvol=@cache                            0 1
 PARTUUID=$_root______________________partuuid       /.snapshots         btrfs       $MOUNT_OPT,subvol=@snapshots                        0 1
 PARTUUID=$_boot______________________partuuid       /boot/efi           vfat        $EFI_PARTITION_MOUNT_________________OPTIONS        0 2
-tmpfs                                               /tmp                tmpfs       rw,nodev,nosuid,mode=1777                           0 0
 PARTUUID=$_swap______________________partuuid       none                swap        defaults                                            0 0
 EOF
     ### 2. efi bootloader
