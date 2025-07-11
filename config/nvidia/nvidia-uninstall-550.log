@@ -1,8 +1,8 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log'
-creation time: Sat Jun  7 13:59:52 2025
-installer version: 550.135
+creation time: Thu Jul 10 23:07:47 2025
+installer version: 550.163.01
 
-PATH: /home/kzl/.local/bin:/home/kzl/.cargo/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin
+PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
 
 nvidia-installer command line:
     /usr/bin/nvidia-uninstall
@@ -13,17 +13,17 @@ nvidia-installer command line:
 Using built-in stream user interface
 -> Detected 16 CPUs online; setting concurrency level to 16.
 -> Scanning the initramfs with lsinitramfs...
--> Executing: /usr/bin/lsinitramfs   -l /boot/initrd.img-6.12.32-KZL
+-> Executing: /usr/bin/lsinitramfs   -l /boot/initrd.img-6.12.37-KZL
 -> If you plan to no longer use the NVIDIA driver, you should make sure that no X screens are configured to use the NVIDIA X driver in your X configuration file. If you used nvidia-xconfig to configure X, it may have created a backup of your original configuration. Would you like to run `nvidia-xconfig --restore-original-backup` to attempt restoration of the original X configuration file? (Answer: No)
 -> Parsing log file:
 -> done.
 -> Validating previous installation:
 -> Initramfs scan complete.
 -> done.
--> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-550135 (550.135)):
+-> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-55016301 (550.163.01)):
 -> done.
 -> Running ldconfig:
 -> done.
 -> Running `/usr/bin/systemctl daemon-reload`:
 -> done.
--> Uninstallation of existing driver: NVIDIA Accelerated Graphics Driver for Linux-x86_64 (550.135) is complete.
+-> Uninstallation of existing driver: NVIDIA Accelerated Graphics Driver for Linux-x86_64 (550.163.01) is complete.
