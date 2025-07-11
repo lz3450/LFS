@@ -91,7 +91,6 @@ chroot_setup() {
     _chroot_mount -t devpts     -o rw,nosuid,noexec,gid=5,mode=620,ptmxmode=000 devpts      "$chroot_dir/dev/pts"
     _chroot_mount -t tmpfs      -o rw,nosuid,nodev                              tmpfs       "$chroot_dir/dev/shm"
     _chroot_mount -t tmpfs      -o rw,nosuid,nodev,mode=755                     tmpfs       "$chroot_dir/run"
-    _chroot_mount -t tmpfs      -o rw,nosuid,nodev,mode=1777                    tmpfs       "$chroot_dir/tmp"
 
     _mount_resolv_conf
 
