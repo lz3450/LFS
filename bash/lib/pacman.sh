@@ -17,6 +17,13 @@ declare -r __PACMAN__="pacman.sh"
 LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR/log.sh"
 . "$LIBDIR/utils.sh"
+if [[ -f "/etc/makepkg.conf" ]]; then
+    . /etc/makepkg.conf
+elif [[ -f "/opt/etc/makepkg.conf" ]]; then
+    . /opt/etc/makepkg.conf
+else
+    error "makepkg.conf NOT found" 4
+fi
 
 ### constants & variables
 if [[ -f "/usr/bin/pacman" ]]; then
