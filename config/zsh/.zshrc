@@ -242,6 +242,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias now="date +%Y%m%d_%H%M%S"
 alias lfs="cd ~/LFS"
 alias aptupdate="sudo apt update && sudo apt upgrade --no-install-recommends"
 alias aptinstall="sudo apt install --no-install-recommends"
@@ -255,4 +256,4 @@ else
     alias pipinstall="python3 -m pip install --user -U --no-index --find-links ~/wheels"
     alias pipuninstall="python3 -m pip uninstall -y"
 fi
-alias now="date +%Y%m%d_%H%M%S"
+alias tlmgrinstall="tlmgr --usermode install"
