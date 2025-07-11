@@ -15,7 +15,7 @@ umask 0022
 declare -r SCRIPT_NAME="$(basename "$0")"
 declare -r SCRIPT_PATH="$(realpath --no-symlinks "$0")"
 declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-declare -ar SCRIPT_INVOCATION=("$@")
+declare -ar SCRIPT_CMDLINE=("$0" "$@")
 
 ################################################################################
 
@@ -91,14 +91,7 @@ declare -r -i CURRENT_PKGREL=$(grep -oP 'pkgrel=\K\d+$' PKGBUILD)
 declare -r -i NEW_PKGREL=$(($CURRENT_PKGREL + 1))
 
 ### libraries
-. "$SCRIPT_DIR"/lib/log.sh
-if [[ -f "/etc/makepkg.conf" ]]; then
-    . /etc/makepkg.conf
-elif [[ -f "/opt/etc/makepkg.conf" ]]; then
-    . /opt/etc/makepkg.conf
-else
-    error "makepkg.conf NOT found" 4
-fi
+. "$SCRIPT_DIR"/lib/pacman.sh
 . PKGBUILD || error "Failed get package information from PKGBUILD" 2
 unset new_version srcdir build_system pre_update post_update
 . PKGUPDATE || error "Failed to get new version from PKGUPDATE" 3

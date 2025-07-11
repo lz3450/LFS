@@ -15,7 +15,7 @@ umask 0022
 declare -r SCRIPT_NAME="$(basename "$0")"
 declare -r SCRIPT_PATH="$(realpath --no-symlinks "$0")"
 declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-declare -ar SCRIPT_INVOCATION=("$@")
+declare -ar SCRIPT_CMDLINE=("$0" "$@")
 
 ################################################################################
 
@@ -107,8 +107,8 @@ fi
 . "$SCRIPT_DIR"/lib/pacman.sh
 
 ### constants and variables
-PACKAGE_DIR="$HOME/makepkg/packages"
-ARCHIVE_DIR="$HOME/makepkg/archive"
+PACKAGE_DIR="$PKGDEST"
+ARCHIVE_DIR="${PKGDEST%/*}/archive"
 
 ### functions
 update() {
