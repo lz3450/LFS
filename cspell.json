@@ -6,7 +6,8 @@
         "config.txt",
         "config",
         "driver-help.txt",
-        "help.txt"
+        "help.txt",
+        "makepkg.conf*"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
