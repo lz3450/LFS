@@ -80,7 +80,18 @@ clean_rootfs() {
 
     _utils_debug "Cleaning rootfs..."
     # general
-    delete_all_contents "$_rootfs_dir"/run/
+    if mountpoint -q "$_rootfs_dir/dev"; then
+        _utils_warn "$_rootfs_dir/dev is a mountpoint, skipping /dev cleanup"
+        ls -lA "$_rootfs_dir/dev/"
+    else
+        delete_all_contents "$_rootfs_dir/dev/"
+    fi
+    if mountpoint -q "$_rootfs_dir/run"; then
+        _utils_warn "$_rootfs_dir/run is a mountpoint, skipping /run cleanup"
+        ls -lA "$_rootfs_dir/run/"
+    else
+        delete_all_contents "$_rootfs_dir/run/"
+    fi
     delete_all_contents "$_rootfs_dir"/tmp/
     delete_all_contents "$_rootfs_dir"/usr/share/doc/
     delete_all_contents "$_rootfs_dir"/var/cache/
@@ -91,10 +102,6 @@ clean_rootfs() {
     # pacman
     delete_all_contents "$_rootfs_dir"/var/lib/pacman/
     find "$_rootfs_dir" -type f \( -name '*.pacnew' -o -name '*.pacsave' \) -delete
-    # check if the directory is empty
-    if ! dir_empty "$_rootfs_dir"/dev/; then
-        _utils_warn "/dev is not empty"
-    fi
     _utils_debug "Done"
 }
 
