@@ -164,7 +164,8 @@ fi
 ### constants
 declare -r TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
 
-declare -r WORK_DIR="/tmp/mkrootfs_bootstrap_$TIMESTAMP"
+# declare -r WORK_DIR="/tmp/mkrootfs_bootstrap_$TIMESTAMP"
+declare -r WORK_DIR="/var/cache/mkrootfs/mkrootfs_bootstrap_$TIMESTAMP"
 declare -r ROOTFS_DIR="$WORK_DIR/rootfs"
 declare -r LOG_DIR="$WORK_DIR/log"
 
