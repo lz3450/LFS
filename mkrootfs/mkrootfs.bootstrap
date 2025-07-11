@@ -18,7 +18,7 @@ umask 0022
 declare -r SCRIPT_NAME="$(basename "$0")"
 declare -r SCRIPT_PATH="$(realpath --no-symlinks "$0")"
 declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-declare -ar SCRIPT_INVOCATION=("$@")
+declare -ar SCRIPT_CMDLINE=("$0" "$@")
 
 ################################################################################
 
@@ -153,6 +153,14 @@ readonly pacman_pkgs
 
 ################################################################################
 
+if [[ -z "${MKROOTFS_UNSHARED:-}" ]]; then
+    info "Enter new mount namespace"
+    exec unshare --mount --mount-proc --propagation private \
+        env MKROOTFS_UNSHARED=1 "${SCRIPT_CMDLINE[@]}"
+fi
+
+################################################################################
+
 ### constants
 declare -r TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
 
@@ -179,9 +187,6 @@ make_work_dirs() {
         mkdir -p -- "$PKGLIST_DIR"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
     fi
-
-    mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
-    mount --make-private "$ROOTFS_DIR"
 }
 
 debootstrap_rootfs() {
@@ -209,7 +214,7 @@ debootstrap_rootfs() {
         "$arg_suite" \
         "$ROOTFS_DIR" \
         "$deb_mirror" \
-        2> /dev/null | sed 's/ /\n/g' | LC_ALL=C sort -n  | sed '/^$/d' > "$_deb_pkg_to_install"
+        | sed 's/ /\n/g' | LC_ALL=C sort -n  | sed '/^$/d' > "$_deb_pkg_to_install"
 
     info "Debootstrapping \"$ROOTFS_DIR/\"..."
     local _foreign=""
@@ -226,7 +231,7 @@ debootstrap_rootfs() {
         "$arg_suite" \
         "$ROOTFS_DIR" \
         "$deb_mirror" \
-        > "$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap rootfs" 2
+        > "$LOG_DIR"/debootstrap.log || error "Failed to debootstrap rootfs" 2
     if [[ -n "$_foreign" ]]; then
         chroot "$ROOTFS_DIR" /debootstrap/debootstrap --second-stage >> "$LOG_DIR"/debootstrap.log 2>&1 || error "Failed to debootstrap (stage 2) rootfs" 3
     fi
@@ -242,8 +247,10 @@ debootstrap_rootfs() {
         sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/$distro.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/$distro.sources"
     fi
 
+    mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
+    mount --make-private "$ROOTFS_DIR"
     chroot_setup "$ROOTFS_DIR"
-    deb_apt_install "$ROOTFS_DIR" ADDITIONAL_DEB_PKGS
+    deb_apt_install "$ROOTFS_DIR" ADDITIONAL_DEB_PKGS > "$LOG_DIR/deb_apt_install.log"
     deb_set_locale "$ROOTFS_DIR"
     deb_get_installed_pkgs "$ROOTFS_DIR" > "$_deb_pkgs_installed"
     chroot_teardown
