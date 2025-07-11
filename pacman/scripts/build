@@ -3,6 +3,8 @@
 # build
 #
 
+declare -r __DEBUG__=1
+
 set -e
 set -o pipefail
 # set -u
@@ -10,18 +12,12 @@ set -o pipefail
 
 umask 0022
 
-SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(realpath "$0")"
-SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+declare -r SCRIPT_NAME="$(basename "$0")"
+declare -r SCRIPT_PATH="$(realpath --no-symlinks "$0")"
+declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+declare -ar SCRIPT_CMDLINE=("$0" "$@")
 
 ################################################################################
-
-### libraries
-. "$SCRIPT_DIR"/lib/log.sh
-. "$SCRIPT_DIR"/lib/pacman.sh
-
-### constants & variables
-LOG_DIR="$HOME"/makepkg/log
 
 ### options and arguments
 arg_repo=""
@@ -33,142 +29,16 @@ declare -i opt_install=0
 declare -i opt_no_clean=0
 declare -i opt_no_check=0
 
+### constants and variables
 repo_pkgbuilds_dirs=()
 
-### domain specific libraries
+### bash utils
+. "$SCRIPT_DIR"/lib/log.sh
+
+### libraries
 . "$SCRIPT_DIR"/pkglists.sh
 
-### functions
-prepare() {
-    local _log="$LOG_DIR/prepare.log"
-
-    if [[ ! -d "$LOG_DIR" ]]; then
-        sudo mkdir -vp /var/cache/makepkg/log
-        sudo chown "${SUDO_UID}:${SUDO_GID}" -R /var/cache/makepkg
-        ln -sf /var/cache/makepkg -T "$HOME/makepkg"
-    fi
-
-    info "Cleaning pacman cache and database..."
-    sudo pacman -Scc --noconfirm
-    info "Done (Cleaned pacman cache and database)"
-
-    info "Updating repo..."
-    updaterepo -r "$arg_repo" 2>&1 | tee -a "$_log"
-    info "Done (Updated repo)"
-
-    info "Synchronizing package databases..."
-    sudo pacman -Syy --noconfirm
-    info "Done (Synchronized package databases)"
-}
-
-_get_pkg_dir() {
-    local _pkgbase="$1"
-    local _pkgbuilds_dir
-    readarray -t _pkgbuilds_dir < <(find "${repo_pkgbuilds_dirs[@]}" -mindepth 1 -maxdepth 1 -type d -name "$_pkgbase" -print)
-
-    if (( ${#_pkgbuilds_dir[@]} != 1 )); then
-        error "Failed to find package directory for \"$_pkgbase\"" 2
-    fi
-
-    info "Package directory: ${_pkgbuilds_dir[0]}"
-    echo "${_pkgbuilds_dir[0]}"
-}
-
-build() {
-    local _pkgname="$1"
-    local _pkgbase=$(pacman_get_pkgbase "$_pkgname")
-    local _log
-    local -i _updated=0
-    local _cleanbuild='-C'
-    local _clean='--clean'
-    local _no_check='--nocheck'
-
-    if [[ -n "$opt_stage" ]]; then
-        _log="$LOG_DIR/stage$opt_stage.$_pkgbase.log"
-    else
-        _log="$LOG_DIR/$_pkgbase.log"
-    fi
-
-    if [[ -f "$_log" ]]; then
-        mv "$_log" "${_log/.log/.old.log}"
-    fi
-
-    cd $(_get_pkg_dir "$_pkgbase")
-
-    # run install-dependencies.sh if exists
-    if [[ -f "install-dependencies.sh" ]]; then
-        info "Running install-dependencies.sh..."
-        ./install-dependencies.sh >> "$_log" 2>&1
-        info "Done (install-dependencies.sh)"
-    fi
-
-    # update pkgbuild
-    if (( $opt_updatepkg > 0 )); then
-        info "Updating PKGBUILD..."
-        updatepkg --syncdeps >> "$_log" 2>&1 || _updated=$?
-        _cleanbuild='-e'
-
-        if (( $_updated == 255 )); then
-            error "  Current version is newer" 3
-        elif (( $_updated == 0 )); then
-            info "  No update for PKGBUILD"
-        elif (( $_updated == 1 )); then
-            info "  Successfully updated package \"$_pkgbase\" to new version"
-        elif (( $_updated == 2 )); then
-            error "  PKGBUILD does not exist" 2
-        elif (( $_updated == 3 )); then
-            warn "  PKGUPDATE does not exist"
-            _cleanbuild='-C'
-        elif (( $_updated >= 4 )); then
-            error "  Failed to update the PKGBUILD (error code: $_updated)" 3
-        else
-            error "  Unknown \`updatepkg\` result" 3
-        fi
-
-        if (( $opt_updated_only > 0 && $_updated == 0 )) && pacman -Q "$_pkgname" ;then
-            # Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)
-            info "Skip building"
-            return
-        fi
-        if (( $_updated == 0 )); then
-            updatepkg -I >> "$_log" 2>&1
-        fi
-        info "Done (PKGBUILD updated)"
-    fi
-
-    info "Building package..."
-    if (( $opt_no_check == 0 )); then
-        _no_check=''
-    fi
-    if (( $opt_no_clean > 0 )); then
-        _clean=''
-    fi
-
-    makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm >> "$_log" 2>&1 || error "Failed to build package \"$_pkgbase\"" 1
-    info "Done (Built package)"
-
-    info "Getting package configuration log..."
-        sed -n '/^  -> Configuring...$/,/^  -> Compiling...$/{/^  -> Configuring...$/b;/^  -> Compiling...$/b;p}' "$_log" > config.txt
-        if [[ ! -s "config.txt" ]]; then
-            rm config.txt
-        fi
-    info "Done (Got package configuration log)"
-
-    info "Updating repo..."
-    updaterepo -r "$arg_repo" >> "$_log" 2>&1
-    sudo pacman -Sy 2>&1 | tee -a "$_log"
-    info "Done (Updated repo)"
-
-    if (( $opt_install > 0 )); then
-        info "Installing package..."
-        local -a _pkgnames=($(pacman_get_pkgnames "$_pkgname"))
-        # sudo pacman -Sddy --noconfirm --overwrite "*" "${_pkgnames[@]}" --config $pacman_conf >> "$_log" 2>&1
-        sudo pacman -S --noconfirm ${_pkgnames[@]} 2>&1 | tee -a "$_log"
-        echo "Package Contents:" >> "$_log" 2>&1
-        pacman -Ql "${_pkgnames[@]}" >> "$_log" 2>&1
-        info "Done (Installed package)"
-    fi
-}
+################################################################################
 
 usage() {
     cat << EOF
@@ -183,14 +53,12 @@ Usage: $SCRIPT_NAME [ -n | -u ] [ --no-check ] [ --no-clean ] -r <repo> -s <stag
     -p, --package               build single package
     -n, --no-updatepkg          do not update the PKGBUILD before building
     -u, --updated-only          build the package only if the PKGBUILD is updated
-    --no-clean                  skip cleaning up work files after build
-    --no-check                  do not run the check() function in the PKGBUILD
+        --no-clean              skip cleaning up work files after build
+        --no-check              do not run the check() function in the PKGBUILD
     -i, --install               install the package after building
 
 EOF
 }
-
-################################################################################
 
 while (( $# > 0 )); do
     case "$1" in
@@ -316,6 +184,135 @@ else
             ;;
     esac
 fi
+
+################################################################################
+
+### libraries
+. "$SCRIPT_DIR"/lib/pacman.sh
+
+### constants and variables
+declare -r LOG_DIR="${PKGDEST%/*}/log"
+
+### functions
+prepare() {
+    if [[ ! -d "$LOG_DIR" ]]; then
+        sudo mkdir -vp "$LOG_DIR"
+        sudo chown -R "${SUDO_UID}:${SUDO_GID}" "${PKGDEST%/*}"
+        ln -sf /var/cache/makepkg -T "$HOME/makepkg"
+    fi
+
+    info "Cleaning pacman cache and database..."
+    sudo pacman -Scc --noconfirm
+
+    info "Updating repo..."
+    updaterepo -r "$arg_repo"
+
+    info "Synchronizing package databases..."
+    sudo pacman -Syy --noconfirm
+}
+
+_get_pkg_dir() {
+    local _pkgbase="$1"
+    local _pkgbuilds_dir
+    readarray -t _pkgbuilds_dir < <(find "${repo_pkgbuilds_dirs[@]}" -mindepth 1 -maxdepth 1 -type d -name "$_pkgbase" -print)
+
+    if (( ${#_pkgbuilds_dir[@]} != 1 )); then
+        error "Failed to find package directory for \"$_pkgbase\"" 2
+    fi
+
+    debug "Package directory: ${_pkgbuilds_dir[0]}"
+    echo "${_pkgbuilds_dir[0]}"
+}
+
+build() {
+    local _pkgname="$1"
+    local _pkgbase=$(pacman_get_pkgbase "$_pkgname")
+    local _log
+    local -i _updated=0
+    local _cleanbuild='-C'
+    local _clean='--clean'
+    local _no_check='--nocheck'
+
+    if [[ -n "$opt_stage" ]]; then
+        _log="$LOG_DIR/stage$opt_stage.$_pkgbase.log"
+    else
+        _log="$LOG_DIR/package.$_pkgbase.log"
+    fi
+
+    if [[ -f "$_log" ]]; then
+        mv "$_log" "${_log/.log/.old.log}"
+    fi
+
+    cd $(_get_pkg_dir "$_pkgbase")
+
+    # run install-dependencies.sh if exists
+    if [[ -f "install-dependencies.sh" ]]; then
+        info "Running install-dependencies.sh..."
+        ./install-dependencies.sh >> "$_log" 2>&1
+    fi
+
+    # update pkgbuild
+    if (( $opt_updatepkg > 0 )); then
+        info "Updating PKGBUILD..."
+        updatepkg --syncdeps || _updated=$?
+        _cleanbuild='-e'
+
+        if (( $_updated == 255 )); then
+            error "  Current version is newer" 3
+        elif (( $_updated == 0 )); then
+            info "  No update for PKGBUILD"
+        elif (( $_updated == 1 )); then
+            info "  Successfully updated package \"$_pkgbase\" to new version"
+        elif (( $_updated == 2 )); then
+            error "  PKGBUILD does not exist" 2
+        elif (( $_updated == 3 )); then
+            warn "  PKGUPDATE does not exist"
+            _cleanbuild='-C'
+        elif (( $_updated >= 4 )); then
+            error "  Failed to update the PKGBUILD (error code: $_updated)" 3
+        else
+            error "  Unknown \`updatepkg\` result" 3
+        fi
+
+        if (( $opt_updated_only > 0 && $_updated == 0 )) && pacman -Q "$_pkgname" ;then
+            # Package \"$_pkgbase\" is already the latest version, will not build (-u, --build-only-updated)
+            info "Skip building"
+            return
+        fi
+        if (( $_updated == 0 )); then
+            updatepkg -I >> "$_log" 2>&1
+        fi
+    fi
+
+    info "Building package..."
+    if (( $opt_no_check == 0 )); then
+        _no_check=''
+    fi
+    if (( $opt_no_clean > 0 )); then
+        _clean=''
+    fi
+
+    makepkg -s -r "$_cleanbuild" -f "$_clean" "$_no_check" --noconfirm >> "$_log" 2>&1 || error "Failed to build package \"$_pkgbase\"" 1
+
+    info "Getting package configuration log..."
+        sed -n '/^  -> Configuring...$/,/^  -> Compiling...$/{/^  -> Configuring...$/b;/^  -> Compiling...$/b;p}' "$_log" > config.txt
+        if [[ ! -s "config.txt" ]]; then
+            rm config.txt
+        fi
+
+    info "Updating repo..."
+    updaterepo -r "$arg_repo" >> "$_log" 2>&1
+    sudo pacman -Sy 2>&1 | tee -a "$_log"
+
+    if (( $opt_install > 0 )); then
+        info "Installing package..."
+        local -a _pkgnames=($(pacman_get_pkgnames "$_pkgname"))
+        # sudo pacman -Sddy --noconfirm --overwrite "*" "${_pkgnames[@]}" --config $pacman_conf >> "$_log" 2>&1
+        sudo pacman -S --noconfirm ${_pkgnames[@]} 2>&1 | tee -a "$_log"
+        echo "Package Contents:" >> "$_log" 2>&1
+        pacman -Ql "${_pkgnames[@]}" >> "$_log" 2>&1
+    fi
+}
 
 ################################################################################
 

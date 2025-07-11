@@ -80,7 +80,7 @@ readonly opt_increase_only
 
 ################################################################################
 
-### constants & variables
+### constants and variables
 declare -r PKGBUILDDIR="$(pwd)"
 declare -r PKGBUILD_FILE_PATH="$(realpath PKGBUILD)"
 # PGP_KEY_SERVER="hkps://keyserver.ubuntu.com"
