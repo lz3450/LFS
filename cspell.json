@@ -13,6 +13,7 @@
     "dictionaries": [],
     "words": [
         "acmart",
+        "adjustbox",
         "alpm",
         "alsa",
         "AMDGPU",
@@ -117,6 +118,7 @@
         "efivars",
         "emptydirs",
         "ensurepip",
+        "enumitem",
         "erofs",
         "EXAMPLEDIR",
         "execstack",
@@ -499,6 +501,7 @@
         "systemtap",
         "sysusers",
         "sysv",
+        "tabularray",
         "tcltk",
         "teckit",
         "texk",
