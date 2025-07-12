@@ -37,6 +37,7 @@ stage1_pkgs=(
   hyphen-afrikaans
 )
 stage2_pkgs=(
+  ###
   scheme-basic
   ###
   collection-latexrecommended
@@ -53,7 +54,10 @@ stage2_pkgs=(
   inconsolata
   newtx
   ###
+  adjustbox
   algorithm2e
+  enumitem
+  tabularray
   ###
   acmart
   ieeetran
