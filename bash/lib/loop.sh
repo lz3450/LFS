@@ -61,12 +61,12 @@ loop_teardown() {
 
     local _loop_mountpoints=()
     local _mountpoints=()
-    readarray -t _loop_mountpoints < <(mount | grep "$_loop_device" | cut -d ' ' -f 3 | tac)
+    readarray -t _loop_mountpoints < <(mount | grep "$_loop_device" | cut -d ' ' -f 1 | tac)
 
     while (( ${#_loop_mountpoints[@]} > 0 )); do
         local _mp
         for _mp in "${_loop_mountpoints[@]}"; do
-            if ! umount -v -- "$_mp"; then
+            if ! umount -v "$_mp"; then
                 _mountpoints+=("$_mp")
                 _loop_warn "Failed to unmount \"$_mp\", retry later"
             fi
