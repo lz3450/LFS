@@ -282,25 +282,39 @@ configure_rootfs_platform_specific() {
     # fstab
     local _root______________________partuuid=$(blkid -s PARTUUID -o value "${partition_device_map[rootfs]}")
     local _boot______________________partuuid=$(blkid -s PARTUUID -o value "${partition_device_map[efi]}")
-    local _swap______________________partuuid=""
-    if [[ -n "${partition_device_map[swap]}" ]]; then
-        _swap______________________partuuid=$(blkid -s PARTUUID -o value "${partition_device_map[swap]}")
-    fi
     cat > "$ROOTFS_DIR"/etc/fstab << EOF
 # Static information about the filesystems.
 # See fstab(5) for details.
 
 # <device> <target> <type> <options> <dump> <pass>
 
+EOF
+    # root
+    if [[ "$rootfs_type" == "btrfs" ]]; then
+        cat >> "$ROOTFS_DIR"/etc/fstab << EOF
 PARTUUID=$_root______________________partuuid       /                   btrfs       $BTRFS_DEFAULT_MOUNT_OPT,subvol=@                   0 1
 PARTUUID=$_root______________________partuuid       /home               btrfs       $MOUNT_OPT,subvol=@home                             0 1
 PARTUUID=$_root______________________partuuid       /var                btrfs       $MOUNT_OPT,subvol=@var                              0 1
 PARTUUID=$_root______________________partuuid       /var/log            btrfs       $MOUNT_OPT,subvol=@log                              0 1
 PARTUUID=$_root______________________partuuid       /var/cache          btrfs       $MOUNT_OPT,subvol=@cache                            0 1
 PARTUUID=$_root______________________partuuid       /.snapshots         btrfs       $MOUNT_OPT,subvol=@snapshots                        0 1
+EOF
+    else
+        cat >> "$ROOTFS_DIR"/etc/fstab << EOF
+PARTUUID=$_root______________________partuuid       /                   ext4        $MOUNT_OPT                                          0 1
+EOF
+    fi
+    # boot
+    cat >> "$ROOTFS_DIR"/etc/fstab << EOF
 PARTUUID=$_boot______________________partuuid       /boot/efi           vfat        $EFI_PARTITION_MOUNT_________________OPTIONS        0 2
+EOF
+    # swap
+    if [[ -n "${partition_device_map[swap]}" ]]; then
+        local _swap______________________partuuid=$(blkid -s PARTUUID -o value "${partition_device_map[swap]}")
+        cat >> "$ROOTFS_DIR"/etc/fstab << EOF
 PARTUUID=$_swap______________________partuuid       none                swap        defaults                                            0 0
 EOF
+    fi
     ### 2. efi bootloader
     mkdir -vp -- "$ROOTFS_DIR"/boot/efi/loader/entries
     cat > "$ROOTFS_DIR"/boot/efi/loader/loader.conf << EOF
@@ -381,6 +395,7 @@ post_configure_rootfs() {
 cleanup_platform_specific() {
     set +e
     if (( opt_loop > 0 )); then
+        sync
         loop_teardown "$loop_device"
     fi
 }
