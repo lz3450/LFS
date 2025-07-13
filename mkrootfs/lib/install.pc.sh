@@ -219,7 +219,11 @@ prepare_rootfs() {
 
     # mkfs
     mkfs.fat -F 32 -n BOOT -- "${partition_device_map[efi]}"
-    "mkfs.$rootfs_type" -f -L ROOT -- "${partition_device_map[rootfs]}"
+    if [[ "$rootfs_type" == "btrfs" ]]; then
+        mkfs.btrfs -f -L ROOT -- "${partition_device_map[rootfs]}"
+    else
+        mkfs.ext4 -F -L ROOT -- "${partition_device_map[rootfs]}"
+    fi
     if [[ -n "${partition_device_map[swap]}" ]]; then
         mkswap -L SWAP -- "${partition_device_map[swap]}"
     fi
