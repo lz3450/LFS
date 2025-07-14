@@ -1,5 +1,5 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-driver-install-550.log'
-creation time: Thu Jul 10 23:06:56 2025
+creation time: Sun Jul 13 23:30:40 2025
 installer version: 550.163.01
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
@@ -24,9 +24,7 @@ nvidia-installer command line:
 chdir("./")
 Using: nvidia-installer ncurses v6 user interface
 -> Concurrency level set to 16 on the command line.
--> Scanning the initramfs with lsinitramfs...
--> /usr/bin/lsinitramfs does not take a kernel argument.
--> Initramfs scan failed.
+-> Unable to scan initramfs: no tool found
 -> Concurrency level (Answer: '16')
 -> Searching for system utilities:
 -> found `ldconfig` : `/usr/sbin/ldconfig`
@@ -35,6 +33,7 @@ Using: nvidia-installer ncurses v6 user interface
 -> found `tail` : `/usr/bin/tail`
 -> found `objcopy` : `/usr/bin/objcopy`
 -> found `chcon` : `/usr/bin/chcon`
+-> found `pkg-config` : `/usr/bin/pkg-config`
 -> found `openssl` : `/usr/bin/openssl`
 -> found `systemctl` : `/usr/bin/systemctl`
 -> found `tar` : `/usr/bin/tar`
@@ -82,38 +81,37 @@ Using: nvidia-installer ncurses v6 user interface
 -> done.
 -> Kernel module compilation complete.
 -> Kernel messages:
+[    5.331662] wlo1: send auth to 48:22:54:a0:c5:9a (try 1/3)
+[    5.362302] wlo1: authenticated
+[    5.363140] wlo1: associate with 48:22:54:a0:c5:9a (try 1/3)
+[    5.371825] wlo1: RX AssocResp from 48:22:54:a0:c5:9a (capab=0x1511 status=0 aid=1)
+[    5.381795] wlo1: associated
+[    5.487396] wlo1: Limiting TX power to 27 (30 - 3) dBm as advertised by 48:22:54:a0:c5:9a
+[    7.242501] Initializing XFRM netlink socket
+[    7.323579] bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+[  192.230040] nvidia: loading out-of-tree module taints kernel.
+[  192.230046] nvidia: module license 'NVIDIA' taints kernel.
+[  192.230047] Disabling lock debugging due to kernel taint
+[  192.230049] nvidia: module license taints kernel.
+[  192.714572] nvidia-nvlink: Nvlink Core is being initialized, major device number 240
 
-[ 3288.817004] nvidia 0000:01:00.0: vgaarb: VGA decodes changed: olddecodes=none,decodes=none:owns=none
-[ 3288.860570] NVRM: loading NVIDIA UNIX x86_64 Kernel Module  550.163.01  Tue Apr  8 12:41:17 UTC 2025
-[ 3288.887249] nvidia-modeset: Loading NVIDIA Kernel Mode Setting Driver for UNIX platforms  550.163.01  Tue Apr  8 12:09:34 UTC 2025
-[ 3288.888815] [drm] [nvidia-drm] [GPU ID 0x00000100] Loading driver
-[ 3288.888817] [drm] Initialized nvidia-drm 0.0.0 for 0000:01:00.0 on minor 1
-[ 3301.553141] nvidia_uvm: module uses symbols nvUvmInterfaceDisableAccessCntr from proprietary module nvidia, inheriting taint.
-[ 3301.563679] nvidia-uvm: Loaded the UVM driver, major device number 238.
-[ 4342.902051] nvidia-uvm: Unloaded the UVM driver.
-[ 4342.928897] [drm] [nvidia-drm] [GPU ID 0x00000100] Unloading driver
-[ 4342.952629] nvidia-modeset: Unloading
-[ 4342.976001] nvidia-nvlink: Unregistered Nvlink Core, major device number 240
-[ 4372.126105] nvidia-nvlink: Nvlink Core is being initialized, major device number 240
-
-[ 4372.126856] nvidia 0000:01:00.0: vgaarb: VGA decodes changed: olddecodes=none,decodes=none:owns=none
-[ 4372.172176] NVRM: loading NVIDIA UNIX x86_64 Kernel Module  550.163.01  Tue Apr  8 12:41:17 UTC 2025
-[ 4372.188406] nvidia_uvm: module uses symbols nvUvmInterfaceDisableAccessCntr from proprietary module nvidia, inheriting taint.
-[ 4372.203890] nvidia-uvm: Loaded the UVM driver, major device number 238.
-[ 4372.221648] nvidia-modeset: Loading NVIDIA Kernel Mode Setting Driver for UNIX platforms  550.163.01  Tue Apr  8 12:09:34 UTC 2025
-[ 4372.223325] [drm] [nvidia-drm] [GPU ID 0x00000100] Loading driver
-[ 4372.223327] [drm] Initialized nvidia-drm 0.0.0 for 0000:01:00.0 on minor 1
-[ 4372.225017] [drm] [nvidia-drm] [GPU ID 0x00000100] Unloading driver
-[ 4372.238060] nvidia-modeset: Unloading
-[ 4372.267069] nvidia-uvm: Unloaded the UVM driver.
-[ 4372.277007] nvidia-nvlink: Unregistered Nvlink Core, major device number 240
+[  192.715318] nvidia 0000:01:00.0: vgaarb: VGA decodes changed: olddecodes=io+mem,decodes=none:owns=none
+[  192.763365] NVRM: loading NVIDIA UNIX x86_64 Kernel Module  550.163.01  Tue Apr  8 12:41:17 UTC 2025
+[  192.767566] nvidia_uvm: module uses symbols nvUvmInterfaceDisableAccessCntr from proprietary module nvidia, inheriting taint.
+[  192.777320] nvidia-uvm: Loaded the UVM driver, major device number 238.
+[  192.795191] nvidia-modeset: Loading NVIDIA Kernel Mode Setting Driver for UNIX platforms  550.163.01  Tue Apr  8 12:09:34 UTC 2025
+[  192.796853] [drm] [nvidia-drm] [GPU ID 0x00000100] Loading driver
+[  192.796854] [drm] Initialized nvidia-drm 0.0.0 for 0000:01:00.0 on minor 1
+[  192.798567] [drm] [nvidia-drm] [GPU ID 0x00000100] Unloading driver
+[  192.807312] nvidia-modeset: Unloading
+[  192.828446] nvidia-uvm: Unloaded the UVM driver.
+[  192.837811] nvidia-nvlink: Unregistered Nvlink Core, major device number 240
 -> X installation prefix (only under rare circumstances should this be changed from the default) (Answer: '/usr')
 -> X installation prefix is: '/usr'
 WARNING: nvidia-installer was forced to guess the X library path '/usr/lib' and X module path '/usr/lib/xorg/modules'; these paths were not queryable from the system.  If X fails to find the NVIDIA X driver module, please install the `pkg-config` utility and the X.Org SDK/development package for your distribution and reinstall the driver.
 -> X library installation path (only under rare circumstances should this be changed from the default) (Answer: '/usr/lib')
 -> X library installation path is: '/usr/lib'
 -> X module installation path (only under rare circumstances should this be changed from the default) (Answer: '/usr/lib/xorg/modules')
--> The directory '/usr/lib/xorg/modules' does not exist; would you like to create it, or would you prefer to abort installation? (Answer: Create directory)
 -> X module installation path is: '/usr/lib/xorg/modules'
 -> OpenGL installation prefix (only under rare circumstances should this be changed from the default) (Answer: '/usr')
 -> OpenGL installation prefix is: '/usr'
@@ -131,7 +129,6 @@ WARNING: nvidia-installer was forced to guess the X library path '/usr/lib' and 
 -> Compat32 installation prefix (only under rare circumstances should this be changed from the default) (Answer: '/usr')
 -> Compat32 installation prefix is: '/usr'
 WARNING: Unable to find a suitable destination to install 32-bit compatibility libraries. Your system may not be set up for 32-bit compatibility. 32-bit compatibility files will not be installed; if you wish to install them, re-run the installation and set a valid directory with the --compat32-libdir option.
-WARNING: This NVIDIA driver package includes Vulkan components, but no Vulkan ICD loader was detected on this system. The NVIDIA Vulkan ICD will not function without the loader. Most distributions package the Vulkan loader; try installing the "vulkan-loader", "vulkan-icd-loader", or "libvulkan1" package.
 -> Uninstalling the previous installation
 -> done.
 Will install libglvnd libraries.
@@ -140,6 +137,7 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> done.
 -> Installing 'NVIDIA Accelerated Graphics Driver for Linux-x86_64' (550.163.01):
 -> Rebuilding initramfs:
+-> More than one tool for rebuilding initramfs detected. Which tool would you like to use? (Answer: None of these)
 -> Skipping initramfs rebuild.
 -> Installing: kernel/nvidia/nv-kernel.o_binary --> /usr/src/nvidia-550.163.01/nvidia/nv-kernel.o_binary
 -> Installing: kernel/nvidia/nv.c --> /usr/src/nvidia-550.163.01/nvidia/nv.c
@@ -525,10 +523,10 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Installing: nvidia-installer --> /usr/bin/nvidia-installer
 -> Installing: nvidia-modprobe --> /usr/bin/nvidia-modprobe
 -> Installing: nvidia-modprobe.1.gz --> /usr/share/man/man1/nvidia-modprobe.1.gz
--> Installing: systemd/system/nvidia-suspend.service --> /usr/lib/systemd/system/nvidia-suspend.service
--> Installing: systemd/system/nvidia-hibernate.service --> /usr/lib/systemd/system/nvidia-hibernate.service
--> Installing: systemd/system/nvidia-resume.service --> /usr/lib/systemd/system/nvidia-resume.service
--> Installing: systemd/system-sleep/nvidia --> /usr/lib/systemd/system-sleep/nvidia
+-> Installing: systemd/system/nvidia-suspend.service --> /lib/systemd/system/nvidia-suspend.service
+-> Installing: systemd/system/nvidia-hibernate.service --> /lib/systemd/system/nvidia-hibernate.service
+-> Installing: systemd/system/nvidia-resume.service --> /lib/systemd/system/nvidia-resume.service
+-> Installing: systemd/system-sleep/nvidia --> /lib/systemd/system-sleep/nvidia
 -> Installing: systemd/nvidia-sleep.sh --> /usr/bin/nvidia-sleep.sh
 -> Installing: libglvnd_install_checker/glvnd_check --> /usr/lib/nvidia/glvnd_check
 -> Installing: libglvnd_install_checker/libGLX_installcheck.so.0 --> /usr/lib/nvidia/libGLX_installcheck.so.0
@@ -623,7 +621,7 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Installing: kernel/nvidia-peermem/peer_mem.h --> /usr/src/nvidia-550.163.01/nvidia-peermem/peer_mem.h
 -> Installing: kernel/nvidia-peermem/nv-p2p.h --> /usr/src/nvidia-550.163.01/nvidia-peermem/nv-p2p.h
 -> Installing: nvidia-powerd --> /usr/bin/nvidia-powerd
--> Installing: systemd/system/nvidia-powerd.service --> /usr/lib/systemd/system/nvidia-powerd.service
+-> Installing: systemd/system/nvidia-powerd.service --> /lib/systemd/system/nvidia-powerd.service
 -> Installing: nvidia-dbus.conf --> /usr/share/doc/NVIDIA_GLX-1.0/nvidia-dbus.conf
 -> Installing: libnvidia-glcore.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-glcore.so.550.163.01
 -> Installing: libnvidia-tls.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-tls.so.550.163.01
@@ -719,3 +717,86 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Installing: libnvidia-allocator.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-allocator.so.550.163.01
 -> Installing: libnvidia-rtcore.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-rtcore.so.550.163.01
 -> Installing: libnvoptix.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvoptix.so.550.163.01
+-> Installing: nvoptix.bin --> /usr/share/nvidia/nvoptix.bin
+-> Installing: libnvidia-ngx.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-ngx.so.550.163.01
+-> Installing: nvidia-ngx-updater --> /usr/bin/nvidia-ngx-updater
+-> Installing: libnvidia-fbc.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-fbc.so.550.163.01
+-> Installing: libnvcuvid.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvcuvid.so.550.163.01
+-> Installing: libnvidia-encode.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-encode.so.550.163.01
+-> Installing: libnvidia-opticalflow.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-opticalflow.so.550.163.01
+-> Installing: libnvidia-pkcs11.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-pkcs11.so.550.163.01
+-> Installing: libnvidia-pkcs11-openssl3.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-pkcs11-openssl3.so.550.163.01
+-> Installing: /tmp/template-w6S4Vb --> /usr/src/nvidia-550.163.01/dkms.conf
+-> Deleting: /tmp/template-w6S4Vb
+-> Installing: kernel/nvidia.ko --> /lib/modules/6.12.37-KZL/kernel/drivers/video/nvidia.ko
+-> Installing: kernel/nvidia-uvm.ko --> /lib/modules/6.12.37-KZL/kernel/drivers/video/nvidia-uvm.ko
+-> Installing: kernel/nvidia-modeset.ko --> /lib/modules/6.12.37-KZL/kernel/drivers/video/nvidia-modeset.ko
+-> Installing: kernel/nvidia-drm.ko --> /lib/modules/6.12.37-KZL/kernel/drivers/video/nvidia-drm.ko
+-> Installing: kernel/nvidia-peermem.ko --> /lib/modules/6.12.37-KZL/kernel/drivers/video/nvidia-peermem.ko
+-> Installing: /tmp/template-sKP5o0 --> /usr/share/applications/nvidia-settings.desktop
+-> Deleting: /tmp/template-sKP5o0
+-> Creating symlink: /usr/bin/nvidia-uninstall -> nvidia-installer
+-> Creating symlink: /etc/systemd/system/systemd-suspend.service.wants/nvidia-suspend.service -> /lib/systemd/system/nvidia-suspend.service
+-> Creating symlink: /etc/systemd/system/systemd-hibernate.service.wants/nvidia-hibernate.service -> /lib/systemd/system/nvidia-hibernate.service
+-> Creating symlink: /etc/systemd/system/systemd-suspend.service.wants/nvidia-resume.service -> /lib/systemd/system/nvidia-resume.service
+-> Creating symlink: /etc/systemd/system/systemd-hibernate.service.wants/nvidia-resume.service -> /lib/systemd/system/nvidia-resume.service
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 -> libnvidia-ml.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-ml.so -> libnvidia-ml.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libcuda.so.1 -> libcuda.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libcuda.so -> libcuda.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-opencl.so.1 -> libnvidia-opencl.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0 -> libOpenCL.so.1.0.0
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libOpenCL.so.1 -> libOpenCL.so.1.0
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libOpenCL.so -> libOpenCL.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-ptxjitcompiler.so.1 -> libnvidia-ptxjitcompiler.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-ptxjitcompiler.so -> libnvidia-ptxjitcompiler.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libcudadebugger.so.1 -> libcudadebugger.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-nvvm.so.4 -> libnvidia-nvvm.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-nvvm.so -> libnvidia-nvvm.so.4
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libGLX_nvidia.so.0 -> libGLX_nvidia.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libGLX_indirect.so.0 -> libGLX_nvidia.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libOpenGL.so -> libOpenGL.so.0
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libGLESv1_CM.so.1 -> libGLESv1_CM.so.1.2.0
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libGLESv1_CM.so -> libGLESv1_CM.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libGLESv2.so.2 -> libGLESv2.so.2.1.0
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libGLESv2.so -> libGLESv2.so.2
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libGLX.so -> libGLX.so.0
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libGL.so.1 -> libGL.so.1.7.0
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libGL.so -> libGL.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libEGL.so.1 -> libEGL.so.1.1.0
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libEGL.so -> libEGL.so.1
+-> Creating symlink: /usr/lib/xorg/modules/extensions/libglxserver_nvidia.so -> libglxserver_nvidia.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libEGL_nvidia.so.0 -> libEGL_nvidia.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libGLESv2_nvidia.so.2 -> libGLESv2_nvidia.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libGLESv1_CM_nvidia.so.1 -> libGLESv1_CM_nvidia.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-cfg.so.1 -> libnvidia-cfg.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-cfg.so -> libnvidia-cfg.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/vdpau/libvdpau_nvidia.so.1 -> libvdpau_nvidia.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libvdpau_nvidia.so -> vdpau/libvdpau_nvidia.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-allocator.so.1 -> libnvidia-allocator.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-allocator.so -> libnvidia-allocator.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/gbm/nvidia-drm_gbm.so -> /usr/lib/x86_64-linux-gnu/libnvidia-allocator.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvoptix.so.1 -> libnvoptix.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-fbc.so.1 -> libnvidia-fbc.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-fbc.so -> libnvidia-fbc.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvcuvid.so.1 -> libnvcuvid.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvcuvid.so -> libnvcuvid.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-encode.so.1 -> libnvidia-encode.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-encode.so -> libnvidia-encode.so.1
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-opticalflow.so.1 -> libnvidia-opticalflow.so.550.163.01
+-> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-opticalflow.so -> libnvidia-opticalflow.so.1
+-> Creating symlink: /usr/lib/libGL.so.1 -> /usr/lib/x86_64-linux-gnu/libGL.so.1
+-> Executing: /usr/sbin/ldconfig
+   executing: '/usr/sbin/ldconfig'...
+-> Executing: /usr/sbin/depmod -a 6.12.37-KZL
+   executing: '/usr/sbin/depmod -a 6.12.37-KZL'...
+-> Executing: /usr/bin/systemctl daemon-reload
+   executing: '/usr/bin/systemctl daemon-reload'...
+-> done.
+-> Driver file installation is complete.
+-> No distribution post-install script found.
+-> Running post-install sanity check:
+-> done.
+-> Post-install sanity check passed.
+-> Would you like to run the nvidia-xconfig utility to automatically update your X configuration file so that the NVIDIA X driver will be used when you restart X?  Any pre-existing X configuration file will be backed up. (Answer: No)
+-> Installation of the NVIDIA Accelerated Graphics Driver for Linux-x86_64 (version: 550.163.01) is now complete.  Please update your xorg.conf file as appropriate; see the file /usr/share/doc/NVIDIA_GLX-1.0/README.txt for details.

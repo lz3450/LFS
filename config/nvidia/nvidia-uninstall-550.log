@@ -1,5 +1,5 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log'
-creation time: Thu Jul 10 23:07:47 2025
+creation time: Sun Jul 13 23:31:29 2025
 installer version: 550.163.01
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
@@ -12,15 +12,16 @@ nvidia-installer command line:
 
 Using built-in stream user interface
 -> Detected 16 CPUs online; setting concurrency level to 16.
--> Scanning the initramfs with lsinitramfs...
--> Executing: /usr/bin/lsinitramfs   -l /boot/initrd.img-6.12.37-KZL
+-> Unable to scan initramfs: no tool found
 -> If you plan to no longer use the NVIDIA driver, you should make sure that no X screens are configured to use the NVIDIA X driver in your X configuration file. If you used nvidia-xconfig to configure X, it may have created a backup of your original configuration. Would you like to run `nvidia-xconfig --restore-original-backup` to attempt restoration of the original X configuration file? (Answer: No)
 -> Parsing log file:
 -> done.
 -> Validating previous installation:
--> Initramfs scan complete.
 -> done.
 -> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-55016301 (550.163.01)):
+-> Failed to delete the directory '/etc/vulkan' (Directory not empty).
+WARNING: Failed to delete some directories. See /home/kzl/LFS/config/nvidia/nvidia-uninstall.log for details.
+-> Unable to delete directories created by previous installation.
 -> done.
 -> Running ldconfig:
 -> done.
