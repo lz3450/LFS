@@ -205,9 +205,7 @@ declare -r LOG_DIR="${PKGDEST%/*}/log"
 ### functions
 prepare() {
     if [[ ! -d "$LOG_DIR" ]]; then
-        sudo mkdir -vp "$LOG_DIR"
-        sudo chown -R "${SUDO_UID}:${SUDO_GID}" "${PKGDEST%/*}"
-        ln -sf /var/cache/makepkg -T "$HOME/makepkg"
+        mkdir -vp "$LOG_DIR"
     fi
 
     info "Cleaning pacman cache and database..."
