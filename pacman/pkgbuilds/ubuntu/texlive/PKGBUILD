@@ -2,7 +2,7 @@ pkgname=texlive
 pkgver=75246
 texliveyear=2025
 texlivedate=20250308
-pkgrel=7
+pkgrel=10
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -16,7 +16,7 @@ source=(
   $pkgname.install
 )
 sha256sums=('SKIP'
-            '267b117ae49594b3fa7b5282c2be06473828fab66dd007ae9e3b5857824da8cf'
+            '0c5dbae454f34aa6ac19df994ff1ecf09ba753883997997aaac3c30327e3ec0f'
             'SKIP'
             '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')
 
@@ -33,8 +33,13 @@ stage0_pkgs=(
 stage1_pkgs=(
   scheme-infraonly
   scheme-minimal
+  ###
   dehyph-exptl
   hyphen-afrikaans
+  hyphen-albanian
+  hyphen-ancientgreek
+  hyphen-arabic
+  hyphen-armenian
 )
 stage2_pkgs=(
   ###
@@ -57,6 +62,7 @@ stage2_pkgs=(
   adjustbox
   algorithm2e
   enumitem
+  minted
   tabularray
   ###
   acmart
@@ -211,7 +217,6 @@ EOF
   rm -rf "$_texmf_root"/texmf-dist/doc
   rm -rf "$_texmf_root"/tlpkg/tlperl
   rm -rf "$_texmf_root"/tlpkg/tlpobj
-  rm -rf "$_texmf_root"/tlpkg/tlpostcode
   rm -rf "$_texmf_root"/tlpkg/tlpostcode
   rm -rf "$_texmf_root"/tlpkg/tltcl
   find "$_texmf_root"/tlpkg/installer -mindepth 1 ! -name 'config.guess' -exec rm -vrf {} +
