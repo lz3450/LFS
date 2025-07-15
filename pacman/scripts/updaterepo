@@ -115,13 +115,16 @@ update() {
     local _pkg="$1"
     local _pkg_file="$(pacman_get_pkg_file "$_pkg" "$PACKAGE_DIR")"
 
-    mkdir -p -- "$ARCHIVE_DIR"
+    mkdir -vp -- "$ARCHIVE_DIR"
 
     if [[ -f "$PACKAGE_DIR/$_pkg_file" ]]; then
         info "Updating $pkgname..."
-        sudo cp -f -- "$PACKAGE_DIR/$_pkg_file" "$repo_dir"
-        mv -- "$PACKAGE_DIR/$_pkg_file" "$ARCHIVE_DIR"
-        sudo repo-add -R "$repo_path.$EXTENSION" "$repo_dir/$_pkg_file"
+        sudo repo-add -R "$repo_path.$EXTENSION" "$PACKAGE_DIR/$_pkg_file"
+        if [[ ! -f "$repo_dir/$_pkg_file" ]]; then
+            # repo-add will remove the new package if its version is same as the old one
+            sudo cp -vf -- "$PACKAGE_DIR/$_pkg_file" "$repo_dir/"
+        fi
+        mv -v -- "$PACKAGE_DIR/$_pkg_file" "$ARCHIVE_DIR"
     fi
 }
 
