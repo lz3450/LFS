@@ -1,6 +1,6 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
-# install-driver.sh
+# install-driver-550.sh
 #
 
 set -e
