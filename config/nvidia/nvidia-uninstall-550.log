@@ -1,5 +1,5 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log'
-creation time: Sun Jul 13 23:31:29 2025
+creation time: Fri Jul 18 10:11:46 2025
 installer version: 550.163.01
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
@@ -19,9 +19,6 @@ Using built-in stream user interface
 -> Validating previous installation:
 -> done.
 -> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-55016301 (550.163.01)):
--> Failed to delete the directory '/etc/vulkan' (Directory not empty).
-WARNING: Failed to delete some directories. See /home/kzl/LFS/config/nvidia/nvidia-uninstall.log for details.
--> Unable to delete directories created by previous installation.
 -> done.
 -> Running ldconfig:
 -> done.

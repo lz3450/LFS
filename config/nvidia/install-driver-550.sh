@@ -56,6 +56,8 @@ echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
 
 sudo chown "$(id -u):$(id -g)" "$LOG_FILE"
 sed -i '/-> Building kernel modules/,/-> done\./{/-> Building kernel modules/b;/-> done\./b;d}' "$LOG_FILE"
+sed -i '/-> Kernel messages:/,/-> X installation prefix/{/-> Kernel messages:/b;/-> X installation prefix/b;d}' "$LOG_FILE"
+
 
 if [[ -f "$SCRIPT_DIR/nvidia-uninstall.log" ]]; then
     sudo chown "$(id -u):$(id -g)" "$SCRIPT_DIR/nvidia-uninstall.log"
