@@ -1,5 +1,5 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log'
-creation time: Fri Jul 18 10:11:46 2025
+creation time: Fri Jul 18 10:31:41 2025
 installer version: 550.163.01
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
@@ -17,7 +17,9 @@ Using built-in stream user interface
 -> Parsing log file:
 -> done.
 -> Validating previous installation:
+-> The installed file '/usr/lib/x86_64-linux-gnu/libOpenGL.so.0' is not of the correct filetype.
 -> done.
+WARNING: Your driver installation has been altered since it was initially installed; this may happen, for example, if you have since installed the NVIDIA driver through a mechanism other than nvidia-installer (such as your distribution's native package management system).  nvidia-installer will attempt to uninstall as best it can.  Please see the file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log' for details.
 -> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-55016301 (550.163.01)):
 -> done.
 -> Running ldconfig:

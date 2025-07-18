@@ -1,5 +1,5 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-driver-install-550.log'
-creation time: Fri Jul 18 10:11:07 2025
+creation time: Fri Jul 18 10:31:05 2025
 installer version: 550.163.01
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
@@ -111,6 +111,8 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Searching for conflicting files:
 -> done.
 -> Installing 'NVIDIA Accelerated Graphics Driver for Linux-x86_64' (550.163.01):
+-> Deleting: /usr/lib/x86_64-linux-gnu/libOpenGL.so.0.0.0
+-> Deleting: /usr/lib/x86_64-linux-gnu/libOpenGL.so.0
 -> Rebuilding initramfs:
 -> More than one tool for rebuilding initramfs detected. Which tool would you like to use? (Answer: None of these)
 -> Skipping initramfs rebuild.
@@ -701,15 +703,15 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Installing: libnvidia-opticalflow.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-opticalflow.so.550.163.01
 -> Installing: libnvidia-pkcs11.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-pkcs11.so.550.163.01
 -> Installing: libnvidia-pkcs11-openssl3.so.550.163.01 --> /usr/lib/x86_64-linux-gnu/libnvidia-pkcs11-openssl3.so.550.163.01
--> Installing: /tmp/template-LutyrG --> /usr/src/nvidia-550.163.01/dkms.conf
--> Deleting: /tmp/template-LutyrG
+-> Installing: /tmp/template-zSYA1g --> /usr/src/nvidia-550.163.01/dkms.conf
+-> Deleting: /tmp/template-zSYA1g
 -> Installing: kernel/nvidia.ko --> /lib/modules/6.12.37-KZL/kernel/drivers/video/nvidia.ko
 -> Installing: kernel/nvidia-uvm.ko --> /lib/modules/6.12.37-KZL/kernel/drivers/video/nvidia-uvm.ko
 -> Installing: kernel/nvidia-modeset.ko --> /lib/modules/6.12.37-KZL/kernel/drivers/video/nvidia-modeset.ko
 -> Installing: kernel/nvidia-drm.ko --> /lib/modules/6.12.37-KZL/kernel/drivers/video/nvidia-drm.ko
 -> Installing: kernel/nvidia-peermem.ko --> /lib/modules/6.12.37-KZL/kernel/drivers/video/nvidia-peermem.ko
--> Installing: /tmp/template-20PUlU --> /usr/share/applications/nvidia-settings.desktop
--> Deleting: /tmp/template-20PUlU
+-> Installing: /tmp/template-aaoWOt --> /usr/share/applications/nvidia-settings.desktop
+-> Deleting: /tmp/template-aaoWOt
 -> Creating symlink: /usr/bin/nvidia-uninstall -> nvidia-installer
 -> Creating symlink: /etc/systemd/system/systemd-suspend.service.wants/nvidia-suspend.service -> /lib/systemd/system/nvidia-suspend.service
 -> Creating symlink: /etc/systemd/system/systemd-hibernate.service.wants/nvidia-hibernate.service -> /lib/systemd/system/nvidia-hibernate.service

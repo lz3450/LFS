@@ -30,6 +30,8 @@ if [[ ! -f "$DOWNLOADS_DIR/$RUNFILE" ]]; then
     wget -P "$DOWNLOADS_DIR" https://us.download.nvidia.com/XFree86/Linux-x86_64/$DRIVER_VERSION/$RUNFILE
 fi
 
+./install-dependencies.sh
+
 sudo rm -rf "$WORKDIR"
 bash "$DOWNLOADS_DIR/$RUNFILE" -A > driver-help-${DRIVER_VERSION%%.*}.txt
 bash "$DOWNLOADS_DIR/$RUNFILE" --extract-only --target "$WORKDIR"
