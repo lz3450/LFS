@@ -30,9 +30,13 @@ common_deb_pkgs=(
   ### gnome
   eog
   gnome-calculator
+  gnome-console
   gnome-power-manager
+  gnome-remote-desktop
   gnome-system-monitor
   gnome-terminal
+  gnome-text-editor
+  nautilus-extension-gnome-terminal
   seahorse
   ### ubuntu
   gsettings-ubuntu-schemas
@@ -58,21 +62,23 @@ common_deb_pkgs=(
 jammy_deb_pkgs=(
   ### gnome
   evince
-  gedit
   gnome-bluetooth
+  nautilus-extension-gnome-console
   gnome-startup-applications
   ### network
   network-manager-gnome
 )
 noble_deb_pkgs=(
+  ### gnome
+  evince
+  ### network
+  network-manager-gnome
 )
 questing_deb_pkgs=(
   ### ubuntu-minimal-desktop depends
   gnome-shell-extension-ubuntu-tiling-assistant
   ### gnome
   gnome-bluetooth-sendto
-  gnome-remote-desktop
-  gnome-text-editor
   papers
   ### network
   nm-connection-editor
