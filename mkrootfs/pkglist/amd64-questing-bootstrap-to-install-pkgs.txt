@@ -153,6 +153,7 @@ libxtables12
 libxxhash0
 libyaml-0-2
 libzstd1
+linux-sysctl-defaults
 locales
 login
 login.defs
@@ -180,6 +181,7 @@ python3-apt
 python3-cffi-backend
 python3-dbus
 python3-gi
+python3-linkify-it
 python3-markdown-it
 python3-mdurl
 python3-minimal
@@ -188,6 +190,7 @@ python3-netplan
 python3-pygments
 python3-rich
 python3-typing-extensions
+python3-uc-micro
 python3-yaml
 python3.13
 python3.13-minimal

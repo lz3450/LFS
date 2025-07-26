@@ -17,12 +17,6 @@ declare -r __INSTALL_LIVEOS__="install.liveos.sh"
 declare -r ISO_LABEL="LIVEOS"
 
 declare -ar COMMON_DEB_PKGS=(
-    ### general
-    nano
-    bash-completion
-    zsh
-    zsh-syntax-highlighting
-    zsh-autosuggestions
     ### disk
     parted fdisk
     smartmontools
@@ -34,9 +28,6 @@ declare -ar COMMON_DEB_PKGS=(
     # bcachefs-tools
     ### network
     iw wpasupplicant
-    wget curl
-    openssh-server
-    git
     ### kernel
     linux-image-generic
     # dracut
@@ -182,7 +173,7 @@ prepare_rootfs() {
 
     # mount
     mkdir -p "$ISOFS_DIR"
-    mount -v "${loop_device}p2" "$ISOFS_DIR"
+    mount -o "$MOUNT_OPT" -- "${loop_device}p2" "$ISOFS_DIR"
 
     exec 1>&3 3>&-
 }
