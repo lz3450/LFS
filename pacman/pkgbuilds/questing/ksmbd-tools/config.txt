@@ -1,12 +1,12 @@
 The Meson build system
 Version: 1.8.2
-Source dir: /home/kzl/makepkg/build/ksmbd-tools/src/ksmbd-tools
-Build dir: /home/kzl/makepkg/build/ksmbd-tools/src/ksmbd-tools/build
+Source dir: /var/cache/makepkg/build/ksmbd-tools/src/ksmbd-tools
+Build dir: /var/cache/makepkg/build/ksmbd-tools/src/ksmbd-tools/build
 Build type: native build
 Project name: ksmbd-tools
 Project version: 3.5.3
 C compiler for the host machine: cc (gcc 14.3.0 "cc (Ubuntu 14.3.0-1ubuntu1) 14.3.0")
-C linker for the host machine: cc ld.bfd 2.44.50.20250616
+C linker for the host machine: cc ld.bfd 2.44.50.20250707
 Host machine cpu family: x86_64
 Host machine cpu: x86_64
 Found pkg-config: YES (/usr/bin/pkg-config) 1.8.1
