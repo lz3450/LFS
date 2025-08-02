@@ -3,7 +3,7 @@
 pkgbase=linux
 pkgname=(linux linux-headers)
 pkgver=6.15.9
-pkgrel=5
+pkgrel=6
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -15,7 +15,7 @@ source=(
   config
 )
 sha256sums=('SKIP'
-            '8d1044ff7f4914c14c6a322b01b457452244b4471cbb77998b11d0aad2a375e1')
+            'bec412e38439b5f68b094b32dd33e9fda0db323f5ee6ff2d2ea6f482f2256bef')
 
 export LOCALVERSION="-KZL"
 export KBUILD_BUILD_HOST="Ubuntu"
