@@ -1,0 +1,1 @@
+../../ubuntu/cmake/install-dependecies.sh

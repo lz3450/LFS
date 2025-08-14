@@ -15,8 +15,10 @@ Configuration:
                           (for use only by package maintainers)
   --no-system-libs        use all cmake-provided third-party libraries
                           (default)
-  --system-curl           use system-installed curl library
-  --no-system-curl        use cmake-provided curl library (default)
+  --system-cppdap         use system-installed cppdap library
+  --no-system-cppdap      use cmake-provided cppdap library (default)
+  --system-curl           use system-installed curl library (default on macOS)
+  --no-system-curl        use cmake-provided curl library (default elsewhere)
   --system-expat          use system-installed expat library
   --no-system-expat       use cmake-provided expat library (default)
   --system-jsoncpp        use system-installed jsoncpp library
@@ -46,6 +48,9 @@ Configuration:
   --no-qt-gui             do not build the Qt-based GUI (default)
   --qt-qmake=<qmake>      use <qmake> as the qmake executable to find Qt
 
+  --debugger              enable debugger support (default if supported)
+  --no-debugger           disable debugger support
+
   --sphinx-info           build Info manual with Sphinx
   --sphinx-man            build man pages with Sphinx
   --sphinx-html           build html help with Sphinx
@@ -60,9 +65,9 @@ Directory and file names:
   --bindir=DIR            install binaries in PREFIX/DIR
                           [bin]
   --datadir=DIR           install data files in PREFIX/DIR
-                          [share/cmake-3.23]
+                          [share/cmake-3.31]
   --docdir=DIR            install documentation files in PREFIX/DIR
-                          [doc/cmake-3.23]
+                          [doc/cmake-3.31]
   --mandir=DIR            install man pages files in PREFIX/DIR/manN
                           [man]
   --xdgdatadir=DIR        install XDG specific files in PREFIX/DIR

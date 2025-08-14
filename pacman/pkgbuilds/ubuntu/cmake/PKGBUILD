@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=cmake
-pkgver=3.23.5
-pkgrel=1
+pkgver=3.31.8
+pkgrel=2
 epoch=
 pkgdesc="A powerful software build system"
 arch=('x86_64')
@@ -15,24 +15,11 @@ build() {
   cd CMake
 
   ./bootstrap \
-    --prefix=/usr/local \
+    --prefix=$PREFIX \
     --datadir=share/cmake \
     --docdir=share/doc/cmake \
     --mandir=share/man \
-    --parallel=$(nproc) \
-    --system-libs \
-    --system-curl \
-    --system-expat \
-    --system-jsoncpp \
-    --system-zlib \
-    --system-bzip2 \
-    --system-liblzma \
-    --system-nghttp2 \
-    --system-zstd \
-    --system-libarchive \
-    --system-librhash \
-    --system-libuv \
-    --no-qt-gui
+    --parallel=$(nproc)
 
   make
 }
