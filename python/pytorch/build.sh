@@ -33,6 +33,6 @@ sed -i \
 python3 -m pip wheel --wheel-dir ~/wheels --no-binary :all: -r requirements.txt
 python3 -m pip install --user -U --no-index --find-links ~/wheels -r requirements.txt
 
-CMAKE_ONLY=1 python3 setup.py build > ../build.log 2>&1
-ccmake build
+# CMAKE_ONLY=1 python3 setup.py build > ../build.log 2>&1
+# ccmake build
 python3 -m pip -v wheel --no-build-isolation .
