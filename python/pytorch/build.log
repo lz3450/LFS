@@ -1,0 +1,1100 @@
+Cloning into 'nccl'...
+Note: switching to '72d2432094d6ae36abd6e511c3a16a2d052dbf94'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+CMake Deprecation Warning at CMakeLists.txt:9 (cmake_policy):
+  The OLD behavior for policy CMP0126 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+
+
+-- The CXX compiler identification is GNU 11.4.0
+-- The C compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Not forcing any particular BLAS to be found
+-- Could not find ccache. Consider installing ccache to speed up compilation.
+-- Performing Test C_HAS_AVX_1
+-- Performing Test C_HAS_AVX_1 - Failed
+-- Performing Test C_HAS_AVX_2
+-- Performing Test C_HAS_AVX_2 - Success
+-- Performing Test C_HAS_AVX2_1
+-- Performing Test C_HAS_AVX2_1 - Failed
+-- Performing Test C_HAS_AVX2_2
+-- Performing Test C_HAS_AVX2_2 - Success
+-- Performing Test C_HAS_AVX512_1
+-- Performing Test C_HAS_AVX512_1 - Failed
+-- Performing Test C_HAS_AVX512_2
+-- Performing Test C_HAS_AVX512_2 - Success
+-- Performing Test CXX_HAS_AVX_1
+-- Performing Test CXX_HAS_AVX_1 - Failed
+-- Performing Test CXX_HAS_AVX_2
+-- Performing Test CXX_HAS_AVX_2 - Success
+-- Performing Test CXX_HAS_AVX2_1
+-- Performing Test CXX_HAS_AVX2_1 - Failed
+-- Performing Test CXX_HAS_AVX2_2
+-- Performing Test CXX_HAS_AVX2_2 - Success
+-- Performing Test CXX_HAS_AVX512_1
+-- Performing Test CXX_HAS_AVX512_1 - Failed
+-- Performing Test CXX_HAS_AVX512_2
+-- Performing Test CXX_HAS_AVX512_2 - Success
+-- Current compiler supports avx2 extension. Will build perfkernels.
+-- Performing Test CAFFE2_COMPILER_SUPPORTS_AVX512_EXTENSIONS
+-- Performing Test CAFFE2_COMPILER_SUPPORTS_AVX512_EXTENSIONS - Success
+-- Current compiler supports avx512f extension. Will build fbgemm.
+-- Performing Test COMPILER_SUPPORTS_HIDDEN_VISIBILITY
+-- Performing Test COMPILER_SUPPORTS_HIDDEN_VISIBILITY - Success
+-- Performing Test COMPILER_SUPPORTS_HIDDEN_INLINE_VISIBILITY
+-- Performing Test COMPILER_SUPPORTS_HIDDEN_INLINE_VISIBILITY - Success
+-- Performing Test COMPILER_SUPPORTS_RDYNAMIC
+-- Performing Test COMPILER_SUPPORTS_RDYNAMIC - Success
+-- Could not find hardware support for NEON on this machine.
+-- No OMAP3 processor on this machine.
+-- No OMAP4 processor on this machine.
+-- Performing Test CXX_HAS_SVE256
+-- Performing Test CXX_HAS_SVE256 - Failed
+-- Performing Test CXX_HAS_ARM_BF16
+-- Performing Test CXX_HAS_ARM_BF16 - Failed
+-- No SVE processor on this machine.
+-- Compiler does not support SVE extension. Will not build perfkernels.
+-- Found CUDA: /usr/local/cuda (found version "12.8") 
+-- The CUDA compiler identification is NVIDIA 12.8.93 with host compiler GNU 11.4.0
+-- Detecting CUDA compiler ABI info
+-- Detecting CUDA compiler ABI info - done
+-- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc - skipped
+-- Detecting CUDA compile features
+-- Detecting CUDA compile features - done
+-- Found CUDAToolkit: /usr/local/cuda/include (found version "12.8.93")
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- PyTorch: CUDA detected: 12.8
+-- PyTorch: CUDA nvcc is: /usr/local/cuda/bin/nvcc
+-- PyTorch: CUDA toolkit directory: /usr/local/cuda
+-- PyTorch: Header version is: 12.8
+-- Found Python: /opt/bin/python3 (found version "3.13.5") found components: Interpreter
+CMake Warning at cmake/public/cuda.cmake:140 (message):
+  Failed to compute shorthash for libnvrtc.so
+Call Stack (most recent call first):
+  cmake/Dependencies.cmake:44 (include)
+  CMakeLists.txt:863 (include)
+
+
+-- Found CUDNN: /usr/local/cuda/lib64/libcudnn.so
+-- Could NOT find CUSPARSELT (missing: CUSPARSELT_LIBRARY_PATH CUSPARSELT_INCLUDE_PATH) 
+CMake Warning at cmake/public/cuda.cmake:226 (message):
+  Cannot find cuSPARSELt library.  Turning the option off
+Call Stack (most recent call first):
+  cmake/Dependencies.cmake:44 (include)
+  CMakeLists.txt:863 (include)
+
+
+-- Could NOT find CUDSS (missing: CUDSS_LIBRARY_PATH CUDSS_INCLUDE_PATH) 
+CMake Warning at cmake/public/cuda.cmake:242 (message):
+  Cannot find CUDSS library.  Turning the option off
+Call Stack (most recent call first):
+  cmake/Dependencies.cmake:44 (include)
+  CMakeLists.txt:863 (include)
+
+
+-- Autodetected CUDA architecture(s):  7.5
+-- Added CUDA NVCC flags for: -gencode;arch=compute_75,code=sm_75
+CMake Warning at cmake/Dependencies.cmake:95 (message):
+  Not compiling with XPU.  Could NOT find SYCL.  Suppress this warning with
+  -DUSE_XPU=OFF.
+Call Stack (most recent call first):
+  CMakeLists.txt:863 (include)
+
+
+-- Building using own protobuf under third_party per request.
+-- Use custom protobuf build.
+CMake Deprecation Warning at third_party/protobuf/cmake/CMakeLists.txt:2 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- 
+-- 3.13.0.0
+-- Performing Test protobuf_HAVE_BUILTIN_ATOMICS
+-- Performing Test protobuf_HAVE_BUILTIN_ATOMICS - Success
+-- Caffe2 protobuf include directory: $<BUILD_INTERFACE:/home/kzl/LFS/python/pytorch/pytorch/third_party/protobuf/src>$<INSTALL_INTERFACE:include>
+-- Trying to find preferred BLAS backend of choice: MKL
+-- MKL_THREADING = OMP
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of void*
+-- Check size of void* - done
+-- MKL_THREADING = OMP
+CMake Warning at cmake/Dependencies.cmake:208 (message):
+  MKL could not be found.  Defaulting to Eigen
+Call Stack (most recent call first):
+  CMakeLists.txt:863 (include)
+
+
+CMake Warning at cmake/Dependencies.cmake:256 (message):
+  Preferred BLAS (MKL) cannot be found, now searching for a general BLAS
+  library
+Call Stack (most recent call first):
+  CMakeLists.txt:863 (include)
+
+
+-- MKL_THREADING = OMP
+-- Checking for [mkl_intel_lp64 - mkl_gnu_thread - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_intel_lp64: not found
+-- Checking for [mkl_intel_lp64 - mkl_intel_thread - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_intel_lp64: not found
+-- Checking for [mkl_intel - mkl_gnu_thread - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_intel: not found
+-- Checking for [mkl_intel - mkl_intel_thread - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_intel: not found
+-- Checking for [mkl_gf_lp64 - mkl_gnu_thread - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_gf_lp64: not found
+-- Checking for [mkl_gf_lp64 - mkl_intel_thread - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_gf_lp64: not found
+-- Checking for [mkl_gf - mkl_gnu_thread - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_gf: not found
+-- Checking for [mkl_gf - mkl_intel_thread - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_gf: not found
+-- Checking for [mkl_intel_lp64 - mkl_gnu_thread - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_intel_lp64: not found
+-- Checking for [mkl_intel_lp64 - mkl_intel_thread - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_intel_lp64: not found
+-- Checking for [mkl_intel - mkl_gnu_thread - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_intel: not found
+-- Checking for [mkl_intel - mkl_intel_thread - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_intel: not found
+-- Checking for [mkl_gf_lp64 - mkl_gnu_thread - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_gf_lp64: not found
+-- Checking for [mkl_gf_lp64 - mkl_intel_thread - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_gf_lp64: not found
+-- Checking for [mkl_gf - mkl_gnu_thread - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_gf: not found
+-- Checking for [mkl_gf - mkl_intel_thread - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_gf: not found
+-- Checking for [mkl_intel_lp64 - mkl_gnu_thread - mkl_core - pthread - m - dl]
+--   Library mkl_intel_lp64: not found
+-- Checking for [mkl_intel_lp64 - mkl_intel_thread - mkl_core - pthread - m - dl]
+--   Library mkl_intel_lp64: not found
+-- Checking for [mkl_intel - mkl_gnu_thread - mkl_core - pthread - m - dl]
+--   Library mkl_intel: not found
+-- Checking for [mkl_intel - mkl_intel_thread - mkl_core - pthread - m - dl]
+--   Library mkl_intel: not found
+-- Checking for [mkl_gf_lp64 - mkl_gnu_thread - mkl_core - pthread - m - dl]
+--   Library mkl_gf_lp64: not found
+-- Checking for [mkl_gf_lp64 - mkl_intel_thread - mkl_core - pthread - m - dl]
+--   Library mkl_gf_lp64: not found
+-- Checking for [mkl_gf - mkl_gnu_thread - mkl_core - pthread - m - dl]
+--   Library mkl_gf: not found
+-- Checking for [mkl_gf - mkl_intel_thread - mkl_core - pthread - m - dl]
+--   Library mkl_gf: not found
+-- Checking for [mkl_intel_lp64 - mkl_sequential - mkl_core - m - dl]
+--   Library mkl_intel_lp64: not found
+-- Checking for [mkl_intel - mkl_sequential - mkl_core - m - dl]
+--   Library mkl_intel: not found
+-- Checking for [mkl_gf_lp64 - mkl_sequential - mkl_core - m - dl]
+--   Library mkl_gf_lp64: not found
+-- Checking for [mkl_gf - mkl_sequential - mkl_core - m - dl]
+--   Library mkl_gf: not found
+-- Checking for [mkl_intel_lp64 - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_intel_lp64: not found
+-- Checking for [mkl_intel - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_intel: not found
+-- Checking for [mkl_gf_lp64 - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_gf_lp64: not found
+-- Checking for [mkl_gf - mkl_core - gomp - pthread - m - dl]
+--   Library mkl_gf: not found
+-- Checking for [mkl_intel_lp64 - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_intel_lp64: not found
+-- Checking for [mkl_intel - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_intel: not found
+-- Checking for [mkl_gf_lp64 - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_gf_lp64: not found
+-- Checking for [mkl_gf - mkl_core - iomp5 - pthread - m - dl]
+--   Library mkl_gf: not found
+-- Checking for [mkl_intel_lp64 - mkl_core - pthread - m - dl]
+--   Library mkl_intel_lp64: not found
+-- Checking for [mkl_intel - mkl_core - pthread - m - dl]
+--   Library mkl_intel: not found
+-- Checking for [mkl_gf_lp64 - mkl_core - pthread - m - dl]
+--   Library mkl_gf_lp64: not found
+-- Checking for [mkl_gf - mkl_core - pthread - m - dl]
+--   Library mkl_gf: not found
+-- Checking for [mkl - guide - pthread - m]
+--   Library mkl: not found
+-- MKL library not found
+-- Checking for [blis]
+--   Library blis: BLAS_blis_LIBRARY-NOTFOUND
+-- Checking for [Accelerate]
+--   Library Accelerate: BLAS_Accelerate_LIBRARY-NOTFOUND
+-- Checking for [vecLib]
+--   Library vecLib: BLAS_vecLib_LIBRARY-NOTFOUND
+-- Checking for [flexiblas]
+--   Library flexiblas: BLAS_flexiblas_LIBRARY-NOTFOUND
+-- Checking for [openblas]
+--   Library openblas: /usr/lib/x86_64-linux-gnu/libopenblas.so
+-- Looking for sgemm_
+-- Looking for sgemm_ - found
+-- Performing Test BLAS_F2C_DOUBLE_WORKS
+-- Performing Test BLAS_F2C_DOUBLE_WORKS - Failed
+-- Performing Test BLAS_F2C_FLOAT_WORKS
+-- Performing Test BLAS_F2C_FLOAT_WORKS - Success
+-- Performing Test BLAS_USE_CBLAS_DOT
+-- Performing Test BLAS_USE_CBLAS_DOT - Success
+-- Found a library with BLAS API (open). Full path: (/usr/lib/x86_64-linux-gnu/libopenblas.so)
+-- Looking for sbgemm_
+-- Looking for sbgemm_ - not found
+-- Using pocketfft in directory: /home/kzl/LFS/python/pytorch/pytorch/third_party/pocketfft/
+CMake Deprecation Warning at third_party/pthreadpool/CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Deprecation Warning at third_party/FXdiv/CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Deprecation Warning at third_party/cpuinfo/CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Deprecation Warning at aten/src/ATen/native/quantized/cpu/qnnpack/CMakeLists.txt:7 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- The ASM compiler identification is GNU
+-- Found assembler: /usr/bin/cc
+CMake Deprecation Warning at third_party/psimd/CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Deprecation Warning at third_party/FP16/CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Brace yourself, we are building NNPACK
+CMake Deprecation Warning at third_party/NNPACK/CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Performing Test NNPACK_ARCH_IS_X86_32
+-- Performing Test NNPACK_ARCH_IS_X86_32 - Failed
+CMake Warning (dev) at third_party/NNPACK/CMakeLists.txt:110 (FIND_PACKAGE):
+  Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+  are removed.  Run "cmake --help-policy CMP0148" for policy details.  Use
+  the cmake_policy command to set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found PythonInterp: /opt/bin/python3.13 (found version "3.13.5")
+-- NNPACK backend is x86-64
+-- Downloading six (Python package) to /home/kzl/LFS/python/pytorch/pytorch/build/confu-srcs/six (define PYTHON_SIX_SOURCE_DIR to avoid it)
+CMake Deprecation Warning at CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Warning (dev) at /opt/share/cmake/Modules/ExternalProject/shared_internal_commands.cmake:1276 (message):
+  The DOWNLOAD_EXTRACT_TIMESTAMP option was not given and policy CMP0135 is
+  not set.  The policy's OLD behavior will be used.  When using a URL
+  download, the timestamps of extracted files should preferably be that of
+  the time of extraction, otherwise code that depends on the extracted
+  contents might not be rebuilt if the URL changes.  The OLD behavior
+  preserves the timestamps from the archive instead, but this is usually not
+  what you want.  Update your project to the NEW behavior or specify the
+  DOWNLOAD_EXTRACT_TIMESTAMP option with a value of true to avoid this
+  robustness issue.
+Call Stack (most recent call first):
+  /opt/share/cmake/Modules/ExternalProject.cmake:3041 (_ep_add_download_command)
+  CMakeLists.txt:6 (ExternalProject_Add)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/kzl/LFS/python/pytorch/pytorch/build/confu-deps/six-download
+[1/9] Creating directories for 'six'
+[2/9] Performing download step (download, verify and extract) for 'six'
+-- Downloading...
+   dst='/home/kzl/LFS/python/pytorch/pytorch/build/confu-deps/six-download/six-prefix/src/six-1.11.0.tar.gz'
+   timeout='none'
+   inactivity timeout='none'
+-- Using src='https://pypi.python.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz'
+-- [download 100% complete]
+-- [download 55% complete]
+-- [download 69% complete]
+-- [download 100% complete]
+-- verifying file...
+       file='/home/kzl/LFS/python/pytorch/pytorch/build/confu-deps/six-download/six-prefix/src/six-1.11.0.tar.gz'
+-- Downloading... done
+-- extracting...
+     src='/home/kzl/LFS/python/pytorch/pytorch/build/confu-deps/six-download/six-prefix/src/six-1.11.0.tar.gz'
+     dst='/home/kzl/LFS/python/pytorch/pytorch/build/confu-srcs/six'
+-- extracting... [tar xfz]
+-- extracting... [analysis]
+-- extracting... [rename]
+-- extracting... [clean up]
+-- extracting... done
+[3/9] No update step for 'six'
+[4/9] No patch step for 'six'
+[5/9] No configure step for 'six'
+[6/9] No build step for 'six'
+[7/9] No install step for 'six'
+[8/9] No test step for 'six'
+[9/9] Completed 'six'
+-- Building for XNNPACK_TARGET_PROCESSOR: x86_64
+-- Generating microkernels.cmake
+Duplicate microkernel definition: src/qs8-qc4w-packw/gen/qs8-qc4w-packw-x8c8-gemm-goi-avx256vnni.c and src/qs8-qc4w-packw/gen/qs8-qc4w-packw-x8c8-gemm-goi-avxvnni.c (1th function)
+Duplicate microkernel definition: src/qs8-qc4w-packw/gen/qs8-qc4w-packw-x8c8-gemm-goi-avxvnni.c and src/qs8-qc4w-packw/gen/qs8-qc4w-packw-x8c8-gemm-goi-scalar.c
+No microkernel found in src/reference/binary-elementwise.cc
+No microkernel found in src/reference/packing.cc
+No microkernel found in src/reference/unary-elementwise.cc
+-- LLVM FileCheck Found: /opt/bin/FileCheck
+-- Found Git: /usr/bin/git (found version "2.34.1")
+-- Google Benchmark version: v1.9.3, normalized to 1.9.3
+-- Looking for shm_open in rt
+-- Looking for shm_open in rt - found
+-- Performing Test HAVE_CXX_FLAG_WALL
+-- Performing Test HAVE_CXX_FLAG_WALL - Success
+-- Performing Test HAVE_CXX_FLAG_WEXTRA
+-- Performing Test HAVE_CXX_FLAG_WEXTRA - Success
+-- Performing Test HAVE_CXX_FLAG_WSHADOW
+-- Performing Test HAVE_CXX_FLAG_WSHADOW - Success
+-- Performing Test HAVE_CXX_FLAG_WFLOAT_EQUAL
+-- Performing Test HAVE_CXX_FLAG_WFLOAT_EQUAL - Success
+-- Performing Test HAVE_CXX_FLAG_WOLD_STYLE_CAST
+-- Performing Test HAVE_CXX_FLAG_WOLD_STYLE_CAST - Success
+-- Performing Test HAVE_CXX_FLAG_WCONVERSION
+-- Performing Test HAVE_CXX_FLAG_WCONVERSION - Success
+-- Performing Test HAVE_CXX_FLAG_WERROR
+-- Performing Test HAVE_CXX_FLAG_WERROR - Success
+-- Performing Test HAVE_CXX_FLAG_WSUGGEST_OVERRIDE
+-- Performing Test HAVE_CXX_FLAG_WSUGGEST_OVERRIDE - Success
+-- Performing Test HAVE_CXX_FLAG_PEDANTIC
+-- Performing Test HAVE_CXX_FLAG_PEDANTIC - Success
+-- Performing Test HAVE_CXX_FLAG_PEDANTIC_ERRORS
+-- Performing Test HAVE_CXX_FLAG_PEDANTIC_ERRORS - Success
+-- Performing Test HAVE_CXX_FLAG_WSHORTEN_64_TO_32
+-- Performing Test HAVE_CXX_FLAG_WSHORTEN_64_TO_32 - Failed
+-- Performing Test HAVE_CXX_FLAG_FSTRICT_ALIASING
+-- Performing Test HAVE_CXX_FLAG_FSTRICT_ALIASING - Success
+-- Performing Test HAVE_CXX_FLAG_WNO_DEPRECATED_DECLARATIONS
+-- Performing Test HAVE_CXX_FLAG_WNO_DEPRECATED_DECLARATIONS - Success
+-- Performing Test HAVE_CXX_FLAG_WNO_DEPRECATED
+-- Performing Test HAVE_CXX_FLAG_WNO_DEPRECATED - Success
+-- Performing Test HAVE_CXX_FLAG_WSTRICT_ALIASING
+-- Performing Test HAVE_CXX_FLAG_WSTRICT_ALIASING - Success
+-- Performing Test HAVE_CXX_FLAG_WD654
+-- Performing Test HAVE_CXX_FLAG_WD654 - Failed
+-- Performing Test HAVE_CXX_FLAG_WTHREAD_SAFETY
+-- Performing Test HAVE_CXX_FLAG_WTHREAD_SAFETY - Failed
+-- Performing Test HAVE_CXX_FLAG_COVERAGE
+-- Performing Test HAVE_CXX_FLAG_COVERAGE - Success
+-- Compiling and running to test HAVE_STD_REGEX
+-- Performing Test HAVE_STD_REGEX -- success
+-- Compiling and running to test HAVE_GNU_POSIX_REGEX
+-- Performing Test HAVE_GNU_POSIX_REGEX -- failed to compile
+-- Compiling and running to test HAVE_POSIX_REGEX
+-- Performing Test HAVE_POSIX_REGEX -- success
+-- Compiling and running to test HAVE_STEADY_CLOCK
+-- Performing Test HAVE_STEADY_CLOCK -- success
+-- Compiling and running to test HAVE_PTHREAD_AFFINITY
+-- Performing Test HAVE_PTHREAD_AFFINITY -- success
+CMake Warning (dev) at third_party/fbgemm/CMakeLists.txt:97 (find_package):
+  Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+  are removed.  Run "cmake --help-policy CMP0148" for policy details.  Use
+  the cmake_policy command to set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Performing Test COMPILER_SUPPORTS_AVX512
+-- Performing Test COMPILER_SUPPORTS_AVX512 - Success
+-- Performing Test HAVE_GNU_F2H_IEEE
+-- Performing Test HAVE_GNU_F2H_IEEE - Failed
+-- MKL_THREADING = OMP
+-- Check OMP with lib /usr/lib/gcc/x86_64-linux-gnu/11/libgomp.so and flags -fopenmp -v
+-- MKL_THREADING = OMP
+-- Check OMP with lib /usr/lib/gcc/x86_64-linux-gnu/11/libgomp.so and flags -fopenmp -v
+CMake Warning (dev) at /opt/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
+  The package name passed to `find_package_handle_standard_args` (OpenMP_C)
+  does not match the name of the calling package (OpenMP).  This can lead to
+  problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  cmake/Modules/FindOpenMP.cmake:635 (find_package_handle_standard_args)
+  third_party/fbgemm/CMakeLists.txt:148 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found OpenMP_C: -fopenmp (found version "4.5")
+CMake Warning (dev) at /opt/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
+  The package name passed to `find_package_handle_standard_args` (OpenMP_CXX)
+  does not match the name of the calling package (OpenMP).  This can lead to
+  problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  cmake/Modules/FindOpenMP.cmake:635 (find_package_handle_standard_args)
+  third_party/fbgemm/CMakeLists.txt:148 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found OpenMP_CXX: -fopenmp (found version "4.5")
+-- Found OpenMP: TRUE (found version "4.5")
+-- OpenMP found! OpenMP_C_INCLUDE_DIRS = 
+-- ==========
+-- CMAKE_BUILD_TYPE = Release
+-- CMAKE_CXX_FLAGS_DEBUG is -g
+-- CMAKE_CXX_FLAGS_RELEASE is -O3 -DNDEBUG
+-- ==========
+CMake Deprecation Warning at third_party/fbgemm/external/asmjit/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Performing Test __CxxFlag__fno_threadsafe_statics
+-- Performing Test __CxxFlag__fno_threadsafe_statics - Success
+-- Performing Test __CxxFlag__fno_semantic_interposition
+-- Performing Test __CxxFlag__fno_semantic_interposition - Success
+-- Performing Test __CxxFlag__fmerge_all_constants
+-- Performing Test __CxxFlag__fmerge_all_constants - Success
+-- Performing Test __CxxFlag__fno_enforce_eh_specs
+-- Performing Test __CxxFlag__fno_enforce_eh_specs - Success
+-- Dependency: adding libc (Linux, BSD, or other UNIX/POSIX environment)
+-- Performing Test ASMJIT_LIBC_HAS_LIBPTHREAD
+-- Performing Test ASMJIT_LIBC_HAS_LIBPTHREAD - Success
+-- Dependency: libpthread provided by libc (not linking to libpthread)
+-- Performing Test ASMJIT_LIBC_HAS_LIBRT
+-- Performing Test ASMJIT_LIBC_HAS_LIBRT - Success
+-- Dependency: shm_open provided by libc (not linking to librt)
+** AsmJit Summary **
+   ASMJIT_DIR=/home/kzl/LFS/python/pytorch/pytorch/third_party/fbgemm/external/asmjit
+   ASMJIT_TEST=FALSE
+   ASMJIT_TARGET_TYPE=STATIC
+   ASMJIT_DEPS=c
+   ASMJIT_LIBS=asmjit;c
+   ASMJIT_CFLAGS=-DASMJIT_STATIC
+   ASMJIT_PRIVATE_CFLAGS=-Wall;-Wextra;-Wconversion;-fno-math-errno;-fno-threadsafe-statics;-fno-semantic-interposition;-DASMJIT_STATIC
+   ASMJIT_PRIVATE_CFLAGS_DBG=
+   ASMJIT_PRIVATE_CFLAGS_REL=-O2;-fmerge-all-constants;-fno-enforce-eh-specs
+-- Performing Test HAS_WNO_DEPRECATED_ENUM_ENUM_CONVERSION
+-- Performing Test HAS_WNO_DEPRECATED_ENUM_ENUM_CONVERSION - Success
+-- Performing Test HAS_WNO_DEPRECATED_ANON_ENUM_ENUM_CONVERSION
+-- Performing Test HAS_WNO_DEPRECATED_ANON_ENUM_ENUM_CONVERSION - Failed
+-- Performing Test HAS_WNO_ERROR_DEPRECATED_ENUM_ENUM_CONVERSION
+-- Performing Test HAS_WNO_ERROR_DEPRECATED_ENUM_ENUM_CONVERSION - Success
+-- Found Numa: /usr/include
+-- Found Numa  (include: /usr/include, library: /usr/lib/x86_64-linux-gnu/libnuma.so)
+CMake Deprecation Warning at third_party/ittapi/CMakeLists.txt:7 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Using third party subdirectory Eigen.
+-- Found Python: /opt/bin/python3 (found version "3.13.5") found components: Interpreter Development.Module NumPy
+-- Using third_party/pybind11.
+-- pybind11 include dirs: /home/kzl/LFS/python/pytorch/pytorch/cmake/../third_party/pybind11/include
+-- Could NOT find OpenTelemetryApi (missing: OpenTelemetryApi_INCLUDE_DIRS) 
+-- Using third_party/opentelemetry-cpp.
+-- opentelemetry api include dirs: /home/kzl/LFS/python/pytorch/pytorch/cmake/../third_party/opentelemetry-cpp/api/include
+-- Found MPI_C: /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi.so (found version "3.1")
+-- Found MPI_CXX: /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi_cxx.so (found version "3.1")
+-- Found MPI: TRUE (found version "3.1")
+-- MPI support found
+-- MPI compile flags: 
+-- MPI include path: /usr/lib/x86_64-linux-gnu/openmpi/include/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi
+-- MPI LINK flags path: 
+-- MPI libraries: /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi_cxx.so/usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi.so
+CMake Warning at cmake/Dependencies.cmake:904 (message):
+  OpenMPI found, but it is not built with CUDA support.
+Call Stack (most recent call first):
+  CMakeLists.txt:863 (include)
+
+
+-- Found OpenMP_C: -fopenmp
+-- Found OpenMP_CXX: -fopenmp
+-- Found OpenMP: TRUE
+-- Adding OpenMP CXX_FLAGS: -fopenmp
+-- Will link against OpenMP libraries: /usr/lib/gcc/x86_64-linux-gnu/11/libgomp.so
+-- ROCM_PATH environment variable is not set and /opt/rocm does not exist.
+Building without ROCm support.
+-- Autodetected CUDA architecture(s):  7.5
+CMake Warning at cmake/Dependencies.cmake:1116 (message):
+  Not using XPU, so disabling USE_XCCL.  Suppress this warning with
+  -DUSE_XCCL=OFF.
+Call Stack (most recent call first):
+  CMakeLists.txt:863 (include)
+
+
+-- Found CUB: /usr/local/cuda/include
+-- Converting CMAKE_CUDA_FLAGS to CUDA_NVCC_FLAGS:
+    CUDA_NVCC_FLAGS                = -DLIBCUDACXX_ENABLE_SIMPLIFIED_COMPLEX_OPERATIONS;-Xfatbin;-compress-all;-DONNX_NAMESPACE=onnx_torch;-gencode;arch=compute_75,code=sm_75;-Xcudafe;--diag_suppress=cc_clobber_ignored,--diag_suppress=field_without_dll_interface,--diag_suppress=base_class_has_different_dll_interface,--diag_suppress=dll_interface_conflict_none_assumed,--diag_suppress=dll_interface_conflict_dllexport_assumed,--diag_suppress=bad_friend_decl;--expt-relaxed-constexpr;--expt-extended-lambda
+    CUDA_NVCC_FLAGS_DEBUG          = -g
+    CUDA_NVCC_FLAGS_RELEASE        = -O3;-DNDEBUG
+    CUDA_NVCC_FLAGS_RELWITHDEBINFO = -O2;-g;-DNDEBUG
+    CUDA_NVCC_FLAGS_MINSIZEREL     = -O1;-DNDEBUG
+CMake Deprecation Warning at third_party/tensorpipe/CMakeLists.txt:7 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Deprecation Warning at third_party/tensorpipe/third_party/libuv/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Performing Test UV_LINT_W4
+-- Performing Test UV_LINT_W4 - Failed
+-- Performing Test UV_LINT_NO_UNUSED_PARAMETER_MSVC
+-- Performing Test UV_LINT_NO_UNUSED_PARAMETER_MSVC - Failed
+-- Performing Test UV_LINT_NO_CONDITIONAL_CONSTANT_MSVC
+-- Performing Test UV_LINT_NO_CONDITIONAL_CONSTANT_MSVC - Failed
+-- Performing Test UV_LINT_NO_NONSTANDARD_MSVC
+-- Performing Test UV_LINT_NO_NONSTANDARD_MSVC - Failed
+-- Performing Test UV_LINT_NO_NONSTANDARD_EMPTY_TU_MSVC
+-- Performing Test UV_LINT_NO_NONSTANDARD_EMPTY_TU_MSVC - Failed
+-- Performing Test UV_LINT_NO_NONSTANDARD_FILE_SCOPE_MSVC
+-- Performing Test UV_LINT_NO_NONSTANDARD_FILE_SCOPE_MSVC - Failed
+-- Performing Test UV_LINT_NO_NONSTANDARD_NONSTATIC_DLIMPORT_MSVC
+-- Performing Test UV_LINT_NO_NONSTANDARD_NONSTATIC_DLIMPORT_MSVC - Failed
+-- Performing Test UV_LINT_NO_HIDES_LOCAL
+-- Performing Test UV_LINT_NO_HIDES_LOCAL - Failed
+-- Performing Test UV_LINT_NO_HIDES_PARAM
+-- Performing Test UV_LINT_NO_HIDES_PARAM - Failed
+-- Performing Test UV_LINT_NO_HIDES_GLOBAL
+-- Performing Test UV_LINT_NO_HIDES_GLOBAL - Failed
+-- Performing Test UV_LINT_NO_CONDITIONAL_ASSIGNMENT_MSVC
+-- Performing Test UV_LINT_NO_CONDITIONAL_ASSIGNMENT_MSVC - Failed
+-- Performing Test UV_LINT_NO_UNSAFE_MSVC
+-- Performing Test UV_LINT_NO_UNSAFE_MSVC - Failed
+-- Performing Test UV_LINT_WALL
+-- Performing Test UV_LINT_WALL - Success
+-- Performing Test UV_LINT_NO_UNUSED_PARAMETER
+-- Performing Test UV_LINT_NO_UNUSED_PARAMETER - Success
+-- Performing Test UV_LINT_STRICT_PROTOTYPES
+-- Performing Test UV_LINT_STRICT_PROTOTYPES - Success
+-- Performing Test UV_LINT_EXTRA
+-- Performing Test UV_LINT_EXTRA - Success
+-- Performing Test UV_LINT_UTF8_MSVC
+-- Performing Test UV_LINT_UTF8_MSVC - Failed
+-- Performing Test UV_F_STRICT_ALIASING
+-- Performing Test UV_F_STRICT_ALIASING - Success
+-- summary of build options:
+    Install prefix:  /home/kzl/LFS/python/pytorch/pytorch/torch
+    Target system:   Linux
+    Compiler:
+      C compiler:    /usr/bin/cc
+      CFLAGS:         
+
+-- Found uv: 1.38.1 (found version "1.38.1") 
+-- Performing Test HAS_WNO_MISSING_TEMPLATE_ARG_LIST_AFTER_TEMPLATE_KW
+-- Performing Test HAS_WNO_MISSING_TEMPLATE_ARG_LIST_AFTER_TEMPLATE_KW - Failed
+-- Gloo build as SHARED library
+-- MPI include path: /usr/lib/x86_64-linux-gnu/openmpi/include/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi
+-- MPI libraries: /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi_cxx.so/usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi.so
+-- Found CUDAToolkit: /usr/local/cuda/include (found suitable version "12.8.93", minimum required is "7.0")
+-- CUDA detected: 12.8.93
+-- GLOO_USE_TORCH_DTYPES : 1 /home/kzl/LFS/python/pytorch/pytorch;/home/kzl/LFS/python/pytorch/pytorch/build
+-- Found Python3: /opt/bin/python3 (found version "3.13.5") found components: Interpreter
+-- ONNX_PROTOC_EXECUTABLE: $<TARGET_FILE:protobuf::protoc>
+-- Protobuf_VERSION: Protobuf_VERSION_NOTFOUND
+Generated: /home/kzl/LFS/python/pytorch/pytorch/build/third_party/onnx/onnx/onnx_onnx_torch-ml.proto
+Generated: /home/kzl/LFS/python/pytorch/pytorch/build/third_party/onnx/onnx/onnx-operators_onnx_torch-ml.proto
+Generated: /home/kzl/LFS/python/pytorch/pytorch/build/third_party/onnx/onnx/onnx-data_onnx_torch.proto
+-- 
+-- ******** Summary ********
+--   CMake version                     : 3.31.8
+--   CMake command                     : /opt/bin/cmake
+--   System                            : Linux
+--   C++ compiler                      : /usr/bin/c++
+--   C++ compiler version              : 11.4.0
+--   CXX flags                         :  -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -Wnon-virtual-dtor
+--   Build type                        : Release
+--   Compile definitions               : ONNX_ML=1;ONNXIFI_ENABLE_EXT=1
+--   CMAKE_PREFIX_PATH                 : /opt/lib/python3.13/site-packages;/usr/local/cuda;/usr/local/cuda;/usr/local/cuda
+--   CMAKE_INSTALL_PREFIX              : /home/kzl/LFS/python/pytorch/pytorch/torch
+--   CMAKE_MODULE_PATH                 : /home/kzl/LFS/python/pytorch/pytorch/cmake/Modules;/home/kzl/LFS/python/pytorch/pytorch/cmake/public/../Modules_CUDA_fix
+-- 
+--   ONNX version                      : 1.18.0
+--   ONNX NAMESPACE                    : onnx_torch
+--   ONNX_USE_LITE_PROTO               : OFF
+--   USE_PROTOBUF_SHARED_LIBS          : OFF
+--   ONNX_DISABLE_EXCEPTIONS           : OFF
+--   ONNX_DISABLE_STATIC_REGISTRATION  : OFF
+--   ONNX_WERROR                       : OFF
+--   ONNX_BUILD_TESTS                  : OFF
+--   BUILD_SHARED_LIBS                 : OFF
+-- 
+--   Protobuf compiler                 : $<TARGET_FILE:protobuf::protoc>
+--   Protobuf includes                 : 
+--   Protobuf libraries                : 
+--   ONNX_BUILD_PYTHON                 : OFF
+-- Found CUDA with FP16 support, compiling with torch.cuda.HalfTensor
+-- Adding -DNDEBUG to compile flags
+-- Checking prototype magma_get_sgeqrf_nb for MAGMA_V2
+-- Checking prototype magma_get_sgeqrf_nb for MAGMA_V2 - False
+-- MAGMA not found. Compiling without MAGMA support
+-- Could not find hardware support for NEON on this machine.
+-- No OMAP3 processor on this machine.
+-- No OMAP4 processor on this machine.
+-- No SVE processor on this machine.
+-- Looking for cheev_
+-- Looking for cheev_ - found
+-- Looking for cgesdd_
+-- Looking for cgesdd_ - found
+-- Found a library with LAPACK API (open).
+disabling ROCM because NOT USE_ROCM is set
+-- MIOpen not found. Compiling without MIOpen support
+-- Will build oneDNN Graph
+-- Will build oneDNN UKERNEL
+-- MKLDNN_CPU_RUNTIME = OMP
+-- DNNL_TARGET_ARCH: X64
+-- DNNL_LIBRARY_NAME: dnnl
+CMake Warning (dev) at /opt/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
+  The package name passed to `find_package_handle_standard_args` (OpenMP_C)
+  does not match the name of the calling package (OpenMP).  This can lead to
+  problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  cmake/Modules/FindOpenMP.cmake:635 (find_package_handle_standard_args)
+  third_party/ideep/mkl-dnn/cmake/OpenMP.cmake:41 (find_package)
+  third_party/ideep/mkl-dnn/CMakeLists.txt:89 (include)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found OpenMP_C: -fopenmp
+CMake Warning (dev) at /opt/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:441 (message):
+  The package name passed to `find_package_handle_standard_args` (OpenMP_CXX)
+  does not match the name of the calling package (OpenMP).  This can lead to
+  problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  cmake/Modules/FindOpenMP.cmake:635 (find_package_handle_standard_args)
+  third_party/ideep/mkl-dnn/cmake/OpenMP.cmake:41 (find_package)
+  third_party/ideep/mkl-dnn/CMakeLists.txt:89 (include)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found OpenMP_CXX: -fopenmp
+-- Enabled testing coverage: CI
+-- Enabled workload: TRAINING
+-- Enabled primitives: ALL
+-- Enabled primitive CPU ISA: ALL
+-- Enabled primitive GPU ISA: ALL
+-- Enabled GeMM kernels ISA: ALL
+-- Primitive cache is enabled
+-- Experimental functionality for ukernels is enabled
+-- Graph component is enabled
+-- Graph compiler backend is disabled.
+-- Found MKL-DNN: TRUE
+-- Looking for clock_gettime in rt
+-- Looking for clock_gettime in rt - found
+-- Looking for mmap
+-- Looking for mmap - found
+-- Looking for shm_open
+-- Looking for shm_open - found
+-- Looking for shm_unlink
+-- Looking for shm_unlink - found
+-- Looking for malloc_usable_size
+-- Looking for malloc_usable_size - found
+-- <FindZVECTOR>
+-- Performing Test COMPILE_OUT_ZVECTOR
+-- Performing Test COMPILE_OUT_ZVECTOR - Failed
+-- ZVECTOR flags were NOT set.
+-- </FindZVECTOR>
+-- {fmt} version: 11.2.0
+-- Build type: Release
+-- Using Kineto with CUPTI support
+-- Configuring Kineto dependency:
+--   KINETO_SOURCE_DIR = /home/kzl/LFS/python/pytorch/pytorch/third_party/kineto/libkineto
+--   KINETO_BUILD_TESTS = OFF
+--   KINETO_LIBRARY_TYPE = static
+--   CUDA_SOURCE_DIR = /usr/local/cuda
+--   CUDA_INCLUDE_DIRS = /usr/local/cuda/include
+--   CUPTI_INCLUDE_DIR = /usr/local/cuda/extras/CUPTI/include
+--   CUDA_cupti_LIBRARY = /usr/local/cuda/extras/CUPTI/lib64/libcupti.so
+-- Found CUPTI
+CMake Deprecation Warning at third_party/kineto/libkineto/CMakeLists.txt:7 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Warning (dev) at third_party/kineto/libkineto/CMakeLists.txt:15 (find_package):
+  Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+  are removed.  Run "cmake --help-policy CMP0148" for policy details.  Use
+  the cmake_policy command to set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+--  ROCM_SOURCE_DIR = 
+-- Kineto: FMT_SOURCE_DIR = /home/kzl/LFS/python/pytorch/pytorch/third_party/fmt
+-- Kineto: FMT_INCLUDE_DIR = /home/kzl/LFS/python/pytorch/pytorch/third_party/fmt/include
+--  CUPTI_INCLUDE_DIR = /usr/local/cuda/extras/CUPTI/include
+--  ROCTRACER_INCLUDE_DIR = /include/roctracer
+--  DYNOLOG_INCLUDE_DIR = /home/kzl/LFS/python/pytorch/pytorch/third_party/kineto/libkineto/third_party/dynolog/
+--  IPCFABRIC_INCLUDE_DIR = /home/kzl/LFS/python/pytorch/pytorch/third_party/kineto/libkineto/third_party/dynolog//dynolog/src/ipcfabric/
+-- Configured Kineto
+-- GCC 11.4.0: Adding gcc and gcc_s libs to link line
+-- Performing Test HAS_WERROR_RETURN_TYPE
+-- Performing Test HAS_WERROR_RETURN_TYPE - Success
+-- Performing Test HAS_WERROR_NON_VIRTUAL_DTOR
+-- Performing Test HAS_WERROR_NON_VIRTUAL_DTOR - Success
+-- Performing Test HAS_WERROR_BRACED_SCALAR_INIT
+-- Performing Test HAS_WERROR_BRACED_SCALAR_INIT - Failed
+-- Performing Test HAS_WERROR_RANGE_LOOP_CONSTRUCT
+-- Performing Test HAS_WERROR_RANGE_LOOP_CONSTRUCT - Success
+-- Performing Test HAS_WERROR_BOOL_OPERATION
+-- Performing Test HAS_WERROR_BOOL_OPERATION - Success
+-- Performing Test HAS_WNARROWING
+-- Performing Test HAS_WNARROWING - Success
+-- Performing Test HAS_WNO_MISSING_FIELD_INITIALIZERS
+-- Performing Test HAS_WNO_MISSING_FIELD_INITIALIZERS - Success
+-- Performing Test HAS_WNO_UNKNOWN_PRAGMAS
+-- Performing Test HAS_WNO_UNKNOWN_PRAGMAS - Success
+-- Performing Test HAS_WNO_UNUSED_PARAMETER
+-- Performing Test HAS_WNO_UNUSED_PARAMETER - Success
+-- Performing Test HAS_WNO_STRICT_OVERFLOW
+-- Performing Test HAS_WNO_STRICT_OVERFLOW - Success
+-- Performing Test HAS_WNO_STRICT_ALIASING
+-- Performing Test HAS_WNO_STRICT_ALIASING - Success
+-- Performing Test HAS_WNO_STRINGOP_OVERFLOW
+-- Performing Test HAS_WNO_STRINGOP_OVERFLOW - Success
+-- Performing Test HAS_WVLA_EXTENSION
+-- Performing Test HAS_WVLA_EXTENSION - Failed
+-- Performing Test HAS_WSUGGEST_OVERRIDE
+-- Performing Test HAS_WSUGGEST_OVERRIDE - Success
+-- Performing Test HAS_WNEWLINE_EOF
+-- Performing Test HAS_WNEWLINE_EOF - Failed
+-- Performing Test HAS_WINCONSISTENT_MISSING_OVERRIDE
+-- Performing Test HAS_WINCONSISTENT_MISSING_OVERRIDE - Failed
+-- Performing Test HAS_WINCONSISTENT_MISSING_DESTRUCTOR_OVERRIDE
+-- Performing Test HAS_WINCONSISTENT_MISSING_DESTRUCTOR_OVERRIDE - Failed
+-- Performing Test HAS_WNO_ERROR_OLD_STYLE_CAST
+-- Performing Test HAS_WNO_ERROR_OLD_STYLE_CAST - Success
+-- Performing Test HAS_WCONSTANT_CONVERSION
+-- Performing Test HAS_WCONSTANT_CONVERSION - Failed
+-- Performing Test HAS_WNO_ALIGNED_ALLOCATION_UNAVAILABLE
+-- Performing Test HAS_WNO_ALIGNED_ALLOCATION_UNAVAILABLE - Failed
+-- Performing Test HAS_QUNUSED_ARGUMENTS
+-- Performing Test HAS_QUNUSED_ARGUMENTS - Failed
+-- Performing Test HAS_FALIGNED_NEW
+-- Performing Test HAS_FALIGNED_NEW - Success
+-- Performing Test HAS_WNO_MAYBE_UNINITIALIZED
+-- Performing Test HAS_WNO_MAYBE_UNINITIALIZED - Success
+-- Performing Test HAS_FSTANDALONE_DEBUG
+-- Performing Test HAS_FSTANDALONE_DEBUG - Failed
+-- Performing Test HAS_FNO_MATH_ERRNO
+-- Performing Test HAS_FNO_MATH_ERRNO - Success
+-- Performing Test HAS_FNO_TRAPPING_MATH
+-- Performing Test HAS_FNO_TRAPPING_MATH - Success
+-- Performing Test HAS_WERROR_FORMAT
+-- Performing Test HAS_WERROR_FORMAT - Success
+-- NUMA paths:
+-- /usr/include
+-- /usr/lib/x86_64-linux-gnu/libnuma.so
+-- Looking for backtrace
+-- Looking for backtrace - found
+-- backtrace facility detected in default set of libraries
+-- Found Backtrace: /usr/include
+-- Autodetected CUDA architecture(s):  7.5
+-- Autodetected CUDA architecture(s):  7.5
+-- Autodetected CUDA architecture(s):  7.5
+-- headers outputs: 
+-- sources outputs: 
+-- declarations_yaml outputs: 
+-- Performing Test COMPILER_SUPPORTS_NO_AVX256_SPLIT
+-- Performing Test COMPILER_SUPPORTS_NO_AVX256_SPLIT - Success
+-- Using ATen parallel backend: OMP
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")
+-- Check size of long double
+-- Check size of long double - done
+-- Performing Test COMPILER_SUPPORTS_LONG_DOUBLE
+-- Performing Test COMPILER_SUPPORTS_LONG_DOUBLE - Success
+-- Performing Test COMPILER_SUPPORTS_FLOAT128
+-- Performing Test COMPILER_SUPPORTS_FLOAT128 - Success
+-- Performing Test COMPILER_SUPPORTS_QUADMATH
+-- Performing Test COMPILER_SUPPORTS_QUADMATH - Success
+-- Performing Test COMPILER_SUPPORTS_SSE2
+-- Performing Test COMPILER_SUPPORTS_SSE2 - Success
+-- Performing Test COMPILER_SUPPORTS_SSE4
+-- Performing Test COMPILER_SUPPORTS_SSE4 - Success
+-- Performing Test COMPILER_SUPPORTS_AVX
+-- Performing Test COMPILER_SUPPORTS_AVX - Success
+-- Performing Test COMPILER_SUPPORTS_FMA4
+-- Performing Test COMPILER_SUPPORTS_FMA4 - Success
+-- Performing Test COMPILER_SUPPORTS_AVX2
+-- Performing Test COMPILER_SUPPORTS_AVX2 - Success
+-- Performing Test COMPILER_SUPPORTS_AVX512F
+-- Performing Test COMPILER_SUPPORTS_AVX512F - Success
+-- Found OpenMP_C: -fopenmp (found version "4.5")
+-- Found OpenMP_CXX: -fopenmp (found version "4.5")
+-- Found OpenMP_CUDA: -fopenmp (found version "4.5")
+-- Found OpenMP: TRUE (found version "4.5")
+-- Performing Test COMPILER_SUPPORTS_OPENMP
+-- Performing Test COMPILER_SUPPORTS_OPENMP - Success
+-- Performing Test COMPILER_SUPPORTS_OMP_SIMD
+-- Performing Test COMPILER_SUPPORTS_OMP_SIMD - Success
+-- Performing Test COMPILER_SUPPORTS_WEAK_ALIASES
+-- Performing Test COMPILER_SUPPORTS_WEAK_ALIASES - Success
+-- Performing Test COMPILER_SUPPORTS_BUILTIN_MATH
+-- Performing Test COMPILER_SUPPORTS_BUILTIN_MATH - Success
+-- Performing Test COMPILER_SUPPORTS_SYS_GETRANDOM
+-- Performing Test COMPILER_SUPPORTS_SYS_GETRANDOM - Success
+-- Configuring build for SLEEF-v3.8.0
+   Target system: Linux-6.15.9-KZL
+   Target processor: x86_64
+   Host system: Linux-6.15.9-KZL
+   Host processor: x86_64
+   Detected C compiler: GNU @ /usr/bin/cc
+   CMake: 3.31.8
+   Make program: /home/kzl/.local/bin/ninja
+-- Using option `-Wall -Wno-unused-function -Wno-attributes -Wno-unused-result -Wno-psabi -ffp-contract=off -fno-math-errno -fno-trapping-math` to compile libsleef
+-- Building shared libs : OFF
+-- Building static test bins: OFF
+-- MPFR : LIB_MPFR-NOTFOUND
+-- GMP : LIBGMP-NOTFOUND
+-- RT : /usr/lib/x86_64-linux-gnu/librt.a
+-- FFTW3 : LIBFFTW3-NOTFOUND
+-- OPENSSL : 3.0.2
+-- SDE : SDE_COMMAND-NOTFOUND
+-- COMPILER_SUPPORTS_OPENMP : 1
+AT_INSTALL_INCLUDE_DIR include/ATen/core
+core header install: /home/kzl/LFS/python/pytorch/pytorch/build/aten/src/ATen/core/TensorBody.h
+core header install: /home/kzl/LFS/python/pytorch/pytorch/build/aten/src/ATen/core/aten_interned_strings.h
+core header install: /home/kzl/LFS/python/pytorch/pytorch/build/aten/src/ATen/core/enum_tag.h
+-- Performing Test HAS_WNO_MISSING_BRACES
+-- Performing Test HAS_WNO_MISSING_BRACES - Success
+-- Performing Test HAS_WNO_UNUSED_BUT_SET_PARAMETER
+-- Performing Test HAS_WNO_UNUSED_BUT_SET_PARAMETER - Success
+-- Autodetected CUDA architecture(s):  7.5
+CMake Warning at CMakeLists.txt:1266 (message):
+  Generated cmake files are only fully tested if one builds with system glog,
+  gflags, and protobuf.  Other settings may generate files that are not well
+  tested.
+
+
+-- 
+-- ******** Summary ********
+-- General:
+--   CMake version         : 3.31.8
+--   CMake command         : /opt/bin/cmake
+--   System                : Linux
+--   C++ compiler          : /usr/bin/c++
+--   C++ compiler id       : GNU
+--   C++ compiler version  : 11.4.0
+--   Using ccache if found : ON
+--   Found ccache          : CCACHE_PROGRAM-NOTFOUND
+--   CXX flags             :  -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOROCTRACER -DLIBKINETO_NOXPUPTI=ON -DUSE_FBGEMM -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=old-style-cast -faligned-new -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow
+--   Shared LD flags       :  -Wl,--no-as-needed -rdynamic
+--   Static LD flags       : 
+--   Module LD flags       : 
+--   Build type            : Release
+--   Compile definitions   : ONNX_ML=1;ONNXIFI_ENABLE_EXT=1;ONNX_NAMESPACE=onnx_torch;HAVE_MMAP=1;_FILE_OFFSET_BITS=64;HAVE_SHM_OPEN=1;HAVE_SHM_UNLINK=1;HAVE_MALLOC_USABLE_SIZE=1;USE_EXTERNAL_MZCRC;MINIZ_DISABLE_ZIP_READER_CRC32_CHECKS
+--   CMAKE_PREFIX_PATH     : /opt/lib/python3.13/site-packages;/usr/local/cuda;/usr/local/cuda;/usr/local/cuda
+--   CMAKE_INSTALL_PREFIX  : /home/kzl/LFS/python/pytorch/pytorch/torch
+--   USE_GOLD_LINKER       : OFF
+-- 
+--   TORCH_VERSION         : 2.8.0
+--   BUILD_STATIC_RUNTIME_BENCHMARK: OFF
+--   BUILD_BINARY          : OFF
+--   BUILD_CUSTOM_PROTOBUF : ON
+--     Link local protobuf : ON
+--   BUILD_PYTHON          : True
+--     Python version      : 3.13.5
+--     Python executable   : /opt/bin/python3
+--     Python library      : 
+--     Python includes     : /opt/include/python3.13
+--     Python site-package : /opt/lib/python3.13/site-packages
+--   BUILD_SHARED_LIBS     : ON
+--   CAFFE2_USE_MSVC_STATIC_RUNTIME     : OFF
+--   BUILD_TEST            : True
+--   BUILD_JNI             : OFF
+--   BUILD_MOBILE_AUTOGRAD : OFF
+--   BUILD_LITE_INTERPRETER: OFF
+--   INTERN_BUILD_MOBILE   : 
+--   TRACING_BASED         : OFF
+--   USE_BLAS              : 1
+--     BLAS                : open
+--     BLAS_HAS_SBGEMM     : 
+--   USE_LAPACK            : 1
+--     LAPACK              : open
+--   USE_ASAN              : OFF
+--   USE_TSAN              : OFF
+--   USE_CPP_CODE_COVERAGE : OFF
+--   USE_CUDA              : ON
+--     Split CUDA          : 
+--     CUDA static link    : OFF
+--     USE_CUDNN           : ON
+--     USE_CUSPARSELT      : OFF
+--     USE_CUDSS           : OFF
+--     USE_CUFILE          : ON
+--     CUDA version        : 12.8
+--     USE_FLASH_ATTENTION : ON
+--     USE_MEM_EFF_ATTENTION : ON
+--     cuDNN version       : 9.12.0
+--     cufile library    : /usr/local/cuda/lib64/libcufile.so
+--     CUDA root directory : /usr/local/cuda
+--     CUDA library        : /usr/lib/x86_64-linux-gnu/libcuda.so
+--     cudart library      : /usr/local/cuda/lib64/libcudart.so
+--     cublas library      : /usr/local/cuda/lib64/libcublas.so
+--     cufft library       : /usr/local/cuda/lib64/libcufft.so
+--     curand library      : /usr/local/cuda/lib64/libcurand.so
+--     cusparse library    : /usr/local/cuda/lib64/libcusparse.so
+--     cuDNN library       : /usr/local/cuda/lib64/libcudnn.so
+--     nvrtc               : /usr/local/cuda/lib64/libnvrtc.so
+--     CUDA include path   : /usr/local/cuda/include
+--     NVCC executable     : /usr/local/cuda/bin/nvcc
+--     CUDA compiler       : /usr/local/cuda/bin/nvcc
+--     CUDA flags          :  -DLIBCUDACXX_ENABLE_SIMPLIFIED_COMPLEX_OPERATIONS -Xfatbin -compress-all -DONNX_NAMESPACE=onnx_torch -gencode arch=compute_75,code=sm_75 -Xcudafe --diag_suppress=cc_clobber_ignored,--diag_suppress=field_without_dll_interface,--diag_suppress=base_class_has_different_dll_interface,--diag_suppress=dll_interface_conflict_none_assumed,--diag_suppress=dll_interface_conflict_dllexport_assumed,--diag_suppress=bad_friend_decl --expt-relaxed-constexpr --expt-extended-lambda  -Wno-deprecated-gpu-targets --expt-extended-lambda -DCUB_WRAPPED_NAMESPACE=at_cuda_detail -DCUDA_HAS_FP16=1 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -DC10_NODEPRECATED
+--     CUDA host compiler  : 
+--     CUDA --device-c     : OFF
+--     USE_TENSORRT        : 
+--   USE_XPU               : OFF
+--   USE_ROCM              : OFF
+--   BUILD_NVFUSER         : 
+--   USE_EIGEN_FOR_BLAS    : ON
+--   USE_FBGEMM            : ON
+--     USE_FAKELOWP          : OFF
+--   USE_KINETO            : ON
+--   USE_GFLAGS            : OFF
+--   USE_GLOG              : OFF
+--   USE_LITE_PROTO        : OFF
+--   USE_PYTORCH_METAL     : OFF
+--   USE_PYTORCH_METAL_EXPORT     : OFF
+--   USE_MPS               : OFF
+--   CAN_COMPILE_METAL     : 
+--   USE_MKL               : OFF
+--   USE_MKLDNN            : ON
+--   USE_MKLDNN_ACL        : OFF
+--   USE_MKLDNN_CBLAS      : OFF
+--   USE_UCC               : OFF
+--   USE_ITT               : ON
+--   USE_XCCL              : OFF
+--   USE_NCCL              : ON
+--     USE_SYSTEM_NCCL     : OFF
+--   USE_NNPACK            : ON
+--   USE_NUMPY             : ON
+--   USE_OBSERVERS         : ON
+--   USE_OPENCL            : OFF
+--   USE_OPENMP            : ON
+--   USE_MIMALLOC          : OFF
+--   USE_VULKAN            : OFF
+--   USE_PROF              : OFF
+--   USE_PYTORCH_QNNPACK   : ON
+--   USE_XNNPACK           : ON
+--   USE_DISTRIBUTED       : ON
+--     USE_MPI               : ON
+--     USE_GLOO              : ON
+--     USE_GLOO_WITH_OPENSSL : OFF
+--     USE_GLOO_IBVERBS      : OFF
+--     USE_TENSORPIPE        : ON
+--   Public Dependencies  : 
+--   Private Dependencies : Threads::Threads;pthreadpool;cpuinfo;pytorch_qnnpack;nnpack;XNNPACK;microkernels-prod;fbgemm;ittnotify;fp16;caffe2::openmp;tensorpipe;nlohmann;moodycamel;gloo;rt;fmt::fmt-header-only;kineto;gcc_s;gcc;dl
+--   Public CUDA Deps.    : 
+--   Private CUDA Deps.   : caffe2::curand;caffe2::cufft;caffe2::cublas;torch::cudnn;torch::cufile;__caffe2_nccl;tensorpipe_cuda;gloo_cuda;fmt::fmt-header-only;/usr/local/cuda/lib64/libcudart.so;CUDA::cusparse;CUDA::cufft;ATEN_CUDA_FILES_GEN_LIB
+--   USE_COREML_DELEGATE     : OFF
+--   BUILD_LAZY_TS_BACKEND   : ON
+--   USE_ROCM_KERNEL_ASSERT : OFF
+-- Performing Test HAS_WMISSING_PROTOTYPES
+-- Performing Test HAS_WMISSING_PROTOTYPES - Failed
+-- Performing Test HAS_WERROR_MISSING_PROTOTYPES
+-- Performing Test HAS_WERROR_MISSING_PROTOTYPES - Failed
+-- Configuring done (23.9s)
+-- Generating done (1.3s)
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    CMAKE_ONLY
+
+
+-- Build files have been written to: /home/kzl/LFS/python/pytorch/pytorch/build
+Building wheel torch-2.8.0a0+gitba56102
+-- Building version 2.8.0a0+gitba56102
+-- Checkout nccl release tag: v2.27.3-1
+cmake -GNinja -DBUILD_PYTHON=True -DBUILD_TEST=True -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/kzl/LFS/python/pytorch/pytorch/torch -DCMAKE_ONLY=1 -DCMAKE_PREFIX_PATH=/opt/lib/python3.13/site-packages -DPython_EXECUTABLE=/opt/bin/python3 -DTORCH_BUILD_VERSION=2.8.0a0+gitba56102 -DUSE_NUMPY=True /home/kzl/LFS/python/pytorch/pytorch
+Finished running cmake. Run "ccmake build" or "cmake-gui build" to adjust build options and "python setup.py install" to build.
