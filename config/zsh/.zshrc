@@ -249,13 +249,13 @@ alias aptupdate="sudo apt update && sudo apt upgrade --no-install-recommends"
 alias aptinstall="sudo apt install --no-install-recommends"
 alias aptremove="sudo apt remove --purge --auto-remove"
 if [[ -f "/opt/bin/python3" ]]; then
-    alias pipwheel="/opt/bin/python3 -m pip wheel --wheel-dir ~/wheels --no-binary :all:"
-    alias pipinstall="/opt/bin/python3 -m pip install --user -U --no-index --find-links ~/wheels"
-    alias pipuninstall="/opt/bin/python3 -m pip uninstall -y"
+    alias pipwheel="/opt/bin/python3 -m pip -v wheel --wheel-dir ~/wheels --no-binary :all:"
+    alias pipinstall="/opt/bin/python3 -m pip -v install --user -U --no-index --find-links ~/wheels"
+    alias pipuninstall="/opt/bin/python3 -m pip -v uninstall -y"
 else
-    alias pipwheel="python3 -m pip wheel --wheel-dir ~/wheels --no-binary :all:"
-    alias pipinstall="python3 -m pip install --user -U --no-index --find-links ~/wheels"
-    alias pipuninstall="python3 -m pip uninstall -y"
+    alias pipwheel="python3 -m pip -v wheel --wheel-dir ~/wheels --no-binary :all:"
+    alias pipinstall="python3 -m pip -v install --user -U --no-index --find-links ~/wheels"
+    alias pipuninstall="python3 -m pip -v uninstall -y"
 fi
 alias tlmgrinstall="tlmgr --usermode install"
 
