@@ -2,7 +2,7 @@
 
 pkgname=cmake
 pkgver=3.31.8
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="A powerful software build system"
 arch=('x86_64')
@@ -15,7 +15,7 @@ build() {
   cd CMake
 
   ./bootstrap \
-    --prefix=$PREFIX \
+    --prefix=/$PREFIX \
     --datadir=share/cmake \
     --docdir=share/doc/cmake \
     --mandir=share/man \
