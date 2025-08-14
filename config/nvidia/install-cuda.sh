@@ -10,21 +10,15 @@ set -u
 
 umask 0022
 
-SCRIPT_NAME="$(basename "$0")"
-SCRIPT_PATH="$(realpath "$0")"
-SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-
 ################################################################################
 
-CUDA_VERSION=12.6.3
+# https://developer.nvidia.com/cuda-toolkit-archive
+
+CUDA_VERSION=12.8.1
 
 WORKDIR=/tmp/cuda
 DOWNLOADS_DIR="$HOME/Downloads"
-RUNFILE=cuda_${CUDA_VERSION}_560.35.05_linux.run
-
-source=https://developer.download.nvidia.com/compute/cuda/$CUDA_VERSION/local_installers/$RUNFILE
-
-set -e
+RUNFILE=cuda_${CUDA_VERSION}_570.124.06_linux.run
 
 if [[ ! -f "$DOWNLOADS_DIR/$RUNFILE" ]]; then
     wget -P "$DOWNLOADS_DIR" https://developer.download.nvidia.com/compute/cuda/$CUDA_VERSION/local_installers/$RUNFILE

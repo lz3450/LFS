@@ -12,17 +12,23 @@ umask 0022
 
 ################################################################################
 
-WORKDIR=/tmp/cudnn
-PKGNAME=cudnn-linux-x86_64-8.9.7.29_cuda12-archive.tar.xz
+# https://docs.nvidia.com/deeplearning/cudnn/installation/latest/linux.html#tarball-installation
+# https://developer.download.nvidia.com/compute/cudnn/redist/
 
-if [ ! -f "$HOME/Downloads/$PKGNAME" ]; then
-    echo "Please download $PKGNAME from https://developer.nvidia.com/cudnn"
+CUDNN_VERSION=9.12.0.46
+
+WORKDIR=/tmp/cudnn
+DOWNLOADS_DIR="$HOME/Downloads"
+TARBALL=cudnn-linux-x86_64-${CUDNN_VERSION}_cuda12-archive.tar.xz
+CUDNNDIR=$WORKDIR/cudnn-linux-x86_64-${CUDNN_VERSION}_cuda12-archive
+
+if [[ ! -f "$DOWNLOADS_DIR/$TARBALL" ]]; then
+    wget -P "$DOWNLOADS_DIR" https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-x86_64/$TARBALL
 fi
 
 sudo rm -rf "$WORKDIR"
 mkdir -p "$WORKDIR"
-tar -xf "$HOME/Downloads/$PKGNAME" -C "$WORKDIR"
+tar -xf "$HOME/Downloads/$TARBALL" -C "$WORKDIR"
 
-sudo cp "$WORKDIR"/cudnn-*-archive/include/cudnn*.h /usr/local/cuda/include
-sudo cp -P "$WORKDIR"/cudnn-*-archive/lib/libcudnn* /usr/local/cuda/lib64
-sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
+sudo cp -vP "$CUDNNDIR"/include/* /usr/local/cuda/include/ > cudnn-install.log
+sudo cp -vP "$CUDNNDIR"/lib/* /usr/local/cuda/lib64/ >> cudnn-install.log
