@@ -243,11 +243,13 @@ export EDITOR='nano'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# General
 alias now="date +%Y%m%d_%H%M%S"
 alias lfs="cd ~/LFS"
-alias aptupdate="sudo apt update && sudo apt upgrade --no-install-recommends"
-alias aptinstall="sudo apt install --no-install-recommends"
-alias aptremove="sudo apt remove --purge --auto-remove"
+alias gitlog="git log --oneline --all --graph --decorate"
+
+# Python
 if [[ -f "/opt/bin/python3" ]]; then
     alias pipwheel="/opt/bin/python3 -m pip -v wheel --wheel-dir ~/wheels --no-binary :all:"
     alias pipinstall="/opt/bin/python3 -m pip -v install --user -U --no-index --find-links ~/wheels"
@@ -258,6 +260,11 @@ else
     alias pipuninstall="python3 -m pip -v uninstall -y"
 fi
 alias tlmgrinstall="tlmgr --usermode install"
+
+# APT package management
+alias aptupdate="sudo apt update && sudo apt upgrade --no-install-recommends"
+alias aptinstall="sudo apt install --no-install-recommends"
+alias aptremove="sudo apt remove --purge --auto-remove"
 
 # Functions
 function y() {
