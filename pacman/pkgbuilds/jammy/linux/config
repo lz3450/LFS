@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86 6.16.2 Kernel Configuration
+# Linux/x86 6.16.4 Kernel Configuration
 #
 CONFIG_CC_IS_GCC=y
 CONFIG_AS_IS_GNU=y
