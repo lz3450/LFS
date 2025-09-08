@@ -19,6 +19,8 @@ post_update() {
         -e '/CONFIG_RUSTC_LLVM_VERSION/d' \
         -e '/CONFIG_CC_HAS_ASM_GOTO_OUTPUT/d' \
         -e '/CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT/d' \
+        -e '/CONFIG_CC_HAS_COUNTED_BY/d' \
+        -e '/CONFIG_CC_HAS_MULTIDIMENSIONAL_NONSTRING/d' \
         -e '/CONFIG_GCC_ASM_GOTO_OUTPUT_BROKEN/d' \
         -e '/CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES/d' \
         -e '/CONFIG_PAHOLE_VERSION/d' \
