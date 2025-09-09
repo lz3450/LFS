@@ -1,11 +1,13 @@
 configure: processing command line
 configure: 
-configure: build.configure-args := ['--disable-debug', '--disable-docs', '--disable-compiler-docs', '--disable-optimize-tests', '--disable-verbose-tests', '--disable-local-rust', '--enable-rpath', '--disable-codegen-tests', '--disable-ninja', '--disable-locked-deps', '--disable-vendor', '--disable-sanitizers', '--disable-dist-src', '--disable-cargo-native-static', '--disable-profiler', '--disable-full-tools', '--disable-lld', '--disable-llvm-bitcode-linker', '--disable-control-flow-guard', '--disable-patch-binaries-for-nix', '--enable-new-symbol-mangling', '--prefix=/opt', '--sysconfdir=/etc', '--llvm-root=/opt', '--llvm-config=/opt/bin/llvm-config', '--llvm-filecheck=/opt/bin/FileCheck', '--python=/opt/bin/python3', '--release-channel="auto-detect"', '--release-description=KZL 2025/07/11 02:16:15 -0500', '--enable-manage-submodules', '--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,src,wasm-component-ld', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set=change-id=140732', '--set=llvm.download-ci-llvm=false', '--set=build.compiletest-use-stage0-libtest=false', '--set=rust.download-rustc=false', '--set=rust.use-lld=true', '--set=rust.llvm-tools=false', '--set=rust.llvm-bitcode-linker=false', '--set=rust.remap-debuginfo=true', '--set=rust.jemalloc=true', '--set=target.x86_64-unknown-linux-gnu.cc=/opt/bin/clang', '--set=target.x86_64-unknown-linux-gnu.cxx=/opt/bin/clang++', '--set=target.x86_64-unknown-linux-gnu.ar=/opt/bin/llvm-ar', '--set=target.x86_64-unknown-linux-gnu.ranlib=/opt/bin/llvm-ranlib']
+configure: build.configure-args := ['--disable-debug', '--disable-docs', '--disable-compiler-docs', '--disable-optimize-tests', '--disable-verbose-tests', '--disable-local-rust', '--enable-rpath', '--disable-codegen-tests', '--disable-ninja', '--disable-locked-deps', '--disable-vendor', '--disable-sanitizers', '--disable-dist-src', '--disable-cargo-native-static', '--disable-profiler', '--disable-full-tools', '--disable-lld', '--disable-llvm-bitcode-linker', '--disable-control-flow-guard', '--disable-patch-binaries-for-nix', '--enable-new-symbol-mangling', '--prefix=/opt', '--sysconfdir=/etc', '--llvm-root=/opt', '--llvm-config=/opt/bin/llvm-config', '--llvm-filecheck=/opt/bin/FileCheck', '--python=/opt/bin/python3', '--release-channel="auto-detect"', '--release-description=KZL 2025/09/08 20:35:11 -0500', '--enable-manage-submodules', '--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,src,wasm-component-ld', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set=change-id=142379', '--set=llvm.download-ci-llvm=false', '--set=build.compiletest-use-stage0-libtest=false', '--set=rust.download-rustc=false', '--set=rust.use-lld=true', '--set=rust.llvm-tools=false', '--set=rust.llvm-bitcode-linker=false', '--set=rust.remap-debuginfo=true', '--set=rust.jemalloc=true', '--set=target.x86_64-unknown-linux-gnu.cc=/opt/bin/clang', '--set=target.x86_64-unknown-linux-gnu.cxx=/opt/bin/clang++', '--set=target.x86_64-unknown-linux-gnu.ar=/opt/bin/llvm-ar', '--set=target.x86_64-unknown-linux-gnu.ranlib=/opt/bin/llvm-ranlib']
 configure: rust.debug           := False
 configure: build.docs           := False
 configure: build.compiler-docs  := False
 configure: rust.optimize-tests  := False
 configure: rust.verbose-tests   := False
+configure: build.rustc          := /opt/bin/rustc
+configure: build.cargo          := /opt/bin/cargo
 configure: rust.rpath           := True
 configure: rust.codegen-tests   := False
 configure: llvm.ninja           := False
@@ -32,13 +34,13 @@ configure: target.x86_64-unknown-linux-gnu.llvm-config := /opt/bin/llvm-config
 configure: target.x86_64-unknown-linux-gnu.llvm-filecheck := /opt/bin/FileCheck
 configure: build.python         := /opt/bin/python3
 configure: rust.channel         := "auto-detect"
-configure: build.description    := KZL 2025/07/11 02:16:15 -0500
+configure: build.description    := KZL 2025/09/08 20:35:11 -0500
 configure: build.submodules     := True
 configure: build.tools          := ['cargo', 'clippy', 'rustfmt', 'rust-analyzer', 'rust-analyzer-proc-macro-srv', 'src', 'wasm-component-ld']
 configure: build.build          := x86_64-unknown-linux-gnu
 configure: build.host           := ['x86_64-unknown-linux-gnu']
 configure: build.target         := ['x86_64-unknown-linux-gnu']
-configure: change-id            := 140732
+configure: change-id            := 142379
 configure: llvm.download-ci-llvm := False
 configure: build.compiletest-use-stage0-libtest := False
 configure: rust.download-rustc  := False
@@ -74,7 +76,7 @@ profile = 'dist'
 # If the change-id does not match the version currently in use, x.py will
 # display the changes made to the bootstrap.
 # To suppress these warnings, you can set change-id = "ignore".
-change-id = 140732
+change-id = 142379
 
 [llvm]
 
@@ -105,7 +107,7 @@ ninja = false
 # upstream Rust you need to set this to "". However, note that if you set this to "" but
 # are not actually compatible -- for example if you've backported patches that change
 # behavior -- this may lead to miscompilations or other bugs.
-description = 'KZL 2025/07/11 02:16:15 -0500'
+description = 'KZL 2025/09/08 20:35:11 -0500'
 
 # Build triple for the pre-compiled snapshot compiler. If `rustc` is set, this must match its host
 # triple (see `rustc --version --verbose`; cross-compiling the rust build system itself is NOT
@@ -134,6 +136,16 @@ host = ['x86_64-unknown-linux-gnu']
 # host triples to this list as well in order for those host toolchains to be
 # able to compile programs for their native target.
 target = ['x86_64-unknown-linux-gnu']
+
+# Instead of downloading the src/stage0 version of Cargo specified, use
+# this Cargo binary instead to build all Rust code
+# If you set this, you likely want to set `rustc` as well.
+cargo = '/opt/bin/cargo'
+
+# Instead of downloading the src/stage0 version of the compiler
+# specified, use this rustc binary instead as the stage0 snapshot compiler.
+# If you set this, you likely want to set `cargo` as well.
+rustc = '/opt/bin/rustc'
 
 # Whether to build documentation by default. If false, rustdoc and
 # friends will still be compiled but they will not be used to generate any
@@ -209,7 +221,7 @@ cargo-native-static = false
 # Arguments passed to the `./configure` script, used during distcheck. You
 # probably won't fill this in but rather it's filled in by the `./configure`
 # script. Useful for debugging.
-configure-args = ['--disable-debug', '--disable-docs', '--disable-compiler-docs', '--disable-optimize-tests', '--disable-verbose-tests', '--disable-local-rust', '--enable-rpath', '--disable-codegen-tests', '--disable-ninja', '--disable-locked-deps', '--disable-vendor', '--disable-sanitizers', '--disable-dist-src', '--disable-cargo-native-static', '--disable-profiler', '--disable-full-tools', '--disable-lld', '--disable-llvm-bitcode-linker', '--disable-control-flow-guard', '--disable-patch-binaries-for-nix', '--enable-new-symbol-mangling', '--prefix=/opt', '--sysconfdir=/etc', '--llvm-root=/opt', '--llvm-config=/opt/bin/llvm-config', '--llvm-filecheck=/opt/bin/FileCheck', '--python=/opt/bin/python3', '--release-channel="auto-detect"', '--release-description=KZL 2025/07/11 02:16:15 -0500', '--enable-manage-submodules', '--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,src,wasm-component-ld', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set=change-id=140732', '--set=llvm.download-ci-llvm=false', '--set=build.compiletest-use-stage0-libtest=false', '--set=rust.download-rustc=false', '--set=rust.use-lld=true', '--set=rust.llvm-tools=false', '--set=rust.llvm-bitcode-linker=false', '--set=rust.remap-debuginfo=true', '--set=rust.jemalloc=true', '--set=target.x86_64-unknown-linux-gnu.cc=/opt/bin/clang', '--set=target.x86_64-unknown-linux-gnu.cxx=/opt/bin/clang++', '--set=target.x86_64-unknown-linux-gnu.ar=/opt/bin/llvm-ar', '--set=target.x86_64-unknown-linux-gnu.ranlib=/opt/bin/llvm-ranlib']
+configure-args = ['--disable-debug', '--disable-docs', '--disable-compiler-docs', '--disable-optimize-tests', '--disable-verbose-tests', '--disable-local-rust', '--enable-rpath', '--disable-codegen-tests', '--disable-ninja', '--disable-locked-deps', '--disable-vendor', '--disable-sanitizers', '--disable-dist-src', '--disable-cargo-native-static', '--disable-profiler', '--disable-full-tools', '--disable-lld', '--disable-llvm-bitcode-linker', '--disable-control-flow-guard', '--disable-patch-binaries-for-nix', '--enable-new-symbol-mangling', '--prefix=/opt', '--sysconfdir=/etc', '--llvm-root=/opt', '--llvm-config=/opt/bin/llvm-config', '--llvm-filecheck=/opt/bin/FileCheck', '--python=/opt/bin/python3', '--release-channel="auto-detect"', '--release-description=KZL 2025/09/08 20:35:11 -0500', '--enable-manage-submodules', '--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,src,wasm-component-ld', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set=change-id=142379', '--set=llvm.download-ci-llvm=false', '--set=build.compiletest-use-stage0-libtest=false', '--set=rust.download-rustc=false', '--set=rust.use-lld=true', '--set=rust.llvm-tools=false', '--set=rust.llvm-bitcode-linker=false', '--set=rust.remap-debuginfo=true', '--set=rust.jemalloc=true', '--set=target.x86_64-unknown-linux-gnu.cc=/opt/bin/clang', '--set=target.x86_64-unknown-linux-gnu.cxx=/opt/bin/clang++', '--set=target.x86_64-unknown-linux-gnu.ar=/opt/bin/llvm-ar', '--set=target.x86_64-unknown-linux-gnu.ranlib=/opt/bin/llvm-ranlib']
 
 # Always patch binaries for usage with Nix toolchains. If `true` then binaries
 # will be patched unconditionally. If `false` or unset, binaries will be patched

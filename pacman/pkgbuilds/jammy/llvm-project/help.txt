@@ -26,7 +26,7 @@
 -- polly project is disabled
 -- pstl project is disabled
 -- flang project is disabled
--- Found Python3: /usr/bin/python3.10 (found suitable version "3.10.12", minimum required is "3.0") found components: Interpreter 
+-- Found Python3: /home/kzl/.local/bin/python (found suitable version "3.13.5", minimum required is "3.0") found components: Interpreter 
 -- Performing Test LLVM_LIBSTDCXX_MIN
 -- Performing Test LLVM_LIBSTDCXX_MIN - Success
 -- Performing Test LLVM_LIBSTDCXX_SOFT_ERROR
@@ -151,11 +151,11 @@
 -- Native target architecture is X86
 -- Threads enabled.
 -- Doxygen disabled.
--- Ninja version: 1.11.1.git.kitware.jobserver-1
+-- Ninja version: 1.13.0.git.kitware.jobserver-pipe-1
 -- Could NOT find OCaml (missing: OCAMLFIND OCAML_VERSION OCAML_STDLIB_PATH) 
 -- OCaml bindings disabled.
--- Could NOT find Python module pygments
--- Could NOT find Python module pygments.lexers.c_cpp
+-- Found Python module pygments
+-- Found Python module pygments.lexers.c_cpp
 -- Found Python module yaml
 -- LLVM default target triple: x86_64-unknown-linux-gnu
 -- Performing Test CXX_SUPPORTS_CUSTOM_LINKER
@@ -803,7 +803,7 @@ LIBXML2_INCLUDE_DIR:PATH=/usr/include/libxml2
 LIBXML2_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libxml2.so
 
 // Path to a program.
-LIBXML2_XMLLINT_EXECUTABLE:FILEPATH=LIBXML2_XMLLINT_EXECUTABLE-NOTFOUND
+LIBXML2_XMLLINT_EXECUTABLE:FILEPATH=/usr/bin/xmllint
 
 // Default URL where lldb bug reports are to be submitted.
 LLDB_BUG_REPORT_URL:STRING=https://github.com/llvm/llvm-project/issues/
@@ -1687,7 +1687,7 @@ LibEdit_INCLUDE_DIRS:PATH=/usr/include
 LibEdit_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libedit.so
 
 // Ninja version number
-NINJA_VERSION:STRING=1.11.1.git.kitware.jobserver-1
+NINJA_VERSION:STRING=1.13.0.git.kitware.jobserver-pipe-1
 
 // Path to a program.
 OCAMLFIND:FILEPATH=OCAMLFIND-NOTFOUND
@@ -1704,11 +1704,11 @@ PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
 // Enable IEEE binary128 as default long double format on PowerPC Linux.
 PPC_LINUX_DEFAULT_IEEELONGDOUBLE:BOOL=OFF
 
-// Failed to find python module 'pygments'
-PY_PYGMENTS_FOUND:BOOL=OFF
+// Found python module 'pygments'
+PY_PYGMENTS_FOUND:BOOL=ON
 
-// Failed to find python module 'pygments.lexers.c_cpp'
-PY_PYGMENTS_LEXERS_C_CPP_FOUND:BOOL=OFF
+// Found python module 'pygments.lexers.c_cpp'
+PY_PYGMENTS_LEXERS_C_CPP_FOUND:BOOL=ON
 
 // Found python module 'yaml'
 PY_YAML_FOUND:BOOL=ON

@@ -130,7 +130,7 @@ SRCPKGDEST="/var/cache/makepkg/srcpackages"
 #-- Log files: specify a fixed directory where all log files will be placed
 LOGDEST="/var/cache/makepkg/makepkglogs"
 #-- Packager: name/email of the person or organization building packages
-PACKAGER="Zelun Kong <zelun.kong@outlook.com>"
+PACKAGER="KZL <lz3450@outlook.com>"
 #-- Specify a key to use for package signing
 #GPGKEY=""
 

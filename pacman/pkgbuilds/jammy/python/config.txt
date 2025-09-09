@@ -2,12 +2,8 @@ checking for git... found
 checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
 checking for Python interpreter freezing... ./_bootstrap_python
-checking for python3.13... no
-checking for python3.13... no
-checking for python3.12... no
-checking for python3.11... no
-checking for python3.10... python3.10
-checking Python for regen version... Python 3.10.12
+checking for python3.13... python3.13
+checking Python for regen version... Python 3.13.5
 checking for pkg-config... /usr/bin/pkg-config
 checking pkg-config is at least version 0.9.0... yes
 checking MACHDEP... "linux"
@@ -186,7 +182,7 @@ checking for dirent.h that defines DIR... yes
 checking for library containing opendir... none required
 checking for sys/mkdev.h... (cached) no
 checking for sys/sysmacros.h... (cached) yes
-checking for bluetooth/bluetooth.h... no
+checking for bluetooth/bluetooth.h... yes
 checking for net/if.h... yes
 checking for linux/netlink.h... yes
 checking for netlink/netlink.h... no
@@ -265,7 +261,7 @@ checking for ffi_prep_cif_var... yes
 checking for ffi_prep_closure_loc... yes
 checking for ffi_closure_alloc... yes
 checking for --with-system-libmpdec... no
-configure: WARNING: the bundled copy of libmpdecimal is scheduled for removal in Python 3.15; consider using a system installed mpdecimal library.
+configure: WARNING: the bundled copy of libmpdec is scheduled for removal in Python 3.16; consider using a system installed mpdecimal library.
 checking for --with-decimal-contextvar... yes
 checking for decimal libmpdec machine... uint128
 checking for sqlite3 >= 3.15.2... yes

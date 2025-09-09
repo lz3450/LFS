@@ -127,6 +127,7 @@ checking whether memrchr is declared... yes
 checking for backtrace... yes
 checking for copy_file_range... yes
 checking for fallocate... yes
+checking for getrandom... yes
 checking for getrlimit... yes
 checking for gettimeofday... yes
 checking for lgetxattr... yes

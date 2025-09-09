@@ -1,8 +1,8 @@
-# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+# Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=erofs-utils
-pkgver=1.8.9
-pkgrel=12
+pkgver=1.8.10
+pkgrel=1
 epoch=
 pkgdesc="Userspace utilities for linux-erofs file system"
 arch=('x86_64')

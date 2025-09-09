@@ -1,8 +1,8 @@
-# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+# Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g69
-pkgrel=24
+pkgver=7.0.0.g79
+pkgrel=2
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -71,7 +71,7 @@ prepare() {
       -e '/^#SRCDEST=/c\SRCDEST="/var/cache/makepkg/sources"' \
       -e '/^#SRCPKGDEST=/c\SRCPKGDEST="/var/cache/makepkg/srcpackages"' \
       -e '/^#LOGDEST=/c\LOGDEST="/var/cache/makepkg/makepkglogs"' \
-      -e '/^#PACKAGER=/c\PACKAGER="Zelun Kong <zelun.kong@outlook.com>"' \
+      -e '/^#PACKAGER=/c\PACKAGER="KZL <lz3450@outlook.com>"' \
       -e '/^OPTIONS=/s/libtool/!libtool/' \
       -e '/^OPTIONS=/s/!lto/lto/' \
       etc/makepkg.conf.in
