@@ -26,7 +26,7 @@
 -- polly project is disabled
 -- pstl project is disabled
 -- flang project is disabled
--- Found Python3: /home/kzl/.local/bin/python (found suitable version "3.13.5", minimum required is "3.0") found components: Interpreter 
+-- Found Python3: /home/kzl/.local/bin/python (found suitable version "3.13.7", minimum required is "3.0") found components: Interpreter 
 -- Performing Test LLVM_LIBSTDCXX_MIN
 -- Performing Test LLVM_LIBSTDCXX_MIN - Success
 -- Performing Test LLVM_LIBSTDCXX_SOFT_ERROR
