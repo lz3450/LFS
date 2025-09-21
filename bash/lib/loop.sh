@@ -46,16 +46,16 @@ loop_partitioned_setup() {
     _loop_debug "$_loop_device -> $_img"
 }
 
-# detach loop device
-# loop_teardown <loop_device>
+# umount loop device
+# loop_unmount <loop_device>
 # $1: loop device name
-loop_teardown() {
+loop_unmount() {
     local _loop_device="${1:-}"
     if [[ -z "$_loop_device" ]]; then
         return
     fi
 
-    _loop_debug "Detaching loop device $_loop_device"
+    _loop_debug "Unmounting loop device $_loop_device"
 
     sync
 
@@ -77,9 +77,21 @@ loop_teardown() {
         sleep 3
     done
 
-    losetup -d "$_loop_device"
+    _loop_debug "Done (unmount)"
+}
 
-    _loop_debug "Done (teardown)"
+# umount loop device
+# loop_detach <loop_device>
+# $1: loop device name
+loop_detach() {
+    local _loop_device="${1:-}"
+    if [[ -z "$_loop_device" ]]; then
+        return
+    fi
+
+    _loop_debug "Detaching loop device $_loop_device"
+    losetup -d "$_loop_device"
+    _loop_debug "Done (detach)"
 }
 
 debug "${BASH_SOURCE[0]} sourced"

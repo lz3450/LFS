@@ -22,7 +22,6 @@ declare -r CHROOT_PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/
 
 chroot_dir=""
 chroot_active_mounts=()
-declare -i chroot_setup_times=0
 
 ### functions
 _chroot_debug() {
@@ -77,18 +76,19 @@ _mount_resolv_conf() {
 # when using `chroot_setup`, `chroot_teardown` must be call to clean up
 # for example, `trap chroot_teardown EXIT`
 chroot_setup() {
-    chroot_dir="$1"
-
-    if ! mountpoint -q "$chroot_dir"; then
-        _chroot_error "\"$chroot_dir\" is not a mountpoint"
+    if [[ -n "$chroot_dir" ]]; then
+        _chroot_error "\"chroot_dir\" is already set to \"$chroot_dir\""
         return 1
     fi
 
-    if (( chroot_setup_times > 0 )); then
-        chroot_setup_times=$(( chroot_setup_times + 1 ))
-        _chroot_debug "chroot_setup_times=$chroot_setup_times"
-        return
+    local _chroot_dir="$1"
+
+    if ! mountpoint -q "$_chroot_dir"; then
+        _chroot_error "\"$_chroot_dir\" is not a mountpoint"
+        return 1
     fi
+
+    chroot_dir="$_chroot_dir"
 
     _chroot_debug "Setting up chroot environment in \"$chroot_dir\""
 
@@ -102,8 +102,6 @@ chroot_setup() {
 
     _mount_resolv_conf
 
-    chroot_setup_times=1
-
     _chroot_debug "Done (setup)"
 }
 
@@ -111,16 +109,7 @@ chroot_teardown() {
     local _mountpoints=()
 
     if [[ -z "$chroot_dir" ]] || (( ${#chroot_active_mounts[@]} == 0 )); then
-        _chroot_debug "chroot_dir is not set, nothing to tear down"
-        return
-    fi
-
-    if (( chroot_setup_times == 0 )); then
-        _chroot_debug "Nothing to tear down in $chroot_dir"
-        return
-    elif (( chroot_setup_times > 1 )); then
-        chroot_setup_times=$(( chroot_setup_times - 1 ))
-        _chroot_debug "chroot_setup_times=$chroot_setup_times"
+        _chroot_debug "\"chroot_dir\" is not set, nothing to tear down"
         return
     fi
 
@@ -130,7 +119,7 @@ chroot_teardown() {
         local _mp
         for _mp in "${chroot_active_mounts[@]}"; do
             if mountpoint -q "$_mp" >&2; then
-                if ! umount "$_mp"; then
+                if ! umount -v "$_mp"; then
                     _mountpoints+=("$_mp")
                     _chroot_warn "Failed to unmount \"$_mp\", retry later"
                 fi
@@ -142,14 +131,8 @@ chroot_teardown() {
         _mountpoints=()
         sleep 3
     done
-    chroot_setup_times=0
 
     _chroot_debug "Done (teardown)"
-}
-
-chroot_teardown_force() {
-    chroot_setup_times=1
-    chroot_teardown
 }
 
 chroot_run() {

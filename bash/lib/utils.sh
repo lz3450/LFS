@@ -75,10 +75,11 @@ dir_empty() {
 clean_rootfs() {
     local _rootfs_dir="$1"
     if [[ ! -d "$_rootfs_dir" ]]; then
-        _utils_error "Root filesystem directory is not a directory" 1
+        _utils_error "\"$_rootfs_dir\" is not a directory" 1
     fi
 
-    _utils_debug "Cleaning rootfs..."
+    _utils_debug "Cleaning up rootfs..."
+
     # general
     if mountpoint -q "$_rootfs_dir/dev"; then
         _utils_warn "$_rootfs_dir/dev is a mountpoint, skipping /dev cleanup"
@@ -102,7 +103,8 @@ clean_rootfs() {
     # pacman
     delete_all_contents "$_rootfs_dir"/var/lib/pacman/
     find "$_rootfs_dir" -type f \( -name '*.pacnew' -o -name '*.pacsave' \) -delete
-    _utils_debug "Done"
+
+    _utils_debug "Done (cleanup)"
 }
 
 debug "${BASH_SOURCE[0]} sourced"
