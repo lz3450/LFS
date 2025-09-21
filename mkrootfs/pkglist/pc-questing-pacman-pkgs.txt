@@ -1,2 +1,2 @@
-linux 6.12.37-3
-pacman 7.0.0.g69-24
+linux 6.16.7-1
+pacman 7.0.0.g79-2

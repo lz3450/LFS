@@ -13,7 +13,7 @@ chrony
 console-setup
 console-setup-linux
 coreutils
-coreutils-from-gnu
+coreutils-from-uutils
 cpio
 cron
 cron-daemon-common
@@ -188,7 +188,6 @@ libpython3-stdlib
 libpython3.13-minimal
 libpython3.13-stdlib
 libreadline8t64
-libreiserfscore0t64
 librtmp1
 libsasl2-2
 libsasl2-modules-db
@@ -225,10 +224,10 @@ libyaml-0-2
 libzstd1
 linux-base
 linux-firmware
-linux-image-6.15.0-4-generic
+linux-image-6.17.0-4-generic
 linux-image-generic
 linux-libc-dev
-linux-modules-6.15.0-4-generic
+linux-modules-6.17.0-4-generic
 linux-sysctl-defaults
 locales
 login
@@ -281,11 +280,13 @@ python3.13-minimal
 readline-common
 rpcsvc-proto
 rsyslog
+rust-coreutils
 sed
 sensible-utils
 shared-mime-info
 smartmontools
 sudo
+sudo-rs
 systemd
 systemd-boot
 systemd-boot-efi
@@ -305,6 +306,7 @@ vim-common
 vim-tiny
 wget
 whiptail
+wireless-regdb
 wpasupplicant
 xdg-user-dirs
 xfsprogs

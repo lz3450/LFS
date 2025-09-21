@@ -9,7 +9,7 @@ chrony
 console-setup
 console-setup-linux
 coreutils
-coreutils-from-gnu
+coreutils-from-uutils
 cron
 cron-daemon-common
 dash
@@ -196,10 +196,12 @@ python3.13
 python3.13-minimal
 readline-common
 rsyslog
+rust-coreutils
 sed
 sensible-utils
 shared-mime-info
 sudo
+sudo-rs
 systemd
 systemd-cryptsetup
 systemd-hwe-hwdb
