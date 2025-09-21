@@ -61,12 +61,13 @@ loop_teardown() {
 
     local _loop_mountpoints=()
     local _mountpoints=()
-    readarray -t _loop_mountpoints < <(mount | grep "$_loop_device" | cut -d ' ' -f 1 | tac)
+    readarray -t _loop_mountpoints < <(mount | grep "$_loop_device" | cut -d ' ' -f 1 )
+    # _loop_debug "Mounted partitions: $(IFS=','; echo "${_loop_mountpoints[*]}")"
 
     while (( ${#_loop_mountpoints[@]} > 0 )); do
         local _mp
         for _mp in "${_loop_mountpoints[@]}"; do
-            if ! umount -v "$_mp"; then
+            if ! umount -v "$_mp" >&2; then
                 _mountpoints+=("$_mp")
                 _loop_warn "Failed to unmount \"$_mp\", retry later"
             fi
@@ -78,7 +79,7 @@ loop_teardown() {
 
     losetup -d "$_loop_device"
 
-    _loop_debug "Done"
+    _loop_debug "Done (teardown)"
 }
 
 debug "${BASH_SOURCE[0]} sourced"

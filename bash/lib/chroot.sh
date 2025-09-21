@@ -34,6 +34,9 @@ _chroot_info () {
 _chroot_warn() {
     warn "${1:-}" "${BASH_SOURCE[0]##*/}"
 }
+_chroot_error() {
+    error "${1:-}" 0 "${BASH_SOURCE[0]##*/}"
+}
 
 _chroot_mount() {
     mount "$@" >&2
@@ -74,13 +77,18 @@ _mount_resolv_conf() {
 # when using `chroot_setup`, `chroot_teardown` must be call to clean up
 # for example, `trap chroot_teardown EXIT`
 chroot_setup() {
+    chroot_dir="$1"
+
+    if ! mountpoint -q "$chroot_dir"; then
+        _chroot_error "\"$chroot_dir\" is not a mountpoint"
+        return 1
+    fi
+
     if (( chroot_setup_times > 0 )); then
         chroot_setup_times=$(( chroot_setup_times + 1 ))
         _chroot_debug "chroot_setup_times=$chroot_setup_times"
         return
     fi
-
-    chroot_dir="$1"
 
     _chroot_debug "Setting up chroot environment in \"$chroot_dir\""
 
@@ -96,7 +104,7 @@ chroot_setup() {
 
     chroot_setup_times=1
 
-    _chroot_debug "Done"
+    _chroot_debug "Done (setup)"
 }
 
 chroot_teardown() {
@@ -136,7 +144,7 @@ chroot_teardown() {
     done
     chroot_setup_times=0
 
-    _chroot_debug "Done"
+    _chroot_debug "Done (teardown)"
 }
 
 chroot_teardown_force() {

@@ -72,7 +72,7 @@ case "$arg_suite" in
         deb_pkgs+=("${QUESTING_DEB_PKGS[@]}")
         ;;
     *)
-        error "Unsupported suite \"$arg_suite\"" 128
+        error "Unsupported suite: $arg_suite" 128
         ;;
 esac
 
@@ -397,7 +397,6 @@ post_configure_rootfs() {
 }
 
 cleanup_platform_specific() {
-    set +e
     if (( opt_loop > 0 )); then
         sync
         loop_teardown "$loop_device"

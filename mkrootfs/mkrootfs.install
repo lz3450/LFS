@@ -230,7 +230,7 @@ install_deb_pkgs() {
 }
 
 install_pacman_pkgs() {
-    if [[ -z "$pacman_pkgs" ]]; then
+    if [[ -z "${pacman_pkgs:-}" ]]; then
         info "No pacman packages to install"
         return
     fi
@@ -262,10 +262,10 @@ configure_rootfs_common() {
     cp -vf -- "$CONFIG_DIR/network/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
     cp -vf -- "$CONFIG_DIR/network/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
     cp -vf -- "$CONFIG_DIR/network/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
-    local _wl_dev=$(ip -o link show | awk -F': ' '{print $2}' | grep 'wl.*')
-    if [[ -n "$_wl_dev" ]]; then
-        ln -sf wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-$_wl_dev.conf"
-    fi
+    # local _wl_dev=$(ip -o link show | awk -F': ' '{print $2}' | grep 'wl.*')
+    # if [[ -n "$_wl_dev" ]]; then
+    #     ln -sf wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-$_wl_dev.conf"
+    # fi
     # grml-zsh-config for root
     wget -qO "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
     echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
@@ -277,10 +277,12 @@ cleanup() {
     set +e
 
     log_magenta "Cleaning up..."
-    cleanup_platform_specific
-
     chroot_teardown_force
     umount -v -R -- "$ROOTFS_DIR"
+
+    cleanup_platform_specific
+
+    umount -R -- "$ROOTFS_DIR"
 
     local _answer
     read -r -p "Do you want to remove the working directory $WORK_DIR? [Y/n] " _answer
@@ -288,10 +290,10 @@ cleanup() {
     if [[ "$_answer" =~ ^[Yy]$ ]]; then
         echo >&2
         log_magenta "Removing working directory: $WORK_DIR"
-        rm -rf --one-file-system -- "$WORK_DIR"
+        rm -vrf --one-file-system -- "$WORK_DIR"
     fi
 
-    log_magenta "Done"
+    log_magenta "Done (cleanup)"
 
     trap - EXIT
     case "$_signal" in
@@ -318,7 +320,7 @@ touch -- "$WORK_DIR/$arg_platform"
 
 prepare_rootfs
 bootstrap_rootfs
-chroot_setup "$ROOTFS_DIR"
+chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment" 3
 if declare -F 'post_bootstrap_rootfs' > '/dev/null'; then
     info "Running post-bootstrap hook..."
     post_bootstrap_rootfs
@@ -347,5 +349,6 @@ epilogue
 ### error codes
 # 1: general error
 # 2: mount error
+# 3: chroot error
 # 127: command not found
 # 128: unknown option or invalid argument

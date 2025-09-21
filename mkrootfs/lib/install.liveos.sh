@@ -113,7 +113,7 @@ case "$arg_suite" in
         )
         ;;
     *)
-        error "Unsupported suite \"$arg_suite\"" 128
+        error "Unsupported suite: $arg_suite" 128
         ;;
 esac
 readonly -a deb_pkgs
@@ -383,7 +383,8 @@ post_configure_rootfs() {
 }
 
 cleanup_platform_specific() {
-    set +e
     sync
     loop_teardown "$loop_device"
 }
+
+debug "${BASH_SOURCE[0]} sourced"
