@@ -439,6 +439,8 @@
         "pacdiff",
         "packlist",
         "pacman",
+        "pacnew",
+        "pacsave",
         "pacstrap",
         "Pacstrapping",
         "PAHOLE",
