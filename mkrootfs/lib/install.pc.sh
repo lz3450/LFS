@@ -153,7 +153,7 @@ _prompt_for_partition_path() {
     partition_device_map[$_partition_name]="$_partition_path"
 }
 
-prepare_rootfs() {
+prepare() {
     # exec 3>&1
     # exec >> "$LOG_DIR/${FUNCNAME[0]}.log"
 
@@ -380,14 +380,12 @@ EOF
     fi
 }
 
-post_configure_rootfs() {
-    local _answer
-    read -r -p "Do you want to configure rootfs manually (post configuration)? [y/N] " _answer
-    if [[ "$_answer" =~ ^[Yy]$ ]]; then
-        chroot_run "$ROOTFS_DIR" /bin/zsh
-    fi
-
+finalize() {
     if (( $opt_loop > 0 )); then
+        ###
+        loop_teardown "$loop_device"
+
+        ###
         cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
         log_cyan "Successfully installed ${distro^} ${arg_suite^} on $SCRIPT_DIR/images/$IMG_FILE_NAME"
@@ -398,7 +396,6 @@ post_configure_rootfs() {
 
 cleanup_platform_specific() {
     if (( opt_loop > 0 )); then
-        sync
         loop_teardown "$loop_device"
     fi
 }

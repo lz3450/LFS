@@ -247,6 +247,8 @@ configure_rootfs_common() {
     # hostname
     if [[ "${arg_platform}" == 'liveos' ]]; then
         echo "LiveOS" > "$ROOTFS_DIR/etc/hostname"
+    elif [[ "${arg_platform}" == 'rpi' ]]; then
+        echo "RPi" > "$ROOTFS_DIR/etc/hostname"
     else
         local _hostname
         read -r -p 'hostname: ' _hostname
@@ -272,9 +274,19 @@ configure_rootfs_common() {
     echo '. /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR/root/.zshrc"
 }
 
+configure_rootfs_manual() {
+    local _answer
+    read -r -p "Do you want to configure rootfs manually ? [y/N] " _answer
+    if [[ "$_answer" =~ ^[Yy]$ ]]; then
+        chroot_run "$ROOTFS_DIR" /bin/zsh || :
+    fi
+}
+
 cleanup() {
     local _signal="${1:-}"
     set +e
+
+    sync
 
     log_magenta "Cleaning up..."
     chroot_teardown_force
@@ -282,15 +294,13 @@ cleanup() {
 
     cleanup_platform_specific
 
-    umount -R -- "$ROOTFS_DIR"
-
     local _answer
     read -r -p "Do you want to remove the working directory $WORK_DIR? [Y/n] " _answer
     _answer="${_answer:-y}"
     if [[ "$_answer" =~ ^[Yy]$ ]]; then
         echo >&2
         log_magenta "Removing working directory: $WORK_DIR"
-        rm -vrf --one-file-system -- "$WORK_DIR"
+        rm -rf --one-file-system -- "$WORK_DIR"
     fi
 
     log_magenta "Done (cleanup)"
@@ -314,11 +324,15 @@ trap 'cleanup SIGTERM' SIGTERM
 
 prologue
 
+###
 make_work_dirs
 echo "${SCRIPT_INVOCATION[@]}" > "$LOG_DIR/command.log"
 touch -- "$WORK_DIR/$arg_platform"
 
-prepare_rootfs
+###
+prepare
+
+###
 bootstrap_rootfs
 chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment" 3
 if declare -F 'post_bootstrap_rootfs' > '/dev/null'; then
@@ -326,6 +340,7 @@ if declare -F 'post_bootstrap_rootfs' > '/dev/null'; then
     post_bootstrap_rootfs
 fi
 
+###
 if [[ "$distro" != "kzl-linux" ]]; then
     install_deb_pkgs
 fi
@@ -335,13 +350,13 @@ if declare -F 'post_install_pkgs' > '/dev/null'; then
     post_install_pkgs
 fi
 
+###
 configure_rootfs_common
 configure_rootfs_platform_specific
+configure_rootfs_manual
 chroot_teardown
-if declare -F 'post_configure_rootfs' > '/dev/null'; then
-    info "Running post-configuration hook..."
-    post_configure_rootfs
-fi
+
+finalize
 
 cleanup
 epilogue

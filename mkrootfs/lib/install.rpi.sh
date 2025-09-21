@@ -74,7 +74,7 @@ LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR/chroot.sh"
 
 ### functions
-prepare_rootfs() {
+prepare() {
     info "Preparing root filesystem on $loop_device..."
 
     # mkpart
@@ -136,8 +136,8 @@ configure_rootfs_platform_specific() {
 
     ###
     info "Copying kernel images in raspberrypi/firmware to rootfs..."
-    mv -- "$_firmware_dir"/boot/* "$ROOTFS_DIR/boot/firmware/"
-    mv -- "$_firmware_dir"/modules "$ROOTFS_DIR/usr/lib/"
+    cp -rf -- "$_firmware_dir"/boot/* "$ROOTFS_DIR/boot/firmware/"
+    cp -rf -- "$_firmware_dir"/modules "$ROOTFS_DIR/usr/lib/"
     local _kernel_version
     local _kv
     local _kernel_suffix
@@ -155,7 +155,7 @@ configure_rootfs_platform_specific() {
     ###
     info "Initializing rootfs..."
     # chroot_run "$ROOTFS_DIR" update-initramfs -c -k all
-    chroot_run "$ROOTFS_DIR" /bin/bash -e -u -o pipefail -s > "$LOG_DIR/initialize.log" << EOF
+    chroot_run "$ROOTFS_DIR" /bin/bash -e -u -o pipefail -s >> "$LOG_DIR/${FUNCNAME[0]}.log" << EOF
 useradd -m -U -G adm,dialout,sudo,audio,video -s /bin/zsh kzl
 echo "root:raspi" | chpasswd
 echo "kzl:raspi" | chpasswd
@@ -212,17 +212,16 @@ EOF
     fi
 }
 
-post_configure_rootfs() {
+finalize() {
     ###
-    info "Cleaning up rootfs..."
-    clean_rootfs "$ROOTFS_DIR" > "$LOG_DIR/clean_rootfs.log"
+    debug "Cleaning up root filesystem..."
+    umount -v -- "$ROOTFS_DIR/boot/firmware"
+    delete_all_contents "$ROOTFS_DIR/boot/firmware/"
+    clean_rootfs "$ROOTFS_DIR" >> "$LOG_DIR/${FUNCNAME[0]}.log"
 
     ###
-    local _answer
-    read -r -p "Do you want to configure rootfs manually (post configuration)? [y/N] " _answer
-    if [[ "$_answer" =~ ^[Yy]$ ]]; then
-        chroot_run "$ROOTFS_DIR" /bin/zsh
-    fi
+    loop_unmount "$loop_device"
+    loop_detach "$loop_device"
 
     ###
     cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
@@ -231,8 +230,8 @@ post_configure_rootfs() {
 }
 
 cleanup_platform_specific() {
-    sync
-    loop_teardown "$loop_device"
+    loop_unmount "$loop_device"
+    loop_detach "$loop_device"
 }
 
 debug "${BASH_SOURCE[0]} sourced"

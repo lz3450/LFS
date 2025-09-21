@@ -145,7 +145,7 @@ LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$SCRIPT_DIR/lib/pacman.sh"
 
 ### functions
-prepare_rootfs() {
+prepare() {
     exec 3>&1
     exec > "$LOG_DIR/${FUNCNAME[0]}.log"
 
@@ -320,7 +320,7 @@ EOF
     done
 }
 
-_make_rootfs_ro_rootfs_img() {
+_make_ro_rootfs_img() {
     info "Making rootfs SquashFS/EROFS image, this may take some time..."
     local _rootfs_img_file="$SCRIPT_DIR/images/${ISO_FILE_NAME%.iso}-$RO_ROOTFS_IMG_FILE_NAME"
     # mksquashfs "$ROOTFS_DIR" "$_rootfs_img_file" -b 1M -comp zstd -noappend
@@ -357,11 +357,10 @@ _make_iso_image() {
         -appended_part_as_gpt \
         -output "$SCRIPT_DIR/images/$ISO_FILE_NAME" \
         "$ISOFS_DIR"
-    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/images/$ISO_FILE_NAME"
-    log_cyan "Successfully made ${distro^} ${arg_suite^} LiveOS ISO image: $SCRIPT_DIR/images/$ISO_FILE_NAME"
 }
 
-post_configure_rootfs() {
+finalize() {
+    ###
     debug "Cleaning up root filesystem..."
     umount -v -- "$ROOTFS_DIR/$efi_dir"
     umount -v -- "$ROOTFS_DIR/home"
@@ -369,22 +368,33 @@ post_configure_rootfs() {
     delete_all_contents "$ROOTFS_DIR/home/"
     clean_rootfs "$ROOTFS_DIR" >> "$LOG_DIR/${FUNCNAME[0]}.log"
 
-    _make_rootfs_ro_rootfs_img
+    ###
+    _make_ro_rootfs_img
 
-    cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
-    chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
-    log_cyan "Successfully installed ${distro^} ${arg_suite^} LiveOS on $SCRIPT_DIR/images/$IMG_FILE_NAME"
+    ###
+    loop_unmount "$loop_device"
 
+    ###
     local _answer
     read -r -p "Do you want to create a bootable ISO image? [y/N] " _answer
     if [[ "$_answer" =~ ^[Yy]$ ]]; then
         _make_iso_image
+        chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/images/$ISO_FILE_NAME"
+        log_cyan "Successfully made ${distro^} ${arg_suite^} LiveOS ISO image: $SCRIPT_DIR/images/$ISO_FILE_NAME"
     fi
+
+    ###
+    loop_detach "$loop_device"
+
+    ###
+    cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+    log_cyan "Successfully installed ${distro^} ${arg_suite^} LiveOS on $SCRIPT_DIR/images/$IMG_FILE_NAME"
 }
 
 cleanup_platform_specific() {
-    sync
-    loop_teardown "$loop_device"
+    loop_unmount "$loop_device"
+    loop_detach "$loop_device"
 }
 
 debug "${BASH_SOURCE[0]} sourced"
