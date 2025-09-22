@@ -1,1 +1,0 @@
-../../ubuntu/02-install-app.sh
