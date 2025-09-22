@@ -264,10 +264,12 @@ configure_rootfs_common() {
     cp -vf -- "$CONFIG_DIR/network/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
     cp -vf -- "$CONFIG_DIR/network/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
     cp -vf -- "$CONFIG_DIR/network/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
-    # local _wl_dev=$(ip -o link show | awk -F': ' '{print $2}' | grep 'wl.*')
-    # if [[ -n "$_wl_dev" ]]; then
-    #     ln -sf wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-$_wl_dev.conf"
-    # fi
+    if [[ "${arg_platform}" != 'rpi' ]]; then
+        local _wl_dev=$(ip -o link show | awk -F': ' '{print $2}' | grep 'wl.*')
+        if [[ -n "$_wl_dev" ]]; then
+            ln -sf wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-$_wl_dev.conf"
+        fi
+    fi
     # grml-zsh-config for root
     wget -qO "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
     echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
