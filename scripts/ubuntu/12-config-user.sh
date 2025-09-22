@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# 12-install-desktop.sh
+# 12-config-user.sh
 #
 
 set -e

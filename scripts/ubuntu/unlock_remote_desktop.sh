@@ -1,4 +1,7 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+#
+# unlock_remote_desktop.sh
+#
 
 session_number=$(loginctl list-sessions | awk '$5 == "tty2" {print $1}')
 loginctl unlock-session "$session_number"

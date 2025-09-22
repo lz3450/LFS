@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# 10-config-rdb.sh
+# 10-config-rdp.sh
 #
 
 set -e
