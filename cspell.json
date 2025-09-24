@@ -249,6 +249,7 @@
         "LDFLAGS",
         "leapseconds",
         "LFLAGS",
+        "LFS",
         "libalpm",
         "libassuan",
         "libaudit",
