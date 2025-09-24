@@ -22,6 +22,12 @@ RUN mkdir -p /home/kzl/Projects
 RUN mkdir -p /home/kzl/makepkg/sources
 RUN mkdir -p /home/kzl/wheels
 
+# Set up zsh configuration
+RUN git clone --depth 1 https://github.com/lz3450/LFS.git
+WORKDIR /home/kzl/LFS/config
+RUN ./update-config.sh
+WORKDIR /home/kzl
+
 # Expose SSH port
 EXPOSE 22
 
@@ -36,4 +42,4 @@ CMD ["/usr/sbin/sshd", "-D"]
 
 # Run the container in detached mode
 # docker run -d --rm -u root -p 2223:22 --name jammy -h JAMMY <REPOSITORY:TAG>
-# docker run -d --rm -u root -p 2223:22 --name jammy -h JAMMY --mount type=bind,source=/home/kzl/LFS,target=/home/kzl/LFS --mount type=bind,source=/home/kzl/Projects,target=/home/kzl/Projects --mount type=bind,source=/home/kzl/makepkg/sources,target=/home/kzl/makepkg/sources <REPOSITORY:TAG>
+# docker run -d --rm -u root -p 2223:22 --name jammy -h JAMMY --mount type=bind,source=/home/kzl/LFS,target=/home/kzl/LFS <REPOSITORY:TAG>
