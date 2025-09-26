@@ -1,7 +1,7 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=fish
-pkgver=4.0.6
+pkgver=4.0.8
 pkgrel=1
 epoch=
 pkgdesc="A smart and user-friendly command line shell"
@@ -15,7 +15,7 @@ install=$pkgname.install
 source=(
   git+https://github.com/fish-shell/fish-shell.git#tag=$pkgver
 )
-sha256sums=('e0881f1f4f59656eb69881400f5f2a7b30efebbe590f0c5d31d608e0675775b4')
+sha256sums=('330f5b2587f1a1edd2b2ac1e9f6e51a1f9541203e5c82224a99a3942722bb499')
 
 build() {
   cd fish-shell
