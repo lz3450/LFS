@@ -2,8 +2,8 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=6.16.9
-pkgrel=2
+pkgver=6.17
+pkgrel=3
 epoch=
 pkgdesc="LTS Linux Kernel"
 arch=('x86_64')
@@ -11,11 +11,12 @@ url="https://www.kernel.org"
 license=('KZL')
 options=(!strip)
 source=(
-  git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
+  # git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#branch=linux-${pkgver%.*}.y
+  git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#tag=v$pkgver
   config
 )
-sha256sums=('SKIP'
-            '3b9ca477eedff406c54c367396ebdcd7fe91ddfedba5ab279cac6331cf5a35f7')
+sha256sums=('36f75bf7406db7455b64ea442251f231502c21d3a2b1abd7be2faef83a767a29'
+            'b7c6ba2863ddded4164cba90dfeb4551aab9080c11ba95b2548af7ae5c6a6dfd')
 
 export LOCALVERSION="-KZL"
 export KBUILD_BUILD_HOST="Ubuntu"
@@ -53,9 +54,9 @@ package_linux() {
   make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 O=build modules_install
 
   install -dm600 "$pkgdir"/boot/efi/
-  install -Dm644 "build/$_image_name" "$pkgdir/boot/vmlinuz-$pkgver$LOCALVERSION"
+  install -Dm644 "build/$_image_name" "$pkgdir/boot/vmlinuz-$_kernelrelease"
   install -Dm644 "build/$_image_name" "$pkgdir/boot/efi/vmlinuz$LOCALVERSION"
-  install -Dm644 "$srcdir/config" "$pkgdir/boot/config-$pkgver$LOCALVERSION"
+  install -Dm644 "$srcdir/config" "$pkgdir/boot/config-$_kernelrelease"
 
   ln -vsf --no-dereference "/usr/src/linux-headers-$_kernelrelease" "$pkgdir/usr/lib/modules/$_kernelrelease/source"
   ln -vsf --no-dereference "/usr/src/linux-headers-$_kernelrelease/build" "$pkgdir/usr/lib/modules/$_kernelrelease/build"
@@ -75,7 +76,7 @@ update-initramfs -k all -c
 
 cp -v -- /boot/initrd.img /boot/efi/initrd.img
 cp -v -- /boot/vmlinuz /boot/efi/vmlinuz
-cp -v -- /boot/initrd.img-$pkgver$LOCALVERSION /boot/efi/initrd$LOCALVERSION.img
+cp -v -- /boot/initrd.img-$_kernelrelease /boot/efi/initrd$LOCALVERSION.img
 EOF
 }
 
