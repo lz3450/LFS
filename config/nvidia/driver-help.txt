@@ -1,8 +1,8 @@
 
-/home/kzl/Downloads/NVIDIA-Linux-x86_64-570.172.08.run [options]
+/home/kzl/Downloads/NVIDIA-Linux-x86_64-580.82.07.run [options]
 
 This program will install the NVIDIA Accelerated Graphics Driver
-for Linux-x86_64 570.172.08 by unpacking the embedded tarball and
+for Linux-x86_64 580.82.07 by unpacking the embedded tarball and
 executing the ./nvidia-installer  installation utility.
 
 --info
@@ -21,7 +21,7 @@ executing the ./nvidia-installer  installation utility.
   Check integrity of the archive and exit.
 
 -x, --extract-only
-  Extract the contents of /home/kzl/Downloads/NVIDIA-Linux-x86_64-570.172.08.run, but do not
+  Extract the contents of /home/kzl/Downloads/NVIDIA-Linux-x86_64-580.82.07.run, but do not
   run 'nvidia-installer'.
 
 --add-this-kernel

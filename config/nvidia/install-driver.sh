@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# install-driver-570.sh
+# install-driver.sh
 #
 
 set -e
@@ -16,11 +16,14 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
 
-DRIVER_VERSION=570.172.08
+DRIVER_VERSION=580.82.07
 
 WORKDIR=/tmp/nvidia
 DOWNLOADS_DIR="$HOME/Downloads"
-LOG_FILE="$SCRIPT_DIR/nvidia-driver-install-${DRIVER_VERSION%%.*}.log"
+# LOG_FILE="$SCRIPT_DIR/driver-install-${DRIVER_VERSION%%.*}.log"
+# HELP_TXT="driver-help-${DRIVER_VERSION%%.*}.txt"
+LOG_FILE="$SCRIPT_DIR/driver-install.log"
+HELP_TXT="driver-help.txt"
 
 RUNFILE=NVIDIA-Linux-x86_64-$DRIVER_VERSION.run
 
@@ -33,7 +36,7 @@ fi
 ./install-dependencies.sh
 
 sudo rm -rf "$WORKDIR"
-bash "$DOWNLOADS_DIR/$RUNFILE" -A > driver-help-${DRIVER_VERSION%%.*}.txt
+bash "$DOWNLOADS_DIR/$RUNFILE" -A > "$HELP_TXT"
 bash "$DOWNLOADS_DIR/$RUNFILE" --extract-only --target "$WORKDIR"
 
 cd "$WORKDIR"
@@ -63,5 +66,6 @@ sed -i '/-> Kernel messages:/,/-> X installation prefix/{/-> Kernel messages:/b;
 
 if [[ -f "$SCRIPT_DIR/nvidia-uninstall.log" ]]; then
     sudo chown "$(id -u):$(id -g)" "$SCRIPT_DIR/nvidia-uninstall.log"
-    mv "$SCRIPT_DIR/nvidia-uninstall.log" "$SCRIPT_DIR/nvidia-uninstall-${DRIVER_VERSION%%.*}.log"
+    # mv "$SCRIPT_DIR/nvidia-uninstall.log" "$SCRIPT_DIR/driver-uninstall-${DRIVER_VERSION%%.*}.log"
+    mv "$SCRIPT_DIR/nvidia-uninstall.log" "$SCRIPT_DIR/driver-uninstall.log"
 fi
