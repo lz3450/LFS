@@ -1,0 +1,11 @@
+[Unit]
+Description=Umount LAB3 NFS
+Before=umount.target shutdown.target
+After=network-online.target ssh.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/umount /home/kzl/Projects
+
+[Install]
+WantedBy=shutdown.target

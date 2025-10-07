@@ -1,0 +1,13 @@
+[Unit]
+Description=On-demand NFS mount from LAB3
+Requires=network-online.target ssh.service
+After=network-online.target ssh.service
+
+[Mount]
+What=127.0.0.1:/home/kzl/Projects
+Where=/home/kzl/Projects
+Type=nfs
+Options=noatime,noauto,_netdev,port=34549,hard
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=Automount NFS from LAB3 via reverse tunnel
+Requires=network-online.target ssh.service
+After=network-online.target ssh.service
+
+[Automount]
+Where=/home/kzl/Projects
+
+[Install]
+WantedBy=multi-user.target
