@@ -1,0 +1,9 @@
+new_version=$(git ls-remote https://git.samba.org/samba.git | grep -oP 'refs/tags/samba-\K\d\.\d+\.\d+$' | sort -V | tail -n1)
+srcdir="$pkgname"
+build_system=
+
+post_update() {
+    cd "$BUILDDIR/$pkgname/src/$srcdir"
+
+    ./configure --help > "$PKGBUILDDIR"/help.txt
+}

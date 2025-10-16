@@ -1,0 +1,71 @@
+# Maintainer: Zelun Kong <zelun.kong@outlook.com>
+
+pkgname=samba
+pkgver=4.23.1
+pkgrel=1
+epoch=
+arch=('x86_64')
+url="https://www.samba.org"
+license=('KZL')
+backup=(etc/sysconfig/samba
+        etc/pam.d/samba
+        etc/logrotate.d/samba)
+source=(git+https://git.samba.org/samba.git#tag=$pkgname-$pkgver
+        samba.pam
+        samba.tmpfiles
+        samba.logrotate)
+sha256sums=('247b0bb0b10ac0f805928199672b7163d729509f67279688402eb1f91342b80a'
+            'aa5345d85235c6452fe8e696f38f8e788e7e6b02b481184636d63c6436df8d95'
+            '5398a42ccb36ac3b87cfa42c8050b535efc2ca38ab3b9354a52f4e0fe71b5800'
+            '44662af59edf16e2a618138bf11752cc1dd2a6ffffdbfb41f0a5357c37f9bf32')
+
+build() {
+  cd $pkgname
+
+  ./configure \
+    --without-ldb-lmdb \
+    --with-gpgme \
+    --with-ldap \
+    --disable-cups \
+    --disable-iprint \
+    --with-pam \
+    --with-quotas \
+    --with-acl-support \
+    --with-libarchive \
+    --with-systemd \
+    --with-system-mitkrb5 \
+    --with-experimental-mit-ad-dc \
+    --with-pie \
+    --with-relro \
+    --with-json \
+    --prefix=/usr \
+    --destdir="$pkgdir" \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --libdir=/usr/lib \
+    --bundled-libraries=!popt,talloc,pytalloc,pytalloc-util,tevent,pytevent,tdb,pytdb,ldb,pyldb,pyldb-util \
+    --disable-rpath-install \
+    --enable-fhs \
+    --systemd-install-services
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+  rm -rf "$pkgdir"/var/run
+
+  # smb.conf example
+  install -Dm644 "$srcdir"/samba/examples/smb.conf.default "$pkgdir"/etc/samba/smb.conf.default
+
+  # pam
+  install -Dm644 "$srcdir"/samba.pam "$pkgdir"/etc/pam.d/samba
+
+  # tmpfiles
+  install -Dm644 "$srcdir"/samba.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/samba.conf
+
+  # logrotate
+  install -Dm644 "$srcdir"/samba.logrotate "$pkgdir"/etc/logrotate.d/samba
+}
