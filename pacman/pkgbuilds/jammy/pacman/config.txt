@@ -18,14 +18,11 @@ Run-time dependency libarchive found: YES 3.6.0
 Run-time dependency libcurl found: YES 7.81.0
 Run-time dependency gpgme found: YES 1.16.0
 Run-time dependency libcrypto found: YES 3.0.2
-Found CMake: /usr/bin/cmake (3.22.1)
-Run-time dependency libseccomp found: NO (tried pkgconfig and cmake)
 Has header "linux/landlock.h" : YES 
 Has header "mntent.h" : YES 
 Has header "sys/mnttab.h" : NO 
 Has header "sys/mount.h" : YES 
 Has header "sys/param.h" : YES 
-Has header "sys/prctl.h" : YES 
 Has header "sys/statvfs.h" : YES 
 Has header "sys/types.h" : YES 
 Has header "sys/ucred.h" : NO 
@@ -102,7 +99,7 @@ Message: pacman 7.0.0
       Use OpenSSL              : true
       Use nettle               : false
     
-Build targets in project: 249
+Build targets in project: 246
 
 pacman 7.0.0
 
