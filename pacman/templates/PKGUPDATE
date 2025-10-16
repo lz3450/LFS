@@ -12,4 +12,5 @@ pre_update() {
 
 post_update() {
     cd "$BUILDDIR/$pkgname/src/$srcdir"
+    # > "$PKGBUILDDIR"/help.txt
 }
