@@ -155,7 +155,7 @@ fi
 
 info "Running \`makepkg -o\`..."
 cd "$PKGBUILDDIR"
-makepkg "$opt_cleanbuild" "$opt_syncdeps" -o --noconfirm || error "\`makepkg -o\` error" 5
+makepkg "$opt_cleanbuild" "$opt_syncdeps" -o --noconfirm 2> /dev/null || error "\`makepkg -o\` error" 5
 
 # get build options
 info "Getting build options..."
