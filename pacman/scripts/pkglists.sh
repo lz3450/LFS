@@ -385,6 +385,7 @@ kzl_stage3_pkgs=(
 
 ubuntu_stage0_pkgs=(
     pacman
+    python
 )
 
 ubuntu_stage1_pkgs=(
@@ -392,23 +393,13 @@ ubuntu_stage1_pkgs=(
 )
 
 ubuntu_stage2_pkgs=(
-    pacman
-    llvm-project
-    python
-    rust
-    ksmbd-tools
-    kexec-tools
     debootstrap
     dracut
     erofs-utils
-    fish
-    texlive
-)
-
-questing_stage0_pkgs=(
-    pacman
-)
-
-questing_stage1_pkgs=(
+    llvm-project
+    rust
     ksmbd-tools
+    kexec-tools
+    texlive
+    fish
 )
