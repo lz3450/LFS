@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=ksmbd-tools
-pkgver=3.5.4
-pkgrel=1
+pkgver=3.5.5
+pkgrel=2
 epoch=
 pkgdesc="A collection of userspace utilities for the ksmbd kernel server"
 arch=('x86_64')

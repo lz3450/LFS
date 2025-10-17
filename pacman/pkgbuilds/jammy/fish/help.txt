@@ -4,20 +4,8 @@
 -- Check for working C compiler: /usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
--- Found Gettext: /usr/bin/msgmerge (found version "0.21") 
 -- Trying to use PCRE2 from the system
--- Rust Target: x86_64-unknown-linux-gnu
--- Determining required link libraries for target x86_64-unknown-linux-gnu
--- Required static libs for target x86_64-unknown-linux-gnu: gcc_s;util;rt;pthread;m;dl;c
--- Found Rust: /opt/bin/rustc (found version "1.90.0") 
--- The following features have been enabled:
-
- * gettext, translate messages with gettext
-
--- The following OPTIONAL packages have been found:
-
- * Gettext
-
+-- Found Rust: /opt/bin/rustc  
 -- The following REQUIRED packages have been found:
 
  * Rust
@@ -222,19 +210,10 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 // Try to use PCRE2 from the system, instead of the pcre2-sys version
 FISH_USE_SYSTEM_PCRE2:BOOL=ON
 
-// Path to a program.
-GETTEXT_MSGFMT_EXECUTABLE:FILEPATH=/usr/bin/msgfmt
-
-// Path to a program.
-GETTEXT_MSGMERGE_EXECUTABLE:FILEPATH=/usr/bin/msgmerge
-
-// Indicates whether to descend into the toolchain pointed to by rustup
-Rust_RESOLVE_RUSTUP_TOOLCHAINS:BOOL=OFF
-
 // Sphinx documentation generator
 SPHINX_EXECUTABLE:FILEPATH=SPHINX_EXECUTABLE-NOTFOUND
 
-// translate messages if gettext is available
+// Build with gettext localization support. Requires `msgfmt` to work.
 WITH_GETTEXT:BOOL=ON
 
 // Path for extra completions

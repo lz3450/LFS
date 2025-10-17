@@ -1,15 +1,15 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=python
-pkgver=3.13.7
-pkgrel=1
+pkgver=3.14.0
+pkgrel=4
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
 url="https://www.python.org/"
 license=('KZL')
 source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
-sha256sums=('da6a413819a117751e9327035412ff5d70a2742e06e2e9d1fd977bf7d31ce884')
+sha256sums=('45cdf4814fc021abab6908eeb5f4aeece9c1ecadae639c1dc104af21ab28715b')
 
 build() {
   cd cpython
@@ -20,6 +20,7 @@ build() {
   ./configure \
     --prefix="/$PREFIX" \
     --enable-shared=yes \
+    --disable-gil \
     --enable-optimizations \
     --enable-loadable-sqlite-extensions=yes \
     --enable-ipv6=yes \
@@ -27,8 +28,6 @@ build() {
     --with-pkg-config=yes \
     --with-lto=yes \
     --with-tzpath=/usr/share/zoneinfo \
-    --with-system-expat=no \
-    --with-system-libmpdec=no \
     --with-dbmliborder=gdbm:ndbm \
     --with-readline=editline \
     --with-ensurepip=no
@@ -41,6 +40,4 @@ package() {
   cd cpython
 
   make DESTDIR="$pkgdir" install
-
-  rm -vr "$pkgdir/$PREFIX/lib/python${pkgver%.*}"/{test,idlelib/idle_test}
 }

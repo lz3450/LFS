@@ -1,10 +1,10 @@
 The Meson build system
-Version: 1.8.2
+Version: 1.9.0
 Source dir: /var/cache/makepkg/build/ksmbd-tools/src/ksmbd-tools
 Build dir: /var/cache/makepkg/build/ksmbd-tools/src/ksmbd-tools/build
 Build type: native build
 Project name: ksmbd-tools
-Project version: 3.5.4
+Project version: 3.5.5
 C compiler for the host machine: cc (gcc 11.4.0 "cc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0")
 C linker for the host machine: cc ld.bfd 2.38
 Host machine cpu family: x86_64
@@ -25,7 +25,7 @@ Configuring ksmbd.control.8 using configuration
 Configuring ksmbd.mountd.8 using configuration
 Build targets in project: 5
 
-ksmbd-tools 3.5.4
+ksmbd-tools 3.5.5
 
   User defined options
     auto_features       : disabled

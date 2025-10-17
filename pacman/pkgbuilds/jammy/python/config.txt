@@ -2,8 +2,8 @@ checking for git... found
 checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
 checking for Python interpreter freezing... ./_bootstrap_python
-checking for python3.13... python3.13
-checking Python for regen version... Python 3.13.5
+checking for python3.14... python3.14
+checking Python for regen version... Python 3.14.0
 checking for pkg-config... /usr/bin/pkg-config
 checking pkg-config is at least version 0.9.0... yes
 checking MACHDEP... "linux"
@@ -49,7 +49,6 @@ checking for multiarch... x86_64-linux-gnu
 checking for PEP 11 support tier... x86_64-pc-linux-gnu/gcc has tier 1 (supported)
 checking for -Wl,--no-as-needed... yes
 checking for the Android API level... not Android
-checking for --with-emscripten-target... 
 checking for --enable-wasm-dynamic-linking... missing
 checking for --enable-wasm-pthreads... missing
 checking for --with-suffix... 
@@ -66,12 +65,11 @@ checking HOSTRUNNER...
 checking for ar... ar
 checking for a BSD-compatible install... /usr/bin/install -c
 checking for a race-free mkdir -p... /usr/bin/mkdir -p
-checking for --disable-gil... no
+checking for --disable-gil... yes
 checking for --with-pydebug... no
 checking for --with-trace-refs... no
 checking for --enable-pystats... no
 checking for --with-assertions... no
-checking for --enable-experimental-jit...  
 checking for --enable-optimizations... yes
 checking whether C compiler accepts -fno-semantic-interposition... yes
 checking PROFILE_TASK... -m test --pgo --timeout=$(TESTTIMEOUT)
@@ -83,6 +81,8 @@ checking BOLT_APPLY_FLAGS...   -update-debug-sections -skip-funcs=_PyEval_EvalFr
 checking if gcc supports -fstrict-overflow and -fno-strict-overflow... yes
 checking for --with-strict-overflow... no
 checking if gcc supports -Og optimization level... yes
+checking for --enable-safety... no
+checking for --enable-slower-safety... no
 checking if we can add -Wextra... yes
 checking whether gcc -fno-strict-aliasing accepts and needs -fno-strict-aliasing... no
 checking if we can disable gcc unused-parameter warning... yes
@@ -93,6 +93,7 @@ checking if we can enable gcc unreachable-code warning... yes
 checking if we can enable gcc strict-prototypes warning... yes
 checking if we can make implicit function declaration an error in gcc -Werror=implicit-function-declaration... yes
 checking if we can use visibility in gcc -fvisibility=hidden... yes
+checking for --enable-experimental-jit...  
 checking whether pthreads are available without options... yes
 checking whether g++ also accepts flags for thread support... no
 checking for alloca.h... yes
@@ -114,8 +115,10 @@ checking for sys/auxv.h... yes
 checking for linux/fs.h... yes
 checking for linux/limits.h... yes
 checking for linux/memfd.h... yes
+checking for linux/netfilter_ipv4.h... yes
 checking for linux/random.h... yes
 checking for linux/soundcard.h... yes
+checking for linux/sched.h... yes
 checking for linux/tipc.h... yes
 checking for linux/wait.h... yes
 checking for netdb.h... yes
@@ -200,7 +203,8 @@ checking for mode_t... yes
 checking for off_t... yes
 checking for pid_t... yes
 checking for size_t... yes
-checking for uid_t in sys/types.h... yes
+checking for uid_t... yes
+checking for gid_t... yes
 checking for ssize_t... yes
 checking for __uint128_t... yes
 checking size of int... 4
@@ -245,6 +249,15 @@ checking perf trampoline... yes
 checking for sendfile in -lsendfile... no
 checking for dlopen in -ldl... yes
 checking for shl_load in -ldld... no
+checking for execinfo.h... yes
+checking for backtrace... yes
+checking for dladdr1... yes
+checking for link.h... yes
+checking for backtrace... (cached) yes
+checking for dladdr1... (cached) yes
+checking for dlfcn.h... (cached) yes
+checking for backtrace... (cached) yes
+checking for dladdr1... (cached) yes
 checking for uuid.h... no
 checking for uuid >= 2.20... yes
 checking for library containing sem_init... none required
@@ -260,10 +273,10 @@ checking for libffi... yes
 checking for ffi_prep_cif_var... yes
 checking for ffi_prep_closure_loc... yes
 checking for ffi_closure_alloc... yes
-checking for --with-system-libmpdec... no
-configure: WARNING: the bundled copy of libmpdec is scheduled for removal in Python 3.16; consider using a system installed mpdecimal library.
+checking libffi has complex type support... yes
+checking for --with-system-libmpdec... yes
+checking for libmpdec >= 2.5.0... no
 checking for --with-decimal-contextvar... yes
-checking for decimal libmpdec machine... uint128
 checking for sqlite3 >= 3.15.2... yes
 checking for sqlite3.h... yes
 checking for sqlite3_bind_double in -lsqlite3... yes
@@ -305,7 +318,6 @@ checking for stdatomic.h... yes
 checking for builtin __atomic_load_n and __atomic_store_n functions... yes
 checking for --with-mimalloc... yes
 checking for --with-pymalloc... yes
-checking for --with-freelists... yes
 checking for --with-c-locale-coercion... yes
 checking for --with-valgrind... no
 checking for --with-dtrace... no
@@ -323,6 +335,7 @@ checking for close_range... yes
 checking for confstr... yes
 checking for copy_file_range... yes
 checking for ctermid... yes
+checking for dladdr... yes
 checking for dup... yes
 checking for dup3... yes
 checking for execv... yes
@@ -421,6 +434,11 @@ checking for pthread_cond_timedwait_relative_np... no
 checking for pthread_condattr_setclock... yes
 checking for pthread_init... no
 checking for pthread_kill... yes
+checking for pthread_get_name_np... no
+checking for pthread_getname_np... yes
+checking for pthread_set_name_np... no
+checking for pthread_setname_np... yes
+checking for pthread_getattr_np... yes
 checking for ptsname... yes
 checking for ptsname_r... yes
 checking for pwrite... yes
@@ -530,6 +548,7 @@ checking for getpagesize... yes
 checking for broken unsetenv... no
 checking for true... true
 checking for inet_aton in -lc... yes
+checking for hstrerror in -lc... yes
 checking for chflags... no
 checking for lchflags... no
 checking for zlib >= 1.2.0... yes
@@ -537,6 +556,7 @@ checking for bzip2... no
 checking for bzlib.h... yes
 checking for BZ2_bzCompress in -lbz2... yes
 checking for liblzma... yes
+checking for libzstd >= 1.4.5... yes
 checking for hstrerror... yes
 checking for getservbyname... yes
 checking for getservbyport... yes
@@ -636,8 +656,8 @@ checking size of wchar_t... 4
 checking whether wchar_t is signed... yes
 checking whether wchar_t is usable... no
 checking whether byte ordering is bigendian... no
-checking ABIFLAGS... 
-checking SOABI... cpython-313-x86_64-linux-gnu
+checking ABIFLAGS... t
+checking SOABI... cpython-314t-x86_64-linux-gnu
 checking LDVERSION... $(VERSION)$(ABIFLAGS)
 checking for --with-platlibdir... no
 checking for --with-wheel-pkg-dir... no
@@ -660,6 +680,8 @@ checking for broken poll()... no
 checking for working tzset()... yes
 checking for tv_nsec in struct stat... yes
 checking for tv_nsec2 in struct stat... no
+checking whether year with century should be normalized for strftime... yes
+checking whether C99-compatible strftime specifiers are supported... yes
 checking for ncursesw... yes
 checking for panelw... yes
 checking for ncursesw/curses.h... yes
@@ -694,6 +716,8 @@ checking for socklen_t... yes
 checking for broken mbstowcs... no
 checking for --with-computed-gotos... no value specified
 checking whether gcc supports computed gotos... yes
+checking for --with-tail-call-interp... no value specified
+checking for --with-remote-debug... yes
 checking for build directories... done
 checking for -O2... yes
 checking for glibc _FORTIFY_SOURCE/memmove bug... no
@@ -712,7 +736,6 @@ checking whether OpenSSL provides required ssl module APIs... yes
 checking whether OpenSSL provides required hashlib module APIs... yes
 checking for --with-ssl-default-suites... python
 checking for --with-builtin-hashlib-hashes... md5,sha1,sha2,sha3,blake2
-checking for libb2... no
 checking for --disable-test-modules... yes
 checking whether libatomic is needed by <pyatomic.h>... no
 checking for stdlib extension module _multiprocessing... yes
@@ -728,11 +751,17 @@ checking for stdlib extension module syslog... yes
 checking for stdlib extension module termios... yes
 checking for stdlib extension module pyexpat... yes
 checking for stdlib extension module _elementtree... yes
+checking whether C compiler accepts -msse -msse2 -msse3 -msse4.1 -msse4.2... yes
+checking for HACL* SIMD128 implementation... standard
+checking whether C compiler accepts -mavx2... yes
+checking for HACL* SIMD256 implementation... standard
+checking for HACL* library linking type... shared
 checking for stdlib extension module _md5... yes
 checking for stdlib extension module _sha1... yes
 checking for stdlib extension module _sha2... yes
 checking for stdlib extension module _sha3... yes
 checking for stdlib extension module _blake2... yes
+checking for stdlib extension module _hmac... yes
 checking for stdlib extension module _ctypes... yes
 checking for stdlib extension module _curses... yes
 checking for stdlib extension module _curses_panel... yes
@@ -746,6 +775,7 @@ checking for stdlib extension module _uuid... yes
 checking for stdlib extension module zlib... yes
 checking for stdlib extension module _bz2... yes
 checking for stdlib extension module _lzma... yes
+checking for stdlib extension module _zstd... yes
 checking for stdlib extension module _ssl... yes
 checking for stdlib extension module _hashlib... yes
 checking for stdlib extension module _testcapi... yes
@@ -757,7 +787,6 @@ checking for stdlib extension module _testbuffer... yes
 checking for stdlib extension module _testimportmultiple... yes
 checking for stdlib extension module _testmultiphase... yes
 checking for stdlib extension module _testsinglephase... yes
-checking for stdlib extension module _testexternalinspection... yes
 checking for stdlib extension module xxsubtype... yes
 checking for stdlib extension module _xxtestfuzz... yes
 checking for stdlib extension module _ctypes_test... yes

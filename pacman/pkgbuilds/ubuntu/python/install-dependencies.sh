@@ -6,8 +6,10 @@ pkgs=(
     libffi-dev
     libgdbm-compat-dev
     libgdbm-dev
+    libmpdec-dev
     libncurses-dev
     libsqlite3-dev
+    libzstd-dev
     tcl-dev
     tk-dev
 )

@@ -2,7 +2,7 @@
 Core properties:
   Source dir /var/cache/makepkg/build/pacman/src/pacman
 
-Main project options:
+Global build options:
 
   Core options                   Default Value                    Possible Values                  Description
   --------------                 -------------                    ---------------                  -----------
@@ -55,6 +55,14 @@ Main project options:
   b_sanitize                     []                                                                Code sanitizer to use
   b_staticpic                    true                             [True, False]                    Build static libraries as position independent
 
+  Compiler options               Default Value                    Possible Values                  Description
+  ------------------             -------------                    ---------------                  -----------
+  c_args                         []                                                                Extra arguments passed to the c compiler
+  c_link_args                    []                                                                Extra arguments passed to the c linker
+  c_std                          none                             [none, c89, c99, c11, c17, c18,  c language standard to use
+                                                                   c2x, gnu89, gnu99, gnu11,
+                                                                   gnu17, gnu18, gnu2x]
+
   pkgconfig module options       Default Value                    Possible Values                  Description
   --------------------------     -------------                    ---------------                  -----------
   pkgconfig.relocatable          false                            [True, False]                    Generate pkgconfig files as relocatable
@@ -69,7 +77,7 @@ Main project options:
 
   Directories                    Default Value                    Possible Values                  Description
   -------------                  -------------                    ---------------                  -----------
-  prefix                         /usr                                                              Installation prefix
+  prefix                         /usr/local                                                        Installation prefix
   bindir                         bin                                                               Executable directory
   datadir                        share                                                             Data file directory
   includedir                     include                                                           Header file directory
@@ -78,11 +86,11 @@ Main project options:
   licensedir                                                                                       Licenses directory
   libexecdir                     libexec                                                           Library executable directory
   localedir                      share/locale                                                      Locale data directory
-  localstatedir                  /var                                                              Localstate data directory
+  localstatedir                  /var/local                                                        Localstate data directory
   mandir                         share/man                                                         Manual page directory
   sbindir                        sbin                                                              System executable directory
-  sharedstatedir                 /var/lib                                                          Architecture-independent data directory
-  sysconfdir                     /etc                                                              Sysconf data directory
+  sharedstatedir                 /var/local/lib                                                    Architecture-independent data directory
+  sysconfdir                     etc                                                               Sysconf data directory
 
   Testing options                Default Value                    Possible Values                  Description
   -----------------              -------------                    ---------------                  -----------
