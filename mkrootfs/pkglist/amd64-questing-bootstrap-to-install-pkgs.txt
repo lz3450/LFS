@@ -185,7 +185,6 @@ python3-linkify-it
 python3-markdown-it
 python3-mdurl
 python3-minimal
-python3-netifaces
 python3-netplan
 python3-pygments
 python3-rich
