@@ -313,7 +313,7 @@ EOF
     local _pkg
     local _pkg_file
     for _pkg in "${pacman_pkgs[@]}"; do
-        debug "Adding $_pkg to pacman repository..."
+        debug "Adding \"$_pkg\" to pacman repository..."
         _pkg_file=$(pacman_get_pkg_file "$_pkg" "/$PACMAN_REPO_DIR")
         cp -f -- "/$PACMAN_REPO_DIR/$_pkg_file" "$ROOTFS_DIR/$PACMAN_REPO_DIR"
         repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_FILE" "$ROOTFS_DIR/$PACMAN_REPO_DIR/$_pkg_file" > /dev/null
@@ -337,9 +337,10 @@ _make_ro_rootfs_img() {
 }
 
 _make_iso_image() {
-    info "Making ISO image..."
+    info "Making ISO partition images..."
     dd if="${loop_device}p1" of="$WORK_DIR/efiboot.img" bs=1M status=progress
     dd if="${loop_device}p3" of="$WORK_DIR/recovery.img" bs=1M status=progress
+    info "Making ISO image..."
     xorriso \
         -as mkisofs \
         -iso-level 3 \
@@ -362,6 +363,7 @@ _make_iso_image() {
 finalize() {
     ###
     debug "Cleaning up root filesystem..."
+    sync
     umount -v -- "$ROOTFS_DIR/$efi_dir"
     umount -v -- "$ROOTFS_DIR/home"
     delete_all_contents "$ROOTFS_DIR/boot/efi/"
@@ -370,9 +372,6 @@ finalize() {
 
     ###
     _make_ro_rootfs_img
-
-    ###
-    loop_unmount "$loop_device"
 
     ###
     local _answer
@@ -384,6 +383,7 @@ finalize() {
     fi
 
     ###
+    loop_unmount "$loop_device"
     loop_detach "$loop_device"
 
     ###
