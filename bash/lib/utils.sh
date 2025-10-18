@@ -101,7 +101,7 @@ clean_rootfs() {
     # apt
     delete_all_contents "$_rootfs_dir"/var/lib/apt/lists/
     # pacman
-    delete_all_contents "$_rootfs_dir"/var/lib/pacman/
+    delete_all_contents "$_rootfs_dir"/var/lib/pacman/sync/
     find "$_rootfs_dir" -type f \( -name '*.pacnew' -o -name '*.pacsave' \) -delete
 
     _utils_debug "Done (cleanup)"
