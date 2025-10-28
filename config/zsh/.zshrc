@@ -250,15 +250,14 @@ alias lfs="cd ~/LFS"
 alias gitlog="git log --oneline --all --graph --decorate"
 
 # Python
-if [[ -f "/opt/bin/python3" ]]; then
-    alias pipwheel="/opt/bin/python3 -m pip -v wheel --wheel-dir ~/wheels --no-binary :all:"
-    alias pipinstall="/opt/bin/python3 -m pip -v install --user -U --no-index --find-links ~/wheels"
-    alias pipuninstall="/opt/bin/python3 -m pip -v uninstall -y"
-else
-    alias pipwheel="python3 -m pip -v wheel --wheel-dir ~/wheels --no-binary :all:"
-    alias pipinstall="python3 -m pip -v install --user -U --no-index --find-links ~/wheels"
-    alias pipuninstall="python3 -m pip -v uninstall -y"
-fi
+alias pipwheel="/opt/bin/python3 -m pip -v wheel --wheel-dir ~/wheels --no-binary :all:"
+alias pipinstall="/opt/bin/python3 -m pip -v install --user -U --no-index --find-links ~/wheels"
+alias pipuninstall="/opt/bin/python3 -m pip -v uninstall -y"
+alias pip3wheel="python3 -m pip -v wheel --wheel-dir ~/wheels --no-binary :all:"
+alias pip3install="python3 -m pip -v install --user -U --no-index --find-links ~/wheels"
+alias pip3uninstall="python3 -m pip -v uninstall -y"
+
+# TeX Live
 alias tlmgrinstall="tlmgr --usermode install"
 
 # APT package management
