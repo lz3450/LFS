@@ -1,5 +1,5 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/driver-install.log'
-creation time: Thu Oct 23 21:28:40 2025
+creation time: Wed Oct 29 09:55:09 2025
 installer version: 580.82.07
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
@@ -9,7 +9,7 @@ nvidia-installer command line:
     --accept-license
     --expert
     --log-file-name=/home/kzl/LFS/config/nvidia/driver-install.log
-    --kernel-name=6.17.5-KZL
+    --kernel-name=6.17.6-KZL
     --no-backup
     --disable-nouveau
     --no-distro-scripts
@@ -60,25 +60,25 @@ Using: nvidia-installer ncurses v6 user interface
 -> Would you like to install the nvidia-uvm kernel module? You must install this module in order to use CUDA. (Answer: Yes)
 -> Would you like to install the nvidia-drm kernel module? You must install this module in order to use DRM-KMS. (Answer: Yes)
 -> Would you like to install the nvidia-peermem kernel module? You must install this module in order to use GPUDirect RDMA p2p memory sharing. (Answer: Yes)
--> Kernel module installation path (Answer: '/lib/modules/6.17.5-KZL/kernel/drivers/video')
--> The directory '/lib/modules/6.17.5-KZL/kernel/drivers/video' does not exist; would you like to create it, or would you prefer to abort installation? (Answer: Create directory)
--> Kernel module installation path: /lib/modules/6.17.5-KZL/kernel/drivers/video
+-> Kernel module installation path (Answer: '/lib/modules/6.17.6-KZL/kernel/drivers/video')
+-> The directory '/lib/modules/6.17.6-KZL/kernel/drivers/video' does not exist; would you like to create it, or would you prefer to abort installation? (Answer: Create directory)
+-> Kernel module installation path: /lib/modules/6.17.6-KZL/kernel/drivers/video
 -> Not probing for precompiled kernel interfaces.
--> Kernel source path (Answer: '/lib/modules/6.17.5-KZL/source')
--> Kernel source path: '/lib/modules/6.17.5-KZL/source'
--> Kernel output path: '/lib/modules/6.17.5-KZL/build'
+-> Kernel source path (Answer: '/lib/modules/6.17.6-KZL/source')
+-> Kernel source path: '/lib/modules/6.17.6-KZL/source'
+-> Kernel output path: '/lib/modules/6.17.6-KZL/build'
 -> Performing Compiler check.
 -> Performing Dom0 check.
 -> Performing Xen check.
 -> Performing PREEMPT_RT check.
 -> Performing vgpu_kvm check.
 -> Cleaning kernel module build directory.
-   executing: 'cd kernel-open; /usr/bin/make -k -j16  NV_EXCLUDE_KERNEL_MODULES="" SYSSRC="/lib/modules/6.17.5-KZL/source" SYSOUT="/lib/modules/6.17.5-KZL/build" clean'...
+   executing: 'cd kernel-open; /usr/bin/make -k -j16  NV_EXCLUDE_KERNEL_MODULES="" SYSSRC="/lib/modules/6.17.6-KZL/source" SYSOUT="/lib/modules/6.17.6-KZL/build" clean'...
    rm -f -r conftest
-   make[1]: Entering directory '/usr/src/linux-headers-6.17.5-KZL'
+   make[1]: Entering directory '/usr/src/linux-headers-6.17.6-KZL'
    make[2]: Entering directory '/tmp/nvidia/kernel-open'
    make[2]: Leaving directory '/tmp/nvidia/kernel-open'
-   make[1]: Leaving directory '/usr/src/linux-headers-6.17.5-KZL'
+   make[1]: Leaving directory '/usr/src/linux-headers-6.17.6-KZL'
 -> Building kernel modules
 -> done.
 -> Kernel module compilation complete.
@@ -751,15 +751,15 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Installing: nvidia-pcc --> /usr/bin/nvidia-pcc
 -> Installing: libnvidia-sandboxutils.so.580.82.07 --> /usr/lib/x86_64-linux-gnu/libnvidia-sandboxutils.so.580.82.07
 -> Installing: sandboxutils-filelist.json --> /usr/share/nvidia/files.d/sandboxutils-filelist.json
--> Installing: /tmp/template-eMD8zK --> /usr/src/nvidia-580.82.07/dkms.conf
--> Deleting: /tmp/template-eMD8zK
--> Installing: kernel-open/nvidia.ko --> /lib/modules/6.17.5-KZL/kernel/drivers/video/nvidia.ko
--> Installing: kernel-open/nvidia-uvm.ko --> /lib/modules/6.17.5-KZL/kernel/drivers/video/nvidia-uvm.ko
--> Installing: kernel-open/nvidia-modeset.ko --> /lib/modules/6.17.5-KZL/kernel/drivers/video/nvidia-modeset.ko
--> Installing: kernel-open/nvidia-drm.ko --> /lib/modules/6.17.5-KZL/kernel/drivers/video/nvidia-drm.ko
--> Installing: kernel-open/nvidia-peermem.ko --> /lib/modules/6.17.5-KZL/kernel/drivers/video/nvidia-peermem.ko
--> Installing: /tmp/template-CaGQwv --> /usr/share/applications/nvidia-settings.desktop
--> Deleting: /tmp/template-CaGQwv
+-> Installing: /tmp/template-ILwFgm --> /usr/src/nvidia-580.82.07/dkms.conf
+-> Deleting: /tmp/template-ILwFgm
+-> Installing: kernel-open/nvidia.ko --> /lib/modules/6.17.6-KZL/kernel/drivers/video/nvidia.ko
+-> Installing: kernel-open/nvidia-uvm.ko --> /lib/modules/6.17.6-KZL/kernel/drivers/video/nvidia-uvm.ko
+-> Installing: kernel-open/nvidia-modeset.ko --> /lib/modules/6.17.6-KZL/kernel/drivers/video/nvidia-modeset.ko
+-> Installing: kernel-open/nvidia-drm.ko --> /lib/modules/6.17.6-KZL/kernel/drivers/video/nvidia-drm.ko
+-> Installing: kernel-open/nvidia-peermem.ko --> /lib/modules/6.17.6-KZL/kernel/drivers/video/nvidia-peermem.ko
+-> Installing: /tmp/template-XwvKqM --> /usr/share/applications/nvidia-settings.desktop
+-> Deleting: /tmp/template-XwvKqM
 -> Creating symlink: /usr/bin/nvidia-uninstall -> nvidia-installer
 -> Creating symlink: /etc/systemd/system/systemd-suspend.service.wants/nvidia-suspend.service -> /lib/systemd/system/nvidia-suspend.service
 -> Creating symlink: /etc/systemd/system/systemd-suspend-then-hibernate.service.wants/nvidia-suspend-then-hibernate.service -> /lib/systemd/system/nvidia-suspend-then-hibernate.service
@@ -818,8 +818,8 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Creating symlink: /usr/lib/libGL.so.1 -> /usr/lib/x86_64-linux-gnu/libGL.so.1
 -> Executing: /usr/sbin/ldconfig
    executing: '/usr/sbin/ldconfig'...
--> Executing: /usr/sbin/depmod -a 6.17.5-KZL
-   executing: '/usr/sbin/depmod -a 6.17.5-KZL'...
+-> Executing: /usr/sbin/depmod -a 6.17.6-KZL
+   executing: '/usr/sbin/depmod -a 6.17.6-KZL'...
 -> Executing: /usr/bin/systemctl daemon-reload
    executing: '/usr/bin/systemctl daemon-reload'...
 -> done.
