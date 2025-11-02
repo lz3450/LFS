@@ -1,5 +1,5 @@
 The Meson build system
-Version: 1.8.2
+Version: 1.9.0
 Source dir: /var/cache/makepkg/build/pacman/src/pacman
 Build dir: /var/cache/makepkg/build/pacman/src/pacman/build
 Build type: native build

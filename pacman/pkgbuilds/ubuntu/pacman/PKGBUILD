@@ -2,7 +2,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.g7
-pkgrel=4
+pkgrel=5
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -14,18 +14,19 @@ backup=(
 )
 _ref="1f38429b1c5f30edce30c731aa352e6363cc788e"
 source=(
-  # git+https://gitlab.archlinux.org/pacman/pacman.git#tag=$_ref
+  # git+https://gitlab.archlinux.org/pacman/pacman.git#tag=v$pkgver
   # git+https://gitlab.archlinux.org/pacman/pacman.git#branch=$_ref
   git+https://gitlab.archlinux.org/pacman/pacman.git#commit=$_ref
   # git+https://gitlab.archlinux.org/pacman/pacman.git
 )
-sha256sums=('SKIP')
+sha256sums=('7744ae7b57fda9a7dc3aa0ae9136e2d3965cb2a536e49cc31199eaaaa024ce7f')
 
+MAKEPKG_PREFIX='/var/cache'
 # Compare the output of `gcc -march=native -Q --help=target` in the host system and the build system
 # Order of options matters
 RPATH_FLAGS="-Wl,-rpath=/$PREFIX/lib"
 MAKEPKG_CPPFLAGS='-D_FORTIFY_SOURCE=3'
-MAKEPKG_CFLAGS='-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security'
+MAKEPKG_CFLAGS="-ffile-prefix-map=$MAKEPKG_PREFIX/makepkg/build=. -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security"
 MAKEPKG_CXXFLAGS='$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS'
 MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs $RPATH_FLAGS"
 MAKEPKG_LTOFLAGS='-flto=auto -ffat-lto-objects'
@@ -66,12 +67,12 @@ prepare() {
       -e '/^#MAKEFLAGS=/c\MAKEFLAGS="-j $(nproc) -O"' \
       -e '/^#DEBUG_CFLAGS=/c\DEBUG_CFLAGS="-g"' \
       -e '/^#DEBUG_CXXFLAGS=/c\DEBUG_CXXFLAGS="$DEBUG_CFLAGS"' \
-      -e '/^#BUILDDIR=/c\BUILDDIR="/var/cache/makepkg/build"' \
+      -e "/^#BUILDDIR=/c\BUILDDIR=\"$MAKEPKG_PREFIX/makepkg/build\"" \
       -e '/^INTEGRITY_CHECK=/s/(.*)/(sha256)/' \
-      -e '/^#PKGDEST=/c\PKGDEST="/var/cache/makepkg/packages"' \
-      -e '/^#SRCDEST=/c\SRCDEST="/var/cache/makepkg/sources"' \
-      -e '/^#SRCPKGDEST=/c\SRCPKGDEST="/var/cache/makepkg/srcpackages"' \
-      -e '/^#LOGDEST=/c\LOGDEST="/var/cache/makepkg/makepkglogs"' \
+      -e "/^#PKGDEST=/c\PKGDEST=\"$MAKEPKG_PREFIX/makepkg/packages\"" \
+      -e "/^#SRCDEST=/c\SRCDEST=\"$MAKEPKG_PREFIX/makepkg/sources\"" \
+      -e "/^#SRCPKGDEST=/c\SRCPKGDEST=\"$MAKEPKG_PREFIX/makepkg/srcpackages\"" \
+      -e "/^#LOGDEST=/c\LOGDEST=\"$MAKEPKG_PREFIX/makepkg/makepkglogs\"" \
       -e '/^#PACKAGER=/c\PACKAGER="KZL <lz3450@outlook.com>"' \
       -e '/^OPTIONS=/s/libtool/!libtool/' \
       -e '/^OPTIONS=/s/!lto/lto/' \
