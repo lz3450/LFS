@@ -24,6 +24,7 @@ sha256sums=('SKIP')
 # Compare the output of `gcc -march=native -Q --help=target` in the host system and the build system
 # Order of options matters
 RPATH_FLAGS="-Wl,-rpath=/$PREFIX/lib"
+MAKEPKG_CPPFLAGS='-D_FORTIFY_SOURCE=3'
 MAKEPKG_CFLAGS='-march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security'
 MAKEPKG_CXXFLAGS='$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS'
 MAKEPKG_LDFLAGS="-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs $RPATH_FLAGS"
@@ -57,7 +58,7 @@ prepare() {
   sed -i \
       -e '/^CHOST=/a\\n\PREFIX="opt"' \
       -e '/^#NPROC=/c\NPROC="$(nproc)"' \
-      -e '/^#CPPFLAGS=/c\CPPFLAGS=""' \
+      -e "/^#CPPFLAGS=/c\CPPFLAGS=\"$MAKEPKG_CPPFLAGS\"" \
       -e "/^#CFLAGS=/c\CFLAGS=\"$MAKEPKG_CFLAGS\"" \
       -e "/^#CXXFLAGS=/c\CXXFLAGS=\"$MAKEPKG_CXXFLAGS\"" \
       -e "/^#LDFLAGS=/c\LDFLAGS=\"$MAKEPKG_LDFLAGS\"" \
