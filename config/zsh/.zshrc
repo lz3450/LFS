@@ -14,12 +14,14 @@ ZSH_THEME=random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
+# ls -1 ~/.oh-my-zsh/themes | sed 's/.zsh-theme//;s/^/    # "/;s/$/"/'
 ZSH_THEME_RANDOM_CANDIDATES=(
     # "3den"
     # "adben"
     # "af-magic"
     # "afowler"
-    # "agnoster"# "alanpeabody"
+    # "agnoster"
+    # "alanpeabody"
     # "amuse"
     # "apple"
     # "arrow"
@@ -148,7 +150,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "tjkirch_mod"
     "tjkirch"
     # "tonotdo"
-    # "trapd00r"``
+    # "trapd00r"
     # "wedisagree"
     # "wezm+"
     # "wezm"
