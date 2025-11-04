@@ -65,7 +65,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "garyblessington"
     "gentoo"
     # "geoffgarside"
-    "gianu"
+    # "gianu"
     # "gnzh"
     # "gozilla"
     # "half-life"
