@@ -65,7 +65,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "gallifrey"
     # "gallois"
     # "garyblessington"
-    "gentoo"
+    # "gentoo"
     # "geoffgarside"
     # "gianu"
     # "gnzh"
