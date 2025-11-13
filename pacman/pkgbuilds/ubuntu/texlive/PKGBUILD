@@ -4,7 +4,7 @@ pkgname=texlive
 pkgver=75246
 texliveyear=2025
 texlivedate=20250308
-pkgrel=10
+pkgrel=15
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -18,7 +18,7 @@ source=(
   $pkgname.install
 )
 sha256sums=('SKIP'
-            '152ec80525c40200836a5b921190f0c44a23e9f90762436992e1cc235d06d55e'
+            '51e968b61d37d65aa38f2b565879d728c827874fc051d0a150f8e97d05f98fbb'
             'SKIP'
             '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')
 
@@ -55,6 +55,7 @@ stage2_pkgs=(
   latexindent
   latexmk
   pdfcrop
+  texdoc
   ###
   cascadia-code
   fontawesome
@@ -140,7 +141,7 @@ package() {
   ### texmf
   local _texmf_root="$pkgdir/$PREFIX/share"
   # texmf-local/web2c/texmf.cnf has higher priority than texmf-dist/web2c/texmf.cnf
-  cp -vr "$srcdir/installer/texmf-dist" "$_texmf_root"
+  cp -r "$srcdir/installer/texmf-dist" "$_texmf_root"
   mkdir -vp "$_texmf_root/texmf-local/web2c"
   cat > "$_texmf_root/texmf-local/web2c/texmf.cnf" << EOF
 TEXMFROOT = \$SELFAUTODIR/share
@@ -151,7 +152,7 @@ TEXMFCONFIG = ~/.texlive/texmf-config
 EOF
 
   ### tlpkg
-  cp -vr "$srcdir"/installer/tlpkg "$_texmf_root"
+  cp -r "$srcdir"/installer/tlpkg "$_texmf_root"
   mkdir -vp "$_texmf_root"/tlpkg/{backups,tlpobj}
   rm -vf "$_texmf_root"/tlpkg/texlive.tlpdb
   for _pkg in "${stage0_pkgs[@]}"; do
