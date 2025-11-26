@@ -2,7 +2,7 @@
 
 pkgbase=linux
 pkgname=(linux linux-headers)
-pkgver=6.17.8
+pkgver=6.17.9
 pkgrel=1
 epoch=
 pkgdesc="LTS Linux Kernel"
@@ -15,8 +15,8 @@ source=(
   git+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git#tag=v$pkgver
   config
 )
-sha256sums=('aa1535c890eb8f8c091a3ddddaf1f2927816e53cedfaf0deffbc6c8b80ea7906'
-            'a9906f2c835ce26ca0b588ce5868d986d79d7d2587ecfc79add582740a9e5933')
+sha256sums=('13697408c31f044746fe58787d8f89e4d893e91f892cea1755aaf71b0e0d5973'
+            'e13252a4d9e2c5e71487140bcf31cff68b03c5d777d11659ebae54b9f6f876ac')
 
 export LOCALVERSION="-KZL"
 export KBUILD_BUILD_HOST="Ubuntu"
