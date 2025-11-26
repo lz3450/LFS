@@ -47,6 +47,7 @@ msg
 multiplatform
 netbsd
 newtx
+nvidia
 pdfcrop
 pdftex
 pixman

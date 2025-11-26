@@ -4,6 +4,7 @@
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
+        "axhline",
         "df",
         "env",
         "figsize",
@@ -14,6 +15,8 @@
         "np",
         "pkgs",
         "plt",
+        "ros",
+        "ROS",
         "tex",
         "usr",
         "xlabel",
