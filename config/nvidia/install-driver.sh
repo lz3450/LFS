@@ -16,7 +16,7 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
 
-DRIVER_VERSION=580.82.07
+DRIVER_VERSION=580.105.08
 
 WORKDIR=/tmp/nvidia
 DOWNLOADS_DIR="$HOME/Downloads"
