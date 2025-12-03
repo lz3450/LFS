@@ -34,9 +34,11 @@ inconsolata
 infodir
 infraonly
 kpathsea
+ksmbd
 latexindent
 latexmk
 latexrecommended
+LIBDIR
 libpaper
 linux
 linuxmusl
@@ -62,6 +64,8 @@ potrace
 ptexenc
 rf
 rl
+rootfs
+RUSTC
 sed
 SELFAUTODIR
 SELFAUTOPARENT
@@ -90,6 +94,8 @@ tlpkg
 tlpobj
 tlpostcode
 tltcl
+tzdata
+userspace
 usr
 vf
 vp
