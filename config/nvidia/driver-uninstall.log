@@ -1,5 +1,5 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log'
-creation time: Wed Dec  3 11:18:20 2025
+creation time: Wed Dec  3 23:05:48 2025
 installer version: 580.82.07
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
@@ -11,23 +11,13 @@ nvidia-installer command line:
     --skip-depmod
 
 Using built-in stream user interface
--> Detected 8 CPUs online; setting concurrency level to 8.
--> Scanning the initramfs with lsinitramfs...
--> Executing: /usr/bin/lsinitramfs   -l /boot/initrd.img-6.18.0-KZL
+-> Detected 16 CPUs online; setting concurrency level to 16.
+-> Unable to scan initramfs: no tool found
 -> If you plan to no longer use the NVIDIA driver, you should make sure that no X screens are configured to use the NVIDIA X driver in your X configuration file. If you used nvidia-xconfig to configure X, it may have created a backup of your original configuration. Would you like to run `nvidia-xconfig --restore-original-backup` to attempt restoration of the original X configuration file? (Answer: No)
 -> Parsing log file:
 -> done.
 -> Validating previous installation:
--> Initramfs scan complete.
--> The installed file '/usr/lib/x86_64-linux-gnu/libOpenGL.so.0' is not of the correct filetype.
--> The installed file '/usr/lib/x86_64-linux-gnu/libGLESv2.so.2.1.0' seems to have changed, but `prelink -u` failed; unable to restore '/usr/lib/x86_64-linux-gnu/libGLESv2.so.2.1.0' to an un-prelinked state.
--> The installed file '/usr/lib/x86_64-linux-gnu/libGLdispatch.so.0' is not of the correct filetype.
--> The installed file '/usr/lib/x86_64-linux-gnu/libGLX.so.0' is not of the correct filetype.
--> The installed file '/usr/lib/x86_64-linux-gnu/libGL.so.1.7.0' seems to have changed, but `prelink -u` failed; unable to restore '/usr/lib/x86_64-linux-gnu/libGL.so.1.7.0' to an un-prelinked state.
--> The installed file '/usr/lib/x86_64-linux-gnu/libEGL.so.1.1.0' seems to have changed, but `prelink -u` failed; unable to restore '/usr/lib/x86_64-linux-gnu/libEGL.so.1.1.0' to an un-prelinked state.
--> The previously installed symlink '/usr/lib/x86_64-linux-gnu/libGLX_indirect.so.0' has target 'libGLX_mesa.so.0', but it was installed with target 'libGLX_nvidia.so.580.82.07'.  /usr/lib/x86_64-linux-gnu/libGLX_indirect.so.0 will not be uninstalled.
 -> done.
-WARNING: Your driver installation has been altered since it was initially installed; this may happen, for example, if you have since installed the NVIDIA driver through a mechanism other than nvidia-installer (such as your distribution's native package management system).  nvidia-installer will attempt to uninstall as best it can.  Please see the file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log' for details.
 -> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-5808207 (580.82.07)):
 -> done.
 -> Running ldconfig:
