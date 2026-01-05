@@ -115,7 +115,7 @@ case "$arg_repo" in
         ;;
     noble)
         ;;
-    questing)
+    resolute)
         ;;
     *)
         error "Unknown repo name \"$arg_repo\"" 128
@@ -175,13 +175,13 @@ else
                     ;;
             esac
             ;;
-        questing)
+        resolute)
             case "$arg_stage" in
                 0)
-                    pkgs=("${questing_stage0_pkgs[@]}")
+                    pkgs=("${resolute_stage0_pkgs[@]}")
                     ;;
                 1)
-                    pkgs=("${questing_stage1_pkgs[@]}")
+                    pkgs=("${resolute_stage1_pkgs[@]}")
                     ;;
                 *)
                     error "Unknown stage \"$arg_stage\"" 128
