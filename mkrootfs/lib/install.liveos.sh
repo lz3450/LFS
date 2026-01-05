@@ -43,7 +43,7 @@ declare -ar NOBLE_DEB_PKGS=(
     systemd-boot
     systemd-resolved
 )
-declare -ar QUESTING_DEB_PKGS=(
+declare -ar RESOLUTE_DEB_PKGS=(
     systemd-boot
     systemd-boot-efi
     systemd-resolved
@@ -101,8 +101,8 @@ case "$arg_suite" in
     noble)
         deb_pkgs+=("${NOBLE_DEB_PKGS[@]}")
         ;;
-    questing)
-        deb_pkgs+=("${QUESTING_DEB_PKGS[@]}")
+    resolute)
+        deb_pkgs+=("${RESOLUTE_DEB_PKGS[@]}")
         ;;
     kzl)
         pacman_pkgs=("${KZL_PACMAN_PKGS[@]}")

@@ -74,7 +74,7 @@ noble_deb_pkgs=(
   ### network
   network-manager-gnome
 )
-questing_deb_pkgs=(
+resolute_deb_pkgs=(
   ### ubuntu-minimal-desktop depends
   gnome-shell-extension-ubuntu-tiling-assistant
   ### gnome
@@ -88,7 +88,7 @@ deb_pkgs=()
 case "$UBUNTU_CODENAME" in
     jammy)      deb_pkgs=("${common_deb_pkgs[@]}" "${jammy_deb_pkgs[@]}") ;;
     noble)      deb_pkgs=("${common_deb_pkgs[@]}" "${noble_deb_pkgs[@]}") ;;
-    questing)   deb_pkgs=("${common_deb_pkgs[@]}" "${questing_deb_pkgs[@]}") ;;
+    resolute)   deb_pkgs=("${common_deb_pkgs[@]}" "${resolute_deb_pkgs[@]}") ;;
     *)          echo "Unknown suite \"$1\"" && exit 1
 esac
 

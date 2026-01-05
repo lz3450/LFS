@@ -49,7 +49,7 @@ Usage:
                                     if platform is liveos or rpi, only ext4 is supported, -f will be ignored
 
     -s, --suite <suite>             set suite to install (default: jammy)
-                                    supported suites: jammy, noble, questing, bookworm, trixie, kzl
+                                    supported suites: jammy, noble, resolute, bookworm, trixie, kzl
 
     -l, --loop                      install to loop device
                                     only applicable for platform pc, liveos and rpi use loop device by default
@@ -127,7 +127,7 @@ readonly install_lib
 readonly rootfs_type
 
 case "$arg_suite" in
-    jammy|noble|questing)
+    jammy|noble|resolute)
         distro="ubuntu"
         ;;
     bookworm|trixie)

@@ -79,7 +79,7 @@ Usage: $SCRIPT_NAME  -a | --arch <architecture>  -s | --suite <suite>
                                     supported architectures: amd64, arm64
 
     -s, --suite <suite>             specify the distribution suite (default: jammy)
-                                    supported suites: bookworm, trixie, jammy, noble, questing, kzl
+                                    supported suites: bookworm, trixie, jammy, noble, resolute, kzl
 EOF
 }
 
@@ -131,7 +131,7 @@ case "$arg_suite" in
         included_deb_pkgs=("${DEBIAN_INCLUDED_DEB_PKGS[@]}")
         excluded_deb_pkgs=("${DEBIAN_EXCLUDED_DEB_PKGS[@]}")
         ;;
-    jammy|noble|questing)
+    jammy|noble|resolute)
         distro=ubuntu
         deb_mirror="$ubuntu_mirror"
         included_deb_pkgs=("${UBUNTU_INCLUDED_DEB_PKGS[@]}")

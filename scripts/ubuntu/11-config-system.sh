@@ -28,7 +28,7 @@ EOF
     systemctl restart NetworkManager.service
 elif [[ "$UBUNTU_CODENAME" == "noble" ]]; then
     :
-elif [[ "$UBUNTU_CODENAME" == "questing" ]]; then
+elif [[ "$UBUNTU_CODENAME" == "resolute" ]]; then
     systemctl disable --now systemd-networkd.service
     systemctl restart NetworkManager.service
 else
