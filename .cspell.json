@@ -12,7 +12,7 @@
     "dictionaryDefinitions": [
         {
             "name": "LFS",
-            "path": "~/LFS/config/cspell/LFS.txt"
+            "path": ".LFS.txt"
         }
     ],
     "dictionaries": [
@@ -20,5 +20,7 @@
     ],
     "words": [],
     "ignoreWords": [],
-    "import": []
+    "import": [
+        "~/LFS/config/cspell/cspell.json"
+    ]
 }

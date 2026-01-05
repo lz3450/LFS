@@ -33,7 +33,6 @@ dvipng
 efi
 efibootmgr
 enumitem
-env
 exptl
 fdisk
 fontawesome
@@ -60,12 +59,13 @@ ksmbd
 latexindent
 latexmk
 latexrecommended
+LFS
 LIBDIR
 libgpgme
 libpaper
-linux
 linuxmusl
 liveos
+makepkg
 mandir
 mklabel
 mkpart
@@ -95,7 +95,6 @@ pkglist
 PKGLIST
 pkgname
 pkgrel
-pkgs
 pkgver
 potrace
 ptexenc
