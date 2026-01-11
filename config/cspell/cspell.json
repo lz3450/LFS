@@ -14,6 +14,7 @@
         "isaac",
         "isaacsim",
         "linux",
+        "MMIO",
         "moveit",
         "noatime",
         "pycache",
