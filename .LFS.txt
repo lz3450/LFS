@@ -22,11 +22,13 @@ chktex
 cleanbuild
 CMDLINE
 cnf
+cocciconfig
 cpf
 darwin
 darwinlegacy
 datarootdir
 datrev
+dbg
 debian
 debootstrap
 Debootstrapping
@@ -70,7 +72,11 @@ ip
 ISOFS
 iw
 joliet
+KBUILD
+Kconfig
+kernelrelease
 kmoddir
+ko
 kpathsea
 ksmbd
 kv
@@ -85,6 +91,7 @@ libpaper
 linuxmusl
 livenet
 liveos
+LOCALVERSION
 makepkg
 mandir
 mkisofs
@@ -159,6 +166,7 @@ subvolume
 subvolumes
 svnrev
 synctex
+syscalls
 tabularray
 teckit
 tex
@@ -188,10 +196,12 @@ updaterepo
 userspace
 usr
 vf
+vmlinux
 volid
 vp
 vr
 vrf
+vsf
 wl
 wpa
 wpasupplicant
