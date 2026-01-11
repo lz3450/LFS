@@ -4,19 +4,27 @@
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
+        "cmdline",
         "CUDA",
         "DNN",
+        "env",
+        "ethernet",
         "ipynb",
         "ir",
         "isaac",
         "isaacsim",
         "linux",
         "moveit",
+        "noatime",
         "pycache",
         "rclcpp",
         "ros",
         "ROS",
-        "RTX"
+        "RTX",
+        "rw",
+        "UEFI",
+        "vfat",
+        "wifi"
     ],
     "ignoreWords": [],
     "import": []
