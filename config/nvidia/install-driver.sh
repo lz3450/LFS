@@ -49,12 +49,14 @@ sudo ./nvidia-installer \
     --disable-nouveau \
     --no-distro-scripts \
     --no-wine-files \
+    --no-kernel-module-source \
     --no-dkms \
     --no-check-for-alternate-installs \
     --concurrency-level="$(nproc)" \
     --install-libglvnd \
     --systemd \
-    --no-rebuild-initramfs
+    --no-rebuild-initramfs \
+    --silent
 
 sudo rm -vf /usr/lib/modprobe.d/nvidia-installer-disable-nouveau.conf
 echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
