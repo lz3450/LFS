@@ -159,11 +159,13 @@ SELFAUTOPARENT
 showmanual
 smartmontools
 squashfs
+SRCDEST
 srcdir
 subvol
 SUBVOL
 subvolume
 subvolumes
+svn
 svnrev
 synctex
 syscalls
@@ -193,6 +195,7 @@ trixie
 tzdata
 updatepkg
 updaterepo
+updpkgsums
 userspace
 usr
 vf
