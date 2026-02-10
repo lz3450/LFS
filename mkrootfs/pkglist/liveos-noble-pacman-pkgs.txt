@@ -1,3 +1,3 @@
 debootstrap 1.0.141.g10-2
-linux 6.18-1
+linux 6.18.8-1
 pacman 7.0.0.g7-5

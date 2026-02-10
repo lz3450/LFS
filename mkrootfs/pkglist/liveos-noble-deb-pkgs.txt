@@ -7,6 +7,7 @@ base-passwd
 bash
 bash-completion
 bsdutils
+btrfs-progs
 busybox-initramfs
 ca-certificates
 console-setup
@@ -139,6 +140,7 @@ libgssapi-krb5-2
 libhogweed6t64
 libicu74
 libidn2-0
+libinih1
 libjson-c5
 libk5crypto3
 libkeyutils1
@@ -151,6 +153,7 @@ libldap2
 liblocale-gettext-perl
 liblz4-1
 liblzma5
+liblzo2-2
 libmd0
 libmnl0
 libmount1
@@ -182,6 +185,7 @@ libpython3-stdlib
 libpython3.12-minimal
 libpython3.12-stdlib
 libreadline8t64
+libreiserfscore0t64
 librtmp1
 libsasl2-2
 libsasl2-modules-db
@@ -208,6 +212,7 @@ libtirpc-common
 libtirpc3t64
 libudev1
 libunistring5
+liburcu8t64
 libuuid1
 libwrap0
 libxml2
@@ -217,11 +222,11 @@ libyaml-0-2
 libzstd1
 linux-base
 linux-firmware
-linux-image-6.8.0-88-generic
+linux-image-6.8.0-100-generic
 linux-image-generic
 linux-libc-dev
-linux-modules-6.8.0-88-generic
-linux-modules-extra-6.8.0-88-generic
+linux-modules-6.8.0-100-generic
+linux-modules-extra-6.8.0-100-generic
 locales
 login
 logrotate
@@ -297,6 +302,7 @@ whiptail
 wireless-regdb
 wpasupplicant
 xdg-user-dirs
+xfsprogs
 xkb-data
 xxd
 zlib1g
