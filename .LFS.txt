@@ -34,6 +34,8 @@ debootstrap
 Debootstrapping
 dehyph
 DESTDIR
+devpts
+devtmpfs
 distro
 dmask
 dmsquash
@@ -44,6 +46,8 @@ dvipng
 efi
 efiboot
 efibootmgr
+efivarfs
+efivars
 enumitem
 erofs
 EROFS
@@ -103,6 +107,8 @@ mksquashfs
 mmdebstrap
 mmdebstrapped
 mmdebstrapping
+mountpoint
+mountpoints
 mpfi
 mpfr
 msg
@@ -152,6 +158,8 @@ POINTEE
 pollcdrom
 potrace
 ptexenc
+ptmxmode
+resolv
 rf
 rl
 ro
@@ -162,6 +170,7 @@ RUSTC
 sed
 SELFAUTODIR
 SELFAUTOPARENT
+shm
 showmanual
 smartmontools
 squashfs
@@ -175,6 +184,7 @@ svn
 svnrev
 synctex
 syscalls
+sysfs
 tabularray
 td
 teckit
@@ -198,6 +208,7 @@ tlpkg
 tlpobj
 tlpostcode
 tltcl
+tmpfs
 trixie
 tzdata
 updatepkg
