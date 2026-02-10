@@ -134,7 +134,7 @@ elif (( result == 0 )); then
         update_pkgrel
     fi
 elif (( result == -1 )); then
-    error "Current version is newer" 255
+    error "Current version is newer ($new_version)" 255
 else
     error "Unknown \`vercmp\` result" 4
 fi
@@ -155,7 +155,7 @@ fi
 
 info "Running \`makepkg -o\`..."
 cd "$PKGBUILDDIR"
-makepkg "$opt_cleanbuild" "$opt_syncdeps" -o --noconfirm 2> /dev/null || error "\`makepkg -o\` error" 5
+makepkg "$opt_cleanbuild" "$opt_syncdeps" -o --noconfirm || error "\`makepkg -o\` error" 5
 
 # get build options
 info "Getting build options..."
