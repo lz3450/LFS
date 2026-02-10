@@ -291,7 +291,7 @@ cleanup() {
     sync
 
     log_magenta "Cleaning up..."
-    chroot_teardown_force
+    chroot_teardown
     umount -v -R -- "$ROOTFS_DIR"
 
     cleanup_platform_specific
