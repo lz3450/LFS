@@ -71,9 +71,8 @@ jammy_deb_pkgs=(
 noble_deb_pkgs=(
   ### gnome
   evince
-  ### network
-  network-manager-gnome
 )
+# TODO: not checked
 resolute_deb_pkgs=(
   ### ubuntu-minimal-desktop depends
   gnome-shell-extension-ubuntu-tiling-assistant
