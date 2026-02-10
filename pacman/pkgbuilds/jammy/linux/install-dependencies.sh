@@ -1,1 +1,0 @@
-../../ubuntu/linux/install-dependencies.sh
