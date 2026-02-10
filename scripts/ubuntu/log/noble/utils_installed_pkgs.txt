@@ -26,7 +26,6 @@ build-essential
 busybox-initramfs
 bzip2
 ca-certificates
-code
 colord
 colord-data
 console-setup
@@ -79,7 +78,6 @@ fontconfig
 fontconfig-config
 fonts-dejavu-core
 fonts-dejavu-mono
-fonts-liberation
 fonts-noto-cjk
 fonts-ubuntu
 fonts-urw-base35
@@ -796,7 +794,6 @@ make
 mawk
 media-types
 mesa-libgallium
-microsoft-edge-stable
 mount
 mutter-common
 mutter-common-bin
@@ -939,7 +936,6 @@ xdg-desktop-portal
 xdg-desktop-portal-gnome
 xdg-desktop-portal-gtk
 xdg-user-dirs
-xdg-utils
 xfonts-encodings
 xfonts-utils
 xkb-data
