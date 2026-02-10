@@ -92,6 +92,7 @@ linuxmusl
 livenet
 liveos
 LOCALVERSION
+longterm
 makepkg
 mandir
 mkisofs
@@ -108,6 +109,7 @@ msg
 multipath
 multiplatform
 mv
+nconfig
 netbsd
 netplan
 networkd
@@ -118,11 +120,13 @@ nofail
 nolvmconf
 nomdadmconf
 nosuid
+NUL
 nvidia
 openssh
 overlayfs
 pacman
 pacstrap
+PAHOLE
 PARTUUID
 pdfcrop
 pdftex
@@ -130,6 +134,7 @@ pixman
 pkgbase
 pkgbuild
 PKGBUILD
+PKGBUILDDIR
 pkgbuilds
 pkgdesc
 PKGDEST
@@ -143,6 +148,7 @@ pkgs
 PKGS
 PKGUPDATE
 pkgver
+POINTEE
 pollcdrom
 potrace
 ptexenc
@@ -170,6 +176,7 @@ svnrev
 synctex
 syscalls
 tabularray
+td
 teckit
 tex
 texdoc
