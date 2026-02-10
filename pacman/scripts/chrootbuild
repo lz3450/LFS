@@ -193,7 +193,7 @@ EOF
 cleanup() {
     info "Cleaning..."
 
-    chroot_teardown_force
+    chroot_teardown
     unmount_all_bind_mounts
 
     info "Done (Cleaning)"
