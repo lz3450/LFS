@@ -167,9 +167,9 @@ prepare() {
     loop_partitioned_setup "$loop_device" "$IMG_FILE"
 
     # mkfs
-    mkfs.fat -F 32 -n BOOT -- "${loop_device}p1"
+    mkfs.fat -F 32 -n LIVEOS_BOOT -- "${loop_device}p1"
     mkfs.ext4 -L "$ISO_LABEL" -- "${loop_device}p2"
-    mkfs.ext4 -L RECOVERY -- "${loop_device}p3"
+    mkfs.ext4 -L LIVEOS_REC -- "${loop_device}p3"
 
     # mount
     mkdir -p "$ISOFS_DIR"
@@ -262,8 +262,8 @@ EOF
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$CONFIG_DIR/liveos/sshd_config"
     # fstab
     cat > "$ROOTFS_DIR"/etc/fstab << EOF
-LABEL=BOOT          /boot/efi       vfat        $EFI_PARTITION_MOUNT_________________OPTIONS,nofail,x-systemd.device-timeout=30s    0 2
-LABEL=RECOVERY      /home           ext4        $MOUNT_OPT,nofail,x-systemd.device-timeout=30s                                      0 2
+LABEL=LIVEOS_BOOT   /boot/efi       vfat        $EFI_PARTITION_MOUNT_________________OPTIONS,nofail,x-systemd.device-timeout=30s    0 2
+LABEL=LIVEOS_REC    /home           ext4        $MOUNT_OPT,nofail,x-systemd.device-timeout=30s                                      0 2
 EOF
 
     ### 2. efi bootloader
