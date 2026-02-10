@@ -1,6 +1,6 @@
 
 Core properties:
-  Source dir /home/kzl/makepkg/build/pacman/src/pacman
+  Source dir /var/cache/makepkg/build/pacman/src/pacman
 
 Main project options:
   

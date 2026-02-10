@@ -1,8 +1,8 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=pacman
-pkgver=7.0.0.g7
-pkgrel=5
+pkgver=7.1.0.g10
+pkgrel=2
 epoch=
 arch=('x86_64')
 url="https://www.archlinux.org/pacman/"
@@ -12,14 +12,14 @@ backup=(
   "$PREFIX"/etc/makepkg.conf.d/rust.conf
   "$PREFIX"/etc/pacman.conf
 )
-_ref="1f38429b1c5f30edce30c731aa352e6363cc788e"
+_ref="cb7452f63414291b52061166ab2ebf1083897917"
 source=(
   # git+https://gitlab.archlinux.org/pacman/pacman.git#tag=v$pkgver
   # git+https://gitlab.archlinux.org/pacman/pacman.git#branch=$_ref
   git+https://gitlab.archlinux.org/pacman/pacman.git#commit=$_ref
   # git+https://gitlab.archlinux.org/pacman/pacman.git
 )
-sha256sums=('7744ae7b57fda9a7dc3aa0ae9136e2d3965cb2a536e49cc31199eaaaa024ce7f')
+sha256sums=('SKIP')
 
 MAKEPKG_PREFIX='/var/cache'
 # Compare the output of `gcc -march=native -Q --help=target` in the host system and the build system

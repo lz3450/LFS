@@ -1,4 +1,4 @@
-new_version=$(git ls-remote --tags https://gitlab.archlinux.org/pacman/pacman.git | grep -oP '(?<=refs/tags/v)7\.0\.0' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://gitlab.archlinux.org/pacman/pacman.git | grep -oP '(?<=refs/tags/v)7\.1\.0' | sort -V | tail -n1)
 srcdir="$pkgname"
 build_system=meson
 
