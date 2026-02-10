@@ -1,4 +1,4 @@
-new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.kernel.org | grep -P -A 1 "<td>(mainline|stable|longterm):</td>" | grep -oP '6\.18(\.\d+)?' | sort -V | tail -n1)
+new_version=$(curl -L -A 'Mozilla/5.0' --stderr - https://www.kernel.org | grep -P -A 1 "<td>(mainline|stable|longterm):</td>" | grep -oP '6\.19(\.\d+)?' | sort -V | tail -n1)
 srcdir=
 build_system=
 
