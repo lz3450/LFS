@@ -10,6 +10,8 @@ armhf
 awk
 bak
 bcachefs
+blkid
+blockdev
 bluetooth
 bootable
 bootctl
@@ -18,6 +20,7 @@ btrfs
 cairo
 cascadia
 CDLABEL
+chattr
 chktex
 cleanbuild
 CMDLINE
@@ -52,6 +55,7 @@ enumitem
 erofs
 EROFS
 exptl
+fakeroot
 fdisk
 fmask
 fontawesome
@@ -61,6 +65,7 @@ freebsd
 freetype
 fsprogs
 gd
+getsz
 gmp
 gpt
 grml
@@ -133,6 +138,7 @@ overlayfs
 pacman
 pacstrap
 PAHOLE
+partuuid
 PARTUUID
 pdfcrop
 pdftex
@@ -161,10 +167,12 @@ ptexenc
 ptmxmode
 resolv
 rf
+rfkill
 rl
 ro
 RO
 rootfs
+rootwait
 rpi
 RUSTC
 sed
@@ -178,6 +186,7 @@ SRCDEST
 srcdir
 subvol
 SUBVOL
+SUBVOLS
 subvolume
 subvolumes
 svn
