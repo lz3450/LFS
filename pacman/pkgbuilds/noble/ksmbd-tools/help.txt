@@ -1,0 +1,116 @@
+
+Core properties:
+  Source dir /var/cache/makepkg/build/ksmbd-tools/src/ksmbd-tools
+
+Main project options:
+  
+  Core options                   Default Value                    Possible Values                  Description                                                  
+  --------------                 -------------                    ---------------                  -----------                                                  
+  auto_features                  auto                             [enabled, disabled, auto]        Override value of all 'auto' features                        
+  backend                        ninja                            [ninja, vs, vs2010, vs2012,      Backend to use                                               
+                                                                   vs2013, vs2015, vs2017, vs2019,                                                              
+                                                                   vs2022, xcode, none]                                                                         
+  buildtype                      debug                            [plain, debug, debugoptimized,   Build type to use                                            
+                                                                   release, minsize, custom]                                                                    
+  cmake_prefix_path              []                               []                               List of additional prefixes for cmake to search              
+  debug                          true                             [true, false]                    Enable debug symbols and other information                   
+  default_library                shared                           [shared, static, both]           Default library type                                         
+  force_fallback_for             []                               []                               Force fallback for those subprojects                         
+  genvslite                      vs2022                           [vs2022]                         Setup multiple buildtype-suffixed ninja-backend build        
+                                                                                                   directories, and a [builddir]_vs containing a Visual Studio  
+                                                                                                   meta-backend with multiple configurations that calls into    
+                                                                                                   them                                                         
+  install_umask                  0022                             [preserve, 0000-0777]            Default umask to apply on permissions of installed files     
+  layout                         mirror                           [mirror, flat]                   Build directory layout                                       
+  optimization                   0                                [plain, 0, g, 1, 2, 3, s]        Optimization level                                           
+  pkg_config_path                []                               []                               List of additional paths for pkg-config to search            
+  prefer_static                  false                            [true, false]                    Whether to try static linking before shared linking          
+  strip                          false                            [true, false]                    Strip targets on install                                     
+  unity                          off                              [on, off, subprojects]           Unity build                                                  
+  unity_size                     4                                >=2                              Unity block size                                             
+  vsenv                          false                            [true, false]                    Activate Visual Studio environment                           
+  warning_level                  1                                [0, 1, 2, 3, everything]         Compiler warning level to use                                
+  werror                         false                            [true, false]                    Treat warnings as errors                                     
+  wrap_mode                      default                          [default, nofallback,            Wrap mode                                                    
+                                                                   nodownload, forcefallback,                                                                   
+                                                                   nopromote]                                                                                   
+  build.cmake_prefix_path        []                               []                               List of additional prefixes for cmake to search              
+  build.pkg_config_path          []                               []                               List of additional paths for pkg-config to search            
+  
+  Backend options                Default Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  backend_max_links              0                                >=0                              Maximum number of linker processes to run or 0 for no limit  
+  
+  Base options                   Default Value                    Possible Values                  Description                                                  
+  --------------                 -------------                    ---------------                  -----------                                                  
+  b_asneeded                     true                             [true, false]                    Use -Wl,--as-needed when linking                             
+  b_colorout                     always                           [auto, always, never]            Use colored output                                           
+  b_coverage                     false                            [true, false]                    Enable coverage tracking.                                    
+  b_lto                          false                            [true, false]                    Use link time optimization                                   
+  b_lto_threads                  0                                                                 Use multiple threads for Link Time Optimization              
+  b_lundef                       true                             [true, false]                    Use -Wl,--no-undefined when linking                          
+  b_ndebug                       false                            [true, false, if-release]        Disable asserts                                              
+  b_pch                          true                             [true, false]                    Use precompiled headers                                      
+  b_pgo                          off                              [off, generate, use]             Use profile guided optimization                              
+  b_pie                          false                            [true, false]                    Build executables as position independent                    
+  b_sanitize                     none                             [none, address, thread,          Code sanitizer to use                                        
+                                                                   undefined, memory, leak,                                                                     
+                                                                   address,undefined]                                                                           
+  b_staticpic                    true                             [true, false]                    Build static libraries as position independent               
+  
+  Compiler options               Default Value                    Possible Values                  Description                                                  
+  ------------------             -------------                    ---------------                  -----------                                                  
+  c_args                         []                               []                               Extra arguments passed to the c compiler                     
+  c_link_args                    []                               []                               Extra arguments passed to the c linker                       
+  c_std                          gnu99                            [none, c89, c99, c11, c17, c18,  C language standard to use                                   
+                                                                   c2x, gnu89, gnu99, gnu11,                                                                    
+                                                                   gnu17, gnu18, gnu2x]                                                                         
+  build.c_args                   []                               []                               Extra arguments passed to the c compiler                     
+  build.c_link_args              []                               []                               Extra arguments passed to the c linker                       
+  build.c_std                    none                             [none, c89, c99, c11, c17, c18,  C language standard to use                                   
+                                                                   c2x, gnu89, gnu99, gnu11,                                                                    
+                                                                   gnu17, gnu18, gnu2x]                                                                         
+  
+  pkgconfig module options       Default Value                    Possible Values                  Description                                                  
+  --------------------------     -------------                    ---------------                  -----------                                                  
+  pkgconfig.relocatable          false                            [true, false]                    Generate pkgconfig files as relocatable                      
+  
+  python module options          Default Value                    Possible Values                  Description                                                  
+  -----------------------        -------------                    ---------------                  -----------                                                  
+  python.allow_limited_api       true                             [true, false]                    Whether to allow use of the Python Limited API               
+  python.bytecompile             0                                >=-1, <=2                        Whether to compile bytecode                                  
+  python.install_env             prefix                           [auto, prefix, system, venv]     Which python environment to install to                       
+  python.platlibdir                                                                                Directory for site-specific, platform-specific files.        
+  python.purelibdir                                                                                Directory for site-specific, non-platform-specific files.    
+  
+  Directories                    Default Value                    Possible Values                  Description                                                  
+  -------------                  -------------                    ---------------                  -----------                                                  
+  bindir                         bin                                                               Executable directory                                         
+  datadir                        share                                                             Data file directory                                          
+  includedir                     include                                                           Header file directory                                        
+  infodir                        share/info                                                        Info page directory                                          
+  libdir                         lib/x86_64-linux-gnu                                              Library directory                                            
+  libexecdir                     libexec                                                           Library executable directory                                 
+  licensedir                                                                                       Licenses directory                                           
+  localedir                      share/locale                                                      Locale data directory                                        
+  localstatedir                  /var/local                                                        Localstate data directory                                    
+  mandir                         share/man                                                         Manual page directory                                        
+  prefix                         /usr/local                                                        Installation prefix                                          
+  sbindir                        sbin                                                              System executable directory                                  
+  sharedstatedir                 /var/local/lib                                                    Architecture-independent data directory                      
+  sysconfdir                     etc                                                               Sysconf data directory                                       
+  
+  Testing options                Default Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  errorlogs                      true                             [true, false]                    Whether to print the logs from failing tests                 
+  stdsplit                       true                             [true, false]                    Split stdout and stderr in test logs                         
+  
+  Project options                Default Value                    Possible Values                  Description                                                  
+  -----------------              -------------                    ---------------                  -----------                                                  
+  krb5                           disabled                         [enabled, disabled, auto]        Support for Kerberos 5 authentication                        
+  krb5_name                      krb5                                                              Dependency name used when checking Kerberos 5 support        
+  rundir                                                                                           Directory to store modifiable per-process data               
+                                                                                                   (LOCALSTATEDIR/run by default)                               
+  systemdsystemunitdir                                                                             Directory to install systemd unit file (query pkg-config by  
+                                                                                                   default)                                                     
+
