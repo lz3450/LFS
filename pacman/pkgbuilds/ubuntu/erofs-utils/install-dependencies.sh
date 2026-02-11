@@ -2,6 +2,7 @@
 
 sudo apt-get update
 sudo apt-get install --no-install-recommends -y \
+    automake \
     liblz4-dev \
     liblzma-dev \
     libtool \

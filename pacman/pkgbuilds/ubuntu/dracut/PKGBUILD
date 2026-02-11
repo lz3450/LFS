@@ -1,7 +1,7 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=dracut
-pkgver=108
+pkgver=110
 pkgrel=1
 epoch=
 pkgdesc="An event driven initramfs infrastructure"
@@ -14,7 +14,7 @@ backup=(
 source=(
   git+$url.git#tag=$pkgver
 )
-sha256sums=('3a719e83f1cb32f1c49135c92cb831f20da0dab05b101c834c1856ae3b3b3081')
+sha256sums=('6936901db728a5b9dec2a11f389d7b2a5c9f35e00dfd6be8ee5e6d7135febc99')
 
 # pkgver() {
 #   cd dracut-ng

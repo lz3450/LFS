@@ -1,0 +1,1 @@
+Disabling JSON support: libsystemd >= 257 required
