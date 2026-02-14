@@ -1,0 +1,13 @@
+containerd.io
+docker-buildx-plugin
+docker-ce
+docker-ce-cli
+docker-compose-plugin
+iptables
+libip4tc2
+libip6tc2
+libnetfilter-conntrack3
+libnfnetlink0
+libnftables1
+libnftnl11
+nftables
