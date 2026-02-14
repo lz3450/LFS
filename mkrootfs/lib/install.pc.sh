@@ -106,7 +106,7 @@ declare -A partition_device_map=(
     [efi]=""
     [rootfs]=""
     [swap]=""
-    [recovery]=""
+    [liveos]=""
 )
 
 loop_device=""
@@ -127,7 +127,7 @@ _prompt_for_partition_path() {
         rootfs)
             _prompt_name="root filesystem"
             ;;
-        swap|recovery)
+        swap|liveos)
             _prompt_name="$_partition_name"
             ;;
         *)
@@ -183,7 +183,7 @@ prepare() {
     #         mklabel gpt \
     #         unit s \
     #         mkpart BOOT fat32 2048 1048575 \
-    #         mkpart RECOVERY ext4 1048576 5242879 \
+    #         mkpart LIVEOS ext4 1048576 5242879 \
     #         mkpart ROOT "$rootfs_type" 5242880 $(( _root_end - 1 )) \
     #         mkpart SWAP linux-swap "$_root_end" 100% \
     #         set 1 esp on \
@@ -205,11 +205,11 @@ prepare() {
         if [[ "$_answer" =~ ^[Yy]$ ]]; then
             _prompt_for_partition_path swap
         fi
-        # recovery partition
-        read -r -p 'Make recovery partition [Y/n]: ' _answer
+        # liveos partition
+        read -r -p 'Make liveos partition [Y/n]: ' _answer
         _answer=${_answer:-y}
         if [[ "$_answer" =~ ^[Yy]$ ]]; then
-            _prompt_for_partition_path recovery
+            _prompt_for_partition_path liveos
         fi
 
         # exec 3>&1
@@ -227,8 +227,8 @@ prepare() {
     if [[ -n "${partition_device_map[swap]}" ]]; then
         mkswap -L SWAP -- "${partition_device_map[swap]}"
     fi
-    if [[ -n "${partition_device_map[recovery]}" ]]; then
-        mkfs.ext4 -F -L RECOVERY -- "${partition_device_map[recovery]}"
+    if [[ -n "${partition_device_map[liveos]}" ]]; then
+        mkfs.ext4 -F -L LIVEOS -- "${partition_device_map[liveos]}"
     fi
 
     # mount
@@ -338,14 +338,14 @@ linux   vmlinuz-KZL
 #initrd  initrd-KZL.img
 options root=PARTUUID=$_root______________________partuuid rw rootwait
 EOF
-    if [[ -n "${partition_device_map[recovery]}" ]]; then
-        cat > "$ROOTFS_DIR"/boot/efi/loader/entries/recovery.conf << EOF
-title   Recovery
+    if [[ -n "${partition_device_map[liveos]}" ]]; then
+        cat > "$ROOTFS_DIR"/boot/efi/loader/entries/liveos.conf << EOF
+title   LiveOS
 linux   vmlinuz-LiveOS
 initrd  initramfs-LiveOS.img
-options root=live:CDLABEL=RECOVERY rd.live.overlay.overlayfs rd.live.image rd.shell
+options root=live:CDLABEL=LIVEOS rd.live.overlay.overlayfs rd.live.image rd.shell
 EOF
-    log_magenta "Please set up the recovery partition manually"
+    log_magenta "Please set up the liveos partition manually"
     fi
 
     ### 3. initialize.sh
