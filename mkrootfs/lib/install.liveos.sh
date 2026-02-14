@@ -14,7 +14,9 @@ declare -r __INSTALL_LIVEOS__="install.liveos.sh"
 ################################################################################
 
 ### constants and variables (before argument processing)
-declare -r ISO_LABEL="LIVEOS"
+declare -r BOOT_LABEL="LIVEOS_BOOT"
+declare -r ROOT_LABEL="LIVEOS"
+declare -r HOME_LABEL="LIVEOS_HOME"
 
 declare -ar COMMON_DEB_PKGS=(
     ### disk
@@ -64,21 +66,21 @@ declare -r KZL_LINUX_CONF=$(cat << EOF
 title   KZL Linux
 linux   /vmlinuz
 #initrd  /initramfs.img
-options root=live:CDLABEL=$ISO_LABEL rd.live.overlay.overlayfs rd.live.image rd.shell
+options root=live:CDLABEL=$ROOT_LABEL rd.live.overlay.overlayfs rd.live.image rd.shell
 EOF
 )
 declare -r UBUNTU_KZL_CONF=$(cat << EOF
 title   Ubuntu-KZL
 linux   /vmlinuz-KZL
 initrd  /initramfs-KZL.img
-options root=live:CDLABEL=$ISO_LABEL rd.live.overlay.overlayfs rd.live.image rd.shell
+options root=live:CDLABEL=$ROOT_LABEL rd.live.overlay.overlayfs rd.live.image rd.shell
 EOF
 )
 declare -r UBUNTU_CONF=$(cat << EOF
 title   Ubuntu
 linux   /vmlinuz
 initrd  /initramfs.img
-options root=live:CDLABEL=$ISO_LABEL rd.live.overlay.overlayfs rd.live.image rd.shell
+options root=live:CDLABEL=$ROOT_LABEL rd.live.overlay.overlayfs rd.live.image rd.shell
 EOF
 )
 efi_dir=""
@@ -126,15 +128,12 @@ readonly -A efi_boot_entries
 
 ### constants and variables (after argument processing)
 declare -r ISO_NAME="${distro^}-$arg_suite"
-declare -r ISO_PUBLISHER="<https://github.com/lz3450/LFS>"
-declare -r ISO_APPLICATION="Live/Rescue ISO Image"
 
 declare -r ISOFS_DIR="$WORK_DIR/iso"
 declare -r RO_ROOTFS_IMG_DIR="$ISOFS_DIR/LiveOS"
 declare -r RO_ROOTFS_IMG_FILE_NAME="squashfs.img"
-declare -r RO_ROOTFS_IMG_FILE_PATH="$RO_ROOTFS_IMG_DIR/$RO_ROOTFS_IMG_FILE_NAME"
-declare -r PACMAN_REPO_DIR="home/.repository/ubuntu"
-declare -r PACMAN_REPO_FILE="$PACMAN_REPO_DIR/ubuntu.db.tar.zst"
+declare -r PACMAN_REPO_DIR="home/.repository/$distro"
+declare -r PACMAN_REPO_FILE="$PACMAN_REPO_DIR/$distro.db.tar.zst"
 declare -r ISO_FILE_NAME="liveos-$arg_suite-$TIMESTAMP.iso"
 
 loop_device=""
@@ -156,9 +155,9 @@ prepare() {
     parted -s "$IMG_FILE" \
         mklabel gpt \
         unit s \
-        mkpart BOOT fat32 2048 1048575 \
-        mkpart "$ISO_LABEL" ext4 1048576 5242879 \
-        mkpart RECOVERY ext4 5242880 100% \
+        mkpart "$BOOT_LABEL" fat32 2048 1048575 \
+        mkpart "$ROOT_LABEL" ext4 1048576 5242879 \
+        mkpart "$HOME_LABEL" ext4 5242880 100% \
         set 1 esp on \
         print
 
@@ -167,9 +166,9 @@ prepare() {
     loop_partitioned_setup "$loop_device" "$IMG_FILE"
 
     # mkfs
-    mkfs.fat -F 32 -n LIVEOS_BOOT -- "${loop_device}p1"
-    mkfs.ext4 -L "$ISO_LABEL" -- "${loop_device}p2"
-    mkfs.ext4 -L LIVEOS_REC -- "${loop_device}p3"
+    mkfs.fat -F 32 -n "$BOOT_LABEL" -- "${loop_device}p1"
+    mkfs.ext4 -L "$ROOT_LABEL" -- "${loop_device}p2"
+    mkfs.ext4 -L "$HOME_LABEL" -- "${loop_device}p3"
 
     # mount
     mkdir -p "$ISOFS_DIR"
@@ -262,8 +261,8 @@ EOF
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$CONFIG_DIR/liveos/sshd_config"
     # fstab
     cat > "$ROOTFS_DIR"/etc/fstab << EOF
-LABEL=LIVEOS_BOOT   /boot/efi       vfat        $EFI_PARTITION_MOUNT_________________OPTIONS,nofail,x-systemd.device-timeout=30s    0 2
-LABEL=LIVEOS_REC    /home           ext4        $MOUNT_OPT,nofail,x-systemd.device-timeout=30s                                      0 2
+LABEL=$BOOT_LABEL   /boot/efi       vfat        $EFI_PARTITION_MOUNT_________________OPTIONS,nofail,x-systemd.device-timeout=30s    0 2
+LABEL=$HOME_LABEL   /home           ext4        $MOUNT_OPT,nofail,x-systemd.device-timeout=30s                                      0 2
 EOF
 
     ### 2. efi bootloader
@@ -338,8 +337,8 @@ _make_ro_rootfs_img() {
 
 _make_iso_image() {
     info "Making ISO partition images..."
-    dd if="${loop_device}p1" of="$WORK_DIR/efiboot.img" bs=1M status=progress
-    dd if="${loop_device}p3" of="$WORK_DIR/recovery.img" bs=1M status=progress
+    dd if="${loop_device}p1" of="$WORK_DIR/liveos_boot.img" bs=1M status=progress
+    dd if="${loop_device}p3" of="$WORK_DIR/liveos_home.img" bs=1M status=progress
     info "Making ISO image..."
     xorriso \
         -as mkisofs \
@@ -348,13 +347,13 @@ _make_iso_image() {
         -joliet-long \
         -full-iso9660-filenames \
         -rational-rock \
-        -volid "$ISO_LABEL" \
-        -publisher "$ISO_NAME $ISO_PUBLISHER" \
-        -appid "$ISO_NAME $ISO_APPLICATION" \
+        -volid "$ROOT_LABEL" \
+        -publisher "$ISO_NAME <https://github.com/lz3450/LFS>" \
+        -appid "$ISO_NAME Live/Rescue ISO Image" \
         -preparer "prepared by kzl" \
         -partition_offset 16 \
-        -append_partition 2 C12A7328-F81F-11D2-BA4B-00A0C93EC93B "$WORK_DIR/efiboot.img" \
-        -append_partition 3 0FC63DAF-8483-4772-8E79-3D69D8477DE4 "$WORK_DIR/recovery.img" \
+        -append_partition 2 C12A7328-F81F-11D2-BA4B-00A0C93EC93B "$WORK_DIR/liveos_boot.img" \
+        -append_partition 3 0FC63DAF-8483-4772-8E79-3D69D8477DE4 "$WORK_DIR/liveos_home.img" \
         -appended_part_as_gpt \
         -output "$SCRIPT_DIR/images/$ISO_FILE_NAME" \
         "$ISOFS_DIR"
