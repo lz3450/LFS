@@ -1,5 +1,5 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/driver-install.log'
-creation time: Tue Feb 10 23:54:31 2026
+creation time: Sun Feb 15 02:46:57 2026
 installer version: 580.126.09
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
@@ -47,7 +47,6 @@ Using built-in stream user interface
 -> Multiple kernel module types are available for this system. Which would you like to use? (Answer: MIT/GPL)
 -> No distribution pre-unload script found.
 -> Installing NVIDIA driver version 580.126.09.
--> There appears to already be a driver installed on your system (version: 580.105.08).  As part of installing this driver (version: 580.126.09), the existing driver will be uninstalled.  Are you sure you want to continue? (Answer: Continue installation)
 -> Check for the availability or presence of alternate driver installs? (Answer: No)
 -> No distribution pre-install script found.
 -> Not probing for precompiled kernel interfaces.
@@ -91,6 +90,7 @@ WARNING: nvidia-installer was forced to guess the X library path '/usr/lib' and 
 -> X library installation path (only under rare circumstances should this be changed from the default) (Answer: '/usr/lib')
 -> X library installation path is: '/usr/lib'
 -> X module installation path (only under rare circumstances should this be changed from the default) (Answer: '/usr/lib/xorg/modules')
+-> The directory '/usr/lib/xorg/modules' does not exist; would you like to create it, or would you prefer to abort installation? (Answer: Create directory)
 -> X module installation path is: '/usr/lib/xorg/modules'
 -> OpenGL installation prefix (only under rare circumstances should this be changed from the default) (Answer: '/usr')
 -> OpenGL installation prefix is: '/usr'
@@ -104,13 +104,23 @@ WARNING: nvidia-installer was forced to guess the X library path '/usr/lib' and 
 -> Compat32 installation prefix (only under rare circumstances should this be changed from the default) (Answer: '/usr')
 -> Compat32 installation prefix is: '/usr'
 WARNING: Unable to find a suitable destination to install 32-bit compatibility libraries. Your system may not be set up for 32-bit compatibility. 32-bit compatibility files will not be installed; if you wish to install them, re-run the installation and set a valid directory with the --compat32-libdir option.
--> Uninstalling the previous installation
--> done.
 Will install libglvnd libraries.
 Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Searching for conflicting files:
 -> done.
 -> Installing 'NVIDIA Accelerated Graphics Driver for Linux-x86_64' (580.126.09):
+-> Deleting: /usr/lib/x86_64-linux-gnu/libOpenGL.so
+-> Deleting: /usr/lib/x86_64-linux-gnu/libGLdispatch.so.0.0.0
+-> Deleting: /usr/lib/x86_64-linux-gnu/libOpenGL.so.0
+-> Deleting: /usr/lib/x86_64-linux-gnu/libOpenGL.so.0.0.0
+-> Deleting: /usr/lib/x86_64-linux-gnu/libGL.so.1.7.0
+-> Deleting: /usr/lib/x86_64-linux-gnu/libGLdispatch.so.0
+-> Deleting: /usr/lib/x86_64-linux-gnu/libGLX.so
+-> Deleting: /usr/lib/x86_64-linux-gnu/libGL.so.1
+-> Deleting: /usr/lib/x86_64-linux-gnu/libGLX.so.0
+-> Deleting: /usr/lib/x86_64-linux-gnu/libGL.so
+-> Deleting: /usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+-> Deleting: /usr/lib/x86_64-linux-gnu/libGLX_indirect.so.0
 -> Rebuilding initramfs:
 -> More than one tool for rebuilding initramfs detected. Which tool would you like to use? (Answer: None of these)
 -> Skipping initramfs rebuild.
@@ -121,11 +131,11 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Installing: nvidia-installer --> /usr/bin/nvidia-installer
 -> Installing: nvidia-modprobe --> /usr/bin/nvidia-modprobe
 -> Installing: nvidia-modprobe.1.gz --> /usr/share/man/man1/nvidia-modprobe.1.gz
--> Installing: systemd/system/nvidia-suspend.service --> /lib/systemd/system/nvidia-suspend.service
--> Installing: systemd/system/nvidia-suspend-then-hibernate.service --> /lib/systemd/system/nvidia-suspend-then-hibernate.service
--> Installing: systemd/system/nvidia-hibernate.service --> /lib/systemd/system/nvidia-hibernate.service
--> Installing: systemd/system/nvidia-resume.service --> /lib/systemd/system/nvidia-resume.service
--> Installing: systemd/system-sleep/nvidia --> /lib/systemd/system-sleep/nvidia
+-> Installing: systemd/system/nvidia-suspend.service --> /usr/lib/systemd/system/nvidia-suspend.service
+-> Installing: systemd/system/nvidia-suspend-then-hibernate.service --> /usr/lib/systemd/system/nvidia-suspend-then-hibernate.service
+-> Installing: systemd/system/nvidia-hibernate.service --> /usr/lib/systemd/system/nvidia-hibernate.service
+-> Installing: systemd/system/nvidia-resume.service --> /usr/lib/systemd/system/nvidia-resume.service
+-> Installing: systemd/system-sleep/nvidia --> /usr/lib/systemd/system-sleep/nvidia
 -> Installing: systemd/nvidia-sleep.sh --> /usr/bin/nvidia-sleep.sh
 -> Installing: libglvnd_install_checker/glvnd_check --> /usr/lib/nvidia/glvnd_check
 -> Installing: libglvnd_install_checker/libGLX_installcheck.so.0 --> /usr/lib/nvidia/libGLX_installcheck.so.0
@@ -218,7 +228,7 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Installing: libnvidia-gpucomp.so.580.126.09 --> /usr/lib/x86_64-linux-gnu/libnvidia-gpucomp.so.580.126.09
 -> Installing: libnvidia-api.so.1 --> /usr/lib/x86_64-linux-gnu/libnvidia-api.so.1
 -> Installing: nvidia-powerd --> /usr/bin/nvidia-powerd
--> Installing: systemd/system/nvidia-powerd.service --> /lib/systemd/system/nvidia-powerd.service
+-> Installing: systemd/system/nvidia-powerd.service --> /usr/lib/systemd/system/nvidia-powerd.service
 -> Installing: nvidia-dbus.conf --> /usr/share/doc/NVIDIA_GLX-1.0/nvidia-dbus.conf
 -> Installing: libnvidia-glcore.so.580.126.09 --> /usr/lib/x86_64-linux-gnu/libnvidia-glcore.so.580.126.09
 -> Installing: libnvidia-tls.so.580.126.09 --> /usr/lib/x86_64-linux-gnu/libnvidia-tls.so.580.126.09
@@ -280,21 +290,21 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Installing: nvidia-pcc --> /usr/bin/nvidia-pcc
 -> Installing: libnvidia-sandboxutils.so.580.126.09 --> /usr/lib/x86_64-linux-gnu/libnvidia-sandboxutils.so.580.126.09
 -> Installing: sandboxutils-filelist.json --> /usr/share/nvidia/files.d/sandboxutils-filelist.json
--> Deleting: /tmp/template-jE136R
+-> Deleting: /tmp/template-q8c0EP
 -> Installing: kernel-open/nvidia.ko --> /lib/modules/6.19.0-KZL/kernel/drivers/video/nvidia.ko
 -> Installing: kernel-open/nvidia-uvm.ko --> /lib/modules/6.19.0-KZL/kernel/drivers/video/nvidia-uvm.ko
 -> Installing: kernel-open/nvidia-modeset.ko --> /lib/modules/6.19.0-KZL/kernel/drivers/video/nvidia-modeset.ko
 -> Installing: kernel-open/nvidia-drm.ko --> /lib/modules/6.19.0-KZL/kernel/drivers/video/nvidia-drm.ko
 -> Installing: kernel-open/nvidia-peermem.ko --> /lib/modules/6.19.0-KZL/kernel/drivers/video/nvidia-peermem.ko
--> Installing: /tmp/template-dEWVlZ --> /usr/share/applications/nvidia-settings.desktop
--> Deleting: /tmp/template-dEWVlZ
+-> Installing: /tmp/template-8Bf3Q1 --> /usr/share/applications/nvidia-settings.desktop
+-> Deleting: /tmp/template-8Bf3Q1
 -> Creating symlink: /usr/bin/nvidia-uninstall -> nvidia-installer
--> Creating symlink: /etc/systemd/system/systemd-suspend.service.wants/nvidia-suspend.service -> /lib/systemd/system/nvidia-suspend.service
--> Creating symlink: /etc/systemd/system/systemd-suspend-then-hibernate.service.wants/nvidia-suspend-then-hibernate.service -> /lib/systemd/system/nvidia-suspend-then-hibernate.service
--> Creating symlink: /etc/systemd/system/systemd-hibernate.service.wants/nvidia-hibernate.service -> /lib/systemd/system/nvidia-hibernate.service
--> Creating symlink: /etc/systemd/system/systemd-suspend.service.wants/nvidia-resume.service -> /lib/systemd/system/nvidia-resume.service
--> Creating symlink: /etc/systemd/system/systemd-hibernate.service.wants/nvidia-resume.service -> /lib/systemd/system/nvidia-resume.service
--> Creating symlink: /etc/systemd/system/systemd-suspend-then-hibernate.service.wants/nvidia-resume.service -> /lib/systemd/system/nvidia-resume.service
+-> Creating symlink: /etc/systemd/system/systemd-suspend.service.wants/nvidia-suspend.service -> /usr/lib/systemd/system/nvidia-suspend.service
+-> Creating symlink: /etc/systemd/system/systemd-suspend-then-hibernate.service.wants/nvidia-suspend-then-hibernate.service -> /usr/lib/systemd/system/nvidia-suspend-then-hibernate.service
+-> Creating symlink: /etc/systemd/system/systemd-hibernate.service.wants/nvidia-hibernate.service -> /usr/lib/systemd/system/nvidia-hibernate.service
+-> Creating symlink: /etc/systemd/system/systemd-suspend.service.wants/nvidia-resume.service -> /usr/lib/systemd/system/nvidia-resume.service
+-> Creating symlink: /etc/systemd/system/systemd-hibernate.service.wants/nvidia-resume.service -> /usr/lib/systemd/system/nvidia-resume.service
+-> Creating symlink: /etc/systemd/system/systemd-suspend-then-hibernate.service.wants/nvidia-resume.service -> /usr/lib/systemd/system/nvidia-resume.service
 -> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 -> libnvidia-ml.so.580.126.09
 -> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-ml.so -> libnvidia-ml.so.1
 -> Creating symlink: /usr/lib/x86_64-linux-gnu/libcuda.so.1 -> libcuda.so.580.126.09
