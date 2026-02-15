@@ -1,10 +1,10 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=texlive
-pkgver=75246
+pkgver=77745
 texliveyear=2025
 texlivedate=20250308
-pkgrel=15
+pkgrel=1
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -18,7 +18,7 @@ source=(
   $pkgname.install
 )
 sha256sums=('SKIP'
-            '51e968b61d37d65aa38f2b565879d728c827874fc051d0a150f8e97d05f98fbb'
+            '46e956d372691010860766cec4d8f203d43ee825fcfb664ba49c3631fa5fd5af'
             'SKIP'
             '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')
 

@@ -1,0 +1,11 @@
+pre_install() {
+  if [ -f usr/lib/dracut/dracut-install ]; then
+    mv -v usr/lib/dracut/dracut-install usr/lib/dracut/dracut-install.original
+  fi
+}
+
+post_remove() {
+  if [ -f usr/lib/dracut/dracut-install.original ]; then
+    mv -v usr/lib/dracut/dracut-install.original usr/lib/dracut/dracut-install
+  fi
+}

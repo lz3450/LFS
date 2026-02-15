@@ -1,5 +1,5 @@
 The Meson build system
-Version: 1.3.2
+Version: 1.10.1
 Source dir: /var/cache/makepkg/build/ksmbd-tools/src/ksmbd-tools
 Build dir: /var/cache/makepkg/build/ksmbd-tools/src/ksmbd-tools/build
 Build type: native build
@@ -34,4 +34,4 @@ ksmbd-tools 3.5.6
     rundir              : /run
     systemdsystemunitdir: /usr/lib/systemd/system
 
-Found ninja-1.11.1 at /usr/bin/ninja
+Found ninja-1.13.0.git.kitware.jobserver-pipe-1 at /home/kzl/.local/bin/ninja

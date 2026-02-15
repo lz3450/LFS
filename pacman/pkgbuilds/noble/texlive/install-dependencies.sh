@@ -1,0 +1,1 @@
+../../ubuntu/texlive/install-dependencies.sh

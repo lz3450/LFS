@@ -1,15 +1,15 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=python
-pkgver=3.14.0
-pkgrel=4
+pkgver=3.14.3
+pkgrel=1
 epoch=
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('x86_64')
 url="https://www.python.org/"
 license=('KZL')
 source=(git+https://github.com/python/cpython.git#tag=v$pkgver)
-sha256sums=('45cdf4814fc021abab6908eeb5f4aeece9c1ecadae639c1dc104af21ab28715b')
+sha256sums=('6abdbf2d5bcd0f6eb6ecf1fa11221d7984d64a3ff10226caf8d70d400cba4c26')
 
 build() {
   cd cpython

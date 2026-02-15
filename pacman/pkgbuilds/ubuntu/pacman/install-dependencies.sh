@@ -13,5 +13,7 @@ sudo apt-get install --no-install-recommends -y \
     libcurl4-openssl-dev \
     libgpgme-dev \
     libssl-dev \
+    meson \
+    ninja-build \
     pkg-config \
     zstd

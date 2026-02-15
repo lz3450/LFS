@@ -1,0 +1,404 @@
+configure: creating cache config.cache
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for wchar.h... yes
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking whether _XOPEN_SOURCE should be defined... no
+checking for native WIN32 or MINGW32... no
+configure: Assuming `--enable-autosp=no'
+configure: Assuming `--enable-axodraw2=no'
+configure: Assuming `--enable-devnag=no'
+configure: Assuming `--enable-lacheck=no'
+configure: Assuming `--enable-m-tx=no'
+configure: Assuming `--enable-pmx=no'
+configure: Assuming `--enable-ps2eps=no'
+configure: Assuming `--enable-t1utils=no'
+configure: Assuming `--enable-texdoctk=no'
+configure: Assuming `--enable-tpic2pdftex=no'
+configure: Assuming `--enable-vlna=no'
+configure: Assuming `--enable-xindy=no'
+configure: Assuming `--with-clisp-runtime=system'
+configure: Assuming `--enable-xml2pmx=no'
+configure: `--without-x' -> `--disable-xpdfopen'
+configure: Assuming `--enable-afm2pl=no'
+configure: Assuming `--enable-bibtex-x=no'
+configure: Assuming `--enable-cjkutils=no'
+configure: Assuming `--enable-detex=no'
+configure: Assuming `--enable-dtl=no'
+configure: Assuming `--enable-dvi2tty=no'
+configure: Assuming `--enable-dvidvi=no'
+configure: Assuming `--enable-dviljk=no'
+configure: Assuming `--enable-dviout-util=no'
+configure: Assuming `--enable-dvipdfm-x=no'
+configure: Assuming `--enable-dvipos=no'
+configure: Assuming `--enable-dvipsk=no'
+configure: Assuming `--enable-dvisvgm=no'
+configure: Assuming `--enable-gregorio=no'
+configure: Assuming `--enable-gsftopk=no'
+configure: Assuming `--enable-lcdf-typetools=no'
+configure: Assuming `--enable-makeindexk=no'
+configure: Assuming `--enable-makejvf=no'
+configure: Assuming `--enable-mendexk=no'
+configure: Assuming `--enable-musixtnt=no'
+configure: Assuming `--enable-ps2pk=no'
+configure: Assuming `--enable-psutils=no'
+configure: Assuming `--enable-seetexk=no'
+configure: Assuming `--enable-tex4htk=no'
+configure: Assuming `--enable-ttf2pk2=no'
+configure: Assuming `--enable-ttfdump=no'
+configure: Assuming `--enable-upmendex=no'
+configure: `--without-x' -> `--disable-xdvik'
+configure: Using `harfbuzz' headers and library from TL tree
+configure: Using `icu' headers and library from TL tree
+configure: Using `teckit' headers and library from TL tree
+configure: Using `graphite2' headers and library from TL tree
+configure: Using `zziplib' headers and library from TL tree
+configure: Assuming `xpdf' headers and library from TL tree
+configure: Using `mpfi' headers and library from TL tree
+configure: Using `mpfr' headers and library from TL tree
+configure: Using `gmp' headers and library from TL tree
+configure: Using `cairo' headers and library from TL tree
+configure: Using `pixman' headers and library from TL tree
+configure: Using `gd' headers and library from TL tree
+configure: Using `potrace' headers and library from TL tree
+configure: Using `freetype2' headers and library from TL tree
+configure: Using `libpng' headers and library from TL tree
+configure: Using `libpaper' headers and library from TL tree
+configure: Assuming `luajit' headers and library from TL tree
+configure: Using `zlib' headers and library from TL tree
+configure: Using `ptexenc' headers and library from TL tree
+configure: Using `kpathsea' headers and library from TL tree
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether sleep supports fractional seconds... yes
+checking filesystem timestamp resolution... 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /usr/bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports the include directive... yes (GNU style)
+checking whether make supports nested variables... yes
+checking xargs -n works... yes
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by gcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for file... file
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ranlib... ranlib
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking command to parse /usr/bin/nm -B output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... mt
+checking if mt is a manifest tool... no
+checking for dlfcn.h... yes
+checking for gcc options needed to detect all undeclared functions... none needed
+checking how to create a pax tar archive... gnutar
+checking dependency style of gcc... gcc3
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking whether the compiler accepts prototypes... yes
+checking what warning flags to pass to the C compiler... -Wimplicit -Wreturn-type
+checking the archiver (ar) interface... ar
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC -DPIC
+checking if gcc PIC flag -fPIC -DPIC works... yes
+checking if gcc static flag -static works... yes
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... no
+checking for gcc option to enable large file support... none needed
+checking for declarations of fseeko and ftello... yes
+checking for dirent.h that defines DIR... yes
+checking for library containing opendir... none required
+checking whether closedir returns void... no
+checking for assert.h... yes
+checking for float.h... yes
+checking for limits.h... yes
+checking for pwd.h... yes
+checking for stdlib.h... (cached) yes
+checking for sys/param.h... yes
+checking for putenv... yes
+checking for getcwd... yes
+checking for getwd... yes
+checking for memcmp... yes
+checking for memcpy... yes
+checking for mkstemp... yes
+checking for mktemp... yes
+checking for strchr... yes
+checking for strrchr... yes
+checking for an ANSI C-conforming const... yes
+checking for inline... inline
+checking for size_t... yes
+checking for int64_t... yes
+checking for uint64_t... yes
+checking whether isascii is declared... yes
+checking for struct stat.st_mtim... yes
+checking how to run the C preprocessor... gcc -E
+checking for X... disabled
+checking for g++... g++
+checking whether the compiler supports GNU C++... yes
+checking whether g++ accepts -g... yes
+checking for g++ option to enable C++11 features... none needed
+checking dependency style of g++... gcc3
+checking what warning flags to pass to the C++ compiler... -Wreturn-type -Wno-write-strings
+checking how to run the C++ preprocessor... g++ -E
+checking for ld used by g++... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking for g++ option to produce PIC... -fPIC -DPIC
+checking if g++ PIC flag -fPIC -DPIC works... yes
+checking if g++ static flag -static works... yes
+checking if g++ supports -c -o file.o... yes
+checking if g++ supports -c -o file.o... (cached) yes
+checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether ln -s works... yes
+checking for TeX specific libraries to build... texk/kpathsea texk/ptexenc 
+checking for pkg-config... pkg-config
+checking for freetype-config... no
+checking for pkg-config... (cached) pkg-config
+checking for icu-config... no
+checking for pkg-config... (cached) pkg-config
+configure: updating cache config.cache
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating doc/Makefile
+config.status: executing depfiles commands
+config.status: executing libtool commands
+=== configuring in auxdir/auxsub (/var/cache/makepkg/build/texlive/src/texlive-source/build/auxdir/auxsub)
+configure: running /bin/bash ../.././../auxdir/auxsub/configure --disable-option-checking '--prefix=/opt'  '--datarootdir=${prefix}/share' '--infodir=${prefix}/share/info' '--mandir=${prefix}/share/man' '--disable-all-pkgs' '--disable-native-texlive-build' '--disable-multiplatform' '--enable-web2c' '--enable-tex' '--enable-pdftex' '--enable-pdftex-synctex' '--enable-synctex' '--enable-chktex' '--enable-dvipng' '--enable-texlive' '--enable-linked-scripts' '--enable-shared' '--disable-static' '--with-banner-add=/KZL 2026/02/15 01:52:22 -0600 (1)' '--with-gs=/usr/bin/gs' '--without-system-cairo' '--without-system-freetype2' '--without-system-gd' '--without-system-gmp' '--without-system-graphite2' '--without-system-harfbuzz' '--without-system-icu' '--without-system-kpathsea' '--without-system-libpaper' '--without-system-libpng' '--without-system-mpfi' '--without-system-mpfr' '--without-system-pixman' '--without-system-potrace' '--without-system-ptexenc' '--without-system-teckit' '--without-system-zlib' '--without-system-zziplib' '--without-x' 'CFLAGS=-ffile-prefix-map=/var/cache/makepkg/build=. -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -flto=auto -ffat-lto-objects' 'LDFLAGS=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -Wl,-rpath=/opt/lib -flto=auto -ffat-lto-objects' 'CPPFLAGS=-D_FORTIFY_SOURCE=3' 'CXXFLAGS=-ffile-prefix-map=/var/cache/makepkg/build=. -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -Wp,-D_GLIBCXX_ASSERTIONS -flto=auto -ffat-lto-objects' '--enable-largefile' '--disable-silent-rules' '--enable-cxx-runtime-hack=no' '--enable-libtool-hack=yes' '--enable-texlive-build' '--enable-autosp=no' '--enable-axodraw2=no' '--enable-devnag=no' '--enable-lacheck=no' '--enable-m-tx=no' '--enable-pmx=no' '--enable-ps2eps=no' '--enable-t1utils=no' '--enable-texdoctk=no' '--enable-tpic2pdftex=no' '--enable-vlna=no' '--enable-xindy=no' '--with-clisp-runtime=system' '--enable-xml2pmx=no' '--disable-xpdfopen' '--enable-afm2pl=no' '--enable-bibtex-x=no' '--enable-cjkutils=no' '--enable-detex=no' '--enable-dtl=no' '--enable-dvi2tty=no' '--enable-dvidvi=no' '--enable-dviljk=no' '--enable-dviout-util=no' '--enable-dvipdfm-x=no' '--enable-dvipos=no' '--enable-dvipsk=no' '--enable-dvisvgm=no' '--enable-gregorio=no' '--enable-gsftopk=no' '--enable-lcdf-typetools=no' '--enable-makeindexk=no' '--enable-makejvf=no' '--enable-mendexk=no' '--enable-musixtnt=no' '--enable-ps2pk=no' '--enable-psutils=no' '--enable-seetexk=no' '--enable-tex4htk=no' '--enable-ttf2pk2=no' '--enable-ttfdump=no' '--enable-upmendex=no' '--disable-xdvik' '--with-system-xpdf=no' '--with-system-luajit=no' --cache-file=../../config.cache --srcdir=../.././../auxdir/auxsub
+configure: loading cache ../../config.cache
+checking for a BSD-compatible install... (cached) /usr/bin/install -c
+checking whether sleep supports fractional seconds... (cached) yes
+checking filesystem timestamp resolution... (cached) 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... (cached) /usr/bin/mkdir -p
+checking for gawk... (cached) mawk
+checking whether make sets $(MAKE)... (cached) yes
+checking whether make supports nested variables... (cached) yes
+checking xargs -n works... (cached) yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+=== configuring in libs (/var/cache/makepkg/build/texlive/src/texlive-source/build/libs)
+configure: running /bin/bash .././../libs/configure --disable-option-checking '--prefix=/opt'  '--datarootdir=${prefix}/share' '--infodir=${prefix}/share/info' '--mandir=${prefix}/share/man' '--disable-all-pkgs' '--disable-native-texlive-build' '--disable-multiplatform' '--enable-web2c' '--enable-tex' '--enable-pdftex' '--enable-pdftex-synctex' '--enable-synctex' '--enable-chktex' '--enable-dvipng' '--enable-texlive' '--enable-linked-scripts' '--enable-shared' '--disable-static' '--with-banner-add=/KZL 2026/02/15 01:52:22 -0600 (1)' '--with-gs=/usr/bin/gs' '--without-system-cairo' '--without-system-freetype2' '--without-system-gd' '--without-system-gmp' '--without-system-graphite2' '--without-system-harfbuzz' '--without-system-icu' '--without-system-kpathsea' '--without-system-libpaper' '--without-system-libpng' '--without-system-mpfi' '--without-system-mpfr' '--without-system-pixman' '--without-system-potrace' '--without-system-ptexenc' '--without-system-teckit' '--without-system-zlib' '--without-system-zziplib' '--without-x' 'CFLAGS=-ffile-prefix-map=/var/cache/makepkg/build=. -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -flto=auto -ffat-lto-objects' 'LDFLAGS=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -Wl,-rpath=/opt/lib -flto=auto -ffat-lto-objects' 'CPPFLAGS=-D_FORTIFY_SOURCE=3' 'CXXFLAGS=-ffile-prefix-map=/var/cache/makepkg/build=. -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -Wp,-D_GLIBCXX_ASSERTIONS -flto=auto -ffat-lto-objects' '--enable-largefile' '--disable-silent-rules' '--enable-cxx-runtime-hack=no' '--enable-libtool-hack=yes' '--enable-texlive-build' '--enable-autosp=no' '--enable-axodraw2=no' '--enable-devnag=no' '--enable-lacheck=no' '--enable-m-tx=no' '--enable-pmx=no' '--enable-ps2eps=no' '--enable-t1utils=no' '--enable-texdoctk=no' '--enable-tpic2pdftex=no' '--enable-vlna=no' '--enable-xindy=no' '--with-clisp-runtime=system' '--enable-xml2pmx=no' '--disable-xpdfopen' '--enable-afm2pl=no' '--enable-bibtex-x=no' '--enable-cjkutils=no' '--enable-detex=no' '--enable-dtl=no' '--enable-dvi2tty=no' '--enable-dvidvi=no' '--enable-dviljk=no' '--enable-dviout-util=no' '--enable-dvipdfm-x=no' '--enable-dvipos=no' '--enable-dvipsk=no' '--enable-dvisvgm=no' '--enable-gregorio=no' '--enable-gsftopk=no' '--enable-lcdf-typetools=no' '--enable-makeindexk=no' '--enable-makejvf=no' '--enable-mendexk=no' '--enable-musixtnt=no' '--enable-ps2pk=no' '--enable-psutils=no' '--enable-seetexk=no' '--enable-tex4htk=no' '--enable-ttf2pk2=no' '--enable-ttfdump=no' '--enable-upmendex=no' '--disable-xdvik' '--with-system-xpdf=no' '--with-system-luajit=no' --cache-file=../config.cache --srcdir=.././../libs
+configure: loading cache ../config.cache
+checking build system type... (cached) x86_64-pc-linux-gnu
+checking host system type... (cached) x86_64-pc-linux-gnu
+checking for gcc... (cached) gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... (cached) o
+checking whether the compiler supports GNU C... (cached) yes
+checking whether gcc accepts -g... (cached) yes
+checking for gcc option to enable C11 features... (cached) none needed
+checking whether gcc understands -c and -o together... (cached) yes
+checking for stdio.h... (cached) yes
+checking for stdlib.h... (cached) yes
+checking for string.h... (cached) yes
+checking for inttypes.h... (cached) yes
+checking for stdint.h... (cached) yes
+checking for strings.h... (cached) yes
+checking for sys/stat.h... (cached) yes
+checking for sys/types.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for wchar.h... (cached) yes
+checking for minix/config.h... (cached) no
+checking whether it is safe to define __EXTENSIONS__... (cached) yes
+checking whether _XOPEN_SOURCE should be defined... (cached) no
+checking for native WIN32 or MINGW32... (cached) no
+checking for a BSD-compatible install... (cached) /usr/bin/install -c
+checking whether sleep supports fractional seconds... (cached) yes
+checking filesystem timestamp resolution... (cached) 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... (cached) /usr/bin/mkdir -p
+checking for gawk... (cached) mawk
+checking whether make sets $(MAKE)... (cached) yes
+checking whether make supports the include directive... yes (GNU style)
+checking whether make supports nested variables... (cached) yes
+checking xargs -n works... (cached) yes
+checking dependency style of gcc... (cached) gcc3
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking whether the compiler accepts prototypes... (cached) yes
+checking what warning flags to pass to the C compiler... (cached) -Wimplicit -Wreturn-type
+checking for generic libraries to build... zlib lua53 luajit libpng freetype2 potrace gd pixman cairo gmp mpfr mpfi xpdf zziplib graphite2 teckit icu harfbuzz pplib 
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: executing depfiles commands
+=== configuring in utils (/var/cache/makepkg/build/texlive/src/texlive-source/build/utils)
+configure: running /bin/bash .././../utils/configure --disable-option-checking '--prefix=/opt'  '--datarootdir=${prefix}/share' '--infodir=${prefix}/share/info' '--mandir=${prefix}/share/man' '--disable-all-pkgs' '--disable-native-texlive-build' '--disable-multiplatform' '--enable-web2c' '--enable-tex' '--enable-pdftex' '--enable-pdftex-synctex' '--enable-synctex' '--enable-chktex' '--enable-dvipng' '--enable-texlive' '--enable-linked-scripts' '--enable-shared' '--disable-static' '--with-banner-add=/KZL 2026/02/15 01:52:22 -0600 (1)' '--with-gs=/usr/bin/gs' '--without-system-cairo' '--without-system-freetype2' '--without-system-gd' '--without-system-gmp' '--without-system-graphite2' '--without-system-harfbuzz' '--without-system-icu' '--without-system-kpathsea' '--without-system-libpaper' '--without-system-libpng' '--without-system-mpfi' '--without-system-mpfr' '--without-system-pixman' '--without-system-potrace' '--without-system-ptexenc' '--without-system-teckit' '--without-system-zlib' '--without-system-zziplib' '--without-x' 'CFLAGS=-ffile-prefix-map=/var/cache/makepkg/build=. -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -flto=auto -ffat-lto-objects' 'LDFLAGS=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -Wl,-rpath=/opt/lib -flto=auto -ffat-lto-objects' 'CPPFLAGS=-D_FORTIFY_SOURCE=3' 'CXXFLAGS=-ffile-prefix-map=/var/cache/makepkg/build=. -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -Wp,-D_GLIBCXX_ASSERTIONS -flto=auto -ffat-lto-objects' '--enable-largefile' '--disable-silent-rules' '--enable-cxx-runtime-hack=no' '--enable-libtool-hack=yes' '--enable-texlive-build' '--enable-autosp=no' '--enable-axodraw2=no' '--enable-devnag=no' '--enable-lacheck=no' '--enable-m-tx=no' '--enable-pmx=no' '--enable-ps2eps=no' '--enable-t1utils=no' '--enable-texdoctk=no' '--enable-tpic2pdftex=no' '--enable-vlna=no' '--enable-xindy=no' '--with-clisp-runtime=system' '--enable-xml2pmx=no' '--disable-xpdfopen' '--enable-afm2pl=no' '--enable-bibtex-x=no' '--enable-cjkutils=no' '--enable-detex=no' '--enable-dtl=no' '--enable-dvi2tty=no' '--enable-dvidvi=no' '--enable-dviljk=no' '--enable-dviout-util=no' '--enable-dvipdfm-x=no' '--enable-dvipos=no' '--enable-dvipsk=no' '--enable-dvisvgm=no' '--enable-gregorio=no' '--enable-gsftopk=no' '--enable-lcdf-typetools=no' '--enable-makeindexk=no' '--enable-makejvf=no' '--enable-mendexk=no' '--enable-musixtnt=no' '--enable-ps2pk=no' '--enable-psutils=no' '--enable-seetexk=no' '--enable-tex4htk=no' '--enable-ttf2pk2=no' '--enable-ttfdump=no' '--enable-upmendex=no' '--disable-xdvik' '--with-system-xpdf=no' '--with-system-luajit=no' --cache-file=../config.cache --srcdir=.././../utils
+configure: loading cache ../config.cache
+checking build system type... (cached) x86_64-pc-linux-gnu
+checking host system type... (cached) x86_64-pc-linux-gnu
+checking for gcc... (cached) gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... (cached) o
+checking whether the compiler supports GNU C... (cached) yes
+checking whether gcc accepts -g... (cached) yes
+checking for gcc option to enable C11 features... (cached) none needed
+checking whether gcc understands -c and -o together... (cached) yes
+checking for stdio.h... (cached) yes
+checking for stdlib.h... (cached) yes
+checking for string.h... (cached) yes
+checking for inttypes.h... (cached) yes
+checking for stdint.h... (cached) yes
+checking for strings.h... (cached) yes
+checking for sys/stat.h... (cached) yes
+checking for sys/types.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for wchar.h... (cached) yes
+checking for minix/config.h... (cached) no
+checking whether it is safe to define __EXTENSIONS__... (cached) yes
+checking whether _XOPEN_SOURCE should be defined... (cached) no
+checking for native WIN32 or MINGW32... (cached) no
+checking for a BSD-compatible install... (cached) /usr/bin/install -c
+checking whether sleep supports fractional seconds... (cached) yes
+checking filesystem timestamp resolution... (cached) 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... (cached) /usr/bin/mkdir -p
+checking for gawk... (cached) mawk
+checking whether make sets $(MAKE)... (cached) yes
+checking whether make supports the include directive... yes (GNU style)
+checking whether make supports nested variables... (cached) yes
+checking xargs -n works... (cached) yes
+checking dependency style of gcc... (cached) gcc3
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking whether the compiler accepts prototypes... (cached) yes
+checking what warning flags to pass to the C compiler... (cached) -Wimplicit -Wreturn-type
+checking for Utils programs to build... 
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: executing depfiles commands
+=== configuring in texk (/var/cache/makepkg/build/texlive/src/texlive-source/build/texk)
+configure: running /bin/bash .././../texk/configure --disable-option-checking '--prefix=/opt'  '--datarootdir=${prefix}/share' '--infodir=${prefix}/share/info' '--mandir=${prefix}/share/man' '--disable-all-pkgs' '--disable-native-texlive-build' '--disable-multiplatform' '--enable-web2c' '--enable-tex' '--enable-pdftex' '--enable-pdftex-synctex' '--enable-synctex' '--enable-chktex' '--enable-dvipng' '--enable-texlive' '--enable-linked-scripts' '--enable-shared' '--disable-static' '--with-banner-add=/KZL 2026/02/15 01:52:22 -0600 (1)' '--with-gs=/usr/bin/gs' '--without-system-cairo' '--without-system-freetype2' '--without-system-gd' '--without-system-gmp' '--without-system-graphite2' '--without-system-harfbuzz' '--without-system-icu' '--without-system-kpathsea' '--without-system-libpaper' '--without-system-libpng' '--without-system-mpfi' '--without-system-mpfr' '--without-system-pixman' '--without-system-potrace' '--without-system-ptexenc' '--without-system-teckit' '--without-system-zlib' '--without-system-zziplib' '--without-x' 'CFLAGS=-ffile-prefix-map=/var/cache/makepkg/build=. -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -flto=auto -ffat-lto-objects' 'LDFLAGS=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,-z,pack-relative-relocs -Wl,-rpath=/opt/lib -flto=auto -ffat-lto-objects' 'CPPFLAGS=-D_FORTIFY_SOURCE=3' 'CXXFLAGS=-ffile-prefix-map=/var/cache/makepkg/build=. -march=native -O2 -pipe -fno-plt -fexceptions -fcf-protection -fstack-clash-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -Wformat -Werror=format-security -Wp,-D_GLIBCXX_ASSERTIONS -flto=auto -ffat-lto-objects' '--enable-largefile' '--disable-silent-rules' '--enable-cxx-runtime-hack=no' '--enable-libtool-hack=yes' '--enable-texlive-build' '--enable-autosp=no' '--enable-axodraw2=no' '--enable-devnag=no' '--enable-lacheck=no' '--enable-m-tx=no' '--enable-pmx=no' '--enable-ps2eps=no' '--enable-t1utils=no' '--enable-texdoctk=no' '--enable-tpic2pdftex=no' '--enable-vlna=no' '--enable-xindy=no' '--with-clisp-runtime=system' '--enable-xml2pmx=no' '--disable-xpdfopen' '--enable-afm2pl=no' '--enable-bibtex-x=no' '--enable-cjkutils=no' '--enable-detex=no' '--enable-dtl=no' '--enable-dvi2tty=no' '--enable-dvidvi=no' '--enable-dviljk=no' '--enable-dviout-util=no' '--enable-dvipdfm-x=no' '--enable-dvipos=no' '--enable-dvipsk=no' '--enable-dvisvgm=no' '--enable-gregorio=no' '--enable-gsftopk=no' '--enable-lcdf-typetools=no' '--enable-makeindexk=no' '--enable-makejvf=no' '--enable-mendexk=no' '--enable-musixtnt=no' '--enable-ps2pk=no' '--enable-psutils=no' '--enable-seetexk=no' '--enable-tex4htk=no' '--enable-ttf2pk2=no' '--enable-ttfdump=no' '--enable-upmendex=no' '--disable-xdvik' '--with-system-xpdf=no' '--with-system-luajit=no' --cache-file=../config.cache --srcdir=.././../texk
+configure: loading cache ../config.cache
+checking build system type... (cached) x86_64-pc-linux-gnu
+checking host system type... (cached) x86_64-pc-linux-gnu
+checking for gcc... (cached) gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... (cached) o
+checking whether the compiler supports GNU C... (cached) yes
+checking whether gcc accepts -g... (cached) yes
+checking for gcc option to enable C11 features... (cached) none needed
+checking whether gcc understands -c and -o together... (cached) yes
+checking for stdio.h... (cached) yes
+checking for stdlib.h... (cached) yes
+checking for string.h... (cached) yes
+checking for inttypes.h... (cached) yes
+checking for stdint.h... (cached) yes
+checking for strings.h... (cached) yes
+checking for sys/stat.h... (cached) yes
+checking for sys/types.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for wchar.h... (cached) yes
+checking for minix/config.h... (cached) no
+checking whether it is safe to define __EXTENSIONS__... (cached) yes
+checking whether _XOPEN_SOURCE should be defined... (cached) no
+checking for native WIN32 or MINGW32... (cached) no
+checking for a BSD-compatible install... (cached) /usr/bin/install -c
+checking whether sleep supports fractional seconds... (cached) yes
+checking filesystem timestamp resolution... (cached) 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... (cached) /usr/bin/mkdir -p
+checking for gawk... (cached) mawk
+checking whether make sets $(MAKE)... (cached) yes
+checking whether make supports the include directive... yes (GNU style)
+checking whether make supports nested variables... (cached) yes
+checking xargs -n works... (cached) yes
+checking dependency style of gcc... (cached) gcc3
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking whether the compiler accepts prototypes... (cached) yes
+checking what warning flags to pass to the C compiler... (cached) -Wimplicit -Wreturn-type
+checking for TeXk programs to build...  web2c chktex dvipng texlive
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: executing depfiles commands
+
+** Configuration summary for TeX Live 2025-03-07 (2025/KZL 2026/02/15 01:52:22 -0600 (1)):
+
+   compiling for x86_64-pc-linux-gnu
+      in /var/cache/makepkg/build/texlive/src/texlive-source/build
+      from sources in /var/cache/makepkg/build/texlive/src/texlive-source
+
+   C compiler (CC):              gcc (gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0)
+   C++ compiler (CXX):           g++ (g++ (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0)
+   PATH:                         /home/kzl/LFS/pacman/scripts:/home/kzl/.local/bin:/home/kzl/.cargo/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin
+
+   enable_native_texlive_build:  no
+   enable_largefile:             yes
+   enable_shared:                yes
+   enable_multiplatform:         no
+   enable_cxx_runtime_hack:      no
+   enable_libtool_hack:          yes
+   enable_compiler_warnings:     min
+
+   prefix:                       /opt
+   includedir:                   ${prefix}/include
+   datarootdir:                  ${prefix}/share
+   mandir:                       ${prefix}/share/man
+   infodir:                      ${prefix}/share/info
+   exec_prefix:                  ${prefix}
+   bindir:                       ${exec_prefix}/bin
+   libdir:                       ${exec_prefix}/lib
+
+** Next run `make' to configure and build each library and program.
+
