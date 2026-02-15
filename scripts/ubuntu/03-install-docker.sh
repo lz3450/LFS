@@ -25,24 +25,22 @@ apt-get update
 apt-get upgrade -y
 
 ### Uninstall all conflicting packages
-for _pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
-    apt-get purge -y $_pkg
-done
-unset _pkg
+apt-get purge -y $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc | cut -f1)
 
 # Add Docker's official GPG key:
+apt-get update
+apt-get install ca-certificates curl
 install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /usr/share/keyrings/docker.asc
-chmod a+r /usr/share/keyrings/docker.asc
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
 
 # Add the repository to Apt sources:
-cat > /etc/apt/sources.list.d/docker.sources << EOF
+tee /etc/apt/sources.list.d/docker.sources << EOF
 Types: deb
 URIs: https://download.docker.com/linux/ubuntu
 Suites: ${UBUNTU_CODENAME:-$VERSION_CODENAME}
 Components: stable
-Architectures: $(dpkg --print-architecture)
-Signed-By: /usr/share/keyrings/docker.asc
+Signed-By: /etc/apt/keyrings/docker.asc
 EOF
 
 apt-get update
