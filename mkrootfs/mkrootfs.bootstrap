@@ -215,7 +215,9 @@ debootstrap_rootfs() {
         "$arg_suite" \
         "$ROOTFS_DIR" \
         "$deb_mirror" \
-        | sed 's/ /\n/g' | LC_ALL=C sort -n  | sed '/^$/d' > "$_deb_pkg_to_install"
+        2> "$LOG_DIR"/deb_list.log \
+        | sed 's/ /\n/g' | LC_ALL=C sort -n  | sed '/^$/d' > "$_deb_pkg_to_install" \
+        || error "Failed to list deb packages to be installed" 2
 
     info "Debootstrapping \"$ROOTFS_DIR/\"..."
     local _foreign=""
