@@ -43,9 +43,11 @@ declare -ar DEBIAN_DEB_PKGS=(
     rpi-eeprom
     # rpicam-apps-lite
 )
-declare -ar UBUNTU_DEB_PKGS=(
+declare -ar JAMMY_DEB_PKGS=(
     linux-firmware-raspi2
     ubuntu-raspi-settings
+)
+declare -ar NOBLE_DEB_PKGS=(
 )
 
 deb_pkgs=("${COMMON_DEB_PKGS[@]}")
@@ -57,7 +59,10 @@ case "$arg_suite" in
         deb_pkgs+=("${DEBIAN_DEB_PKGS[@]}")
         ;;
     jammy)
-        deb_pkgs+=("${UBUNTU_DEB_PKGS[@]}")
+        deb_pkgs+=("${JAMMY_DEB_PKGS[@]}")
+        ;;
+    noble)
+        deb_pkgs+=("${NOBLE_DEB_PKGS[@]}")
         ;;
     *)
         error "Unsupported suite: $arg_suite" 128
@@ -120,6 +125,7 @@ EOF
 
 post_install_pkgs() {
     if [[ "$distro" == "debian" ]]; then
+        # raspberrypi-archive-stable.gpg will be overwritten by deb package raspberrypi-archive-keyring
         info "Setting up sources.list..."
         rm -vf -- "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key"
         sed -i -e '/^Signed-By/d' -e '/^#Signed-By/s/^#//' "$ROOTFS_DIR/etc/apt/sources.list.d/raspi.sources"
@@ -161,14 +167,12 @@ echo "root:raspi" | chpasswd
 echo "kzl:raspi" | chpasswd
 
 systemctl disable wpa_supplicant.service
-systemctl disable NetworkManager.service
+# systemctl disable NetworkManager.service
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
 systemctl enable wpa_supplicant@wlan0.service
 systemctl enable ssh.service
 EOF
-    rm -vf -- "$ROOTFS_DIR/initialize.sh"
-
     ###
     info "Copying miscellaneous config files..."
     # environment
