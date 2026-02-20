@@ -1,5 +1,5 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log'
-creation time: Sun Feb 15 03:50:32 2026
+creation time: Thu Feb 19 18:45:22 2026
 installer version: 580.126.09
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
@@ -17,15 +17,13 @@ Using built-in stream user interface
 -> Parsing log file:
 -> done.
 -> Validating previous installation:
--> The installed file '/usr/lib/x86_64-linux-gnu/libGLESv2.so.2.1.0' seems to have changed, but `prelink -u` failed; unable to restore '/usr/lib/x86_64-linux-gnu/libGLESv2.so.2.1.0' to an un-prelinked state.
--> The installed file '/usr/lib/x86_64-linux-gnu/libEGL.so.1.1.0' seems to have changed, but `prelink -u` failed; unable to restore '/usr/lib/x86_64-linux-gnu/libEGL.so.1.1.0' to an un-prelinked state.
+-> The installed file '/usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0' seems to have changed, but `prelink -u` failed; unable to restore '/usr/lib/x86_64-linux-gnu/libOpenCL.so.1.0.0' to an un-prelinked state.
+-> The installed file '/usr/lib/x86_64-linux-gnu/libGLESv1_CM.so.1.2.0' seems to have changed, but `prelink -u` failed; unable to restore '/usr/lib/x86_64-linux-gnu/libGLESv1_CM.so.1.2.0' to an un-prelinked state.
+-> The previously installed symlink '/usr/lib/x86_64-linux-gnu/libOpenCL.so.1' has target 'libOpenCL.so.1.0.0', but it was installed with target 'libOpenCL.so.1.0'.  /usr/lib/x86_64-linux-gnu/libOpenCL.so.1 will not be uninstalled.
 -> done.
 WARNING: Your driver installation has been altered since it was initially installed; this may happen, for example, if you have since installed the NVIDIA driver through a mechanism other than nvidia-installer (such as your distribution's native package management system).  nvidia-installer will attempt to uninstall as best it can.  Please see the file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log' for details.
 -> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-58012609 (580.126.09)):
--> Failed to delete the directory '/usr/share/icons/hicolor/128x128/apps' (Directory not empty).
--> Failed to delete the directory '/usr/share/icons/hicolor/128x128' (Directory not empty).
--> Failed to delete the directory '/usr/share/glvnd/egl_vendor.d' (Directory not empty).
--> Failed to delete the directory '/usr/share/glvnd' (Directory not empty).
+-> Failed to delete the directory '/usr/lib/x86_64-linux-gnu/vdpau' (Directory not empty).
 WARNING: Failed to delete some directories. See /home/kzl/LFS/config/nvidia/nvidia-uninstall.log for details.
 -> Unable to delete directories created by previous installation.
 -> done.
