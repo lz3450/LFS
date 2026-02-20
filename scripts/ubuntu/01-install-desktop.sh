@@ -43,6 +43,8 @@ common_deb_pkgs=(
   yaru-theme-gtk
   yaru-theme-icon
   yaru-theme-sound
+  ### power
+  power-profiles-daemon
   ### network
   network-manager
   network-manager-config-connectivity-ubuntu
