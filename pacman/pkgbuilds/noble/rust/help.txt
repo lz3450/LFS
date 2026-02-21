@@ -1,0 +1,159 @@
+Usage: ./configure [options]
+
+Options
+	--enable-debug                     OR --disable-debug
+		enables debugging environment; does not affect optimization of bootstrapped code
+	--enable-docs                      OR --disable-docs
+		build standard library documentation
+	--enable-compiler-docs             OR --disable-compiler-docs
+		build compiler documentation
+	--enable-optimize-tests            OR --disable-optimize-tests
+		build tests with optimizations
+	--enable-verbose-tests             OR --disable-verbose-tests
+		enable verbose output when running tests
+	--enable-ccache                    OR --disable-ccache
+		invoke gcc/clang/rustc via ccache to reuse object files between builds
+	--enable-sccache                   OR --disable-sccache
+		invoke gcc/clang/rustc via sccache to reuse object files between builds
+	--enable-local-rust                OR --disable-local-rust
+		use an installed rustc rather than downloading a snapshot
+	--local-rust-root=VAL          set prefix for local rust binary
+	--enable-local-rebuild             OR --disable-local-rebuild
+		assume local-rust matches the current version, for rebuilds; implies local-rust, and is implied if local-rust already matches the current version
+	--enable-llvm-static-stdcpp        OR --disable-llvm-static-stdcpp
+		statically link to libstdc++ for LLVM
+	--enable-llvm-link-shared          OR --disable-llvm-link-shared
+		prefer shared linking to LLVM (llvm-config --link-shared)
+	--enable-rpath                     OR --disable-rpath
+		build rpaths into rustc itself
+	--enable-codegen-tests             OR --disable-codegen-tests
+		run the tests/codegen tests
+	--enable-ninja                     OR --disable-ninja
+		build LLVM using the Ninja generator (for MSVC, requires building in the correct environment)
+	--enable-locked-deps               OR --disable-locked-deps
+		force Cargo.lock to be up to date
+	--enable-vendor                    OR --disable-vendor
+		enable usage of vendored Rust crates
+	--enable-sanitizers                OR --disable-sanitizers
+		build the sanitizer runtimes (asan, dfsan, lsan, msan, tsan, hwasan)
+	--enable-dist-src                  OR --disable-dist-src
+		when building tarballs enables building a source tarball
+	--enable-cargo-native-static       OR --disable-cargo-native-static
+		static native libraries in cargo
+	--enable-profiler                  OR --disable-profiler
+		build the profiler runtime
+	--enable-full-tools                OR --disable-full-tools
+		enable all tools
+	--enable-lld                       OR --disable-lld
+		build lld
+	--enable-llvm-bitcode-linker       OR --disable-llvm-bitcode-linker
+		build llvm bitcode linker
+	--enable-clang                     OR --disable-clang
+		build clang
+	--enable-use-libcxx                OR --disable-use-libcxx
+		build LLVM with libc++
+	--enable-control-flow-guard        OR --disable-control-flow-guard
+		Enable Control Flow Guard
+	--enable-patch-binaries-for-nix    OR --disable-patch-binaries-for-nix
+		whether patch binaries for usage with Nix toolchains
+	--enable-new-symbol-mangling       OR --disable-new-symbol-mangling
+		use symbol-mangling-version v0
+	--llvm-cflags=VAL              build LLVM with these extra compiler flags
+	--llvm-cxxflags=VAL            build LLVM with these extra compiler flags
+	--llvm-ldflags=VAL             build LLVM with these extra linker flags
+	--llvm-libunwind=VAL           use LLVM libunwind
+	--enable-optimize-llvm             OR --disable-optimize-llvm
+		build optimized LLVM
+	--enable-llvm-assertions           OR --disable-llvm-assertions
+		build LLVM with assertions
+	--enable-llvm-enzyme               OR --disable-llvm-enzyme
+		build LLVM with enzyme
+	--enable-llvm-offload              OR --disable-llvm-offload
+		build LLVM with gpu offload support
+	--enable-llvm-plugins              OR --disable-llvm-plugins
+		build LLVM with plugin interface
+	--enable-debug-assertions          OR --disable-debug-assertions
+		build with debugging assertions
+	--enable-debug-assertions-std      OR --disable-debug-assertions-std
+		build the standard library with debugging assertions
+	--enable-overflow-checks           OR --disable-overflow-checks
+		build with overflow checks
+	--enable-overflow-checks-std       OR --disable-overflow-checks-std
+		build the standard library with overflow checks
+	--enable-llvm-release-debuginfo    OR --disable-llvm-release-debuginfo
+		build LLVM with debugger metadata
+	--debuginfo-level=VAL          debuginfo level for Rust code
+	--debuginfo-level-rustc=VAL    debuginfo level for the compiler
+	--debuginfo-level-std=VAL      debuginfo level for the standard library
+	--debuginfo-level-tools=VAL    debuginfo level for the tools
+	--debuginfo-level-tests=VAL    debuginfo level for the test suites run with compiletest
+	--save-toolstates=VAL          save build and test status of external tools into this file
+	--prefix=VAL                   set installation prefix
+	--localstatedir=VAL            local state directory
+	--datadir=VAL                  install data
+	--sysconfdir=VAL               install system configuration files
+	--infodir=VAL                  install additional info
+	--libdir=VAL                   install libraries
+	--mandir=VAL                   install man pages in PATH
+	--docdir=VAL                   install documentation in PATH
+	--bindir=VAL                   install binaries
+	--llvm-root=VAL                set LLVM root
+	--llvm-config=VAL              set path to llvm-config
+	--llvm-filecheck=VAL           set path to LLVM's FileCheck utility
+	--python=VAL                   set path to python
+	--musl-root=VAL                MUSL root installation directory (deprecated)
+	--musl-root-x86_64=VAL         x86_64-unknown-linux-musl install directory
+	--musl-root-i586=VAL           i586-unknown-linux-musl install directory
+	--musl-root-i686=VAL           i686-unknown-linux-musl install directory
+	--musl-root-arm=VAL            arm-unknown-linux-musleabi install directory
+	--musl-root-armhf=VAL          arm-unknown-linux-musleabihf install directory
+	--musl-root-armv5te=VAL        armv5te-unknown-linux-musleabi install directory
+	--musl-root-armv7=VAL          armv7-unknown-linux-musleabi install directory
+	--musl-root-armv7hf=VAL        armv7-unknown-linux-musleabihf install directory
+	--musl-root-aarch64=VAL        aarch64-unknown-linux-musl install directory
+	--musl-root-mips=VAL           mips-unknown-linux-musl install directory
+	--musl-root-mipsel=VAL         mipsel-unknown-linux-musl install directory
+	--musl-root-mips64=VAL         mips64-unknown-linux-muslabi64 install directory
+	--musl-root-mips64el=VAL       mips64el-unknown-linux-muslabi64 install directory
+	--musl-root-powerpc64=VAL      powerpc64-unknown-linux-musl install directory
+	--musl-root-powerpc64le=VAL    powerpc64le-unknown-linux-musl install directory
+	--musl-root-riscv32gc=VAL      riscv32gc-unknown-linux-musl install directory
+	--musl-root-riscv64gc=VAL      riscv64gc-unknown-linux-musl install directory
+	--musl-root-loongarch64=VAL    loongarch64-unknown-linux-musl install directory
+	--musl-root-wali-wasm32=VAL    wasm32-wali-linux-musl install directory
+	--qemu-armhf-rootfs=VAL        rootfs in qemu testing, you probably don't want to use this
+	--qemu-aarch64-rootfs=VAL      rootfs in qemu testing, you probably don't want to use this
+	--qemu-riscv64-rootfs=VAL      rootfs in qemu testing, you probably don't want to use this
+	--experimental-targets=VAL     experimental LLVM targets to build
+	--release-channel=VAL          the name of the release channel to build
+	--release-description=VAL      optional descriptive string for version output
+	--dist-compression-formats=VAL List of compression formats to use
+	--default-linker=VAL           the default linker
+	--enable-manage-submodules         OR --disable-manage-submodules
+		let the build manage the git submodules
+	--enable-full-bootstrap            OR --disable-full-bootstrap
+		build three compilers instead of two (not recommended except for testing reproducible builds)
+	--enable-extended                  OR --disable-extended
+		build an extended rust tool set
+	--bootstrap-cache-path=VAL     use provided path for the bootstrap cache
+	--tools=VAL                    List of extended tools will be installed
+	--codegen-backends=VAL         List of codegen backends to build
+	--build=VAL                    GNUs ./configure syntax LLVM build triple
+	--host=VAL                     List of GNUs ./configure syntax LLVM host triples
+	--target=VAL                   List of GNUs ./configure syntax LLVM target triples
+	--enable-option-checking           OR --disable-option-checking
+		complain about unrecognized options in this configure script
+	--enable-verbose-configure         OR --disable-verbose-configure
+		don't truncate options when printing them in this configure script
+	--set=VAL                      set arbitrary key/value pairs in TOML configuration
+	--parallel-frontend-threads=VAL number of parallel threads for rustc compilation
+
+This configure script is a thin configuration shim over the true
+configuration system, `bootstrap.toml`. You can explore the comments
+in `bootstrap.example.toml` next to this configure script to see
+more information about what each option is. Additionally you can
+pass `--set` as an argument to set arbitrary key/value pairs
+in the TOML configuration if desired
+
+Also note that all options which take `--enable` can similarly
+be passed with `--disable-foo` to forcibly disable the option

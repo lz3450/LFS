@@ -1,5 +1,5 @@
 # new_version=$(curl -L --stderr - https://llvm.org/ | grep -oP '(?<=: LLVM )\d+\.\d+\.\d+(?= is now )')
-new_version=$(git ls-remote --tags https://github.com/llvm/llvm-project.git | grep -oP '(?<=refs/tags/llvmorg-)20\.\d+\.\d+$' | sort -V | tail -n1)
+new_version=$(git ls-remote --tags https://github.com/llvm/llvm-project.git | grep -oP '(?<=refs/tags/llvmorg-)21\.\d+\.\d+$' | sort -V | tail -n1)
 srcdir="$pkgname"
 build_system=
 

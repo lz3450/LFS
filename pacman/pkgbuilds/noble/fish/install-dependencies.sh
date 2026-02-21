@@ -1,0 +1,1 @@
+../../ubuntu/fish/install-dependencies.sh

@@ -1,0 +1,276 @@
+configure: processing command line
+configure: 
+configure: build.configure-args := ['--disable-debug', '--disable-docs', '--disable-compiler-docs', '--enable-rpath', '--disable-lld', '--disable-llvm-bitcode-linker', '--enable-new-symbol-mangling', '--prefix=/opt', '--sysconfdir=/opt/etc', '--llvm-root=/opt', '--llvm-config=/opt/bin/llvm-config', '--llvm-filecheck=/opt/bin/FileCheck', '--python=/opt/bin/python3', '--release-channel=stable', '--enable-manage-submodules', '--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set=change-id=148911', '--set=llvm.download-ci-llvm=false', '--set=gcc.download-ci-gcc=false', '--set=rust.download-rustc=false', '--set=rust.llvm-tools=false', '--set=rust.remap-debuginfo=true', '--set=target.x86_64-unknown-linux-gnu.cc=/opt/bin/clang', '--set=target.x86_64-unknown-linux-gnu.cxx=/opt/bin/clang++', '--set=target.x86_64-unknown-linux-gnu.ar=/opt/bin/llvm-ar', '--set=target.x86_64-unknown-linux-gnu.ranlib=/opt/bin/llvm-ranlib', '--set=target.x86_64-unknown-linux-gnu.linker=/opt/bin/clang']
+configure: rust.debug           := False
+configure: build.docs           := False
+configure: build.compiler-docs  := False
+configure: rust.rpath           := True
+configure: rust.lld             := False
+configure: rust.llvm-bitcode-linker := False
+configure: rust.new-symbol-mangling := True
+configure: install.prefix       := /opt
+configure: install.sysconfdir   := /opt/etc
+configure: target.x86_64-unknown-linux-gnu.llvm-config := /opt/bin/llvm-config
+configure: target.x86_64-unknown-linux-gnu.llvm-config := /opt/bin/llvm-config
+configure: target.x86_64-unknown-linux-gnu.llvm-filecheck := /opt/bin/FileCheck
+configure: build.python         := /opt/bin/python3
+configure: rust.channel         := stable
+configure: build.submodules     := True
+configure: build.tools          := ['cargo', 'clippy', 'rustfmt', 'rust-analyzer', 'rust-analyzer-proc-macro-srv', 'analysis', 'src']
+configure: build.build          := x86_64-unknown-linux-gnu
+configure: build.host           := ['x86_64-unknown-linux-gnu']
+configure: build.target         := ['x86_64-unknown-linux-gnu']
+configure: change-id            := 148911
+configure: llvm.download-ci-llvm := False
+configure: gcc.download-ci-gcc  := False
+configure: rust.download-rustc  := False
+configure: rust.llvm-tools      := False
+configure: rust.remap-debuginfo := True
+configure: target.x86_64-unknown-linux-gnu.cc := /opt/bin/clang
+configure: target.x86_64-unknown-linux-gnu.cxx := /opt/bin/clang++
+configure: target.x86_64-unknown-linux-gnu.ar := /opt/bin/llvm-ar
+configure: target.x86_64-unknown-linux-gnu.ranlib := /opt/bin/llvm-ranlib
+configure: target.x86_64-unknown-linux-gnu.linker := /opt/bin/clang
+configure: profile              := dist
+configure: 
+configure: writing `bootstrap.toml` in current directory
+configure: 
+configure: run `python3 /var/cache/makepkg/build/rust/src/rust/x.py --help`
+# Use different pre-set defaults than the global defaults.
+#
+# See `src/bootstrap/defaults` for more information.
+# Note that this has no default value (x.py uses the defaults in `bootstrap.example.toml`).
+profile = 'dist'
+
+# Keeps track of major changes made to this configuration.
+#
+# This value also represents ID of the PR that caused major changes. Meaning,
+# you can visit github.com/rust-lang/rust/pull/{change-id} to check for more details.
+#
+# A 'major change' includes any of the following
+#  - A new option
+#  - A change in the default values
+#
+# If the change-id does not match the version currently in use, x.py will
+# display the changes made to the bootstrap.
+# To suppress these warnings, you can set change-id = "ignore".
+change-id = 148911
+
+[llvm]
+
+# Currently, we only support this when building LLVM for the build triple.
+#
+# Note that many of the LLVM options are not currently supported for
+# downloading. Currently only the "assertions" option can be toggled.
+download-ci-llvm = false
+
+[gcc]
+
+# =============================================================================
+# Tweaking how GCC is compiled
+# =============================================================================
+# Download GCC from CI instead of building it locally.
+# Note that this will attempt to download GCC even if there are local
+# modifications to the `src/gcc` submodule.
+# Currently, this is only supported for the `x86_64-unknown-linux-gnu` target.
+download-ci-gcc = false
+
+[build]
+
+# Build triple for the pre-compiled snapshot compiler. If `rustc` is set, this must match its host
+# triple (see `rustc --version --verbose`; cross-compiling the rust build system itself is NOT
+# supported). If `rustc` is unset, this must be a platform with pre-compiled host tools
+# (https://doc.rust-lang.org/nightly/rustc/platform-support.html). The current platform must be
+# able to run binaries of this build triple.
+#
+# If `rustc` is present in path, this defaults to the host it was compiled for.
+# Otherwise, `x.py` will try to infer it from the output of `uname`.
+# If `uname` is not found in PATH, we assume this is `x86_64-pc-windows-msvc`.
+# This may be changed in the future.
+build = 'x86_64-unknown-linux-gnu'
+
+# Which triples to produce a compiler toolchain for. Each of these triples will be bootstrapped from
+# the build triple themselves. In other words, this is the list of triples for which to build a
+# compiler that can RUN on that triple.
+#
+# Defaults to just the `build` triple.
+host = ['x86_64-unknown-linux-gnu']
+
+# Which triples to build libraries (core/alloc/std/test/proc_macro) for. Each of these triples will
+# be bootstrapped from the build triple themselves. In other words, this is the list of triples for
+# which to build a library that can CROSS-COMPILE to that triple.
+#
+# Defaults to `host`. If you set this explicitly, you likely want to add all
+# host triples to this list as well in order for those host toolchains to be
+# able to compile programs for their native target.
+target = ['x86_64-unknown-linux-gnu']
+
+# Whether to build documentation by default. If false, rustdoc and
+# friends will still be compiled but they will not be used to generate any
+# documentation.
+#
+# You can still build documentation when this is disabled by explicitly passing paths,
+# e.g. `x doc library`.
+docs = false
+
+# Indicate whether to build compiler documentation by default.
+# You can still build documentation when this is disabled by explicitly passing a path: `x doc compiler`.
+compiler-docs = false
+
+# Indicate whether git submodules are managed and updated automatically.
+submodules = true
+
+# Python interpreter to use for various tasks throughout the build, notably
+# rustdoc tests, and some dist bits and pieces.
+#
+# Defaults to the Python interpreter used to execute x.py.
+python = '/opt/bin/python3'
+
+# Set of tools to be included in the installation.
+#
+# If `extended = false`, the only one of these built by default is rustdoc.
+#
+# If `extended = true`, they are all included.
+#
+# If any enabled tool fails to build, the installation fails.
+tools = ['cargo', 'clippy', 'rustfmt', 'rust-analyzer', 'rust-analyzer-proc-macro-srv', 'analysis', 'src']
+#    "cargo",
+#    "clippy",
+#    "rustdoc",
+#    "rustfmt",
+#    "rust-analyzer",
+#    "rust-analyzer-proc-macro-srv",
+#    "analysis",
+#    "src",
+#    "wasm-component-ld",
+#    "miri", "cargo-miri" # for dev/nightly channels
+#]
+
+# Arguments passed to the `./configure` script, used during distcheck. You
+# probably won't fill this in but rather it's filled in by the `./configure`
+# script. Useful for debugging.
+configure-args = ['--disable-debug', '--disable-docs', '--disable-compiler-docs', '--enable-rpath', '--disable-lld', '--disable-llvm-bitcode-linker', '--enable-new-symbol-mangling', '--prefix=/opt', '--sysconfdir=/opt/etc', '--llvm-root=/opt', '--llvm-config=/opt/bin/llvm-config', '--llvm-filecheck=/opt/bin/FileCheck', '--python=/opt/bin/python3', '--release-channel=stable', '--enable-manage-submodules', '--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src', '--build=x86_64-unknown-linux-gnu', '--host=x86_64-unknown-linux-gnu', '--target=x86_64-unknown-linux-gnu', '--enable-option-checking', '--enable-verbose-configure', '--set=change-id=148911', '--set=llvm.download-ci-llvm=false', '--set=gcc.download-ci-gcc=false', '--set=rust.download-rustc=false', '--set=rust.llvm-tools=false', '--set=rust.remap-debuginfo=true', '--set=target.x86_64-unknown-linux-gnu.cc=/opt/bin/clang', '--set=target.x86_64-unknown-linux-gnu.cxx=/opt/bin/clang++', '--set=target.x86_64-unknown-linux-gnu.ar=/opt/bin/llvm-ar', '--set=target.x86_64-unknown-linux-gnu.ranlib=/opt/bin/llvm-ranlib', '--set=target.x86_64-unknown-linux-gnu.linker=/opt/bin/clang']
+
+[install]
+
+# Where to install the generated toolchain. Must be an absolute path.
+prefix = '/opt'
+
+# Where to install system configuration files.
+# If this is a relative path, it will get installed in `prefix` above
+sysconfdir = '/opt/etc'
+
+[rust]
+
+# Indicates that the build should be configured for debugging Rust. A
+# `debug`-enabled compiler and standard library will be somewhat
+# slower (due to e.g. checking of debug assertions) but should remain
+# usable.
+#
+# Note: If this value is set to `true`, it will affect a number of
+#       configuration options below as well, if they have been left
+#       unconfigured in this file.
+#
+# Note: changes to the `debug` setting do *not* affect `optimize`
+#       above. In theory, a "maximally debuggable" environment would
+#       set `optimize` to `false` above to assist the introspection
+#       facilities of debuggers like lldb and gdb. To recreate such an
+#       environment, explicitly set `optimize` to `false` and `debug`
+#       to `true`. In practice, everyone leaves `optimize` set to
+#       `true`, because an unoptimized rustc with debugging
+#       enabled becomes *unusably slow* (e.g. rust-lang/rust#24840
+#       reported a 25x slowdown) and bootstrapping the supposed
+#       "maximally debuggable" environment (notably libstd) takes
+#       hours to build.
+#
+debug = false
+
+# Whether to download the stage 1 and 2 compilers from CI. This is useful if you
+# are working on tools, doc-comments, or library (you will be able to build the
+# standard library without needing to build the compiler).
+#
+# Set this to "if-unchanged" if you are working on `src/tools`, `tests` or
+# `library` (on CI, `library` changes triggers in-tree compiler build) to speed
+# up the build process if you don't need to build a compiler from the latest
+# commit from `master`.
+#
+# Set this to `true` to always download or `false` to always use the in-tree
+# compiler.
+download-rustc = false
+
+# The "channel" for the Rust build to produce. The stable/beta channels only
+# allow using stable features, whereas the nightly and dev channels allow using
+# nightly features.
+#
+# You can set the channel to "auto-detect" to load the channel name from `src/ci/channel`.
+#
+# If using tarball sources, default value is "auto-detect", otherwise, it's "dev".
+channel = 'stable'
+
+# By default the `rustc` executable is built with `-Wl,-rpath` flags on Unix
+# platforms to ensure that the compiler is usable by default from the build
+# directory (as it links to a number of dynamic libraries). This may not be
+# desired in distributions, for example.
+rpath = true
+
+# Indicates whether LLD will be compiled and made available in the sysroot for rustc to execute,
+lld = false
+
+# Indicates whether some LLVM tools, like llvm-objdump, will be made available in the
+# sysroot.
+llvm-tools = false
+
+# Indicates whether the `self-contained` llvm-bitcode-linker, will be made available
+# in the sysroot. It is required for running nvptx tests.
+llvm-bitcode-linker = false
+
+# Map debuginfo paths to `/rust/$sha/...`.
+# Useful for reproducible builds. Generally only set for releases
+remap-debuginfo = true
+
+# Enable symbol-mangling-version v0. This can be helpful when profiling rustc,
+# as generics will be preserved in symbols (rather than erased into opaque T).
+# When no setting is given, the new scheme will be used when compiling the
+# compiler and its tools and the legacy scheme will be used when compiling the
+# standard library.
+# If an explicit setting is given, it will be used for all parts of the codebase.
+new-symbol-mangling = true
+
+[dist]
+
+[target.x86_64-unknown-linux-gnu]
+
+# C compiler to be used to compile C code. Note that the
+# default value is platform specific, and if not specified it may also depend on
+# what platform is crossing to what platform.
+# See `src/bootstrap/src/utils/cc_detect.rs` for details.
+cc = '/opt/bin/clang'
+
+# C++ compiler to be used to compile C++ code (e.g. LLVM and our LLVM shims).
+# This is only used for host targets.
+# See `src/bootstrap/src/utils/cc_detect.rs` for details.
+cxx = '/opt/bin/clang++'
+
+# Archiver to be used to assemble static libraries compiled from C/C++ code.
+# Note: an absolute path should be used, otherwise LLVM build will break.
+ar = '/opt/bin/llvm-ar'
+
+# Ranlib to be used to assemble static libraries compiled from C/C++ code.
+# Note: an absolute path should be used, otherwise LLVM build will break.
+ranlib = '/opt/bin/llvm-ranlib'
+
+# Linker to be used to bootstrap Rust code. Note that the
+# default value is platform specific, and if not specified it may also depend on
+# what platform is crossing to what platform.
+# Setting this will override the `bootstrap-override-lld` option for Rust code when targeting MSVC.
+linker = '/opt/bin/clang'
+
+# Path to the `llvm-config` binary of the installation of a custom LLVM to link
+# against. Note that if this is specified we don't compile LLVM at all for this
+# target.
+llvm-config = '/opt/bin/llvm-config'
+
+# Normally the build system can find LLVM's FileCheck utility, but if
+# not, you can specify an explicit file name for it.
+llvm-filecheck = '/opt/bin/FileCheck'
+

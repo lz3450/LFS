@@ -1,8 +1,8 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=rust
-pkgver=1.90.0
-pkgrel=1
+pkgver=1.93.1
+pkgrel=9
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')
@@ -15,7 +15,7 @@ source=(
   # git+https://github.com/rust-lang/rust.git#branch=stable
   git+https://github.com/rust-lang/rust.git#tag=$pkgver
 )
-sha256sums=('8e41c67af44ed5345a954f882c68c1f1567f5ee2ffa138a66c4a7456a2d46511')
+sha256sums=('858974283b1b813b7bdd31543bd60969d1f35b62f0f7fc544b682155157833ec')
 
 pkgver() {
   cd $pkgname
@@ -32,34 +32,19 @@ build() {
     --disable-debug
     --disable-docs
     --disable-compiler-docs
-    --disable-optimize-tests
-    --disable-verbose-tests
-    --disable-local-rust
     --enable-rpath
-    --disable-codegen-tests
-    --disable-ninja
-    --disable-locked-deps
-    --disable-vendor
-    --disable-sanitizers
-    --disable-dist-src
-    --disable-cargo-native-static
-    --disable-profiler
-    --disable-full-tools
     --disable-lld
     --disable-llvm-bitcode-linker
-    --disable-control-flow-guard
-    --disable-patch-binaries-for-nix
     --enable-new-symbol-mangling
     "--prefix=/$PREFIX"
-    "--sysconfdir=/etc"
+    "--sysconfdir=/$PREFIX/etc"
     "--llvm-root=/$PREFIX"
     "--llvm-config=/$PREFIX/bin/llvm-config"
     "--llvm-filecheck=/$PREFIX/bin/FileCheck"
     "--python=/$PREFIX/bin/python3"
-    "--release-channel=\"auto-detect\""
-    "--release-description=KZL $(date '+%Y/%m/%d %T %z')"
+    "--release-channel=stable"
     "--enable-manage-submodules"
-    "--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,src,wasm-component-ld"
+    "--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src"
     "--build=$_target"
     "--host=$_target"
     "--target=$_target"
@@ -67,17 +52,15 @@ build() {
     --enable-verbose-configure
     "--set=change-id=$_change_id"
     "--set=llvm.download-ci-llvm=false"
-    "--set=build.compiletest-use-stage0-libtest=false"
+    "--set=gcc.download-ci-gcc=false"
     "--set=rust.download-rustc=false"
-    "--set=rust.use-lld=true"
     "--set=rust.llvm-tools=false"
-    "--set=rust.llvm-bitcode-linker=false"
     "--set=rust.remap-debuginfo=true"
-    "--set=rust.jemalloc=true"
     "--set=target.$_target.cc=/$PREFIX/bin/clang"
     "--set=target.$_target.cxx=/$PREFIX/bin/clang++"
     "--set=target.$_target.ar=/$PREFIX/bin/llvm-ar"
     "--set=target.$_target.ranlib=/$PREFIX/bin/llvm-ranlib"
+    "--set=target.$_target.linker=/$PREFIX/bin/clang"
   )
 
   msg2 "Configuring..."

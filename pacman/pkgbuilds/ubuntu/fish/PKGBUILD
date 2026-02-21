@@ -1,8 +1,8 @@
 # Maintainer: Zelun Kong <zelun.kong@outlook.com>
 
 pkgname=fish
-pkgver=4.1.2
-pkgrel=1
+pkgver=4.5.0
+pkgrel=2
 epoch=
 pkgdesc="A smart and user-friendly command line shell"
 arch=('x86_64')
@@ -15,7 +15,7 @@ install=$pkgname.install
 source=(
   git+https://github.com/fish-shell/fish-shell.git#tag=$pkgver
 )
-sha256sums=('f73bad7d4cb6db000fbba066eef3c1312fab8e7107b30fed5539fd2d6475533b')
+sha256sums=('fd522719bae4cd3256028933da11367fe43919edec785c236e519519bea440a3')
 
 build() {
   cd fish-shell
@@ -26,7 +26,7 @@ build() {
     -D CMAKE_INSTALL_PREFIX="/$PREFIX" \
     -D CMAKE_C_FLAGS="$CFLAGS $CPPFLAGS" \
     -D CMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS" \
-    -D BUILD_DOCS=OFF
+    -D WITH_DOCS=OFF
 
   msg2 "Compiling..."
   cmake --build build
