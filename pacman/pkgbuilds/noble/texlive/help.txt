@@ -1,4 +1,4 @@
-Configuration of TeX Live 2025-03-07:
+Configuration of TeX Live 2026-03-02:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -39,10 +39,7 @@ Optional Features:
   --enable-tex-synctex        build TeX with SyncTeX support
   --enable-etex             compile and install e-TeX
   --disable-etex-synctex      build e-TeX without SyncTeX support
-  --enable-ptex             compile and install pTeX
-  --disable-ptex-synctex      build pTeX without SyncTeX support
   --enable-uptex            compile and install upTeX
-  --disable-uptex-synctex     build upTeX without SyncTeX support
   --disable-euptex          do not compile and install e-upTeX
   --disable-euptex-synctex    build e-upTeX without SyncTeX support
   --disable-aleph           do not compile and install Aleph
@@ -127,6 +124,7 @@ Optional Features:
   --disable-ttfdump       do not build the ttfdump package
   --disable-upmendex      do not build the upmendex package
   --disable-xdvik         do not build the xdvik package
+  --disable-xdvipsk       do not build the xdvipsk package
   --disable-texlive       do not build the texlive (TeX Live scripts) package
   --disable-linked-scripts  do not install the linked scripts
   --disable-mktexmf-default   do not run mktexmf if MF source missing
@@ -269,7 +267,7 @@ Optional Features:
 
 Report bugs to <tex-k@tug.org>.
 
-Configuration of TeX Live libs 2025:
+Configuration of TeX Live libs 2026:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -310,10 +308,7 @@ Optional Features:
   --enable-tex-synctex        build TeX with SyncTeX support
   --enable-etex             compile and install e-TeX
   --disable-etex-synctex      build e-TeX without SyncTeX support
-  --enable-ptex             compile and install pTeX
-  --disable-ptex-synctex      build pTeX without SyncTeX support
   --enable-uptex            compile and install upTeX
-  --disable-uptex-synctex     build upTeX without SyncTeX support
   --disable-euptex          do not compile and install e-upTeX
   --disable-euptex-synctex    build e-upTeX without SyncTeX support
   --disable-aleph           do not compile and install Aleph
@@ -398,6 +393,7 @@ Optional Features:
   --disable-ttfdump       do not build the ttfdump package
   --disable-upmendex      do not build the upmendex package
   --disable-xdvik         do not build the xdvik package
+  --disable-xdvipsk       do not build the xdvipsk package
   --disable-texlive       do not build the texlive (TeX Live scripts) package
   --disable-linked-scripts  do not install the linked scripts
   --disable-mktexmf-default   do not run mktexmf if MF source missing
@@ -502,7 +498,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <tex-k@tug.org>.
 
-Configuration of TeX Live utils 2025:
+Configuration of TeX Live utils 2026:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -543,10 +539,7 @@ Optional Features:
   --enable-tex-synctex        build TeX with SyncTeX support
   --enable-etex             compile and install e-TeX
   --disable-etex-synctex      build e-TeX without SyncTeX support
-  --enable-ptex             compile and install pTeX
-  --disable-ptex-synctex      build pTeX without SyncTeX support
   --enable-uptex            compile and install upTeX
-  --disable-uptex-synctex     build upTeX without SyncTeX support
   --disable-euptex          do not compile and install e-upTeX
   --disable-euptex-synctex    build e-upTeX without SyncTeX support
   --disable-aleph           do not compile and install Aleph
@@ -631,6 +624,7 @@ Optional Features:
   --disable-ttfdump       do not build the ttfdump package
   --disable-upmendex      do not build the upmendex package
   --disable-xdvik         do not build the xdvik package
+  --disable-xdvipsk       do not build the xdvipsk package
   --disable-texlive       do not build the texlive (TeX Live scripts) package
   --disable-linked-scripts  do not install the linked scripts
   --disable-mktexmf-default   do not run mktexmf if MF source missing
@@ -735,7 +729,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <tex-k@tug.org>.
 
-Configuration of TeX Live texk 2025:
+Configuration of TeX Live texk 2026:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -776,10 +770,7 @@ Optional Features:
   --enable-tex-synctex        build TeX with SyncTeX support
   --enable-etex             compile and install e-TeX
   --disable-etex-synctex      build e-TeX without SyncTeX support
-  --enable-ptex             compile and install pTeX
-  --disable-ptex-synctex      build pTeX without SyncTeX support
   --enable-uptex            compile and install upTeX
-  --disable-uptex-synctex     build upTeX without SyncTeX support
   --disable-euptex          do not compile and install e-upTeX
   --disable-euptex-synctex    build e-upTeX without SyncTeX support
   --disable-aleph           do not compile and install Aleph
@@ -864,6 +855,7 @@ Optional Features:
   --disable-ttfdump       do not build the ttfdump package
   --disable-upmendex      do not build the upmendex package
   --disable-xdvik         do not build the xdvik package
+  --disable-xdvipsk       do not build the xdvipsk package
   --disable-texlive       do not build the texlive (TeX Live scripts) package
   --disable-linked-scripts  do not install the linked scripts
   --disable-mktexmf-default   do not run mktexmf if MF source missing

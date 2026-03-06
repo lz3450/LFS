@@ -1,10 +1,10 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=texlive
-pkgver=77745
-texliveyear=2025
-texlivedate=20250308
-pkgrel=2
+pkgver=78081
+texliveyear=2026
+texlivedate=20260301
+pkgrel=1
 epoch=
 pkgdesc="TeX Live"
 arch=('x86_64')
@@ -18,7 +18,7 @@ source=(
   $pkgname.install
 )
 sha256sums=('SKIP'
-            '46e956d372691010860766cec4d8f203d43ee825fcfb664ba49c3631fa5fd5af'
+            '25c759b8ab5eb151562e049eb47bb96f0bfd9a7f929998e7ad925c395cbff8a1'
             'SKIP'
             '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')
 
@@ -219,7 +219,6 @@ EOF
   rm -rf "$_texmf_root"/readme-txt.dir
   rm -rf "$_texmf_root"/texmf-dist/doc
   rm -rf "$_texmf_root"/tlpkg/tlperl
-  rm -rf "$_texmf_root"/tlpkg/tlpobj
   rm -rf "$_texmf_root"/tlpkg/tlpostcode
   rm -rf "$_texmf_root"/tlpkg/tltcl
   find "$_texmf_root"/tlpkg/installer -mindepth 1 ! -name 'config.guess' -exec rm -vrf {} +
