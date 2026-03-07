@@ -532,6 +532,7 @@ pkexec
 policykit-1
 polkitd
 poppler-data
+power-profiles-daemon
 psmisc
 python3-aptdaemon
 python3-aptdaemon.gtk3widgets

@@ -211,6 +211,7 @@ parted
 passwd
 pciutils
 perl-base
+power-profiles-daemon
 procps
 psmisc
 python-apt-common
