@@ -82,7 +82,7 @@ checking if libtool supports shared libraries... yes
 checking whether to build shared libraries... yes
 checking whether to build static libraries... yes
 checking pkg-config m4 macros... yes
-checking whether to enable multi-threading support... no
+checking whether to enable multi-threading support... yes
 checking for dirent.h... yes
 checking for execinfo.h... yes
 checking for endian.h... yes
@@ -92,6 +92,7 @@ checking for inttypes.h... (cached) yes
 checking for linux/aufs_type.h... no
 checking for linux/falloc.h... yes
 checking for linux/fs.h... yes
+checking for linux/loop.h... yes
 checking for linux/types.h... yes
 checking for linux/xattr.h... yes
 checking for limits.h... yes
@@ -109,6 +110,7 @@ checking for sys/statfs.h... yes
 checking for sys/sysmacros.h... yes
 checking for sys/time.h... yes
 checking for sys/uio.h... yes
+checking for sys/xattr.h... yes
 checking for unistd.h... (cached) yes
 checking how to run the C preprocessor... gcc -E
 checking whether termios.h defines TIOCGWINSZ... no
@@ -122,8 +124,6 @@ checking for struct stat.st_atim... yes
 checking for struct stat.st_atimensec... no
 checking for uint64_t... yes
 checking for gcc options needed to detect all undeclared functions... none needed
-checking whether llseek is declared... no
-checking whether lseek64 is declared... yes
 checking whether memrchr is declared... yes
 checking for backtrace... yes
 checking for copy_file_range... yes
@@ -136,8 +136,6 @@ checking for llistxattr... yes
 checking for lsetxattr... yes
 checking for memset... yes
 checking for realpath... yes
-checking for lseek64... yes
-checking for ftello64... yes
 checking for pread64... yes
 checking for pwrite64... yes
 checking for pwritev... yes
@@ -151,6 +149,8 @@ checking for strtoull... yes
 checking for sysconf... yes
 checking for utimensat... yes
 checking sysconf (_SC_PAGESIZE)... 4096
+checking for pthread.h... yes
+checking for pthread_mutex_lock in -lpthread... yes
 checking for pkg-config... /usr/bin/pkg-config
 checking pkg-config is at least version 0.9.0... yes
 checking for uuid... yes
@@ -174,6 +174,24 @@ checking for libxxhash... yes
 checking for xxhash.h... yes
 checking for XXH32 in -lxxhash... yes
 checking whether XXH32 is declared... yes
+checking for libcurl... yes
+checking for curl/curl.h... yes
+checking for curl_easy_perform in -lcurl... yes
+checking whether curl_easy_perform is declared... yes
+checking for json-c... no
+checking for openssl... yes
+checking for openssl/hmac.h... yes
+checking for EVP_sha1 in -lssl... yes
+checking whether EVP_sha1 is declared... yes
+checking for openssl/evp.h... yes
+checking for libxml-2.0... yes
+checking for libxml/parser.h... yes
+checking for xmlReadMemory in -lxml2... yes
+checking whether xmlReadMemory is declared... yes
+checking for libnl-genl-3.0 >= 3.1... yes
+checking for netlink/genl/genl.h... yes
+checking for genl_connect in -lnl-genl-3... yes
+checking whether genl_connect is declared... yes
 checking that generated files are newer than configure... done
 configure: creating ./config.status
 config.status: creating Makefile
@@ -183,6 +201,7 @@ config.status: creating mkfs/Makefile
 config.status: creating dump/Makefile
 config.status: creating fuse/Makefile
 config.status: creating fsck/Makefile
+config.status: creating mount/Makefile
 config.status: creating contrib/Makefile
 config.status: creating config.h
 config.status: executing depfiles commands

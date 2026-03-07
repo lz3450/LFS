@@ -1,4 +1,4 @@
-Configuration of erofs-utils 1.8.10:
+Configuration of erofs-utils 1.9:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -15,13 +15,15 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-multithreading enable multi-threading support (EXPERIMENTAL)
-                          [default=no]
+  --disable-multithreading
+                          disable multi-threading support [default=yes]
   --enable-debug          enable debugging mode [default=no]
   --enable-werror         enable -Werror [default=no]
   --enable-fuzzing        set up fuzzing mode [default=no]
   --disable-lz4           disable LZ4 compression support [default=auto]
   --disable-lzma          disable LZMA compression support [default=auto]
+  --enable-s3             enable s3 image generation support [default=no]
+  --enable-oci            enable OCI registry based input support [default=no]
   --enable-fuse           enable erofsfuse [default=no]
   --enable-static-fuse    build erofsfuse as a static library [default=no]
 
@@ -46,6 +48,11 @@ Optional Packages:
                           [default=disabled]
   --with-xxhash           Enable and build with libxxhash support
                           [default=auto]
+  --with-libcurl          Enable and build with libcurl support [default=auto]
+  --with-openssl          Enable and build with openssl support [default=auto]
+  --with-libxml2          Enable and build with libxml2 support [default=auto]
+  --with-json-c           Enable and build with json-c support [default=auto]
+  --with-libnl3           Enable and build with libnl3 support [default=auto]
   --without-uuid          Ignore presence of libuuid and disable uuid support
                           [default=enabled]
   --with-selinux          enable and build with selinux support [default=no]
@@ -116,6 +123,24 @@ Some influential environment variables:
               C compiler flags for libxxhash, overriding pkg-config
   libxxhash_LIBS
               linker flags for libxxhash, overriding pkg-config
+  libcurl_CFLAGS
+              C compiler flags for libcurl, overriding pkg-config
+  libcurl_LIBS
+              linker flags for libcurl, overriding pkg-config
+  json_c_CFLAGS
+              C compiler flags for json_c, overriding pkg-config
+  json_c_LIBS linker flags for json_c, overriding pkg-config
+  openssl_CFLAGS
+              C compiler flags for openssl, overriding pkg-config
+  openssl_LIBS
+              linker flags for openssl, overriding pkg-config
+  libxml2_CFLAGS
+              C compiler flags for libxml2, overriding pkg-config
+  libxml2_LIBS
+              linker flags for libxml2, overriding pkg-config
+  libnl3_CFLAGS
+              C compiler flags for libnl3, overriding pkg-config
+  libnl3_LIBS linker flags for libnl3, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
