@@ -2,7 +2,7 @@
 
 pkgname=fish
 pkgver=4.5.0
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="A smart and user-friendly command line shell"
 arch=('x86_64')

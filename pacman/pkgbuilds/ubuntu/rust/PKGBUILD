@@ -1,8 +1,8 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=rust
-pkgver=1.93.1
-pkgrel=9
+pkgver=1.94.0
+pkgrel=1
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
 arch=('x86_64')
@@ -15,7 +15,7 @@ source=(
   # git+https://github.com/rust-lang/rust.git#branch=stable
   git+https://github.com/rust-lang/rust.git#tag=$pkgver
 )
-sha256sums=('858974283b1b813b7bdd31543bd60969d1f35b62f0f7fc544b682155157833ec')
+sha256sums=('f0cfa610eb12c961032f8ad81c5672ccf3a2eed91faf0a52baf55fb211c4c5c2')
 
 pkgver() {
   cd $pkgname

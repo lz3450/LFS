@@ -150,7 +150,7 @@
 -- Native target architecture is X86
 -- Threads enabled.
 -- Doxygen disabled.
--- Ninja version: 1.13.0.git.kitware.jobserver-pipe-1
+-- Ninja version: 1.11.1
 -- Could NOT find OCaml (missing: OCAMLFIND OCAML_VERSION OCAML_STDLIB_PATH) 
 -- OCaml bindings disabled.
 -- Found Python module pygments
@@ -217,8 +217,8 @@
 -- Looking for include file sys/inotify.h - found
 -- Performing Test HAVE_LINKER_FLAG_LONG_PLT
 -- Performing Test HAVE_LINKER_FLAG_LONG_PLT - Success
--- Configuring done (6.5s)
--- Generating done (0.8s)
+-- Configuring done (5.9s)
+-- Generating done (0.7s)
 -- Build files have been written to: /var/cache/makepkg/build/llvm-project/src/llvm-project/tmp
 -- Cache values
 // Default URL where bug reports are to be submitted.
@@ -639,7 +639,7 @@ CMAKE_INSTALL_SYSCONFDIR:PATH=etc
 CMAKE_LINKER:FILEPATH=/opt/bin/ld.lld
 
 // Program used to build from build.ninja files.
-CMAKE_MAKE_PROGRAM:FILEPATH=/home/kzl/.local/bin/ninja
+CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/ninja
 
 // Flags used by the linker during the creation of modules during all build types.
 CMAKE_MODULE_LINKER_FLAGS:STRING=
@@ -819,7 +819,7 @@ LIBXML2_INCLUDE_DIR:PATH=/usr/include/libxml2
 LIBXML2_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libxml2.so
 
 // Path to a program.
-LIBXML2_XMLLINT_EXECUTABLE:FILEPATH=/usr/bin/xmllint
+LIBXML2_XMLLINT_EXECUTABLE:FILEPATH=LIBXML2_XMLLINT_EXECUTABLE-NOTFOUND
 
 // Default URL where lldb bug reports are to be submitted.
 LLDB_BUG_REPORT_URL:STRING=https://github.com/llvm/llvm-project/issues/
@@ -1721,7 +1721,7 @@ LibEdit_INCLUDE_DIRS:PATH=/usr/include
 LibEdit_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libedit.so
 
 // Ninja version number
-NINJA_VERSION:STRING=1.13.0.git.kitware.jobserver-pipe-1
+NINJA_VERSION:STRING=1.11.1
 
 // Path to a program.
 OCAMLFIND:FILEPATH=OCAMLFIND-NOTFOUND

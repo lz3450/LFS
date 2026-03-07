@@ -70,6 +70,8 @@ Options
 		build LLVM with enzyme
 	--enable-llvm-offload              OR --disable-llvm-offload
 		build LLVM with gpu offload support
+	--enable-llvm-offload-clang-dir    OR --disable-llvm-offload-clang-dir
+		pass the absolute directory of ClangConfig.cmake
 	--enable-llvm-plugins              OR --disable-llvm-plugins
 		build LLVM with plugin interface
 	--enable-debug-assertions          OR --disable-debug-assertions
