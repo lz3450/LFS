@@ -120,10 +120,10 @@ update() {
     if [[ -f "$PACKAGE_DIR/$_pkg_file" ]]; then
         info "Updating $pkgname..."
         sudo repo-add -R "$repo_path.$EXTENSION" "$PACKAGE_DIR/$_pkg_file"
-        if [[ ! -f "$repo_dir/$_pkg_file" ]]; then
-            # repo-add will remove the new package if its version is same as the old one
-            sudo cp -vf -- "$PACKAGE_DIR/$_pkg_file" "$repo_dir/"
-        fi
+        # if [[ ! -f "$repo_dir/$_pkg_file" ]]; then
+        #     # repo-add will remove the new package if its version is same as the old one
+        #     sudo cp -vf -- "$PACKAGE_DIR/$_pkg_file" "$repo_dir/"
+        # fi
         mv -v -- "$PACKAGE_DIR/$_pkg_file" "$ARCHIVE_DIR"
     fi
 }
