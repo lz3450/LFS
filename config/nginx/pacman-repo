@@ -1,0 +1,10 @@
+server {
+    listen 34580;
+    server_name _;
+
+    root /home/.repository;
+
+    location / {
+        autoindex on;
+    }
+}
