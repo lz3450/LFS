@@ -82,3 +82,4 @@ ParallelDownloads = 5
 [ubuntu]
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/$repo
+#Server = http://0.0.0.0:34580/$repo
