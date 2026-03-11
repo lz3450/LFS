@@ -37,7 +37,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "cloud"
     "crcandy"
     # "crunch"
-    "cypher"
+    # "cypher"
     # "dallas"
     # "darkblood"
     # "daveverwer"
