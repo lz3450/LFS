@@ -1,7 +1,7 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=texlive
-pkgver=78081
+pkgver=78399
 texliveyear=2026
 texlivedate=20260301
 pkgrel=1
@@ -18,7 +18,7 @@ source=(
   $pkgname.install
 )
 sha256sums=('SKIP'
-            '25c759b8ab5eb151562e049eb47bb96f0bfd9a7f929998e7ad925c395cbff8a1'
+            '4ff95e60b83ad9ebb8d4755124d5a8a09206fe861f0aa59d8f1947bcbc468a48'
             'SKIP'
             '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')
 

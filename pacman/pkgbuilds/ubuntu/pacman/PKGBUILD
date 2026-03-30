@@ -91,7 +91,7 @@ prepare() {
 [$_repo]
 SigLevel = Optional TrustAll
 Server = file:///home/.repository/\$repo
-#Server = http://192.168.1.100:34580/\$repo
+#Server = http://0.0.0.0:34580/\$repo
 EOF
 }
 

@@ -1,8 +1,8 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=debootstrap
-pkgver=1.0.142.g9
-pkgrel=2
+pkgver=1.0.143
+pkgrel=1
 epoch=
 pkgdesc="Bootstrap a basic Debian system"
 arch=('any')
