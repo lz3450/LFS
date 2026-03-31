@@ -67,11 +67,12 @@ sed -i '/-> Kernel messages:/,/-> X installation prefix/{/-> Kernel messages:/b;
 sed -i \
     -e '/^creation time:/d' \
     -e 's|\(/tmp/template-\)[A-Za-z0-9]\{6\}|\1|' \
+    -e 's|[0-9]+\.[0-9]+\.[0-9]+-KZL|x.y.z|g' \
     "$LOG_FILE"
-
 
 if [[ -f "$SCRIPT_DIR/nvidia-uninstall.log" ]]; then
     sudo chown "$(id -u):$(id -g)" "$SCRIPT_DIR/nvidia-uninstall.log"
     # mv "$SCRIPT_DIR/nvidia-uninstall.log" "$SCRIPT_DIR/driver-uninstall-${DRIVER_VERSION%%.*}.log"
     mv "$SCRIPT_DIR/nvidia-uninstall.log" "$SCRIPT_DIR/driver-uninstall.log"
+    sed -e '/^creation time:/d' "$SCRIPT_DIR/driver-uninstall.log"
 fi
