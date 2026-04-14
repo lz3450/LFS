@@ -16,7 +16,7 @@ source=(
   config
 )
 sha256sums=('d461386a5d4f20c7dee8b4fe4e4fb3bef524146a38da458d1763cac864818e17'
-            'e52a8cb176aa869aed15417e49e155a8226c7e3e15f3eb65547cb31d3ea3bc00')
+            '97cd4aae9a04e1c2e55cb510d2995a428dd6999e48e998c2f766262cd770cdde')
 
 export LOCALVERSION="-KZL"
 export KBUILD_BUILD_HOST="Ubuntu"
