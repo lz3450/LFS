@@ -16,7 +16,7 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 ################################################################################
 
-DRIVER_VERSION=580.126.09
+DRIVER_VERSION=580.142
 
 WORKDIR=/tmp/nvidia
 DOWNLOADS_DIR="$HOME/Downloads"
@@ -74,5 +74,5 @@ if [[ -f "$SCRIPT_DIR/nvidia-uninstall.log" ]]; then
     sudo chown "$(id -u):$(id -g)" "$SCRIPT_DIR/nvidia-uninstall.log"
     # mv "$SCRIPT_DIR/nvidia-uninstall.log" "$SCRIPT_DIR/driver-uninstall-${DRIVER_VERSION%%.*}.log"
     mv "$SCRIPT_DIR/nvidia-uninstall.log" "$SCRIPT_DIR/driver-uninstall.log"
-    sed -e '/^creation time:/d' "$SCRIPT_DIR/driver-uninstall.log"
+    sed -i -e '/^creation time:/d' "$SCRIPT_DIR/driver-uninstall.log"
 fi
