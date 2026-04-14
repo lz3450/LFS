@@ -2,12 +2,8 @@ checking for git... found
 checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
 checking for Python interpreter freezing... ./_bootstrap_python
-checking for python3.14... no
-checking for python3.15... no
-checking for python3.14... no
-checking for python3.13... no
-checking for python3.12... python3.12
-checking Python for regen version... Python 3.12.3
+checking for python3.14... python3.14
+checking Python for regen version... Python 3.14.3
 checking for pkg-config... /usr/bin/pkg-config
 checking pkg-config is at least version 0.9.0... yes
 checking MACHDEP... "linux"
@@ -78,7 +74,8 @@ checking for --enable-optimizations... yes
 checking whether C compiler accepts -fno-semantic-interposition... yes
 checking PROFILE_TASK... -m test --pgo --timeout=$(TESTTIMEOUT)
 checking for --with-lto... yes
-checking for llvm-profdata... no
+checking for llvm-profdata... /opt/bin/llvm-profdata
+checking whether C compiler accepts -fprofile-update=atomic... yes
 checking for --enable-bolt... no
 checking BOLT_COMMON_FLAGS... checking BOLT_INSTRUMENT_FLAGS...  -update-debug-sections -skip-funcs=_PyEval_EvalFrameDefault,sre_ucs1_match/1,sre_ucs2_match/1,sre_ucs4_match/1 
 checking BOLT_APPLY_FLAGS...   -update-debug-sections -skip-funcs=_PyEval_EvalFrameDefault,sre_ucs1_match/1,sre_ucs2_match/1,sre_ucs4_match/1  -reorder-blocks=ext-tsp -reorder-functions=cdsort -split-functions -icf=1 -inline-all -split-eh -reorder-functions-use-hot-size -peepholes=none -jump-tables=aggressive -inline-ap -indirect-call-promotion=all -dyno-stats -use-gnu-stack -frame-opt=hot 
@@ -189,7 +186,7 @@ checking for dirent.h that defines DIR... yes
 checking for library containing opendir... none required
 checking for sys/mkdev.h... (cached) no
 checking for sys/sysmacros.h... (cached) yes
-checking for bluetooth/bluetooth.h... no
+checking for bluetooth/bluetooth.h... yes
 checking for net/if.h... yes
 checking for linux/netlink.h... yes
 checking for netlink/netlink.h... no
