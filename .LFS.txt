@@ -39,6 +39,7 @@ coreutils
 cpf
 cpio
 CPPFLAGS
+cpython
 cryptsetup
 CXXFLAGS
 cyrus
@@ -47,6 +48,7 @@ darwinlegacy
 datarootdir
 datrev
 dbg
+dbmliborder
 debian
 debootstrap
 Debootstrapping
@@ -63,6 +65,7 @@ dosfstools
 dpkgopt
 dracut
 dvipng
+editline
 edu
 efi
 efiboot
@@ -96,6 +99,7 @@ gdb
 gdbm
 getsz
 ghostscript
+gil
 GLIBCXX
 gmp
 gnupg
@@ -222,6 +226,7 @@ multiplatform
 mv
 nasm
 nconfig
+ndbm
 netbsd
 netplan
 networkd
@@ -360,6 +365,7 @@ tltcl
 tmpfs
 trixie
 tzdata
+tzpath
 updatepkg
 updaterepo
 updpkgsums
@@ -388,6 +394,7 @@ xxhash
 xz
 yn
 Yy
+zoneinfo
 zst
 zstd
 zziplib
