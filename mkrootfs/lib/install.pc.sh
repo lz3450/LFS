@@ -193,6 +193,11 @@ prepare() {
         # exec 1>&3
 
         log_magenta "Please partition manually"
+        echo "Suggested partition scheme:
+- 512MiB EFI System Partition (ESP), FAT32, boot flag
+- All remaining space for root filesystem partition
+- 32GiB swap partition (optional)
+- Remaining space can be used for liveos partition (optional), ext4"
         parted
 
         local _answer

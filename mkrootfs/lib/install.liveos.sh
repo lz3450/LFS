@@ -15,7 +15,7 @@ declare -r __INSTALL_LIVEOS__="install.liveos.sh"
 
 ### constants and variables (before argument processing)
 declare -r BOOT_LABEL="LIVEOS_BOOT"
-declare -r ROOT_LABEL="LIVEOS"
+declare -r ROOT_LABEL="LIVEOS_ROOT"
 declare -r HOME_LABEL="LIVEOS_HOME"
 
 declare -ar COMMON_DEB_PKGS=(
