@@ -13,7 +13,7 @@ fi
 . /etc/os-release
 
 ### /tmp
-systemctl enable --now /usr/share/systemd/tmp.mount
+systemctl enable /usr/share/systemd/tmp.mount
 
 ### network-manager
 if [[ "$UBUNTU_CODENAME" == "jammy" ]]; then
@@ -24,12 +24,12 @@ network:
 EOF
     chmod 600 /etc/netplan/00-default.yaml
     netplan apply
-    systemctl disable --now systemd-networkd.service
+    systemctl disable systemd-networkd.service
     systemctl restart NetworkManager.service
 elif [[ "$UBUNTU_CODENAME" == "noble" ]]; then
-    :
+    systemctl disable systemd-networkd.service
 elif [[ "$UBUNTU_CODENAME" == "resolute" ]]; then
-    :
+    systemctl disable systemd-networkd.service
 else
     echo "Unsupported Ubuntu suite: $UBUNTU_CODENAME"
     exit 1
