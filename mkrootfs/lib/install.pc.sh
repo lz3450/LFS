@@ -346,8 +346,8 @@ EOF
     if [[ -n "${partition_device_map[liveos]}" ]]; then
         cat > "$ROOTFS_DIR"/boot/efi/loader/entries/liveos.conf << EOF
 title   LiveOS
-linux   vmlinuz-LiveOS
-initrd  initramfs-LiveOS.img
+linux   vmlinuz-liveos
+initrd  initramfs-liveos.img
 options root=live:CDLABEL=LIVEOS rd.live.overlay.overlayfs rd.live.image rd.shell
 EOF
     log_magenta "Please set up the liveos partition manually"
