@@ -16,6 +16,8 @@ declare -r __INSTALL_PC__="install.pc.sh"
 ################################################################################
 
 ### constants and variables (before argument processing)
+declare -r LIVEOS_LABEL="LIVEOS"
+
 declare -ar COMMON_DEB_PKGS=(
     ### general
     sudo
@@ -233,7 +235,7 @@ prepare() {
         mkswap -L SWAP -- "${partition_device_map[swap]}"
     fi
     if [[ -n "${partition_device_map[liveos]}" ]]; then
-        mkfs.ext4 -F -L LIVEOS -- "${partition_device_map[liveos]}"
+        mkfs.ext4 -F -L "$LIVEOS_LABEL" -- "${partition_device_map[liveos]}"
     fi
 
     # mount
@@ -348,7 +350,7 @@ EOF
 title   LiveOS
 linux   vmlinuz-liveos
 initrd  initramfs-liveos.img
-options root=live:CDLABEL=LIVEOS rd.live.overlay.overlayfs rd.live.image rd.shell
+options root=live:CDLABEL=$LIVEOS_LABEL rd.live.overlay.overlayfs rd.live.image rd.shell
 EOF
     log_magenta "Please set up the liveos partition manually"
     fi
