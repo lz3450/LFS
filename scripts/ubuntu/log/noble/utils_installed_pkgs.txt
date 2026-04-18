@@ -776,11 +776,8 @@ libyaml-0-2
 libzstd1
 linux-base
 linux-firmware
-linux-image-6.8.0-100-generic
 linux-image-generic
 linux-libc-dev
-linux-modules-6.8.0-100-generic
-linux-modules-extra-6.8.0-100-generic
 linux-sound-base
 locales
 login
@@ -835,6 +832,7 @@ pkexec
 policykit-1
 polkitd
 poppler-data
+power-profiles-daemon
 procps
 psmisc
 python-apt-common
