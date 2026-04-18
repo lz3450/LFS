@@ -50,6 +50,7 @@
         "pycache",
         "rclcpp",
         "rclpy",
+        "rf",
         "rmw",
         "RMW",
         "rootdir",
