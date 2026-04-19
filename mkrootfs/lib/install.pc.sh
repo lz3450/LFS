@@ -345,6 +345,16 @@ linux   vmlinuz-KZL
 #initrd  initrd-KZL.img
 options root=PARTUUID=$_root______________________partuuid rw rootwait
 EOF
+    cat > "$ROOTFS_DIR"/etc/kernel/postinst.d/zz-update-kernel << EOF
+#!/bin/bash
+#
+# update-kernel.sh
+#
+
+cp -v /boot/initrd.img /boot/efi/initrd.img
+cp -v /boot/vmlinuz /boot/efi/vmlinuz
+EOF
+    chmod +x "$ROOTFS_DIR"/etc/kernel/postinst.d/zz-update-kernel
     if [[ -n "${partition_device_map[liveos]}" ]]; then
         cat > "$ROOTFS_DIR"/boot/efi/loader/entries/liveos.conf << EOF
 title   LiveOS
