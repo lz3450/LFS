@@ -1,6 +1,8 @@
 bc
 landscape-client
 landscape-common
+libevent-core-2.1-7t64
+libutempter0
 lshw
 python3-attr
 python3-automat
@@ -21,3 +23,4 @@ python3-service-identity
 python3-setuptools
 python3-twisted
 python3-zope.interface
+tmux
