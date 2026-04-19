@@ -196,10 +196,11 @@ prepare() {
 
         log_magenta "Please partition manually"
         echo "Suggested partition scheme:
-- 512MiB EFI System Partition (ESP), FAT32, boot flag, LABEL=BOOT
-- All remaining space for root filesystem partition, LABEL=ROOT
+- 512MiB-2GiB EFI System Partition (ESP), FAT32, boot flag, LABEL=BOOT
+- root filesystem partition, LABEL=ROOT
 - 32GiB swap partition (optional), LABEL=SWAP
-- Remaining space can be used for liveos partition (optional), ext4, label=LIVEOS"
+- 2GiB liveos partition (optional), ext4, label=LIVEOS
+- 4GiB liveos-home partition (optional), ext4, label=LIVEOS_HOME"
         parted
 
         local _answer
