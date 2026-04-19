@@ -11,7 +11,5 @@ post_upgrade() {
 
 post_remove() {
   # ${1}: old package version
-  rm -v boot/initrd.img efi/initrd.img
-  rm -v boot/vmlinuz efi/vmlinuz
-  rm -v boot/initrd.img-*-KZL efi/initrd-KZL.img
+  rm -v boot/initrd.img-$1-KZL boot/efi/initrd-KZL.img
 }
