@@ -109,6 +109,7 @@ declare -A partition_device_map=(
     [rootfs]=""
     [swap]=""
     [liveos]=""
+    [liveos_home]=""
 )
 
 loop_device=""
@@ -129,7 +130,7 @@ _prompt_for_partition_path() {
         rootfs)
             _prompt_name="root filesystem"
             ;;
-        swap|liveos)
+        swap|liveos|liveos_home)
             _prompt_name="$_partition_name"
             ;;
         *)
@@ -219,6 +220,12 @@ prepare() {
         if [[ "$_answer" =~ ^[Yy]$ ]]; then
             _prompt_for_partition_path liveos
         fi
+        # liveos-home partition
+        read -r -p 'Make liveos-home partition [Y/n]: ' _answer
+        _answer=${_answer:-y}
+        if [[ "$_answer" =~ ^[Yy]$ ]]; then
+            _prompt_for_partition_path liveos_home
+        fi
 
         # exec 3>&1
         # exec >> "$LOG_DIR/${FUNCNAME[0]}.log"
@@ -237,6 +244,9 @@ prepare() {
     fi
     if [[ -n "${partition_device_map[liveos]}" ]]; then
         mkfs.ext4 -F -L "$LIVEOS_LABEL" -- "${partition_device_map[liveos]}"
+    fi
+    if [[ -n "${partition_device_map[liveos_home]}" ]]; then
+        mkfs.ext4 -F -L LIVEOS_HOME -- "${partition_device_map[liveos_home]}"
     fi
 
     # mount
