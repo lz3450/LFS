@@ -17,9 +17,9 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 ################################################################################
 
 ### libraries
-. "$SCRIPT_DIR"/../lib/log.sh
-. "$SCRIPT_DIR"/../lib/utils.sh
-. "$SCRIPT_DIR"/../lib/chroot.sh
+. "$SCRIPT_DIR"/../../bash/lib/log.sh
+. "$SCRIPT_DIR"/../../bash/lib/utils.sh
+. "$SCRIPT_DIR"/../../bash/lib/chroot.sh
 
 ### checks
 check_root
