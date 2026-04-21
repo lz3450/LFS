@@ -1,7 +1,0 @@
-downloads
-*.tbz2
-jetson/
-jetson-210/
-toolchain
-*.deb
-*.tar.gz
