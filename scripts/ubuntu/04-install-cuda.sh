@@ -14,9 +14,9 @@ fi
 LOG_DIR="log/$UBUNTU_CODENAME"
 
 pkgs=(
+    # nvidia-driver-580-open
     nvidia-driver-580
-    cuda-libraries-12-6
-    cuda-toolkit-12-6
+    cuda-toolkit-13-0
 )
 
 apt-get update
