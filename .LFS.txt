@@ -288,6 +288,8 @@ procps
 psmisc
 ptexenc
 ptmxmode
+pytorch
+PYTORCH
 qbittorrent
 rasterbar
 recv
