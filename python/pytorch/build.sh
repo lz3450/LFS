@@ -14,6 +14,8 @@ umask 0022
 
 export PATH="/opt/bin:/usr/local/cuda/bin:$PATH"
 
+PYTORCH_VERSION=v2.11.0
+
 cd pytorch-$PYTORCH_VERSION
 
 echo "${PYTORCH_VERSION/v/}" > version.txt
@@ -36,6 +38,7 @@ cp -v build/CMakeCache.txt ../CMakeCache.txt
 /opt/bin/python3 -m pip -v wheel --wheel-dir ~/wheels --no-binary :all: --no-build-isolation .
 /opt/bin/python3 -m pip -v install --user -U --no-index --find-links ~/wheels pytorch
 
+cd ..
 tar --zstd -cf pytorch-$PYTORCH_VERSION-build.tar.zst pytorch-$PYTORCH_VERSION
 
 echo "Successfully built PyTorch $PYTORCH_VERSION"

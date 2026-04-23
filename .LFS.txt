@@ -12,6 +12,7 @@ awk
 bak
 bc
 bcachefs
+bdist
 binutils
 blkid
 blockdev
@@ -389,6 +390,7 @@ wl
 wpa
 wpasupplicant
 xattrs
+xf
 xfsprogs
 xorriso
 xpf
