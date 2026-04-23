@@ -119,7 +119,7 @@ AT_INSTALL_SHARE_DIR:PATH=share
 Atlas_BLAS_LIBRARY:FILEPATH=Atlas_BLAS_LIBRARY-NOTFOUND
 
 //Path to a file.
-Atlas_CBLAS_INCLUDE_DIR:PATH=Atlas_CBLAS_INCLUDE_DIR-NOTFOUND
+Atlas_CBLAS_INCLUDE_DIR:PATH=/usr/include/x86_64-linux-gnu
 
 //Path to a library.
 Atlas_CBLAS_LIBRARY:FILEPATH=Atlas_CBLAS_LIBRARY-NOTFOUND
@@ -128,7 +128,7 @@ Atlas_CBLAS_LIBRARY:FILEPATH=Atlas_CBLAS_LIBRARY-NOTFOUND
 Atlas_CLAPACK_INCLUDE_DIR:PATH=Atlas_CLAPACK_INCLUDE_DIR-NOTFOUND
 
 //Path to a library.
-Atlas_LAPACK_LIBRARY:FILEPATH=Atlas_LAPACK_LIBRARY-NOTFOUND
+Atlas_LAPACK_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/liblapack.so
 
 //enables rdpms counter to report precise cpu frequency in benchdnn.
 //\n    CAUTION: may not work on all cpus (hence disabled by default)
@@ -661,7 +661,7 @@ CTEST_SUBMIT_RETRY_COUNT:STRING=3
 CTEST_SUBMIT_RETRY_DELAY:STRING=5
 
 //Path to a file.
-CUDAToolkit_CUPTI_INCLUDE_DIR:PATH=/usr/local/cuda/include
+CUDAToolkit_CUPTI_INCLUDE_DIR:PATH=/usr/local/cuda/extras/CUPTI/include
 
 //Path to a file.
 CUDAToolkit_nvToolsExt_INCLUDE_DIR:PATH=CUDAToolkit_nvToolsExt_INCLUDE_DIR-NOTFOUND
@@ -723,7 +723,7 @@ CUDA_NVCC_FLAGS_RELWITHDEBINFO:STRING=
 CUDA_NVRTC_LIB:FILEPATH=/usr/local/cuda/lib64/libnvrtc.so
 
 //Path to a library.
-CUDA_OpenCL_LIBRARY:FILEPATH=CUDA_OpenCL_LIBRARY-NOTFOUND
+CUDA_OpenCL_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libOpenCL.so
 
 //Propagate C/CXX_FLAGS and friends to the host compiler via -Xcompile
 CUDA_PROPAGATE_HOST_FLAGS:BOOL=ON
@@ -808,10 +808,10 @@ CUDA_cufftw_static_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcufftw_static.a
 CUDA_culibos_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libculibos.a
 
 //"cupti" library
-CUDA_cupti_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcupti.so
+CUDA_cupti_LIBRARY:FILEPATH=/usr/local/cuda/extras/CUPTI/lib64/libcupti.so
 
 //Path to a library.
-CUDA_cupti_static_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcupti_static.a
+CUDA_cupti_static_LIBRARY:FILEPATH=/usr/local/cuda/extras/CUPTI/lib64/libcupti_static.a
 
 //"curand" library
 CUDA_curand_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libcurand.so
@@ -922,7 +922,7 @@ CUDA_nvjpeg_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnvjpeg.so
 CUDA_nvjpeg_static_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnvjpeg_static.a
 
 //Path to a library.
-CUDA_nvml_LIBRARY:FILEPATH=/usr/local/cuda/lib64/stubs/libnvidia-ml.so
+CUDA_nvml_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libnvidia-ml.so
 
 //Path to a library.
 CUDA_nvrtc_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnvrtc.so
@@ -931,13 +931,13 @@ CUDA_nvrtc_LIBRARY:FILEPATH=/usr/local/cuda/lib64/libnvrtc.so
 CUDNN_INCLUDE_DIR:PATH=
 
 //Path to a file.
-CUDNN_INCLUDE_PATH:PATH=/usr/include/x86_64-linux-gnu
+CUDNN_INCLUDE_PATH:PATH=/usr/local/cuda/include
 
 //Path to the cudnn library file (e.g., libcudnn.so)
 CUDNN_LIBRARY:PATH=
 
 //Path to a library.
-CUDNN_LIBRARY_PATH:FILEPATH=/usr/lib/x86_64-linux-gnu/libcudnn.so
+CUDNN_LIBRARY_PATH:FILEPATH=/usr/local/cuda/lib64/libcudnn.so
 
 //Folder containing NVIDIA cuDNN
 CUDNN_ROOT:PATH=
@@ -1539,7 +1539,7 @@ MAGMA_LIBRARIES:FILEPATH=MAGMA_LIBRARIES-NOTFOUND
 MAKECOMMAND:STRING=/usr/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 
 //Path to the memory checking command, used for memory error detection.
-MEMORYCHECK_COMMAND:FILEPATH=/usr/bin/valgrind
+MEMORYCHECK_COMMAND:FILEPATH=/usr/local/cuda/bin/compute-sanitizer
 
 //File that contains suppressions for the memory checker
 MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
@@ -1573,7 +1573,7 @@ MKL_THREADING:STRING=OMP
 MPIEXEC_EXECUTABLE:FILEPATH=/usr/bin/mpiexec
 
 //Maximum number of processors available to run MPI applications.
-MPIEXEC_MAX_NUMPROCS:STRING=32
+MPIEXEC_MAX_NUMPROCS:STRING=8
 
 //Flag used by MPI to specify the number of processes for mpiexec;
 // the next option will be the number of processes.
@@ -1833,7 +1833,7 @@ PTHREADPOOL_SYNC_PRIMITIVE:STRING=default
 PYTHON_ENUM_SOURCE_DIR:STRING=
 
 //Path to a program.
-PYTHON_EXECUTABLE:FILEPATH=/opt/bin/python3
+PYTHON_EXECUTABLE:FILEPATH=/opt/bin/python
 
 //PeachPy (Python package) source directory
 PYTHON_PEACHPY_SOURCE_DIR:STRING=/home/kzl/LFS/python/pytorch/pytorch-v2.11.0/third_party/python-peachpy
@@ -1858,12 +1858,6 @@ PYTORCH_QNNPACK_LIBRARY_TYPE:STRING=static
 //Value Computed by CMake
 PYTORCH_QNNPACK_SOURCE_DIR:STATIC=/home/kzl/LFS/python/pytorch/pytorch-v2.11.0/aten/src/ATen/native/quantized/cpu/qnnpack
 
-//Path to a program.
-ProcessorCount_cmd_nproc:FILEPATH=/usr/bin/nproc
-
-//Path to a program.
-ProcessorCount_cmd_sysctl:FILEPATH=/usr/sbin/sysctl
-
 //No help, variable specified on the command line.
 Python_EXECUTABLE:UNINITIALIZED=/opt/bin/python3
 
@@ -1887,7 +1881,7 @@ SED_COMMAND:FILEPATH=/usr/bin/sed
 SELECTED_OP_LIST:STRING=
 
 //Name of the computer/site where compile is being run
-SITE:STRING=dilemma.utdallas.edu
+SITE:STRING=LAB3
 
 //List of SIMD architectures supported by libsleef.
 SLEEF_ALL_SUPPORTED_EXTENSIONS:STRING=AVX512FNOFMA;AVX512F;AVX2;AVX2128;FMA4;AVX;SSE4;SSE2;SVENOFMA;SVE;ADVSIMDNOFMA;ADVSIMD;NEON32;NEON32VFPV4;VSX;VSXNOFMA;VSX3;VSX3NOFMA;VXE;VXENOFMA;VXE2;VXE2NOFMA;RVVM1NOFMA;RVVM1;RVVM2NOFMA;RVVM2;PUREC_SCALAR;PURECFMA_SCALAR
@@ -3405,7 +3399,7 @@ FIND_PACKAGE_MESSAGE_DETAILS_CUDA:INTERNAL=[/usr/local/cuda][/usr/local/cuda/bin
 //Details about finding CUDAToolkit
 FIND_PACKAGE_MESSAGE_DETAILS_CUDAToolkit:INTERNAL=[/usr/local/cuda/include][13.0.88][/usr/local/cuda/lib64/libcudart.so][/usr/local/cuda/bin][v13.0.88()]
 //Details about finding CUDNN
-FIND_PACKAGE_MESSAGE_DETAILS_CUDNN:INTERNAL=[/usr/lib/x86_64-linux-gnu/libcudnn.so][/usr/include/x86_64-linux-gnu][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_CUDNN:INTERNAL=[/usr/local/cuda/lib64/libcudnn.so][/usr/local/cuda/include][v()]
 //Details about finding Git
 FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[/usr/bin/git][v2.43.0()]
 //Details about finding MPI
@@ -3429,7 +3423,7 @@ FIND_PACKAGE_MESSAGE_DETAILS_Python:INTERNAL=[/opt/bin/python3][cfound component
 //Details about finding Python3
 FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/opt/bin/python3][cfound components: Interpreter ][v3.14.4()]
 //Details about finding PythonInterp
-FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/opt/bin/python3][v3.14.4()]
+FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/opt/bin/python][v3.14.4()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Details about finding nvtx3
@@ -3660,10 +3654,6 @@ PTHREADPOOL_SYNC_PRIMITIVE-STRINGS:INTERNAL=default;condvar;futex;gcd;event
 PYTHON_EXECUTABLE-ADVANCED:INTERNAL=1
 //STRINGS property for variable: PYTORCH_QNNPACK_LIBRARY_TYPE
 PYTORCH_QNNPACK_LIBRARY_TYPE-STRINGS:INTERNAL=default;static;shared
-//ADVANCED property for variable: ProcessorCount_cmd_nproc
-ProcessorCount_cmd_nproc-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: ProcessorCount_cmd_sysctl
-ProcessorCount_cmd_sysctl-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: SCCACHE_EXECUTABLE
 SCCACHE_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: SITE

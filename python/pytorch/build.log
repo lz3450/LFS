@@ -91,7 +91,7 @@ cmake -GNinja -DBUILD_PYTHON=True -DBUILD_TEST=False -DCMAKE_BUILD_TYPE=Release 
 -- PyTorch: Header version is: 13.0
 -- Found Python: /opt/bin/python3 (found version "3.14.4") found components: Interpreter 
 -- /usr/local/cuda/lib64/libnvrtc.so shorthash is a49e67e8
--- Found CUDNN: /usr/lib/x86_64-linux-gnu/libcudnn.so  
+-- Found CUDNN: /usr/local/cuda/lib64/libcudnn.so  
 -- Could NOT find CUSPARSELT (missing: CUSPARSELT_LIBRARY_PATH CUSPARSELT_INCLUDE_PATH) 
 CMake Warning at cmake/public/cuda.cmake:235 (message):
   Cannot find cuSPARSELt library.  Turning the option off
@@ -269,7 +269,7 @@ Call Stack (most recent call first):
 --   Library acml: BLAS_acml_LIBRARY-NOTFOUND
 -- Checking for [blis]
 --   Library blis: BLAS_blis_LIBRARY-NOTFOUND
--- Could NOT find Atlas (missing: Atlas_CBLAS_INCLUDE_DIR Atlas_CLAPACK_INCLUDE_DIR Atlas_CBLAS_LIBRARY Atlas_BLAS_LIBRARY Atlas_LAPACK_LIBRARY) 
+-- Could NOT find Atlas (missing: Atlas_CLAPACK_INCLUDE_DIR Atlas_CBLAS_LIBRARY Atlas_BLAS_LIBRARY) 
 -- Checking for [ptf77blas - atlas - gfortran]
 --   Library ptf77blas: BLAS_ptf77blas_LIBRARY-NOTFOUND
 -- Checking for []
@@ -313,7 +313,7 @@ CMake Warning (dev) at third_party/NNPACK/CMakeLists.txt:110 (FIND_PACKAGE):
 
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
--- Found PythonInterp: /opt/bin/python3 (found version "3.14.4") 
+-- Found PythonInterp: /opt/bin/python (found version "3.14.4") 
 -- NNPACK backend is x86-64
 -- Downloading six (Python package) to /home/kzl/LFS/python/pytorch/pytorch-v2.11.0/build/confu-srcs/six (define PYTHON_SIX_SOURCE_DIR to avoid it)
 CMake Deprecation Warning at CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
@@ -350,7 +350,11 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
    inactivity timeout='none'
 -- Using src='https://pypi.python.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz'
 -- [download 100% complete]
--- [download 55% complete]
+-- [download 46% complete]
+-- [download 48% complete]
+-- [download 62% complete]
+-- [download 75% complete]
+-- [download 89% complete]
 -- [download 100% complete]
 -- verifying file...
        file='/home/kzl/LFS/python/pytorch/pytorch-v2.11.0/build/confu-deps/six-download/six-prefix/src/six-1.11.0.tar.gz'
@@ -374,11 +378,11 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Generating microkernels.cmake
 /home/kzl/LFS/python/pytorch/pytorch-v2.11.0/third_party/XNNPACK/tools/update-microkernels.py:118: DeprecationWarning: codecs.open() is deprecated. Use open() instead.
   with codecs.open(filepath, 'w', encoding='utf-8') as output_file:
-Duplicate microkernel definition: src/qs8-qc4w-packw/gen/qs8-qc4w-packw-x8c8-gemm-goi-scalar.c and src/qs8-qc4w-packw/gen/qs8-qc4w-packw-x8c8-gemm-goi-avxvnni.c (1th function)
 Duplicate microkernel definition: src/qs8-qc4w-packw/gen/qs8-qc4w-packw-x8c8-gemm-goi-avxvnni.c and src/qs8-qc4w-packw/gen/qs8-qc4w-packw-x8c8-gemm-goi-avx256vnni.c (1th function)
+Duplicate microkernel definition: src/qs8-qc4w-packw/gen/qs8-qc4w-packw-x8c8-gemm-goi-avx256vnni.c and src/qs8-qc4w-packw/gen/qs8-qc4w-packw-x8c8-gemm-goi-scalar.c
+No microkernel found in src/reference/binary-elementwise.cc
 No microkernel found in src/reference/packing.cc
 No microkernel found in src/reference/unary-elementwise.cc
-No microkernel found in src/reference/binary-elementwise.cc
 
 
 ================================================================================
@@ -995,7 +999,7 @@ Generated: /home/kzl/LFS/python/pytorch/pytorch-v2.11.0/build/third_party/onnx/o
 --   Library acml: BLAS_acml_LIBRARY-NOTFOUND
 -- Checking for [blis]
 --   Library blis: BLAS_blis_LIBRARY-NOTFOUND
--- Could NOT find Atlas (missing: Atlas_CBLAS_INCLUDE_DIR Atlas_CLAPACK_INCLUDE_DIR Atlas_CBLAS_LIBRARY Atlas_BLAS_LIBRARY Atlas_LAPACK_LIBRARY) 
+-- Could NOT find Atlas (missing: Atlas_CLAPACK_INCLUDE_DIR Atlas_CBLAS_LIBRARY Atlas_BLAS_LIBRARY) 
 -- Checking for [ptf77blas - atlas - gfortran]
 --   Library ptf77blas: BLAS_ptf77blas_LIBRARY-NOTFOUND
 -- Checking for []
@@ -1112,7 +1116,7 @@ disabling ROCM because NOT USE_ROCM is set
 --   Library acml: BLAS_acml_LIBRARY-NOTFOUND
 -- Checking for [blis]
 --   Library blis: BLAS_blis_LIBRARY-NOTFOUND
--- Could NOT find Atlas (missing: Atlas_CBLAS_INCLUDE_DIR Atlas_CLAPACK_INCLUDE_DIR Atlas_CBLAS_LIBRARY Atlas_BLAS_LIBRARY Atlas_LAPACK_LIBRARY) 
+-- Could NOT find Atlas (missing: Atlas_CLAPACK_INCLUDE_DIR Atlas_CBLAS_LIBRARY Atlas_BLAS_LIBRARY) 
 -- Checking for [ptf77blas - atlas - gfortran]
 --   Library ptf77blas: BLAS_ptf77blas_LIBRARY-NOTFOUND
 -- Checking for []
@@ -1294,9 +1298,9 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Performing Test COMPILER_SUPPORTS_SYS_GETRANDOM
 -- Performing Test COMPILER_SUPPORTS_SYS_GETRANDOM - Success
 -- Configuring build for SLEEF-v3.8.0
-   Target system: Linux-6.17.0-22-generic
+   Target system: Linux-7.0.0-KZL
    Target processor: x86_64
-   Host system: Linux-6.17.0-22-generic
+   Host system: Linux-7.0.0-KZL
    Host processor: x86_64
    Detected C compiler: GNU @ /usr/bin/cc
    CMake: 3.28.3
@@ -1382,7 +1386,7 @@ CMake Warning at CMakeLists.txt:1330 (message):
 --     CUDA version        : 13.0
 --     USE_FLASH_ATTENTION : ON
 --     USE_MEM_EFF_ATTENTION : ON
---     cuDNN version       : 9.21.1
+--     cuDNN version       : 9.16.0
 --     cufile library    : /usr/local/cuda/lib64/libcufile.so
 --     CUDA root directory : /usr/local/cuda
 --     CUDA library        : /usr/lib/x86_64-linux-gnu/libcuda.so
@@ -1391,7 +1395,7 @@ CMake Warning at CMakeLists.txt:1330 (message):
 --     cufft library       : /usr/local/cuda/lib64/libcufft.so
 --     curand library      : /usr/local/cuda/lib64/libcurand.so
 --     cusparse library    : /usr/local/cuda/lib64/libcusparse.so
---     cuDNN library       : /usr/lib/x86_64-linux-gnu/libcudnn.so
+--     cuDNN library       : /usr/local/cuda/lib64/libcudnn.so
 --     nvrtc               : /usr/local/cuda/lib64/libnvrtc.so
 --     CUDA include path   : /usr/local/cuda/include
 --     NVCC executable     : /usr/local/cuda/bin/nvcc
@@ -1449,8 +1453,8 @@ CMake Warning at CMakeLists.txt:1330 (message):
 --   USE_COREML_DELEGATE     : OFF
 --   BUILD_LAZY_TS_BACKEND   : ON
 --   USE_ROCM_KERNEL_ASSERT : OFF
--- Configuring done (31.0s)
--- Generating done (1.2s)
+-- Configuring done (19.3s)
+-- Generating done (0.8s)
 -- Build files have been written to: /home/kzl/LFS/python/pytorch/pytorch-v2.11.0/build
 Finished running cmake. Run "ccmake build" or "cmake-gui build" to adjust build options and "python -m pip install --no-build-isolation -v ." to build.
 -- Checkout nccl release tag: v2.28.9-1

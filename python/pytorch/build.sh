@@ -20,6 +20,8 @@ cd pytorch-$PYTORCH_VERSION
 
 echo "${PYTORCH_VERSION/v/}" > version.txt
 
+# export MAX_JOBS=16
+
 export BUILD_TEST=False
 
 export PYTORCH_BUILD_VERSION="${PYTORCH_VERSION/v/}"
@@ -32,9 +34,11 @@ CMAKE_ONLY=1 /opt/bin/python3 setup.py build > ../build.log 2>&1
 ccmake build
 cp -v build/CMakeCache.txt ../CMakeCache.txt
 
+### old
 # /opt/bin/python3 setup.py build
-# /opt/bin/python3 setup.py install --user
 # /opt/bin/python3 setup.py bdist_wheel
+# /opt/bin/python3 setup.py install --user
+### new
 /opt/bin/python3 -m pip -v wheel --wheel-dir ~/wheels --no-binary :all: --no-build-isolation .
 /opt/bin/python3 -m pip -v install --user -U --no-index --find-links ~/wheels torch
 
