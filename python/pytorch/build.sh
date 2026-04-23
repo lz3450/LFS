@@ -36,7 +36,7 @@ cp -v build/CMakeCache.txt ../CMakeCache.txt
 # /opt/bin/python3 setup.py install --user
 # /opt/bin/python3 setup.py bdist_wheel
 /opt/bin/python3 -m pip -v wheel --wheel-dir ~/wheels --no-binary :all: --no-build-isolation .
-/opt/bin/python3 -m pip -v install --user -U --no-index --find-links ~/wheels pytorch
+/opt/bin/python3 -m pip -v install --user -U --no-index --find-links ~/wheels torch
 
 cd ..
 tar --zstd -cf pytorch-$PYTORCH_VERSION-build.tar.zst pytorch-$PYTORCH_VERSION

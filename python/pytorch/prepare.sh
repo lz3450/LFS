@@ -1,20 +1,6 @@
 #!/usr/bin/env bash
 #
-# build.sh
-#
-
-set -e
-set -o pipefail
-set -u
-# set -x
-
-umask 0022
-
-################################################################################
-
-#!/usr/bin/env bash
-#
-# build.sh
+# prepare.sh
 #
 
 set -e
