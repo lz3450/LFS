@@ -191,6 +191,7 @@ liburing
 libusb
 libuv
 libxcrypt
+lintrunner
 linuxmusl
 livenet
 liveos
