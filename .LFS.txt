@@ -42,6 +42,7 @@ cpio
 CPPFLAGS
 cpython
 cryptsetup
+cuda
 CXXFLAGS
 cyrus
 darwin
