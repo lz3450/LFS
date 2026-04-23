@@ -48,6 +48,7 @@
         "pkgs",
         "plt",
         "pycache",
+        "pyproject",
         "rclcpp",
         "rclpy",
         "rf",
