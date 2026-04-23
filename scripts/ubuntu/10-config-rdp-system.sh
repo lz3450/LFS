@@ -24,6 +24,7 @@ if [[ ! -d  "$CERT_DIR" ]]; then
     openssl genrsa -out "$KEY" 4096
     openssl req -new -key "$KEY" -out "$CSR"
     openssl x509 -req -days 365 -signkey "$KEY" -in "$CSR" -out "$CRT"
+    chown -R gnome-remote-desktop:gnome-remote-desktop "$CERT_DIR"
 fi
 
 grdctl --system rdp set-tls-cert "$CRT"
