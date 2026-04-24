@@ -26,8 +26,10 @@ yaru-theme-gtk
 yaru-theme-icon
 yaru-theme-sound
 
+bc
 bridge-utils
 cpio
+debconf-utils
 device-tree-compiler
 efibootmgr
 gir1.2-appindicator3-0.1
@@ -41,10 +43,13 @@ libseat1
 libvulkan1
 mtd-utils
 nvme-cli
+oem-config-debconf
 oem-config-gtk
+plymouth
 python2
 python3-matplotlib
 python3-tk
+zstd
 
 build-essential
 bash-completion
