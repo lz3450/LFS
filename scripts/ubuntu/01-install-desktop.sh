@@ -30,7 +30,6 @@ common_deb_pkgs=(
   ### gnome
   eog
   gnome-calculator
-  gnome-console
   gnome-power-manager
   gnome-remote-desktop
   gnome-system-monitor
@@ -46,7 +45,6 @@ common_deb_pkgs=(
   ### power
   power-profiles-daemon
   ### network
-  network-manager
   network-manager-config-connectivity-ubuntu
   ### sound
   alsa-base
@@ -64,11 +62,9 @@ common_deb_pkgs=(
 jammy_deb_pkgs=(
   ### gnome
   evince
-  gnome-bluetooth
-  nautilus-extension-gnome-console
+  gnome-console
   gnome-startup-applications
-  ### network
-  network-manager-gnome
+  nautilus-extension-gnome-console
 )
 noble_deb_pkgs=(
   ### gnome
