@@ -14,6 +14,8 @@ SCRIPT_NAME="$(basename "$0")"
 SCRIPT_PATH="$(realpath "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
+declare -r __DEBUG__=0
+
 ################################################################################
 
 ### libraries
@@ -32,11 +34,16 @@ if [[ ! -d "$rootfs_dir" ]]; then
     error "Root filesystem directory '$rootfs_dir' does not exist." 1
 fi
 
-trap chroot_teardown EXIT SIGINT SIGTERM SIGKILL
+cleanup() {
+    local rc=$?
+    trap - EXIT SIGINT SIGTERM ERR
+    chroot_teardown || true
+    exit "$rc"
+}
+trap cleanup EXIT SIGINT SIGTERM ERR
+
 chroot_setup "$rootfs_dir"
 chroot_run "$rootfs_dir" "$@"
-trap - EXIT SIGINT SIGTERM SIGKILL
-chroot_teardown
 
 ### error codes
 # 1: must be run as root
