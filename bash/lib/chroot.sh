@@ -38,36 +38,46 @@ _chroot_error() {
 }
 
 _chroot_mount() {
-    mount "$@" >&2
+    mount -v "$@" >&2
     chroot_active_mounts=(${@: -1} "${chroot_active_mounts[@]}")
 }
 
 _resolve_link() {
     local _target="$1"
-    local _rootfs="${2:-}"
 
     while [[ -L "$_target" ]]; do
         _target=$(readlink -m "$_target")
-        if [[ -n "$_rootfs" && "$_target" != "$_rootfs"* ]]; then
-            _target="${_rootfs%/}/${_target#/}"
-        fi
     done
 
     echo "$_target"
 }
 
 _mount_resolv_conf() {
-    local _source=$(_resolve_link /etc/resolv.conf)
-    local _target=$(_resolve_link "$chroot_dir/etc/resolv.conf" "$chroot_dir")
-
     # /etc/resolv.conf does not exist in the host system, nothing to do
-    if [[ ! -e $_source ]]; then
+    if [[ ! -e /etc/resolv.conf ]]; then
+        _chroot_warn "Host /etc/resolv.conf does not exist, skipping resolv.conf mount"
         return
     fi
 
-    if [[ ! -e "$_target" && -L "$chroot_dir/etc/resolv.conf" ]]; then
+    # /etc/resolv.conf does not exist in the chroot rootfs, check the integrity
+    if [[ ! -e "$chroot_dir/etc/resolv.conf" && ! -L "$chroot_dir/etc/resolv.conf" ]]; then
+        _chroot_warn "Target /etc/resolv.conf does not exist in chroot, skipping resolv.conf mount"
+        return
+    fi
+
+    local _source=$(_resolve_link /etc/resolv.conf)
+    _chroot_info "host /etc/resolv.conf:   \"$_source\""
+    local _target=$(_resolve_link "$chroot_dir/etc/resolv.conf")
+    _chroot_info "chroot /etc/resolv.conf: \"$_target\""
+
+    if [[ "$_target" != "$(realpath "$chroot_dir")"/* ]]; then
+        _chroot_warn "Target /etc/resolv.conf is not inside the chroot directory, skipping resolv.conf mount"
+        return
+    fi
+
+    if [[ ! -e "$_target" ]]; then
         install -Dm644 /dev/null "$_target"
-        _chroot_mount -v -c --bind "$_source" "$_target"
+        _chroot_mount -c --bind "$_source" "$_target"
     fi
 }
 
@@ -85,6 +95,7 @@ chroot_setup() {
 
     if ! mountpoint -q "$_chroot_dir"; then
         _chroot_error "\"$_chroot_dir\" is not a mountpoint"
+        _chroot_error "Please run \`mount --bind $_chroot_dir $_chroot_dir\`"
         return 1
     fi
 
