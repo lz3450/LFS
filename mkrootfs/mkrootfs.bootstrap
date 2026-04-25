@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # mkrootfs.bootstrap
 #
@@ -256,6 +256,11 @@ debootstrap_rootfs() {
     deb_apt_install "$ROOTFS_DIR" ADDITIONAL_DEB_PKGS > "$LOG_DIR/deb_apt_install.log"
     deb_set_locale "$ROOTFS_DIR"
     deb_get_installed_pkgs "$ROOTFS_DIR" > "$_deb_pkgs_installed"
+    local _answer
+    read -r -p "Do you want to configure rootfs manually ? [y/N] " _answer
+    if [[ "$_answer" =~ ^[Yy]$ ]]; then
+        chroot_run "$ROOTFS_DIR" || :
+    fi
     chroot_teardown
 
     info "Cleaning up rootfs..."
