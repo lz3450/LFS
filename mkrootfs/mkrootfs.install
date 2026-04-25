@@ -258,8 +258,6 @@ configure_rootfs_common() {
     if [[ "$distro" == "ubuntu" || "$distro" == "debian" ]]; then
         echo "PATH=\"/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin\"" > "$ROOTFS_DIR/etc/environment"
     fi
-    # passwd
-    sed -i '/^root/s|/bin/bash|/bin/zsh|' "$ROOTFS_DIR"/etc/passwd
     # network
     cp -vf -- "$CONFIG_DIR/network/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
     cp -vf -- "$CONFIG_DIR/network/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
@@ -270,10 +268,6 @@ configure_rootfs_common() {
             ln -sf wpa_supplicant.conf "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant-$_wl_dev.conf"
         fi
     fi
-    # grml-zsh-config for root
-    wget -qO "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
-    echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
-    echo '. /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR/root/.zshrc"
 }
 
 configure_rootfs_manual() {

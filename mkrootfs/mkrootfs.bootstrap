@@ -240,6 +240,7 @@ debootstrap_rootfs() {
     fi
 
     info "Configuring rootfs..."
+    # apt sources
     if [[ -f "$ROOTFS_DIR/etc/apt/sources.list" ]]; then
         mv -v -- "$ROOTFS_DIR/etc/apt/sources.list" "$ROOTFS_DIR/etc/apt/sources.list.bak"
     fi
@@ -249,6 +250,12 @@ debootstrap_rootfs() {
     else
         sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/$distro.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/$distro.sources"
     fi
+    # passwd
+    sed -i '/^root/s|/bin/bash|/bin/zsh|' "$ROOTFS_DIR"/etc/passwd
+    # grml-zsh-config for root
+    wget -qO "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+    echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
+    echo '. /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR/root/.zshrc"
 
     mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
     mount --make-private "$ROOTFS_DIR"
@@ -265,9 +272,6 @@ debootstrap_rootfs() {
 
     info "Cleaning up rootfs..."
     clean_rootfs "$ROOTFS_DIR" > "$LOG_DIR/clean_rootfs.log"
-    rm -vrf -- "$ROOTFS_DIR"/bin.usr-is-merged
-    rm -vrf -- "$ROOTFS_DIR"/lib.usr-is-merged
-    rm -vrf -- "$ROOTFS_DIR"/sbin.usr-is-merged
 }
 
 mmdebstrap_rootfs() {
