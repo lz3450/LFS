@@ -252,6 +252,7 @@ debootstrap_rootfs() {
     fi
     # passwd
     sed -i '/^root/s|/bin/bash|/bin/zsh|' "$ROOTFS_DIR"/etc/passwd
+    passwd -R "$ROOTFS_DIR" root -d
     # grml-zsh-config for root
     wget -qO "$ROOTFS_DIR/root/.zshrc" https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
     echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
