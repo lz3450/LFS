@@ -51,6 +51,7 @@ declare -ar ADDITIONAL_DEB_PKGS=(
     nano
     openssh-server
     curl wget git
+    fdisk parted
 )
 declare -ar PACMAN_PKGS=(
     base
