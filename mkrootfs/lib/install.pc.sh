@@ -23,12 +23,11 @@ declare -ar COMMON_DEB_PKGS=(
     sudo
     file
     build-essential
-    ### disk
+    ### filesystem
     parted
-    btrfs-progs
+    # btrfs-progs
     ### network
     iw wpasupplicant
-    rfkill
     ### kernel
     linux-image-generic
     # dracut
@@ -37,6 +36,7 @@ declare -ar COMMON_DEB_PKGS=(
     libarchive-tools
     zstd
     libgpgme-dev
+    ### makepkg
     fakeroot
 )
 declare -ar JAMMY_DEB_PKGS=()
