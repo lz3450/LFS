@@ -95,11 +95,12 @@ clean_rootfs() {
     fi
     delete_all_contents "$_rootfs_dir"/tmp/
     delete_all_contents "$_rootfs_dir"/usr/share/doc/
-    delete_all_contents "$_rootfs_dir"/var/cache/
     delete_all_contents "$_rootfs_dir"/var/log/
     delete_all_contents "$_rootfs_dir"/var/tmp/
     # apt
-    delete_all_contents "$_rootfs_dir"/var/lib/apt/lists/
+    rm -rf "$_rootfs_dir"/var/lib/apt/lists/*
+    rm -rf "$_rootfs_dir"/var/cache/apt/archives/*.deb
+    rm -rf "$_rootfs_dir"/var/cache/apt/archives/partial/*
     # pacman
     delete_all_contents "$_rootfs_dir"/var/lib/pacman/sync/
     find "$_rootfs_dir" -type f \( -name '*.pacnew' -o -name '*.pacsave' \) -delete
