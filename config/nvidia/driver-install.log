@@ -8,8 +8,9 @@ nvidia-installer command line:
     --accept-license
     --expert
     --log-file-name=/home/kzl/LFS/config/nvidia/driver-install.log
-    --kernel-name=7.0.0-KZL
+    --kernel-name=7.0.2-KZL
     --no-backup
+    --no-x-check
     --disable-nouveau
     --no-distro-scripts
     --no-wine-files
@@ -19,6 +20,9 @@ nvidia-installer command line:
     --concurrency-level=16
     --install-libglvnd
     --systemd
+    --skip-depmod
+    --kernel-module-type=open
+    --allow-installation-with-running-driver
     --no-rebuild-initramfs
     --silent
 
@@ -32,8 +36,8 @@ Using built-in stream user interface
 -> found `dmesg` : `/usr/bin/dmesg`
 -> found `tail` : `/usr/bin/tail`
 -> found `objcopy` : `/usr/bin/objcopy`
--> found `chcon` : `/usr/bin/chcon`
 -> Unable to scan initramfs: no tool found
+-> found `chcon` : `/usr/bin/chcon`
 -> found `pkg-config` : `/usr/bin/pkg-config`
 -> found `openssl` : `/usr/bin/openssl`
 -> found `systemctl` : `/usr/bin/systemctl`
@@ -43,10 +47,15 @@ Using built-in stream user interface
 -> found `rmmod` : `/usr/sbin/rmmod`
 -> found `lsmod` : `/usr/sbin/lsmod`
 -> found `depmod` : `/usr/sbin/depmod`
--> Multiple kernel module types are available for this system. Which would you like to use? (Answer: MIT/GPL)
+-> The file '/tmp/.X0-lock' exists and appears to contain the process ID '832' of a running X server.
+-> Continuing per the '--no-x-check' option.
 -> No distribution pre-unload script found.
+WARNING: An NVIDIA kernel module 'nvidia-uvm' appears to be already loaded in your kernel.  This may be because it is in use (for example, by an X server, a CUDA program, or the NVIDIA Persistence Daemon), but this may also happen if your kernel was configured without support for module unloading.  Some of the sanity checks that nvidia-installer performs to detect potential installation problems are not possible while an NVIDIA kernel module is running.
+-> Would you like to continue installation and skip the sanity checks? If not, please abort the installation, then close any programs which may be using the NVIDIA GPU(s), and attempt installation again. (Answer: Continue installation)
+WARNING: Continuing installation despite the presence of a loaded NVIDIA kernel module.  Some sanity checks will not be performed.  It is strongly recommended that you reboot your computer after installation is complete.  If the installation is not successful after rebooting the computer, you can run `nvidia-uninstall` to attempt to remove the NVIDIA driver.
+-> Kernel module load tests will be skipped.
 -> Installing NVIDIA driver version 580.142.
--> There appears to already be a driver installed on your system (version: 580.126.09).  As part of installing this driver (version: 580.142), the existing driver will be uninstalled.  Are you sure you want to continue? (Answer: Continue installation)
+-> There appears to already be a driver installed on your system (version: 580.142).  As part of installing this driver (version: 580.142), the existing driver will be uninstalled.  Are you sure you want to continue? (Answer: Continue installation)
 -> Check for the availability or presence of alternate driver installs? (Answer: No)
 -> No distribution pre-install script found.
 -> Not probing for precompiled kernel interfaces.
@@ -61,28 +70,29 @@ Using built-in stream user interface
 -> Would you like to install the nvidia-uvm kernel module? You must install this module in order to use CUDA. (Answer: Yes)
 -> Would you like to install the nvidia-drm kernel module? You must install this module in order to use DRM-KMS. (Answer: Yes)
 -> Would you like to install the nvidia-peermem kernel module? You must install this module in order to use GPUDirect RDMA p2p memory sharing. (Answer: Yes)
--> Kernel module installation path (Answer: '/lib/modules/7.0.0-KZL/kernel/drivers/video')
--> Kernel module installation path: /lib/modules/7.0.0-KZL/kernel/drivers/video
+-> Kernel module installation path (Answer: '/lib/modules/7.0.2-KZL/kernel/drivers/video')
+-> Kernel module installation path: /lib/modules/7.0.2-KZL/kernel/drivers/video
 -> Not probing for precompiled kernel interfaces.
--> Kernel source path (Answer: '/lib/modules/7.0.0-KZL/source')
--> Kernel source path: '/lib/modules/7.0.0-KZL/source'
--> Kernel output path: '/lib/modules/7.0.0-KZL/build'
+-> Kernel source path (Answer: '/lib/modules/7.0.2-KZL/source')
+-> Kernel source path: '/lib/modules/7.0.2-KZL/source'
+-> Kernel output path: '/lib/modules/7.0.2-KZL/build'
 -> Performing Compiler check.
 -> Performing Dom0 check.
 -> Performing Xen check.
 -> Performing PREEMPT_RT check.
 -> Performing vgpu_kvm check.
 -> Cleaning kernel module build directory.
-   executing: 'cd kernel-open; /usr/bin/make -k -j16  NV_EXCLUDE_KERNEL_MODULES="" SYSSRC="/lib/modules/7.0.0-KZL/source" SYSOUT="/lib/modules/7.0.0-KZL/build" clean'...
+   executing: 'cd kernel-open; /usr/bin/make -k -j16  NV_EXCLUDE_KERNEL_MODULES="" SYSSRC="/lib/modules/7.0.2-KZL/source" SYSOUT="/lib/modules/7.0.2-KZL/build" clean'...
    rm -f -r conftest
-   make[1]: Entering directory '/usr/src/linux-headers-7.0.0-KZL'
+   make[1]: Entering directory '/usr/src/linux-headers-7.0.2-KZL'
    make[2]: Entering directory '/tmp/nvidia/kernel-open'
    make[2]: Leaving directory '/tmp/nvidia/kernel-open'
-   make[1]: Leaving directory '/usr/src/linux-headers-7.0.0-KZL'
+   make[1]: Leaving directory '/usr/src/linux-headers-7.0.2-KZL'
+-> Failed to estimate output lines: /bin/sh: 1: .: cannot open /lib/modules/7.0.0-KZL/build/.config: No such file
+conftests:215 objects:208 modules:5
 -> Building kernel modules
 -> done.
 -> Kernel module compilation complete.
--> Kernel messages:
 -> X installation prefix (only under rare circumstances should this be changed from the default) (Answer: '/usr')
 -> X installation prefix is: '/usr'
 WARNING: nvidia-installer was forced to guess the X library path '/usr/lib' and X module path '/usr/lib/xorg/modules'; these paths were not queryable from the system.  If X fails to find the NVIDIA X driver module, please install the `pkg-config` utility and the X.Org SDK/development package for your distribution and reinstall the driver.
@@ -279,11 +289,11 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Installing: libnvidia-sandboxutils.so.580.142 --> /usr/lib/x86_64-linux-gnu/libnvidia-sandboxutils.so.580.142
 -> Installing: sandboxutils-filelist.json --> /usr/share/nvidia/files.d/sandboxutils-filelist.json
 -> Deleting: /tmp/template-
--> Installing: kernel-open/nvidia.ko --> /lib/modules/7.0.0-KZL/kernel/drivers/video/nvidia.ko
--> Installing: kernel-open/nvidia-uvm.ko --> /lib/modules/7.0.0-KZL/kernel/drivers/video/nvidia-uvm.ko
--> Installing: kernel-open/nvidia-modeset.ko --> /lib/modules/7.0.0-KZL/kernel/drivers/video/nvidia-modeset.ko
--> Installing: kernel-open/nvidia-drm.ko --> /lib/modules/7.0.0-KZL/kernel/drivers/video/nvidia-drm.ko
--> Installing: kernel-open/nvidia-peermem.ko --> /lib/modules/7.0.0-KZL/kernel/drivers/video/nvidia-peermem.ko
+-> Installing: kernel-open/nvidia.ko --> /lib/modules/7.0.2-KZL/kernel/drivers/video/nvidia.ko
+-> Installing: kernel-open/nvidia-uvm.ko --> /lib/modules/7.0.2-KZL/kernel/drivers/video/nvidia-uvm.ko
+-> Installing: kernel-open/nvidia-modeset.ko --> /lib/modules/7.0.2-KZL/kernel/drivers/video/nvidia-modeset.ko
+-> Installing: kernel-open/nvidia-drm.ko --> /lib/modules/7.0.2-KZL/kernel/drivers/video/nvidia-drm.ko
+-> Installing: kernel-open/nvidia-peermem.ko --> /lib/modules/7.0.2-KZL/kernel/drivers/video/nvidia-peermem.ko
 -> Installing: /tmp/template- --> /usr/share/applications/nvidia-settings.desktop
 -> Deleting: /tmp/template-
 -> Creating symlink: /usr/bin/nvidia-uninstall -> nvidia-installer
@@ -344,8 +354,6 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Creating symlink: /usr/lib/libGL.so.1 -> /usr/lib/x86_64-linux-gnu/libGL.so.1
 -> Executing: /usr/sbin/ldconfig
    executing: '/usr/sbin/ldconfig'...
--> Executing: /usr/sbin/depmod -a 7.0.0-KZL
-   executing: '/usr/sbin/depmod -a 7.0.0-KZL'...
 -> Executing: /usr/bin/systemctl daemon-reload
    executing: '/usr/bin/systemctl daemon-reload'...
 -> done.
@@ -356,3 +364,8 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Post-install sanity check passed.
 -> Would you like to run the nvidia-xconfig utility to automatically update your X configuration file so that the NVIDIA X driver will be used when you restart X?  Any pre-existing X configuration file will be backed up. (Answer: No)
 -> Installation of the NVIDIA Accelerated Graphics Driver for Linux-x86_64 (version: 580.142) is now complete.  Please update your xorg.conf file as appropriate; see the file /usr/share/doc/NVIDIA_GLX-1.0/README.txt for details.
+WARNING: It is strongly recommended that you reboot your computer after exiting the installer, due to the following condition(s) which the installer detected: 
+
+  * Existing NVIDIA kernel modules were loaded during installation, and are likely still loaded.
+
+If you continue to use the computer without rebooting, you may not be able to start new programs which use the NVIDIA GPU(s) until after you reboot or reload the NVIDIA kernel modules.

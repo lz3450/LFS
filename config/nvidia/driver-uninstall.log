@@ -1,5 +1,5 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log'
-installer version: 580.126.09
+installer version: 580.142
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
 
@@ -17,10 +17,10 @@ Using built-in stream user interface
 -> done.
 -> Validating previous installation:
 -> done.
--> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-58012609 (580.126.09)):
+-> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-580142 (580.142)):
 -> done.
 -> Running ldconfig:
 -> done.
 -> Running `/usr/bin/systemctl daemon-reload`:
 -> done.
--> Uninstallation of existing driver: NVIDIA Accelerated Graphics Driver for Linux-x86_64 (580.126.09) is complete.
+-> Uninstallation of existing driver: NVIDIA Accelerated Graphics Driver for Linux-x86_64 (580.142) is complete.

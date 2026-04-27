@@ -29,6 +29,13 @@ RUNFILE=NVIDIA-Linux-x86_64-$DRIVER_VERSION.run
 
 ################################################################################
 
+if (( $# != 1 )); then
+    echo "Usage: $SCRIPT_NAME <kernel-version>"
+    exit 1
+fi
+
+KERNEL_VERSION="$1"
+
 if [[ ! -f "$DOWNLOADS_DIR/$RUNFILE" ]]; then
     wget -P "$DOWNLOADS_DIR" https://us.download.nvidia.com/XFree86/Linux-x86_64/$DRIVER_VERSION/$RUNFILE
 fi
@@ -44,8 +51,9 @@ sudo ./nvidia-installer \
     --accept-license \
     --expert \
     --log-file-name="$LOG_FILE" \
-    --kernel-name="$(uname -r)" \
+    --kernel-name="$KERNEL_VERSION" \
     --no-backup \
+    --no-x-check \
     --disable-nouveau \
     --no-distro-scripts \
     --no-wine-files \
@@ -55,6 +63,9 @@ sudo ./nvidia-installer \
     --concurrency-level="$(nproc)" \
     --install-libglvnd \
     --systemd \
+    --skip-depmod \
+    --kernel-module-type=open \
+    --allow-installation-with-running-driver \
     --no-rebuild-initramfs \
     --silent
 
