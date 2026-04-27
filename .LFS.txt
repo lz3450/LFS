@@ -255,6 +255,8 @@ openssh
 openssl
 overlayfs
 pacman
+pacnew
+pacsave
 pacstrap
 pahole
 PAHOLE
