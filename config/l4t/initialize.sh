@@ -62,6 +62,7 @@ deb_pkgs=(
   pciutils
   psmisc
   usbutils
+  fdisk parted
   ###
   eog
   evince
