@@ -18,57 +18,68 @@ MANUAL_INSTALLED_PKGLIST_FILE="$LOG_DIR/desktop_manual_installed_pkgs.txt"
 
 common_deb_pkgs=(
   ### ubuntu-minimal-desktop depends
+  alsa-base
+  alsa-utils
+  bc
+  ca-certificates
+  fonts-dejavu-core
+  fonts-freefont-ttf
   gdm3
   gnome-control-center
   gnome-menus
   gnome-session-canberra
+  gnome-settings-daemon
+  gnome-shell
   gnome-shell-extension-appindicator
   gnome-shell-extension-desktop-icons-ng
   gnome-shell-extension-ubuntu-dock
+  nautilus
+  pulseaudio
+  rfkill
   ubuntu-session
   ubuntu-settings
-  ### gnome
-  eog
+  xdg-user-dirs
+  xdg-user-dirs-gtk
+  ### ubuntu-minimal-desktop recommends
+  file-roller
+  fonts-noto-cjk
+  fonts-noto-color-emoji
+  fonts-ubuntu
+  gnome-bluetooth
   gnome-calculator
+  gnome-keyring
   gnome-power-manager
   gnome-remote-desktop
   gnome-system-monitor
   gnome-terminal
-  gnome-text-editor
-  nautilus-extension-gnome-terminal
+  network-manager
+  network-manager-config-connectivity-ubuntu
   seahorse
-  ### ubuntu
-  gsettings-ubuntu-schemas
+  ubuntu-wallpapers
+  xdg-utils
+  yaru-theme-gnome-shell
   yaru-theme-gtk
   yaru-theme-icon
   yaru-theme-sound
   ### power
   power-profiles-daemon
-  ### network
-  network-manager-config-connectivity-ubuntu
-  ### sound
-  alsa-base
-  alsa-utils
-  ### fonts
-  fonts-noto-cjk
-  fonts-ubuntu
   ### utils
   file
-  fwupd
   pciutils
   psmisc
   usbutils
 )
 jammy_deb_pkgs=(
-  ### gnome
+  eog
   evince
-  gnome-console
-  gnome-startup-applications
-  nautilus-extension-gnome-console
+  nautilus-extension-gnome-terminal
+  gnome-text-editor
 )
 noble_deb_pkgs=(
-  ### gnome
+  eog
   evince
+  nautilus-extension-gnome-terminal
+  gnome-text-editor
 )
 # TODO: not checked
 resolute_deb_pkgs=(
@@ -79,6 +90,10 @@ resolute_deb_pkgs=(
   papers
   ### network
   nm-connection-editor
+)
+# TODO: prompt for installing
+recommended_deb_pkgs=(
+  fwupd
 )
 deb_pkgs=()
 
