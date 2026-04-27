@@ -63,35 +63,63 @@ deb_pkgs=(
   psmisc
   usbutils
   fdisk parted
-  ###
-  eog
-  evince
+  ### recommends
   nautilus-extension-gnome-terminal
-  gnome-text-editor
-  ### l4t
-  bridge-utils
-  cpio
-  debconf-utils
-  oem-config-debconf
-  oem-config-gtk
-  mtd-utils
-  zstd
   ### other
-  build-essential
   bash-completion
   zsh zsh-syntax-highlighting zsh-autosuggestions
   nano
   openssh-server
-  curl wget git
-  tmux
-  python3-pip python3-setuptools
+  wget
+)
+nvidia_l4t_deps=(
+  ### flash
+  bridge-utils
+  cpio
+  mtd-utils
+  oem-config-gtk
+  ubiquity-frontend-debconf ubiquity-frontend-gtk
+  plymouth
+  zstd
+  ### nvidia-l4t-* depends
+  debconf-utils
+  device-tree-compiler
+  efibootmgr
+  gir1.2-appindicator3-0.1
+  iputils-ping
+  libegl1-mesa
+  libffi7
+  libgstreamer-plugins-bad1.0-0
+  libnl-3-200
+  libnl-genl-3-200
+  libnl-route-3-200
+  libseat1
+  libvulkan1
+  libvulkan1
+  net-tools
+  nvme-cli
+  python2
+  python3-matplotlib
+  python3-tk
+  xorg
+)
+pkgs_to_remove=(
+  # libnetplan0
+  # netplan.io
 )
 
 # install packages
 apt-get update
 apt-get upgrade -y
 apt-get install --no-install-recommends -y "${deb_pkgs[@]}"
+apt-get install --no-install-recommends -y "${nvidia_l4t_deps[@]}"
+# apt-get remove --purge -y "${pkgs_to_remove[@]}"
 apt-get autoremove --purge -y
+apt-mark auto "${nvidia_l4t_deps[@]}"
 apt-mark showmanual > manual_installed_pkgs.txt
 
+echo "root:root" | chpasswd
+
 echo "Successfully installed desktop packages for Ubuntu $UBUNTU_CODENAME"
+
+dpkg -l | awk '{print $2}'
