@@ -88,6 +88,7 @@ nvidia_l4t_deps=(
   device-tree-compiler
   efibootmgr
   gir1.2-appindicator3-0.1
+  initramfs-tools
   iputils-ping
   libegl1-mesa
   libffi7
