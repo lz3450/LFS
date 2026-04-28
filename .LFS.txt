@@ -41,6 +41,7 @@ cpf
 cpio
 CPPFLAGS
 cpython
+crt
 cryptsetup
 cuda
 CXXFLAGS
@@ -99,6 +100,7 @@ gcc
 gd
 gdb
 gdbm
+gdm
 getsz
 ghostscript
 gil
@@ -110,6 +112,7 @@ gobject
 gperf
 gpgme
 gpt
+grdctl
 grml
 groff
 harfbuzz
@@ -298,6 +301,7 @@ pytorch
 PYTORCH
 qbittorrent
 rasterbar
+rdp
 recv
 regdb
 relocs
@@ -323,6 +327,7 @@ SELFAUTODIR
 SELFAUTOPARENT
 shm
 showmanual
+signkey
 smartmontools
 sqlite
 squashfs
