@@ -34,7 +34,8 @@ grdctl rdp set-tls-cert "$CRT"
 grdctl rdp set-tls-key "$KEY"
 grdctl rdp enable
 grdctl rdp disable-view-only
-grdctl rdp set-port 34589
+# old versions of gnome-remote-desktop don't support changing the default port, so ignore errors
+grdctl rdp set-port 34589 || :
 
 ./unlock_remote_desktop.sh
 read -r -p "Enter rdp username: " username
