@@ -11,7 +11,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 deb_pkgs=(
-  ### ubuntu-minimal-desktop depends
+  ### ubuntu-desktop-minimal depends
   alsa-base
   alsa-utils
   bc
@@ -32,9 +32,11 @@ deb_pkgs=(
   rfkill
   ubuntu-session
   ubuntu-settings
+  wireless-tools
+  wpasupplicant
   xdg-user-dirs
   xdg-user-dirs-gtk
-  ### ubuntu-minimal-desktop recommends
+  ### ubuntu-desktop-minimal recommends
   file-roller
   fonts-noto-cjk
   fonts-noto-color-emoji
