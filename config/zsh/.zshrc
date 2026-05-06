@@ -83,7 +83,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "josh"
     # "jreese"
     # "jtriley"
-    "juanghurtado"
+    # "juanghurtado"
     "junkfood"
     # "kafeitu"
     # "kardan"
