@@ -69,6 +69,8 @@ sudo ./nvidia-installer \
     --no-rebuild-initramfs \
     --silent
 
+sudo depmod -a "$KERNEL_VERSION"
+
 sudo rm -vf /usr/lib/modprobe.d/nvidia-installer-disable-nouveau.conf
 echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
 
