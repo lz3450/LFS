@@ -68,11 +68,13 @@ deb_pkgs=(
   ### recommends
   nautilus-extension-gnome-terminal
   ### other
+  build-essential
   bash-completion
   zsh zsh-syntax-highlighting zsh-autosuggestions
   nano
   openssh-server
-  wget
+  curl wget
+  zstd
 )
 nvidia_l4t_deps=(
   ### flash
@@ -82,7 +84,6 @@ nvidia_l4t_deps=(
   oem-config-gtk
   ubiquity-frontend-debconf ubiquity-frontend-gtk
   plymouth
-  zstd
   ### nvidia-l4t-* depends
   debconf-utils
   device-tree-compiler
