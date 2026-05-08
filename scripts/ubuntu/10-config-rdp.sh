@@ -17,11 +17,11 @@ KEY="$CERT_DIR"/rdp-tls.key
 CSR="$CERT_DIR"/rdp-tls.csr
 CRT="$CERT_DIR"/rdp-tls.crt
 
+if [[ $UBUNTU_CODENAME == "noble" ]]; then
+    sudo systemctl disable --now gnome-remote-desktop.service
+fi
 sudo nano /etc/gdm3/custom.conf
-# if [[ $UBUNTU_CODENAME == "noble" ]]; then
-#     sudo systemctl disable gnome-remote-desktop.service
-# fi
-systemctl --user enable --now gnome-remote-desktop.service
+systemctl --user enable --now gnome-remote-desktop-headless.service
 
 if [[ ! -d  "$CERT_DIR" ]]; then
     mkdir -p "$CERT_DIR"
@@ -34,8 +34,6 @@ grdctl rdp set-tls-cert "$CRT"
 grdctl rdp set-tls-key "$KEY"
 grdctl rdp enable
 grdctl rdp disable-view-only
-# old versions of gnome-remote-desktop don't support changing the default port, so ignore errors
-grdctl rdp set-port 34589 || :
 
 ./unlock_remote_desktop.sh
 read -r -p "Enter rdp username: " username
