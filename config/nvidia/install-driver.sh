@@ -35,6 +35,16 @@ if (( $# != 1 )); then
 fi
 
 KERNEL_VERSION="$1"
+kernel_module_type="open"
+
+read -p "Install open kernel module? [Y/n] " _answer
+_answer="${_answer:-y}"
+if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
+    kernel_module_type="open"
+else
+    kernel_module_type="proprietary"
+fi
+unset _answer
 
 if [[ ! -f "$DOWNLOADS_DIR/$RUNFILE" ]]; then
     wget -P "$DOWNLOADS_DIR" https://us.download.nvidia.com/XFree86/Linux-x86_64/$DRIVER_VERSION/$RUNFILE
@@ -64,7 +74,7 @@ sudo ./nvidia-installer \
     --install-libglvnd \
     --systemd \
     --skip-depmod \
-    --kernel-module-type=open \
+    --kernel-module-type="$kernel_module_type" \
     --allow-installation-with-running-driver \
     --no-rebuild-initramfs \
     --silent
