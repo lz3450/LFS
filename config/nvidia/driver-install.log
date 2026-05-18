@@ -8,7 +8,7 @@ nvidia-installer command line:
     --accept-license
     --expert
     --log-file-name=/home/kzl/LFS/config/nvidia/driver-install.log
-    --kernel-name=7.0.2-KZL
+    --kernel-name=7.0.9-KZL
     --no-backup
     --no-x-check
     --disable-nouveau
@@ -36,8 +36,8 @@ Using built-in stream user interface
 -> found `dmesg` : `/usr/bin/dmesg`
 -> found `tail` : `/usr/bin/tail`
 -> found `objcopy` : `/usr/bin/objcopy`
--> Unable to scan initramfs: no tool found
 -> found `chcon` : `/usr/bin/chcon`
+-> Unable to scan initramfs: no tool found
 -> found `pkg-config` : `/usr/bin/pkg-config`
 -> found `openssl` : `/usr/bin/openssl`
 -> found `systemctl` : `/usr/bin/systemctl`
@@ -47,7 +47,7 @@ Using built-in stream user interface
 -> found `rmmod` : `/usr/sbin/rmmod`
 -> found `lsmod` : `/usr/sbin/lsmod`
 -> found `depmod` : `/usr/sbin/depmod`
--> The file '/tmp/.X0-lock' exists and appears to contain the process ID '832' of a running X server.
+-> The file '/tmp/.X0-lock' exists and appears to contain the process ID '830' of a running X server.
 -> Continuing per the '--no-x-check' option.
 -> No distribution pre-unload script found.
 WARNING: An NVIDIA kernel module 'nvidia-uvm' appears to be already loaded in your kernel.  This may be because it is in use (for example, by an X server, a CUDA program, or the NVIDIA Persistence Daemon), but this may also happen if your kernel was configured without support for module unloading.  Some of the sanity checks that nvidia-installer performs to detect potential installation problems are not possible while an NVIDIA kernel module is running.
@@ -70,25 +70,25 @@ WARNING: Continuing installation despite the presence of a loaded NVIDIA kernel 
 -> Would you like to install the nvidia-uvm kernel module? You must install this module in order to use CUDA. (Answer: Yes)
 -> Would you like to install the nvidia-drm kernel module? You must install this module in order to use DRM-KMS. (Answer: Yes)
 -> Would you like to install the nvidia-peermem kernel module? You must install this module in order to use GPUDirect RDMA p2p memory sharing. (Answer: Yes)
--> Kernel module installation path (Answer: '/lib/modules/7.0.2-KZL/kernel/drivers/video')
--> Kernel module installation path: /lib/modules/7.0.2-KZL/kernel/drivers/video
+-> Kernel module installation path (Answer: '/lib/modules/7.0.9-KZL/kernel/drivers/video')
+-> Kernel module installation path: /lib/modules/7.0.9-KZL/kernel/drivers/video
 -> Not probing for precompiled kernel interfaces.
--> Kernel source path (Answer: '/lib/modules/7.0.2-KZL/source')
--> Kernel source path: '/lib/modules/7.0.2-KZL/source'
--> Kernel output path: '/lib/modules/7.0.2-KZL/build'
+-> Kernel source path (Answer: '/lib/modules/7.0.9-KZL/source')
+-> Kernel source path: '/lib/modules/7.0.9-KZL/source'
+-> Kernel output path: '/lib/modules/7.0.9-KZL/build'
 -> Performing Compiler check.
 -> Performing Dom0 check.
 -> Performing Xen check.
 -> Performing PREEMPT_RT check.
 -> Performing vgpu_kvm check.
 -> Cleaning kernel module build directory.
-   executing: 'cd kernel-open; /usr/bin/make -k -j16  NV_EXCLUDE_KERNEL_MODULES="" SYSSRC="/lib/modules/7.0.2-KZL/source" SYSOUT="/lib/modules/7.0.2-KZL/build" clean'...
+   executing: 'cd kernel-open; /usr/bin/make -k -j16  NV_EXCLUDE_KERNEL_MODULES="" SYSSRC="/lib/modules/7.0.9-KZL/source" SYSOUT="/lib/modules/7.0.9-KZL/build" clean'...
    rm -f -r conftest
-   make[1]: Entering directory '/usr/src/linux-headers-7.0.2-KZL'
+   make[1]: Entering directory '/usr/src/linux-headers-7.0.9-KZL'
    make[2]: Entering directory '/tmp/nvidia/kernel-open'
    make[2]: Leaving directory '/tmp/nvidia/kernel-open'
-   make[1]: Leaving directory '/usr/src/linux-headers-7.0.2-KZL'
--> Failed to estimate output lines: /bin/sh: 1: .: cannot open /lib/modules/7.0.0-KZL/build/.config: No such file
+   make[1]: Leaving directory '/usr/src/linux-headers-7.0.9-KZL'
+-> Failed to estimate output lines: /bin/sh: 1: .: cannot open /lib/modules/7.0.2-KZL/build/.config: No such file
 conftests:215 objects:208 modules:5
 -> Building kernel modules
 -> done.
@@ -289,11 +289,11 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Installing: libnvidia-sandboxutils.so.580.142 --> /usr/lib/x86_64-linux-gnu/libnvidia-sandboxutils.so.580.142
 -> Installing: sandboxutils-filelist.json --> /usr/share/nvidia/files.d/sandboxutils-filelist.json
 -> Deleting: /tmp/template-
--> Installing: kernel-open/nvidia.ko --> /lib/modules/7.0.2-KZL/kernel/drivers/video/nvidia.ko
--> Installing: kernel-open/nvidia-uvm.ko --> /lib/modules/7.0.2-KZL/kernel/drivers/video/nvidia-uvm.ko
--> Installing: kernel-open/nvidia-modeset.ko --> /lib/modules/7.0.2-KZL/kernel/drivers/video/nvidia-modeset.ko
--> Installing: kernel-open/nvidia-drm.ko --> /lib/modules/7.0.2-KZL/kernel/drivers/video/nvidia-drm.ko
--> Installing: kernel-open/nvidia-peermem.ko --> /lib/modules/7.0.2-KZL/kernel/drivers/video/nvidia-peermem.ko
+-> Installing: kernel-open/nvidia.ko --> /lib/modules/7.0.9-KZL/kernel/drivers/video/nvidia.ko
+-> Installing: kernel-open/nvidia-uvm.ko --> /lib/modules/7.0.9-KZL/kernel/drivers/video/nvidia-uvm.ko
+-> Installing: kernel-open/nvidia-modeset.ko --> /lib/modules/7.0.9-KZL/kernel/drivers/video/nvidia-modeset.ko
+-> Installing: kernel-open/nvidia-drm.ko --> /lib/modules/7.0.9-KZL/kernel/drivers/video/nvidia-drm.ko
+-> Installing: kernel-open/nvidia-peermem.ko --> /lib/modules/7.0.9-KZL/kernel/drivers/video/nvidia-peermem.ko
 -> Installing: /tmp/template- --> /usr/share/applications/nvidia-settings.desktop
 -> Deleting: /tmp/template-
 -> Creating symlink: /usr/bin/nvidia-uninstall -> nvidia-installer
