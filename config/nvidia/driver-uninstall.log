@@ -1,5 +1,5 @@
 nvidia-installer log file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log'
-installer version: 580.142
+installer version: 580.159.04
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/bin
 
@@ -16,11 +16,13 @@ Using built-in stream user interface
 -> Parsing log file:
 -> done.
 -> Validating previous installation:
+-> The previously installed symlink '/usr/lib/x86_64-linux-gnu/libGLX_indirect.so.0' has target 'libGLX_mesa.so.0', but it was installed with target 'libGLX_nvidia.so.580.159.04'.  /usr/lib/x86_64-linux-gnu/libGLX_indirect.so.0 will not be uninstalled.
 -> done.
--> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-580142 (580.142)):
+WARNING: Your driver installation has been altered since it was initially installed; this may happen, for example, if you have since installed the NVIDIA driver through a mechanism other than nvidia-installer (such as your distribution's native package management system).  nvidia-installer will attempt to uninstall as best it can.  Please see the file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log' for details.
+-> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-58015904 (580.159.04)):
 -> done.
 -> Running ldconfig:
 -> done.
 -> Running `/usr/bin/systemctl daemon-reload`:
 -> done.
--> Uninstallation of existing driver: NVIDIA Accelerated Graphics Driver for Linux-x86_64 (580.142) is complete.
+-> Uninstallation of existing driver: NVIDIA Accelerated Graphics Driver for Linux-x86_64 (580.159.04) is complete.
