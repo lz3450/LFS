@@ -16,9 +16,7 @@ Using built-in stream user interface
 -> Parsing log file:
 -> done.
 -> Validating previous installation:
--> The previously installed symlink '/usr/lib/x86_64-linux-gnu/libGLX_indirect.so.0' has target 'libGLX_mesa.so.0', but it was installed with target 'libGLX_nvidia.so.580.159.04'.  /usr/lib/x86_64-linux-gnu/libGLX_indirect.so.0 will not be uninstalled.
 -> done.
-WARNING: Your driver installation has been altered since it was initially installed; this may happen, for example, if you have since installed the NVIDIA driver through a mechanism other than nvidia-installer (such as your distribution's native package management system).  nvidia-installer will attempt to uninstall as best it can.  Please see the file '/home/kzl/LFS/config/nvidia/nvidia-uninstall.log' for details.
 -> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-58015904 (580.159.04)):
 -> done.
 -> Running ldconfig:
