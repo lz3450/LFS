@@ -76,8 +76,8 @@ _mount_resolv_conf() {
         install -Dm644 /dev/null "$_dst" || return 1
     fi
 
-    _chroot_info "Mounting host /etc/resolv.conf onto \"$_target\""
-    _chroot_mount --bind -o X-mount.nocanonicalize=target /etc/resolv.conf "$_target"
+    _chroot_info "Mounting host /etc/resolv.conf onto \"$_dst\""
+    _chroot_mount --bind -o X-mount.nocanonicalize=target "$_src" "$_dst"
 }
 
 # chroot_setup <chroot_dir>
