@@ -39,46 +39,51 @@ _chroot_error() {
 
 _chroot_mount() {
     mount -v "$@" >&2
-    chroot_active_mounts=(${@: -1} "${chroot_active_mounts[@]}")
-}
-
-_resolve_link() {
-    local _target="$1"
-
-    while [[ -L "$_target" ]]; do
-        _target=$(readlink -m "$_target")
-    done
-
-    echo "$_target"
+    chroot_active_mounts=("${@: -1}" "${chroot_active_mounts[@]}")
 }
 
 _mount_resolv_conf() {
-    # /etc/resolv.conf does not exist in the host system, nothing to do
     if [[ ! -e /etc/resolv.conf ]]; then
-        _chroot_warn "Host /etc/resolv.conf does not exist, skipping resolv.conf mount"
-        return
+        _chroot_error "Host /etc/resolv.conf does not exist"
+        return 1
     fi
 
-    # /etc/resolv.conf does not exist in the chroot rootfs, check the integrity
-    if [[ ! -e "$chroot_dir/etc/resolv.conf" && ! -L "$chroot_dir/etc/resolv.conf" ]]; then
-        _chroot_warn "Target /etc/resolv.conf does not exist in chroot, skipping resolv.conf mount"
-        return
+    local _source
+    _source=$(realpath -e -- /etc/resolv.conf) || return 1
+    if [[ ! -f "$_source" ]]; then
+        _chroot_error "Host /etc/resolv.conf is not a regular file"
+        return 1
     fi
 
-    local _source=$(_resolve_link /etc/resolv.conf)
-    _chroot_info "host /etc/resolv.conf:   \"$_source\""
-    local _target=$(_resolve_link "$chroot_dir/etc/resolv.conf")
-    _chroot_info "chroot /etc/resolv.conf: \"$_target\""
+    local _root _target _link
+    _root=$(realpath -e -- "$chroot_dir") || return 1
+    _target="$_root/etc/resolv.conf"
 
-    if [[ "$_target" != "$(realpath "$chroot_dir")"/* ]]; then
-        _chroot_warn "Target /etc/resolv.conf is not inside the chroot directory, skipping resolv.conf mount"
-        return
+    if [[ -L "$_target" ]]; then
+        _link=$(readlink -- "$_target") || return 1
+        if [[ "$_link" == /* ]]; then
+            _target="$_root$_link"
+        else
+            _target="$_root/etc/$_link"
+        fi
+        _target=$(realpath -m -s -- "$_target") || return 1
+
+        if [[ "$_target" != "$_root"/* ]]; then
+            _chroot_error "Target /etc/resolv.conf points outside the rootfs"
+            return 1
+        fi
     fi
 
+    if [[ -L "$_target" ]]; then
+        _chroot_error "Target /etc/resolv.conf contains a symbolic link chain"
+        return 1
+    fi
     if [[ ! -e "$_target" ]]; then
         install -Dm644 /dev/null "$_target"
-        _chroot_mount -c --bind "$_source" "$_target"
     fi
+
+    _chroot_info "Mounting host /etc/resolv.conf onto \"$_target\""
+    _chroot_mount --bind "$_source" "$_target"
 }
 
 # chroot_setup <chroot_dir>
