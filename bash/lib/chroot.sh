@@ -43,47 +43,23 @@ _chroot_mount() {
 }
 
 _mount_resolv_conf() {
+    local _target="$chroot_dir/etc/resolv.conf"
+
     if [[ ! -e /etc/resolv.conf ]]; then
-        _chroot_error "Host /etc/resolv.conf does not exist"
-        return 1
+        _chroot_warning "Host /etc/resolv.conf does not exist"
+        return 0
     fi
 
-    local _source
-    _source=$(realpath -e -- /etc/resolv.conf) || return 1
-    if [[ ! -f "$_source" ]]; then
-        _chroot_error "Host /etc/resolv.conf is not a regular file"
-        return 1
-    fi
-
-    local _root _target _link
-    _root=$(realpath -e -- "$chroot_dir") || return 1
-    _target="$_root/etc/resolv.conf"
-
-    if [[ -L "$_target" ]]; then
-        _link=$(readlink -- "$_target") || return 1
-        if [[ "$_link" == /* ]]; then
-            _target="$_root$_link"
-        else
-            _target="$_root/etc/$_link"
-        fi
-        _target=$(realpath -m -s -- "$_target") || return 1
-
-        if [[ "$_target" != "$_root"/* ]]; then
-            _chroot_error "Target /etc/resolv.conf points outside the rootfs"
-            return 1
-        fi
-    fi
-
-    if [[ -L "$_target" ]]; then
-        _chroot_error "Target /etc/resolv.conf contains a symbolic link chain"
-        return 1
-    fi
-    if [[ ! -e "$_target" ]]; then
-        install -Dm644 /dev/null "$_target"
+    if [[ ! -e "$_target" && ! -L "$_target" ]]; then
+        # There may be no resolv.conf in the chroot. In this case, we'll just exit.
+        # The chroot environment must not be concerned with DNS resolution.
+        _chroot_warning "/etc/resolv.conf does not exist in the chroot environment"
+        _chroot_warning "Skipping mounting of host /etc/resolv.conf"
+        return 0
     fi
 
     _chroot_info "Mounting host /etc/resolv.conf onto \"$_target\""
-    _chroot_mount --bind "$_source" "$_target"
+    _chroot_mount --bind -o X-mount.nocanonicalize=target /etc/resolv.conf "$_target"
 }
 
 # chroot_setup <chroot_dir>
@@ -97,6 +73,11 @@ chroot_setup() {
     fi
 
     local _chroot_dir="$1"
+
+    if [[ ! -d "$_chroot_dir" ]]; then
+        _chroot_error "\"$_chroot_dir\" is not a directory"
+        return 1
+    fi
 
     if ! mountpoint -q "$_chroot_dir"; then
         _chroot_error "\"$_chroot_dir\" is not a mountpoint"
