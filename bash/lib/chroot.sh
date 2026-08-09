@@ -42,20 +42,38 @@ _chroot_mount() {
     chroot_active_mounts=("${@: -1}" "${chroot_active_mounts[@]}")
 }
 
-_mount_resolv_conf() {
-    local _target="$chroot_dir/etc/resolv.conf"
+_resolve_symlink_with_root() {
+    local _target=$1
+    local _root=${2%/}
 
-    if [[ ! -e /etc/resolv.conf ]]; then
-        _chroot_warning "Host /etc/resolv.conf does not exist"
+    _target=$(readlink -m "$_target")
+
+    if [[ -n "$_root" && "$_target" != "$_root"* ]]; then
+        _target="$_root/${_target#/}"
+    fi
+
+    echo "$_target"
+}
+
+_mount_resolv_conf() {
+    local _src=$(_resolve_symlink_with_root "/etc/resolv.conf" "")
+    local _dst=$(_resolve_symlink_with_root "$chroot_dir/etc/resolv.conf" "$chroot_dir")
+
+    if [[ ! -e "$_src" ]]; then
+        _chroot_warn "Host /etc/resolv.conf does not exist"
         return 0
     fi
 
-    if [[ ! -e "$_target" && ! -L "$_target" ]]; then
-        # There may be no resolv.conf in the chroot. In this case, we'll just exit.
-        # The chroot environment must not be concerned with DNS resolution.
-        _chroot_warning "/etc/resolv.conf does not exist in the chroot environment"
-        _chroot_warning "Skipping mounting of host /etc/resolv.conf"
-        return 0
+    if [[ ! -e "$_dst" ]]; then
+        if [[ "$_dst" = "$chroot_dir/etc/resolv.conf" ]]; then
+            # There may be no resolv.conf in the chroot. In this case, we'll just exit.
+            # The chroot environment must not be concerned with DNS resolution.
+            _chroot_warn "/etc/resolv.conf does not exist in the chroot environment"
+            _chroot_warn "Skipping mounting of host /etc/resolv.conf"
+            return 0
+        fi
+
+        install -Dm644 /dev/null "$_dst" || return 1
     fi
 
     _chroot_info "Mounting host /etc/resolv.conf onto \"$_target\""
