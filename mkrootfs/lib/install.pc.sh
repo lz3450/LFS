@@ -411,7 +411,8 @@ EOF
 finalize() {
     if (( $opt_loop > 0 )); then
         ###
-        loop_teardown "$loop_device"
+        loop_unmount "$loop_device"
+        loop_detach "$loop_device"
 
         ###
         cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
@@ -424,7 +425,8 @@ finalize() {
 
 cleanup_platform_specific() {
     if (( opt_loop > 0 )); then
-        loop_teardown "$loop_device"
+        loop_unmount "$loop_device"
+        loop_detach "$loop_device"
     fi
 }
 
