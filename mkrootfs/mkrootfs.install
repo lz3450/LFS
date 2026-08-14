@@ -38,7 +38,7 @@ usage() {
 
 Usage:
     $SCRIPT_NAME -h | --help
-    $SCRIPT_NAME [-p <platform>] [-f <rootfs-type>] [-s <suite>] [-d <device>] -t <rootfs-tarball>
+    $SCRIPT_NAME [-p <platform>] [-f <rootfs-type>] [-s <suite>] [-l] -t <rootfs-tarball>
 
     -h, --help                      print this help message and exit
     -p, --platform <platform>       set platform (default: pc)
@@ -63,29 +63,37 @@ while (( $# > 0 )); do
     case "$1" in
     -h | --help)
         usage
-        exit
+        exit 0
         ;;
     -p | --platform)
-        shift
-        arg_platform="$1"
+        check_argument "$@"
+        arg_platform="$2"
+        shift 2
         ;;
     -f | --rootfs-type)
-        shift
-        arg_rootfs_type="$1"
+        check_argument "$@"
+        arg_rootfs_type="$2"
+        shift 2
         ;;
     -s | --suite)
-        shift
-        arg_suite="$1"
+        check_argument "$@"
+        arg_suite="$2"
+        shift 2
         ;;
     -l | --loop)
         opt_loop=1
+        shift
         ;;
     -t | --rootfs-tarball)
-        shift
-        arg_rootfs_tarball="$1"
+        check_argument "$@"
+        arg_rootfs_tarball="$2"
+        shift 2
+        ;;
+    *)
+        usage
+        error "Unknown option or argument: $1" 128
         ;;
     esac
-    shift
 done
 readonly arg_platform
 readonly arg_rootfs_type

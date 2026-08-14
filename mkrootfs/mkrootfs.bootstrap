@@ -71,7 +71,7 @@ usage() {
     cat << EOF
 
 Usage: $SCRIPT_NAME -h | --help
-Usage: $SCRIPT_NAME  -a | --arch <architecture>  -s | --suite <suite>
+Usage: $SCRIPT_NAME [-a <architecture>] [-s <suite>]
 
     -h, --help                      print this help message and exit
 
@@ -90,19 +90,20 @@ while (( $# > 0 )); do
         exit 0
         ;;
     -a | --arch)
-        shift
-        arg_arch="$1"
+        check_argument "$@"
+        arg_arch="$2"
+        shift 2
         ;;
     -s | --suite)
-        shift
-        arg_suite="$1"
+        check_argument "$@"
+        arg_suite="$2"
+        shift 2
         ;;
     *)
         usage
-        error "Unknown option: $1" 128
+        error "Unknown option or argument: $1" 128
         ;;
     esac
-    shift
 done
 readonly arg_arch
 readonly arg_suite
@@ -368,5 +369,5 @@ epilogue
 # 1: general error
 # 2: debootstrap error
 # 3: chroot error
-# 128: unknown option
+# 128: argument/option error
 # 255: must be run as root

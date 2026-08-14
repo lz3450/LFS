@@ -37,6 +37,16 @@ check_root() {
     fi
 }
 
+# check_argument <option> <argument> [remaining arguments...]
+# Check that an option is followed by a non-empty, non-option argument.
+check_argument() {
+    local -r _option="${1:-}"
+
+    if (( $# < 2 )) || [[ -z "${2:-}" || "$2" == -* ]]; then
+        error "Option $_option requires an argument" 128
+    fi
+}
+
 # Delete recursively all files and directories under $1, including $1 itself
 delete_all() {
     local _dir="$1"
@@ -111,4 +121,5 @@ clean_rootfs() {
 debug "${BASH_SOURCE[0]} sourced"
 
 ### error codes
+# 128: argument/option error
 # 255: Must be run as root
