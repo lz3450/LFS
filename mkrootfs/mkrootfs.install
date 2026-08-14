@@ -234,7 +234,7 @@ install_deb_pkgs() {
 
     info "Installing deb packages..."
     deb_apt_install "$ROOTFS_DIR" deb_pkgs >> "$LOG_DIR/${FUNCNAME[0]}.log"
-    deb_get_installed_pkgs "$ROOTFS_DIR" | sed -e '/^linux-image-.+/d' -e '/^linux-modules-.+/d' -e 's/:amd64//g' > "$INSTALLED_DEB_PKGLIST_FILE"
+    deb_get_installed_pkgs "$ROOTFS_DIR" | sed -E '/^linux-(image|modules)-/d' > "$INSTALLED_DEB_PKGLIST_FILE"
 }
 
 install_pacman_pkgs() {
