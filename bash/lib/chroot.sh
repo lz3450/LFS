@@ -38,8 +38,14 @@ _chroot_error() {
 }
 
 _chroot_mount() {
-    mount -v "$@" >&2
-    chroot_active_mounts=("${@: -1}" "${chroot_active_mounts[@]}")
+    local _mountpoint="${@: -1}"
+
+    if ! mount -v "$@" >&2; then
+        _chroot_error "Failed to mount \"$_mountpoint\""
+        return 1
+    fi
+
+    chroot_active_mounts=("$_mountpoint" "${chroot_active_mounts[@]}")
 }
 
 _resolve_symlink_with_root() {
@@ -107,15 +113,18 @@ chroot_setup() {
 
     _chroot_debug "Setting up chroot environment in \"$chroot_dir\""
 
-    _chroot_mount -t proc       -o rw,nosuid,nodev,noexec                       proc        "$chroot_dir/proc"
-    _chroot_mount -t sysfs      -o ro,nosuid,nodev,noexec                       sysfs       "$chroot_dir/sys"
-    _chroot_mount -t efivarfs   -o rw,nosuid,nodev,noexec                       efivarfs    "$chroot_dir/sys/firmware/efi/efivars"
-    _chroot_mount -t devtmpfs   -o rw                                           devtmpfs    "$chroot_dir/dev"
-    _chroot_mount -t devpts     -o rw,nosuid,noexec,gid=5,mode=620,ptmxmode=000 devpts      "$chroot_dir/dev/pts"
-    _chroot_mount -t tmpfs      -o rw,nosuid,nodev                              tmpfs       "$chroot_dir/dev/shm"
-    _chroot_mount -t tmpfs      -o rw,nosuid,nodev,mode=755                     tmpfs       "$chroot_dir/run"
-
-    _mount_resolv_conf
+    if ! _chroot_mount -t proc      -o rw,nosuid,nodev,noexec                       proc        "$chroot_dir/proc" ||
+       ! _chroot_mount -t sysfs     -o ro,nosuid,nodev,noexec                       sysfs       "$chroot_dir/sys" ||
+       ! _chroot_mount -t efivarfs  -o rw,nosuid,nodev,noexec                       efivarfs    "$chroot_dir/sys/firmware/efi/efivars" ||
+       ! _chroot_mount -t devtmpfs  -o rw                                           devtmpfs    "$chroot_dir/dev" ||
+       ! _chroot_mount -t devpts    -o rw,nosuid,noexec,gid=5,mode=620,ptmxmode=000 devpts      "$chroot_dir/dev/pts" ||
+       ! _chroot_mount -t tmpfs     -o rw,nosuid,nodev                              tmpfs       "$chroot_dir/dev/shm" ||
+       ! _chroot_mount -t tmpfs     -o rw,nosuid,nodev,mode=755                     tmpfs       "$chroot_dir/run" ||
+       ! _mount_resolv_conf; then
+        _chroot_error "Failed to set up chroot environment in \"$chroot_dir\""
+        chroot_teardown
+        return 1
+    fi
 
     _chroot_debug "Done (setup)"
 }
@@ -123,8 +132,14 @@ chroot_setup() {
 chroot_teardown() {
     local _mountpoints=()
 
-    if [[ -z "$chroot_dir" ]] || (( ${#chroot_active_mounts[@]} == 0 )); then
+    if [[ -z "$chroot_dir" ]]; then
         _chroot_debug "\"chroot_dir\" is not set, nothing to tear down"
+        return
+    fi
+
+    if (( ${#chroot_active_mounts[@]} == 0 )); then
+        _chroot_debug "No active chroot mounts to tear down"
+        chroot_dir=""
         return
     fi
 
@@ -147,6 +162,7 @@ chroot_teardown() {
         sleep 3
     done
 
+    chroot_dir=""
     _chroot_debug "Done (teardown)"
 }
 

@@ -260,7 +260,7 @@ debootstrap_rootfs() {
 
     mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
     mount --make-private "$ROOTFS_DIR"
-    chroot_setup "$ROOTFS_DIR"
+    chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment" 3
     deb_apt_install "$ROOTFS_DIR" ADDITIONAL_DEB_PKGS > "$LOG_DIR/deb_apt_install.log"
     deb_set_locale "$ROOTFS_DIR"
     deb_get_installed_pkgs "$ROOTFS_DIR" > "$_deb_pkgs_installed"
