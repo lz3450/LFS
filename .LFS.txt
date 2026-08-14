@@ -241,6 +241,7 @@ newtx
 ng
 nghttp
 noappend
+nocanonicalize
 nodev
 nofail
 nolvmconf
