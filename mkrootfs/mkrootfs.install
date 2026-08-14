@@ -330,7 +330,8 @@ prologue
 
 ###
 make_work_dirs
-echo "${SCRIPT_INVOCATION[@]}" > "$LOG_DIR/command.log"
+printf '%q ' "${SCRIPT_CMDLINE[@]}" > "$LOG_DIR/command.log"
+echo >> "$LOG_DIR/command.log"
 touch -- "$WORK_DIR/$arg_platform"
 
 ###
