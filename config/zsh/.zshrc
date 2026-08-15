@@ -130,7 +130,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     # "rkj"
     # "robbyrussell"
     # "sammy"
-    "simonoff"
+    # "simonoff"
     # "simple"
     # "skaro"
     # "smt"
