@@ -38,9 +38,23 @@ declare -ar DEBIAN_INCLUDED_DEB_PKGS=(
 declare -ar DEBIAN_EXCLUDED_DEB_PKGS=(
     ifupdown
 )
-declare -ar UBUNTU_INCLUDED_DEB_PKGS=()
+declare -ar UBUNTU_INCLUDED_DEB_PKGS=(
+    adduser
+    apt-utils
+    ca-certificates
+    console-setup
+    iproute2
+    iputils-ping
+    kbd
+    kmod
+    less
+    locales
+    lsb-release
+    sudo
+    tzdata
+    whiptail
+)
 declare -ar UBUNTU_EXCLUDED_DEB_PKGS=(
-    ubuntu-advantage-tools
     ubuntu-minimal
     ubuntu-pro-client
     ubuntu-pro-client-l10n
@@ -212,6 +226,7 @@ debootstrap_rootfs() {
         --arch="$arg_arch" \
         $_include \
         $_exclude \
+        --variant=minbase \
         --merged-usr \
         "$arg_suite" \
         "$ROOTFS_DIR" \
@@ -230,6 +245,7 @@ debootstrap_rootfs() {
         --arch="$arg_arch" \
         $_include \
         $_exclude \
+        --variant=minbase \
         --merged-usr \
         $_foreign \
         "$arg_suite" \
