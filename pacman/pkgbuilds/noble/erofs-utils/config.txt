@@ -130,6 +130,7 @@ checking for copy_file_range... yes
 checking for fallocate... yes
 checking for getrandom... yes
 checking for getrlimit... yes
+checking for gettid... yes
 checking for gettimeofday... yes
 checking for lgetxattr... yes
 checking for llistxattr... yes
@@ -178,7 +179,9 @@ checking for libcurl... yes
 checking for curl/curl.h... yes
 checking for curl_easy_perform in -lcurl... yes
 checking whether curl_easy_perform is declared... yes
-checking for json-c... no
+checking for json-c... yes
+checking for json-c/json.h... yes
+checking whether json_tokener_parse is declared... yes
 checking for openssl... yes
 checking for openssl/hmac.h... yes
 checking for EVP_sha1 in -lssl... yes

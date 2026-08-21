@@ -1,7 +1,7 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=erofs-utils
-pkgver=1.9.1
+pkgver=1.9.4
 pkgrel=1
 epoch=
 pkgdesc="Userspace utilities for linux-erofs file system"

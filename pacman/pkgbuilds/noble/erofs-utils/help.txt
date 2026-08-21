@@ -1,4 +1,4 @@
-Configuration of erofs-utils 1.9:
+Configuration of erofs-utils 1.9.4:
 
 Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
@@ -22,8 +22,10 @@ Optional Features:
   --enable-fuzzing        set up fuzzing mode [default=no]
   --disable-lz4           disable LZ4 compression support [default=auto]
   --disable-lzma          disable LZMA compression support [default=auto]
+  --enable-ublk           enable ublk block device support [default=no]
   --enable-s3             enable s3 image generation support [default=no]
   --enable-oci            enable OCI registry based input support [default=no]
+  --enable-fanotify       enable fanotify pre-content backend [default=no]
   --enable-fuse           enable erofsfuse [default=no]
   --enable-static-fuse    build erofsfuse as a static library [default=no]
 
@@ -141,6 +143,10 @@ Some influential environment variables:
   libnl3_CFLAGS
               C compiler flags for libnl3, overriding pkg-config
   libnl3_LIBS linker flags for libnl3, overriding pkg-config
+  liburing_CFLAGS
+              C compiler flags for liburing, overriding pkg-config
+  liburing_LIBS
+              linker flags for liburing, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.

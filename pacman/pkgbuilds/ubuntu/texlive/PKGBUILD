@@ -13,12 +13,12 @@ license=('KZL')
 install=$pkgname.install
 source=(
   git+https://github.com/TeX-Live/texlive-source.git#branch=branch$texliveyear
-  http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
+  https://mirrors.mit.edu/CTAN/systems/texlive/tlnet/tlpkg/texlive.tlpdb
   git+https://github.com/TeX-Live/installer.git
   $pkgname.install
 )
 sha256sums=('SKIP'
-            '4ff95e60b83ad9ebb8d4755124d5a8a09206fe861f0aa59d8f1947bcbc468a48'
+            '5ce90028de6af9913db276582e51a470629fba6e494c67027429a6d062c10e9f'
             'SKIP'
             '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')
 

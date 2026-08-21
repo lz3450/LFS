@@ -2,6 +2,7 @@
 
 [global]
 	; global parameters
+	aapl model = Xserve
 	bind interfaces only = no
 	deadtime = 0
 	durable handles = no
@@ -25,10 +26,10 @@
 	server signing = auto
 	server string = SMB SERVER
 	share:fake_fscaps = 64
-	smb2 leases = no
+	smb2 leases = yes
 	smb2 max credits = 8192
 	smb2 max read = 4MB
-	smb2 max trans = 1MB
+	smb2 max trans = 4MB
 	smb2 max write = 4MB
 	smb3 encryption = auto
 	smbd max io size = 8MB
@@ -48,6 +49,7 @@
 	force user = 
 	guest ok = no
 	hide dot files = yes
+	hide unreadable = no
 	inherit owner = no
 	invalid users = 
 	oplocks = yes
@@ -55,6 +57,7 @@
 	read list = 
 	read only = ; yes
 	store dos attributes = yes
+	time machine = no
 	valid users = 
 	veto files = 
 	vfs objects = 

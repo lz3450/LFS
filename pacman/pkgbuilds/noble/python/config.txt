@@ -3,7 +3,7 @@ checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
 checking for Python interpreter freezing... ./_bootstrap_python
 checking for python3.14... python3.14
-checking Python for regen version... Python 3.14.3
+checking Python for regen version... Python 3.14.4
 checking for pkg-config... /usr/bin/pkg-config
 checking pkg-config is at least version 0.9.0... yes
 checking MACHDEP... "linux"
@@ -38,10 +38,10 @@ checking for minix/config.h... no
 checking whether it is safe to define __EXTENSIONS__... yes
 checking whether _XOPEN_SOURCE should be defined... no
 checking for GCC compatible compiler... yes
-checking for g++... no
+checking for g++... /usr/bin/g++
 configure:
 
-  By default, distutils will build C++ extension modules with "g++".
+  By default, distutils will build C++ extension modules with "/usr/bin/g++".
   If this is not intended, then set CXX on the configure command line.
   
 checking for the platform triplet based on compiler characteristics... x86_64-linux-gnu
@@ -75,6 +75,7 @@ checking whether C compiler accepts -fno-semantic-interposition... yes
 checking PROFILE_TASK... -m test --pgo --timeout=$(TESTTIMEOUT)
 checking for --with-lto... yes
 checking for llvm-profdata... /opt/bin/llvm-profdata
+checking for i686... no
 checking whether C compiler accepts -fprofile-update=atomic... yes
 checking for --enable-bolt... no
 checking BOLT_COMMON_FLAGS... checking BOLT_INSTRUMENT_FLAGS...  -update-debug-sections -skip-funcs=_PyEval_EvalFrameDefault,sre_ucs1_match/1,sre_ucs2_match/1,sre_ucs4_match/1 
@@ -82,6 +83,7 @@ checking BOLT_APPLY_FLAGS...   -update-debug-sections -skip-funcs=_PyEval_EvalFr
 checking if gcc supports -fstrict-overflow and -fno-strict-overflow... yes
 checking for --with-strict-overflow... no
 checking if gcc supports -Og optimization level... yes
+checking for thread stack size... default
 checking for --enable-safety... no
 checking for --enable-slower-safety... no
 checking if we can add -Wextra... yes
@@ -96,7 +98,7 @@ checking if we can make implicit function declaration an error in gcc -Werror=im
 checking if we can use visibility in gcc -fvisibility=hidden... yes
 checking for --enable-experimental-jit...  
 checking whether pthreads are available without options... yes
-checking whether g++ also accepts flags for thread support... no
+checking whether /usr/bin/g++ also accepts flags for thread support... no
 checking for alloca.h... yes
 checking for asm/types.h... yes
 checking for bluetooth.h... no
@@ -165,6 +167,7 @@ checking for sys/stat.h... (cached) yes
 checking for sys/statvfs.h... yes
 checking for sys/sys_domain.h... no
 checking for sys/syscall.h... yes
+checking for sys/sysctl.h... no
 checking for sys/sysmacros.h... yes
 checking for sys/termio.h... no
 checking for sys/time.h... yes
@@ -325,6 +328,7 @@ checking for --with-c-locale-coercion... yes
 checking for --with-valgrind... no
 checking for --with-dtrace... no
 checking for dlopen... yes
+checking for dl_iterate_phdr... yes
 checking DYNLOADFILE... dynload_shlib.o
 checking MACHDEP_OBJS... none
 checking for accept4... yes
@@ -340,7 +344,6 @@ checking for copy_file_range... yes
 checking for ctermid... yes
 checking for dladdr... yes
 checking for dup... yes
-checking for dup3... yes
 checking for execv... yes
 checking for explicit_bzero... yes
 checking for explicit_memset... no
@@ -420,7 +423,6 @@ checking for opendir... yes
 checking for pathconf... yes
 checking for pause... yes
 checking for pipe... yes
-checking for pipe2... yes
 checking for plock... no
 checking for poll... yes
 checking for posix_fadvise... yes
@@ -498,6 +500,7 @@ checking for strsignal... yes
 checking for symlinkat... yes
 checking for sync... yes
 checking for sysconf... yes
+checking for sysctlbyname... no
 checking for tcgetpgrp... yes
 checking for tcsetpgrp... yes
 checking for tempnam... yes
@@ -528,6 +531,8 @@ checking for writev... yes
 checking for getentropy... yes
 checking for getgroups... yes
 checking for system... yes
+checking for dup3... yes
+checking for pipe2... yes
 checking for gcc options needed to detect all undeclared functions... none needed
 checking whether dirfd is declared... yes
 checking for chroot... yes
@@ -696,6 +701,7 @@ checking for ncurses.h... yes
 checking for panel.h... yes
 checking for library containing initscr... none required
 checking for library containing update_panels... none required
+checking whether curses supports wide characters... yes
 checking for term.h... yes
 checking whether mvwdelch is an expression... yes
 checking whether WINDOW has _flags... no
@@ -710,6 +716,11 @@ checking for curses function filter... yes
 checking for curses function has_key... yes
 checking for curses function typeahead... yes
 checking for curses function use_env... yes
+checking for curses function set_escdelay... yes
+checking for curses function set_tabsize... yes
+checking for curses variable ESCDELAY... yes
+checking for curses variable TABSIZE... yes
+checking for ncurses-style curses function getmouse... yes
 configure: checking for device files
 checking for /dev/ptmx... yes
 checking for /dev/ptc... no
@@ -722,6 +733,7 @@ checking for --with-remote-debug... yes
 checking for build directories... done
 checking for -O2... yes
 checking for glibc _FORTIFY_SOURCE/memmove bug... no
+checking if we need to manually block large inlining in ceval.c... no
 checking for gcc ipa-pure-const bug... no
 checking for ensurepip... no
 checking if the dirent structure of a d_type field... yes
