@@ -1833,7 +1833,7 @@ PTHREADPOOL_SYNC_PRIMITIVE:STRING=default
 PYTHON_ENUM_SOURCE_DIR:STRING=
 
 //Path to a program.
-PYTHON_EXECUTABLE:FILEPATH=/opt/bin/python
+PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python
 
 //PeachPy (Python package) source directory
 PYTHON_PEACHPY_SOURCE_DIR:STRING=/home/kzl/LFS/python/pytorch/pytorch-v2.11.0/third_party/python-peachpy
@@ -1858,6 +1858,12 @@ PYTORCH_QNNPACK_LIBRARY_TYPE:STRING=static
 //Value Computed by CMake
 PYTORCH_QNNPACK_SOURCE_DIR:STATIC=/home/kzl/LFS/python/pytorch/pytorch-v2.11.0/aten/src/ATen/native/quantized/cpu/qnnpack
 
+//Path to a program.
+ProcessorCount_cmd_nproc:FILEPATH=/usr/bin/nproc
+
+//Path to a program.
+ProcessorCount_cmd_sysctl:FILEPATH=/usr/sbin/sysctl
+
 //No help, variable specified on the command line.
 Python_EXECUTABLE:UNINITIALIZED=/opt/bin/python3
 
@@ -1881,7 +1887,7 @@ SED_COMMAND:FILEPATH=/usr/bin/sed
 SELECTED_OP_LIST:STRING=
 
 //Name of the computer/site where compile is being run
-SITE:STRING=LAB3
+SITE:STRING=ROBOINSIGHT
 
 //List of SIMD architectures supported by libsleef.
 SLEEF_ALL_SUPPORTED_EXTENSIONS:STRING=AVX512FNOFMA;AVX512F;AVX2;AVX2128;FMA4;AVX;SSE4;SSE2;SVENOFMA;SVE;ADVSIMDNOFMA;ADVSIMD;NEON32;NEON32VFPV4;VSX;VSXNOFMA;VSX3;VSX3NOFMA;VXE;VXENOFMA;VXE2;VXE2NOFMA;RVVM1NOFMA;RVVM1;RVVM2NOFMA;RVVM2;PUREC_SCALAR;PURECFMA_SCALAR
@@ -3419,11 +3425,11 @@ FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_CXX:INTERNAL=[-fopenmp][/usr/lib/gcc/x86_64-
 //Details about finding OpenSSL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenSSL:INTERNAL=[/usr/lib/x86_64-linux-gnu/libcrypto.so][/usr/include][c ][v3.0.13()]
 //Details about finding Python
-FIND_PACKAGE_MESSAGE_DETAILS_Python:INTERNAL=[/opt/bin/python3][cfound components: Interpreter Development.Module NumPy ][v3.14.4()]
+FIND_PACKAGE_MESSAGE_DETAILS_Python:INTERNAL=[/opt/bin/python3][cfound components: Interpreter Development.Module NumPy ][v3.14.7()]
 //Details about finding Python3
-FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/opt/bin/python3][cfound components: Interpreter ][v3.14.4()]
+FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/opt/bin/python3][cfound components: Interpreter ][v3.14.7()]
 //Details about finding PythonInterp
-FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/opt/bin/python][v3.14.4()]
+FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python][v3.12.3()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Details about finding nvtx3
@@ -3654,6 +3660,10 @@ PTHREADPOOL_SYNC_PRIMITIVE-STRINGS:INTERNAL=default;condvar;futex;gcd;event
 PYTHON_EXECUTABLE-ADVANCED:INTERNAL=1
 //STRINGS property for variable: PYTORCH_QNNPACK_LIBRARY_TYPE
 PYTORCH_QNNPACK_LIBRARY_TYPE-STRINGS:INTERNAL=default;static;shared
+//ADVANCED property for variable: ProcessorCount_cmd_nproc
+ProcessorCount_cmd_nproc-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: ProcessorCount_cmd_sysctl
+ProcessorCount_cmd_sysctl-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: SCCACHE_EXECUTABLE
 SCCACHE_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: SITE
@@ -3755,7 +3765,7 @@ _Python3_Compiler_REASON_FAILURE:INTERNAL=
 _Python3_Development_REASON_FAILURE:INTERNAL=
 _Python3_EXECUTABLE:INTERNAL=/opt/bin/python3
 //Python3 Properties
-_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;14;4;64;32;t;cpython-314t-x86_64-linux-gnu;abi3;/opt/lib/python3.14t;/opt/lib/python3.14t;/opt/lib/python3.14t/site-packages;/opt/lib/python3.14t/site-packages
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;14;7;64;32;t;cpython-314t-x86_64-linux-gnu;abi3;/opt/lib/python3.14t;/opt/lib/python3.14t;/opt/lib/python3.14t/site-packages;/opt/lib/python3.14t/site-packages
 _Python3_INTERPRETER_SIGNATURE:INTERNAL=9fe3a023dad056ecdfcbae7b14daddff
 //NumPy reason failure
 _Python3_NumPy_REASON_FAILURE:INTERNAL=
@@ -3768,7 +3778,7 @@ _Python_EXECUTABLE:INTERNAL=/opt/bin/python3
 //Path to a file.
 _Python_INCLUDE_DIR:INTERNAL=/opt/include/python3.14t
 //Python Properties
-_Python_INTERPRETER_PROPERTIES:INTERNAL=Python;3;14;4;64;t;cpython-314t-x86_64-linux-gnu;abi3;/opt/lib/python3.14t;/opt/lib/python3.14t;/opt/lib/python3.14t/site-packages;/opt/lib/python3.14t/site-packages
+_Python_INTERPRETER_PROPERTIES:INTERNAL=Python;3;14;7;64;t;cpython-314t-x86_64-linux-gnu;abi3;/opt/lib/python3.14t;/opt/lib/python3.14t;/opt/lib/python3.14t/site-packages;/opt/lib/python3.14t/site-packages
 _Python_INTERPRETER_SIGNATURE:INTERNAL=9fe3a023dad056ecdfcbae7b14daddff
 _Python_NUMPY_SIGNATURE:INTERNAL=6c314322afaca81771fe794064584079
 _Python_NumPy_INCLUDE_DIR:INTERNAL=/home/kzl/.local/lib/python3.14t/site-packages/numpy/_core/include
