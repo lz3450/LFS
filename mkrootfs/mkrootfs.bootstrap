@@ -31,6 +31,10 @@ arg_arch="amd64"
 arg_suite="noble"
 
 ### constants and variables
+declare -ar PACMAN_PKGS=(
+    base
+)
+## debootstrap packages
 declare -ar DEBIAN_INCLUDED_DEB_PKGS=(
     locales
     ca-certificates
@@ -59,25 +63,32 @@ declare -ar UBUNTU_EXCLUDED_DEB_PKGS=(
     ubuntu-pro-client
     ubuntu-pro-client-l10n
 )
-declare -ar ADDITIONAL_DEB_PKGS=(
+## additional packages installed using apt
+declare -ar COMMON_DEB_PKGS=(
     bash-completion
     zsh zsh-autosuggestions zsh-syntax-highlighting
     nano
     openssh-server
     curl wget git
 )
-declare -ar PACMAN_PKGS=(
-    base
+declare -ar TRIXIE_DEB_PKGS=(
+)
+declare -ar JAMMY_DEB_PKGS=(
+)
+declare -ar NOBLE_DEB_PKGS=(
+)
+declare -ar RESOLUTE_DEB_PKGS=(
 )
 
 distro=""
 ubuntu_mirror=""
 deb_mirror=""
-deb_mirrors=()
+# deb_mirrors=()
 
+pacman_pkgs=()
 included_deb_pkgs=()
 excluded_deb_pkgs=()
-pacman_pkgs=()
+additional_deb_pkgs=("${COMMON_DEB_PKGS[@]}")
 
 ################################################################################
 
@@ -140,7 +151,11 @@ esac
 readonly ubuntu_mirror
 
 case "$arg_suite" in
-    bookworm|trixie)
+    kzl)
+        distro=kzl-linux
+        pacman_pkgs+=("${PACMAN_PKGS[@]}")
+        ;;
+    trixie)
         distro=debian
         deb_mirror=http://deb.debian.org/debian
         included_deb_pkgs=("${DEBIAN_INCLUDED_DEB_PKGS[@]}")
@@ -152,19 +167,30 @@ case "$arg_suite" in
         included_deb_pkgs=("${UBUNTU_INCLUDED_DEB_PKGS[@]}")
         excluded_deb_pkgs=("${UBUNTU_EXCLUDED_DEB_PKGS[@]}")
         ;;
-    kzl)
-        distro=kzl-linux
-        pacman_pkgs+=("${PACMAN_PKGS[@]}")
-        ;;
     *)
-        error "Unsupported distribution \"$arg_suite\"." 1
+        error "Unsupported suite \"$arg_suite\"." 1
         ;;
 esac
 readonly distro
+readonly -a pacman_pkgs
 readonly deb_mirror
-readonly included_deb_pkgs
-readonly excluded_deb_pkgs
-readonly pacman_pkgs
+readonly -a included_deb_pkgs
+readonly -a excluded_deb_pkgs
+
+case "$arg_suite" in
+    trixie)
+        ;;
+    jammy)
+        additional_deb_pkgs+=("${JAMMY_DEB_PKGS[@]}")
+        ;;
+    noble)
+        additional_deb_pkgs+=("${NOBLE_DEB_PKGS[@]}")
+        ;;
+    resolute)
+        additional_deb_pkgs+=("${RESOLUTE_DEB_PKGS[@]}")
+        ;;
+esac
+readonly -a additional_deb_pkgs
 
 ################################################################################
 
@@ -278,7 +304,7 @@ debootstrap_rootfs() {
     mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
     mount --make-private "$ROOTFS_DIR"
     chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment" 3
-    deb_apt_install "$ROOTFS_DIR" ADDITIONAL_DEB_PKGS > "$LOG_DIR/deb_apt_install.log"
+    deb_apt_install "$ROOTFS_DIR" additional_deb_pkgs > "$LOG_DIR/deb_apt_install.log"
     deb_set_locale "$ROOTFS_DIR"
     deb_get_installed_pkgs "$ROOTFS_DIR" > "$_deb_pkgs_installed"
     local _answer
