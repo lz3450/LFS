@@ -211,6 +211,7 @@ MAKEFLAGS
 makepkg
 makepkglogs
 mandir
+minbase
 minicom
 mkisofs
 mkl
