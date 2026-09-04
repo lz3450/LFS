@@ -15,14 +15,6 @@ declare -r __INSTALL_RPI__="install.rpi.sh"
 
 ### constants and variables
 declare -ar COMMON_DEB_PKGS=(
-    ### general
-    build-essential
-    file
-    ### network
-    iw wpasupplicant
-    rfkill
-    ### kernel
-    # initramfs-tools
 )
 declare -ar DEBIAN_DEB_PKGS=(
     systemd-resolved
