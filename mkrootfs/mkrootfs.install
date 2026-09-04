@@ -225,7 +225,7 @@ bootstrap_rootfs() {
 }
 
 install_deb_pkgs() {
-    if [[ -z "$deb_pkgs" ]]; then
+    if [[ ! -v deb_pkgs || -z "$deb_pkgs" ]]; then
         info "No deb packages to install"
         return
     fi
