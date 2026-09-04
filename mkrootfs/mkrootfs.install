@@ -23,7 +23,7 @@ declare -ar SCRIPT_CMDLINE=("$0" "$@")
 arg_platform="pc"
 declare -i opt_loop=0
 arg_rootfs_type="ext4"
-arg_suite="jammy"
+arg_suite="noble"
 arg_rootfs_tarball=""
 
 ### Place the library as far back as possible

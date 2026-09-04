@@ -28,7 +28,7 @@ declare -ar SCRIPT_CMDLINE=("$0" "$@")
 
 ### options and arguments
 arg_arch="amd64"
-arg_suite="jammy"
+arg_suite="noble"
 
 ### constants and variables
 declare -ar DEBIAN_INCLUDED_DEB_PKGS=(
