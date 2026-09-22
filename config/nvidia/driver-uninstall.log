@@ -18,9 +18,6 @@ Using built-in stream user interface
 -> Validating previous installation:
 -> done.
 -> Uninstalling NVIDIA Accelerated Graphics Driver for Linux-x86_64 (1.0-58017804 (580.178.04)):
--> Failed to delete the directory '/lib/modules/7.2.6-KZL' (Directory not empty).
-WARNING: Failed to delete some directories. See /home/kzl/LFS/config/nvidia/nvidia-uninstall.log for details.
--> Unable to delete directories created by previous installation.
 -> done.
 -> Running ldconfig:
 -> done.
