@@ -18,7 +18,7 @@ source=(
   $pkgname.install
 )
 sha256sums=('SKIP'
-            '5ce90028de6af9913db276582e51a470629fba6e494c67027429a6d062c10e9f'
+            'c2ed59e4cc69d98931709ff1a8a02916a0f85dcdd6ead332ddfb136a67065f53'
             'SKIP'
             '6fa80718d87d606f99bbd591ce4dc6f6454be4f51375f88b18bf2a852dcd55fd')
 

@@ -14,7 +14,7 @@ Run-time dependency glib-2.0 found: YES 2.80.0
 Run-time dependency libnl-genl-3.0 found: YES 3.7.0
 Run-time dependency systemd found: YES 255
 Dependency krb5 for host machine skipped: feature krb5 disabled
-Library pthread found: YES
+Run-time dependency threads found: YES
 Configuring config.h using configuration
 Configuring ksmbd.conf.5 using configuration
 Configuring ksmbdpwd.db.5 using configuration
