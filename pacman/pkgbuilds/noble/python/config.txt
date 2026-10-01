@@ -3,7 +3,7 @@ checking build system type... x86_64-pc-linux-gnu
 checking host system type... x86_64-pc-linux-gnu
 checking for Python interpreter freezing... ./_bootstrap_python
 checking for python3.14... python3.14
-checking Python for regen version... Python 3.14.4
+checking Python for regen version... Python 3.14.7
 checking for pkg-config... /usr/bin/pkg-config
 checking pkg-config is at least version 0.9.0... yes
 checking MACHDEP... "linux"
