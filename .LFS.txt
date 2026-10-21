@@ -1,3 +1,4 @@
+-vdr
 acmart
 adjustbox
 afrikaans
@@ -17,8 +18,10 @@ binutils
 blkid
 blockdev
 bluetooth
+bluez
 bootable
 bootctl
+brcm
 bs
 btrfs
 buildtype
@@ -60,6 +63,7 @@ DESTDIR
 devpts
 devtmpfs
 dfu
+dialout
 diffutils
 distro
 dmask
@@ -70,6 +74,7 @@ dracut
 dvipng
 editline
 edu
+eeprom
 efi
 efiboot
 efibootmgr
@@ -87,6 +92,7 @@ fdisk
 ffat
 ffile
 findutils
+firstboot
 fmask
 fno
 fontawesome
@@ -110,11 +116,14 @@ gnupg
 gnutls
 gobject
 gperf
+gpg
 gpgme
+gpio
 gpt
 grdctl
 grml
 groff
+gz
 harfbuzz
 hkps
 hostonly
@@ -227,6 +236,7 @@ mountpoints
 mpc
 mpfi
 mpfr
+msdos
 msg
 mtools
 multipath
@@ -302,8 +312,11 @@ ptmxmode
 pytorch
 PYTORCH
 qbittorrent
+raspberrypi
+raspi
 rasterbar
 rdp
+realtek
 recv
 regdb
 relocs
@@ -316,10 +329,12 @@ rl
 ro
 RO
 rootfs
+rootfstype
 rootwait
 rpath
 rpcsvc
 rpi
+rpicam
 RUSTC
 RUSTFLAGS
 sasl
@@ -345,6 +360,7 @@ subvolume
 subvolumes
 svn
 svnrev
+swapfile
 Sy
 syncdeps
 synctex
@@ -369,6 +385,7 @@ TEXMFHOME
 TEXMFLOCAL
 TEXMFROOT
 TEXMFVAR
+timesyncd
 tl
 tlmgr
 tlpdb
@@ -399,6 +416,7 @@ vsf
 Werror
 Wformat
 wl
+wlan
 wpa
 wpasupplicant
 xattrs
