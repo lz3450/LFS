@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 #
 # mkrootfs.bootstrap
 #
@@ -22,10 +22,6 @@ declare -ar SCRIPT_CMDLINE=("$0" "$@")
 
 ################################################################################
 
-### bash utils
-. "$SCRIPT_DIR"/lib/log.sh
-. "$SCRIPT_DIR"/lib/utils.sh
-
 ### options and arguments
 arg_arch="amd64"
 arg_suite="noble"
@@ -36,25 +32,19 @@ declare -ar PACMAN_PKGS=(
 )
 ## debootstrap packages
 declare -ar DEBIAN_INCLUDED_DEB_PKGS=(
-    locales
     ca-certificates
+    locales
 )
 declare -ar DEBIAN_EXCLUDED_DEB_PKGS=(
     ifupdown
 )
 declare -ar UBUNTU_INCLUDED_DEB_PKGS=(
-    adduser
     apt-utils
     ca-certificates
-    console-setup
-    iproute2
-    iputils-ping
     kbd
     kmod
-    less
     locales
     lsb-release
-    sudo
     tzdata
     whiptail
 )
@@ -89,6 +79,10 @@ pacman_pkgs=()
 included_deb_pkgs=()
 excluded_deb_pkgs=()
 additional_deb_pkgs=("${COMMON_DEB_PKGS[@]}")
+
+### bash utils
+. "$SCRIPT_DIR"/lib/log.sh
+. "$SCRIPT_DIR"/lib/utils.sh
 
 ################################################################################
 
