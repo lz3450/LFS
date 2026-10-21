@@ -15,6 +15,8 @@ declare -r __INSTALL_RPI__="install.rpi.sh"
 
 ### constants and variables
 declare -ar COMMON_DEB_PKGS=(
+    build-essential
+    python3
 )
 declare -ar DEBIAN_DEB_PKGS=(
     systemd-resolved
@@ -40,6 +42,8 @@ declare -ar JAMMY_DEB_PKGS=(
     ubuntu-raspi-settings
 )
 declare -ar NOBLE_DEB_PKGS=(
+    systemd-resolved
+    systemd-timesyncd
 )
 
 deb_pkgs=("${COMMON_DEB_PKGS[@]}")
@@ -144,6 +148,7 @@ configure_rootfs_platform_specific() {
         _kv=$(echo "$_kernel_version" | grep -oP '\d+\.\d+\.\d+\K.*' | sed 's/^-v//;s/\+//')
         case "$_kv" in
             8-16k)  _kernel_suffix="_2712" ;;
+            8-rt)  _kernel_suffix="8_rt" ;;
             *)      _kernel_suffix="$_kv" ;;
         esac
         cp -vdr -- "$ROOTFS_DIR/boot/firmware/kernel$_kernel_suffix.img" "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version"
