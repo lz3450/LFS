@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 #
 # mkrootfs.install
 #
@@ -26,7 +26,18 @@ arg_rootfs_type="ext4"
 arg_suite="noble"
 arg_rootfs_tarball=""
 
-### Place the library as far back as possible
+### constants and variables
+# required deb packages for boot
+declare -ar REQUIRED_DEB_PKGS=(
+    adduser
+    iproute2
+    iputils-ping
+    less
+    sudo
+    systemd
+    wpasupplicant
+)
+
 ### bash utils
 . "$SCRIPT_DIR"/lib/log.sh
 . "$SCRIPT_DIR"/lib/utils.sh
@@ -225,15 +236,15 @@ bootstrap_rootfs() {
 }
 
 install_deb_pkgs() {
-    if [[ ! -v deb_pkgs || -z "$deb_pkgs" ]]; then
-        info "No deb packages to install"
-        return
+    info "Installing required deb packages..."
+    deb_apt_install "$ROOTFS_DIR" REQUIRED_DEB_PKGS >> "$LOG_DIR/${FUNCNAME[0]}.log"
+
+    if [[ -v deb_pkgs && ! -z "$deb_pkgs" ]]; then
+        info "Installing deb packages..."
+        deb_apt_install "$ROOTFS_DIR" deb_pkgs >> "$LOG_DIR/${FUNCNAME[0]}.log"
     fi
 
-    sudo -u "${SUDO_USER:-root}" touch -- "$INSTALLED_DEB_PKGLIST_FILE"
-
-    info "Installing deb packages..."
-    deb_apt_install "$ROOTFS_DIR" deb_pkgs >> "$LOG_DIR/${FUNCNAME[0]}.log"
+    sudo -u "${SUDO_USER:-root}" touch "$INSTALLED_DEB_PKGLIST_FILE"
     deb_get_installed_pkgs "$ROOTFS_DIR" | sed -E '/^linux-(image|modules)-/d' > "$INSTALLED_DEB_PKGLIST_FILE"
 }
 
