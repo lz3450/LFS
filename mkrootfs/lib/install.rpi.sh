@@ -75,7 +75,7 @@ readonly -a deb_pkgs
 loop_device=""
 
 ### libraries
-LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
+LIBDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR/chroot.sh"
 
 ### functions
@@ -130,7 +130,7 @@ post_install_pkgs() {
     if [[ "$distro" == "debian" ]]; then
         # raspberrypi-archive-stable.gpg will be overwritten by deb package raspberrypi-archive-keyring
         info "Setting up sources.list..."
-        rm -vf -- "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key"
+        rm -vf "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key"
         sed -i -e '/^Signed-By/d' -e '/^#Signed-By/s/^#//' "$ROOTFS_DIR/etc/apt/sources.list.d/raspi.sources"
     fi
 }
@@ -141,7 +141,7 @@ configure_rootfs_platform_specific() {
 Ubuntu for Raspberry Pi \n (\s \m \r) \t \l
 
 EOF
-    mkdir -p -- "$ROOTFS_DIR"/etc/issue.d
+    mkdir -p "$ROOTFS_DIR"/etc/issue.d
     cat > "$ROOTFS_DIR"/etc/issue.d/00-ip.issue << EOF
 
 IPv4 address: \4
@@ -158,12 +158,12 @@ EOF
 
     ###
     info "Copying firmware in raspberrypi/firmware to rootfs..."
-    cp -rf -- "$_firmware_dir"/boot/*.bin "$ROOTFS_DIR/boot/firmware/"
-    cp -rf -- "$_firmware_dir"/boot/*.dat "$ROOTFS_DIR/boot/firmware/"
-    cp -rf -- "$_firmware_dir"/boot/*.elf "$ROOTFS_DIR/boot/firmware/"
+    cp -rf "$_firmware_dir"/boot/*.bin "$ROOTFS_DIR/boot/firmware/"
+    cp -rf "$_firmware_dir"/boot/*.dat "$ROOTFS_DIR/boot/firmware/"
+    cp -rf "$_firmware_dir"/boot/*.elf "$ROOTFS_DIR/boot/firmware/"
     info "Copying kernel images in raspberrypi/firmware to rootfs..."
     if [[ "$distro" == "debian" ]]; then
-        cp -rf -- "$_firmware_dir"/modules "$ROOTFS_DIR/usr/lib/"
+        cp -rf "$_firmware_dir"/modules "$ROOTFS_DIR/usr/lib/"
         local _kernel_version
         local _kv
         local _kernel_suffix
@@ -175,9 +175,9 @@ EOF
                 8-rt)  _kernel_suffix="8_rt" ;;
                 *)      _kernel_suffix="$_kv" ;;
             esac
-            cp -vdr -- "$ROOTFS_DIR/boot/firmware/kernel$_kernel_suffix.img" "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version"
+            cp -vdr "$ROOTFS_DIR/boot/firmware/kernel$_kernel_suffix.img" "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version"
             chroot_run "$ROOTFS_DIR" update-initramfs -k "$_kernel_version" -c
-            cp -vdr -- "$ROOTFS_DIR/boot/initrd.img-$_kernel_version" "$ROOTFS_DIR/boot/firmware/initramfs$_kernel_suffix"
+            cp -vdr "$ROOTFS_DIR/boot/initrd.img-$_kernel_version" "$ROOTFS_DIR/boot/firmware/initramfs$_kernel_suffix"
             _kernel_version_suffix+=("$_kernel_version:$_kernel_suffix")
         done
     elif [[ "$distro" == "ubuntu" ]]; then
@@ -222,7 +222,7 @@ EOF
     ###
     info "Copying miscellaneous config files..."
     # environment
-    cp -vf -- "$CONFIG_DIR/rpi/profile" "$ROOTFS_DIR/etc/profile"
+    cp -vf "$CONFIG_DIR/rpi/profile" "$ROOTFS_DIR/etc/profile"
     # passwd
     sed -i '/^root/s|/bin/bash|/bin/zsh|' "$ROOTFS_DIR"/etc/passwd
     # network
@@ -236,8 +236,8 @@ EOF
     ###
     info "Copying boot configuration files..."
     # copy configuration files
-    cp -vf -- "$CONFIG_DIR/rpi/cmdline.txt" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
-    cp -vf -- "$CONFIG_DIR/rpi/config.txt" "$ROOTFS_DIR/boot/firmware/config.txt"
+    cp -vf "$CONFIG_DIR/rpi/cmdline.txt" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
+    cp -vf "$CONFIG_DIR/rpi/config.txt" "$ROOTFS_DIR/boot/firmware/config.txt"
     # get PARTUUIDs of the partitions
     local b_partuuid=$(findmnt -n -o PARTUUID --source "${loop_device}p1")
     local r_partuuid=$(findmnt -n -o PARTUUID --source "${loop_device}p2")
@@ -277,7 +277,7 @@ cleanup_platform_specific() {
 finalize() {
     ###
     cp -v "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
-    chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/images/$IMG_FILE_NAME"
     log_cyan "Successfully installed ${distro^} ${arg_suite^} Raspberry Pi on $SCRIPT_DIR/images/$IMG_FILE_NAME"
 }
 
