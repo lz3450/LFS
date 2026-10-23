@@ -97,13 +97,13 @@ prepare() {
     loop_partitioned_setup "$loop_device" "$IMG_FILE"
 
     # mkfs
-    mkfs.fat -F 32 -n BOOT -- "${loop_device}p1"
-    mkfs.ext4 -F -L ROOT -- "${loop_device}p2"
+    mkfs.fat -F 32 -n BOOT "${loop_device}p1"
+    mkfs.ext4 -F -L ROOT "${loop_device}p2"
 
     # mount
-    mount -o "$MOUNT_OPT" -- "${loop_device}p2" "$ROOTFS_DIR"
-    mkdir -p -- "$ROOTFS_DIR/boot/firmware"
-    mount -o "$MOUNT_OPT" -- "${loop_device}p1" "$ROOTFS_DIR/boot/firmware"
+    mount -v -o "$MOUNT_OPT" "${loop_device}p2" "$ROOTFS_DIR"
+    mkdir -p "$ROOTFS_DIR/boot/firmware"
+    mount -v -o "$MOUNT_OPT" "${loop_device}p1" "$ROOTFS_DIR/boot/firmware"
 }
 
 post_bootstrap_rootfs() {
@@ -112,7 +112,7 @@ post_bootstrap_rootfs() {
 
     if [[ "$distro" == "debian" ]]; then
         info "Setting up raspberrypi sources.list..."
-        mkdir -p -- "$ROOTFS_DIR/etc/apt/sources.list.d"
+        mkdir -p "$ROOTFS_DIR/etc/apt/sources.list.d"
         cat > "$ROOTFS_DIR/etc/apt/sources.list.d/raspi.sources" << EOF
 Types: deb
 URIs: https://archive.raspberrypi.com/debian/
@@ -122,7 +122,7 @@ Signed-By: /etc/apt/trusted.gpg.d/raspberrypi.gpg.key
 #Signed-By: /etc/apt/trusted.gpg.d/raspberrypi-archive-stable.gpg
 EOF
         # raspberrypi-archive-stable.gpg will be overwritten by deb package raspberrypi-archive-keyring
-        wget -qO "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key" http://archive.raspberrypi.org/debian/raspberrypi.gpg.key
+        wget -qO "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key" https://archive.raspberrypi.org/debian/raspberrypi.gpg.key
     fi
 }
 

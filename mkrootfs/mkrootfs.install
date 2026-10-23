@@ -214,12 +214,12 @@ loop_device=""
 ### functions
 make_work_dirs() {
     info "Making working directory: $WORK_DIR"
-    mkdir -- "$WORK_DIR"
-    mkdir -- "$ROOTFS_DIR"
-    mkdir -- "$LOG_DIR"
+    mkdir -p "$WORK_DIR"
+    mkdir -p "$ROOTFS_DIR"
+    mkdir -p "$LOG_DIR"
     if [[ ! -d "$PKGLIST_DIR" ]]; then
-        mkdir -- "$PKGLIST_DIR"
-        chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
+        mkdir -p "$PKGLIST_DIR"
+        chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$PKGLIST_DIR"
     fi
 
     mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
@@ -255,7 +255,7 @@ install_pacman_pkgs() {
         return
     fi
 
-    sudo -u "${SUDO_USER:-root}" touch -- "$INSTALLED_PACMAN_PKGLIST_FILE"
+    sudo -u "${SUDO_USER:-root}" touch "$INSTALLED_PACMAN_PKGLIST_FILE"
 
     info "Installing pacman packages..."
     pacman_bootstrap "$ROOTFS_DIR" pacman_pkgs > "$LOG_DIR/${FUNCNAME[0]}.log"
@@ -279,9 +279,9 @@ configure_rootfs_common() {
         echo "PATH=\"/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/bin:/opt/sbin\"" > "$ROOTFS_DIR/etc/environment"
     fi
     # network
-    cp -vf -- "$CONFIG_DIR/network/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
-    cp -vf -- "$CONFIG_DIR/network/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
-    cp -vf -- "$CONFIG_DIR/network/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
+    cp -vf "$CONFIG_DIR/network/ethernet.network" "$ROOTFS_DIR/etc/systemd/network/ethernet.network"
+    cp -vf "$CONFIG_DIR/network/wifi.network" "$ROOTFS_DIR/etc/systemd/network/wifi.network"
+    cp -vf "$CONFIG_DIR/network/wpa_supplicant.conf" "$ROOTFS_DIR/etc/wpa_supplicant/wpa_supplicant.conf"
     if [[ "${arg_platform}" != 'rpi' ]]; then
         local _wl_dev=$(ip -o link show | awk -F': ' '{print $2}' | grep 'wl.*')
         if [[ -n "$_wl_dev" ]]; then
@@ -308,12 +308,12 @@ cleanup() {
     read -r -p "Press any key to continue..."
 
     chroot_teardown
-
     cleanup_platform_specific
-
     umount -v -R "$ROOTFS_DIR"
 
-    finalize
+    if [[ -z "$_signal" ]]; then
+        finalize
+    fi
 
     local _answer
     read -r -p "Do you want to remove the working directory $WORK_DIR? [Y/n] " _answer
@@ -321,7 +321,7 @@ cleanup() {
     if [[ "$_answer" =~ ^[Yy]$ ]]; then
         echo >&2
         log_magenta "Removing working directory: $WORK_DIR"
-        rm -rf --one-file-system -- "$WORK_DIR"
+        rm -rf --one-file-system "$WORK_DIR"
     fi
 
     log_magenta "Done (cleanup)"
@@ -349,7 +349,7 @@ prologue
 make_work_dirs
 printf '%q ' "${SCRIPT_CMDLINE[@]}" > "$LOG_DIR/command.log"
 echo >> "$LOG_DIR/command.log"
-touch -- "$WORK_DIR/$arg_platform"
+touch "$WORK_DIR/$arg_platform"
 
 ###
 prepare
