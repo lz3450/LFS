@@ -262,26 +262,23 @@ EOF
     fi
 }
 
-finalize() {
+cleanup_platform_specific() {
     ###
     debug "Cleaning up root filesystem..."
-    umount -v -- "$ROOTFS_DIR/boot/firmware"
+    umount -v "$ROOTFS_DIR/boot/firmware"
     delete_all_contents "$ROOTFS_DIR/boot/firmware/"
     clean_rootfs "$ROOTFS_DIR" >> "$LOG_DIR/${FUNCNAME[0]}.log"
 
     ###
     loop_unmount "$loop_device"
     loop_detach "$loop_device"
-
-    ###
-    cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
-    chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
-    log_cyan "Successfully installed ${distro^} ${arg_suite^} Raspberry Pi on $SCRIPT_DIR/images/$IMG_FILE_NAME"
 }
 
-cleanup_platform_specific() {
-    loop_unmount "$loop_device"
-    loop_detach "$loop_device"
+finalize() {
+    ###
+    cp -v "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+    log_cyan "Successfully installed ${distro^} ${arg_suite^} Raspberry Pi on $SCRIPT_DIR/images/$IMG_FILE_NAME"
 }
 
 debug "${BASH_SOURCE[0]} sourced"

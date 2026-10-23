@@ -233,6 +233,7 @@ bootstrap_rootfs() {
         --numeric-owner \
         -xpf "$arg_rootfs_tarball" \
         -C "$ROOTFS_DIR"
+    chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment" 3
 }
 
 install_deb_pkgs() {
@@ -303,14 +304,16 @@ cleanup() {
 
     sync
 
-
     log_magenta "Cleaning up..."
     read -r -p "Press any key to continue..."
 
     chroot_teardown
-    umount -v -R -- "$ROOTFS_DIR"
 
     cleanup_platform_specific
+
+    umount -v -R "$ROOTFS_DIR"
+
+    finalize
 
     local _answer
     read -r -p "Do you want to remove the working directory $WORK_DIR? [Y/n] " _answer
@@ -353,8 +356,7 @@ prepare
 
 ###
 bootstrap_rootfs
-chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment" 3
-if declare -F 'post_bootstrap_rootfs' > '/dev/null'; then
+if declare -F 'post_bootstrap_rootfs' > /dev/null; then
     info "Running post-bootstrap hook..."
     post_bootstrap_rootfs
 fi
@@ -373,10 +375,8 @@ fi
 configure_rootfs_common
 configure_rootfs_platform_specific
 configure_rootfs_manual
-chroot_teardown
 
-finalize
-
+###
 cleanup
 epilogue
 
