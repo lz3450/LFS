@@ -216,19 +216,19 @@ declare -r TARBALL_FILE="$SCRIPT_DIR/tarballs/rootfs-$arg_arch-$distro-$arg_suit
 ### functions
 make_work_dirs() {
     info "Making working directory: $WORK_DIR"
-    mkdir -p -- "$WORK_DIR"
-    mkdir -p -- "$ROOTFS_DIR"
-    mkdir -p -- "$LOG_DIR"
+    mkdir -p "$WORK_DIR"
+    mkdir -p "$ROOTFS_DIR"
+    mkdir -p "$LOG_DIR"
     if [[ ! -d "$PKGLIST_DIR" ]]; then
-        mkdir -p -- "$PKGLIST_DIR"
-        chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$PKGLIST_DIR"
+        mkdir -p "$PKGLIST_DIR"
+        chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$PKGLIST_DIR"
     fi
 }
 
 debootstrap_rootfs() {
     local -r _deb_pkg_to_install="$PKGLIST_DIR/$arg_arch-$arg_suite-bootstrap-to-install-pkgs.txt"
     local -r _deb_pkgs_installed="$PKGLIST_DIR/$arg_arch-$arg_suite-bootstrap-installed-pkgs.txt"
-    sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkg_to_install" "$_deb_pkgs_installed"
+    sudo -u "${SUDO_USER:-root}" touch "$_deb_pkg_to_install" "$_deb_pkgs_installed"
 
     local _include=""
     if (( ${#included_deb_pkgs[@]} > 0 )); then
@@ -279,9 +279,9 @@ debootstrap_rootfs() {
     info "Configuring rootfs..."
     # apt sources
     if [[ -f "$ROOTFS_DIR/etc/apt/sources.list" ]]; then
-        mv -v -- "$ROOTFS_DIR/etc/apt/sources.list" "$ROOTFS_DIR/etc/apt/sources.list.bak"
+        mv -v "$ROOTFS_DIR/etc/apt/sources.list" "$ROOTFS_DIR/etc/apt/sources.list.bak"
     fi
-    mkdir -vp -- "$ROOTFS_DIR/etc/apt/sources.list.d"
+    mkdir -vp "$ROOTFS_DIR/etc/apt/sources.list.d"
     if [[ "$arg_arch" != "amd64" && "$distro" == "ubuntu" ]]; then
         sed "s|@SUITE@|$arg_suite|g" "$APT_CONFIG_DIR/ubuntu-ports.sources" > "$ROOTFS_DIR/etc/apt/sources.list.d/ubuntu-ports.sources"
     else
@@ -314,7 +314,7 @@ debootstrap_rootfs() {
 
 mmdebstrap_rootfs() {
     # local _deb_pkglist="${arg_suite}_deb_pkglist.txt"
-    # sudo -u "${SUDO_USER:-root}" touch -- "$_deb_pkglist"
+    # sudo -u "${SUDO_USER:-root}" touch "$_deb_pkglist"
 
     # info "mmdebstrapping \"$ROOTFS_DIR/\": ${deb_pkgs[*]}"
     # mmdebstrap \
@@ -334,7 +334,7 @@ mmdebstrap_rootfs() {
 
 pacstrap_rootfs() {
     # local -r _pkg_list="$PKGLIST_DIR/$arg_arch-pacstrap-pkgs.txt"
-    # sudo -u "${SUDO_USER:-root}" touch -- "$_pkg_list"
+    # sudo -u "${SUDO_USER:-root}" touch "$_pkg_list"
 
     # mkdir -v -m 0755 -p "$ROOTFS_DIR"/var/{cache/pacman/pkg,lib/pacman,log} "$ROOTFS_DIR"/{dev,run,etc/pacman.d}
     # mkdir -v -m 1777 -p "$ROOTFS_DIR"/tmp
@@ -358,15 +358,17 @@ cleanup() {
     set +e
 
     log_magenta "Cleaning up..."
+    read -r -p "Press any key to continue..."
+
     chroot_teardown
-    umount -v -R -- "$ROOTFS_DIR"
+    umount -v -R "$ROOTFS_DIR"
 
     local _answer
     read -p "Do you want to remove the working directory $WORK_DIR? [Y/n] " _answer
     _answer="${_answer:-y}"
     if [[ "$_answer" == "Y" || "$_answer" == "y" ]]; then
         log_magenta "Removing working directory: $WORK_DIR"
-        rm -rf --one-file-system -- "$WORK_DIR"
+        rm -rf --one-file-system "$WORK_DIR"
     fi
     log_magenta "Done"
 
