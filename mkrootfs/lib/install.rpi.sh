@@ -15,8 +15,10 @@ declare -r __INSTALL_RPI__="install.rpi.sh"
 
 ### constants and variables
 declare -ar COMMON_DEB_PKGS=(
-    build-essential
+    # build-essential
+    initramfs-tools
     python3
+    zstd
 )
 declare -ar DEBIAN_DEB_PKGS=(
     systemd-resolved
@@ -42,6 +44,8 @@ declare -ar JAMMY_DEB_PKGS=(
     ubuntu-raspi-settings
 )
 declare -ar NOBLE_DEB_PKGS=(
+    linux-firmware-raspi
+    linux-image-6.8.0-1065-raspi
     systemd-resolved
     systemd-timesyncd
 )
@@ -103,6 +107,9 @@ prepare() {
 }
 
 post_bootstrap_rootfs() {
+    wget -qO "$CONFIG_DIR/rpi/cmdline.txt" https://raw.githubusercontent.com/RPi-Distro/pi-gen/refs/heads/master/stage1/00-boot-files/files/cmdline.txt
+    wget -qO "$CONFIG_DIR/rpi/config.txt" https://raw.githubusercontent.com/RPi-Distro/pi-gen/refs/heads/master/stage1/00-boot-files/files/config.txt
+
     if [[ "$distro" == "debian" ]]; then
         info "Setting up raspberrypi sources.list..."
         mkdir -p -- "$ROOTFS_DIR/etc/apt/sources.list.d"
@@ -130,6 +137,19 @@ post_install_pkgs() {
 
 configure_rootfs_platform_specific() {
     ###
+    cat > "$ROOTFS_DIR"/etc/issue << EOF
+Ubuntu for Raspberry Pi \n (\s \m \r) \t \l
+
+EOF
+    mkdir -p -- "$ROOTFS_DIR"/etc/issue.d
+    cat > "$ROOTFS_DIR"/etc/issue.d/00-ip.issue << EOF
+
+IPv4 address: \4
+IPv6 address: \6
+
+EOF
+
+    ###
     info "Downloading RPi firmware..."
     local _firmware_version=$(git ls-remote --tags https://github.com/raspberrypi/firmware.git | grep -oP '(?<=refs/tags/)1.\d{8}$' | sort -V | tail -n1)
     local _firmware_dir="$WORK_DIR/firmware-$_firmware_version"
@@ -137,28 +157,56 @@ configure_rootfs_platform_specific() {
     tar -xf "$WORK_DIR/firmware.tar.gz" -C "$WORK_DIR"
 
     ###
+    info "Copying firmware in raspberrypi/firmware to rootfs..."
+    cp -rf -- "$_firmware_dir"/boot/*.bin "$ROOTFS_DIR/boot/firmware/"
+    cp -rf -- "$_firmware_dir"/boot/*.dat "$ROOTFS_DIR/boot/firmware/"
+    cp -rf -- "$_firmware_dir"/boot/*.elf "$ROOTFS_DIR/boot/firmware/"
     info "Copying kernel images in raspberrypi/firmware to rootfs..."
-    cp -rf -- "$_firmware_dir"/boot/* "$ROOTFS_DIR/boot/firmware/"
-    cp -rf -- "$_firmware_dir"/modules "$ROOTFS_DIR/usr/lib/"
-    local _kernel_version
-    local _kv
-    local _kernel_suffix
-    local -a _kernel_version_suffix=()
-    for _kernel_version in $(ls "$ROOTFS_DIR/usr/lib/modules"); do
-        _kv=$(echo "$_kernel_version" | grep -oP '\d+\.\d+\.\d+\K.*' | sed 's/^-v//;s/\+//')
-        case "$_kv" in
-            8-16k)  _kernel_suffix="_2712" ;;
-            8-rt)  _kernel_suffix="8_rt" ;;
-            *)      _kernel_suffix="$_kv" ;;
-        esac
-        cp -vdr -- "$ROOTFS_DIR/boot/firmware/kernel$_kernel_suffix.img" "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version"
-        _kernel_version_suffix+=("$_kernel_version:$_kernel_suffix")
-    done
+    if [[ "$distro" == "debian" ]]; then
+        cp -rf -- "$_firmware_dir"/modules "$ROOTFS_DIR/usr/lib/"
+        local _kernel_version
+        local _kv
+        local _kernel_suffix
+        local -a _kernel_version_suffix=()
+        for _kernel_version in $(ls "$ROOTFS_DIR/usr/lib/modules"); do
+            _kv=$(echo "$_kernel_version" | grep -oP '\d+\.\d+\.\d+\K.*' | sed 's/^-v//;s/\+//')
+            case "$_kv" in
+                8-16k)  _kernel_suffix="_2712" ;;
+                8-rt)  _kernel_suffix="8_rt" ;;
+                *)      _kernel_suffix="$_kv" ;;
+            esac
+            cp -vdr -- "$ROOTFS_DIR/boot/firmware/kernel$_kernel_suffix.img" "$ROOTFS_DIR/boot/vmlinuz-$_kernel_version"
+            chroot_run "$ROOTFS_DIR" update-initramfs -k "$_kernel_version" -c
+            cp -vdr -- "$ROOTFS_DIR/boot/initrd.img-$_kernel_version" "$ROOTFS_DIR/boot/firmware/initramfs$_kernel_suffix"
+            _kernel_version_suffix+=("$_kernel_version:$_kernel_suffix")
+        done
+    elif [[ "$distro" == "ubuntu" ]]; then
+    install -Dm755 /dev/stdin "$ROOTFS_DIR"/boot/update-kernel.sh << EOF
+#!/usr/bin/bash
+#
+# update-kernel.sh
+#
+
+if [[ \$EUID -ne 0 ]]; then
+    echo "This script must be run as root."
+    exit 1
+fi
+
+kernel_version=\$(realpath /boot/vmlinuz | xargs basename | sed 's/^vmlinuz-//')
+
+update-initramfs -k "\$kernel_version" -c
+
+cp -v /boot/vmlinuz /boot/firmware/kernel8.img
+cp -v /boot/initrd.img /boot/firmware/initramfs8
+cp /usr/lib/firmware/"\$kernel_version"/device-tree/broadcom/* /boot/firmware/
+cp -r /usr/lib/firmware/"\$kernel_version"/device-tree/overlays /boot/firmware/
+EOF
+    chroot_run "$ROOTFS_DIR" /boot/update-kernel.sh
+    fi
 
     ###
     info "Initializing rootfs..."
-    # chroot_run "$ROOTFS_DIR" update-initramfs -c -k all
-    chroot_run "$ROOTFS_DIR" /bin/bash -e -u -o pipefail -s >> "$LOG_DIR/${FUNCNAME[0]}.log" << EOF
+    chroot_run "$ROOTFS_DIR" /usr/bin/bash -e -u -o pipefail -s >> "$LOG_DIR/${FUNCNAME[0]}.log" << EOF
 useradd -m -U -G adm,dialout,sudo,audio,video -s /bin/zsh kzl
 echo "root:raspi" | chpasswd
 echo "kzl:raspi" | chpasswd
@@ -170,6 +218,7 @@ systemctl enable systemd-resolved.service
 systemctl enable wpa_supplicant@wlan0.service
 systemctl enable ssh.service
 EOF
+
     ###
     info "Copying miscellaneous config files..."
     # environment
@@ -187,29 +236,29 @@ EOF
     ###
     info "Copying boot configuration files..."
     # copy configuration files
+    cp -vf -- "$CONFIG_DIR/rpi/cmdline.txt" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
     cp -vf -- "$CONFIG_DIR/rpi/config.txt" "$ROOTFS_DIR/boot/firmware/config.txt"
     # get PARTUUIDs of the partitions
-    local _b_partuuid=$(findmnt -n -o PARTUUID --source "${loop_device}p1")
-    local _r_partuuid=$(findmnt -n -o PARTUUID --source "${loop_device}p2")
-    if [ -z "$_b_partuuid" ]; then
+    local b_partuuid=$(findmnt -n -o PARTUUID --source "${loop_device}p1")
+    local r_partuuid=$(findmnt -n -o PARTUUID --source "${loop_device}p2")
+    if [[ -z "$b_partuuid" ]]; then
         error "Cannot find PARTUUID of BOOT partition!" 4
     fi
-    info "BOOT PARTUUID: $_b_partuuid"
-    if [ -z "$_r_partuuid" ]; then
+    info "BOOT PARTUUID: $b_partuuid"
+    if [[ -z "$r_partuuid" ]]; then
         error "Cannot find PARTUUID of ROOT partition!" 4
     fi
-    info "ROOT PARTUUID: $_r_partuuid"
+    info "ROOT PARTUUID: $r_partuuid"
     # set PARTUUIDs in fstab and cmdline.txt
     cat > "$ROOTFS_DIR/etc/fstab" << EOF
-PARTUUID=$_r_partuuid       /                   ext4        defaults                0 1
-PARTUUID=$_b_partuuid       /boot/firmware      vfat        defaults,noatime        0 2
+PARTUUID=$r_partuuid        /                   ext4        defaults                0 1
+PARTUUID=$b_partuuid        /boot/firmware      vfat        defaults,noatime        0 2
 #/swapfile                   none                swap        defaults                0 0
 EOF
-    cat > "$ROOTFS_DIR/boot/firmware/cmdline.txt" << EOF
-console=serial0,115200 console=tty1 root=PARTUUID=$_r_partuuid rootfstype=ext4 fsck.repair=yes rootwait quiet init=/usr/lib/raspberrypi-sys-mods/firstboot
-EOF
+    sed -i "s/ROOTDEV/PARTUUID=$r_partuuid/" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
     if [[ "$distro" == "ubuntu" ]]; then
         sed -i -E 's| init=.*||' "$ROOTFS_DIR/boot/firmware/cmdline.txt"
+        sed -i "s/ resize//" "$ROOTFS_DIR/boot/firmware/cmdline.txt"
     fi
 }
 

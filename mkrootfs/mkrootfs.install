@@ -35,6 +35,7 @@ declare -ar REQUIRED_DEB_PKGS=(
     less
     sudo
     systemd
+    systemd-sysv
     wpasupplicant
 )
 
