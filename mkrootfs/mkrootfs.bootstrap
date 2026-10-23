@@ -97,8 +97,8 @@ Usage: $SCRIPT_NAME [-a <architecture>] [-s <suite>]
     -a, --arch <architecture>       specify the architecture (default: amd64)
                                     supported architectures: amd64, arm64
 
-    -s, --suite <suite>             specify the distribution suite (default: jammy)
-                                    supported suites: bookworm, trixie, jammy, noble, resolute, kzl
+    -s, --suite <suite>             specify the distribution suite (default: noble)
+                                    supported suites: trixie, jammy, noble, resolute, kzl
 EOF
 }
 
@@ -298,6 +298,7 @@ debootstrap_rootfs() {
     mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
     mount --make-private "$ROOTFS_DIR"
     chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment" 3
+
     deb_apt_install "$ROOTFS_DIR" additional_deb_pkgs > "$LOG_DIR/deb_apt_install.log"
     deb_set_locale "$ROOTFS_DIR"
     deb_get_installed_pkgs "$ROOTFS_DIR" > "$_deb_pkgs_installed"
@@ -306,7 +307,6 @@ debootstrap_rootfs() {
     if [[ "$_answer" =~ ^[Yy]$ ]]; then
         chroot_run "$ROOTFS_DIR" || :
     fi
-    chroot_teardown
 
     info "Cleaning up rootfs..."
     clean_rootfs "$ROOTFS_DIR" > "$LOG_DIR/clean_rootfs.log"
