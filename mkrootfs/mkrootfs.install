@@ -29,7 +29,6 @@ arg_rootfs_tarball=""
 ### constants and variables
 # required deb packages for boot
 declare -ar REQUIRED_DEB_PKGS=(
-    adduser
     iproute2
     iputils-ping
     less
@@ -304,7 +303,10 @@ cleanup() {
 
     sync
 
+
     log_magenta "Cleaning up..."
+    read -r -p "Press any key to continue..."
+
     chroot_teardown
     umount -v -R -- "$ROOTFS_DIR"
 
