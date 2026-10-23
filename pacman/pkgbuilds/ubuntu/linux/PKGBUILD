@@ -62,7 +62,7 @@ package_linux() {
   ln -vsf --no-dereference "/usr/src/linux-headers-$_kernelrelease/build" "$pkgdir/usr/lib/modules/$_kernelrelease/build"
 
   install -Dm755 /dev/stdin "$pkgdir"/boot/update-kernel.sh << EOF
-#!/bin/bash
+#!/usr/bin/bash
 #
 # update-kernel.sh
 #
@@ -74,9 +74,9 @@ fi
 
 update-initramfs -k all -c
 
-cp -v -- /boot/initrd.img /boot/efi/initrd.img
-cp -v -- /boot/vmlinuz /boot/efi/vmlinuz
-cp -v -- /boot/initrd.img-$_kernelrelease /boot/efi/initrd$LOCALVERSION.img
+cp -v /boot/initrd.img /boot/efi/initrd.img
+cp -v /boot/vmlinuz /boot/efi/vmlinuz
+cp -v /boot/initrd.img-$_kernelrelease /boot/efi/initrd$LOCALVERSION.img
 EOF
 }
 
