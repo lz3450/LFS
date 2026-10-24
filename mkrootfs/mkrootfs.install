@@ -15,7 +15,7 @@ umask 0022
 declare -r SCRIPT_NAME="$(basename "$0")"
 declare -r SCRIPT_PATH="$(realpath --no-symlinks "$0")"
 declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-declare -ar SCRIPT_CMDLINE=("$0" "$@")
+declare -ar SCRIPT_CMDLINE=("$SCRIPT_PATH" "$@")
 
 ################################################################################
 
@@ -31,6 +31,7 @@ arg_rootfs_tarball=""
 declare -ar REQUIRED_DEB_PKGS=(
     iproute2
     iputils-ping
+    kmod
     less
     sudo
     systemd
@@ -172,11 +173,13 @@ fi
 
 ################################################################################
 
-if [[ -z "${MKROOTFS_UNSHARED:-}" ]]; then
-    info "Enter new mount namespace"
-    exec unshare --mount --mount-proc --propagation private \
-        env MKROOTFS_UNSHARED=1 "${SCRIPT_CMDLINE[@]}"
-fi
+# TODO: make it optional via a command-line argument or environment variable
+### create new mount namespace
+# if [[ -z "${MKROOTFS_UNSHARED:-}" ]]; then
+#     info "Enter new mount namespace"
+#     exec unshare --mount --propagation private \
+#         env MKROOTFS_UNSHARED=1 "${SCRIPT_CMDLINE[@]}"
+# fi
 
 ################################################################################
 
@@ -202,8 +205,6 @@ declare -r UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
 declare -r MOUNT_OPT="rw,noatime"
 declare -r EFI_PARTITION_MOUNT_________________OPTIONS="rw,nosuid,nodev,noexec,fmask=0177,dmask=0177"
 
-loop_device=""
-
 ### libraries
 . "$SCRIPT_DIR/lib/$install_lib"
 . "$SCRIPT_DIR/lib/chroot.sh"
@@ -221,9 +222,6 @@ make_work_dirs() {
         mkdir -p "$PKGLIST_DIR"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$PKGLIST_DIR"
     fi
-
-    mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
-    mount --make-private "$ROOTFS_DIR"
 }
 
 bootstrap_rootfs() {
@@ -233,6 +231,10 @@ bootstrap_rootfs() {
         --numeric-owner \
         -xpf "$arg_rootfs_tarball" \
         -C "$ROOTFS_DIR"
+    if ! mountpoint -q "$ROOTFS_DIR"; then
+        mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
+        mount --make-private "$ROOTFS_DIR"
+    fi
     chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment" 3
 }
 
@@ -298,21 +300,27 @@ configure_rootfs_manual() {
     fi
 }
 
-cleanup() {
+finalize() {
     local _signal="${1:-}"
     set +e
 
     sync
 
-    log_magenta "Cleaning up..."
+    log_magenta "Finalizing..."
     read -r -p "Press any key to continue..."
 
     chroot_teardown
-    cleanup_platform_specific
+
+    pre_make_image_cleanup
+    if declare -F 'make_image' > /dev/null && [[ -z "$_signal" ]]; then
+        make_image
+    fi
+    post_make_image_cleanup
+
     umount -v -R "$ROOTFS_DIR"
 
     if [[ -z "$_signal" ]]; then
-        finalize
+        copy_image
     fi
 
     local _answer
@@ -324,7 +332,7 @@ cleanup() {
         rm -rf --one-file-system "$WORK_DIR"
     fi
 
-    log_magenta "Done (cleanup)"
+    log_magenta "Done (finalize)"
 
     trap - EXIT
     case "$_signal" in
@@ -337,9 +345,9 @@ cleanup() {
     esac
 
 }
-trap 'cleanup EXIT' EXIT
-trap 'cleanup SIGINT' SIGINT
-trap 'cleanup SIGTERM' SIGTERM
+trap 'finalize EXIT' EXIT
+trap 'finalize SIGINT' SIGINT
+trap 'finalize SIGTERM' SIGTERM
 
 ################################################################################
 
@@ -352,9 +360,7 @@ echo >> "$LOG_DIR/command.log"
 touch "$WORK_DIR/$arg_platform"
 
 ###
-prepare
-
-###
+prepare_filesystem
 bootstrap_rootfs
 if declare -F 'post_bootstrap_rootfs' > /dev/null; then
     info "Running post-bootstrap hook..."
@@ -367,7 +373,7 @@ if [[ "$distro" != "kzl-linux" ]]; then
 fi
 install_pacman_pkgs
 if declare -F 'post_install_pkgs' > '/dev/null'; then
-    info "Running post-install hook..."
+    info "Running post-install-pkgs hook..."
     post_install_pkgs
 fi
 
@@ -377,7 +383,7 @@ configure_rootfs_platform_specific
 configure_rootfs_manual
 
 ###
-cleanup
+finalize
 epilogue
 
 ### error codes

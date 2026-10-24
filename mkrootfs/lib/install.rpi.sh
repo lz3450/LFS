@@ -15,29 +15,24 @@ declare -r __INSTALL_RPI__="install.rpi.sh"
 
 ### constants and variables
 declare -ar COMMON_DEB_PKGS=(
+    ### general
     # build-essential
     initramfs-tools
+    kbd
     python3
     zstd
-)
-declare -ar DEBIAN_DEB_PKGS=(
+    ### systemd
     systemd-resolved
     systemd-timesyncd
-    bluez
-    ### firmware
+)
+declare -ar DEBIAN_DEB_PKGS=(
     firmware-brcm80211
-    firmware-realtek
-    bluez-firmware
     ### raspi
     raspberrypi-archive-keyring
     raspberrypi-sys-mods
-    raspberrypi-net-mods
     raspi-config
     raspi-firmware
-    raspi-gpio
     raspi-utils
-    rpi-eeprom
-    # rpicam-apps-lite
 )
 declare -ar JAMMY_DEB_PKGS=(
     linux-firmware-raspi2
@@ -46,8 +41,6 @@ declare -ar JAMMY_DEB_PKGS=(
 declare -ar NOBLE_DEB_PKGS=(
     linux-firmware-raspi
     linux-image-6.8.0-1065-raspi
-    systemd-resolved
-    systemd-timesyncd
 )
 
 deb_pkgs=("${COMMON_DEB_PKGS[@]}")
@@ -72,6 +65,7 @@ readonly -a deb_pkgs
 
 ################################################################################
 
+### constants and variables
 loop_device=""
 
 ### libraries
@@ -79,7 +73,7 @@ LIBDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR/chroot.sh"
 
 ### functions
-prepare() {
+prepare_filesystem() {
     info "Preparing root filesystem on $loop_device..."
 
     # mkpart
@@ -118,21 +112,15 @@ Types: deb
 URIs: https://archive.raspberrypi.com/debian/
 Suites: $arg_suite
 Components: main
-Signed-By: /etc/apt/trusted.gpg.d/raspberrypi.gpg.key
-#Signed-By: /etc/apt/trusted.gpg.d/raspberrypi-archive-stable.gpg
+Signed-By: /etc/apt/trusted.gpg.d/raspberrypi-archive.asc
 EOF
-        # raspberrypi-archive-stable.gpg will be overwritten by deb package raspberrypi-archive-keyring
-        wget -qO "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key" https://archive.raspberrypi.org/debian/raspberrypi.gpg.key
+        wget -qO "$ROOTFS_DIR/var/cache/apt/archives/raspberrypi-archive-keyring_2025.1+rpt1_all.deb" https://archive.raspberrypi.com/debian/pool/main/r/raspberrypi-archive-keyring/raspberrypi-archive-keyring_2025.1+rpt1_all.deb
+        chroot_run "$ROOTFS_DIR" dpkg -i "/var/cache/apt/archives/raspberrypi-archive-keyring_2025.1+rpt1_all.deb"
     fi
 }
 
 post_install_pkgs() {
-    if [[ "$distro" == "debian" ]]; then
-        # raspberrypi-archive-stable.gpg will be overwritten by deb package raspberrypi-archive-keyring
-        info "Setting up sources.list..."
-        rm -vf "$ROOTFS_DIR/etc/apt/trusted.gpg.d/raspberrypi.gpg.key"
-        sed -i -e '/^Signed-By/d' -e '/^#Signed-By/s/^#//' "$ROOTFS_DIR/etc/apt/sources.list.d/raspi.sources"
-    fi
+    :
 }
 
 configure_rootfs_platform_specific() {
@@ -158,11 +146,8 @@ EOF
 
     ###
     info "Copying firmware in raspberrypi/firmware to rootfs..."
-    cp -rf "$_firmware_dir"/boot/*.bin "$ROOTFS_DIR/boot/firmware/"
-    cp -rf "$_firmware_dir"/boot/*.dat "$ROOTFS_DIR/boot/firmware/"
-    cp -rf "$_firmware_dir"/boot/*.elf "$ROOTFS_DIR/boot/firmware/"
-    info "Copying kernel images in raspberrypi/firmware to rootfs..."
     if [[ "$distro" == "debian" ]]; then
+        cp -rf "$_firmware_dir"/boot/* "$ROOTFS_DIR/boot/firmware/"
         cp -rf "$_firmware_dir"/modules "$ROOTFS_DIR/usr/lib/"
         local _kernel_version
         local _kv
@@ -181,6 +166,9 @@ EOF
             _kernel_version_suffix+=("$_kernel_version:$_kernel_suffix")
         done
     elif [[ "$distro" == "ubuntu" ]]; then
+    cp -rf "$_firmware_dir"/boot/*.bin "$ROOTFS_DIR/boot/firmware/"
+    cp -rf "$_firmware_dir"/boot/*.dat "$ROOTFS_DIR/boot/firmware/"
+    cp -rf "$_firmware_dir"/boot/*.elf "$ROOTFS_DIR/boot/firmware/"
     install -Dm755 /dev/stdin "$ROOTFS_DIR"/boot/update-kernel.sh << EOF
 #!/usr/bin/bash
 #
@@ -262,19 +250,21 @@ EOF
     fi
 }
 
-cleanup_platform_specific() {
+pre_make_image_cleanup() {
     ###
     debug "Cleaning up root filesystem..."
     umount -v "$ROOTFS_DIR/boot/firmware"
     delete_all_contents "$ROOTFS_DIR/boot/firmware/"
     clean_rootfs "$ROOTFS_DIR" >> "$LOG_DIR/${FUNCNAME[0]}.log"
+}
 
+post_make_image_cleanup() {
     ###
     loop_unmount "$loop_device"
     loop_detach "$loop_device"
 }
 
-finalize() {
+copy_image() {
     ###
     cp -v "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/images/$IMG_FILE_NAME"
