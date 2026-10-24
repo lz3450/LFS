@@ -32,8 +32,11 @@ declare -ar PACMAN_PKGS=(
 )
 ## debootstrap packages
 declare -ar DEBIAN_INCLUDED_DEB_PKGS=(
+    apt-utils
     ca-certificates
     locales
+    lsb-release
+    whiptail
 )
 declare -ar DEBIAN_EXCLUDED_DEB_PKGS=(
     ifupdown
@@ -41,8 +44,6 @@ declare -ar DEBIAN_EXCLUDED_DEB_PKGS=(
 declare -ar UBUNTU_INCLUDED_DEB_PKGS=(
     apt-utils
     ca-certificates
-    kbd
-    kmod
     locales
     lsb-release
     tzdata
@@ -307,9 +308,6 @@ debootstrap_rootfs() {
     if [[ "$_answer" =~ ^[Yy]$ ]]; then
         chroot_run "$ROOTFS_DIR" || :
     fi
-
-    info "Cleaning up rootfs..."
-    clean_rootfs "$ROOTFS_DIR" > "$LOG_DIR/clean_rootfs.log"
 }
 
 mmdebstrap_rootfs() {
@@ -342,6 +340,11 @@ pacstrap_rootfs() {
     error "Not implemented yet" 1
 }
 
+cleanup() {
+    info "Cleaning up rootfs..."
+    clean_rootfs "$ROOTFS_DIR" >> "$LOG_DIR/${FUNCNAME[0]}.log"
+}
+
 make_rootfs_tarball() {
     info "Making base rootfs tarball..."
     tar --zstd \
@@ -351,17 +354,23 @@ make_rootfs_tarball() {
         -cpf "$TARBALL_FILE" \
         -C "$ROOTFS_DIR" .
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$TARBALL_FILE"
+    log_cyan "Successfully made rootfs tarball: $TARBALL_FILE"
 }
 
-cleanup() {
+finalize() {
     local _signal="${1:-}"
     set +e
 
-    log_magenta "Cleaning up..."
+    log_magenta "Finalizing..."
     read -r -p "Press any key to continue..."
 
     chroot_teardown
+    cleanup
     umount -v -R "$ROOTFS_DIR"
+
+    if [[ -z "$_signal" ]]; then
+        make_rootfs_tarball
+    fi
 
     local _answer
     read -p "Do you want to remove the working directory $WORK_DIR? [Y/n] " _answer
@@ -382,9 +391,9 @@ cleanup() {
         ;;
     esac
 }
-trap 'cleanup EXIT' EXIT
-trap 'cleanup SIGINT' SIGINT
-trap 'cleanup SIGTERM' SIGTERM
+trap 'finalize EXIT' EXIT
+trap 'finalize SIGINT' SIGINT
+trap 'finalize SIGTERM' SIGTERM
 
 ################################################################################
 
@@ -396,11 +405,8 @@ if [[ "$distro" == "kzl-linux" ]]; then
 else
     debootstrap_rootfs
 fi
-make_rootfs_tarball
 
-log_cyan "Successfully made rootfs tarball: $TARBALL_FILE"
-
-cleanup
+finalize
 epilogue
 
 ### error codes

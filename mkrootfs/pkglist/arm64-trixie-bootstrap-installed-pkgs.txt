@@ -1,5 +1,6 @@
 adduser
 apt
+apt-utils
 base-files
 base-passwd
 bash
@@ -69,6 +70,7 @@ libmd0
 libmount1
 libncursesw6
 libnettle8t64
+libnewt0.52
 libnghttp2-14
 libnghttp3-9
 libngtcp2-16
@@ -80,6 +82,7 @@ libpam-runtime
 libpam0g
 libpcre2-8-0
 libperl5.40
+libpopt0
 libproc2-0
 libpsl5t64
 librtmp1
@@ -90,6 +93,7 @@ libselinux1
 libsemanage-common
 libsemanage2
 libsepol2
+libslang2
 libsmartcols1
 libsqlite3-0
 libssh2-1t64
@@ -111,6 +115,7 @@ libzstd1
 locales
 login
 login.defs
+lsb-release
 mawk
 mount
 nano
@@ -137,6 +142,7 @@ tzdata
 ucf
 util-linux
 wget
+whiptail
 zlib1g
 zsh
 zsh-autosuggestions

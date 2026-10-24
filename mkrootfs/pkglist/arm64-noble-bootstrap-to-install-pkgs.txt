@@ -5,8 +5,6 @@ base-passwd
 bash
 bsdutils
 ca-certificates
-console-setup
-console-setup-linux
 coreutils
 dash
 debconf
@@ -21,9 +19,6 @@ grep
 gzip
 hostname
 init-system-helpers
-kbd
-keyboard-configuration
-kmod
 libacl1
 libapt-pkg6.0t64
 libassuan0
@@ -49,8 +44,6 @@ libgnutls30t64
 libgpg-error0
 libhogweed6t64
 libidn2-0
-libkmod2
-liblocale-gettext-perl
 liblz4-1
 liblzma5
 libmd0
@@ -106,5 +99,4 @@ ubuntu-keyring
 usrmerge
 util-linux
 whiptail
-xkb-data
 zlib1g
