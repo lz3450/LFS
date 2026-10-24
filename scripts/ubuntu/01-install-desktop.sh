@@ -17,57 +17,44 @@ INSTALLED_PKGLIST_FILE="$LOG_DIR/desktop_installed_pkgs.txt"
 MANUAL_INSTALLED_PKGLIST_FILE="$LOG_DIR/desktop_manual_installed_pkgs.txt"
 
 common_deb_pkgs=(
-  ### ubuntu-minimal-desktop depends
   alsa-base
   alsa-utils
   bc
-  ca-certificates
+  file
+  file-roller
   fonts-dejavu-core
   fonts-freefont-ttf
-  gdm3
-  gnome-control-center
-  gnome-menus
-  gnome-session-canberra
-  gnome-settings-daemon
-  gnome-shell
-  gnome-shell-extension-appindicator
-  gnome-shell-extension-desktop-icons-ng
-  gnome-shell-extension-ubuntu-dock
-  nautilus
-  pulseaudio
-  rfkill
-  ubuntu-session
-  ubuntu-settings
-  xdg-user-dirs
-  xdg-user-dirs-gtk
-  ### ubuntu-minimal-desktop recommends
-  file-roller
   fonts-noto-cjk
   fonts-noto-color-emoji
   fonts-ubuntu
+  gdm3
   gnome-bluetooth
   gnome-calculator
-  gnome-keyring
+  gnome-control-center
+  gnome-menus
   gnome-power-manager
   gnome-remote-desktop
+  gnome-session-canberra
+  gnome-shell-extension-appindicator
+  gnome-shell-extension-desktop-icons-ng
+  gnome-shell-extension-ubuntu-dock
   gnome-system-monitor
   gnome-terminal
-  network-manager
   network-manager-config-connectivity-ubuntu
+  pciutils
+  power-profiles-daemon
+  psmisc
+  pulseaudio
+  rfkill
   seahorse
-  ubuntu-wallpapers
+  ubuntu-session
+  ubuntu-settings
+  usbutils
+  xdg-user-dirs-gtk
   xdg-utils
-  yaru-theme-gnome-shell
   yaru-theme-gtk
   yaru-theme-icon
   yaru-theme-sound
-  ### power
-  power-profiles-daemon
-  ### utils
-  file
-  pciutils
-  psmisc
-  usbutils
 )
 jammy_deb_pkgs=(
   eog
