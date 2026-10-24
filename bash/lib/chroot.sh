@@ -115,6 +115,7 @@ chroot_setup() {
 
     if ! _chroot_mount -t proc      -o rw,nosuid,nodev,noexec                       proc        "$chroot_dir/proc" ||
        ! _chroot_mount -t sysfs     -o ro,nosuid,nodev,noexec                       sysfs       "$chroot_dir/sys" ||
+       ! _chroot_mount -t efivarfs  -o rw,nosuid,nodev,noexec                       efivarfs    "$chroot_dir/sys/firmware/efi/efivars" ||
        ! _chroot_mount -t devtmpfs  -o rw                                           devtmpfs    "$chroot_dir/dev" ||
        ! _chroot_mount -t devpts    -o rw,nosuid,noexec,gid=5,mode=620,ptmxmode=000 devpts      "$chroot_dir/dev/pts" ||
        ! _chroot_mount -t tmpfs     -o rw,nosuid,nodev                              tmpfs       "$chroot_dir/dev/shm" ||
