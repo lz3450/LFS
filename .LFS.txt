@@ -22,6 +22,7 @@ bluez
 bootable
 bootctl
 brcm
+broadcom
 bs
 btrfs
 buildtype
@@ -211,6 +212,7 @@ lmdb
 LOCALVERSION
 LOGDEST
 longterm
+losetup
 lto
 LTOFLAGS
 lz
@@ -328,6 +330,7 @@ rhash
 rl
 ro
 RO
+ROOTDEV
 rootfs
 rootfstype
 rootwait
@@ -367,6 +370,7 @@ synctex
 syscalls
 sysconfdir
 sysfs
+sysv
 Syu
 tabularray
 tcl
