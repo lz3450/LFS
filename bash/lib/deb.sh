@@ -35,10 +35,10 @@ deb_apt_install() {
 
     _deb_debug "Installing deb packages: $(IFS=','; echo "${_deb_pkgs[*]}")"
     chroot_run "$_rootfs_dir" /bin/bash -e -u -o pipefail -s << EOF
-apt-get update
-apt-get upgrade -y
-apt-get install --no-install-recommends -y ${_deb_pkgs[@]}
-apt-get autoremove --purge -y
+DEBIAN_FRONTEND=noninteractive apt-get -o APT::Color=0 update
+DEBIAN_FRONTEND=noninteractive apt-get -o APT::Color=0 upgrade -y
+DEBIAN_FRONTEND=noninteractive apt-get -o APT::Color=0 install --no-install-recommends -y ${_deb_pkgs[@]}
+DEBIAN_FRONTEND=noninteractive apt-get -o APT::Color=0 autoremove --purge -y
 EOF
     _deb_debug "Done"
 }
