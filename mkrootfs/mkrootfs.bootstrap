@@ -18,7 +18,7 @@ umask 0022
 declare -r SCRIPT_NAME="$(basename "$0")"
 declare -r SCRIPT_PATH="$(realpath --no-symlinks "$0")"
 declare -r SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
-declare -ar SCRIPT_CMDLINE=("$0" "$@")
+declare -ar SCRIPT_CMDLINE=("$SCRIPT_PATH" "$@")
 
 ################################################################################
 
@@ -189,11 +189,13 @@ readonly -a additional_deb_pkgs
 
 ################################################################################
 
-if [[ -z "${MKROOTFS_UNSHARED:-}" ]]; then
-    info "Enter new mount namespace"
-    exec unshare --mount --mount-proc --propagation private \
-        env MKROOTFS_UNSHARED=1 "${SCRIPT_CMDLINE[@]}"
-fi
+# TODO: make it optional via a command-line argument or environment variable
+### create new mount namespace
+# if [[ -z "${MKROOTFS_UNSHARED:-}" ]]; then
+#     info "Enter new mount namespace"
+#     exec unshare --mount --propagation private \
+#         env MKROOTFS_UNSHARED=1 "${SCRIPT_CMDLINE[@]}"
+# fi
 
 ################################################################################
 
@@ -296,11 +298,12 @@ debootstrap_rootfs() {
     echo '. /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ROOTFS_DIR/root/.zshrc"
     echo '. /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> "$ROOTFS_DIR/root/.zshrc"
 
-    mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
-    mount --make-private "$ROOTFS_DIR"
+    if ! mountpoint -q "$ROOTFS_DIR"; then
+        mount --bind "$ROOTFS_DIR" "$ROOTFS_DIR"
+        mount --make-private "$ROOTFS_DIR"
+    fi
     chroot_setup "$ROOTFS_DIR" || error "Failed to set up chroot environment" 3
-
-    deb_apt_install "$ROOTFS_DIR" additional_deb_pkgs > "$LOG_DIR/deb_apt_install.log"
+    deb_apt_install "$ROOTFS_DIR" additional_deb_pkgs >> "$LOG_DIR/${FUNCNAME[0]}.log"
     deb_set_locale "$ROOTFS_DIR"
     deb_get_installed_pkgs "$ROOTFS_DIR" > "$_deb_pkgs_installed"
     local _answer
