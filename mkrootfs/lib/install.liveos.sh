@@ -139,12 +139,12 @@ declare -r ISO_FILE_NAME="liveos-$arg_suite-$TIMESTAMP.iso"
 loop_device=""
 
 ### libraries
-LIBDIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
+LIBDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1; pwd -P)"
 . "$LIBDIR/chroot.sh"
 . "$SCRIPT_DIR/lib/pacman.sh"
 
 ### functions
-prepare() {
+prepare_filesystem() {
     exec 3>&1
     exec > "$LOG_DIR/${FUNCNAME[0]}.log"
 
@@ -166,27 +166,25 @@ prepare() {
     loop_partitioned_setup "$loop_device" "$IMG_FILE"
 
     # mkfs
-    mkfs.fat -F 32 -n "$BOOT_LABEL" -- "${loop_device}p1"
-    mkfs.ext4 -L "$ROOT_LABEL" -- "${loop_device}p2"
-    mkfs.ext4 -L "$HOME_LABEL" -- "${loop_device}p3"
-
-    # mount
-    mkdir -p "$ISOFS_DIR"
-    mount -o "$MOUNT_OPT" -- "${loop_device}p2" "$ISOFS_DIR"
+    mkfs.fat -F 32 -n "$BOOT_LABEL" "${loop_device}p1"
+    mkfs.ext4 -L "$ROOT_LABEL" "${loop_device}p2"
+    mkfs.ext4 -L "$HOME_LABEL" "${loop_device}p3"
 
     exec 1>&3 3>&-
 }
 
 post_bootstrap_rootfs() {
+    mkdir -p "$ISOFS_DIR"
+    mount -o "$MOUNT_OPT" "${loop_device}p2" "$ISOFS_DIR"
     mkdir -p -m 600 "$ROOTFS_DIR/$efi_dir"
     mount -v -o "$EFI_PARTITION_MOUNT_________________OPTIONS" "${loop_device}p1" "$ROOTFS_DIR/$efi_dir"
     mount -v -o "$MOUNT_OPT" "${loop_device}p3" "$ROOTFS_DIR/home"
 }
 
 post_install_pkgs() {
-    touch -- "$ISOFS_DIR/$TIMESTAMP"
-    cp -vf -- "$INSTALLED_DEB_PKGLIST_FILE" "$ISOFS_DIR/deb_pkgs.txt"
-    cp -vf -- "$INSTALLED_PACMAN_PKGLIST_FILE" "$ISOFS_DIR/pacman_pkgs.txt"
+    touch "$ISOFS_DIR/$TIMESTAMP"
+    cp -vf "$INSTALLED_DEB_PKGLIST_FILE" "$ISOFS_DIR/deb_pkgs.txt"
+    cp -vf "$INSTALLED_PACMAN_PKGLIST_FILE" "$ISOFS_DIR/pacman_pkgs.txt"
 }
 
 _make_initramfs_for_kernel() {
@@ -239,7 +237,7 @@ configure_rootfs_platform_specific() {
 $ISO_NAME Live OS \n (\s \m \r) \t \l
 
 EOF
-    mkdir -p -- "$ROOTFS_DIR"/etc/issue.d
+    mkdir -p "$ROOTFS_DIR"/etc/issue.d
     cat > "$ROOTFS_DIR"/etc/issue.d/00-ip.issue << EOF
 
 IPv4 address: \4
@@ -256,8 +254,8 @@ EOF
         -e '/PermitRootLogin/c\PermitRootLogin yes' \
         -e '/PermitEmptyPasswords/c\PermitEmptyPasswords yes' \
         "$ROOTFS_DIR/etc/ssh/sshd_config"
-    mkdir -p -- "$CONFIG_DIR/liveos"
-    cp -vf -- "$ROOTFS_DIR/etc/ssh/sshd_config" "$CONFIG_DIR/liveos/sshd_config"
+    mkdir -p "$CONFIG_DIR/liveos"
+    cp -vf "$ROOTFS_DIR/etc/ssh/sshd_config" "$CONFIG_DIR/liveos/sshd_config"
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$CONFIG_DIR/liveos/sshd_config"
     # fstab
     cat > "$ROOTFS_DIR"/etc/fstab << EOF
@@ -267,7 +265,7 @@ EOF
 
     ### 2. efi bootloader
     info "Setting up systemd-boot for UEFI booting..."
-    mkdir -p -- "$ROOTFS_DIR/$efi_dir/loader/entries"
+    mkdir -p "$ROOTFS_DIR/$efi_dir/loader/entries"
     local _entry
     for _entry in "${!efi_boot_entries[@]}"; do
         echo "${efi_boot_entries[$_entry]}" > "$ROOTFS_DIR/$efi_dir/loader/entries/$_entry"
@@ -291,7 +289,7 @@ EOF
     for _kv in $(ls "$ROOTFS_DIR/usr/lib/modules"); do
         local _kernel_suffix="$(_get_kernel_suffix "$_kv")"
         debug "Copying kernel and initramfs ($_kv) to EFI file system..."
-        cp -vf -- "$ROOTFS_DIR/boot/initramfs-$_kv.img" "$ROOTFS_DIR/$efi_dir/initramfs$_kernel_suffix.img"
+        cp -vf "$ROOTFS_DIR/boot/initramfs-$_kv.img" "$ROOTFS_DIR/$efi_dir/initramfs$_kernel_suffix.img"
     done
 
     ### 3. initialize.sh
@@ -308,13 +306,13 @@ EOF
 
     ### 4. pacman repository
     info "Setting up pacman repository for LiveOS..."
-    mkdir -p -- "$ROOTFS_DIR/$PACMAN_REPO_DIR"
+    mkdir -p "$ROOTFS_DIR/$PACMAN_REPO_DIR"
     local _pkg
     local _pkg_file
     for _pkg in "${pacman_pkgs[@]}"; do
         debug "Adding \"$_pkg\" to pacman repository..."
         _pkg_file=$(pacman_get_pkg_file "$_pkg" "/$PACMAN_REPO_DIR")
-        cp -f -- "/$PACMAN_REPO_DIR/$_pkg_file" "$ROOTFS_DIR/$PACMAN_REPO_DIR"
+        cp -f "/$PACMAN_REPO_DIR/$_pkg_file" "$ROOTFS_DIR/$PACMAN_REPO_DIR"
         repo-add -R "$ROOTFS_DIR/$PACMAN_REPO_FILE" "$ROOTFS_DIR/$PACMAN_REPO_DIR/$_pkg_file" > /dev/null
     done
 }
@@ -323,10 +321,10 @@ _make_ro_rootfs_img() {
     info "Making rootfs SquashFS/EROFS image, this may take some time..."
     local _rootfs_img_file="$SCRIPT_DIR/images/${ISO_FILE_NAME%.iso}-$RO_ROOTFS_IMG_FILE_NAME"
     # mksquashfs "$ROOTFS_DIR" "$_rootfs_img_file" -b 1M -comp zstd -noappend
-    mkdir -vp -- "$RO_ROOTFS_IMG_DIR"
-    mkfs.erofs -- "$_rootfs_img_file" "$ROOTFS_DIR"
+    mkdir -vp "$RO_ROOTFS_IMG_DIR"
+    mkfs.erofs "$_rootfs_img_file" "$ROOTFS_DIR"
     chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$_rootfs_img_file"
-    cp -vf -- "$_rootfs_img_file" "$RO_ROOTFS_IMG_DIR/$RO_ROOTFS_IMG_FILE_NAME"
+    cp -vf "$_rootfs_img_file" "$RO_ROOTFS_IMG_DIR/$RO_ROOTFS_IMG_FILE_NAME"
     sync
     hash_source=$(sha256sum "$_rootfs_img_file" | awk '{print $1}')
     hash_target=$(sha256sum "$RO_ROOTFS_IMG_DIR/$RO_ROOTFS_IMG_FILE_NAME" | awk '{print $1}')
@@ -359,16 +357,17 @@ _make_iso_image() {
         "$ISOFS_DIR"
 }
 
-finalize() {
+pre_make_image_cleanup() {
     ###
     debug "Cleaning up root filesystem..."
-    sync
-    umount -v -- "$ROOTFS_DIR/$efi_dir"
-    umount -v -- "$ROOTFS_DIR/home"
+    umount -v "$ROOTFS_DIR/$efi_dir"
+    umount -v "$ROOTFS_DIR/home"
     delete_all_contents "$ROOTFS_DIR/boot/efi/"
     delete_all_contents "$ROOTFS_DIR/home/"
     clean_rootfs "$ROOTFS_DIR" >> "$LOG_DIR/${FUNCNAME[0]}.log"
+}
 
+make_image() {
     ###
     _make_ro_rootfs_img
 
@@ -380,20 +379,19 @@ finalize() {
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/images/$ISO_FILE_NAME"
         log_cyan "Successfully made ${distro^} ${arg_suite^} LiveOS ISO image: $SCRIPT_DIR/images/$ISO_FILE_NAME"
     fi
-
-    ###
-    loop_unmount "$loop_device"
-    loop_detach "$loop_device"
-
-    ###
-    cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
-    chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
-    log_cyan "Successfully installed ${distro^} ${arg_suite^} LiveOS on $SCRIPT_DIR/images/$IMG_FILE_NAME"
 }
 
-cleanup_platform_specific() {
+post_make_image_cleanup() {
+    ###
     loop_unmount "$loop_device"
     loop_detach "$loop_device"
+}
+
+copy_image() {
+    ###
+    cp -v "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+    chown ${SUDO_UID:-0}:${SUDO_GID:-0} "$SCRIPT_DIR/images/$IMG_FILE_NAME"
+    log_cyan "Successfully installed ${distro^} ${arg_suite^} LiveOS on $SCRIPT_DIR/images/$IMG_FILE_NAME"
 }
 
 debug "${BASH_SOURCE[0]} sourced"
