@@ -29,6 +29,15 @@ EOF
     systemctl enable wpa_supplicant.service
     systemctl enable NetworkManager.service
     nmtui
+elif [[ "$UBUNTU_CODENAME" == "noble" ]]; then
+    sed -i '1i country=US\n' /etc/wpa_supplicant/wpa_supplicant.conf
+    systemctl disable wpa_supplicant@wlan0.service
+    systemctl disable systemd-networkd.service
+    systemctl enable wpa_supplicant.service
+    systemctl enable NetworkManager.service
+    nmtui
+elif [[ "$UBUNTU_CODENAME" == "resolute" ]]; then
+    systemctl disable systemd-networkd.service
 else
     echo "Unsupported Ubuntu suite: $UBUNTU_CODENAME"
     exit 1
