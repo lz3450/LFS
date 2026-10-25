@@ -253,6 +253,7 @@ networkd
 newtx
 ng
 nghttp
+nmtui
 noappend
 nocanonicalize
 nodev
