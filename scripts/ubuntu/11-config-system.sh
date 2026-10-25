@@ -13,7 +13,7 @@ fi
 . /etc/os-release
 
 ### /tmp
-systemctl enable /usr/share/systemd/tmp.mount
+systemctl enable --now /usr/share/systemd/tmp.mount
 
 ### network-manager
 if [[ "$UBUNTU_CODENAME" == "jammy" ]]; then
