@@ -312,7 +312,7 @@ finalize() {
     chroot_teardown
 
     pre_make_image_cleanup
-    if declare -F 'make_image' > /dev/null && [[ -z "$_signal" ]]; then
+    if [[ -z "$_signal" ]]; then
         make_image
     fi
     post_make_image_cleanup

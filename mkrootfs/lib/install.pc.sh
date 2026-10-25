@@ -408,25 +408,28 @@ EOF
     fi
 }
 
-finalize() {
-    if (( $opt_loop > 0 )); then
-        ###
+pre_make_image_cleanup() {
+    :
+}
+
+make_image() {
+    :
+}
+
+post_make_image_cleanup() {
+    if (( opt_loop > 0 )); then
         loop_unmount "$loop_device"
         loop_detach "$loop_device"
+    fi
+}
 
-        ###
+copy_image() {
+    if (( $opt_loop > 0 )); then
         cp -v -- "$IMG_FILE" "$SCRIPT_DIR/images/$IMG_FILE_NAME"
         chown ${SUDO_UID:-0}:${SUDO_GID:-0} -- "$SCRIPT_DIR/images/$IMG_FILE_NAME"
         log_cyan "Successfully installed ${distro^} ${arg_suite^} on $SCRIPT_DIR/images/$IMG_FILE_NAME"
     else
         log_cyan "Successfully installed ${distro^} ${arg_suite^} on ${partition_device_map[rootfs]}"
-    fi
-}
-
-cleanup_platform_specific() {
-    if (( opt_loop > 0 )); then
-        loop_unmount "$loop_device"
-        loop_detach "$loop_device"
     fi
 }
 
