@@ -258,6 +258,10 @@ pre_make_image_cleanup() {
     clean_rootfs "$ROOTFS_DIR" >> "$LOG_DIR/${FUNCNAME[0]}.log"
 }
 
+make_image() {
+    :
+}
+
 post_make_image_cleanup() {
     ###
     loop_unmount "$loop_device"
