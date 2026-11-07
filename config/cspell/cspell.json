@@ -6,6 +6,7 @@
     "words": [
         "-srf",
         "-vp",
+        "-Wno-dev",
         "abi",
         "adduser",
         "awk",
@@ -59,6 +60,7 @@
         "moveit",
         "noatime",
         "np",
+        "numpy",
         "onedot",
         "openssl",
         "parsep",
