@@ -6,6 +6,8 @@ post_install() {
 post_upgrade() {
   # ${1}: new package version
   # ${2}: old package version
+  rm -vf boot/initrd.img-$2-KZL
+  [ -f /etc/machine-id ] && rm -vrf boot/efi/$(cat etc/machine-id)/$2-KZL
   post_install
 }
 
