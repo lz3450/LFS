@@ -1,7 +1,7 @@
 # Maintainer: KZL <lz3450@outlook.com>
 
 pkgname=rust
-pkgver=1.98.0
+pkgver=1.100.0
 pkgrel=1
 epoch=
 pkgdesc="Systems programming language focused on safety, speed and concurrency"
@@ -15,7 +15,7 @@ source=(
   # git+https://github.com/rust-lang/rust.git#branch=stable
   git+https://github.com/rust-lang/rust.git#tag=$pkgver
 )
-sha256sums=('b16d8971e336693f3c50055d3c11dd39244ba27438c29da019019371e7ec6c66')
+sha256sums=('01dfe6073f6417dacd4b2722a67fcf6935b18c7314920bbe4203f65ad6ae4b50')
 
 pkgver() {
   cd $pkgname
@@ -44,7 +44,7 @@ build() {
     "--python=/$PREFIX/bin/python3"
     "--release-channel=stable"
     "--enable-manage-submodules"
-    "--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,src"
+    "--tools=cargo,clippy,rustfmt,rust-analyzer,rust-analyzer-proc-macro-srv,analysis,rust-src"
     "--build=$_target"
     "--host=$_target"
     "--target=$_target"

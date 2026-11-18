@@ -11,7 +11,7 @@ umask 0022
 ################################################################################
 
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-readonly PYTORCH_VERSION=v2.11.0
+readonly PYTORCH_VERSION=v2.14.1
 readonly SOURCE_DIR="pytorch-${PYTORCH_VERSION}"
 readonly SOURCE_ARCHIVE="${SOURCE_DIR}.tar.zst"
 readonly WHEEL_DIR="${HOME}/wheels"
@@ -31,11 +31,11 @@ fi
 
 cd "${SOURCE_DIR}"
 
-# Use the system CMake/ccmake and omit the optional lint tool from the
+# Use the system CMake and omit the optional lint tool from the
 # source-only wheelhouse. Keep the match limited to requirement entries so
 # future pyproject.toml settings containing these words survive.
 sed -i \
-    -e '/^[[:space:]]*"lintrunner[;"]/d' \
+    -e '/^[[:space:]]*"lintrunner[[:space:];"]/d' \
     -e '/^[[:space:]]*"cmake[<=>]/d' \
     pyproject.toml
 
