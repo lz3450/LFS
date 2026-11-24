@@ -1,5 +1,5 @@
 The Meson build system
-Version: 1.3.2
+Version: 1.11.0
 Source dir: /var/cache/makepkg/build/pacman/src/pacman
 Build dir: /var/cache/makepkg/build/pacman/src/pacman/build
 Build type: native build
@@ -19,7 +19,7 @@ Run-time dependency libcurl found: YES 8.5.0
 Run-time dependency gpgme found: YES 1.18.0
 Run-time dependency libcrypto found: YES 3.0.13
 Found CMake: /usr/bin/cmake (3.28.3)
-Run-time dependency libseccomp found: NO (tried pkgconfig and cmake)
+Run-time dependency libseccomp found: NO  (tried pkg-config and cmake)
 Has header "linux/landlock.h" : YES 
 Has header "mntent.h" : YES 
 Has header "sys/mnttab.h" : NO 
@@ -57,6 +57,7 @@ Program msgmerge found: YES (/usr/bin/msgmerge)
 Program xgettext found: YES (/usr/bin/xgettext)
 Program asciidoc skipped: feature doc disabled
 Program a2x skipped: feature doc disabled
+Found pkg-config: YES (/usr/bin/pkg-config) 1.8.1
 Configuring makepkg using configuration
 Configuring pacman-db-upgrade using configuration
 Configuring pacman-key using configuration
@@ -103,24 +104,26 @@ Message: pacman 7.1.0
       Use nettle               : false
     
 Build targets in project: 249
+NOTICE: Future-deprecated features used:
+ * 1.11.0: {'should_fail arg in test'}
 
 pacman 7.1.0
 
   User defined options
     auto_features  : disabled
-    buildtype      : plain
-    libdir         : lib
-    prefix         : /opt
-    sysconfdir     : etc
     buildstatic    : false
+    buildtype      : plain
     crypto         : openssl
     curl           : enabled
     doc            : disabled
     doxygen        : disabled
     file-seccomp   : enabled
     gpgme          : enabled
+    libdir         : lib
     pkg-ext        : .pkg.tar.zst
+    prefix         : /opt
     src-ext        : .src.tar.zst
+    sysconfdir     : etc
     use-git-version: false
 
-Found ninja-1.11.1 at /usr/bin/ninja
+Found ninja-1.13.2.git.kitware.jobserver-pipe-1 at /home/kzl/.local/bin/ninja

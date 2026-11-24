@@ -41,7 +41,7 @@ ParallelDownloads = 5
 
 # PGP signature checking
 #SigLevel = Optional
-#LocalFileSigLevel = Optional
+LocalFileSigLevel = Optional
 #RemoteFileSigLevel = Optional
 
 #
