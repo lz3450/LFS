@@ -411,6 +411,7 @@ userspace
 USERSPEC
 usr
 valgrind
+vercmp
 vf
 vmlinux
 volid
