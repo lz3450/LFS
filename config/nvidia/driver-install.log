@@ -8,7 +8,7 @@ nvidia-installer command line:
     --accept-license
     --expert
     --log-file-name=/home/kzl/LFS/config/nvidia/driver-install.log
-    --kernel-name=7.3.3-KZL
+    --kernel-name=7.3.6-KZL
     --no-backup
     --no-x-check
     --disable-nouveau
@@ -47,7 +47,7 @@ Using built-in stream user interface
 -> found `rmmod` : `/usr/sbin/rmmod`
 -> found `lsmod` : `/usr/sbin/lsmod`
 -> found `depmod` : `/usr/sbin/depmod`
--> The file '/tmp/.X0-lock' exists and appears to contain the process ID '833' of a running X server.
+-> The file '/tmp/.X0-lock' exists and appears to contain the process ID '830' of a running X server.
 -> Continuing per the '--no-x-check' option.
 -> No distribution pre-unload script found.
 WARNING: An NVIDIA kernel module 'nvidia-uvm' appears to be already loaded in your kernel.  This may be because it is in use (for example, by an X server, a CUDA program, or the NVIDIA Persistence Daemon), but this may also happen if your kernel was configured without support for module unloading.  Some of the sanity checks that nvidia-installer performs to detect potential installation problems are not possible while an NVIDIA kernel module is running.
@@ -70,25 +70,25 @@ WARNING: Continuing installation despite the presence of a loaded NVIDIA kernel 
 -> Would you like to install the nvidia-uvm kernel module? You must install this module in order to use CUDA. (Answer: Yes)
 -> Would you like to install the nvidia-drm kernel module? You must install this module in order to use DRM-KMS. (Answer: Yes)
 -> Would you like to install the nvidia-peermem kernel module? You must install this module in order to use GPUDirect RDMA p2p memory sharing. (Answer: Yes)
--> Kernel module installation path (Answer: '/lib/modules/7.3.3-KZL/kernel/drivers/video')
--> Kernel module installation path: /lib/modules/7.3.3-KZL/kernel/drivers/video
+-> Kernel module installation path (Answer: '/lib/modules/7.3.6-KZL/kernel/drivers/video')
+-> Kernel module installation path: /lib/modules/7.3.6-KZL/kernel/drivers/video
 -> Not probing for precompiled kernel interfaces.
--> Kernel source path (Answer: '/lib/modules/7.3.3-KZL/source')
--> Kernel source path: '/lib/modules/7.3.3-KZL/source'
--> Kernel output path: '/lib/modules/7.3.3-KZL/build'
+-> Kernel source path (Answer: '/lib/modules/7.3.6-KZL/source')
+-> Kernel source path: '/lib/modules/7.3.6-KZL/source'
+-> Kernel output path: '/lib/modules/7.3.6-KZL/build'
 -> Performing Compiler check.
 -> Performing Dom0 check.
 -> Performing Xen check.
 -> Performing PREEMPT_RT check.
 -> Performing vgpu_kvm check.
 -> Cleaning kernel module build directory.
-   executing: 'cd kernel-open; /usr/bin/make -k -j16  NV_EXCLUDE_KERNEL_MODULES="" SYSSRC="/lib/modules/7.3.3-KZL/source" SYSOUT="/lib/modules/7.3.3-KZL/build" clean'...
+   executing: 'cd kernel-open; /usr/bin/make -k -j16  NV_EXCLUDE_KERNEL_MODULES="" SYSSRC="/lib/modules/7.3.6-KZL/source" SYSOUT="/lib/modules/7.3.6-KZL/build" clean'...
    rm -f -r conftest
-   make[1]: Entering directory '/usr/src/linux-headers-7.3.3-KZL'
+   make[1]: Entering directory '/usr/src/linux-headers-7.3.6-KZL'
    make[2]: Entering directory '/tmp/nvidia/kernel-open'
    make[2]: Leaving directory '/tmp/nvidia/kernel-open'
-   make[1]: Leaving directory '/usr/src/linux-headers-7.3.3-KZL'
--> Failed to estimate output lines: /bin/sh: 1: .: cannot open /lib/modules/7.3.0-KZL/build/.config: No such file
+   make[1]: Leaving directory '/usr/src/linux-headers-7.3.6-KZL'
+-> Failed to estimate output lines: /bin/sh: 1: .: cannot open /lib/modules/7.3.5-KZL/build/.config: No such file
 conftests:216 objects:208 modules:5
 -> Building kernel modules
 -> done.
@@ -111,7 +111,7 @@ WARNING: nvidia-installer was forced to guess the X library path '/usr/lib' and 
 -> Compat32 installation chroot is: '(null)'
 -> Compat32 installation prefix (only under rare circumstances should this be changed from the default) (Answer: '/usr')
 -> Compat32 installation prefix is: '/usr'
-WARNING: Unable to find a suitable destination to install 32-bit compatibility libraries. Your system may not be set up for 32-bit compatibility. 32-bit compatibility files will not be installed; if you wish to install them, re-run the installation and set a valid directory with the --compat32-libdir option.
+-> Install NVIDIA's 32-bit compatibility libraries? (Answer: Yes)
 -> Uninstalling the previous installation
 -> done.
 Will install libglvnd libraries.
@@ -288,12 +288,47 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Installing: nvidia-pcc --> /usr/bin/nvidia-pcc
 -> Installing: libnvidia-sandboxutils.so.580.178.04 --> /usr/lib/x86_64-linux-gnu/libnvidia-sandboxutils.so.580.178.04
 -> Installing: sandboxutils-filelist.json --> /usr/share/nvidia/files.d/sandboxutils-filelist.json
+-> Installing: ./32/libcuda.so.580.178.04 --> /usr/lib32/libcuda.so.580.178.04
+-> Installing: ./32/libnvidia-ptxjitcompiler.so.580.178.04 --> /usr/lib32/libnvidia-ptxjitcompiler.so.580.178.04
+-> Installing: ./32/libnvidia-ml.so.580.178.04 --> /usr/lib32/libnvidia-ml.so.580.178.04
+-> Installing: ./32/libOpenCL.so.1.0.0 --> /usr/lib32/libOpenCL.so.1.0.0
+-> Installing: ./32/libnvidia-opencl.so.580.178.04 --> /usr/lib32/libnvidia-opencl.so.580.178.04
+-> Installing: ./32/libnvidia-nvvm.so.580.178.04 --> /usr/lib32/libnvidia-nvvm.so.580.178.04
+-> Installing: ./32/libOpenGL.so.0 --> /usr/lib32/libOpenGL.so.0
+-> Installing: ./32/libGLdispatch.so.0 --> /usr/lib32/libGLdispatch.so.0
+-> Installing: ./32/libGLESv2.so.2.1.0 --> /usr/lib32/libGLESv2.so.2.1.0
+-> Installing: ./32/libGLESv1_CM.so.1.2.0 --> /usr/lib32/libGLESv1_CM.so.1.2.0
+-> Installing: ./32/libGL.so.1.7.0 --> /usr/lib32/libGL.so.1.7.0
+-> Installing: ./32/libGLX_nvidia.so.580.178.04 --> /usr/lib32/libGLX_nvidia.so.580.178.04
+-> Installing: ./32/libGLX.so.0 --> /usr/lib32/libGLX.so.0
+-> Installing: ./32/libglvnd_install_checker/glvnd_check --> /usr/lib/nvidia/32/glvnd_check
+-> Installing: ./32/libglvnd_install_checker/libGLX_installcheck.so.0 --> /usr/lib/nvidia/32/libGLX_installcheck.so.0
+-> Installing: ./32/libnvidia-glcore.so.580.178.04 --> /usr/lib32/libnvidia-glcore.so.580.178.04
+-> Installing: ./32/libnvidia-tls.so.580.178.04 --> /usr/lib32/libnvidia-tls.so.580.178.04
+-> Installing: ./32/libnvidia-glvkspirv.so.580.178.04 --> /usr/lib32/libnvidia-glvkspirv.so.580.178.04
+-> Installing: ./32/libnvidia-glsi.so.580.178.04 --> /usr/lib32/libnvidia-glsi.so.580.178.04
+-> Installing: ./32/libnvidia-gpucomp.so.580.178.04 --> /usr/lib32/libnvidia-gpucomp.so.580.178.04
+-> Installing: ./32/libvdpau_nvidia.so.580.178.04 --> /usr/lib32/vdpau/libvdpau_nvidia.so.580.178.04
+-> Installing: ./32/libnvcuvid.so.580.178.04 --> /usr/lib32/libnvcuvid.so.580.178.04
+-> Installing: ./32/libnvidia-encode.so.580.178.04 --> /usr/lib32/libnvidia-encode.so.580.178.04
+-> Installing: ./32/libnvidia-eglcore.so.580.178.04 --> /usr/lib32/libnvidia-eglcore.so.580.178.04
+-> Installing: ./32/libEGL.so.1.1.0 --> /usr/lib32/libEGL.so.1.1.0
+-> Installing: ./32/libEGL_nvidia.so.580.178.04 --> /usr/lib32/libEGL_nvidia.so.580.178.04
+-> Installing: ./32/libGLESv2_nvidia.so.580.178.04 --> /usr/lib32/libGLESv2_nvidia.so.580.178.04
+-> Installing: ./32/libGLESv1_CM_nvidia.so.580.178.04 --> /usr/lib32/libGLESv1_CM_nvidia.so.580.178.04
+-> Installing: ./32/libnvidia-egl-gbm.so.1.1.3 --> /usr/lib32/libnvidia-egl-gbm.so.1.1.3
+-> Installing: ./32/libnvidia-egl-wayland.so.1.1.20 --> /usr/lib32/libnvidia-egl-wayland.so.1.1.20
+-> Installing: ./32/libnvidia-egl-xlib.so.1.0.5 --> /usr/lib32/libnvidia-egl-xlib.so.1.0.5
+-> Installing: ./32/libnvidia-egl-xcb.so.1.0.5 --> /usr/lib32/libnvidia-egl-xcb.so.1.0.5
+-> Installing: ./32/libnvidia-fbc.so.580.178.04 --> /usr/lib32/libnvidia-fbc.so.580.178.04
+-> Installing: ./32/libnvidia-allocator.so.580.178.04 --> /usr/lib32/libnvidia-allocator.so.580.178.04
+-> Installing: ./32/libnvidia-opticalflow.so.580.178.04 --> /usr/lib32/libnvidia-opticalflow.so.580.178.04
 -> Deleting: /tmp/template-
--> Installing: kernel-open/nvidia.ko --> /lib/modules/7.3.3-KZL/kernel/drivers/video/nvidia.ko
--> Installing: kernel-open/nvidia-uvm.ko --> /lib/modules/7.3.3-KZL/kernel/drivers/video/nvidia-uvm.ko
--> Installing: kernel-open/nvidia-modeset.ko --> /lib/modules/7.3.3-KZL/kernel/drivers/video/nvidia-modeset.ko
--> Installing: kernel-open/nvidia-drm.ko --> /lib/modules/7.3.3-KZL/kernel/drivers/video/nvidia-drm.ko
--> Installing: kernel-open/nvidia-peermem.ko --> /lib/modules/7.3.3-KZL/kernel/drivers/video/nvidia-peermem.ko
+-> Installing: kernel-open/nvidia.ko --> /lib/modules/7.3.6-KZL/kernel/drivers/video/nvidia.ko
+-> Installing: kernel-open/nvidia-uvm.ko --> /lib/modules/7.3.6-KZL/kernel/drivers/video/nvidia-uvm.ko
+-> Installing: kernel-open/nvidia-modeset.ko --> /lib/modules/7.3.6-KZL/kernel/drivers/video/nvidia-modeset.ko
+-> Installing: kernel-open/nvidia-drm.ko --> /lib/modules/7.3.6-KZL/kernel/drivers/video/nvidia-drm.ko
+-> Installing: kernel-open/nvidia-peermem.ko --> /lib/modules/7.3.6-KZL/kernel/drivers/video/nvidia-peermem.ko
 -> Installing: /tmp/template- --> /usr/share/applications/nvidia-settings.desktop
 -> Deleting: /tmp/template-
 -> Creating symlink: /usr/bin/nvidia-uninstall -> nvidia-installer
@@ -351,6 +386,46 @@ Will install libEGL vendor library config file to /usr/share/glvnd/egl_vendor.d
 -> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-vksc-core.so.1 -> libnvidia-vksc-core.so.580.178.04
 -> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-sandboxutils.so.1 -> libnvidia-sandboxutils.so.580.178.04
 -> Creating symlink: /usr/lib/x86_64-linux-gnu/libnvidia-sandboxutils.so -> libnvidia-sandboxutils.so.1
+-> Creating symlink: /usr/lib32/libcuda.so.1 -> libcuda.so.580.178.04
+-> Creating symlink: /usr/lib32/libcuda.so -> libcuda.so.1
+-> Creating symlink: /usr/lib32/libnvidia-ptxjitcompiler.so.1 -> libnvidia-ptxjitcompiler.so.580.178.04
+-> Creating symlink: /usr/lib32/libnvidia-ptxjitcompiler.so -> libnvidia-ptxjitcompiler.so.1
+-> Creating symlink: /usr/lib32/libnvidia-ml.so.1 -> libnvidia-ml.so.580.178.04
+-> Creating symlink: /usr/lib32/libnvidia-ml.so -> libnvidia-ml.so.1
+-> Creating symlink: /usr/lib32/libOpenCL.so.1.0 -> libOpenCL.so.1.0.0
+-> Creating symlink: /usr/lib32/libOpenCL.so.1 -> libOpenCL.so.1.0
+-> Creating symlink: /usr/lib32/libOpenCL.so -> libOpenCL.so.1
+-> Creating symlink: /usr/lib32/libnvidia-opencl.so.1 -> libnvidia-opencl.so.580.178.04
+-> Creating symlink: /usr/lib32/libnvidia-nvvm.so.4 -> libnvidia-nvvm.so.580.178.04
+-> Creating symlink: /usr/lib32/libnvidia-nvvm.so -> libnvidia-nvvm.so.4
+-> Creating symlink: /usr/lib32/libOpenGL.so -> libOpenGL.so.0
+-> Creating symlink: /usr/lib32/libGLESv2.so.2 -> libGLESv2.so.2.1.0
+-> Creating symlink: /usr/lib32/libGLESv2.so -> libGLESv2.so.2
+-> Creating symlink: /usr/lib32/libGLESv1_CM.so.1 -> libGLESv1_CM.so.1.2.0
+-> Creating symlink: /usr/lib32/libGLESv1_CM.so -> libGLESv1_CM.so.1
+-> Creating symlink: /usr/lib32/libGL.so.1 -> libGL.so.1.7.0
+-> Creating symlink: /usr/lib32/libGL.so -> libGL.so.1
+-> Creating symlink: /usr/lib32/libGLX_nvidia.so.0 -> libGLX_nvidia.so.580.178.04
+-> Creating symlink: /usr/lib32/libGLX.so -> libGLX.so.0
+-> Creating symlink: /usr/lib32/libGLX_indirect.so.0 -> libGLX_nvidia.so.580.178.04
+-> Creating symlink: /usr/lib32/vdpau/libvdpau_nvidia.so.1 -> libvdpau_nvidia.so.580.178.04
+-> Creating symlink: /usr/lib32/libvdpau_nvidia.so -> vdpau/libvdpau_nvidia.so.580.178.04
+-> Creating symlink: /usr/lib32/libnvcuvid.so.1 -> libnvcuvid.so.580.178.04
+-> Creating symlink: /usr/lib32/libnvcuvid.so -> libnvcuvid.so.1
+-> Creating symlink: /usr/lib32/libnvidia-encode.so.1 -> libnvidia-encode.so.580.178.04
+-> Creating symlink: /usr/lib32/libnvidia-encode.so -> libnvidia-encode.so.1
+-> Creating symlink: /usr/lib32/libEGL.so.1 -> libEGL.so.1.1.0
+-> Creating symlink: /usr/lib32/libEGL.so -> libEGL.so.1
+-> Creating symlink: /usr/lib32/libEGL_nvidia.so.0 -> libEGL_nvidia.so.580.178.04
+-> Creating symlink: /usr/lib32/libGLESv2_nvidia.so.2 -> libGLESv2_nvidia.so.580.178.04
+-> Creating symlink: /usr/lib32/libGLESv1_CM_nvidia.so.1 -> libGLESv1_CM_nvidia.so.580.178.04
+-> Creating symlink: /usr/lib32/libnvidia-fbc.so.1 -> libnvidia-fbc.so.580.178.04
+-> Creating symlink: /usr/lib32/libnvidia-fbc.so -> libnvidia-fbc.so.1
+-> Creating symlink: /usr/lib32/libnvidia-allocator.so.1 -> libnvidia-allocator.so.580.178.04
+-> Creating symlink: /usr/lib32/libnvidia-allocator.so -> libnvidia-allocator.so.1
+-> Creating symlink: /usr/lib32/gbm/nvidia-drm_gbm.so -> /usr/lib32/libnvidia-allocator.so.1
+-> Creating symlink: /usr/lib32/libnvidia-opticalflow.so.1 -> libnvidia-opticalflow.so.580.178.04
+-> Creating symlink: /usr/lib32/libnvidia-opticalflow.so -> libnvidia-opticalflow.so.1
 -> Creating symlink: /usr/lib/libGL.so.1 -> /usr/lib/x86_64-linux-gnu/libGL.so.1
 -> Executing: /usr/sbin/ldconfig
    executing: '/usr/sbin/ldconfig'...
